@@ -8,12 +8,13 @@ import { theme, typography, borderRadius, spacing, transitions } from '@/lib/the
 // Resource components registry
 // Add new components here as they're created
 import EQFilterBridge from '@/components/resources/EQFilterBridge';
+import OctavePeriodTrainer from '@/components/resources/OctavePeriodTrainer';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
+    'OctavePeriodTrainer': OctavePeriodTrainer,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
-    // 'CompressorSimulator': CompressorSimulator,
 };
 
 // Dynamic Resource Page
