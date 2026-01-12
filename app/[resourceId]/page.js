@@ -9,10 +9,18 @@ import { theme, typography, borderRadius, spacing, transitions } from '@/lib/the
 // Add new components here as they're created
 import EQFilterBridge from '@/components/resources/EQFilterBridge';
 import OctavePeriodTrainer from '@/components/resources/OctavePeriodTrainer';
+import MIDIPitchBendController from '@/components/resources/MIDIPitchBendController';
+import FilterRolloffVisualization from '@/components/resources/FilterRolloffVisualization';
+import AcousticsFlashcards from '@/components/resources/AcousticsFlashcards';
+import DoubleTrackingExplorer from '@/components/resources/DoubleTrackingExplorer';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
     'OctavePeriodTrainer': OctavePeriodTrainer,
+    'MIDIPitchBendController': MIDIPitchBendController,
+    'FilterRolloffVisualization': FilterRolloffVisualization,
+    'AcousticsFlashcards': AcousticsFlashcards,
+    'DoubleTrackingExplorer': DoubleTrackingExplorer,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
