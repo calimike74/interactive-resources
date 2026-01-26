@@ -13,6 +13,7 @@ import MIDIPitchBendController from '@/components/resources/MIDIPitchBendControl
 import FilterRolloffVisualization from '@/components/resources/FilterRolloffVisualization';
 import AcousticsFlashcards from '@/components/resources/AcousticsFlashcards';
 import DoubleTrackingExplorer from '@/components/resources/DoubleTrackingExplorer';
+import GraphicParametricEQ from '@/components/resources/GraphicParametricEQ';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -21,6 +22,7 @@ const resourceComponents = {
     'FilterRolloffVisualization': FilterRolloffVisualization,
     'AcousticsFlashcards': AcousticsFlashcards,
     'DoubleTrackingExplorer': DoubleTrackingExplorer,
+    'GraphicParametricEQ': GraphicParametricEQ,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
