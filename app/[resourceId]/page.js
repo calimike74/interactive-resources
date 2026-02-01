@@ -14,6 +14,8 @@ import FilterRolloffVisualization from '@/components/resources/FilterRolloffVisu
 import AcousticsFlashcards from '@/components/resources/AcousticsFlashcards';
 import DoubleTrackingExplorer from '@/components/resources/DoubleTrackingExplorer';
 import GraphicParametricEQ from '@/components/resources/GraphicParametricEQ';
+import RevealExplorer from '@/components/resources/RevealExplorer';
+import EQAssessmentPrototype from '@/components/resources/EQAssessmentPrototype';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -23,6 +25,8 @@ const resourceComponents = {
     'AcousticsFlashcards': AcousticsFlashcards,
     'DoubleTrackingExplorer': DoubleTrackingExplorer,
     'GraphicParametricEQ': GraphicParametricEQ,
+    'RevealExplorer': RevealExplorer,
+    'EQAssessmentPrototype': EQAssessmentPrototype,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
