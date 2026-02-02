@@ -1,9 +1,45 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { getAllResources, getResourcesByTopic } from '@/lib/resources';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+
+/**
+ * Custom hook for scroll-triggered visibility
+ * Uses Intersection Observer API for performance
+ */
+function useInView(options = {}) {
+    const [isInView, setIsInView] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const element = ref.current;
+        if (!element) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsInView(true);
+                    // Once visible, stop observing (triggerOnce behavior)
+                    observer.unobserve(element);
+                }
+            },
+            {
+                threshold: options.threshold || 0.1,
+                rootMargin: options.rootMargin || '0px',
+            }
+        );
+
+        observer.observe(element);
+
+        return () => {
+            observer.unobserve(element);
+        };
+    }, [options.threshold, options.rootMargin]);
+
+    return [ref, isInView];
+}
 
 // Type icons for different resource types
 const typeIcons = {
@@ -248,11 +284,12 @@ export default function ResourcesHub() {
                                         gap: spacing[4],
                                     }}
                                 >
-                                    {group.resources.map(resource => (
+                                    {group.resources.map((resource, index) => (
                                         <ResourceCard
                                             key={resource.id}
                                             resource={resource}
                                             theme={t}
+                                            index={index}
                                         />
                                     ))}
                                 </div>
@@ -300,9 +337,10 @@ export default function ResourcesHub() {
     );
 }
 
-// Resource Card Component
-function ResourceCard({ resource, theme: t }) {
+// Resource Card Component with scroll animation
+function ResourceCard({ resource, theme: t, index = 0 }) {
     const [isHovered, setIsHovered] = useState(false);
+    const [ref, isInView] = useInView({ threshold: 0.1 });
 
     return (
         <Link
@@ -310,6 +348,7 @@ function ResourceCard({ resource, theme: t }) {
             style={{ textDecoration: 'none' }}
         >
             <article
+                ref={ref}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 style={{
@@ -319,8 +358,12 @@ function ResourceCard({ resource, theme: t }) {
                     boxShadow: isHovered ? t.shadow.md : t.shadow.sm,
                     padding: spacing[6],
                     cursor: 'pointer',
-                    transition: `all ${transitions.normal} ${transitions.easing}`,
-                    transform: isHovered ? 'translateY(-2px)' : 'none',
+                    transition: `all ${transitions.normal} ${transitions.easing}, opacity 0.6s ease-out, transform 0.6s ease-out`,
+                    transitionDelay: isInView ? `${index * 100}ms` : '0ms',
+                    transform: isInView
+                        ? (isHovered ? 'translateY(-2px)' : 'translateY(0)')
+                        : 'translateY(24px)',
+                    opacity: isInView ? 1 : 0,
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
