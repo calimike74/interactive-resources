@@ -16,6 +16,8 @@ import DoubleTrackingExplorer from '@/components/resources/DoubleTrackingExplore
 import GraphicParametricEQ from '@/components/resources/GraphicParametricEQ';
 import RevealExplorer from '@/components/resources/RevealExplorer';
 import EQAssessmentPrototype from '@/components/resources/EQAssessmentPrototype';
+import EssayScaffold from '@/components/resources/EssayScaffold';
+import SubtractiveSynthExplorer from '@/components/resources/SubtractiveSynthExplorer';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -27,6 +29,8 @@ const resourceComponents = {
     'GraphicParametricEQ': GraphicParametricEQ,
     'RevealExplorer': RevealExplorer,
     'EQAssessmentPrototype': EQAssessmentPrototype,
+    'EssayScaffold': EssayScaffold,
+    'SubtractiveSynthExplorer': SubtractiveSynthExplorer,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };

@@ -1,9 +1,50 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { getAllResources, getResourcesByTopic } from '@/lib/resources';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+
+// Skeleton card component for loading state
+function SkeletonCard({ theme: t }) {
+    const shimmerBg = `linear-gradient(90deg, ${t.bg.tertiary} 0%, ${t.bg.secondary} 50%, ${t.bg.tertiary} 100%)`;
+    const blockStyle = (width, height) => ({
+        width,
+        height,
+        borderRadius: borderRadius.md,
+        background: shimmerBg,
+        backgroundSize: '800px 100%',
+        animation: 'shimmer 1.5s ease-in-out infinite',
+    });
+
+    return (
+        <div
+            style={{
+                background: t.bg.primary,
+                borderRadius: borderRadius.xl,
+                border: `1px solid ${t.border.subtle}`,
+                boxShadow: t.shadow.sm,
+                padding: spacing[6],
+                height: '220px',
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+            aria-hidden="true"
+        >
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: spacing[3] }}>
+                <div style={blockStyle('2rem', '2rem')} />
+                <div style={blockStyle('60px', '20px')} />
+            </div>
+            <div style={{ ...blockStyle('75%', '20px'), marginBottom: spacing[2] }} />
+            <div style={{ ...blockStyle('100%', '14px'), marginBottom: spacing[1] }} />
+            <div style={{ ...blockStyle('85%', '14px'), marginBottom: 'auto' }} />
+            <div style={{ borderTop: `1px solid ${t.border.subtle}`, paddingTop: spacing[3], display: 'flex', justifyContent: 'space-between' }}>
+                <div style={blockStyle('70px', '14px')} />
+                <div style={blockStyle('100px', '14px')} />
+            </div>
+        </div>
+    );
+}
 
 // Type icons for different resource types
 const typeIcons = {
@@ -11,6 +52,7 @@ const typeIcons = {
     demonstration: '📺',
     practice: '✏️',
     revision: '📚',
+    assessment: '📊',
 };
 
 // Type labels
@@ -19,17 +61,59 @@ const typeLabels = {
     demonstration: 'Demo',
     practice: 'Practice',
     revision: 'Revision',
+    assessment: 'Assessment',
 };
+
+// Tab definitions for filter
+const typeTabs = [
+    { key: 'all', label: 'All' },
+    { key: 'interactive', label: 'Interactive' },
+    { key: 'demonstration', label: 'Demo' },
+    { key: 'practice', label: 'Practice' },
+    { key: 'revision', label: 'Revision' },
+    { key: 'assessment', label: 'Assessment' },
+];
 
 // Interactive Resources Hub - Main Entry Page
 // Public access, no login required
 export default function ResourcesHub() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const [activeType, setActiveType] = useState('all');
+    const [pillStyle, setPillStyle] = useState({ left: 0, width: 0 });
+    const [isLoaded, setIsLoaded] = useState(false);
+    const tabsRef = useRef({});
+    const tabContainerRef = useRef(null);
 
     const resources = getAllResources();
     const groupedResources = getResourcesByTopic();
     const t = theme.light; // Use light theme
+
+    // Trigger loaded state after mount for skeleton -> content transition
+    useEffect(() => {
+        const timer = setTimeout(() => setIsLoaded(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Measure tab positions for sliding pill
+    const measureTabs = useCallback(() => {
+        const activeTabEl = tabsRef.current[activeType];
+        const containerEl = tabContainerRef.current;
+        if (activeTabEl && containerEl) {
+            const containerRect = containerEl.getBoundingClientRect();
+            const tabRect = activeTabEl.getBoundingClientRect();
+            setPillStyle({
+                left: tabRect.left - containerRect.left,
+                width: tabRect.width,
+            });
+        }
+    }, [activeType]);
+
+    useEffect(() => {
+        measureTabs();
+        window.addEventListener('resize', measureTabs);
+        return () => window.removeEventListener('resize', measureTabs);
+    }, [measureTabs]);
 
     // Convert grouped object to array for rendering
     const groupedArray = useMemo(() => {
@@ -39,24 +123,32 @@ export default function ResourcesHub() {
         }));
     }, [groupedResources]);
 
-    // Filter resources based on search query
+    // Filter resources based on search query AND type filter
     const filteredGroups = useMemo(() => {
-        if (!searchQuery.trim()) {
-            return groupedArray;
-        }
-        const query = searchQuery.toLowerCase();
         return groupedArray
-            .map(group => ({
-                topic: group.topic,
-                resources: group.resources.filter(
-                    r => r.title.toLowerCase().includes(query) ||
-                         r.description.toLowerCase().includes(query) ||
-                         group.topic.toLowerCase().includes(query) ||
-                         (r.keywords && r.keywords.some(k => k.toLowerCase().includes(query)))
-                )
-            }))
+            .map(group => {
+                let filtered = group.resources;
+
+                // Apply type filter
+                if (activeType !== 'all') {
+                    filtered = filtered.filter(r => r.type === activeType);
+                }
+
+                // Apply search filter
+                if (searchQuery.trim()) {
+                    const query = searchQuery.toLowerCase();
+                    filtered = filtered.filter(
+                        r => r.title.toLowerCase().includes(query) ||
+                             r.description.toLowerCase().includes(query) ||
+                             group.topic.toLowerCase().includes(query) ||
+                             (r.keywords && r.keywords.some(k => k.toLowerCase().includes(query)))
+                    );
+                }
+
+                return { topic: group.topic, resources: filtered };
+            })
             .filter(group => group.resources.length > 0);
-    }, [searchQuery, groupedArray]);
+    }, [searchQuery, activeType, groupedArray]);
 
     return (
         <div
@@ -147,7 +239,7 @@ export default function ResourcesHub() {
                 aria-label="Interactive resources"
             >
                 {/* Search Bar */}
-                <div style={{ marginBottom: spacing[8] }}>
+                <div style={{ marginBottom: spacing[4] }}>
                     <div
                         style={{
                             position: 'relative',
@@ -193,8 +285,97 @@ export default function ResourcesHub() {
                     </div>
                 </div>
 
+                {/* Type Filter Tabs */}
+                <div style={{ marginBottom: spacing[8] }}>
+                    <div
+                        ref={tabContainerRef}
+                        style={{
+                            position: 'relative',
+                            display: 'inline-flex',
+                            gap: spacing[1],
+                            background: t.bg.tertiary,
+                            borderRadius: borderRadius.full,
+                            padding: spacing[1],
+                        }}
+                        role="tablist"
+                        aria-label="Filter by resource type"
+                    >
+                        {/* Sliding pill */}
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: spacing[1],
+                                left: pillStyle.left,
+                                width: pillStyle.width,
+                                height: `calc(100% - ${spacing[1]} - ${spacing[1]})`,
+                                background: '#2563EB',
+                                borderRadius: borderRadius.full,
+                                transition: `all 300ms cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                                zIndex: 0,
+                            }}
+                            aria-hidden="true"
+                        />
+                        {typeTabs.map((tab, tabIndex) => {
+                            const isActive = activeType === tab.key;
+                            return (
+                                <button
+                                    key={tab.key}
+                                    ref={el => { tabsRef.current[tab.key] = el; }}
+                                    onClick={() => setActiveType(tab.key)}
+                                    role="tab"
+                                    aria-selected={isActive}
+                                    style={{
+                                        position: 'relative',
+                                        zIndex: 1,
+                                        padding: `${spacing[2]} ${spacing[4]}`,
+                                        fontSize: typography.size.sm,
+                                        fontWeight: isActive ? typography.weight.semibold : typography.weight.medium,
+                                        fontFamily: typography.fontFamily,
+                                        color: isActive ? t.text.inverse : t.text.secondary,
+                                        background: 'transparent',
+                                        border: 'none',
+                                        borderRadius: borderRadius.full,
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap',
+                                        transition: `color 200ms ${transitions.easing}`,
+                                        animation: `tabSlideIn 300ms ease-out ${tabIndex * 40}ms both`,
+                                    }}
+                                >
+                                    {tab.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
                 {/* Resource Groups by Topic */}
-                {filteredGroups.length === 0 ? (
+                {!isLoaded ? (
+                    /* Skeleton loading state */
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[8] }}>
+                        {[0, 1].map(groupIdx => (
+                            <section key={groupIdx}>
+                                <div style={{
+                                    width: '200px',
+                                    height: '28px',
+                                    borderRadius: borderRadius.md,
+                                    background: `linear-gradient(90deg, ${t.bg.tertiary} 0%, ${t.bg.secondary} 50%, ${t.bg.tertiary} 100%)`,
+                                    backgroundSize: '800px 100%',
+                                    animation: 'shimmer 1.5s ease-in-out infinite',
+                                    marginBottom: spacing[4],
+                                }} />
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                                    gap: spacing[4],
+                                }}>
+                                    {[0, 1, 2].map(i => (
+                                        <SkeletonCard key={i} theme={t} />
+                                    ))}
+                                </div>
+                            </section>
+                        ))}
+                    </div>
+                ) : filteredGroups.length === 0 ? (
                     <div
                         style={{
                             textAlign: 'center',
@@ -203,10 +384,12 @@ export default function ResourcesHub() {
                         }}
                     >
                         <p style={{ fontSize: typography.size.lg }}>
-                            No resources found for "{searchQuery}"
+                            No resources found
+                            {searchQuery ? ` for "${searchQuery}"` : ''}
+                            {activeType !== 'all' ? ` in ${typeTabs.find(t => t.key === activeType)?.label}` : ''}
                         </p>
                         <button
-                            onClick={() => setSearchQuery('')}
+                            onClick={() => { setSearchQuery(''); setActiveType('all'); }}
                             style={{
                                 marginTop: spacing[4],
                                 padding: `${spacing[2]} ${spacing[4]}`,
@@ -219,45 +402,53 @@ export default function ResourcesHub() {
                                 cursor: 'pointer',
                             }}
                         >
-                            Clear search
+                            Clear filters
                         </button>
                     </div>
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[8] }}>
-                        {filteredGroups.map(group => (
-                            <section key={group.topic}>
-                                {/* Topic Header */}
-                                <h2
-                                    style={{
-                                        fontSize: typography.size['2xl'],
-                                        fontWeight: typography.weight.semibold,
-                                        color: t.text.primary,
-                                        marginBottom: spacing[4],
-                                        paddingBottom: spacing[2],
-                                        borderBottom: `2px solid ${t.border.subtle}`,
-                                    }}
-                                >
-                                    {group.topic}
-                                </h2>
+                        {(() => {
+                            let cardIndex = 0;
+                            return filteredGroups.map(group => (
+                                <section key={group.topic}>
+                                    {/* Topic Header */}
+                                    <h2
+                                        style={{
+                                            fontSize: typography.size['2xl'],
+                                            fontWeight: typography.weight.semibold,
+                                            color: t.text.primary,
+                                            marginBottom: spacing[4],
+                                            paddingBottom: spacing[2],
+                                            borderBottom: `2px solid ${t.border.subtle}`,
+                                        }}
+                                    >
+                                        {group.topic}
+                                    </h2>
 
-                                {/* Resource Cards Grid */}
-                                <div
-                                    style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                                        gap: spacing[4],
-                                    }}
-                                >
-                                    {group.resources.map(resource => (
-                                        <ResourceCard
-                                            key={resource.id}
-                                            resource={resource}
-                                            theme={t}
-                                        />
-                                    ))}
-                                </div>
-                            </section>
-                        ))}
+                                    {/* Resource Cards Grid */}
+                                    <div
+                                        style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                                            gap: spacing[4],
+                                        }}
+                                    >
+                                        {group.resources.map(resource => {
+                                            const delay = cardIndex * 60;
+                                            cardIndex++;
+                                            return (
+                                                <ResourceCard
+                                                    key={resource.id}
+                                                    resource={resource}
+                                                    theme={t}
+                                                    animationDelay={delay}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </section>
+                            ));
+                        })()}
                     </div>
                 )}
             </main>
@@ -301,13 +492,16 @@ export default function ResourcesHub() {
 }
 
 // Resource Card Component
-function ResourceCard({ resource, theme: t }) {
+function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
         <Link
             href={`/${resource.id}`}
-            style={{ textDecoration: 'none' }}
+            style={{
+                textDecoration: 'none',
+                animation: `cardReveal 400ms ease-out ${animationDelay}ms both`,
+            }}
         >
             <article
                 onMouseEnter={() => setIsHovered(true)}

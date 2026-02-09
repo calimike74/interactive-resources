@@ -1,5 +1,5 @@
-/* Playfair Display font for elegant headings */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
 
 /* Animation keyframes */
 @keyframes slideUp {
@@ -18,6 +18,42 @@
   to { opacity: 1; }
 }
 
+/* Staggered card reveal */
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+/* Page transition fade */
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Staggered tab entrance */
+@keyframes tabSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -30,10 +66,8 @@
   }
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 body {
@@ -45,4 +79,28 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Custom focus rings - keyboard only */
+*:focus-visible {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Press feel on buttons and interactive cards */
+button:active,
+[role="tab"]:active,
+a[href] article:active {
+  transform: scale(0.97) !important;
+  transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Page transition */
+main {
+  animation: pageFadeIn 200ms ease-out;
 }
