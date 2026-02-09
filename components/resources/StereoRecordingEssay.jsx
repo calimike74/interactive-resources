@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import { supabase } from '@/lib/supabase';
 
@@ -83,6 +83,26 @@ export default function StereoRecordingEssay() {
     const [activeTechnique, setActiveTechnique] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const tabListRef = useRef(null);
+    const tabBtnRefs = useRef({});
+    const [tabIndicator, setTabIndicator] = useState({ x: 0, width: 0, ready: false });
+
+    // Position sliding tab indicator
+    const updateIndicator = useCallback(() => {
+        const list = tabListRef.current;
+        const btn = tabBtnRefs.current[scaffoldLevel];
+        if (!list || !btn) return;
+        const listRect = list.getBoundingClientRect();
+        const btnRect = btn.getBoundingClientRect();
+        setTabIndicator({ x: btnRect.left - listRect.left, width: btnRect.width, ready: true });
+    }, [scaffoldLevel]);
+
+    useEffect(() => { updateIndicator(); }, [updateIndicator]);
+
+    useEffect(() => {
+        window.addEventListener('resize', updateIndicator);
+        return () => window.removeEventListener('resize', updateIndicator);
+    }, [updateIndicator]);
 
     const wordCount = useMemo(() => {
         return Object.values(essayContent).reduce((total, text) => {
@@ -207,29 +227,54 @@ export default function StereoRecordingEssay() {
                     </p>
                 </div>
 
-                <div style={{
-                    display: 'flex',
-                    gap: spacing[1],
-                    background: t.bg.tertiary,
-                    borderRadius: borderRadius.lg,
-                    padding: spacing[1],
-                }}>
+                <div
+                    ref={tabListRef}
+                    style={{
+                        display: 'flex',
+                        position: 'relative',
+                        background: t.bg.tertiary,
+                        borderRadius: '100px',
+                        padding: '4px',
+                    }}
+                >
+                    {/* Sliding pill indicator */}
+                    <div style={{
+                        position: 'absolute',
+                        top: '4px', bottom: '4px', left: '4px',
+                        background: t.bg.primary,
+                        borderRadius: '100px',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)',
+                        zIndex: 1,
+                        width: tabIndicator.width ? `${tabIndicator.width}px` : 'auto',
+                        transform: `translateX(${tabIndicator.x}px)`,
+                        transition: tabIndicator.ready
+                            ? 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                            : 'none',
+                        willChange: 'transform, width',
+                    }} />
                     {SCAFFOLD_LEVELS.map(level => (
                         <button
                             key={level.id}
+                            ref={el => { tabBtnRefs.current[level.id] = el; }}
                             onClick={() => setScaffoldLevel(level.id)}
                             title={level.description}
                             style={{
+                                flex: 1,
                                 padding: `${spacing[2]} ${spacing[3]}`,
-                                borderRadius: borderRadius.md,
+                                borderRadius: '100px',
                                 border: 'none',
                                 cursor: 'pointer',
                                 fontSize: typography.size.sm,
-                                fontWeight: scaffoldLevel === level.id ? typography.weight.semibold : typography.weight.normal,
-                                background: scaffoldLevel === level.id ? t.bg.primary : 'transparent',
+                                fontFamily: typography.fontFamily,
+                                fontWeight: scaffoldLevel === level.id ? typography.weight.semibold : typography.weight.medium,
+                                background: 'transparent',
                                 color: scaffoldLevel === level.id ? t.text.primary : t.text.tertiary,
-                                boxShadow: scaffoldLevel === level.id ? t.shadow.sm : 'none',
-                                transition: `all ${transitions.fast}`,
+                                position: 'relative',
+                                zIndex: 2,
+                                transition: 'color 0.3s ease',
+                                whiteSpace: 'nowrap',
+                                userSelect: 'none',
+                                WebkitTapHighlightColor: 'transparent',
                             }}
                         >
                             {level.label}
