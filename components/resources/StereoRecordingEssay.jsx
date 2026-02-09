@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { supabase } from '@/lib/supabase';
 
 const SCAFFOLD_LEVELS = [
     { id: 'full', label: 'Full Support', description: 'All scaffolds visible' },
@@ -74,11 +75,14 @@ const SELF_ASSESSMENT = [
 
 export default function StereoRecordingEssay() {
     const t = theme.light;
+    const [studentName, setStudentName] = useState('');
     const [scaffoldLevel, setScaffoldLevel] = useState('full');
     const [essayContent, setEssayContent] = useState({});
     const [checkedItems, setCheckedItems] = useState({});
     const [showExtension, setShowExtension] = useState(false);
     const [activeTechnique, setActiveTechnique] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
     const wordCount = useMemo(() => {
         return Object.values(essayContent).reduce((total, text) => {
@@ -96,6 +100,78 @@ export default function StereoRecordingEssay() {
     };
 
     const checkedCount = Object.values(checkedItems).filter(Boolean).length;
+
+    const handleSubmit = async () => {
+        if (!studentName.trim()) {
+            alert('Please enter your name before submitting.');
+            return;
+        }
+        const content = essayContent.response?.trim();
+        if (!content || wordCount < 20) {
+            alert('Please write at least 20 words before submitting.');
+            return;
+        }
+        setSubmitting(true);
+        try {
+            const { error } = await supabase
+                .from('essay_responses')
+                .insert({
+                    resource_id: 'stereo-recording-essay',
+                    student_name: studentName.trim(),
+                    content,
+                    word_count: wordCount,
+                });
+            if (error) throw error;
+            setSubmitted(true);
+        } catch (err) {
+            alert('Error submitting: ' + err.message);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    if (submitted) {
+        return (
+            <div style={{
+                maxWidth: '500px',
+                margin: '0 auto',
+                padding: spacing[10],
+                fontFamily: typography.fontFamily,
+                textAlign: 'center',
+            }}>
+                <div style={{
+                    background: t.bg.primary,
+                    borderRadius: borderRadius['2xl'],
+                    padding: spacing[8],
+                    boxShadow: t.shadow.lg,
+                }}>
+                    <div style={{ fontSize: '3rem', marginBottom: spacing[4] }}>✓</div>
+                    <h2 style={{
+                        fontSize: typography.size.xl,
+                        fontWeight: typography.weight.bold,
+                        color: t.text.primary,
+                        marginBottom: spacing[2],
+                    }}>
+                        Essay Submitted
+                    </h2>
+                    <p style={{
+                        fontSize: typography.size.sm,
+                        color: t.text.secondary,
+                        marginBottom: spacing[4],
+                    }}>
+                        Thanks {studentName}. Your teacher will mark your response.
+                    </p>
+                    <p style={{
+                        fontSize: typography.size.sm,
+                        color: t.text.tertiary,
+                        fontFamily: typography.fontFamilyMono,
+                    }}>
+                        {wordCount} words
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div style={{
@@ -427,6 +503,57 @@ export default function StereoRecordingEssay() {
                                 </label>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Name + Submit */}
+                    <div style={{
+                        marginTop: spacing[6],
+                        padding: spacing[5],
+                        background: t.bg.secondary,
+                        borderRadius: borderRadius.lg,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: spacing[4],
+                        flexWrap: 'wrap',
+                    }}>
+                        <input
+                            type="text"
+                            value={studentName}
+                            onChange={(e) => setStudentName(e.target.value)}
+                            placeholder="Your name"
+                            style={{
+                                flex: '1 1 200px',
+                                padding: spacing[3],
+                                borderRadius: borderRadius.lg,
+                                border: `1px solid ${t.border.input}`,
+                                fontSize: typography.size.base,
+                                fontFamily: typography.fontFamily,
+                                background: t.bg.primary,
+                                color: t.text.primary,
+                            }}
+                        />
+                        <button
+                            onClick={handleSubmit}
+                            disabled={submitting || !studentName.trim() || wordCount < 20}
+                            style={{
+                                padding: `${spacing[3]} ${spacing[6]}`,
+                                borderRadius: borderRadius.lg,
+                                border: 'none',
+                                cursor: submitting || !studentName.trim() || wordCount < 20 ? 'not-allowed' : 'pointer',
+                                fontSize: typography.size.base,
+                                fontWeight: typography.weight.semibold,
+                                fontFamily: typography.fontFamily,
+                                background: submitting || !studentName.trim() || wordCount < 20
+                                    ? t.bg.tertiary
+                                    : t.accent.primary,
+                                color: submitting || !studentName.trim() || wordCount < 20
+                                    ? t.text.tertiary
+                                    : t.text.inverse,
+                                transition: `all ${transitions.fast}`,
+                            }}
+                        >
+                            {submitting ? 'Submitting...' : 'Submit Essay'}
+                        </button>
                     </div>
                 </div>
             </div>
