@@ -19,6 +19,8 @@ import EQAssessmentPrototype from '@/components/resources/EQAssessmentPrototype'
 import EssayScaffold from '@/components/resources/EssayScaffold';
 import SubtractiveSynthExplorer from '@/components/resources/SubtractiveSynthExplorer';
 import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
+import CompressorExplorer from '@/components/resources/CompressorExplorer';
+import EssayScaffoldPractice from '@/components/resources/EssayScaffoldPractice';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -33,6 +35,8 @@ const resourceComponents = {
     'EssayScaffold': EssayScaffold,
     'SubtractiveSynthExplorer': SubtractiveSynthExplorer,
     'StereoRecordingEssay': StereoRecordingEssay,
+    'CompressorExplorer': CompressorExplorer,
+    'EssayScaffoldPractice': EssayScaffoldPractice,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
