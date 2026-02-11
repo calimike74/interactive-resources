@@ -44,20 +44,87 @@ const TABS = [
     { key: 'test', label: 'Test', icon: '🧠' },
 ];
 
-// ─── Shared scaffold data ────────────────────────────────────────────────────
+// ─── Essay Topics ────────────────────────────────────────────────────────────
 
-const scaffoldPoints = [
-    { ao: 3, verb: 'Define', full: 'compression and its role in controlling dynamic range', partial: 'compression and its role in _____', tip: 'Show technical understanding' },
-    { ao: 3, verb: 'Explain', full: 'threshold, ratio, attack & release with practical examples', partial: 'threshold, ratio, _____ & _____ with practical examples', tip: 'Demonstrate applied knowledge' },
-    { ao: 4, verb: 'Evaluate', full: 'creative vs corrective compression — when and why each is used', partial: null, tip: 'Make a judgement with reasoning' },
-    { ao: 4, verb: 'Compare', full: 'parallel compression to standard insert processing', partial: null, tip: 'Weigh advantages and limitations' },
-    { ao: 4, verb: 'Conclude', full: 'with impact on final mix balance and commercial loudness', partial: 'with impact on _____', tip: 'Synthesise your argument' },
+const ESSAY_TOPICS = [
+    {
+        id: 'dynamics',
+        label: 'Dynamics',
+        icon: '🎚️',
+        question: 'Evaluate the use of dynamics processing in the production of a modern pop track.',
+        marks: { total: 20, ao3: 5, ao4: 15 },
+        points: [
+            { ao: 3, verb: 'Define', full: 'compression and its role in controlling dynamic range', partial: 'compression and its role in _____', tip: 'Show technical understanding' },
+            { ao: 3, verb: 'Explain', full: 'threshold, ratio, attack & release with practical examples', partial: 'threshold, ratio, _____ & _____ with practical examples', tip: 'Demonstrate applied knowledge' },
+            { ao: 4, verb: 'Evaluate', full: 'creative vs corrective compression — when and why each is used', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Compare', full: 'parallel compression to standard insert processing', partial: null, tip: 'Weigh advantages and limitations' },
+            { ao: 4, verb: 'Conclude', full: 'with impact on final mix balance and commercial loudness', partial: 'with impact on _____', tip: 'Synthesise your argument' },
+        ],
+    },
+    {
+        id: 'eq',
+        label: 'EQ',
+        icon: '📊',
+        question: 'Evaluate the use of EQ in the mixing of a multitrack recording.',
+        marks: { total: 20, ao3: 5, ao4: 15 },
+        points: [
+            { ao: 3, verb: 'Define', full: 'equalisation and the key parameters: frequency, gain, Q/bandwidth', partial: 'equalisation and the key parameters: _____, gain, _____', tip: 'Show technical understanding' },
+            { ao: 3, verb: 'Explain', full: 'the difference between parametric, graphic, and shelving EQ with examples', partial: 'the difference between parametric, _____, and _____ EQ', tip: 'Demonstrate applied knowledge' },
+            { ao: 4, verb: 'Evaluate', full: 'subtractive vs additive EQ approaches and when each is appropriate', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Compare', full: 'corrective EQ (removing problem frequencies) with creative EQ (shaping tone)', partial: null, tip: 'Weigh advantages and limitations' },
+            { ao: 4, verb: 'Conclude', full: 'with impact on clarity, separation, and overall mix balance', partial: 'with impact on _____ and overall mix balance', tip: 'Synthesise your argument' },
+        ],
+    },
+    {
+        id: 'reverb',
+        label: 'Reverb & Delay',
+        icon: '🔊',
+        question: 'Evaluate the use of reverb and delay effects in a studio recording.',
+        marks: { total: 20, ao3: 5, ao4: 15 },
+        points: [
+            { ao: 3, verb: 'Define', full: 'reverb and delay, distinguishing between the two effects', partial: 'reverb and delay, distinguishing between _____', tip: 'Show technical understanding' },
+            { ao: 3, verb: 'Explain', full: 'key parameters: pre-delay, decay time, wet/dry mix, feedback, and delay time', partial: 'key parameters: pre-delay, _____, wet/dry mix, _____, and delay time', tip: 'Demonstrate applied knowledge' },
+            { ao: 4, verb: 'Evaluate', full: 'how reverb creates a sense of space and depth — plate, hall, room, and spring types', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Compare', full: 'using reverb/delay as insert effects vs send/return (aux) effects', partial: null, tip: 'Weigh advantages and limitations' },
+            { ao: 4, verb: 'Conclude', full: 'with impact on the spatial qualities and cohesion of the final mix', partial: 'with impact on _____ and cohesion of the final mix', tip: 'Synthesise your argument' },
+        ],
+    },
+    {
+        id: 'stereo',
+        label: 'Stereo Recording',
+        icon: '🎙️',
+        question: 'Evaluate the use of stereo recording techniques in capturing a live acoustic performance.',
+        marks: { total: 20, ao3: 5, ao4: 15 },
+        points: [
+            { ao: 3, verb: 'Define', full: 'stereo recording and the principles of creating a stereo image', partial: 'stereo recording and the principles of _____', tip: 'Show technical understanding' },
+            { ao: 3, verb: 'Explain', full: 'XY, AB (spaced pair), and Mid-Side techniques with mic placement details', partial: 'XY, _____, and _____ techniques with mic placement details', tip: 'Demonstrate applied knowledge' },
+            { ao: 4, verb: 'Evaluate', full: 'coincident vs spaced techniques — mono compatibility, phase issues, and stereo width', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Compare', full: 'the suitability of different techniques for different acoustic sources', partial: null, tip: 'Weigh advantages and limitations' },
+            { ao: 4, verb: 'Conclude', full: 'with impact on realism, spatial accuracy, and listener experience', partial: 'with impact on realism and _____', tip: 'Synthesise your argument' },
+        ],
+    },
+    {
+        id: 'microphones',
+        label: 'Microphones',
+        icon: '🎤',
+        question: 'Evaluate the selection and use of microphones in a studio recording session.',
+        marks: { total: 20, ao3: 5, ao4: 15 },
+        points: [
+            { ao: 3, verb: 'Define', full: 'the three main microphone types: dynamic, condenser, and ribbon', partial: 'the three main microphone types: dynamic, _____, and _____', tip: 'Show technical understanding' },
+            { ao: 3, verb: 'Explain', full: 'polar patterns (cardioid, omnidirectional, figure-of-eight) and their applications', partial: 'polar patterns (cardioid, _____, _____) and their applications', tip: 'Demonstrate applied knowledge' },
+            { ao: 4, verb: 'Evaluate', full: 'how microphone choice affects the tonal character and proximity effect of a recording', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Compare', full: 'close-miking vs distance-miking techniques for different instruments', partial: null, tip: 'Weigh advantages and limitations' },
+            { ao: 4, verb: 'Conclude', full: 'with impact on the overall quality and character of the recorded sound', partial: 'with impact on the overall _____ of the recorded sound', tip: 'Synthesise your argument' },
+        ],
+    },
 ];
 
-const ao3Count = scaffoldPoints.filter(p => p.ao === 3).length;
-const ao4Count = scaffoldPoints.filter(p => p.ao === 4).length;
-const ao3Pct = Math.round((ao3Count / scaffoldPoints.length) * 100);
-const ao4Pct = 100 - ao3Pct;
+function getAOStats(points) {
+    const ao3Count = points.filter(p => p.ao === 3).length;
+    const ao4Count = points.filter(p => p.ao === 4).length;
+    const ao3Pct = Math.round((ao3Count / points.length) * 100);
+    return { ao3Count, ao4Count, ao3Pct, ao4Pct: 100 - ao3Pct };
+}
 
 const LEVELS = [
     { key: 'full', label: 'Full', icon: '📋' },
@@ -183,7 +250,7 @@ function AOBadge({ ao }) {
 
 // ─── Question Panel (shared left side) ───────────────────────────────────────
 
-function QuestionPanel() {
+function QuestionPanel({ topic }) {
     return (
         <div>
             <div style={{
@@ -196,7 +263,7 @@ function QuestionPanel() {
                 borderRadius: 10, padding: 16, marginBottom: 14,
             }}>
                 <p style={{ color: C.text, fontSize: 14, lineHeight: 1.6, margin: 0 }}>
-                    Evaluate the use of dynamics processing in the production of a modern pop track.
+                    {topic.question}
                 </p>
             </div>
             <div style={{
@@ -206,9 +273,16 @@ function QuestionPanel() {
                 <div style={{ fontSize: 11, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600, marginBottom: 8 }}>
                     Mark Allocation
                 </div>
-                <div style={{ display: 'flex', gap: 8 }}>
-                    <span style={{ background: C.accentSoft, color: C.accent, fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 8 }}>AO3: 5 marks</span>
-                    <span style={{ background: C.accentSoft, color: C.accent, fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 8 }}>AO4: 5 marks</span>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <span style={{ background: C.accentSoft, color: C.accent, fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 8 }}>
+                        Total: {topic.marks.total} marks
+                    </span>
+                    <span style={{ background: C.ao3Soft, color: C.ao3, fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 8, border: `1px solid ${C.ao3Border}` }}>
+                        AO3: {topic.marks.ao3}
+                    </span>
+                    <span style={{ background: C.ao4Soft, color: C.ao4, fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 8, border: `1px solid ${C.ao4Border}` }}>
+                        AO4: {topic.marks.ao4}
+                    </span>
                 </div>
             </div>
         </div>
@@ -217,13 +291,14 @@ function QuestionPanel() {
 
 // ─── Tab 1: Understand (Colour-Coded AOs) ────────────────────────────────────
 
-function UnderstandTab() {
+function UnderstandTab({ topic }) {
     const [hoveredPoint, setHoveredPoint] = useState(null);
+    const { ao3Pct, ao4Pct } = getAOStats(topic.points);
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
-                <QuestionPanel />
+                <QuestionPanel topic={topic} />
 
                 {/* Colour key */}
                 <div style={{
@@ -253,7 +328,7 @@ function UnderstandTab() {
                     <div style={{ fontSize: 12, color: C.accent, fontWeight: 600, marginBottom: 4 }}>💡 Examiner Tip</div>
                     <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.5 }}>
                         {hoveredPoint !== null
-                            ? scaffoldPoints[hoveredPoint].tip
+                            ? topic.points[hoveredPoint].tip
                             : 'Hover over a scaffold point to see what the examiner is looking for.'}
                     </div>
                 </div>
@@ -289,12 +364,12 @@ function UnderstandTab() {
                     minHeight: 320,
                 }}>
                     <div style={{ color: C.textMuted, marginBottom: 6 }}>---</div>
-                    <div><span style={{ color: C.accent }}>topic:</span> Dynamics Processing</div>
-                    <div><span style={{ color: C.accent }}>marks:</span> 10 (<span style={{ color: C.ao3 }}>AO3: 5</span>, <span style={{ color: C.ao4 }}>AO4: 5</span>)</div>
+                    <div><span style={{ color: C.accent }}>topic:</span> {topic.label}</div>
+                    <div><span style={{ color: C.accent }}>marks:</span> {topic.marks.total} (<span style={{ color: C.ao3 }}>AO3: {topic.marks.ao3}</span>, <span style={{ color: C.ao4 }}>AO4: {topic.marks.ao4}</span>)</div>
                     <div style={{ color: C.textMuted, marginBottom: 10 }}>---</div>
                     <div style={{ color: C.text, fontWeight: 700, marginBottom: 10 }}>## Structure</div>
 
-                    {scaffoldPoints.map((point, i) => {
+                    {topic.points.map((point, i) => {
                         const isAO3 = point.ao === 3;
                         const isHovered = hoveredPoint === i;
                         return (
@@ -325,7 +400,7 @@ function UnderstandTab() {
 
 // ─── Tab 2: Practice (Faded Levels) ──────────────────────────────────────────
 
-function PracticeTab() {
+function PracticeTab({ topic }) {
     const [activeLevel, setActiveLevel] = useState('full');
     const levelTabListRef = useRef(null);
     const levelTabBtnRefs = useRef({});
@@ -356,7 +431,7 @@ function PracticeTab() {
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
-                <QuestionPanel />
+                <QuestionPanel topic={topic} />
 
                 {/* Level info */}
                 <div style={{
@@ -433,12 +508,12 @@ function PracticeTab() {
                     minHeight: 320,
                 }}>
                     <div style={{ color: C.textMuted, marginBottom: 6 }}>---</div>
-                    <div><span style={{ color: C.accent }}>topic:</span> Dynamics Processing</div>
-                    <div><span style={{ color: C.accent }}>marks:</span> 10 (AO3: 5, AO4: 5)</div>
+                    <div><span style={{ color: C.accent }}>topic:</span> {topic.label}</div>
+                    <div><span style={{ color: C.accent }}>marks:</span> {topic.marks.total} (AO3: {topic.marks.ao3}, AO4: {topic.marks.ao4})</div>
                     <div style={{ color: C.textMuted, marginBottom: 10 }}>---</div>
                     <div style={{ color: C.text, fontWeight: 700, marginBottom: 8 }}>## Structure</div>
 
-                    {scaffoldPoints.map((point, i) => {
+                    {topic.points.map((point, i) => {
                         let content;
                         if (activeLevel === 'full') {
                             content = point.full;
@@ -515,14 +590,14 @@ function PracticeTab() {
 
 // ─── Tab 3: Test (Retrieval) ─────────────────────────────────────────────────
 
-function TestTab() {
+function TestTab({ topic }) {
     const [revealed, setRevealed] = useState(false);
     const [attempt, setAttempt] = useState('');
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
-                <QuestionPanel />
+                <QuestionPanel topic={topic} />
 
                 {/* Student attempt area */}
                 <div style={{ marginTop: 14 }}>
@@ -589,11 +664,11 @@ function TestTab() {
                         userSelect: revealed ? 'auto' : 'none',
                     }}>
                         <div style={{ color: C.textMuted, marginBottom: 6 }}>---</div>
-                        <div><span style={{ color: C.accent }}>topic:</span> Dynamics Processing</div>
-                        <div><span style={{ color: C.accent }}>marks:</span> 10 (AO3: 5, AO4: 5)</div>
+                        <div><span style={{ color: C.accent }}>topic:</span> {topic.label}</div>
+                        <div><span style={{ color: C.accent }}>marks:</span> {topic.marks.total} (AO3: {topic.marks.ao3}, AO4: {topic.marks.ao4})</div>
                         <div style={{ color: C.textMuted, marginBottom: 10 }}>---</div>
                         <div style={{ color: C.text, fontWeight: 700, marginBottom: 8 }}>## Structure</div>
-                        {scaffoldPoints.map((point, i) => (
+                        {topic.points.map((point, i) => (
                             <div key={i} style={{ marginBottom: 6 }}>
                                 {i + 1}. <span style={{ color: C.text, fontWeight: 600 }}>{point.verb}</span>{' '}
                                 {point.full}
@@ -713,6 +788,8 @@ const SIDE_ICONS = {
 
 export default function EssayScaffoldPractice() {
     const [activeTab, setActiveTab] = useState('understand');
+    const [selectedTopic, setSelectedTopic] = useState(ESSAY_TOPICS[0]);
+    const [topicHover, setTopicHover] = useState(null);
 
     // Sliding pill tab refs
     const tabListRef = useRef(null);
@@ -765,6 +842,41 @@ export default function EssayScaffoldPractice() {
                     <p style={{ fontSize: 15, lineHeight: 1.6, color: C.textSecondary }}>
                         Three ways to engage with exam essay structure — understand the criteria, practise with support, then test from memory.
                     </p>
+                </div>
+
+                {/* ─── Topic Selector ─── */}
+                <div style={{
+                    display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10,
+                }}>
+                    {ESSAY_TOPICS.map((topic) => {
+                        const isActive = selectedTopic.id === topic.id;
+                        const isHovered = topicHover === topic.id;
+                        return (
+                            <button
+                                key={topic.id}
+                                onClick={() => setSelectedTopic(topic)}
+                                onMouseEnter={() => setTopicHover(topic.id)}
+                                onMouseLeave={() => setTopicHover(null)}
+                                style={{
+                                    background: isActive ? C.accentSoft : isHovered ? C.surfaceHover : C.bgInner,
+                                    border: `1px solid ${isActive ? C.accent : C.border}`,
+                                    borderRadius: 100,
+                                    padding: '8px 20px',
+                                    fontSize: 14,
+                                    fontWeight: isActive ? 600 : 500,
+                                    fontFamily: font,
+                                    color: isActive ? C.accent : C.textSecondary,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.25s ease',
+                                    display: 'flex', alignItems: 'center', gap: 7,
+                                    whiteSpace: 'nowrap',
+                                }}
+                            >
+                                <span style={{ fontSize: 15 }}>{topic.icon}</span>
+                                {topic.label}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* ─── Main Tabs (Sliding Pill) ─── */}
@@ -824,9 +936,9 @@ export default function EssayScaffoldPractice() {
                     </div>
 
                     <BrowserCard title="essay-scaffold">
-                        {activeTab === 'understand' && <UnderstandTab />}
-                        {activeTab === 'practice' && <PracticeTab />}
-                        {activeTab === 'test' && <TestTab />}
+                        {activeTab === 'understand' && <UnderstandTab topic={selectedTopic} />}
+                        {activeTab === 'practice' && <PracticeTab topic={selectedTopic} />}
+                        {activeTab === 'test' && <TestTab topic={selectedTopic} />}
                     </BrowserCard>
 
                     {/* Right icons */}
