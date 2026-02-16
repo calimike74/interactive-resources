@@ -232,7 +232,7 @@ export default function EssayScaffold() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: spacing[5],
+                    marginBottom: spacing[4],
                 }}>
                     <h2 style={{
                         fontSize: typography.size.xl,
@@ -251,6 +251,23 @@ export default function EssayScaffold() {
                     </span>
                 </div>
 
+                {/* Examiner tip */}
+                {scaffoldLevel !== 'independent' && exercise.examinerTip && (
+                    <div style={{
+                        padding: spacing[3],
+                        background: t.accent.warningLight,
+                        borderRadius: borderRadius.lg,
+                        borderLeft: `3px solid ${t.accent.warning}`,
+                        marginBottom: spacing[5],
+                        fontSize: typography.size.sm,
+                        color: t.text.primary,
+                        lineHeight: typography.lineHeight.relaxed,
+                    }}>
+                        <strong style={{ color: t.accent.warning }}>Examiner tip: </strong>
+                        {exercise.examinerTip}
+                    </div>
+                )}
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[5] }}>
                     {exercise.essaySections.map(section => (
                         <div key={section.id}>
@@ -268,6 +285,7 @@ export default function EssayScaffold() {
                                     fontSize: typography.size.xs,
                                     color: t.text.tertiary,
                                     margin: `0 0 ${spacing[2]}`,
+                                    lineHeight: typography.lineHeight.relaxed,
                                 }}>
                                     {section.guidance}
                                 </p>
@@ -276,7 +294,7 @@ export default function EssayScaffold() {
                                 value={essayContent[section.id] || ''}
                                 onChange={(e) => updateSection(section.id, e.target.value)}
                                 placeholder={section.placeholder}
-                                rows={section.id === 'introduction' || section.id === 'conclusion' ? 4 : 8}
+                                rows={8}
                                 style={{
                                     width: '100%',
                                     padding: spacing[3],
@@ -517,7 +535,7 @@ function ScaffoldSidebar({ zone, level, zones, theme: t }) {
                         textTransform: 'uppercase',
                         letterSpacing: typography.letterSpacing.wide,
                     }}>
-                        Evaluation Prompt (AO4)
+                        Extend Your Evaluation
                     </div>
                     <p style={{
                         fontSize: typography.size.sm,
