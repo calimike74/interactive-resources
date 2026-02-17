@@ -4,6 +4,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { getAllResources, getResourcesByTopic } from '@/lib/resources';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import LiquidHero from '@/components/LiquidHero';
 
 // Skeleton card component for loading state
 function SkeletonCard({ theme: t }) {
@@ -158,75 +159,12 @@ export default function ResourcesHub() {
                 fontFamily: typography.fontFamily,
             }}
         >
-            {/* Header */}
-            <header
-                style={{
-                    background: t.bg.primary,
-                    borderBottom: `1px solid ${t.border.subtle}`,
-                    padding: `${spacing[6]} ${spacing[8]}`,
-                }}
-            >
-                <div
-                    style={{
-                        maxWidth: '1200px',
-                        margin: '0 auto',
-                    }}
-                >
-                    {/* Badge */}
-                    <div
-                        style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: spacing[2],
-                            background: t.accent.successLight,
-                            border: `1px solid ${t.accent.success}30`,
-                            color: t.accent.success,
-                            padding: `${spacing[1]} ${spacing[3]}`,
-                            borderRadius: borderRadius.full,
-                            fontSize: typography.size.xs,
-                            fontWeight: typography.weight.semibold,
-                            letterSpacing: typography.letterSpacing.wide,
-                            textTransform: 'uppercase',
-                            marginBottom: spacing[4],
-                        }}
-                    >
-                        <span
-                            style={{
-                                width: '6px',
-                                height: '6px',
-                                borderRadius: '50%',
-                                background: t.accent.success,
-                            }}
-                            aria-hidden="true"
-                        />
-                        A-Level Music Technology
-                    </div>
-
-                    <h1
-                        style={{
-                            fontSize: typography.size['4xl'],
-                            fontWeight: typography.weight.bold,
-                            color: t.text.primary,
-                            marginBottom: spacing[2],
-                            letterSpacing: typography.letterSpacing.tight,
-                            lineHeight: typography.lineHeight.tight,
-                        }}
-                    >
-                        Interactive Resources
-                    </h1>
-
-                    <p
-                        style={{
-                            color: t.text.secondary,
-                            fontSize: typography.size.lg,
-                            lineHeight: typography.lineHeight.relaxed,
-                            maxWidth: '600px',
-                        }}
-                    >
-                        Explore and learn with interactive tools. Practice concepts before taking assessments.
-                    </p>
-                </div>
-            </header>
+            {/* Liquid Hero Banner */}
+            <LiquidHero
+                badge="A-Level Music Technology"
+                title={['Interactive', 'Resources']}
+                tagline="Explore  •  Learn  •  Practice"
+            />
 
             {/* Main Content */}
             <main
