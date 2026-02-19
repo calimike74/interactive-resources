@@ -432,6 +432,14 @@ export default function ResourcesHub() {
 // Resource Card Component
 function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
     const [isHovered, setIsHovered] = useState(false);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const cardRef = useRef(null);
+
+    const handleMouseMove = useCallback((e) => {
+        const rect = cardRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    }, []);
 
     return (
         <Link
@@ -442,9 +450,13 @@ function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
             }}
         >
             <article
+                ref={cardRef}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
+                onMouseMove={handleMouseMove}
                 style={{
+                    position: 'relative',
+                    overflow: 'hidden',
                     background: t.bg.primary,
                     borderRadius: borderRadius.xl,
                     border: `1px solid ${isHovered ? t.accent.primary : t.border.subtle}`,
@@ -458,6 +470,26 @@ function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
                     flexDirection: 'column',
                 }}
             >
+                {/* Glow layer — blurred circle that follows cursor */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: mousePos.y - 150,
+                        left: mousePos.x - 150,
+                        width: 300,
+                        height: 300,
+                        borderRadius: '50%',
+                        background: 'radial-gradient(circle, rgba(37, 99, 235, 0.45) 0%, rgba(37, 99, 235, 0.15) 40%, transparent 70%)',
+                        filter: 'blur(28px) saturate(3) brightness(1.1)',
+                        pointerEvents: 'none',
+                        opacity: isHovered ? 1 : 0,
+                        transition: 'opacity 300ms ease',
+                        zIndex: 0,
+                    }}
+                    aria-hidden="true"
+                />
+                {/* Card content — sits above glow layer */}
+                <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
                 {/* Header with icon and type badge */}
                 <div
                     style={{
@@ -539,6 +571,7 @@ function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
                             Prep for assessment
                         </span>
                     )}
+                </div>
                 </div>
             </article>
         </Link>
