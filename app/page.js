@@ -422,6 +422,18 @@ export default function ResourcesHub() {
                         >
                             Go to Assessment Hub
                         </a>
+                        {' '}&middot;{' '}
+                        <a
+                            href="https://mike-lehnert-portfolio.vercel.app"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                color: t.text.link,
+                                textDecoration: 'none',
+                            }}
+                        >
+                            Built by Mike Lehnert
+                        </a>
                     </p>
                 </div>
             </footer>
