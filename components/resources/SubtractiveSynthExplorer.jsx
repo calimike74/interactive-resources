@@ -1432,29 +1432,62 @@ export default function SubtractiveSynthExplorer() {
                 </div>
             </nav>
 
-            {/* Hero */}
+            {/* Hero with video background */}
             <div style={{
-                maxWidth: '640px', margin: '0 auto',
-                padding: `${spacing[16]} ${spacing[6]} ${spacing[6]}`,
-                textAlign: 'center',
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '16px',
+                margin: `${spacing[16]} ${spacing[4]} ${spacing[6]}`,
+                minHeight: '240px',
             }}>
-                <h1 style={{
-                    fontSize: typography.size['4xl'],
-                    fontWeight: typography.weight.bold,
-                    color: COLORS.text,
-                    lineHeight: typography.lineHeight.tight,
-                    marginBottom: spacing[4],
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        opacity: 0,
+                        transition: 'opacity 0.8s ease-out',
+                    }}
+                    src="/synthesis-hero.mp4"
+                />
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+                }} />
+                <div style={{
+                    position: 'relative',
+                    maxWidth: '640px', margin: '0 auto',
+                    padding: `${spacing[12]} ${spacing[6]} ${spacing[10]}`,
+                    textAlign: 'center',
                 }}>
-                    Subtractive Synthesis
-                </h1>
-                <p style={{
-                    color: COLORS.textSecondary,
-                    fontSize: typography.size.lg,
-                    lineHeight: typography.lineHeight.relaxed,
-                    maxWidth: '480px', margin: '0 auto',
-                }}>
-                    Build sounds from scratch. Choose waveforms, shape them with filters, sculpt dynamics with envelopes.
-                </p>
+                    <h1 style={{
+                        fontSize: typography.size['4xl'],
+                        fontWeight: typography.weight.bold,
+                        color: '#ffffff',
+                        lineHeight: typography.lineHeight.tight,
+                        marginBottom: spacing[4],
+                        textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                    }}>
+                        Subtractive Synthesis
+                    </h1>
+                    <p style={{
+                        color: 'rgba(255,255,255,0.85)',
+                        fontSize: typography.size.lg,
+                        lineHeight: typography.lineHeight.relaxed,
+                        maxWidth: '480px', margin: '0 auto',
+                        textShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                    }}>
+                        Build sounds from scratch. Choose waveforms, shape them with filters, sculpt dynamics with envelopes.
+                    </p>
+                </div>
             </div>
 
             {/* Current section */}

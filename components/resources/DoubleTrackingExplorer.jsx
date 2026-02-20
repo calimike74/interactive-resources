@@ -1188,6 +1188,64 @@ export default function DoubleTrackingExplorer() {
                 </div>
             </header>
 
+            {/* Hero with video background */}
+            <div style={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '16px',
+                margin: '1.5rem 1.5rem 0',
+                minHeight: '240px',
+            }}>
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        opacity: 0,
+                        transition: 'opacity 0.8s ease-out',
+                    }}
+                    src="/stereo-hero.mp4"
+                />
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, rgba(5,5,7,0.4) 0%, rgba(5,5,7,0.7) 100%)',
+                }} />
+                <div style={{
+                    position: 'relative',
+                    maxWidth: '640px', margin: '0 auto',
+                    padding: '3rem 1.5rem 2.5rem',
+                    textAlign: 'center',
+                }}>
+                    <h1 style={{
+                        fontSize: '2.25rem',
+                        fontWeight: 700,
+                        color: '#ffffff',
+                        lineHeight: 1.2,
+                        marginBottom: '1rem',
+                        textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                    }}>
+                        Double Tracking vs Copying
+                    </h1>
+                    <p style={{
+                        color: 'rgba(255,255,255,0.85)',
+                        fontSize: '1.125rem',
+                        lineHeight: 1.6,
+                        maxWidth: '480px', margin: '0 auto',
+                        textShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                    }}>
+                        Understand why copying a track just makes it louder, and how ADT creates real stereo width.
+                    </p>
+                </div>
+            </div>
+
             {/* Content */}
             <main style={{ maxWidth: '900px', margin: '0 auto' }}>
                 {activeTab === 'mistake' && <MistakeSection />}

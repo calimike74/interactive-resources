@@ -69,13 +69,62 @@ export default function MIDIPitchBendController() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <Music className="w-8 h-8 text-purple-600" />
-            <h1 className="text-3xl font-bold text-gray-800">1.5. MIDI Pitch Bend & Controller</h1>
+        {/* Hero with video background */}
+        <div style={{
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: '16px',
+          marginBottom: '1.5rem',
+          minHeight: '240px',
+        }}>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            onLoadedData={(e) => { e.target.style.opacity = 1; }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: 0,
+              transition: 'opacity 0.8s ease-out',
+            }}
+            src="/midi-hero.mp4"
+          />
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+          }} />
+          <div style={{
+            position: 'relative',
+            maxWidth: '640px', margin: '0 auto',
+            padding: '3rem 1.5rem 2.5rem',
+            textAlign: 'center',
+          }}>
+            <h1 style={{
+              fontSize: '2.25rem',
+              fontWeight: 700,
+              color: '#ffffff',
+              lineHeight: 1.2,
+              marginBottom: '1rem',
+              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+            }}>
+              MIDI Pitch Bend & Controller
+            </h1>
+            <p style={{
+              color: 'rgba(255,255,255,0.85)',
+              fontSize: '1.125rem',
+              lineHeight: 1.6,
+              maxWidth: '480px', margin: '0 auto',
+              textShadow: '0 1px 4px rgba(0,0,0,0.2)',
+            }}>
+              An interactive guide to pitch bend data, 14-bit resolution, and MIDI controller messages.
+            </p>
           </div>
-          <p className="text-gray-600">An interactive guide for A-Level Music Technology students</p>
         </div>
 
         {/* Tab Navigation */}

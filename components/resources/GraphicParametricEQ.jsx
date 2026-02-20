@@ -920,21 +920,58 @@ export default function GraphicParametricEQ() {
                 fontFamily: typography.fontFamily,
             }}
         >
-            {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: spacing[8] }}>
-                <h1
+            {/* Hero with video background */}
+            <div style={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '16px',
+                marginBottom: spacing[8],
+                minHeight: '200px',
+            }}>
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
                     style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        opacity: 0,
+                        transition: 'opacity 0.8s ease-out',
+                    }}
+                    src="/eq-hero.mp4"
+                />
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+                }} />
+                <div style={{
+                    position: 'relative',
+                    textAlign: 'center',
+                    padding: `${spacing[10]} ${spacing[6]} ${spacing[8]}`,
+                }}>
+                    <h1 style={{
                         fontSize: typography.size['3xl'],
                         fontWeight: typography.weight.bold,
-                        color: t.text.primary,
+                        color: '#ffffff',
                         marginBottom: spacing[2],
-                    }}
-                >
-                    📊 Graphic vs Parametric EQ
-                </h1>
-                <p style={{ fontSize: typography.size.lg, color: t.text.secondary }}>
-                    Compare two essential equalizer types through interactive exploration
-                </p>
+                        textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                    }}>
+                        Graphic vs Parametric EQ
+                    </h1>
+                    <p style={{
+                        fontSize: typography.size.lg,
+                        color: 'rgba(255,255,255,0.85)',
+                        textShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                    }}>
+                        Compare two essential equalizer types through interactive exploration
+                    </p>
+                </div>
             </div>
 
             {/* Tab Navigation */}

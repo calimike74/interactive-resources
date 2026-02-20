@@ -13,8 +13,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Interactive Resources | A-Level Music Technology",
+  metadataBase: new URL('https://interactive-resources.vercel.app'),
+  title: {
+    default: 'Interactive Resources | A-Level Music Technology',
+    template: '%s | Interactive Resources',
+  },
   description: "Interactive learning tools for Pearson Edexcel A-Level Music Technology. Practice EQ, synthesis, dynamics, and more.",
+  openGraph: {
+    title: 'Interactive Resources | A-Level Music Technology',
+    description: 'Interactive learning tools for Pearson Edexcel A-Level Music Technology. Practice EQ, synthesis, dynamics, and more.',
+    url: 'https://interactive-resources.vercel.app',
+    siteName: 'Interactive Resources | A-Level Music Technology',
+    locale: 'en_GB',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Interactive Resources | A-Level Music Technology',
+    description: 'Interactive learning tools for Pearson Edexcel A-Level Music Technology. Practice EQ, synthesis, dynamics, and more.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }) {
