@@ -32,40 +32,45 @@ function renderTextToDataUrl({ badge, title, tagline }) {
     ctx.fillStyle = COLORS.bg;
     ctx.fillRect(0, 0, width, height);
 
-    // Responsive font sizing
     const isMobile = width < 640;
-    const isTablet = width < 1024;
+    const padding = isMobile ? 20 : 40; // horizontal padding each side
+    const targetWidth = width - padding * 2;
 
     const badgeSize = isMobile ? 11 : 13;
-    const titleSize = isMobile ? 28 : isTablet ? 40 : 52;
     const taglineSize = isMobile ? 13 : 15;
+
+    // Calculate title font size to fill the available width
+    const titleText = Array.isArray(title) ? title.join(' ') : title;
+    const fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    let titleSize = 100; // start large, measure and shrink to fit
+    ctx.letterSpacing = '-1px';
+    ctx.font = `700 ${titleSize}px ${fontFamily}`;
+    let measured = ctx.measureText(titleText).width;
+    titleSize = Math.floor(titleSize * (targetWidth / measured));
+    // Clamp to reasonable range
+    titleSize = Math.min(titleSize, 140);
+    titleSize = Math.max(titleSize, 24);
 
     const centerX = width / 2;
     ctx.textAlign = 'center';
 
     // Badge
-    const badgeY = isMobile ? 40 : 50;
-    ctx.font = `600 ${badgeSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+    const badgeY = isMobile ? 35 : 45;
+    ctx.font = `600 ${badgeSize}px ${fontFamily}`;
     ctx.letterSpacing = '1.5px';
     ctx.fillStyle = '#059669';
     ctx.fillText(badge.toUpperCase(), centerX, badgeY);
 
-    // Title lines
+    // Title — single line, sized to fill width
     ctx.fillStyle = COLORS.text;
     ctx.letterSpacing = '-1px';
-    const lines = Array.isArray(title) ? title : [title];
-    const lineHeight = titleSize * 1.15;
-    const titleBlockHeight = lines.length * lineHeight;
-    const titleStartY = (height / 2) - (titleBlockHeight / 2) + titleSize * 0.35 + (isMobile ? 5 : 0);
-
-    lines.forEach((line, i) => {
-        ctx.font = `700 ${titleSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
-        ctx.fillText(line, centerX, titleStartY + i * lineHeight);
-    });
+    ctx.font = `700 ${titleSize}px ${fontFamily}`;
+    const titleY = height / 2 + titleSize * 0.35;
+    ctx.fillText(titleText, centerX, titleY);
 
     // Tagline
-    const taglineY = height - (isMobile ? 30 : 40);
-    ctx.font = `500 ${taglineSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+    const taglineY = height - (isMobile ? 25 : 35);
+    ctx.font = `500 ${taglineSize}px ${fontFamily}`;
     ctx.fillStyle = '#6B7280';
     ctx.letterSpacing = '3px';
     ctx.fillText(tagline, centerX, taglineY);
@@ -123,7 +128,7 @@ export default function LiquidHero({
         };
     }, [badge, title, tagline]);
 
-    const lines = Array.isArray(title) ? title : [title];
+    const titleText = Array.isArray(title) ? title.join(' ') : title;
 
     return (
         <div style={{ position: 'relative' }}>
@@ -156,20 +161,19 @@ export default function LiquidHero({
                 >
                     {badge}
                 </span>
-                {lines.map((line, i) => (
-                    <span
-                        key={i}
-                        style={{
-                            fontSize: 'clamp(28px, 4.5vw, 52px)',
-                            fontWeight: 700,
-                            color: COLORS.text,
-                            lineHeight: 1.15,
-                            letterSpacing: '-1px',
-                        }}
-                    >
-                        {line}
-                    </span>
-                ))}
+                <span
+                    style={{
+                        fontSize: 'clamp(32px, 9.5vw, 130px)',
+                        fontWeight: 700,
+                        color: COLORS.text,
+                        lineHeight: 1.1,
+                        letterSpacing: '-1px',
+                        whiteSpace: 'nowrap',
+                        padding: '0 20px',
+                    }}
+                >
+                    {Array.isArray(title) ? title.join(' ') : title}
+                </span>
                 <span
                     style={{
                         fontSize: '15px',
@@ -194,7 +198,7 @@ export default function LiquidHero({
                     background: COLORS.bg,
                     cursor: 'grab',
                 }}
-                aria-label={`${badge} — ${lines.join(' ')}`}
+                aria-label={`${badge} — ${titleText}`}
                 role="img"
             />
 
