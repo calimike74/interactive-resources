@@ -75,7 +75,7 @@ function renderTextToDataUrl({ badge, title, tagline }) {
 
 export default function LiquidHero({
     badge = 'A-Level Music Technology',
-    title = ['Interactive', 'Resources'],
+    title = 'Interactive Resources',
     tagline = 'Explore  •  Learn  •  Practice',
 }) {
     const canvasRef = useRef(null);
