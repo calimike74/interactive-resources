@@ -37,7 +37,7 @@ function renderTextToDataUrl({ badge, title, tagline }) {
     const isTablet = width < 1024;
 
     const badgeSize = isMobile ? 11 : 13;
-    const titleSize = isMobile ? 36 : isTablet ? 48 : 60;
+    const titleSize = isMobile ? 28 : isTablet ? 40 : 52;
     const taglineSize = isMobile ? 13 : 15;
 
     const centerX = width / 2;
@@ -160,7 +160,7 @@ export default function LiquidHero({
                     <span
                         key={i}
                         style={{
-                            fontSize: 'clamp(36px, 5vw, 60px)',
+                            fontSize: 'clamp(28px, 4.5vw, 52px)',
                             fontWeight: 700,
                             color: COLORS.text,
                             lineHeight: 1.15,
