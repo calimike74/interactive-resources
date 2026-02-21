@@ -1,0 +1,149 @@
+{
+  "topicId": "midi",
+  "questions": [
+    {
+      "id": "midi-mcq-01",
+      "type": "mcq",
+      "question": "What information does a MIDI Note On message contain?",
+      "options": [
+        "Note number, velocity, and channel",
+        "Note number, sample rate, and channel",
+        "Frequency, amplitude, and duration",
+        "Note number, bit depth, and tempo"
+      ],
+      "correctIndex": 0,
+      "explanation": "A MIDI Note On message carries three pieces of data: the note number (0–127, identifying pitch), the velocity (0–127, indicating how hard the key was struck), and the channel (1–16, routing the message to the correct instrument). MIDI transmits performance data — not audio — so concepts like sample rate and bit depth do not apply."
+    },
+    {
+      "id": "midi-mcq-02",
+      "type": "mcq",
+      "question": "In General MIDI (GM), which channel is reserved for drum and percussion sounds?",
+      "options": [
+        "Channel 1",
+        "Channel 10",
+        "Channel 16",
+        "Channel 8"
+      ],
+      "correctIndex": 1,
+      "explanation": "The General MIDI standard reserves channel 10 exclusively for drums and percussion. On this channel, each note number triggers a different drum sound (e.g., note 36 = bass drum, note 38 = snare) rather than a pitched instrument. This convention is shared across all GM-compatible devices."
+    },
+    {
+      "id": "midi-mcq-03",
+      "type": "mcq",
+      "question": "Which of the following best describes the key difference between MIDI and audio?",
+      "options": [
+        "MIDI stores waveform data at a fixed sample rate; audio stores performance instructions",
+        "MIDI stores performance instructions (note, timing, velocity); audio stores the actual sound as a waveform",
+        "MIDI files are always larger than audio files because they contain more detail",
+        "MIDI can only be used with hardware synthesisers, not software"
+      ],
+      "correctIndex": 1,
+      "explanation": "MIDI is a performance protocol — it records what was played (note number, when, how hard) but contains no sound itself. Audio records the actual waveform of a sound. Because MIDI files only store instructions rather than waveform data, they are typically much smaller than audio files. The sound produced from MIDI depends entirely on the playback device or software instrument."
+    },
+    {
+      "id": "midi-mcq-04",
+      "type": "mcq",
+      "question": "A producer applies quantisation to a MIDI piano part. What does this process do?",
+      "options": [
+        "Adjusts the pitch of each note to the nearest semitone",
+        "Compresses the dynamic range of the MIDI velocities",
+        "Moves note start times to align with the nearest rhythmic grid position",
+        "Converts MIDI data into an audio waveform"
+      ],
+      "correctIndex": 2,
+      "explanation": "Quantisation moves the timing of MIDI notes so they fall on (or closer to) a rhythmic grid — for example, the nearest 16th note. It corrects timing imprecision from live playing. Pitch correction is a separate process. Velocity editing affects dynamics. Rendering MIDI to audio is called 'bouncing' or 'freezing'."
+    },
+    {
+      "id": "midi-mcq-05",
+      "type": "mcq",
+      "question": "A MIDI Control Change (CC) message with controller number 64 is sent to a synthesiser. What does this control?",
+      "options": [
+        "Modulation wheel depth",
+        "Master volume",
+        "Sustain pedal",
+        "Expression level"
+      ],
+      "correctIndex": 2,
+      "explanation": "CC64 is the standard General MIDI assignment for the sustain pedal. A value of 64–127 holds the sustain on; 0–63 releases it. Other standard assignments include CC1 (modulation wheel), CC7 (channel volume), and CC11 (expression). Knowing these standard controller numbers is expected at A-Level."
+    },
+    {
+      "id": "midi-mcq-06",
+      "type": "mcq",
+      "question": "Which MIDI message type is used to change the instrument sound (patch) on a given channel?",
+      "options": [
+        "Control Change",
+        "Pitch Bend",
+        "Program Change",
+        "Note On"
+      ],
+      "correctIndex": 2,
+      "explanation": "A Program Change message instructs the receiving device to switch to a different instrument preset (patch). In General MIDI, Program Change 1 selects Acoustic Grand Piano, Program Change 57 selects Trumpet, and so on. Control Change messages adjust continuous parameters (e.g., volume, modulation), not the instrument selection."
+    },
+    {
+      "id": "midi-num-01",
+      "type": "numeric",
+      "question": "MIDI velocity uses 7-bit resolution. How many discrete velocity values are possible?",
+      "answer": 128,
+      "tolerance": 0,
+      "unit": "values",
+      "explanation": "7-bit resolution means 2^7 = 128 possible values, numbered 0 to 127. Velocity 0 is treated as a Note Off event. Velocity 127 represents the maximum (hardest) strike. This 7-bit range applies to most MIDI data values including note numbers and many CC values."
+    },
+    {
+      "id": "midi-num-02",
+      "type": "numeric",
+      "question": "How many independent channels does the MIDI specification provide?",
+      "answer": 16,
+      "tolerance": 0,
+      "unit": "channels",
+      "explanation": "MIDI supports 16 channels on a single cable or port. Each channel can carry a separate stream of note and control data, allowing up to 16 different instruments to be controlled simultaneously. Channel 10 is reserved for drums in General MIDI. For larger setups, multiple MIDI ports are used."
+    },
+    {
+      "id": "midi-num-03",
+      "type": "numeric",
+      "question": "The modulation wheel is assigned to which MIDI CC number in the General MIDI standard?",
+      "answer": 1,
+      "tolerance": 0,
+      "unit": "CC number",
+      "explanation": "CC1 is the General MIDI standard assignment for the modulation wheel. It is one of the most commonly used continuous controllers, typically mapped to vibrato depth or filter modulation on synthesisers. Remembering key CC assignments — CC1 (mod wheel), CC7 (volume), CC11 (expression), CC64 (sustain) — is important for A-Level."
+    },
+    {
+      "id": "midi-short-01",
+      "type": "short",
+      "question": "Explain what a MIDI Pitch Bend message does and why it is handled differently from other MIDI continuous controllers.",
+      "sampleAnswer": "A MIDI Pitch Bend message raises or lowers the pitch of notes on a channel in real time, typically mapped to a spring-loaded wheel that returns to centre. Unlike Control Change messages which use 7-bit resolution (128 steps), Pitch Bend uses 14-bit resolution (16,384 steps) to allow smooth, subtle pitch variation without audible stepping.",
+      "keyPoints": [
+        "Pitch Bend changes the pitch of notes being played on that channel in real time",
+        "It uses 14-bit resolution (combining two 7-bit bytes) for smooth, continuous pitch movement",
+        "Higher resolution than standard CC messages prevents audible 'stepping' in the pitch glide",
+        "The centre value (no bend) is 8192 in 14-bit; the wheel returns to this position when released"
+      ],
+      "explanation": "Pitch Bend is a dedicated MIDI message type separate from Control Change. Its 14-bit resolution (2^14 = 16,384 steps) is essential because pitch perception is highly sensitive — 7-bit resolution would produce audible stepped artefacts when bending smoothly between notes. This is why it has its own message status byte rather than sharing the CC format."
+    },
+    {
+      "id": "midi-short-02",
+      "type": "short",
+      "question": "Describe the purpose of MIDI Clock and explain how it is used to synchronise devices in a studio setup.",
+      "sampleAnswer": "MIDI Clock is a timing message transmitted 24 times per quarter note (24 ppqn) by a master device, such as a DAW or drum machine. Slave devices receive these clock pulses and use them to lock their internal tempo to the master. This allows sequencers, drum machines, and arpeggiators to stay in sync. MIDI Start, Stop, and Continue messages are used alongside MIDI Clock to control playback.",
+      "keyPoints": [
+        "MIDI Clock sends 24 pulses per quarter note (24 ppqn)",
+        "One device acts as master (sends clock); others act as slaves (follow it)",
+        "Allows multiple hardware or software devices to share the same tempo",
+        "Accompanied by MIDI Start, Stop, and Continue transport messages"
+      ],
+      "explanation": "MIDI Clock is a System Real-Time message, meaning it can be interleaved with other MIDI data in the data stream without interrupting it. The 24 ppqn rate provides enough resolution for tight synchronisation across a range of tempos. In modern studios, MIDI Clock may synchronise hardware synthesisers, drum machines, and effects units to a DAW's master tempo."
+    },
+    {
+      "id": "midi-short-03",
+      "type": "short",
+      "question": "A student records a live keyboard performance into their DAW. The timing is slightly inconsistent. They apply quantisation set to 1/16 note with 30% swing. Explain what each part of this setting does.",
+      "sampleAnswer": "The 1/16 note setting means each MIDI note is snapped to the nearest sixteenth-note grid position, correcting timing errors in the performance. The 30% swing setting offsets every other sixteenth note slightly later in time, creating a subtle rhythmic 'shuffle' feel rather than a rigid, mechanical grid. Higher swing percentages create a more pronounced shuffle or groove.",
+      "keyPoints": [
+        "1/16 note quantisation snaps note start times to the nearest sixteenth-note grid position",
+        "This corrects timing inaccuracies from the live performance",
+        "Swing offsets alternate grid positions (typically the 'off-beat' 16th notes) later in time",
+        "The result is a less rigid, more groove-based feel — higher swing = stronger shuffle"
+      ],
+      "explanation": "Straight quantisation alone can make a performance sound mechanical by placing all notes on perfectly even grid positions. Swing (sometimes called 'groove') reintroduces rhythmic feel by pushing alternate notes back in time by a percentage of the grid interval. A 50% swing value produces an exact triplet feel; values between 50–75% produce varying degrees of shuffle. This is widely used in hip-hop, jazz, and funk production."
+    }
+  ]
+}

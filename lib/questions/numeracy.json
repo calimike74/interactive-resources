@@ -1,0 +1,120 @@
+{
+  "topicId": "numeracy",
+  "questions": [
+    {
+      "id": "numeracy-mcq-01",
+      "type": "mcq",
+      "question": "A sound wave has a period of 0.002 seconds. What is its frequency?",
+      "options": ["200 Hz", "500 Hz", "2000 Hz", "0.002 Hz"],
+      "correctIndex": 1,
+      "explanation": "Frequency = 1 / Period. f = 1 / 0.002 = 500 Hz. The period is the time for one complete cycle; frequency is how many cycles occur per second."
+    },
+    {
+      "id": "numeracy-mcq-02",
+      "type": "mcq",
+      "question": "A4 is 440 Hz. Which frequency represents A5 (one octave above A4)?",
+      "options": ["220 Hz", "460 Hz", "880 Hz", "1760 Hz"],
+      "correctIndex": 2,
+      "explanation": "Each octave up doubles the frequency. A5 = 440 × 2 = 880 Hz. A3 would be 220 Hz (halving), and A6 would be 1760 Hz (two octaves above A4)."
+    },
+    {
+      "id": "numeracy-mcq-03",
+      "type": "mcq",
+      "question": "A recording system uses a 16-bit bit depth. What is the approximate dynamic range?",
+      "options": ["16 dB", "48 dB", "96 dB", "112 dB"],
+      "correctIndex": 2,
+      "explanation": "Dynamic range ≈ bit depth × 6 dB. For 16-bit: 16 × 6 = 96 dB. This is why CD-quality audio (16-bit) offers approximately 96 dB of dynamic range."
+    },
+    {
+      "id": "numeracy-mcq-04",
+      "type": "mcq",
+      "question": "A sample rate of 44,100 Hz is used. What is the maximum frequency that can be accurately recorded according to the Nyquist theorem?",
+      "options": ["22,050 Hz", "44,100 Hz", "88,200 Hz", "11,025 Hz"],
+      "correctIndex": 0,
+      "explanation": "The Nyquist theorem states that the maximum recordable frequency is half the sample rate. 44,100 / 2 = 22,050 Hz — just above the typical upper limit of human hearing (20,000 Hz)."
+    },
+    {
+      "id": "numeracy-mcq-05",
+      "type": "mcq",
+      "question": "A sound source is 2 metres from a microphone. The microphone is moved to 4 metres. Assuming the inverse square law, how does the sound level change?",
+      "options": ["Increases by 6 dB", "Decreases by 3 dB", "Decreases by 6 dB", "Decreases by 12 dB"],
+      "correctIndex": 2,
+      "explanation": "The inverse square law states that doubling the distance from a point source reduces the sound level by 6 dB. Moving from 2m to 4m doubles the distance, so the level drops by 6 dB."
+    },
+    {
+      "id": "numeracy-mcq-06",
+      "type": "mcq",
+      "question": "A track is set to 120 BPM. A producer wants to set a delay time to exactly one beat. What is the correct delay time?",
+      "options": ["120 ms", "250 ms", "500 ms", "600 ms"],
+      "correctIndex": 2,
+      "explanation": "Delay time (ms) = 60,000 / BPM. At 120 BPM: 60,000 / 120 = 500 ms. This ensures the delay repeats in sync with the tempo, creating a rhythmic echo."
+    },
+    {
+      "id": "numeracy-num-01",
+      "type": "numeric",
+      "question": "A sine wave has a frequency of 250 Hz. Calculate its period in milliseconds.",
+      "answer": 4,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "Period (T) = 1 / f = 1 / 250 = 0.004 seconds. Converting to milliseconds: 0.004 × 1000 = 4 ms. Period and frequency are reciprocals — as frequency increases, period decreases proportionally."
+    },
+    {
+      "id": "numeracy-num-02",
+      "type": "numeric",
+      "question": "Calculate the file size in megabytes (MB) of a 3-minute stereo audio file recorded at 44,100 Hz with a 16-bit bit depth. Give your answer to the nearest whole number.",
+      "answer": 30,
+      "tolerance": 1,
+      "unit": "MB",
+      "explanation": "File size (bytes) = sample rate × bit depth × channels × seconds / 8. = 44,100 × 16 × 2 × 180 / 8 = 31,752,000 bytes ≈ 30.3 MB. Dividing bit depth by 8 converts bits to bytes; stereo = 2 channels; 3 minutes = 180 seconds."
+    },
+    {
+      "id": "numeracy-num-03",
+      "type": "numeric",
+      "question": "A track is at 90 BPM. Calculate the delay time in milliseconds for a dotted quaver (⅜ of a beat).",
+      "answer": 250,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "First, find one beat: 60,000 / 90 = 666.67 ms. A dotted quaver = ¾ of a crotchet beat = 666.67 × ¾ = 500 ms. Wait — a dotted quaver is 3/8 of a beat: 666.67 × (3/8) = 250 ms. This is a classic rhythmic delay value used in production to create a syncopated feel."
+    },
+    {
+      "id": "numeracy-short-01",
+      "type": "short",
+      "question": "Explain the relationship between frequency and period. Include the formula and describe what happens to the period when frequency doubles.",
+      "sampleAnswer": "Frequency and period are reciprocals of each other, described by the formula f = 1/T (or T = 1/f), where f is frequency in Hz and T is period in seconds. When frequency doubles, the period halves — the wave completes twice as many cycles per second, so each individual cycle takes half as long.",
+      "keyPoints": [
+        "f = 1/T and T = 1/f (reciprocal relationship)",
+        "Frequency measured in Hz (cycles per second)",
+        "Period measured in seconds (time for one complete cycle)",
+        "Doubling frequency halves the period"
+      ],
+      "explanation": "This relationship underpins all of audio — every pitch we hear is a frequency, and understanding period helps explain phenomena like phase relationships and delay times."
+    },
+    {
+      "id": "numeracy-short-02",
+      "type": "short",
+      "question": "Describe the relationship between bit depth and dynamic range. Why does increasing bit depth improve the quality of a recording?",
+      "sampleAnswer": "Dynamic range in decibels is approximately equal to the bit depth multiplied by 6. For example, 16-bit audio gives roughly 96 dB of dynamic range, while 24-bit gives approximately 144 dB. A greater bit depth means more discrete amplitude levels are available to represent the audio signal. This reduces quantisation noise (the error introduced when rounding continuous amplitude values to the nearest available level), allowing both very loud and very quiet sounds to be captured accurately within the same recording.",
+      "keyPoints": [
+        "Dynamic range (dB) ≈ bit depth × 6",
+        "More bits = more amplitude levels available",
+        "Greater dynamic range captures louder and quieter sounds accurately",
+        "Increasing bit depth reduces quantisation noise/error"
+      ],
+      "explanation": "Bit depth directly controls the amplitude resolution of a digital recording. Each additional bit doubles the number of available amplitude levels and adds approximately 6 dB of dynamic range."
+    },
+    {
+      "id": "numeracy-short-03",
+      "type": "short",
+      "question": "A recording engineer wants to capture audio containing frequencies up to 20 kHz. Using the Nyquist theorem, explain why a sample rate of 44,100 Hz is sufficient, and what would happen if a 30 kHz frequency were present in the signal.",
+      "sampleAnswer": "The Nyquist theorem states that the maximum frequency a digital system can accurately represent is half the sample rate. At 44,100 Hz, the Nyquist frequency is 22,050 Hz, which is above the 20 kHz upper limit of human hearing — so all audible frequencies are captured. If a 30 kHz frequency were present, it would exceed the Nyquist frequency and cause aliasing: the signal would fold back into the audible range as a false lower frequency, introducing distortion. Anti-aliasing filters are used before analogue-to-digital conversion to remove frequencies above the Nyquist limit.",
+      "keyPoints": [
+        "Nyquist frequency = sample rate / 2",
+        "44,100 / 2 = 22,050 Hz — above the 20 kHz hearing limit",
+        "Frequencies above the Nyquist frequency cause aliasing",
+        "Aliasing produces false frequencies (artefacts) in the audible range",
+        "Anti-aliasing filters prevent this by removing high frequencies before conversion"
+      ],
+      "explanation": "The Nyquist theorem is the mathematical foundation for choosing sample rates. 44.1 kHz became the CD standard precisely because it captures the full audible range with a small safety margin, while keeping file sizes manageable."
+    }
+  ]
+}

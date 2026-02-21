@@ -1,6 +1,10 @@
-import { getResource, resourceExists } from '@/lib/resources';
+import { getResource, resourceExists, getAllResources } from '@/lib/resources';
 import { ResourceJsonLd } from '@/components/ResourceJsonLd';
 import ResourcePageClient from './ResourcePageClient';
+
+export function generateStaticParams() {
+    return getAllResources().map(r => ({ resourceId: r.id }));
+}
 
 export async function generateMetadata({ params }) {
     const { resourceId } = await params;

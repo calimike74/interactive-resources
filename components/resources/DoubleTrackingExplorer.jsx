@@ -1192,8 +1192,9 @@ export default function DoubleTrackingExplorer() {
             <div style={{
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: '16px',
-                margin: '1.5rem 1.5rem 0',
+                width: '100vw',
+                marginLeft: 'calc(-50vw + 50%)',
+                marginBottom: '1.5rem',
                 minHeight: '240px',
             }}>
                 <video

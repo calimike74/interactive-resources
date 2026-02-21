@@ -924,7 +924,8 @@ export default function GraphicParametricEQ() {
             <div style={{
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: '16px',
+                width: '100vw',
+                marginLeft: 'calc(-50vw + 50%)',
                 marginBottom: spacing[8],
                 minHeight: '200px',
             }}>

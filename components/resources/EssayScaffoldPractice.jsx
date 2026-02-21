@@ -826,22 +826,59 @@ export default function EssayScaffoldPractice() {
                 display: 'flex', flexDirection: 'column',
                 alignItems: 'center', gap: 36,
             }}>
-                {/* Title */}
-                <div style={{ textAlign: 'center', maxWidth: 600 }}>
-                    <h1 style={{
-                        fontSize: 40, fontWeight: 700, lineHeight: 1.15,
-                        marginBottom: 14, letterSpacing: '-0.02em',
+                {/* Hero with video background */}
+                <div style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    width: '100vw',
+                    marginLeft: 'calc(-50vw + 50%)',
+                    minHeight: 240,
+                }}>
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            opacity: 0,
+                            transition: 'opacity 0.8s ease-out',
+                        }}
+                        src="/general-hero.mp4"
+                    />
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(to bottom, rgba(11,11,18,0.4) 0%, rgba(11,11,18,0.7) 100%)',
+                    }} />
+                    <div style={{
+                        position: 'relative',
+                        maxWidth: 640, margin: '0 auto',
+                        padding: '3rem 1.5rem 2.5rem',
+                        textAlign: 'center',
                     }}>
-                        <span style={{ color: C.text }}>Essay Scaffold for </span>
-                        <span style={{
-                            background: 'linear-gradient(135deg, #5b8def 0%, #8b5cf6 50%, #06b6d4 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                        }}>Music Technology</span>
-                    </h1>
-                    <p style={{ fontSize: 15, lineHeight: 1.6, color: C.textSecondary }}>
-                        Three ways to engage with exam essay structure — understand the criteria, practise with support, then test from memory.
-                    </p>
+                        <h1 style={{
+                            fontSize: 40, fontWeight: 700, lineHeight: 1.15,
+                            marginBottom: 14, letterSpacing: '-0.02em',
+                            color: '#ffffff',
+                            textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                        }}>
+                            <span>Essay Scaffold for </span>
+                            <span style={{
+                                background: 'linear-gradient(135deg, #5b8def 0%, #8b5cf6 50%, #06b6d4 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                            }}>Music Technology</span>
+                        </h1>
+                        <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>
+                            Three ways to engage with exam essay structure — understand the criteria, practise with support, then test from memory.
+                        </p>
+                    </div>
                 </div>
 
                 {/* ─── Topic Selector ─── */}

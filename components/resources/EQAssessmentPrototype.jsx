@@ -426,7 +426,8 @@ export default function EQAssessmentPrototype() {
             <div style={{
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: '16px',
+                width: '100vw',
+                marginLeft: 'calc(-50vw + 50%)',
                 marginBottom: spacing[6],
                 minHeight: '180px',
             }}>

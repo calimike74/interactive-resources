@@ -1,0 +1,152 @@
+{
+  "topicId": "reverb",
+  "questions": [
+    {
+      "id": "reverb-mcq-01",
+      "type": "mcq",
+      "question": "What does RT60 measure?",
+      "options": [
+        "The time for reverb to decay by 60dB after the sound source stops",
+        "The time delay before reverb begins after the direct sound",
+        "The frequency at which reverb is most pronounced",
+        "The ratio of early reflections to late reflections"
+      ],
+      "correctIndex": 0,
+      "explanation": "RT60 (Reverberation Time 60) is the standard measure of how long a room's reverb takes to decay by 60dB from its peak level once the sound source has stopped. A large concert hall might have an RT60 of 2–3 seconds; a small treated studio might be under 0.3 seconds."
+    },
+    {
+      "id": "reverb-mcq-02",
+      "type": "mcq",
+      "question": "Convolution reverb differs from algorithmic reverb because it:",
+      "options": [
+        "Uses an impulse response recording of a real space to recreate its acoustic character",
+        "Applies a mathematical algorithm to simulate room modes and reflections",
+        "Uses a spring or plate to physically generate the reverb signal",
+        "Modulates the delayed signal to add chorus-like movement"
+      ],
+      "correctIndex": 0,
+      "explanation": "Convolution reverb works by capturing an impulse response (IR) — a recording of a real space's acoustic response to a brief burst of sound. The dry signal is then convolved with that IR mathematically, placing the audio into the real acoustic environment. Algorithmic reverb instead uses DSP to simulate reflections without a real-space recording."
+    },
+    {
+      "id": "reverb-mcq-03",
+      "type": "mcq",
+      "question": "Increasing the pre-delay on a reverb unit will:",
+      "options": [
+        "Push the reverb tail further behind the direct sound, improving clarity",
+        "Increase the overall decay time of the reverb",
+        "Add more high-frequency damping to the reverb tail",
+        "Raise the level of early reflections relative to the direct sound"
+      ],
+      "correctIndex": 0,
+      "explanation": "Pre-delay sets a gap (in milliseconds) between the dry direct signal and the onset of reverb. A longer pre-delay lets the transient of a sound be heard clearly before the reverb bloom, improving intelligibility and perceived distance. It also simulates the time sound takes to travel to the nearest reflective surface."
+    },
+    {
+      "id": "reverb-mcq-04",
+      "type": "mcq",
+      "question": "The Haas effect states that when two identical sounds arrive within approximately 40ms of each other, the listener will:",
+      "options": [
+        "Perceive only one sound but with a widened stereo image",
+        "Hear two distinct separate sounds (a slapback echo)",
+        "Experience phase cancellation causing frequency notches",
+        "Perceive the second sound as louder than the first"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Haas effect (also called the precedence effect) describes how delays under ~40ms are fused perceptually with the direct sound — the brain hears a single event but interprets the delay as spatial width or depth. Delays above ~40ms start to be perceived as a separate echo. This is exploited in stereo widening and sound design."
+    },
+    {
+      "id": "reverb-mcq-05",
+      "type": "mcq",
+      "question": "Which reverb type uses a physical sheet of metal or foil to generate its characteristic bright, dense sound?",
+      "options": [
+        "Plate reverb",
+        "Spring reverb",
+        "Room reverb",
+        "Hall reverb"
+      ],
+      "correctIndex": 0,
+      "explanation": "Plate reverb uses a large suspended metal plate excited by a transducer. The vibrations travel across the plate and are picked up by contact microphones. It produces a bright, dense, smooth reverb with a characteristic metallic character, popular on vocals and snare drums."
+    },
+    {
+      "id": "reverb-mcq-06",
+      "type": "mcq",
+      "question": "In a reverb unit, the 'damping' parameter controls:",
+      "options": [
+        "The rate at which high frequencies decay faster than low frequencies in the reverb tail",
+        "The overall wet/dry balance of the reverb signal",
+        "The time before the reverb onset after the direct sound",
+        "The density of early reflections in the reverb"
+      ],
+      "correctIndex": 0,
+      "explanation": "Damping simulates the acoustic absorption of surfaces and air. High frequencies lose energy faster in real rooms because surfaces and air absorb them more readily. Increasing damping causes the treble content of the reverb tail to roll off sooner, producing a warmer, darker-sounding reverb typical of rooms with soft furnishings."
+    },
+    {
+      "id": "reverb-num-01",
+      "type": "numeric",
+      "question": "A delay is set to 375ms with a tempo of 80 BPM. How many beats does one repeat correspond to? (One beat at 80 BPM = 750ms)",
+      "answer": 0.5,
+      "tolerance": 0,
+      "unit": "beats",
+      "explanation": "At 80 BPM, one beat = 60,000 ÷ 80 = 750ms. A 375ms delay is exactly half of 750ms, so it corresponds to a half-beat (quaver/eighth note subdivision). Tempo-syncing delay to musical subdivisions keeps the repeats rhythmically in time with the track."
+    },
+    {
+      "id": "reverb-num-02",
+      "type": "numeric",
+      "question": "RT60 is defined as the time for a sound to decay by how many decibels?",
+      "answer": 60,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "RT60 is universally defined as the time for the reverberant sound level to decay by exactly 60dB. This standard was established by Wallace Sabine and is the primary metric used in architectural acoustics to characterise room reverberation."
+    },
+    {
+      "id": "reverb-num-03",
+      "type": "numeric",
+      "question": "A slapback delay typically uses a single repeat with a delay time of approximately how many milliseconds? (Give a value in the typical range)",
+      "answer": 80,
+      "tolerance": 40,
+      "unit": "ms",
+      "explanation": "Slapback delay uses a single short repeat (no feedback) typically in the range of 40–120ms. This was popularised in 1950s rockabilly recordings using tape delay. The single distinct repeat creates a signature 'slap' that adds rhythmic energy without producing a full echo effect."
+    },
+    {
+      "id": "reverb-short-01",
+      "type": "short",
+      "question": "Explain the difference between early reflections and the diffuse reverb tail, and describe the perceptual role of each.",
+      "sampleAnswer": "Early reflections are the first discrete bounces of sound off surfaces, arriving within the first 50–80ms after the direct sound. They contribute to the listener's sense of the room size and the source's position. The diffuse reverb tail follows, consisting of thousands of closely-spaced reflections that blend into a smooth decay. The tail gives the sense of the space's size and acoustic character.",
+      "keyPoints": [
+        "early reflections arrive first (within ~50-80ms)",
+        "early reflections give sense of room size / source position",
+        "diffuse tail is dense and smooth",
+        "tail indicates decay time and space character",
+        "two distinct perceptual stages"
+      ],
+      "explanation": "Reverberation has two distinct phases. Early reflections (the first ~50–80ms) are discrete bounces from the nearest surfaces — the brain uses them to judge room size and source localisation. The diffuse tail that follows is a dense blend of thousands of reflections that has lost its discrete nature; it conveys the acoustic character of the space and its RT60. Reverb plug-ins often allow independent control of early and late portions."
+    },
+    {
+      "id": "reverb-short-02",
+      "type": "short",
+      "question": "Describe how a flanger is created using delay, and explain what produces its characteristic 'jet plane' sweeping sound.",
+      "sampleAnswer": "A flanger mixes the dry signal with a slightly delayed copy (typically 1–20ms). The delay time is continuously modulated by an LFO, causing the comb filtering notches in the frequency response to sweep up and down. This sweeping movement of phase cancellation creates the characteristic whooshing or jet plane sound.",
+      "keyPoints": [
+        "short delay (1–20ms) mixed with dry signal",
+        "delay time modulated by LFO",
+        "creates comb filtering / phase cancellation notches",
+        "sweeping notches produce the effect",
+        "feedback intensifies the effect"
+      ],
+      "explanation": "Flanging was originally achieved by pressing a thumb on the flange of a tape reel to vary its speed. Digitally, it mixes a dry signal with a short (1–20ms) delay whose time is swept by an LFO. The interaction between direct and delayed signals creates comb filtering — a series of notches in the frequency response. As the delay time changes, these notches sweep through the spectrum, producing the swooping sound. Increasing feedback reinforces the resonance at each notch."
+    },
+    {
+      "id": "reverb-short-03",
+      "type": "short",
+      "question": "A producer is working on a lead vocal and wants to add reverb without making the vocal sound distant or buried in the mix. Explain two parameter adjustments they could make and how each helps.",
+      "sampleAnswer": "First, increase the pre-delay (e.g. 20–40ms) so the dry vocal transient is heard clearly before the reverb begins, maintaining presence. Second, reduce the wet/dry ratio so the reverb sits behind the vocal rather than overwhelming it. Alternatively, reducing decay time keeps the reverb short so it does not accumulate and obscure subsequent words.",
+      "keyPoints": [
+        "pre-delay separates dry signal from reverb onset",
+        "pre-delay maintains clarity / presence",
+        "wet/dry mix controls reverb level",
+        "shorter decay time reduces buildup",
+        "high-frequency damping can warm the reverb so it sits behind the vocal"
+      ],
+      "explanation": "The main challenge is adding space without sacrificing intelligibility. Pre-delay (20–40ms) lets the vocal attack land cleanly before the reverb arrives — exploiting the Haas effect to maintain presence. A lower wet signal level in the mix keeps reverb as a background texture. A shorter decay time prevents the reverb tail from masking the next syllable. Damping high frequencies in the tail also pushes the reverb perceptually further back, leaving spectral space for the bright vocal."
+    }
+  ]
+}

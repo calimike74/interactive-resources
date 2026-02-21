@@ -1310,8 +1310,10 @@ export default function CompressorExplorer() {
             <div style={{
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: '16px',
-                margin: `${spacing[16]} ${spacing[4]} ${spacing[6]}`,
+                width: '100vw',
+                marginLeft: 'calc(-50vw + 50%)',
+                marginTop: spacing[16],
+                marginBottom: spacing[6],
                 minHeight: '240px',
             }}>
                 <video

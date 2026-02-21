@@ -490,7 +490,8 @@ const AcousticsFlashcards = () => {
       <div style={{
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: '16px',
+        width: '100vw',
+        marginLeft: 'calc(-50vw + 50%)',
         minHeight: '240px',
       }}>
         <video

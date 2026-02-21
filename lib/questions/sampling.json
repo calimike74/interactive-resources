@@ -1,0 +1,142 @@
+{
+  "topicId": "sampling",
+  "questions": [
+    {
+      "id": "sampling-mcq-01",
+      "type": "mcq",
+      "question": "According to the Nyquist theorem, what is the minimum sample rate required to accurately reproduce a sound with a highest frequency of 20kHz?",
+      "options": ["20kHz", "40kHz", "44.1kHz", "48kHz"],
+      "correctIndex": 1,
+      "explanation": "The Nyquist theorem states that the sample rate must be at least twice the highest frequency present in the signal. For a 20kHz signal, the minimum required sample rate is 2 × 20kHz = 40kHz. CD quality uses 44.1kHz, which exceeds this minimum to ensure accurate reproduction of the full audible spectrum."
+    },
+    {
+      "id": "sampling-mcq-02",
+      "type": "mcq",
+      "question": "Which of the following correctly describes CD audio quality?",
+      "options": ["48kHz / 24-bit", "44.1kHz / 16-bit", "44.1kHz / 24-bit", "48kHz / 16-bit"],
+      "correctIndex": 1,
+      "explanation": "CD audio uses a sample rate of 44.1kHz and a bit depth of 16 bits. This gives a theoretical dynamic range of approximately 96dB (16 × 6dB) and accurately captures frequencies up to just over 20kHz, covering the full range of human hearing."
+    },
+    {
+      "id": "sampling-mcq-03",
+      "type": "mcq",
+      "question": "What is aliasing in digital audio?",
+      "options": [
+        "Unwanted distortion caused by a sample rate that is too low to accurately represent the original signal",
+        "The process of converting an analogue signal to a digital signal",
+        "Noise introduced during digital-to-analogue conversion",
+        "A technique used to reduce file size by removing inaudible frequencies"
+      ],
+      "correctIndex": 0,
+      "explanation": "Aliasing occurs when the sample rate is less than twice the highest frequency in the signal (violating the Nyquist theorem). The unsampled high-frequency components fold back into the audible range as false, distorted frequencies. Anti-aliasing filters are applied before the ADC to remove frequencies above the Nyquist limit and prevent this."
+    },
+    {
+      "id": "sampling-mcq-04",
+      "type": "mcq",
+      "question": "A producer time-stretches a drum loop from 80 BPM to 100 BPM without altering its pitch. Which statement best describes what has happened?",
+      "options": [
+        "The sample rate has been increased to speed up playback",
+        "The playback speed has been increased, raising the pitch by the same proportion",
+        "The duration has been reduced while the pitch is preserved using DSP algorithms",
+        "The bit depth has been reduced to shorten the file length"
+      ],
+      "correctIndex": 2,
+      "explanation": "Time-stretching uses DSP (digital signal processing) algorithms to change the duration of audio without affecting its pitch. This is distinct from simply changing playback speed, which would alter pitch proportionally. Modern time-stretching algorithms work by manipulating the phase relationships between overlapping audio segments (e.g. phase vocoder or granular methods)."
+    },
+    {
+      "id": "sampling-mcq-05",
+      "type": "mcq",
+      "question": "What is the purpose of a DAC in an audio system?",
+      "options": [
+        "It converts an analogue audio signal into a binary digital representation",
+        "It converts a digital audio signal back into an analogue voltage for playback",
+        "It reduces the bit depth of a signal to lower the file size",
+        "It applies anti-aliasing filtering before recording"
+      ],
+      "correctIndex": 1,
+      "explanation": "A DAC (Digital-to-Analogue Converter) converts the stream of binary data stored digitally back into a continuously varying analogue voltage signal, which can then be amplified and sent to speakers. The ADC (Analogue-to-Digital Converter) performs the reverse process during recording."
+    },
+    {
+      "id": "sampling-mcq-06",
+      "type": "mcq",
+      "question": "A producer creates a seamless loop from a sustained string pad using crossfade looping. What is the main purpose of the crossfade at the loop point?",
+      "options": [
+        "To increase the sample rate at the loop boundary for higher fidelity",
+        "To smooth the transition between the loop end and loop start, avoiding an audible click or discontinuity",
+        "To change the pitch of the loop each time it repeats",
+        "To compress the dynamic range at the loop point"
+      ],
+      "correctIndex": 1,
+      "explanation": "At a loop point, the waveform at the end of the loop rarely matches exactly with the waveform at the start. If the samples jump abruptly, this discontinuity creates a click or glitch. Crossfade looping blends the end of the loop into the beginning over a short overlap period, creating a smooth, transparent transition."
+    },
+    {
+      "id": "sampling-num-01",
+      "type": "numeric",
+      "question": "A 16-bit audio recording has a theoretical dynamic range of approximately how many decibels? (Use the rule of 6dB per bit.)",
+      "answer": 96,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Each bit of bit depth contributes approximately 6dB of dynamic range. Therefore a 16-bit recording has a theoretical dynamic range of 16 × 6 = 96dB. This represents the ratio between the loudest possible signal and the quietest (the noise floor). 24-bit audio extends this to 144dB, well beyond human hearing's dynamic range."
+    },
+    {
+      "id": "sampling-num-02",
+      "type": "numeric",
+      "question": "Calculate the uncompressed file size in megabytes (MB) of a stereo, 16-bit, 44.1kHz recording that is 60 seconds long. Give your answer to 1 decimal place. (1 MB = 1,048,576 bytes)",
+      "answer": 10.1,
+      "tolerance": 0.1,
+      "unit": "MB",
+      "explanation": "File size = sample rate × bit depth × channels × duration. In bytes: 44100 × 16 × 2 × 60 = 84,672,000 bits. Divide by 8 to get bytes: 10,584,000 bytes. Divide by 1,048,576 to get MB: ≈ 10.09 MB, which rounds to 10.1 MB. This calculation shows why lossless compression (e.g. FLAC) or lossy formats (e.g. MP3) are used to reduce storage requirements."
+    },
+    {
+      "id": "sampling-num-03",
+      "type": "numeric",
+      "question": "A producer is working with a sample originally recorded at 120 BPM. They pitch-shift the sample up by 12 semitones (one octave) without time-stretching. By what factor does the playback speed increase?",
+      "answer": 2,
+      "tolerance": 0,
+      "unit": "×",
+      "explanation": "Raising the pitch by one octave (12 semitones) doubles the frequency of every component in the sound. Without time-stretching, this is achieved by playing back the sample at twice the original speed, so the playback speed factor is 2×. As a result, the duration of the sample is halved. This is the classic relationship between pitch and playback speed in simple (non-DSP) pitch-shifting."
+    },
+    {
+      "id": "sampling-short-01",
+      "type": "short",
+      "question": "Explain what an ADC does and why it is necessary in digital audio recording.",
+      "sampleAnswer": "An ADC (Analogue-to-Digital Converter) converts a continuously varying analogue voltage — produced by a microphone or instrument — into a series of discrete binary numbers that can be stored and processed by a computer. This conversion is necessary because computers can only store and manipulate data in digital (binary) form. During conversion, the ADC samples the amplitude of the analogue waveform at regular intervals (determined by the sample rate) and assigns each measurement a numerical value whose precision is determined by the bit depth.",
+      "keyPoints": [
+        "ADC stands for Analogue-to-Digital Converter",
+        "Converts continuously varying analogue signal to discrete binary values",
+        "Necessary because computers process data in digital (binary) form",
+        "Sampling occurs at regular intervals set by the sample rate",
+        "Amplitude resolution is determined by the bit depth"
+      ],
+      "explanation": "The ADC sits at the very start of the digital audio chain, at the input of an audio interface. Its quality directly affects the fidelity of the recording. The reverse process — converting stored digital data back to analogue for playback — is performed by a DAC (Digital-to-Analogue Converter)."
+    },
+    {
+      "id": "sampling-short-02",
+      "type": "short",
+      "question": "Describe two ways a producer might manipulate a sampled drum loop in a DAW, explaining the musical effect of each technique.",
+      "sampleAnswer": "One technique is chopping, where the loop is sliced into individual hits (e.g. kick, snare, hi-hat) which can then be rearranged, reordered, or triggered independently. This allows the producer to create a completely new rhythmic pattern from the original material. A second technique is reversing, where a sample or chop is played back from end to start. This produces an unusual, unnatural attack characteristic — the sound swells in then cuts off sharply — which is often used for effect fills or to add texture.",
+      "keyPoints": [
+        "Chopping: slicing into individual hits for rearrangement / new patterns",
+        "Reversing: playing sample backwards for unnatural envelope / swell effect",
+        "Layering: combining multiple samples for richer, thicker sound",
+        "Pitch-shifting: changing the pitch without altering duration",
+        "Time-stretching: changing the duration without altering pitch"
+      ],
+      "explanation": "Sample manipulation techniques are central to genres such as hip-hop, drum and bass, and electronic music. The examiner is looking for a named technique and a clear description of its musical or sonic effect — not just a definition of the process. Any two from: chopping, layering, reversing, pitch-shifting, time-stretching, or resampling would be valid."
+    },
+    {
+      "id": "sampling-short-03",
+      "type": "short",
+      "question": "Explain how increasing the bit depth of a recording affects both the dynamic range and the file size.",
+      "sampleAnswer": "Increasing the bit depth increases the number of amplitude levels available to represent each sample. Each additional bit doubles the number of levels and adds approximately 6dB to the dynamic range. For example, going from 16-bit (96dB range) to 24-bit (144dB range) adds 48dB. A greater dynamic range means quieter sounds can be represented more accurately above the noise floor. However, because more bits are used for each sample, the file size increases proportionally — a 24-bit file is 1.5× larger than a 16-bit file at the same sample rate and duration.",
+      "keyPoints": [
+        "More bits = more amplitude levels = greater precision per sample",
+        "Each additional bit adds approximately 6dB of dynamic range",
+        "16-bit ≈ 96dB; 24-bit ≈ 144dB",
+        "Greater dynamic range = quieter sounds above the noise floor",
+        "File size increases proportionally with bit depth (24-bit is 1.5× larger than 16-bit)"
+      ],
+      "explanation": "This question tests understanding of the trade-off between audio quality and storage. Bit depth governs amplitude resolution (dynamic range), while sample rate governs frequency resolution. Students should be able to state both the quality benefit and the storage cost clearly, with reference to the 6dB-per-bit rule."
+    }
+  ]
+}

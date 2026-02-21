@@ -73,7 +73,8 @@ export default function MIDIPitchBendController() {
         <div style={{
           position: 'relative',
           overflow: 'hidden',
-          borderRadius: '16px',
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
           marginBottom: '1.5rem',
           minHeight: '240px',
         }}>

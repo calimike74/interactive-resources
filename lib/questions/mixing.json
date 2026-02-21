@@ -1,0 +1,134 @@
+{
+  "topicId": "mixing",
+  "questions": [
+    {
+      "id": "mixing-mcq-01",
+      "type": "mcq",
+      "question": "Which of the following best describes the purpose of an aux send set to pre-fader?",
+      "options": [
+        "The send level is independent of the channel fader, so the monitor mix is unaffected by fader moves",
+        "The send level follows the channel fader, keeping the effect balanced with the dry signal",
+        "The signal is sent after EQ and compression in the signal chain",
+        "Pre-fader sends are only used for reverb and delay effects"
+      ],
+      "correctIndex": 0,
+      "explanation": "A pre-fader send taps the signal before the channel fader. This means the level reaching the aux bus stays constant regardless of fader position — essential for headphone monitor mixes, where a performer needs a consistent mix even if the engineer rides the fader."
+    },
+    {
+      "id": "mixing-mcq-02",
+      "type": "mcq",
+      "question": "When applying reverb to a snare drum in a DAW mix, the most common routing approach is:",
+      "options": [
+        "Send the snare to an aux bus carrying the reverb as a send effect, blending wet and dry signals",
+        "Place the reverb as an insert on the snare channel and set wet/dry to 100% wet",
+        "Route the snare through a bus compressor before adding reverb",
+        "Use a pre-fader send so the reverb level matches the dry level exactly"
+      ],
+      "correctIndex": 0,
+      "explanation": "Reverb (and other time-based effects) work best as send effects on an aux bus. Multiple channels can share one reverb instance, and the wet/dry balance is controlled by the send level and aux return fader — not by the plugin's wet/dry knob. Inserting reverb at 100% wet on the channel removes the dry signal."
+    },
+    {
+      "id": "mixing-mcq-03",
+      "type": "mcq",
+      "question": "What is the key difference between an insert effect and a send effect in terms of signal flow?",
+      "options": [
+        "An insert processes the full signal in series; a send creates a parallel processed copy",
+        "An insert uses parallel processing; a send uses series processing",
+        "Inserts are only used for time-based effects; sends are used for dynamics",
+        "A send replaces the dry signal with a wet signal; an insert blends the two"
+      ],
+      "correctIndex": 0,
+      "explanation": "An insert sits in the signal path in series — all of the signal passes through the processor (e.g. EQ, compression). A send routes a copy of the signal to a parallel bus, so the dry signal continues unaffected and the processed (wet) signal is added back. This is why dynamics and EQ are inserts, while reverb and delay are sends."
+    },
+    {
+      "id": "mixing-mcq-04",
+      "type": "mcq",
+      "question": "In a console or DAW, what is the primary purpose of a bus or group channel?",
+      "options": [
+        "To route multiple channels to a single fader for collective level and processing control",
+        "To apply a different sample rate to a group of instruments",
+        "To send signals to an external hardware processor and return them",
+        "To convert stereo channels to mono before mastering"
+      ],
+      "correctIndex": 0,
+      "explanation": "A bus (or subgroup) collects several channels — such as all drum tracks — and routes them through one fader. This allows collective level adjustment, shared compression or EQ across the group, and simplifies the mix by reducing the number of active faders to manage."
+    },
+    {
+      "id": "mixing-mcq-05",
+      "type": "mcq",
+      "question": "Pan law compensates for a perceptual loudness increase when a signal is panned to centre. Which of the following is the most common pan law setting?",
+      "options": [
+        "-3dB centre",
+        "-6dB centre",
+        "0dB centre",
+        "+3dB centre"
+      ],
+      "correctIndex": 0,
+      "explanation": "When a mono signal plays equally from both speakers (panned centre), summing causes it to appear louder than a signal panned hard left or right. Pan law applies a gain reduction — most commonly -3dB — to the centre position so perceived loudness remains consistent across the stereo field."
+    },
+    {
+      "id": "mixing-mcq-06",
+      "type": "mcq",
+      "question": "What is meant by 'gain staging' in a mix session?",
+      "options": [
+        "Setting appropriate signal levels at each stage of the signal chain to avoid noise and distortion",
+        "Automating gain changes throughout a track to create dynamic variation",
+        "Applying a gain plugin before the master bus limiter",
+        "Matching the output level of all channels to 0dBFS before mixing"
+      ],
+      "correctIndex": 0,
+      "explanation": "Gain staging means managing signal levels at every point in the chain — from the input trim, through inserts, to the channel fader and bus output. If levels are too low, noise becomes audible; too high and processors clip or distort. Good gain staging keeps each stage operating in an optimal range with adequate headroom."
+    },
+    {
+      "id": "mixing-num-01",
+      "type": "numeric",
+      "question": "A mix engineer is monitoring at a reference level where a 1kHz sine tone at -20dBFS reads 83dB SPL at the listening position. If the engineer raises the monitor volume so the same tone reads 89dB SPL, by how many dB has the monitor level increased?",
+      "answer": 6,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "89 − 83 = 6dB. This is a straightforward subtraction. Reference monitoring at 83dB SPL (K-System) is a common standard; raising it by 6dB doubles the perceived loudness and can cause ear fatigue more quickly."
+    },
+    {
+      "id": "mixing-num-02",
+      "type": "numeric",
+      "question": "A delay effect is set to a single repeat at 500ms. If the tempo is 120 BPM, one beat lasts exactly 500ms. How many milliseconds is one beat at 120 BPM?",
+      "answer": 500,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "At 120 BPM there are 120 beats per minute. 60,000ms ÷ 120 = 500ms per beat. Tempo-synced delays set to this value create rhythmically coherent echoes — the repeat falls precisely on the next beat."
+    },
+    {
+      "id": "mixing-num-03",
+      "type": "numeric",
+      "question": "A drum bus is peaking at -6dBFS before the master bus. The mastering engineer requests the mix is delivered with at least 6dB of headroom below 0dBFS. What is the maximum peak level (in dBFS) that the mix output should reach?",
+      "answer": -6,
+      "tolerance": 0,
+      "unit": "dBFS",
+      "explanation": "Headroom is the difference between the peak signal level and the clipping point (0dBFS). 6dB of headroom means the loudest peak must not exceed -6dBFS. This prevents inter-sample clipping in the mastering chain and gives the mastering engineer dynamic range to work with."
+    },
+    {
+      "id": "mixing-short-01",
+      "type": "short",
+      "question": "Explain the difference between a pre-fader and a post-fader aux send, giving an appropriate use case for each.",
+      "sampleAnswer": "A pre-fader send taps the signal before the channel fader, so the send level is independent of fader position — used for headphone monitor mixes so performers hear a consistent level. A post-fader send follows the channel fader, so the effect level stays proportional to the dry signal — used for reverb and delay to keep the wet/dry balance consistent when the fader is adjusted.",
+      "keyPoints": ["pre-fader independent of fader", "post-fader follows fader", "monitor mix", "reverb or delay", "wet/dry balance"],
+      "explanation": "The pre/post distinction determines where in the signal chain the aux tap occurs. Pre-fader is before the fader (independent), making it ideal for foldback/monitor mixes. Post-fader is after the fader (dependent), meaning reverb or delay returns scale with the channel volume — essential for maintaining a consistent wet/dry ratio throughout the mix."
+    },
+    {
+      "id": "mixing-short-02",
+      "type": "short",
+      "question": "Describe two techniques a mix engineer could use to create a wider stereo image without simply hard-panning all instruments.",
+      "sampleAnswer": "1. Mid-Side (M/S) processing: encoding the stereo signal into mid (mono) and side (difference) components, then boosting the side signal to increase perceived width. 2. Chorus or slight pitch modulation applied via a send to a stereo bus, where the modulated copy is panned wide while the dry signal remains centred, creating depth and width without losing mono compatibility.",
+      "keyPoints": ["mid-side", "side signal", "chorus", "modulation", "panning", "stereo width", "mono compatible"],
+      "explanation": "Stereo width is not just about pan position. M/S processing targets the difference between left and right directly. Chorus/modulation on a send adds subtle pitch variation between channels, which the brain interprets as space and width. Other valid techniques include: Haas effect (short delay on one side), stereo reverb returns panned wide, or using a stereo widener plugin on a bus."
+    },
+    {
+      "id": "mixing-short-03",
+      "type": "short",
+      "question": "What is mix automation, and why is it used in a professional mix?",
+      "sampleAnswer": "Mix automation records and plays back changes to mixer parameters — such as volume, pan, and plugin settings — over time. It is used to make precise adjustments that cannot be performed in real time by hand, such as riding a vocal level, muting a noisy channel during a rest, or opening a filter gradually. It allows the mix to respond dynamically to the musical content.",
+      "keyPoints": ["records parameter changes", "volume", "pan", "plugin parameters", "over time", "dynamic response", "precision"],
+      "explanation": "Automation transforms a static mix into a dynamic one. A vocal track may need its level raised during quiet phrases and pulled back during louder ones — doing this accurately and repeatably by hand on a fader is impossible. Automation also enables subtle effects such as gradually widening the stereo image, automating a reverb send for a specific phrase, or muting bleed between takes."
+    }
+  ]
+}

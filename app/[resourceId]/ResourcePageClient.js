@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getResource, resourceExists } from '@/lib/resources';
+import { getTopicForResource } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 
 // Resource components registry
@@ -54,6 +55,9 @@ export default function ResourcePageClient() {
     }
 
     const resource = getResource(resourceId);
+    const parentTopic = getTopicForResource(resourceId);
+    const backHref = parentTopic ? `/topic/${parentTopic.id}` : '/';
+    const backLabel = parentTopic ? `← ${parentTopic.name}` : '← Back to Resources';
     const ResourceComponent = resourceComponents[resource.component];
 
     // Handle missing component
@@ -94,7 +98,7 @@ export default function ResourcePageClient() {
                     {/* Back link and breadcrumb */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: spacing[4] }}>
                         <Link
-                            href="/"
+                            href={backHref}
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -108,7 +112,7 @@ export default function ResourcePageClient() {
                                 transition: `all ${transitions.fast}`,
                             }}
                         >
-                            ← Back to Resources
+                            {backLabel}
                         </Link>
 
                         {/* Topic badge */}
@@ -218,7 +222,7 @@ export default function ResourcePageClient() {
                         }}
                     >
                         <Link
-                            href="/"
+                            href={backHref}
                             style={{
                                 padding: `${spacing[3]} ${spacing[5]}`,
                                 background: t.bg.tertiary,
@@ -229,7 +233,7 @@ export default function ResourcePageClient() {
                                 fontWeight: typography.weight.medium,
                             }}
                         >
-                            ← Explore More Resources
+                            {backLabel}
                         </Link>
 
                         {resource.prepFor && resource.prepFor.length > 0 && (

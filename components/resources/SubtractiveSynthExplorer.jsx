@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { theme, typography, spacing, borderRadius, transitions } from '@/lib/theme';
+import Callout from '@/components/Callout';
 
 // ─── Design Tokens (light, warm, Ableton-inspired) ──────────────────────────
 
@@ -953,6 +954,15 @@ export default function SubtractiveSynthExplorer() {
                 </div>
             </InteractiveBox>
 
+            {/* Inline check — interleaved after hands-on exploration */}
+            <Callout type="question" title="Which waveform would you start with for subtractive synthesis?">
+                <Callout.Options
+                    options={['Sine — it has the cleanest sound', 'Sawtooth — it has the richest harmonics', 'Square — it sounds the loudest', 'Triangle — it is the most balanced']}
+                    correctIndex={1}
+                    explanation="You need harmonics to subtract! A sawtooth contains all harmonics (odd and even), giving you the most material to shape with a filter."
+                />
+            </Callout>
+
             {/* Educational content */}
             <div style={{ marginBottom: spacing[12] }}>
                 <h3 style={{ fontSize: typography.size.xl, fontWeight: typography.weight.semibold, color: COLORS.text, marginBottom: spacing[5] }}>
@@ -1040,6 +1050,14 @@ export default function SubtractiveSynthExplorer() {
                 </div>
             </InteractiveBox>
 
+            {/* Inline definition with nested try-it prompt */}
+            <Callout type="definition" title="Cutoff Frequency">
+                The frequency at which the filter begins to attenuate the signal. Below this point (for a low-pass filter), frequencies pass through unchanged. Above it, they are progressively reduced.
+                <Callout type="listen" title="Hear the difference" collapsible={false}>
+                    Set the filter to Low-Pass above, then slowly drag the cutoff from 20kHz down to 200Hz while playing. Notice how the bright, buzzy harmonics disappear — that is subtractive synthesis in action.
+                </Callout>
+            </Callout>
+
             {/* Educational content */}
             <div style={{ marginBottom: spacing[12] }}>
                 <h3 style={{ fontSize: typography.size.xl, fontWeight: typography.weight.semibold, color: COLORS.text, marginBottom: spacing[5] }}>
@@ -1122,6 +1140,11 @@ export default function SubtractiveSynthExplorer() {
                     <WaveformCanvas analyserRef={analyserRef} color={accent} />
                 </div>
             </InteractiveBox>
+
+            {/* Inline warning — common exam mistake */}
+            <Callout type="warning" title="Sustain is a level, not a time">
+                Students often describe sustain as "how long the sound holds." That is wrong — sustain is the <strong>amplitude level</strong> maintained while the key is held. The hold duration depends on how long the player keeps the key pressed, not on the sustain value. Set sustain to 0 above and trigger a note to hear the difference.
+            </Callout>
 
             {/* Educational content */}
             <div style={{ marginBottom: spacing[12] }}>
@@ -1436,8 +1459,10 @@ export default function SubtractiveSynthExplorer() {
             <div style={{
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: '16px',
-                margin: `${spacing[16]} ${spacing[4]} ${spacing[6]}`,
+                width: '100vw',
+                marginLeft: 'calc(-50vw + 50%)',
+                marginTop: spacing[16],
+                marginBottom: spacing[6],
                 minHeight: '240px',
             }}>
                 <video

@@ -1,18 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'microphone=(self)' },
-        ],
-      },
-    ];
-  },
+  output: 'export',
+  // Note: custom headers() not supported with static export.
+  // Security headers are set via Vercel config (vercel.json) for web
+  // and via Capacitor's server config for iOS.
 };
 
 export default nextConfig;

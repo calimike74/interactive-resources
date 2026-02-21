@@ -1,0 +1,129 @@
+{
+  "topicId": "synthesis",
+  "questions": [
+    {
+      "id": "synthesis-mcq-01",
+      "type": "mcq",
+      "question": "Which waveform contains only the fundamental frequency with no harmonics?",
+      "options": ["Sine wave", "Sawtooth wave", "Square wave", "Triangle wave"],
+      "correctIndex": 0,
+      "explanation": "A sine wave is the purest waveform — it contains only the fundamental frequency and no harmonic content. All other common waveforms (sawtooth, square, triangle) are combinations of multiple sine waves at different harmonics."
+    },
+    {
+      "id": "synthesis-mcq-02",
+      "type": "mcq",
+      "question": "A sawtooth wave contains which harmonics?",
+      "options": [
+        "All harmonics (odd and even)",
+        "Odd harmonics only",
+        "Even harmonics only",
+        "The fundamental only"
+      ],
+      "correctIndex": 0,
+      "explanation": "A sawtooth wave is harmonically the richest common waveform — it contains all harmonics (both odd and even) at decreasing amplitudes. This gives it a bright, buzzy character ideal as a starting point for subtractive synthesis."
+    },
+    {
+      "id": "synthesis-mcq-03",
+      "type": "mcq",
+      "question": "What is the correct signal flow in a standard subtractive synthesiser?",
+      "options": [
+        "Oscillator → Filter → Amplifier",
+        "Filter → Oscillator → Amplifier",
+        "Oscillator → Amplifier → Filter",
+        "Amplifier → Filter → Oscillator"
+      ],
+      "correctIndex": 0,
+      "explanation": "In subtractive synthesis, the oscillator generates the raw waveform with harmonics, the filter removes unwanted harmonics to shape the timbre, and the amplifier controls the final output level. This VCO → VCF → VCA chain is fundamental to the architecture."
+    },
+    {
+      "id": "synthesis-mcq-04",
+      "type": "mcq",
+      "question": "In an ADSR envelope applied to a filter, what does the Sustain stage control?",
+      "options": [
+        "The cutoff frequency level held while a note is pressed",
+        "The time taken for the filter to open fully",
+        "The time taken for the filter to close after the note ends",
+        "The speed at which the filter drops from its peak"
+      ],
+      "correctIndex": 0,
+      "explanation": "Sustain is the only ADSR stage measured as a level (not a time). It sets the filter cutoff frequency maintained for as long as the note is held. Attack, Decay, and Release are all time parameters."
+    },
+    {
+      "id": "synthesis-mcq-05",
+      "type": "mcq",
+      "question": "What happens to a resonant low-pass filter when self-oscillation is reached?",
+      "options": [
+        "The filter generates its own sine wave tone at the cutoff frequency",
+        "The filter stops passing all frequencies",
+        "The filter begins to pass high frequencies instead",
+        "The filter cutoff shifts one octave lower"
+      ],
+      "correctIndex": 0,
+      "explanation": "When resonance is increased to the point of self-oscillation, the filter feedback becomes so strong that it generates its own pitched tone — a sine wave at the cutoff frequency — even without any input signal."
+    },
+    {
+      "id": "synthesis-mcq-06",
+      "type": "mcq",
+      "question": "An LFO running at 5Hz applied to oscillator pitch would produce which effect?",
+      "options": [
+        "Vibrato",
+        "Tremolo",
+        "Chorus",
+        "Reverb"
+      ],
+      "correctIndex": 0,
+      "explanation": "An LFO (Low Frequency Oscillator) below 20Hz modulates a parameter cyclically. At 5Hz applied to pitch, it creates vibrato — a periodic wobble in pitch. Applied to amplitude it would create tremolo instead."
+    },
+    {
+      "id": "synthesis-num-01",
+      "type": "numeric",
+      "question": "A square wave contains only odd harmonics. If the fundamental is the 1st harmonic, how many harmonics are present in the first five odd harmonics?",
+      "answer": 5,
+      "tolerance": 0,
+      "unit": "harmonics",
+      "explanation": "The odd harmonics are the 1st, 3rd, 5th, 7th, and 9th. Counting these gives 5 harmonics. Square and triangle waves share this odd-only harmonic series, which is why they sound more hollow than a sawtooth."
+    },
+    {
+      "id": "synthesis-num-02",
+      "type": "numeric",
+      "question": "How many stages does a standard ADSR envelope have?",
+      "answer": 4,
+      "tolerance": 0,
+      "unit": "stages",
+      "explanation": "ADSR stands for Attack, Decay, Sustain, Release — four discrete stages. Each stage has a distinct role: Attack (time to peak), Decay (time to sustain level), Sustain (held level), Release (time to silence after note off)."
+    },
+    {
+      "id": "synthesis-num-03",
+      "type": "numeric",
+      "question": "A 4-pole low-pass filter (24dB/octave) is set to a cutoff of 1kHz. A signal at 4kHz is how many octaves above the cutoff?",
+      "answer": 2,
+      "tolerance": 0,
+      "unit": "octaves",
+      "explanation": "Each doubling of frequency represents one octave. 1kHz → 2kHz = 1 octave. 2kHz → 4kHz = 2 octaves. At 24dB/octave, the signal at 4kHz would be attenuated by 48dB (2 × 24)."
+    },
+    {
+      "id": "synthesis-short-01",
+      "type": "short",
+      "question": "Explain the difference between additive and subtractive synthesis.",
+      "sampleAnswer": "Additive synthesis builds a sound by adding together individual sine waves (harmonics) to create a complex tone. Subtractive synthesis starts with a harmonically rich waveform and removes unwanted harmonics using a filter to shape the timbre.",
+      "keyPoints": ["additive builds up", "sine waves", "subtractive starts rich", "filter removes harmonics", "timbre"],
+      "explanation": "Additive synthesis works bottom-up — construct complexity from simple parts. Subtractive synthesis works top-down — start with complexity (sawtooth, square) and carve it down with filters. Subtractive is far more common in hardware and virtual synths because it is computationally cheaper and more intuitive to sculpt."
+    },
+    {
+      "id": "synthesis-short-02",
+      "type": "short",
+      "question": "Describe the role of each ADSR envelope stage in shaping the sound of a synthesised string patch.",
+      "sampleAnswer": "Attack: slow attack time means the sound fades in gradually, mimicking a bow drawing across strings. Decay: short decay as the note settles. Sustain: high sustain level keeps the string tone present while held. Release: moderate release lets the tone fade naturally after the key is lifted.",
+      "keyPoints": ["attack time", "fade in", "sustain level", "held note", "release fade"],
+      "explanation": "A string patch relies heavily on envelope shaping. A fast attack would make it sound like a plucked instrument rather than bowed. Long release prevents an abrupt cut-off. The ADSR envelope can be applied to both the amplifier (volume shape) and the filter (timbral brightness over time)."
+    },
+    {
+      "id": "synthesis-short-03",
+      "type": "short",
+      "question": "What is resonance on a filter, and how does it affect the sound?",
+      "sampleAnswer": "Resonance boosts the frequencies around the filter's cutoff point, creating a peak in the frequency response. As resonance increases, this peak becomes more pronounced, giving the sound a ringing, nasal quality. At extreme settings, the filter can self-oscillate.",
+      "keyPoints": ["boost at cutoff", "peak", "ringing", "nasal", "self-oscillation"],
+      "explanation": "Resonance (also called Q or emphasis) feeds some of the filter's output back into its input, amplifying the frequencies near the cutoff. This creates the characteristic 'wah' sweep sound when the cutoff is automated. At maximum resonance, the feedback sustains indefinitely — self-oscillation — generating a pure sine tone."
+    }
+  ]
+}

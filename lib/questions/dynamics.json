@@ -1,0 +1,138 @@
+{
+  "topicId": "dynamics",
+  "questions": [
+    {
+      "id": "dynamics-mcq-01",
+      "type": "mcq",
+      "question": "A compressor is set with a threshold of -20 dBFS and a ratio of 4:1. An input signal arrives at -8 dBFS. How many dB above the threshold is the signal?",
+      "options": ["12 dB", "8 dB", "4 dB", "20 dB"],
+      "correctIndex": 0,
+      "explanation": "-8 dBFS minus -20 dBFS = 12 dB above the threshold. This excess is what gets reduced by the ratio."
+    },
+    {
+      "id": "dynamics-mcq-02",
+      "type": "mcq",
+      "question": "Which compressor parameter determines how quickly the compressor begins to act after the signal exceeds the threshold?",
+      "options": ["Attack", "Release", "Ratio", "Knee"],
+      "correctIndex": 0,
+      "explanation": "Attack time controls how quickly the compressor responds once the signal crosses the threshold. A fast attack (e.g. 1 ms) clamps down almost immediately; a slow attack (e.g. 50 ms) allows transients to pass through before gain reduction begins."
+    },
+    {
+      "id": "dynamics-mcq-03",
+      "type": "mcq",
+      "question": "What is the defining characteristic of a limiter compared to a standard compressor?",
+      "options": [
+        "A limiter uses an effectively infinite ratio, preventing the signal from exceeding the threshold",
+        "A limiter only reduces signals below the threshold",
+        "A limiter has a fixed attack and release time of 0 ms",
+        "A limiter applies gain reduction to the entire signal equally"
+      ],
+      "correctIndex": 0,
+      "explanation": "A limiter is a compressor with a very high (effectively infinite) ratio, typically 10:1 or higher. This means virtually no signal passes above the threshold, setting an absolute ceiling on the output level."
+    },
+    {
+      "id": "dynamics-mcq-04",
+      "type": "mcq",
+      "question": "In parallel compression (New York compression), the processed signal is blended with:",
+      "options": [
+        "The uncompressed dry signal",
+        "A second, more heavily compressed signal",
+        "The side-chain input signal",
+        "A reverb return from the compressed signal"
+      ],
+      "correctIndex": 0,
+      "explanation": "Parallel compression blends a heavily compressed version of the signal with the original dry signal. This retains the transient punch and natural feel of the uncompressed signal while adding the density and sustain of the compressed version."
+    },
+    {
+      "id": "dynamics-mcq-05",
+      "type": "mcq",
+      "question": "Which of the following best describes side-chain compression?",
+      "options": [
+        "The gain reduction is triggered by an external or separate signal rather than the input being compressed",
+        "The compressor applies gain reduction only to the side frequencies of the stereo image",
+        "The compressor uses two separate threshold levels, one for each side of the stereo field",
+        "The compressor is inserted in a parallel chain and blended with the dry signal"
+      ],
+      "correctIndex": 0,
+      "explanation": "Side-chain compression uses a separate signal (the side-chain key) to control the gain reduction applied to the main signal. A common example is ducking music under a voiceover: the vocal signal triggers the compressor on the music bus."
+    },
+    {
+      "id": "dynamics-mcq-06",
+      "type": "mcq",
+      "question": "What is the difference between peak detection and RMS detection in a compressor?",
+      "options": [
+        "Peak detection responds to the highest instantaneous level; RMS detection responds to an averaged level closer to perceived loudness",
+        "Peak detection averages the signal over time; RMS detection responds to the loudest transient",
+        "Peak detection is used only in limiters; RMS detection is used only in noise gates",
+        "Peak detection increases the ratio automatically; RMS detection adjusts the threshold automatically"
+      ],
+      "correctIndex": 0,
+      "explanation": "Peak detection reacts to the highest instantaneous sample, making it well-suited for catching transients and preventing clipping. RMS (Root Mean Square) detection measures an average level over a short time window, which correlates more closely with perceived loudness and produces smoother, more musical gain reduction."
+    },
+    {
+      "id": "dynamics-num-01",
+      "type": "numeric",
+      "question": "A compressor has a threshold of -24 dBFS and a ratio of 3:1. The input signal is 12 dB above the threshold. By how many dB is the output above the threshold?",
+      "answer": 4,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "With a 3:1 ratio, for every 3 dB the input exceeds the threshold, the output exceeds it by only 1 dB. The input is 12 dB over, so the output is 12 ÷ 3 = 4 dB over the threshold."
+    },
+    {
+      "id": "dynamics-num-02",
+      "type": "numeric",
+      "question": "A signal is recorded at a peak level of -2 dBFS and a noise floor of -62 dBFS. What is the dynamic range of this recording in dB?",
+      "answer": 60,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Dynamic range is the difference between the loudest and quietest usable levels. -2 dBFS minus -62 dBFS = 60 dB. A wider dynamic range means more headroom between the noise floor and the loudest peak."
+    },
+    {
+      "id": "dynamics-num-03",
+      "type": "numeric",
+      "question": "A compressor with a ratio of 4:1 applies 9 dB of gain reduction to a signal. How many dB above the threshold was the input signal?",
+      "answer": 12,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "With a 4:1 ratio, the output excess above threshold is one quarter of the input excess. If 9 dB of gain reduction was applied, the input was 9 dB × (4/3) — more directly: if the output exceeds the threshold by (input excess / ratio), then gain reduction = input excess − (input excess / ratio) = input excess × (1 − 1/4) = input excess × 0.75. So 9 = input excess × 0.75, giving input excess = 12 dB."
+    },
+    {
+      "id": "dynamics-short-01",
+      "type": "short",
+      "question": "Explain the difference between a hard knee and a soft knee in a compressor, and describe the effect each has on the sound.",
+      "sampleAnswer": "A hard knee means gain reduction switches on abruptly at the exact threshold level — signals below it are unaffected and signals above it are immediately reduced by the full ratio. A soft knee applies gain reduction gradually across a range of levels around the threshold (e.g. a few dB either side), so compression increases progressively as the signal approaches and passes through the threshold. A hard knee sounds more obvious and aggressive; a soft knee sounds more transparent and natural, making it suitable for sources where the compression should be undetectable.",
+      "keyPoints": [
+        "Hard knee: gain reduction is applied abruptly at the threshold",
+        "Soft knee: gain reduction is introduced gradually across a range around the threshold",
+        "Hard knee sounds more obvious/aggressive; soft knee is more transparent and musical"
+      ],
+      "explanation": "The knee setting affects how the transition into compression sounds. Soft knee is particularly valued on vocals and acoustic instruments where abrupt gain reduction would be audible and distracting."
+    },
+    {
+      "id": "dynamics-short-02",
+      "type": "short",
+      "question": "Describe how a noise gate works and explain two situations in a music production context where a noise gate would be useful.",
+      "sampleAnswer": "A noise gate reduces the level of a signal that falls below a set threshold, typically to silence or near-silence. Unlike a compressor, which reduces loud signals, a noise gate acts on quiet signals — it is a type of downward expander with a very high ratio. When the signal level drops below the threshold, the gate closes (attenuates the signal); when the signal rises above the threshold, the gate opens. Example uses: (1) Removing bleed from a snare drum microphone between hits — the snare mic will pick up hi-hat and other kit noise; a gate closes when the snare is not being struck. (2) Removing amp hiss or electrical noise from a guitar track during silent passages — the gate closes when the guitarist stops playing, eliminating background hum.",
+      "keyPoints": [
+        "A noise gate attenuates signals that fall below the threshold",
+        "The gate opens when the signal exceeds the threshold and closes when it falls below",
+        "Valid use case 1: removing mic bleed between drum hits",
+        "Valid use case 2: gating amp noise or room noise on an instrument track during silent passages"
+      ],
+      "explanation": "Noise gates are expanders with an extreme ratio. They are directionally opposite to compressors — reducing quiet signals rather than loud ones. Attack, hold, and release parameters also exist on gates, controlling how quickly the gate opens and closes."
+    },
+    {
+      "id": "dynamics-short-03",
+      "type": "short",
+      "question": "Explain the purpose of makeup gain in compression and why it is needed.",
+      "sampleAnswer": "Compression reduces the level of signals above the threshold, which lowers the overall peak level of the processed signal. Makeup gain (also called output gain) is applied after the gain reduction stage to restore the overall level. Without makeup gain, a compressed signal would sound quieter than the unprocessed original, making it difficult to make fair comparisons or achieve the correct level in a mix. By applying makeup gain, the producer brings the compressed signal back up so that its loudest peaks match the original, meaning the perceptual effect of compression — increased average loudness and density — becomes more apparent on A/B comparison.",
+      "keyPoints": [
+        "Compression reduces peak levels, lowering the overall output level",
+        "Makeup gain compensates by boosting the output after gain reduction",
+        "Enables fair A/B comparison between compressed and uncompressed signals",
+        "Increases average (RMS) loudness relative to the peaks, which is a key effect of compression"
+      ],
+      "explanation": "Makeup gain is essential for evaluating compression accurately. A louder signal is almost always perceived as better, so without matching levels, it is easy to mistake the loudness boost from makeup gain for the quality of the compression itself."
+    }
+  ]
+}

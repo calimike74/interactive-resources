@@ -1,0 +1,114 @@
+{
+  "topicId": "eq",
+  "questions": [
+    {
+      "id": "eq-mcq-01",
+      "type": "mcq",
+      "question": "What does a high-pass filter remove?",
+      "options": ["Low frequencies", "High frequencies", "Mid frequencies", "All frequencies"],
+      "correctIndex": 0,
+      "explanation": "A high-pass filter passes high frequencies and attenuates (removes) frequencies below the cutoff point."
+    },
+    {
+      "id": "eq-mcq-02",
+      "type": "mcq",
+      "question": "What is the key difference between a graphic EQ and a parametric EQ?",
+      "options": [
+        "A parametric EQ allows control of frequency, gain, and Q per band",
+        "A graphic EQ has more bands than a parametric EQ",
+        "A parametric EQ can only cut frequencies, not boost them",
+        "A graphic EQ offers wider frequency range"
+      ],
+      "correctIndex": 0,
+      "explanation": "A parametric EQ provides three adjustable parameters per band — centre frequency, gain, and Q (bandwidth). A graphic EQ has fixed frequencies and fixed Q; only gain is adjustable per band."
+    },
+    {
+      "id": "eq-mcq-03",
+      "type": "mcq",
+      "question": "At the cutoff frequency, a filter reduces the signal by:",
+      "options": ["-3dB", "-6dB", "-12dB", "0dB"],
+      "correctIndex": 0,
+      "explanation": "The cutoff frequency is defined as the point where the signal is reduced by -3dB, which represents half the power of the original signal."
+    },
+    {
+      "id": "eq-mcq-04",
+      "type": "mcq",
+      "question": "What does a higher Q factor do to an EQ band?",
+      "options": [
+        "Makes the band narrower and more focused",
+        "Makes the band wider and more gentle",
+        "Increases the maximum gain available",
+        "Changes the centre frequency"
+      ],
+      "correctIndex": 0,
+      "explanation": "Q factor controls bandwidth. Higher Q = narrower, more focused band affecting fewer surrounding frequencies. Lower Q = wider, more gentle curve."
+    },
+    {
+      "id": "eq-mcq-05",
+      "type": "mcq",
+      "question": "A notch filter is the opposite of which filter type?",
+      "options": ["Band-pass filter", "Low-pass filter", "High-pass filter", "High-shelf filter"],
+      "correctIndex": 0,
+      "explanation": "A notch filter removes a narrow band of frequencies at the cutoff point, while a band-pass filter passes only that narrow band — they are inverse operations."
+    },
+    {
+      "id": "eq-mcq-06",
+      "type": "mcq",
+      "question": "On a graphic equaliser, which parameter can the user adjust for each band?",
+      "options": ["Gain only", "Gain and frequency", "Gain and Q", "Gain, frequency, and Q"],
+      "correctIndex": 0,
+      "explanation": "A graphic EQ has fixed frequency bands and fixed Q values. The only adjustable parameter is gain (boost/cut) via the slider for each band. What you see is what you get."
+    },
+    {
+      "id": "eq-num-01",
+      "type": "numeric",
+      "question": "A low-pass filter with a slope of 12dB/octave has how many poles?",
+      "answer": 2,
+      "tolerance": 0,
+      "unit": "poles",
+      "explanation": "Each pole contributes 6dB/octave of attenuation. 12 ÷ 6 = 2 poles."
+    },
+    {
+      "id": "eq-num-02",
+      "type": "numeric",
+      "question": "A 4-pole filter has a rolloff rate of how many dB per octave?",
+      "answer": 24,
+      "tolerance": 0,
+      "unit": "dB/oct",
+      "explanation": "Each pole contributes 6dB/octave. 4 poles × 6 = 24dB/octave."
+    },
+    {
+      "id": "eq-num-03",
+      "type": "numeric",
+      "question": "If a signal is 1 octave above a low-pass filter's cutoff (set to 6dB/oct slope), by how many dB is it attenuated?",
+      "answer": 6,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "At 6dB/octave, the signal loses 6dB for every octave beyond the cutoff. One octave above = 6dB of attenuation."
+    },
+    {
+      "id": "eq-short-01",
+      "type": "short",
+      "question": "Explain why a high-pass filter might be applied to a vocal recording.",
+      "sampleAnswer": "To remove low-frequency rumble, handling noise, or proximity effect that muddies the vocal without affecting the vocal tone itself.",
+      "keyPoints": ["rumble", "handling noise", "proximity effect", "low frequency", "unwanted"],
+      "explanation": "Vocals rarely contain useful content below ~80Hz. A HPF removes unwanted low-end noise (microphone handling, room rumble, proximity effect bass buildup) without affecting the vocal tone."
+    },
+    {
+      "id": "eq-short-02",
+      "type": "short",
+      "question": "Describe one advantage and one disadvantage of a graphic EQ compared to a parametric EQ.",
+      "sampleAnswer": "Advantage: the slider positions visually show the EQ curve, making it intuitive to read. Disadvantage: you cannot adjust the Q or centre frequency of each band, limiting precision.",
+      "keyPoints": ["visual", "intuitive", "fixed frequency", "fixed Q", "less flexible", "less precise"],
+      "explanation": "A graphic EQ's strength is visual clarity — slider positions match the frequency response curve. Its weakness is inflexibility — fixed bands and Q values mean you can't surgically target a specific problem frequency."
+    },
+    {
+      "id": "eq-short-03",
+      "type": "short",
+      "question": "What is the relationship between filter slope (dB/octave) and the number of poles? Give an example.",
+      "sampleAnswer": "Each pole adds 6dB/octave of attenuation. For example, a 4-pole filter has a slope of 24dB/octave (4 × 6 = 24).",
+      "keyPoints": ["6dB per pole", "multiply", "steeper", "attenuation"],
+      "explanation": "Filter slope and poles are directly proportional: poles × 6 = dB/octave. A 1-pole filter = 6dB/oct (gentle), a 2-pole = 12dB/oct, a 4-pole = 24dB/oct (steep). Steeper slopes mean more aggressive filtering beyond the cutoff."
+    }
+  ]
+}
