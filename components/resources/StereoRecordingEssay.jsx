@@ -140,6 +140,7 @@ export default function StereoRecordingEssay() {
                     student_name: studentName.trim(),
                     content,
                     word_count: wordCount,
+                    scaffold_level: scaffoldLevel,
                 });
             if (error) throw error;
             setSubmitted(true);
