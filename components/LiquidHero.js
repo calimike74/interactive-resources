@@ -90,39 +90,52 @@ export default function LiquidHero({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const dataUrl = renderTextToDataUrl({ badge, title, tagline });
+        let script = null;
+        let cancelled = false;
 
-        // Load the liquid shader as an ES module via dynamic script injection
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.textContent = `
-            import LiquidBackground from '${CDN_URL}';
-            const canvas = document.getElementById('liquid-hero-canvas');
-            if (canvas) {
-                const app = LiquidBackground(canvas);
-                app.loadImage('${dataUrl}');
-                app.setRain(false);
-                app.liquidPlane.material.metalness = 0.35;
-                app.liquidPlane.material.roughness = 0.45;
-                app.liquidPlane.uniforms.displacementScale.value = 2;
-                window.__liquidApp = app;
-                // Signal that the liquid effect is ready
-                canvas.dispatchEvent(new CustomEvent('liquid-ready'));
-            }
-        `;
-        document.body.appendChild(script);
+        const loadLiquid = () => {
+            if (cancelled) return;
 
-        // Listen for the liquid-ready event from the module script
+            const dataUrl = renderTextToDataUrl({ badge, title, tagline });
+
+            script = document.createElement('script');
+            script.type = 'module';
+            script.textContent = `
+                import LiquidBackground from '${CDN_URL}';
+                const canvas = document.getElementById('liquid-hero-canvas');
+                if (canvas) {
+                    const app = LiquidBackground(canvas);
+                    app.loadImage('${dataUrl}');
+                    app.setRain(false);
+                    app.liquidPlane.material.metalness = 0.35;
+                    app.liquidPlane.material.roughness = 0.45;
+                    app.liquidPlane.uniforms.displacementScale.value = 2;
+                    window.__liquidApp = app;
+                    canvas.dispatchEvent(new CustomEvent('liquid-ready'));
+                }
+            `;
+            document.body.appendChild(script);
+        };
+
+        // Defer loading until the browser is idle — don't block first paint
+        const idleId = typeof requestIdleCallback !== 'undefined'
+            ? requestIdleCallback(loadLiquid, { timeout: 3000 })
+            : setTimeout(loadLiquid, 100);
+
         const handleReady = () => setLiquidLoaded(true);
         canvas.addEventListener('liquid-ready', handleReady);
 
         return () => {
+            cancelled = true;
             canvas.removeEventListener('liquid-ready', handleReady);
+            if (typeof cancelIdleCallback !== 'undefined' && typeof idleId === 'number') {
+                cancelIdleCallback(idleId);
+            }
             if (window.__liquidApp && window.__liquidApp.dispose) {
                 window.__liquidApp.dispose();
                 window.__liquidApp = null;
             }
-            if (script.parentNode) {
+            if (script && script.parentNode) {
                 script.parentNode.removeChild(script);
             }
         };
