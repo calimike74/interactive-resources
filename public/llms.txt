@@ -1,0 +1,46 @@
+# Interactive Resources — A-Level Music Technology
+
+> Interactive learning tools for A-Level Music Technology (Pearson Edexcel Component 4) covering synthesis, EQ, compression, audio numeracy, and more.
+
+Built by Mike Lehnert. Deployed at https://interactive-resources-eight.vercel.app
+
+## What This App Does
+
+A collection of interactive, browser-based tools that let students explore music technology concepts through direct manipulation. Each tool is designed around a specific curriculum topic and uses the Web Audio API for real-time audio processing.
+
+### Available Tools
+
+- **Synth Explorer** — Interactive synthesis with oscillator controls, ADSR envelopes, and waveform visualisation
+- **EQ Trainer** — Hands-on equalisation with frequency bands and real-time audio feedback
+- **Compressor Tool** — Dynamic processing with threshold, ratio, attack, and release controls
+- **Octave Period Trainer** — Numeracy tool for calculating frequency, period, and octave relationships (Topic 2.5)
+- **Revision Quizzes** — Topic-based self-assessment with spaced repetition support
+- Additional tools covering delay, sampling, automation, and signal flow
+
+### How Students Use It
+
+- Browse by curriculum topic
+- Interact with audio parameters in real time
+- Self-assess understanding through built-in quizzes
+- Use as a revision resource alongside classroom teaching
+
+## Curriculum Alignment
+
+All resources are mapped to the Pearson Edexcel Level 3 Advanced GCE in Music Technology, Component 4: Producing and Analysing. Curriculum section numbers (e.g., 1.11 EQ, 1.3 Synthesis, 1.9 Dynamic Processing) are used throughout.
+
+## Tech Stack
+
+Next.js, React, Web Audio API, Tailwind CSS, Vercel
+
+## Important Context
+
+- Designed for UK A-Level students aged 16-18
+- All audio processing happens in the browser — no server-side audio
+- Resources are pedagogically structured with progressive difficulty
+- Interactive elements follow dual coding principles (visual + audio feedback)
+
+## Not Intended For
+
+- General music production tutorials
+- Professional audio engineering reference
+- DAW-specific instruction (though Ableton Live 12 is used in classroom context)
