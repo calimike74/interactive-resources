@@ -662,62 +662,62 @@ export default function CompressorCurvePractice() {
             minHeight: '100vh',
             background: t.bg.secondary,
         }}>
-            {/* Hero */}
+            {/* Hero with video background */}
             <div style={{
                 position: 'relative',
-                height: '280px',
-                background: 'linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 overflow: 'hidden',
+                minHeight: '240px',
             }}>
-                {/* Decorative grid pattern */}
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        opacity: 0,
+                        transition: 'opacity 0.8s ease-out',
+                    }}
+                    src="/compressor-hero.mp4"
+                />
                 <div style={{
                     position: 'absolute',
                     inset: 0,
-                    opacity: 0.08,
-                    backgroundImage: `
-                        linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)
-                    `,
-                    backgroundSize: '40px 40px',
+                    background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
                 }} />
-                {/* Decorative diagonal line */}
-                <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 800 280" preserveAspectRatio="none">
-                    <line x1="100" y1="250" x2="700" y2="30" stroke="rgba(255,255,255,0.06)" strokeWidth="3" strokeDasharray="8 8" />
-                    <line x1="100" y1="250" x2="400" y2="130" stroke="rgba(37,99,235,0.2)" strokeWidth="3" />
-                    <line x1="400" y1="130" x2="700" y2="90" stroke="rgba(5,150,105,0.25)" strokeWidth="3" />
-                    <circle cx="400" cy="130" r="6" fill="rgba(220,38,38,0.4)" />
-                </svg>
-                <div style={{ position: 'relative', textAlign: 'center', zIndex: 1 }}>
+                <div style={{
+                    position: 'relative',
+                    maxWidth: '640px',
+                    margin: '0 auto',
+                    padding: `${spacing[12]} ${spacing[6]} ${spacing[10]}`,
+                    textAlign: 'center',
+                }}>
                     <h1 style={{
                         fontSize: typography.size['4xl'],
                         fontWeight: typography.weight.bold,
-                        color: '#FFFFFF',
-                        margin: 0,
-                        letterSpacing: typography.letterSpacing.tight,
+                        color: '#ffffff',
+                        lineHeight: typography.lineHeight.tight,
+                        marginBottom: spacing[4],
+                        textShadow: '0 2px 8px rgba(0,0,0,0.3)',
                     }}>
                         Compressor Curve Practice
                     </h1>
                     <p style={{
+                        color: 'rgba(255,255,255,0.85)',
                         fontSize: typography.size.lg,
-                        color: 'rgba(255,255,255,0.6)',
-                        margin: `${spacing[3]} 0 0`,
-                        fontWeight: typography.weight.normal,
+                        lineHeight: typography.lineHeight.relaxed,
+                        maxWidth: '480px',
+                        margin: '0 auto',
+                        textShadow: '0 1px 4px rgba(0,0,0,0.2)',
                     }}>
                         Draw and analyse transfer curves
                     </p>
                 </div>
-                {/* Bottom fade */}
-                <div style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '60px',
-                    background: `linear-gradient(transparent, ${t.bg.secondary})`,
-                }} />
             </div>
 
             {/* Content */}
