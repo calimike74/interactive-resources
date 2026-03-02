@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getResource, resourceExists } from '@/lib/resources';
 import { getTopicForResource } from '@/lib/topics';
-import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 
 // Resource components registry
 // Add new components here as they're created
@@ -21,6 +21,7 @@ import EssayScaffold from '@/components/resources/EssayScaffold';
 import SubtractiveSynthExplorer from '@/components/resources/SubtractiveSynthExplorer';
 import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
 import CompressorExplorer from '@/components/resources/CompressorExplorer';
+import CompressorCurvePractice from '@/components/resources/CompressorCurvePractice';
 import EssayScaffoldPractice from '@/components/resources/EssayScaffoldPractice';
 
 const resourceComponents = {
@@ -37,6 +38,7 @@ const resourceComponents = {
     'SubtractiveSynthExplorer': SubtractiveSynthExplorer,
     'StereoRecordingEssay': StereoRecordingEssay,
     'CompressorExplorer': CompressorExplorer,
+    'CompressorCurvePractice': CompressorCurvePractice,
     'EssayScaffoldPractice': EssayScaffoldPractice,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
@@ -76,8 +78,11 @@ export default function ResourcePageClient() {
             {/* Navigation Header */}
             <header
                 style={{
-                    background: t.bg.primary,
-                    borderBottom: `1px solid ${t.border.subtle}`,
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                    borderBottom: `1px solid ${glass.border}`,
+                    boxShadow: glass.shadow,
                     padding: `${spacing[4]} ${spacing[8]}`,
                     position: 'sticky',
                     top: 0,
@@ -107,8 +112,12 @@ export default function ResourcePageClient() {
                                 textDecoration: 'none',
                                 fontSize: typography.size.sm,
                                 padding: `${spacing[2]} ${spacing[3]}`,
-                                borderRadius: borderRadius.md,
-                                background: t.bg.tertiary,
+                                borderRadius: glass.radiusPill,
+                                background: glass.bg,
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                border: '1px solid ' + glass.border,
+                                boxShadow: glass.iconShadow,
                                 transition: `all ${transitions.fast}`,
                             }}
                         >
@@ -118,12 +127,14 @@ export default function ResourcePageClient() {
                         {/* Topic badge */}
                         <span
                             style={{
-                                background: t.accent.infoLight,
+                                background: 'rgba(37, 99, 235, 0.12)',
                                 color: t.accent.info,
                                 padding: `${spacing[1]} ${spacing[3]}`,
                                 borderRadius: borderRadius.full,
                                 fontSize: typography.size.xs,
                                 fontWeight: typography.weight.medium,
+                                backdropFilter: 'blur(8px)',
+                                border: '1px solid rgba(37, 99, 235, 0.2)',
                             }}
                         >
                             {resource.topic}
@@ -160,8 +171,10 @@ export default function ResourcePageClient() {
             {/* Footer */}
             <footer
                 style={{
-                    background: t.bg.primary,
-                    borderTop: `1px solid ${t.border.subtle}`,
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                    borderTop: `1px solid ${glass.border}`,
                     padding: `${spacing[8]} ${spacing[8]}`,
                 }}
             >
@@ -225,7 +238,11 @@ export default function ResourcePageClient() {
                             href={backHref}
                             style={{
                                 padding: `${spacing[3]} ${spacing[5]}`,
-                                background: t.bg.tertiary,
+                                background: glass.bg,
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                border: '1px solid ' + glass.border,
+                                boxShadow: glass.shadow,
                                 color: t.text.primary,
                                 borderRadius: borderRadius.lg,
                                 textDecoration: 'none',
@@ -243,7 +260,11 @@ export default function ResourcePageClient() {
                                 rel="noopener noreferrer"
                                 style={{
                                     padding: `${spacing[3]} ${spacing[5]}`,
-                                    background: t.accent.primary,
+                                    background: glass.bgPrimary,
+                                    backdropFilter: 'blur(' + glass.blur + ')',
+                                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                                    boxShadow: glass.shadowPrimary,
+                                    border: '1px solid ' + glass.border,
                                     color: t.text.inverse,
                                     borderRadius: borderRadius.lg,
                                     textDecoration: 'none',
@@ -277,12 +298,15 @@ function ResourceNotFound({ resourceId, theme: t }) {
         >
             <div
                 style={{
-                    background: t.bg.primary,
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                    border: '1px solid ' + glass.border,
                     borderRadius: borderRadius['2xl'],
                     padding: spacing[10],
                     maxWidth: '480px',
                     textAlign: 'center',
-                    boxShadow: t.shadow.lg,
+                    boxShadow: glass.shadowHover,
                 }}
             >
                 <div style={{ fontSize: '4rem', marginBottom: spacing[4] }}>🔍</div>
@@ -309,7 +333,11 @@ function ResourceNotFound({ resourceId, theme: t }) {
                     style={{
                         display: 'inline-block',
                         padding: `${spacing[3]} ${spacing[6]}`,
-                        background: t.accent.primary,
+                        background: glass.bgPrimary,
+                        backdropFilter: 'blur(' + glass.blur + ')',
+                        WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                        boxShadow: glass.shadowPrimary,
+                        border: '1px solid ' + glass.border,
                         color: t.text.inverse,
                         borderRadius: borderRadius.lg,
                         textDecoration: 'none',
@@ -339,12 +367,15 @@ function ComponentNotFound({ resource, theme: t }) {
         >
             <div
                 style={{
-                    background: t.bg.primary,
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                    border: '1px solid ' + glass.border,
                     borderRadius: borderRadius['2xl'],
                     padding: spacing[10],
                     maxWidth: '480px',
                     textAlign: 'center',
-                    boxShadow: t.shadow.lg,
+                    boxShadow: glass.shadowHover,
                 }}
             >
                 <div style={{ fontSize: '4rem', marginBottom: spacing[4] }}>🚧</div>
@@ -371,7 +402,11 @@ function ComponentNotFound({ resource, theme: t }) {
                     style={{
                         display: 'inline-block',
                         padding: `${spacing[3]} ${spacing[6]}`,
-                        background: t.accent.primary,
+                        background: glass.bgPrimary,
+                        backdropFilter: 'blur(' + glass.blur + ')',
+                        WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                        boxShadow: glass.shadowPrimary,
+                        border: '1px solid ' + glass.border,
                         color: t.text.inverse,
                         borderRadius: borderRadius.lg,
                         textDecoration: 'none',
