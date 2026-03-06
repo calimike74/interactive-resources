@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { theme, typography, spacing, borderRadius, transitions } from '@/lib/theme';
+import { theme, typography, spacing, borderRadius, transitions, glass } from '@/lib/theme';
 import { findTerm, getQuizForTerm, getRandomTerm } from '@/lib/glossary';
 import {
     Copy, ClipboardList, Highlighter, BookOpen, HelpCircle,
@@ -311,10 +311,10 @@ export function ContextMenuProvider({ children }) {
                         zIndex: 9999,
                         minWidth: '220px',
                         maxWidth: '300px',
-                        background: t.bg.elevated,
-                        border: `1px solid ${t.border.medium}`,
+                        background: glass.bg,
+                        border: `1px solid ${glass.border}`,
                         borderRadius: borderRadius.xl,
-                        boxShadow: '0 12px 32px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08)',
+                        boxShadow: glass.shadowHover,
                         padding: `${spacing[1]} 0`,
                         animation: 'contextMenuIn 120ms ease-out',
                         backdropFilter: 'blur(20px)',
@@ -403,7 +403,7 @@ function MenuItem({ item, onClose, theme: t }) {
                 alignItems: 'center',
                 width: '100%',
                 padding: `${spacing[2]} ${spacing[4]}`,
-                background: hovered ? t.bg.secondary : 'transparent',
+                background: hovered ? glass.bgHover : 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: typography.size.sm,
@@ -480,10 +480,12 @@ const DefinitionPopup = forwardRef(function DefinitionPopup({ entry, x, y, onClo
                     top: posY,
                     width: popupWidth,
                     zIndex: 9999,
-                    background: t.bg.elevated,
-                    border: `1px solid ${t.border.medium}`,
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                    border: `1px solid ${glass.border}`,
                     borderRadius: borderRadius['2xl'],
-                    boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.08)',
+                    boxShadow: glass.shadowHover,
                     padding: spacing[6],
                     animation: 'contextMenuIn 150ms ease-out',
                     fontFamily: typography.fontFamily,
@@ -607,10 +609,12 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                     top: posY,
                     width: popupWidth,
                     zIndex: 9999,
-                    background: t.bg.elevated,
-                    border: `1px solid ${t.border.medium}`,
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                    border: `1px solid ${glass.border}`,
                     borderRadius: borderRadius['2xl'],
-                    boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.08)',
+                    boxShadow: glass.shadowHover,
                     padding: spacing[6],
                     animation: 'contextMenuIn 150ms ease-out',
                     fontFamily: typography.fontFamily,
@@ -643,8 +647,10 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                                 fontSize: typography.size.xs,
                                 fontFamily: typography.fontFamily,
                                 cursor: 'pointer',
-                                background: mode === 'mc' ? t.accent.primary : t.bg.tertiary,
+                                background: mode === 'mc' ? glass.bgPrimary : 'rgba(255, 255, 255, 0.4)',
                                 color: mode === 'mc' ? t.text.inverse : t.text.secondary,
+                                backdropFilter: mode === 'mc' ? 'blur(8px)' : 'none',
+                                boxShadow: mode === 'mc' ? glass.shadowPrimary : 'none',
                                 transition: `all ${transitions.fast}`,
                             }}
                         >
@@ -659,8 +665,10 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                                 fontSize: typography.size.xs,
                                 fontFamily: typography.fontFamily,
                                 cursor: 'pointer',
-                                background: mode === 'recall' ? t.accent.primary : t.bg.tertiary,
+                                background: mode === 'recall' ? glass.bgPrimary : 'rgba(255, 255, 255, 0.4)',
                                 color: mode === 'recall' ? t.text.inverse : t.text.secondary,
+                                backdropFilter: mode === 'recall' ? 'blur(8px)' : 'none',
+                                boxShadow: mode === 'recall' ? glass.shadowPrimary : 'none',
                                 transition: `all ${transitions.fast}`,
                             }}
                         >
@@ -702,7 +710,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                         {data.options.map((opt, i) => {
                             const isSelected = selected === i;
                             const showResult = selected !== null;
-                            let optBg = t.bg.secondary;
+                            let optBg = glass.bg;
                             let optBorder = t.border.subtle;
 
                             if (showResult) {
@@ -733,6 +741,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                                         color: t.text.primary,
                                         fontFamily: typography.fontFamily,
                                         lineHeight: typography.lineHeight.normal,
+                                        backdropFilter: 'blur(8px)',
                                         transition: `all ${transitions.fast}`,
                                     }}
                                 >
@@ -764,7 +773,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                                 style={{
                                     width: '100%',
                                     padding: `${spacing[3]} ${spacing[4]}`,
-                                    background: t.accent.primary,
+                                    background: glass.bgPrimary,
                                     color: t.text.inverse,
                                     border: 'none',
                                     borderRadius: borderRadius.lg,
@@ -772,6 +781,8 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                                     fontSize: typography.size.sm,
                                     fontWeight: typography.weight.semibold,
                                     fontFamily: typography.fontFamily,
+                                    backdropFilter: 'blur(8px)',
+                                    boxShadow: glass.shadowPrimary,
                                     transition: `all ${transitions.fast}`,
                                 }}
                             >
@@ -837,8 +848,8 @@ function PopupButton({ label, onClick, primary, icon }) {
                 gap: spacing[1],
                 padding: `${spacing[2]} ${spacing[3]}`,
                 background: primary
-                    ? (hovered ? t.accent.primaryHover : t.accent.primary)
-                    : (hovered ? t.bg.tertiary : t.bg.secondary),
+                    ? (hovered ? glass.bgPrimaryHover : glass.bgPrimary)
+                    : (hovered ? glass.bgHover : glass.bg),
                 color: primary ? t.text.inverse : t.text.primary,
                 border: 'none',
                 borderRadius: borderRadius.lg,
@@ -846,6 +857,8 @@ function PopupButton({ label, onClick, primary, icon }) {
                 fontSize: typography.size.xs,
                 fontWeight: typography.weight.medium,
                 fontFamily: typography.fontFamily,
+                backdropFilter: 'blur(8px)',
+                boxShadow: primary ? glass.shadowPrimary : glass.shadow,
                 transition: `all ${transitions.fast}`,
             }}
         >

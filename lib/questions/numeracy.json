@@ -115,6 +115,89 @@
         "Anti-aliasing filters prevent this by removing high frequencies before conversion"
       ],
       "explanation": "The Nyquist theorem is the mathematical foundation for choosing sample rates. 44.1 kHz became the CD standard precisely because it captures the full audible range with a small safety margin, while keeping file sizes manageable."
+    },
+    {
+      "id": "numeracy-mcq-07",
+      "type": "mcq",
+      "question": "Two identical, uncorrelated sound sources each produce 80 dB SPL. When both play simultaneously, the combined level is approximately:",
+      "options": ["80 dB SPL", "83 dB SPL", "86 dB SPL", "160 dB SPL"],
+      "correctIndex": 1,
+      "explanation": "Doubling the number of uncorrelated sound sources adds approximately 3 dB (technically +3.01 dB). This is because decibels are logarithmic: combining two equal-power sources doubles the total power, and 10 × log₁₀(2) ≈ 3. So 80 + 3 = 83 dB SPL. You cannot simply add dB values arithmetically — 80 + 80 does not equal 160."
+    },
+    {
+      "id": "numeracy-mcq-08",
+      "type": "mcq",
+      "question": "A sound wave at 686 Hz travels through air at 343 m/s. What is its wavelength?",
+      "options": ["0.25 m", "0.5 m", "1 m", "2 m"],
+      "correctIndex": 1,
+      "explanation": "Wavelength = speed ÷ frequency = 343 ÷ 686 = 0.5 m. This formula (λ = v/f) is fundamental in acoustics. Knowing wavelengths helps explain diffraction (sound bending around objects), room modes, and why bass frequencies require larger absorbers to control."
+    },
+    {
+      "id": "numeracy-mcq-09",
+      "type": "mcq",
+      "question": "What is the key distinction between dB SPL and dBFS?",
+      "options": [
+        "dB SPL measures acoustic pressure relative to the threshold of hearing; dBFS measures digital signal level relative to the maximum value before clipping",
+        "dB SPL is used for digital signals; dBFS is used for analogue signals",
+        "dB SPL has no reference point; dBFS is referenced to 1 pascal",
+        "dB SPL and dBFS are identical measurements expressed in different units"
+      ],
+      "correctIndex": 0,
+      "explanation": "dB SPL (Sound Pressure Level) is an acoustic measurement referenced to 20 micropascals — the approximate threshold of human hearing. dBFS (decibels relative to Full Scale) is a digital measurement where 0 dBFS is the maximum level the system can represent before clipping. In dBFS, all normal signal levels are negative values (e.g., −18 dBFS). These are fundamentally different scales measuring different things."
+    },
+    {
+      "id": "numeracy-mcq-10",
+      "type": "mcq",
+      "question": "The frequency ratio for a perfect fifth interval is 3:2. If the lower note is 220 Hz (A3), what is the frequency of the note a perfect fifth above?",
+      "options": ["293.3 Hz", "311 Hz", "330 Hz", "440 Hz"],
+      "correctIndex": 2,
+      "explanation": "A perfect fifth has a frequency ratio of 3:2. Multiply the lower frequency by 3/2: 220 × 1.5 = 330 Hz. This corresponds to E4 in just intonation. Frequency ratios define musical intervals — an octave is 2:1, a perfect fourth is 4:3, and a major third is 5:4. These ratios explain why certain intervals sound consonant: their waveforms align at regular intervals."
+    },
+    {
+      "id": "numeracy-num-04",
+      "type": "numeric",
+      "question": "Calculate the uncompressed bit rate (data rate) in kilobits per second (kbps) for a mono audio stream at 48,000 Hz sample rate and 24-bit bit depth.",
+      "answer": 1152,
+      "tolerance": 0,
+      "unit": "kbps",
+      "explanation": "Bit rate = sample rate × bit depth × channels. For mono: 48,000 × 24 × 1 = 1,152,000 bits per second = 1,152 kbps. For stereo, double this to 2,304 kbps. Understanding data rates helps explain why lossless formats produce larger files than lossy codecs like MP3 (which typically compress to 128–320 kbps)."
+    },
+    {
+      "id": "numeracy-num-05",
+      "type": "numeric",
+      "question": "A speaker is measured at 90 dB SPL at 1 metre. Using the inverse square law, what is the approximate level at 4 metres from the speaker?",
+      "answer": 78,
+      "tolerance": 0,
+      "unit": "dB SPL",
+      "explanation": "The inverse square law states that every doubling of distance reduces level by 6 dB. From 1m to 2m is one doubling (−6 dB = 84 dB). From 2m to 4m is a second doubling (−6 dB = 78 dB). So the level at 4m is 90 − 12 = 78 dB SPL. This applies to point sources in free-field conditions. In real rooms, reflections mean the drop-off is less than the inverse square law predicts at greater distances."
+    },
+    {
+      "id": "numeracy-short-04",
+      "type": "short",
+      "question": "Explain how to calculate the wavelength of a sound wave, and describe why low-frequency sounds have longer wavelengths. Include the formula and a worked example using a 100 Hz tone (speed of sound = 343 m/s).",
+      "sampleAnswer": "Wavelength is calculated using the formula λ = v / f, where λ is wavelength in metres, v is the speed of sound (343 m/s in air at room temperature), and f is frequency in Hz. For a 100 Hz tone: λ = 343 / 100 = 3.43 metres. Low-frequency sounds have longer wavelengths because the speed of sound is constant in a given medium — if fewer cycles occur per second (lower frequency), each cycle must occupy a greater distance to maintain that speed. This is why bass frequencies diffract around obstacles more easily and require physically larger absorbers to control in studio acoustics.",
+      "keyPoints": [
+        "λ = v / f (wavelength = speed of sound ÷ frequency)",
+        "100 Hz example: 343 / 100 = 3.43 m",
+        "speed of sound is constant, so lower frequency = longer wavelength",
+        "long wavelengths diffract around obstacles more easily",
+        "bass trapping requires physically large absorbers because of long wavelengths"
+      ],
+      "explanation": "Wavelength calculations are essential for understanding room acoustics, microphone placement, and acoustic treatment. A 50 Hz bass note has a wavelength of about 6.86 m — this explains why bass traps need to be large and deep (typically a quarter-wavelength thick for effective absorption). Higher frequencies with shorter wavelengths are absorbed by thinner materials, which is why acoustic foam treats mids and highs but not bass."
+    },
+    {
+      "id": "numeracy-short-05",
+      "type": "short",
+      "question": "A student claims that combining ten identical loudspeakers playing the same signal will produce a sound level ten times louder than one speaker. Explain why this is incorrect, using decibel calculations to show the actual increase in level.",
+      "sampleAnswer": "The student is confusing a linear multiplication of power with perceived loudness. Combining ten identical uncorrelated sources adds their acoustic power, giving a factor of 10. In decibels: increase = 10 × log₁₀(10) = 10 dB. However, perceived loudness roughly doubles for every 10 dB increase, so ten speakers would sound approximately twice as loud as one — not ten times louder. The logarithmic nature of decibels and of human hearing means that large increases in physical power produce modest increases in perceived loudness.",
+      "keyPoints": [
+        "combining 10 equal sources = 10× the power",
+        "10 × log₁₀(10) = 10 dB increase",
+        "perceived loudness approximately doubles every 10 dB",
+        "10 speakers sound roughly twice as loud, not 10 times",
+        "decibels are logarithmic, matching human perception"
+      ],
+      "explanation": "This question tests understanding of the logarithmic relationship between physical sound intensity and perceived loudness. The decibel scale exists precisely because human hearing is logarithmic — we perceive equal ratios of intensity as equal steps of loudness. A 10 dB increase (10× power) sounds about twice as loud. A 20 dB increase (100× power) sounds about four times as loud. This is why adding more speakers in a PA system gives diminishing returns in perceived volume."
     }
   ]
 }

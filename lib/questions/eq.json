@@ -109,6 +109,92 @@
       "sampleAnswer": "Each pole adds 6dB/octave of attenuation. For example, a 4-pole filter has a slope of 24dB/octave (4 × 6 = 24).",
       "keyPoints": ["6dB per pole", "multiply", "steeper", "attenuation"],
       "explanation": "Filter slope and poles are directly proportional: poles × 6 = dB/octave. A 1-pole filter = 6dB/oct (gentle), a 2-pole = 12dB/oct, a 4-pole = 24dB/oct (steep). Steeper slopes mean more aggressive filtering beyond the cutoff."
+    },
+    {
+      "id": "eq-mcq-07",
+      "type": "mcq",
+      "question": "A high-shelf filter set to +4 dB at 8 kHz will:",
+      "options": [
+        "Boost only 8 kHz and leave all other frequencies unchanged",
+        "Boost all frequencies above 8 kHz by 4 dB while leaving frequencies below 8 kHz largely unaffected",
+        "Cut all frequencies below 8 kHz by 4 dB",
+        "Create a resonant peak at exactly 8 kHz"
+      ],
+      "correctIndex": 1,
+      "explanation": "A shelf filter applies a uniform boost or cut to all frequencies beyond the shelf frequency. A high-shelf at 8 kHz with +4 dB boosts the entire region above 8 kHz by approximately 4 dB. This differs from a bell curve, which only affects a band around the centre frequency."
+    },
+    {
+      "id": "eq-mcq-08",
+      "type": "mcq",
+      "question": "On a semi-parametric EQ, which parameter is typically missing compared to a fully parametric EQ?",
+      "options": [
+        "Gain control",
+        "Frequency selection",
+        "Q (bandwidth) control",
+        "On/off bypass per band"
+      ],
+      "correctIndex": 2,
+      "explanation": "A semi-parametric EQ provides adjustable frequency and gain per band but uses a fixed Q (bandwidth). A fully parametric EQ adds independent Q control, allowing the engineer to widen or narrow each band. Many affordable hardware and console channel strips use semi-parametric EQs."
+    },
+    {
+      "id": "eq-mcq-09",
+      "type": "mcq",
+      "question": "Frequency masking occurs when:",
+      "options": [
+        "Two instruments occupy the same frequency range and obscure each other in the mix",
+        "A high-pass filter is set too high and removes important fundamental frequencies",
+        "A parametric EQ is set to a Q of exactly 1.0",
+        "An analogue EQ introduces phase distortion at the cutoff frequency"
+      ],
+      "correctIndex": 0,
+      "explanation": "Frequency masking is a psychoacoustic phenomenon where one sound makes another in the same frequency range harder to hear. In mixing, this commonly occurs between bass and kick drum, or between rhythm guitar and vocals. EQ is the primary tool for resolving masking — by cutting the competing frequency range in one instrument, the other becomes clearer."
+    },
+    {
+      "id": "eq-mcq-10",
+      "type": "mcq",
+      "question": "A minimum-phase EQ differs from a linear-phase EQ because a minimum-phase EQ:",
+      "options": [
+        "Has zero latency but is limited to cutting only",
+        "Uses less CPU but cannot match the frequency response of a linear-phase EQ",
+        "Introduces frequency-dependent phase shifts as a side-effect of gain changes",
+        "Can only be used on master bus processing"
+      ],
+      "correctIndex": 2,
+      "explanation": "All analogue EQs and most digital EQs are minimum-phase designs. They introduce phase shifts that vary with frequency as a consequence of altering the magnitude response. Linear-phase EQs avoid this by using symmetrical FIR filters, but at the cost of added latency and potential pre-ringing artefacts."
+    },
+    {
+      "id": "eq-num-04",
+      "type": "numeric",
+      "question": "A signal at 500 Hz is processed through a high-pass filter with a cutoff of 2 kHz and a slope of 12 dB/octave. How many dB of attenuation is applied to the 500 Hz signal?",
+      "answer": 24,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "500 Hz is 2 octaves below the 2 kHz cutoff (2 kHz → 1 kHz = 1 octave, 1 kHz → 500 Hz = 2 octaves). At 12 dB/octave, 2 octaves below = 2 × 12 = 24 dB of attenuation."
+    },
+    {
+      "id": "eq-num-05",
+      "type": "numeric",
+      "question": "A low-pass filter with a 6-pole design has a rolloff slope of how many dB per octave?",
+      "answer": 36,
+      "tolerance": 0,
+      "unit": "dB/oct",
+      "explanation": "Each pole contributes 6 dB/octave of rolloff. A 6-pole filter therefore has a slope of 6 × 6 = 36 dB/octave. This is an extremely steep slope rarely found outside of digital filter designs and crossover networks."
+    },
+    {
+      "id": "eq-short-04",
+      "type": "short",
+      "question": "A mix engineer uses a narrow bell-curve cut at 3.5 kHz on a vocal track and a narrow boost at 3.5 kHz on a snare drum. Explain the mixing principle behind this approach and why it is more effective than simply boosting the snare.",
+      "sampleAnswer": "This is a complementary EQ approach to solving frequency masking. By cutting 3.5 kHz on the vocal, space is created in that frequency range for the snare to occupy. The snare boost fills that space, making both instruments clearer. Simply boosting the snare alone would increase the overall level in that band but the vocal would still mask it, requiring ever-louder boosts and creating a cluttered mix.",
+      "keyPoints": ["complementary EQ", "frequency masking", "cutting one instrument to make room for another", "avoids level escalation"],
+      "explanation": "Complementary EQ is a fundamental mixing technique: rather than always boosting to make things louder, cutting competing instruments is often more effective. Each instrument gets its own frequency 'pocket', leading to a cleaner mix without increasing overall level."
+    },
+    {
+      "id": "eq-short-05",
+      "type": "short",
+      "question": "Explain the difference between a low-shelf filter and a low-pass filter, and give a practical example of when each would be used in music production.",
+      "sampleAnswer": "A low-shelf filter boosts or cuts all frequencies below the shelf frequency by a set amount but does not remove them entirely. A low-pass filter progressively attenuates all frequencies above its cutoff, eventually removing them. A low-shelf boost at 100 Hz could be used to add warmth to a bass guitar without altering higher frequencies. A low-pass filter at 10 kHz could be used on a pad synth to remove harsh high-frequency content and push it further back in the mix.",
+      "keyPoints": ["shelf boosts/cuts by a fixed amount", "low-pass progressively removes above cutoff", "shelf does not remove frequencies", "practical use of each"],
+      "explanation": "The key distinction is that a shelf adjusts level while preserving all frequency content, whereas a pass filter removes content beyond the cutoff. Shelves are shaping tools for tonal balance; pass filters are removal tools for unwanted frequency ranges."
     }
   ]
 }

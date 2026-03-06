@@ -107,9 +107,9 @@ export default function LiquidHero({
                     const app = LiquidBackground(canvas);
                     app.loadImage('${dataUrl}');
                     app.setRain(false);
-                    app.liquidPlane.material.metalness = 0.35;
-                    app.liquidPlane.material.roughness = 0.45;
-                    app.liquidPlane.uniforms.displacementScale.value = 2;
+                    app.liquidPlane.material.metalness = 0.15;
+                    app.liquidPlane.material.roughness = 0.65;
+                    app.liquidPlane.uniforms.displacementScale.value = 1;
                     window.__liquidApp = app;
                     canvas.dispatchEvent(new CustomEvent('liquid-ready'));
                 }

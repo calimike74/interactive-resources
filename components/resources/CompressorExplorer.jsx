@@ -209,6 +209,87 @@ function InteractiveBox({ children, hint }) {
     );
 }
 
+function DescriptionStrip({ threshold, ratio, attack, release, knee, makeupGain, grAmount, section = 'all' }) {
+    const parts = [];
+
+    // Threshold feedback (sections 1, 3, 4)
+    if (section === 'all' || section === 1 || section === 3) {
+        if (threshold >= -10) parts.push({ text: 'High threshold', detail: 'only the loudest peaks affected.', type: 'normal' });
+        else if (threshold >= -25) parts.push({ text: 'Moderate threshold', detail: 'catching louder moments.', type: 'normal' });
+        else if (threshold >= -40) parts.push({ text: 'Low threshold', detail: 'most of the signal is compressed.', type: 'warn' });
+        else parts.push({ text: 'Very low threshold', detail: 'almost everything compressed, removing natural dynamics.', type: 'warn' });
+    }
+
+    // Ratio feedback (sections 1, 3, 4)
+    if (section === 'all' || section === 1 || section === 3) {
+        if (ratio <= 2) parts.push({ text: `Gentle ratio (${ratio}:1)`, detail: 'subtle, transparent.', type: 'good' });
+        else if (ratio <= 4) parts.push({ text: `Moderate ratio (${ratio}:1)`, detail: 'standard for vocals/mix bus.', type: 'normal' });
+        else if (ratio <= 8) parts.push({ text: `Heavy ratio (${ratio}:1)`, detail: 'significant squashing.', type: 'warn' });
+        else if (ratio <= 12) parts.push({ text: `Very heavy (${ratio}:1)`, detail: 'approaching limiting.', type: 'warn' });
+        else parts.push({ text: `Brick-wall limiting (${ratio}:1)`, detail: 'peaks are flattened.', type: 'warn' });
+    }
+
+    // Attack feedback (sections 2, 4)
+    if (section === 'all' || section === 2) {
+        if (attack < 2) parts.push({ text: 'Ultra-fast attack', detail: 'kills transients, drums lose punch.', type: 'warn' });
+        else if (attack <= 30) parts.push({ text: 'Medium attack', detail: 'transients punch through.', type: 'good' });
+        else parts.push({ text: 'Slow attack', detail: 'transients pass, only sustained sound compressed.', type: 'normal' });
+    }
+
+    // Release feedback (sections 2, 4)
+    if (section === 'all' || section === 2) {
+        if (release < 40) parts.push({ text: 'Fast release', detail: 'risk of audible pumping.', type: 'warn' });
+        else if (release < 200) parts.push({ text: 'Natural release', detail: '', type: 'good' });
+        else parts.push({ text: 'Slow release', detail: 'smooth, "glued" sound.', type: 'normal' });
+    }
+
+    // Extreme combos (section 4)
+    if (section === 'all') {
+        if (threshold <= -35 && ratio >= 8) {
+            parts.push({ text: 'This would choke the signal', detail: 'flat, lifeless, heavily distorted.', type: 'warn' });
+        } else if (threshold <= -25 && ratio >= 6 && attack < 3) {
+            parts.push({ text: 'Aggressive', detail: 'transients killed, dynamics flattened.', type: 'warn' });
+        }
+    }
+
+    // GR feedback (when playing)
+    const absGR = Math.abs(grAmount);
+    if (absGR > 0.5) {
+        const label = absGR > 12 ? 'Extreme' : absGR > 6 ? 'Heavy' : absGR > 3 ? 'Moderate' : 'Light';
+        parts.push({ text: `Peak GR: -${absGR.toFixed(1)} dB`, detail: `(${label})`, type: 'note' });
+    }
+
+    if (parts.length === 0) return null;
+
+    const colorMap = {
+        normal: COLORS.text,
+        good: '#16a34a',
+        warn: '#c44d20',
+        note: COLORS.textHint,
+    };
+
+    return (
+        <div style={{
+            background: COLORS.bg,
+            border: `1px solid ${COLORS.border}`,
+            borderRadius: borderRadius.md,
+            padding: `${spacing[2]} ${spacing[4]}`,
+            marginTop: spacing[3],
+            fontSize: typography.size.sm,
+            color: COLORS.textSecondary,
+            lineHeight: typography.lineHeight.relaxed,
+        }}>
+            {parts.map((p, i) => (
+                <span key={i}>
+                    {i > 0 && <span style={{ color: COLORS.textHint, margin: `0 ${spacing[2]}` }}>&middot;</span>}
+                    <strong style={{ color: colorMap[p.type] || COLORS.text }}>{p.text}</strong>
+                    {p.detail && ` — ${p.detail}`}
+                </span>
+            ))}
+        </div>
+    );
+}
+
 function CompressorControl({ label, value, min, max, step, onChange, unit = '', color = COLORS.text, tierColor }) {
     const displayVal = step < 0.01 ? value.toFixed(3) : step < 1 ? value.toFixed(1) : Math.round(value);
 
@@ -238,9 +319,50 @@ function CompressorControl({ label, value, min, max, step, onChange, unit = '', 
     );
 }
 
+function CompactParam({ label, value, min, max, step, onChange, unit = '' }) {
+    const displayVal = step < 0.01 ? value.toFixed(3) : step < 1 ? value.toFixed(1) : Math.round(value);
+
+    const handleChange = useCallback((e) => {
+        onChange(parseFloat(e.target.value));
+    }, [onChange]);
+
+    return (
+        <div style={{
+            background: '#fafaf9',
+            border: '1px solid #eee',
+            borderRadius: '8px',
+            padding: '6px 8px',
+            textAlign: 'center',
+        }}>
+            <div style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#aaa', fontWeight: 600, marginBottom: '1px' }}>
+                {label}
+            </div>
+            <div>
+                <span style={{ fontSize: '1rem', fontWeight: 700, fontFamily: typography.fontFamilyMono, color: '#1a1a2e' }}>
+                    {displayVal}
+                </span>
+                <span style={{ fontSize: '0.55rem', color: '#ccc', fontWeight: 500 }}>{unit}</span>
+            </div>
+            <input
+                type="range"
+                min={min}
+                max={max}
+                step={step}
+                value={value}
+                onChange={handleChange}
+                style={{ width: '100%', height: '3px', WebkitAppearance: 'none', background: '#e8e6e2', borderRadius: '2px', outline: 'none', marginTop: '4px', display: 'block', accentColor: '#FF6B35', cursor: 'pointer' }}
+            />
+        </div>
+    );
+}
+
 // ─── SVG Visualizations ─────────────────────────────────────────────────────
 
-function TransferCurveSVG({ threshold, ratio, knee = 0, makeupGain = 0, width = 400, height = 300, accentColor = COLORS.easy }) {
+function TransferCurveSVG({ threshold, ratio, knee = 0, makeupGain = 0, width = 500, height = 340, accentColor = COLORS.easy, onThresholdChange, onRatioChange }) {
+    const svgRef = useRef(null);
+    const draggingRef = useRef(null);
+    const [hoveringDot, setHoveringDot] = useState(false);
+
     const pad = { top: 20, right: 20, bottom: 35, left: 45 };
     const innerW = width - pad.left - pad.right;
     const innerH = height - pad.top - pad.bottom;
@@ -251,68 +373,144 @@ function TransferCurveSVG({ threshold, ratio, knee = 0, makeupGain = 0, width = 
 
     const dbToX = (db) => pad.left + ((db - minDb) / range) * innerW;
     const dbToY = (db) => pad.top + ((maxDb - db) / range) * innerH;
+    const xToDb = (x) => minDb + ((x - pad.left) / innerW) * range;
+    const yToDb = (y) => maxDb - ((y - pad.top) / innerH) * range;
+
+    // Compute output for a given input dB (used for threshold dot position)
+    const compOut = (inputDb) => {
+        const excess = inputDb - threshold;
+        if (knee > 0 && Math.abs(excess) < knee / 2) {
+            const t = (excess + knee / 2) / knee;
+            const effectiveRatio = 1 + (ratio - 1) * t;
+            return threshold + (excess / effectiveRatio);
+        } else if (inputDb > threshold) {
+            return threshold + excess / ratio;
+        }
+        return inputDb;
+    };
+
+    // SVG-space position from mouse/touch event
+    const getSvgPoint = useCallback((e) => {
+        const svg = svgRef.current;
+        if (!svg) return { x: 0, y: 0 };
+        const rect = svg.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+            x: (clientX - rect.left) * (width / rect.width),
+            y: (clientY - rect.top) * (height / rect.height),
+        };
+    }, [width, height]);
+
+    const handlePointerDown = useCallback((e) => {
+        if (!onThresholdChange && !onRatioChange) return;
+        const p = getSvgPoint(e);
+        const thX = dbToX(threshold);
+        const thY = dbToY(compOut(threshold) + makeupGain);
+        const dx = p.x - thX;
+        const dy = p.y - thY;
+        if (Math.sqrt(dx * dx + dy * dy) < 20) {
+            draggingRef.current = 'threshold';
+        } else if (p.x > thX + 5 && onRatioChange) {
+            draggingRef.current = 'ratio';
+        }
+        if (draggingRef.current) e.preventDefault();
+    }, [threshold, ratio, knee, makeupGain, onThresholdChange, onRatioChange, getSvgPoint]);
+
+    const handlePointerMove = useCallback((e) => {
+        if (!draggingRef.current) return;
+        const p = getSvgPoint(e);
+        if (draggingRef.current === 'threshold' && onThresholdChange) {
+            const newThreshold = Math.round(Math.max(-60, Math.min(0, xToDb(p.x))));
+            onThresholdChange(newThreshold);
+        } else if (draggingRef.current === 'ratio' && onRatioChange) {
+            const inDb = xToDb(p.x);
+            if (inDb > threshold) {
+                const outDb = yToDb(p.y) - makeupGain;
+                const d = inDb - threshold;
+                const od = outDb - threshold;
+                if (od > 0 && d > 0) {
+                    const newRatio = Math.round(Math.max(1, Math.min(20, d / od)) * 2) / 2;
+                    onRatioChange(newRatio);
+                }
+            }
+        }
+    }, [threshold, makeupGain, onThresholdChange, onRatioChange, getSvgPoint]);
+
+    const handlePointerUp = useCallback(() => {
+        draggingRef.current = null;
+    }, []);
+
+    // Global move/up listeners for drag
+    useEffect(() => {
+        const move = (e) => handlePointerMove(e);
+        const up = () => handlePointerUp();
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', up);
+        window.addEventListener('touchmove', move, { passive: false });
+        window.addEventListener('touchend', up);
+        return () => {
+            window.removeEventListener('mousemove', move);
+            window.removeEventListener('mouseup', up);
+            window.removeEventListener('touchmove', move);
+            window.removeEventListener('touchend', up);
+        };
+    }, [handlePointerMove, handlePointerUp]);
 
     // Build transfer curve points
     const points = [];
     for (let inputDb = minDb; inputDb <= maxDb; inputDb += 0.5) {
-        let outputDb;
-        const excess = inputDb - threshold;
-
-        if (knee > 0 && Math.abs(excess) < knee / 2) {
-            // Soft knee region
-            const kneeRange = knee;
-            const t = (excess + kneeRange / 2) / kneeRange;
-            const effectiveRatio = 1 + (ratio - 1) * t;
-            outputDb = threshold + (excess / effectiveRatio);
-        } else if (inputDb > threshold) {
-            // Above threshold — compress
-            outputDb = threshold + excess / ratio;
-        } else {
-            // Below threshold — unity
-            outputDb = inputDb;
-        }
-
+        let outputDb = compOut(inputDb);
         outputDb += makeupGain;
         outputDb = Math.max(minDb, Math.min(maxDb + 12, outputDb));
         points.push({ x: dbToX(inputDb), y: dbToY(outputDb) });
     }
 
     const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
-
-    // Unity line (1:1)
     const unityD = `M${dbToX(minDb).toFixed(1)},${dbToY(minDb).toFixed(1)} L${dbToX(maxDb).toFixed(1)},${dbToY(maxDb).toFixed(1)}`;
-
-    // Grid marks
     const dbMarks = [-48, -36, -24, -12, 0];
 
+    // Threshold dot position
+    const thDotX = dbToX(threshold);
+    const thDotY = dbToY(Math.max(minDb, Math.min(maxDb + 12, compOut(threshold) + makeupGain)));
+    const isDraggable = onThresholdChange || onRatioChange;
+
     return (
-        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
-            <rect width={width} height={height} fill="#1a1a2e" rx={6} />
+        <svg
+            ref={svgRef}
+            width={width}
+            height={height}
+            viewBox={`0 0 ${width} ${height}`}
+            style={{ width: '100%', height: 'auto', display: 'block', cursor: isDraggable ? (hoveringDot ? 'grab' : 'crosshair') : 'default' }}
+            onMouseDown={handlePointerDown}
+            onTouchStart={handlePointerDown}
+        >
+            <rect width={width} height={height} fill="#fcfcfb" rx={6} stroke="#eae8e4" strokeWidth={1} />
 
             {/* Grid */}
             {dbMarks.map(db => (
                 <g key={db}>
-                    <line x1={dbToX(db)} y1={pad.top} x2={dbToX(db)} y2={height - pad.bottom} stroke="rgba(255,255,255,0.06)" strokeWidth={1} />
-                    <line x1={pad.left} y1={dbToY(db)} x2={width - pad.right} y2={dbToY(db)} stroke="rgba(255,255,255,0.06)" strokeWidth={1} />
-                    <text x={dbToX(db)} y={height - 8} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="middle" fontFamily={typography.fontFamilyMono}>
+                    <line x1={dbToX(db)} y1={pad.top} x2={dbToX(db)} y2={height - pad.bottom} stroke={db % 20 === 0 ? '#e2e0dc' : '#eeede9'} strokeWidth={db % 20 === 0 ? 0.6 : 0.3} />
+                    <line x1={pad.left} y1={dbToY(db)} x2={width - pad.right} y2={dbToY(db)} stroke={db % 20 === 0 ? '#e2e0dc' : '#eeede9'} strokeWidth={db % 20 === 0 ? 0.6 : 0.3} />
+                    <text x={dbToX(db)} y={height - 8} fill="#888" fontSize={9} textAnchor="middle" fontFamily={typography.fontFamilyMono}>
                         {db}
                     </text>
-                    <text x={pad.left - 6} y={dbToY(db) + 3} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="end" fontFamily={typography.fontFamilyMono}>
+                    <text x={pad.left - 6} y={dbToY(db) + 3} fill="#888" fontSize={9} textAnchor="end" fontFamily={typography.fontFamilyMono}>
                         {db}
                     </text>
                 </g>
             ))}
 
             {/* Axis labels */}
-            <text x={width / 2} y={height - 1} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle" fontFamily={typography.fontFamily}>
+            <text x={width / 2} y={height - 1} fill="#aaa" fontSize={10} textAnchor="middle" fontFamily={typography.fontFamily}>
                 Input (dB)
             </text>
-            <text x={10} y={height / 2} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle" fontFamily={typography.fontFamily} transform={`rotate(-90, 10, ${height / 2})`}>
+            <text x={10} y={height / 2} fill="#aaa" fontSize={10} textAnchor="middle" fontFamily={typography.fontFamily} transform={`rotate(-90, 10, ${height / 2})`}>
                 Output (dB)
             </text>
 
             {/* Unity line */}
-            <path d={unityD} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth={1} strokeDasharray="4,4" />
+            <path d={unityD} fill="none" stroke="#dddbd7" strokeWidth={1} strokeDasharray="4,4" />
 
             {/* Threshold vertical line */}
             <line x1={dbToX(threshold)} y1={pad.top} x2={dbToX(threshold)} y2={height - pad.bottom} stroke={accentColor} strokeWidth={1} strokeDasharray="6,3" strokeOpacity={0.6} />
@@ -332,15 +530,34 @@ function TransferCurveSVG({ threshold, ratio, knee = 0, makeupGain = 0, width = 
             {/* Transfer curve */}
             <path d={pathD} fill="none" stroke={accentColor} strokeWidth={2.5} />
 
+            {/* Threshold dot with glow */}
+            {isDraggable && (
+                <>
+                    <circle cx={thDotX} cy={thDotY} r={14} fill={accentColor} fillOpacity={hoveringDot ? 0.15 : 0.08} />
+                    <circle
+                        cx={thDotX} cy={thDotY} r={7}
+                        fill={accentColor} stroke="#fff" strokeWidth={2.5}
+                        onMouseEnter={() => setHoveringDot(true)}
+                        onMouseLeave={() => setHoveringDot(false)}
+                        style={{ cursor: 'grab' }}
+                    />
+                </>
+            )}
+
             {/* Threshold label */}
-            <text x={dbToX(threshold) + 4} y={pad.top + 12} fill={accentColor} fontSize={9} fontFamily={typography.fontFamilyMono}>
+            <text x={dbToX(threshold) + (isDraggable ? 16 : 4)} y={isDraggable ? thDotY - 10 : pad.top + 12} fill={accentColor} fontSize={9} fontFamily={typography.fontFamilyMono}>
                 T: {threshold} dB
             </text>
+            {isDraggable && ratio > 1 && (
+                <text x={dbToX(Math.min(threshold + 15, -5)) + 10} y={dbToY(Math.min(compOut(Math.min(threshold + 15, -5)) + makeupGain, maxDb)) - 10} fill="#666" fontSize={11} fontWeight="bold" fontFamily={typography.fontFamilyMono}>
+                    {ratio}:1
+                </text>
+            )}
         </svg>
     );
 }
 
-function ThresholdDiagramSVG({ threshold, width = 400, height = 160, accentColor = COLORS.easy }) {
+function ThresholdDiagramSVG({ threshold, width = 500, height = 180, accentColor = COLORS.easy }) {
     const pad = { top: 10, right: 10, bottom: 10, left: 10 };
     const innerW = width - pad.left - pad.right;
     const innerH = height - pad.top - pad.bottom;
@@ -368,10 +585,10 @@ function ThresholdDiagramSVG({ threshold, width = 400, height = 160, accentColor
 
     return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
-            <rect width={width} height={height} fill="#1a1a2e" rx={6} />
+            <rect width={width} height={height} fill="#fcfcfb" rx={6} stroke="#eae8e4" strokeWidth={1} />
 
             {/* Center line */}
-            <line x1={pad.left} y1={mid} x2={width - pad.right} y2={mid} stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
+            <line x1={pad.left} y1={mid} x2={width - pad.right} y2={mid} stroke="#e8e6e2" strokeWidth={0.5} />
 
             {/* Compression zone fill */}
             <rect x={pad.left} y={pad.top} width={innerW} height={thresholdYTop - pad.top} fill={accentColor} fillOpacity={0.08} />
@@ -382,13 +599,13 @@ function ThresholdDiagramSVG({ threshold, width = 400, height = 160, accentColor
             <line x1={pad.left} y1={thresholdYBot} x2={width - pad.right} y2={thresholdYBot} stroke={accentColor} strokeWidth={1.5} strokeDasharray="6,3" />
 
             {/* Waveform */}
-            <path d={wavePath} fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth={2} />
+            <path d={wavePath} fill="none" stroke="rgba(0,0,0,0.45)" strokeWidth={2} />
 
             {/* Labels */}
             <text x={width - pad.right - 4} y={thresholdYTop - 4} fill={accentColor} fontSize={9} textAnchor="end" fontFamily={typography.fontFamilyMono}>
                 Threshold
             </text>
-            <text x={pad.left + 4} y={mid - 4} fill="rgba(255,255,255,0.3)" fontSize={9} fontFamily={typography.fontFamilyMono}>
+            <text x={pad.left + 4} y={mid - 4} fill="#bbb" fontSize={9} fontFamily={typography.fontFamilyMono}>
                 No compression
             </text>
             <text x={pad.left + 4} y={thresholdYTop + 12} fill={`${accentColor}`} fontSize={9} fontFamily={typography.fontFamilyMono} fillOpacity={0.7}>
@@ -398,7 +615,7 @@ function ThresholdDiagramSVG({ threshold, width = 400, height = 160, accentColor
     );
 }
 
-function TimingDiagramSVG({ attack, release, width = 400, height = 200, accentColor = COLORS.medium }) {
+function TimingDiagramSVG({ attack, release, width = 500, height = 240, accentColor = COLORS.medium }) {
     const pad = { top: 15, right: 15, bottom: 30, left: 15 };
     const innerW = width - pad.left - pad.right;
     const innerH = height - pad.top - pad.bottom;
@@ -430,13 +647,13 @@ function TimingDiagramSVG({ attack, release, width = 400, height = 200, accentCo
 
     return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
-            <rect width={width} height={height} fill="#1a1a2e" rx={6} />
+            <rect width={width} height={height} fill="#fcfcfb" rx={6} stroke="#eae8e4" strokeWidth={1} />
 
             {/* Center line */}
-            <line x1={pad.left} y1={yMid} x2={width - pad.right} y2={yMid} stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
+            <line x1={pad.left} y1={yMid} x2={width - pad.right} y2={yMid} stroke="#e8e6e2" strokeWidth={0.5} />
 
             {/* Input signal */}
-            <path d={inputPath} fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
+            <path d={inputPath} fill="none" stroke="rgba(0,0,0,0.45)" strokeWidth={2} />
 
             {/* GR envelope */}
             <path d={grPath} fill={accentColor} fillOpacity={0.15} stroke={accentColor} strokeWidth={2} />
@@ -454,12 +671,112 @@ function TimingDiagramSVG({ attack, release, width = 400, height = 200, accentCo
             </text>
 
             {/* Labels */}
-            <text x={pad.left + 4} y={yTop + 12} fill="rgba(255,255,255,0.4)" fontSize={9} fontFamily={typography.fontFamily}>
+            <text x={pad.left + 4} y={yTop + 12} fill="#aaa" fontSize={9} fontFamily={typography.fontFamily}>
                 Input Signal
             </text>
             <text x={pad.left + 4} y={yBot - 4} fill={accentColor} fontSize={9} fontFamily={typography.fontFamily} fillOpacity={0.7}>
                 Gain Reduction
             </text>
+        </svg>
+    );
+}
+
+function WaveformSVG({ threshold, ratio, knee = 0, makeupGain = 0, attack = 10, release = 100, width = 540, height = 440, accentColor = '#FF6B35' }) {
+    const pad = 12;
+    const gw = width - pad * 2;
+    const gh = height - pad * 2;
+    const cy = pad + gh / 2;
+    const NSAMP = 400;
+
+    // Generate synthetic waveform (same formula as prototype)
+    const wave = [];
+    for (let i = 0; i < NSAMP; i++) {
+        const t = i / NSAMP;
+        let v = Math.sin(t * Math.PI * 8) * 0.5 + Math.sin(t * Math.PI * 19) * 0.25;
+        v += Math.sin(t * Math.PI * 37) * 0.12 + Math.sin(t * Math.PI * 4) * 0.35;
+        v += Math.exp(-Math.pow((t - 0.15) * 35, 2)) * 0.7;
+        v += Math.exp(-Math.pow((t - 0.45) * 35, 2)) * 0.85;
+        v += Math.exp(-Math.pow((t - 0.72) * 35, 2)) * 0.55;
+        wave.push(Math.max(-1, Math.min(1, v)));
+    }
+
+    // Compression math with attack/release envelope
+    const compOut = (inDb) => {
+        if (knee <= 0) return inDb <= threshold ? inDb : threshold + (inDb - threshold) / ratio;
+        const hk = knee / 2;
+        if (inDb < threshold - hk) return inDb;
+        if (inDb > threshold + hk) return threshold + (inDb - threshold) / ratio;
+        const x = inDb - threshold + hk;
+        return inDb + ((1 / ratio - 1) * x * x) / (2 * knee);
+    };
+    const ampToDb = (a) => a <= 0 ? -60 : Math.max(-60, 20 * Math.log10(a));
+    const dbToAmp = (d) => Math.pow(10, d / 20);
+
+    const atkC = Math.exp(-1 / (attack * 0.6));
+    const relC = Math.exp(-1 / (release * 0.6));
+    let env = 0;
+    const comp = [];
+    const gr = [];
+    for (let i = 0; i < NSAMP; i++) {
+        const amp = Math.abs(wave[i]);
+        const inDb = ampToDb(amp);
+        const outDb = compOut(inDb);
+        const tGR = Math.max(0, inDb - outDb);
+        env = tGR > env ? atkC * env + (1 - atkC) * tGR : relC * env + (1 - relC) * tGR;
+        gr.push(env);
+        comp.push(wave[i] * dbToAmp(-env + makeupGain));
+    }
+
+    // Threshold amplitude lines
+    const thAmp = dbToAmp(threshold);
+    const thTop = cy - thAmp * gh / 2;
+    const thBot = cy + thAmp * gh / 2;
+
+    // Build SVG paths
+    const inputFillD = `M${pad},${cy} ` + wave.map((v, i) => `L${pad + (i / NSAMP) * gw},${cy - v * gh / 2}`).join(' ') + ` L${pad + gw},${cy} Z`;
+    const inputStrokeD = wave.map((v, i) => `${i === 0 ? 'M' : 'L'}${pad + (i / NSAMP) * gw},${cy - v * gh / 2}`).join(' ');
+    const compD = comp.map((v, i) => `${i === 0 ? 'M' : 'L'}${pad + (i / NSAMP) * gw},${cy - Math.max(-1, Math.min(1, v)) * gh / 2}`).join(' ');
+    const grFillD = `M${pad},${pad} ` + gr.map((v, i) => `L${pad + (i / NSAMP) * gw},${pad + (v / 30) * (gh * 0.3)}`).join(' ') + ` L${pad + gw},${pad} Z`;
+    const grLineD = gr.map((v, i) => `${i === 0 ? 'M' : 'L'}${pad + (i / NSAMP) * gw},${pad + (v / 30) * (gh * 0.3)}`).join(' ');
+
+    // Peak GR for label
+    const maxGR = Math.max(...gr);
+
+    return (
+        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
+            <rect width={width} height={height} fill="#fcfcfb" rx={6} stroke="#eae8e4" strokeWidth={1} />
+
+            {/* Center line */}
+            <line x1={pad} y1={cy} x2={pad + gw} y2={cy} stroke="#e8e6e2" strokeWidth={0.5} />
+
+            {/* Threshold dashed lines */}
+            <line x1={pad} y1={thTop} x2={pad + gw} y2={thTop} stroke="rgba(255,107,53,0.22)" strokeWidth={1} strokeDasharray="3,3" />
+            <line x1={pad} y1={thBot} x2={pad + gw} y2={thBot} stroke="rgba(255,107,53,0.22)" strokeWidth={1} strokeDasharray="3,3" />
+            <text x={pad + gw - 4} y={thTop - 4} fill="rgba(255,107,53,0.4)" fontSize={10} textAnchor="end" fontFamily={typography.fontFamilyMono} fontWeight={500}>
+                {threshold} dB
+            </text>
+
+            {/* GR fill area */}
+            <path d={grFillD} fill="rgba(34,197,94,0.08)" />
+
+            {/* Input fill */}
+            <path d={inputFillD} fill="rgba(176,184,196,0.1)" />
+
+            {/* Input stroke */}
+            <path d={inputStrokeD} fill="none" stroke="#b0b8c4" strokeWidth={1} />
+
+            {/* Compressed waveform */}
+            <path d={compD} fill="none" stroke={accentColor} strokeWidth={1.5} />
+
+            {/* GR line */}
+            <path d={grLineD} fill="none" stroke="#22c55e" strokeWidth={1.5} />
+
+            {/* GR label */}
+            {maxGR > 0.1 && (
+                <text x={pad + 6} y={pad + 16} fill="#22c55e" fontSize={11} fontFamily={typography.fontFamilyMono} fontWeight={600}>
+                    -{maxGR.toFixed(1)} dB GR
+                </text>
+            )}
         </svg>
     );
 }
@@ -479,7 +796,7 @@ function GainReductionMeter({ reductionDb, width = 32, height = 200 }) {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: spacing[1] }}>
             <div style={{ color: COLORS.textHint, fontSize: '9px', fontFamily: typography.fontFamilyMono, letterSpacing: '0.05em' }}>GR</div>
             <svg width={width} height={height} style={{ display: 'block' }}>
-                <rect width={width} height={height} fill="#1a1a2e" rx={4} />
+                <rect width={width} height={height} fill="#fcfcfb" rx={4} stroke="#eae8e4" strokeWidth={1} />
                 {/* Fill from top */}
                 <rect x={2} y={2} width={width - 4} height={fillHeight} fill={fillColor} fillOpacity={0.8} rx={2} />
                 {/* Tick marks */}
@@ -487,8 +804,8 @@ function GainReductionMeter({ reductionDb, width = 32, height = 200 }) {
                     const y = (db / maxGR) * height;
                     return (
                         <g key={db}>
-                            <line x1={0} y1={y} x2={4} y2={y} stroke="rgba(255,255,255,0.3)" strokeWidth={1} />
-                            <text x={width - 2} y={y + 3} fill="rgba(255,255,255,0.3)" fontSize={7} textAnchor="end" fontFamily={typography.fontFamilyMono}>
+                            <line x1={0} y1={y} x2={4} y2={y} stroke="#ccc" strokeWidth={1} />
+                            <text x={width - 2} y={y + 3} fill="#aaa" fontSize={7} textAnchor="end" fontFamily={typography.fontFamilyMono}>
                                 {db}
                             </text>
                         </g>
@@ -510,7 +827,7 @@ function LevelMeter({ level, label, width = 24, height = 160, color = '#059669' 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: spacing[1] }}>
             <div style={{ color: COLORS.textHint, fontSize: '9px', fontFamily: typography.fontFamilyMono }}>{label}</div>
             <svg width={width} height={height} style={{ display: 'block' }}>
-                <rect width={width} height={height} fill="#1a1a2e" rx={3} />
+                <rect width={width} height={height} fill="#fcfcfb" rx={3} stroke="#eae8e4" strokeWidth={1} />
                 <rect x={2} y={height - fillHeight} width={width - 4} height={fillHeight} fill={color} fillOpacity={0.7} rx={2} />
             </svg>
         </div>
@@ -778,7 +1095,7 @@ export default function CompressorExplorer() {
     };
 
     const contentCol = {
-        maxWidth: '640px',
+        maxWidth: '1040px',
         margin: '0 auto',
         padding: `0 ${spacing[6]}`,
     };
@@ -836,34 +1153,31 @@ export default function CompressorExplorer() {
                 </p>
             </div>
 
-            <InteractiveBox hint="Drag the threshold and ratio sliders to see how the transfer curve changes">
-                <div style={{ display: 'flex', gap: spacing[6], marginBottom: spacing[5], flexWrap: 'wrap' }}>
-                    <CompressorControl label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" color={accent} tierColor={COLORS.easy} />
-                    <CompressorControl label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=":1" color={accent} tierColor={COLORS.easy} />
-                </div>
-
-                <TransferCurveSVG threshold={threshold} ratio={ratio} accentColor={accent} />
-
-                <div style={{ marginTop: spacing[4] }}>
-                    <ThresholdDiagramSVG threshold={threshold} accentColor={accent} />
-                </div>
-
-                <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', marginTop: spacing[4], flexWrap: 'wrap' }}>
-                    <button
-                        onClick={() => isPlaying ? stopAudio() : startAudio()}
-                        style={isPlaying ? actionBtn('#dc2626') : actionBtn(accent)}
-                    >
-                        {isPlaying ? 'Stop' : 'Play'}
-                    </button>
-                    {isPlaying && (
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: spacing[3] }}>
-                            <LevelMeter level={inputLevel} label="IN" height={80} color="rgba(255,255,255,0.5)" />
-                            <GainReductionMeter reductionDb={grAmount} height={80} />
-                            <LevelMeter level={outputLevel} label="OUT" height={80} color={accent} />
+            <InteractiveBox hint="Drag the threshold and ratio sliders — or drag directly on the transfer curve to adjust">
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 1fr) minmax(300px, 1.4fr)', gap: spacing[6] }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                        <div style={{ paddingBottom: spacing[5] }}>
+                            <CompressorControl label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" color={accent} tierColor={COLORS.easy} />
+                            <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0, marginTop: spacing[3] }}>
+                                The level above which compression begins. Lower values compress more of the signal.
+                            </p>
                         </div>
-                    )}
+                        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: spacing[5] }}>
+                            <CompressorControl label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=":1" color={accent} tierColor={COLORS.easy} />
+                            <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0, marginTop: spacing[3] }}>
+                                How much the signal is reduced above the threshold. 4:1 means 4 dB in produces 1 dB out.
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <TransferCurveSVG threshold={threshold} ratio={ratio} accentColor={accent} width={500} height={340} onThresholdChange={setThreshold} onRatioChange={setRatio} />
+                        <div style={{ marginTop: spacing[3] }}>
+                            <ThresholdDiagramSVG threshold={threshold} accentColor={accent} width={500} height={180} />
+                        </div>
+                    </div>
                 </div>
             </InteractiveBox>
+            <DescriptionStrip threshold={threshold} ratio={ratio} attack={attack} release={release} knee={knee} makeupGain={makeupGain} grAmount={grAmount} section={1} />
 
             {/* Educational content */}
             <div style={{ marginBottom: spacing[12] }}>
@@ -918,43 +1232,33 @@ export default function CompressorExplorer() {
             </div>
 
             <InteractiveBox hint="Adjust attack and release to see how the compressor responds to transients">
-                <div style={{ display: 'flex', gap: spacing[6], marginBottom: spacing[5], flexWrap: 'wrap' }}>
-                    <CompressorControl label="Attack" value={attack} min={0.1} max={200} step={0.1} onChange={setAttack} unit=" ms" color={accent} tierColor={COLORS.medium} />
-                    <CompressorControl label="Release" value={release} min={10} max={1000} step={1} onChange={setRelease} unit=" ms" color={accent} tierColor={COLORS.medium} />
-                </div>
-
-                <div style={{ display: 'flex', gap: spacing[6], marginBottom: spacing[5], flexWrap: 'wrap' }}>
-                    <CompressorControl label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" color={COLORS.easy} tierColor={COLORS.easy} />
-                    <CompressorControl label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=":1" color={COLORS.easy} tierColor={COLORS.easy} />
-                </div>
-
-                <TimingDiagramSVG attack={attack} release={release} accentColor={accent} />
-
-                <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', marginTop: spacing[4], flexWrap: 'wrap' }}>
-                    <button
-                        onClick={() => isPlaying ? stopAudio() : startAudio()}
-                        style={isPlaying ? actionBtn('#dc2626') : actionBtn(accent)}
-                    >
-                        {isPlaying ? 'Stop' : 'Play'}
-                    </button>
-
-                    <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
-                        {Object.entries(SOURCE_CONFIGS).map(([key, cfg]) => (
-                            <button key={key} onClick={() => setSource(key)} style={btnStyle(source === key)}>
-                                {cfg.label}
-                            </button>
-                        ))}
-                    </div>
-
-                    {isPlaying && (
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: spacing[3] }}>
-                            <LevelMeter level={inputLevel} label="IN" height={80} color="rgba(255,255,255,0.5)" />
-                            <GainReductionMeter reductionDb={grAmount} height={80} />
-                            <LevelMeter level={outputLevel} label="OUT" height={80} color={accent} />
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 1fr) minmax(300px, 1.4fr)', gap: spacing[6] }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                        <div style={{ paddingBottom: spacing[5] }}>
+                            <CompressorControl label="Attack" value={attack} min={0.1} max={200} step={0.1} onChange={setAttack} unit=" ms" color={accent} tierColor={COLORS.medium} />
+                            <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0, marginTop: spacing[3] }}>
+                                How fast compression engages. Slow attack lets transients punch through before clamping down.
+                            </p>
                         </div>
-                    )}
+                        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: spacing[5], paddingBottom: spacing[5] }}>
+                            <CompressorControl label="Release" value={release} min={10} max={1000} step={1} onChange={setRelease} unit=" ms" color={accent} tierColor={COLORS.medium} />
+                            <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0, marginTop: spacing[3] }}>
+                                How fast compression lets go. Too fast causes audible pumping; too slow smooths everything out.
+                            </p>
+                        </div>
+                        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: spacing[4] }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[4] }}>
+                                <CompressorControl label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" color={COLORS.easy} tierColor={COLORS.easy} />
+                                <CompressorControl label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=":1" color={COLORS.easy} tierColor={COLORS.easy} />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <TimingDiagramSVG attack={attack} release={release} accentColor={accent} width={500} height={240} />
+                    </div>
                 </div>
             </InteractiveBox>
+            <DescriptionStrip threshold={threshold} ratio={ratio} attack={attack} release={release} knee={knee} makeupGain={makeupGain} grAmount={grAmount} section={2} />
 
             {/* Educational content */}
             <div style={{ marginBottom: spacing[12] }}>
@@ -1005,34 +1309,33 @@ export default function CompressorExplorer() {
             </div>
 
             <InteractiveBox hint="Compare hard knee (0 dB) vs soft knee (30 dB) on the transfer curve, then add makeup gain">
-                <div style={{ display: 'flex', gap: spacing[6], marginBottom: spacing[5], flexWrap: 'wrap' }}>
-                    <CompressorControl label="Knee" value={knee} min={0} max={30} step={1} onChange={setKnee} unit=" dB" color={accent} tierColor={COLORS.advanced} />
-                    <CompressorControl label="Makeup Gain" value={makeupGain} min={0} max={24} step={0.5} onChange={setMakeupGain} unit=" dB" color={accent} tierColor={COLORS.advanced} />
-                </div>
-
-                <div style={{ display: 'flex', gap: spacing[6], marginBottom: spacing[5], flexWrap: 'wrap' }}>
-                    <CompressorControl label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" color={COLORS.easy} tierColor={COLORS.easy} />
-                    <CompressorControl label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=":1" color={COLORS.easy} tierColor={COLORS.easy} />
-                </div>
-
-                <TransferCurveSVG threshold={threshold} ratio={ratio} knee={knee} makeupGain={makeupGain} accentColor={accent} />
-
-                <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', marginTop: spacing[4], flexWrap: 'wrap' }}>
-                    <button
-                        onClick={() => isPlaying ? stopAudio() : startAudio()}
-                        style={isPlaying ? actionBtn('#dc2626') : actionBtn(accent)}
-                    >
-                        {isPlaying ? 'Stop' : 'Play'}
-                    </button>
-                    {isPlaying && (
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: spacing[3] }}>
-                            <LevelMeter level={inputLevel} label="IN" height={80} color="rgba(255,255,255,0.5)" />
-                            <GainReductionMeter reductionDb={grAmount} height={80} />
-                            <LevelMeter level={outputLevel} label="OUT" height={80} color={accent} />
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 1fr) minmax(300px, 1.4fr)', gap: spacing[6] }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                        <div style={{ paddingBottom: spacing[5] }}>
+                            <CompressorControl label="Knee" value={knee} min={0} max={30} step={1} onChange={setKnee} unit=" dB" color={accent} tierColor={COLORS.advanced} />
+                            <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0, marginTop: spacing[3] }}>
+                                How gradually compression engages. 0 dB = hard knee (abrupt). Higher values = soft knee (smoother, more musical).
+                            </p>
                         </div>
-                    )}
+                        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: spacing[5], paddingBottom: spacing[5] }}>
+                            <CompressorControl label="Makeup Gain" value={makeupGain} min={0} max={24} step={0.5} onChange={setMakeupGain} unit=" dB" color={accent} tierColor={COLORS.advanced} />
+                            <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0, marginTop: spacing[3] }}>
+                                Boosts the output after compression. Restores perceived loudness — making quiet parts relatively louder.
+                            </p>
+                        </div>
+                        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: spacing[4] }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[4] }}>
+                                <CompressorControl label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" color={COLORS.easy} tierColor={COLORS.easy} />
+                                <CompressorControl label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=":1" color={COLORS.easy} tierColor={COLORS.easy} />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <TransferCurveSVG threshold={threshold} ratio={ratio} knee={knee} makeupGain={makeupGain} accentColor={accent} width={500} height={340} onThresholdChange={setThreshold} onRatioChange={setRatio} />
+                    </div>
                 </div>
             </InteractiveBox>
+            <DescriptionStrip threshold={threshold} ratio={ratio} attack={attack} release={release} knee={knee} makeupGain={makeupGain} grAmount={grAmount} section={3} />
 
             {/* Educational content */}
             <div style={{ marginBottom: spacing[12] }}>
@@ -1072,11 +1375,20 @@ export default function CompressorExplorer() {
 
     // ─── Section 4: Full Compressor ──────────────────────────────────────────
 
+    const vizLabelStyle = {
+        fontSize: '0.58rem',
+        textTransform: 'uppercase',
+        letterSpacing: '1.6px',
+        color: '#ccc',
+        marginBottom: '4px',
+        fontWeight: 600,
+    };
+
     const renderSection4 = () => {
         const quizScore = Object.values(quizAnswers).filter((a, i) => a === QUIZ_QUESTIONS[i]?.correct).length;
 
         return (
-            <div style={{ ...contentCol, maxWidth: '800px' }}>
+            <div style={{ ...contentCol, maxWidth: '1040px' }}>
                 <div style={{ paddingTop: spacing[12], marginBottom: spacing[10] }}>
                     <h2 style={h2Style}>Full Compressor</h2>
                     <p style={bodyStyle}>
@@ -1086,68 +1398,47 @@ export default function CompressorExplorer() {
                 </div>
 
                 <InteractiveBox>
-                    {/* Presets */}
-                    <div style={{ marginBottom: spacing[5] }}>
-                        <div style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontWeight: typography.weight.medium, marginBottom: spacing[2], textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>
-                            Presets
+                    {/* Two visualizations side by side at the top */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '10px' }}>
+                        <div>
+                            <div style={vizLabelStyle}>Transfer Curve</div>
+                            <TransferCurveSVG threshold={threshold} ratio={ratio} knee={knee} makeupGain={makeupGain} width={540} height={440} accentColor={accent} onThresholdChange={setThreshold} onRatioChange={setRatio} />
                         </div>
+                        <div>
+                            <div style={vizLabelStyle}>Signal & Gain Reduction</div>
+                            <WaveformSVG threshold={threshold} ratio={ratio} knee={knee} makeupGain={makeupGain} attack={attack} release={release} width={540} height={440} accentColor={accent} />
+                            <div style={{ display: 'flex', gap: '12px', fontSize: '0.62rem', color: '#aaa', marginTop: '3px' }}>
+                                <span><span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#b0b8c4', marginRight: '4px', verticalAlign: 'middle' }} />Input</span>
+                                <span><span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#FF6B35', marginRight: '4px', verticalAlign: 'middle' }} />Compressed</span>
+                                <span><span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#22c55e', marginRight: '4px', verticalAlign: 'middle' }} />Gain reduction</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 6-across compact parameter strip */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', marginBottom: '10px' }}>
+                        <CompactParam label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" />
+                        <CompactParam label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=" :1" />
+                        <CompactParam label="Knee" value={knee} min={0} max={30} step={1} onChange={setKnee} unit=" dB" />
+                        <CompactParam label="Makeup" value={makeupGain} min={0} max={24} step={0.5} onChange={setMakeupGain} unit=" dB" />
+                        <CompactParam label="Attack" value={attack} min={0.1} max={200} step={0.1} onChange={setAttack} unit=" ms" />
+                        <CompactParam label="Release" value={release} min={10} max={1000} step={1} onChange={setRelease} unit=" ms" />
+                    </div>
+
+                    {/* Description strip */}
+                    <DescriptionStrip threshold={threshold} ratio={ratio} attack={attack} release={release} knee={knee} makeupGain={makeupGain} grAmount={grAmount} section={'all'} />
+
+                    {/* Presets */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], flexWrap: 'wrap', marginTop: spacing[4] }}>
+                        <span style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontWeight: typography.weight.medium, textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>
+                            Presets
+                        </span>
                         <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
                             {PRESETS.map(p => (
                                 <button key={p.name} onClick={() => loadPreset(p)} style={btnStyle(false)}>
                                     {p.name}
                                 </button>
                             ))}
-                        </div>
-                    </div>
-
-                    {/* Source selector */}
-                    <div style={{ marginBottom: spacing[5] }}>
-                        <div style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontWeight: typography.weight.medium, marginBottom: spacing[2], textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>
-                            Source
-                        </div>
-                        <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
-                            {Object.entries(SOURCE_CONFIGS).map(([key, cfg]) => (
-                                <button key={key} onClick={() => setSource(key)} style={btnStyle(source === key)}>
-                                    {cfg.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* All controls */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: spacing[4], marginBottom: spacing[5] }}>
-                        <CompressorControl label="Threshold" value={threshold} min={-60} max={0} step={1} onChange={setThreshold} unit=" dB" color={COLORS.easy} tierColor={COLORS.easy} />
-                        <CompressorControl label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} unit=":1" color={COLORS.easy} tierColor={COLORS.easy} />
-                        <CompressorControl label="Attack" value={attack} min={0.1} max={200} step={0.1} onChange={setAttack} unit=" ms" color={COLORS.medium} tierColor={COLORS.medium} />
-                        <CompressorControl label="Release" value={release} min={10} max={1000} step={1} onChange={setRelease} unit=" ms" color={COLORS.medium} tierColor={COLORS.medium} />
-                        <CompressorControl label="Knee" value={knee} min={0} max={30} step={1} onChange={setKnee} unit=" dB" color={COLORS.advanced} tierColor={COLORS.advanced} />
-                        <CompressorControl label="Makeup Gain" value={makeupGain} min={0} max={24} step={0.5} onChange={setMakeupGain} unit=" dB" color={COLORS.advanced} tierColor={COLORS.advanced} />
-                    </div>
-
-                    {/* Visualization row */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: spacing[4], marginBottom: spacing[5] }}>
-                        <div>
-                            <div style={{ color: COLORS.textHint, fontSize: typography.size.xs, marginBottom: spacing[2] }}>Transfer Curve</div>
-                            <TransferCurveSVG threshold={threshold} ratio={ratio} knee={knee} makeupGain={makeupGain} height={200} accentColor={accent} />
-                        </div>
-                        <div>
-                            <div style={{ color: COLORS.textHint, fontSize: typography.size.xs, marginBottom: spacing[2] }}>Timing Response</div>
-                            <TimingDiagramSVG attack={attack} release={release} height={200} accentColor={COLORS.medium} />
-                        </div>
-                    </div>
-
-                    {/* Play + Meters */}
-                    <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', flexWrap: 'wrap' }}>
-                        <button
-                            onClick={() => isPlaying ? stopAudio() : startAudio()}
-                            style={isPlaying ? actionBtn('#dc2626') : actionBtn(accent)}
-                        >
-                            {isPlaying ? 'Stop' : 'Play'}
-                        </button>
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: spacing[3] }}>
-                            <LevelMeter level={inputLevel} label="IN" height={100} color="rgba(255,255,255,0.5)" />
-                            <GainReductionMeter reductionDb={grAmount} height={100} />
-                            <LevelMeter level={outputLevel} label="OUT" height={100} color={accent} />
                         </div>
                     </div>
                 </InteractiveBox>
@@ -1374,7 +1665,7 @@ export default function CompressorExplorer() {
 
             {/* Bottom navigation */}
             <div style={{
-                maxWidth: '640px', margin: '0 auto',
+                maxWidth: '1040px', margin: '0 auto',
                 padding: `${spacing[4]} ${spacing[6]} ${spacing[12]}`,
                 display: 'flex', justifyContent: 'space-between',
             }}>

@@ -137,6 +137,104 @@
         "File size increases proportionally with bit depth (24-bit is 1.5× larger than 16-bit)"
       ],
       "explanation": "This question tests understanding of the trade-off between audio quality and storage. Bit depth governs amplitude resolution (dynamic range), while sample rate governs frequency resolution. Students should be able to state both the quality benefit and the storage cost clearly, with reference to the 6dB-per-bit rule."
+    },
+    {
+      "id": "sampling-mcq-07",
+      "type": "mcq",
+      "question": "What is the primary purpose of dithering when reducing the bit depth of a digital audio file (e.g., from 24-bit to 16-bit)?",
+      "options": [
+        "To increase the overall volume of the file to compensate for lost bits",
+        "To remove frequencies above the Nyquist limit before conversion",
+        "To replace quantisation distortion with a less objectionable low-level random noise",
+        "To compress the dynamic range so it fits within the lower bit depth"
+      ],
+      "correctIndex": 2,
+      "explanation": "When bit depth is reduced, the amplitude values must be rounded to fewer available levels — this rounding introduces quantisation distortion, which is correlated with the signal and sounds harsh and unmusical. Dithering adds a tiny amount of random noise before truncation. This randomises the rounding errors, converting the audible distortion into benign, uncorrelated noise that sits well below the audible threshold. Dithering should only be applied once, at the final stage of bit depth reduction."
+    },
+    {
+      "id": "sampling-mcq-08",
+      "type": "mcq",
+      "question": "Which of the following best describes a reconstruction filter (also called a smoothing filter) in digital audio playback?",
+      "options": [
+        "A high-pass filter applied during recording to remove rumble below 20Hz",
+        "A compressor that smooths the dynamic range during DAC conversion",
+        "A filter that boosts high frequencies lost during the sampling process",
+        "A low-pass filter applied after the DAC to remove staircase-shaped artefacts and frequencies above the Nyquist limit"
+      ],
+      "correctIndex": 3,
+      "explanation": "The DAC outputs a staircase-shaped waveform — a series of discrete amplitude steps. The reconstruction filter is a low-pass filter that smooths these steps back into a continuous analogue waveform and removes ultrasonic artefacts (images of the original spectrum created by the sampling process). Without it, the output would contain high-frequency distortion. This is the mirror process of the anti-aliasing filter used during recording."
+    },
+    {
+      "id": "sampling-mcq-09",
+      "type": "mcq",
+      "question": "A producer exports a mix as both FLAC and 320 kbps MP3. Which statement about these two formats is correct?",
+      "options": [
+        "FLAC is a lossy format; MP3 is lossless",
+        "Both formats discard data to reduce file size, but FLAC discards less",
+        "MP3 preserves all original audio data; FLAC compresses it further",
+        "FLAC preserves all original audio data; MP3 permanently discards data deemed inaudible"
+      ],
+      "correctIndex": 3,
+      "explanation": "FLAC (Free Lossless Audio Codec) compresses audio without any data loss — the decoded output is bit-for-bit identical to the original. MP3 is lossy: it uses psychoacoustic modelling to identify and permanently remove audio data the encoder predicts is inaudible, achieving much smaller files but at the cost of irreversible quality loss. FLAC files are typically 50–70% of the original size; a 320 kbps MP3 is roughly 20–25% of the uncompressed size."
+    },
+    {
+      "id": "sampling-mcq-10",
+      "type": "mcq",
+      "question": "Oversampling in an ADC means operating the converter at a rate many times higher than the target sample rate. What is the main benefit of this approach?",
+      "options": [
+        "It doubles the bit depth of the recording",
+        "It removes the need for any anti-aliasing filter",
+        "It allows a gentler, more transparent anti-aliasing filter to be used",
+        "It increases the maximum frequency that can be recorded beyond 20kHz"
+      ],
+      "correctIndex": 2,
+      "explanation": "Without oversampling, the anti-aliasing filter must have an extremely steep cutoff just below the Nyquist frequency — steep filters introduce phase distortion and ringing artefacts near the cutoff. Oversampling (e.g., 64× or 128×) pushes the Nyquist frequency much higher, so the anti-aliasing filter can use a gentler slope with minimal phase distortion in the audible band. The signal is then digitally downsampled to the target rate. The final recording's frequency range is still limited by the target sample rate."
+    },
+    {
+      "id": "sampling-num-04",
+      "type": "numeric",
+      "question": "Calculate the bit rate (in kbps) of a mono, 24-bit audio stream at 48kHz.",
+      "answer": 1152,
+      "tolerance": 0,
+      "unit": "kbps",
+      "explanation": "Bit rate = sample rate × bit depth × number of channels. For mono 24-bit at 48kHz: 48,000 × 24 × 1 = 1,152,000 bits per second = 1,152 kbps. For stereo, this would double to 2,304 kbps. This is the uncompressed bit rate — formats like FLAC and MP3 reduce the actual data rate through compression."
+    },
+    {
+      "id": "sampling-num-05",
+      "type": "numeric",
+      "question": "An audio interface operates at 96kHz sample rate. According to the Nyquist theorem, what is the highest frequency (in kHz) that can be accurately represented?",
+      "answer": 48,
+      "tolerance": 0,
+      "unit": "kHz",
+      "explanation": "The Nyquist theorem states that the maximum representable frequency is half the sample rate. At 96kHz, this is 96 ÷ 2 = 48kHz. This is well above the upper limit of human hearing (approximately 20kHz), which is one reason higher sample rates are used — they push the Nyquist frequency further from the audible range, allowing gentler anti-aliasing filters and reducing artefacts within the audible band."
+    },
+    {
+      "id": "sampling-short-04",
+      "type": "short",
+      "question": "Explain what quantisation error is in digital audio and describe how it affects sound quality at low bit depths.",
+      "sampleAnswer": "Quantisation error is the difference between the actual analogue amplitude of a signal at the moment of sampling and the nearest available digital value. At low bit depths there are fewer amplitude levels available, so the rounding errors are larger and more audible. This manifests as quantisation noise — a grainy, distorted quality particularly noticeable on quiet signals and fade-outs, where the signal amplitude is small relative to the step size between available levels.",
+      "keyPoints": [
+        "Difference between actual analogue amplitude and nearest available digital level",
+        "Fewer bits means larger gaps between levels, so rounding errors are greater",
+        "Audible as grainy distortion or noise, especially on quiet passages",
+        "Proportionally worse at low signal levels where step size is large relative to the signal",
+        "Dithering is used to mitigate quantisation distortion"
+      ],
+      "explanation": "Quantisation error is an inherent limitation of digital audio — converting a continuously varying analogue signal to discrete steps always introduces some error. At 16-bit (65,536 levels) the errors are tiny and inaudible under normal conditions. At 8-bit (256 levels), the steps are large enough to produce clearly audible distortion. This is why professional recording uses 24-bit (16.7 million levels), providing a margin that keeps quantisation noise well below the acoustic noise floor of any real recording environment."
+    },
+    {
+      "id": "sampling-short-05",
+      "type": "short",
+      "question": "A student needs to convert a 96kHz/24-bit studio recording to 44.1kHz/16-bit for CD distribution. Describe the two processes involved and explain why the order in which they are applied matters.",
+      "sampleAnswer": "The two processes are sample rate conversion (resampling from 96kHz to 44.1kHz) and bit depth reduction (truncation from 24-bit to 16-bit with dithering). Sample rate conversion should be performed first because it is a mathematically intensive process that benefits from the higher bit depth — keeping 24-bit precision during resampling avoids accumulating rounding errors. Bit depth reduction with dithering should be applied last, as the final step, because dithering should only be applied once and to the final output format.",
+      "keyPoints": [
+        "Sample rate conversion (96kHz → 44.1kHz) — reduces the number of samples per second",
+        "Bit depth reduction (24-bit → 16-bit) — reduces amplitude resolution, requires dithering",
+        "Sample rate conversion first to maintain precision during the resampling calculation",
+        "Dithering applied last, only once, at the final bit depth",
+        "Reversing the order would accumulate rounding errors from reduced bit depth during resampling"
+      ],
+      "explanation": "This question tests understanding of the signal processing chain for format conversion. Sample rate conversion involves interpolation (calculating new sample values between existing ones) and low-pass filtering — operations that benefit from the headroom and precision of 24-bit. If you reduce to 16-bit first, the resampling calculations operate on less precise data, potentially introducing audible artefacts. Dithering must be the absolute last process because any further processing after dithering would alter the carefully shaped noise floor."
     }
   ]
 }

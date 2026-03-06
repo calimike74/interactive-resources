@@ -144,6 +144,104 @@
         "The result is a less rigid, more groove-based feel — higher swing = stronger shuffle"
       ],
       "explanation": "Straight quantisation alone can make a performance sound mechanical by placing all notes on perfectly even grid positions. Swing (sometimes called 'groove') reintroduces rhythmic feel by pushing alternate notes back in time by a percentage of the grid interval. A 50% swing value produces an exact triplet feel; values between 50–75% produce varying degrees of shuffle. This is widely used in hip-hop, jazz, and funk production."
+    },
+    {
+      "id": "midi-mcq-07",
+      "type": "mcq",
+      "question": "What is the key difference between MIDI CC7 (Channel Volume) and CC11 (Expression)?",
+      "options": [
+        "CC7 controls the overall channel level; CC11 is used for real-time dynamic variation within that level",
+        "CC7 controls panning; CC11 controls reverb depth",
+        "CC7 is 14-bit resolution; CC11 is 7-bit resolution",
+        "CC7 is only used in General MIDI; CC11 works in any MIDI specification"
+      ],
+      "correctIndex": 0,
+      "explanation": "CC7 sets the baseline volume level for a channel — think of it as the channel fader. CC11 (Expression) operates within that ceiling to add real-time dynamic shaping, such as swells and fades in an orchestral part. Using both together gives fine-grained control: CC7 sets the overall balance between instruments, and CC11 adds musical expression without disrupting the mix balance."
+    },
+    {
+      "id": "midi-mcq-08",
+      "type": "mcq",
+      "question": "A synthesiser responds to both channel aftertouch and polyphonic aftertouch. What is the key difference between these two message types?",
+      "options": [
+        "Channel aftertouch applies the same pressure value to all notes on the channel; polyphonic aftertouch sends an independent pressure value per note",
+        "Polyphonic aftertouch only works on channel 10; channel aftertouch works on all channels",
+        "Channel aftertouch uses 14-bit resolution; polyphonic aftertouch uses 7-bit",
+        "Channel aftertouch is a System Exclusive message; polyphonic aftertouch is a Channel Voice message"
+      ],
+      "correctIndex": 0,
+      "explanation": "Channel aftertouch transmits a single pressure value that affects all held notes on that channel equally — if you press harder, every sounding note responds. Polyphonic (key) aftertouch sends individual pressure data for each note, so pressing harder on one key in a chord can add vibrato to that note alone. Polyphonic aftertouch generates significantly more MIDI data and is less commonly supported on standard keyboards."
+    },
+    {
+      "id": "midi-mcq-09",
+      "type": "mcq",
+      "question": "Which of the following is an advantage of MIDI transmitted over USB compared to traditional 5-pin DIN MIDI?",
+      "options": [
+        "USB MIDI uses analogue signalling for lower latency",
+        "5-pin DIN supports more simultaneous channels than USB",
+        "USB can carry multiple MIDI ports over a single cable, along with power",
+        "5-pin DIN cables are bidirectional whereas USB is unidirectional"
+      ],
+      "correctIndex": 2,
+      "explanation": "A single USB connection can carry multiple virtual MIDI ports (each with 16 channels), eliminating the need for multiple DIN cables. USB also supplies bus power, so many controllers need no external power supply. Traditional 5-pin DIN is unidirectional (separate In/Out/Thru cables needed) and carries only one port (16 channels) per cable. However, DIN MIDI has the advantage of electrical isolation via its opto-isolated input, which prevents ground loops."
+    },
+    {
+      "id": "midi-mcq-10",
+      "type": "mcq",
+      "question": "What is the primary difference between a Standard MIDI File Type 0 and Type 1?",
+      "options": [
+        "Type 0 supports General MIDI; Type 1 does not",
+        "Type 1 files are compressed; Type 0 files are uncompressed",
+        "Type 0 merges all channels into a single track; Type 1 stores each channel on a separate track",
+        "Type 0 files include audio data alongside MIDI; Type 1 files are MIDI-only"
+      ],
+      "correctIndex": 2,
+      "explanation": "A Type 0 SMF stores all MIDI data merged into one track, making it simple but harder to edit individual parts. A Type 1 SMF stores data on separate tracks (typically one per channel), preserving the multi-track arrangement from the DAW. Type 1 is preferred for editing and production work. Type 2 exists but is rarely used — it stores multiple independent patterns."
+    },
+    {
+      "id": "midi-num-04",
+      "type": "numeric",
+      "question": "Traditional MIDI uses a serial data rate of 31.25 kbaud. A 3-byte Note On message therefore takes approximately how many microseconds to transmit? (Each byte = 10 bits including start and stop bits.)",
+      "answer": 960,
+      "tolerance": 0,
+      "unit": "μs",
+      "explanation": "At 31,250 bits per second, each bit takes 1/31250 = 32 μs. One byte (with start and stop bits) = 10 bits × 32 μs = 320 μs. A 3-byte message = 3 × 320 = 960 μs (just under 1 ms). This inherent transmission time is a source of MIDI latency, especially when many messages are sent in quick succession on a single DIN cable."
+    },
+    {
+      "id": "midi-num-05",
+      "type": "numeric",
+      "question": "MIDI Polyphonic Expression (MPE) uses one master channel and allocates the remaining channels as member channels. If the master channel is channel 1, how many member channels are available for individual note expression?",
+      "answer": 15,
+      "tolerance": 0,
+      "unit": "channels",
+      "explanation": "MPE reserves one channel as the master (for global messages like sustain pedal) and assigns the remaining channels as member channels — one per active note. With channel 1 as master, channels 2–16 provide 15 member channels. This means up to 15 notes can each have independent pitch bend, slide, and pressure data simultaneously. Some MPE implementations use two zones (upper and lower), reducing the available members per zone."
+    },
+    {
+      "id": "midi-short-04",
+      "type": "short",
+      "question": "Explain what MIDI 2.0 improves over the original MIDI 1.0 specification, and why these improvements matter for modern music production.",
+      "sampleAnswer": "MIDI 2.0 increases resolution from 7-bit (128 values) to up to 32-bit for velocity and controller data, virtually eliminating audible stepping in parameter changes. It introduces bidirectional communication so devices can query each other's capabilities and auto-configure. It also adds per-note controllers (building on MPE concepts) and backwards compatibility with MIDI 1.0 devices.",
+      "keyPoints": [
+        "Higher resolution — up to 32-bit for velocity and CC data (vs 7-bit in MIDI 1.0)",
+        "Bidirectional communication — devices negotiate capabilities automatically",
+        "Per-note controllers natively supported (pitch bend, pressure per note)",
+        "Backwards compatible with MIDI 1.0 devices and software",
+        "Eliminates audible stepping artefacts in fine controller movements"
+      ],
+      "explanation": "MIDI 1.0 was designed in 1983 and its 7-bit resolution (128 steps) is a limitation for expressive performance — subtle fader moves or pitch bends can sound 'stepped'. MIDI 2.0 (ratified in 2020) addresses this with vastly higher resolution. Bidirectional communication means a controller can ask a synthesiser what parameters it supports and map them automatically, reducing manual setup. Per-note articulation is now a core feature rather than a workaround (as MPE was)."
+    },
+    {
+      "id": "midi-short-05",
+      "type": "short",
+      "question": "A keyboard player notices that when they strike keys with varying force, the synthesiser responds differently depending on the selected velocity curve. Explain what a velocity curve is and describe how linear, logarithmic, and fixed curves differ in their musical effect.",
+      "sampleAnswer": "A velocity curve maps the physical force of a key strike to the MIDI velocity value sent. A linear curve provides a directly proportional response — medium force produces medium velocity. A logarithmic curve reaches higher velocity values more quickly with less force, making it easier to play loudly and suiting players with a lighter touch. A fixed curve ignores the physical force entirely and sends the same velocity value for every note, which is useful for parts that require uniform dynamics such as sequenced synthesiser lines.",
+      "keyPoints": [
+        "Velocity curve maps physical key force to MIDI velocity value",
+        "Linear: proportional — medium force = medium velocity",
+        "Logarithmic: reaches higher values quickly with lighter touch",
+        "Fixed: constant velocity regardless of how hard the key is struck",
+        "Choice depends on playing style and musical context"
+      ],
+      "explanation": "Velocity curves are set on the controller (keyboard), not the receiving instrument. They do not change the MIDI data format — they change the relationship between physical gesture and transmitted value. An exponential curve (opposite of logarithmic) requires harder playing to reach high velocities, suiting heavy-handed players. Understanding velocity curves helps students troubleshoot why the same keyboard can feel very different with different settings or when connected to different software instruments."
     }
   ]
 }

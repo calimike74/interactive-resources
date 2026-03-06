@@ -133,6 +133,92 @@
         "Increases average (RMS) loudness relative to the peaks, which is a key effect of compression"
       ],
       "explanation": "Makeup gain is essential for evaluating compression accurately. A louder signal is almost always perceived as better, so without matching levels, it is easy to mistake the loudness boost from makeup gain for the quality of the compression itself."
+    },
+    {
+      "id": "dynamics-mcq-07",
+      "type": "mcq",
+      "question": "What is the key difference between a noise gate and a downward expander?",
+      "options": [
+        "A gate uses a fixed ratio while an expander has an adjustable threshold",
+        "An expander has a variable ratio that gradually reduces the signal below the threshold, while a gate uses a very high ratio that effectively silences it",
+        "A gate can only be used on drum tracks, while an expander works on any source",
+        "An expander boosts signals above the threshold, while a gate reduces signals below it"
+      ],
+      "correctIndex": 1,
+      "explanation": "Both gates and downward expanders reduce the level of signals that fall below the threshold. The difference is severity: an expander uses a moderate ratio (e.g. 1:2 or 1:4), gently pushing quiet signals further down without fully silencing them. A gate uses a very high ratio (effectively muting the signal), creating an abrupt on/off behaviour. Expanders sound more natural and are less prone to audible artefacts."
+    },
+    {
+      "id": "dynamics-mcq-08",
+      "type": "mcq",
+      "question": "A multiband compressor differs from a standard compressor because it:",
+      "options": [
+        "Applies the same compression settings to all frequencies simultaneously",
+        "Can only be used on the master bus",
+        "Splits the signal into separate frequency bands and compresses each independently",
+        "Uses multiple threshold settings but a single frequency range"
+      ],
+      "correctIndex": 2,
+      "explanation": "A multiband compressor divides the input signal into two or more frequency bands using crossover filters, then applies independent compression to each band. This allows, for example, heavy compression on the bass frequencies without affecting the dynamics of the high end. It is commonly used in mastering and on complex mix buses."
+    },
+    {
+      "id": "dynamics-mcq-09",
+      "type": "mcq",
+      "question": "A de-esser is a specialised dynamics processor that reduces sibilance. It typically operates as:",
+      "options": [
+        "A wideband limiter with a very fast attack",
+        "A frequency-selective compressor triggered by harsh high-frequency content",
+        "A noise gate targeting frequencies between 2 kHz and 4 kHz",
+        "A multiband expander isolating the vocal fundamental"
+      ],
+      "correctIndex": 1,
+      "explanation": "A de-esser is essentially a compressor with a side-chain filter tuned to the sibilant frequency range (typically 4–10 kHz). When the level in that frequency band exceeds the threshold, gain reduction is applied — either to the full signal (wideband mode) or only to the sibilant band (split-band mode). This tames harsh 's' and 'sh' sounds without affecting the rest of the vocal."
+    },
+    {
+      "id": "dynamics-mcq-10",
+      "type": "mcq",
+      "question": "What is the purpose of the lookahead function on a compressor or limiter?",
+      "options": [
+        "It delays the audio signal slightly so the compressor can begin gain reduction before the transient arrives",
+        "It predicts future notes using AI analysis of the audio",
+        "It extends the release time to prevent pumping artefacts",
+        "It automatically adjusts the ratio based on the average signal level"
+      ],
+      "correctIndex": 0,
+      "explanation": "Lookahead introduces a small delay (typically 1–5 ms) to the audio path while feeding the undelayed signal to the detector circuit. This means the compressor 'sees' the transient before it arrives in the audio output, allowing gain reduction to begin in advance. The result is transparent transient control without the distortion that a zero-attack setting would cause. Lookahead adds latency, making it unsuitable for live monitoring."
+    },
+    {
+      "id": "dynamics-num-04",
+      "type": "numeric",
+      "question": "A signal has a peak level of -1 dBFS and an RMS level of -14 dBFS. What is the crest factor (peak-to-RMS difference) in dB?",
+      "answer": 13,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Crest factor is the difference between the peak level and the RMS level: -1 − (-14) = 13 dB. A higher crest factor indicates more dynamic, transient-heavy material (e.g. uncompressed drums). Heavy compression reduces the crest factor by bringing the peak and RMS levels closer together."
+    },
+    {
+      "id": "dynamics-num-05",
+      "type": "numeric",
+      "question": "A compressor is set with a threshold of -18 dBFS and a ratio of 6:1. An input signal arrives at -6 dBFS. What is the output level in dBFS?",
+      "answer": -16,
+      "tolerance": 0,
+      "unit": "dBFS",
+      "explanation": "The input is 12 dB above the threshold (-6 − (-18) = 12). With a 6:1 ratio, the output excess is 12 ÷ 6 = 2 dB above the threshold. The threshold is -18 dBFS, so the output level is -18 + 2 = -16 dBFS. Gain reduction applied is 12 − 2 = 10 dB."
+    },
+    {
+      "id": "dynamics-short-04",
+      "type": "short",
+      "question": "Explain how ducking works in broadcast and podcast production, identifying the dynamics processor used and the signal routing involved.",
+      "sampleAnswer": "Ducking uses side-chain compression to automatically lower the level of background music when a presenter speaks. The vocal signal is routed to the side-chain input of a compressor inserted on the music track. When the vocal exceeds the compressor's threshold, gain reduction is applied to the music, lowering it beneath the voice. When the presenter stops speaking, the music returns to its original level. The attack, release, and ratio settings determine how smoothly the music dips and recovers.",
+      "keyPoints": ["side-chain compression", "vocal triggers gain reduction on music", "music lowers automatically when speech is present", "attack and release control smoothness"],
+      "explanation": "Ducking is one of the most practical applications of side-chain compression. It automates what would otherwise require manual volume rides on the music track. Getting the release time right is critical — too fast and the music pumps unnaturally; too slow and it stays ducked during short pauses in speech."
+    },
+    {
+      "id": "dynamics-short-05",
+      "type": "short",
+      "question": "Explain what auto-makeup gain does on a compressor and describe one potential problem it can cause when comparing compressed and uncompressed signals.",
+      "sampleAnswer": "Auto-makeup gain automatically increases the output level to compensate for the gain reduction applied by the compressor, so the perceived loudness stays roughly the same after compression. A potential problem is that it can make A/B comparisons misleading — the compressed signal may sound louder than the bypassed signal if the auto-makeup calculation is imprecise, leading the engineer to believe the compression sounds better when in fact the difference is simply a loudness increase. This exploits the psychoacoustic tendency to prefer louder sounds.",
+      "keyPoints": ["automatically compensates for gain reduction", "maintains perceived loudness", "can cause misleading A/B comparisons", "louder is perceived as better"],
+      "explanation": "Auto-makeup gain is convenient but can be deceptive. Professional engineers often prefer manual makeup gain so they can precisely level-match the compressed and bypassed signals. This ensures that any preference for the compressed version is genuinely due to the dynamic shaping, not a loudness difference."
     }
   ]
 }

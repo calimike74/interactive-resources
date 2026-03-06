@@ -23,6 +23,12 @@ import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
 import CompressorExplorer from '@/components/resources/CompressorExplorer';
 import CompressorCurvePractice from '@/components/resources/CompressorCurvePractice';
 import EssayScaffoldPractice from '@/components/resources/EssayScaffoldPractice';
+import DigitalAnalogue from '@/components/resources/DigitalAnalogue';
+import AudioLeadsFlashcards from '@/components/resources/AudioLeadsFlashcards';
+import CombinedDistortionLab from '@/components/resources/CombinedDistortionLab';
+import StereoPanning from '@/components/resources/StereoPanning';
+import ADCExplorer from '@/components/resources/ADCExplorer';
+import SignalChainBuilder from '@/components/resources/SignalChainBuilder';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -40,6 +46,12 @@ const resourceComponents = {
     'CompressorExplorer': CompressorExplorer,
     'CompressorCurvePractice': CompressorCurvePractice,
     'EssayScaffoldPractice': EssayScaffoldPractice,
+    'DigitalAnalogue': DigitalAnalogue,
+    'AudioLeadsFlashcards': AudioLeadsFlashcards,
+    'CombinedDistortionLab': CombinedDistortionLab,
+    'StereoPanning': StereoPanning,
+    'ADCExplorer': ADCExplorer,
+    'SignalChainBuilder': SignalChainBuilder,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };

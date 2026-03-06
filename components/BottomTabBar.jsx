@@ -1,6 +1,6 @@
 'use client';
 
-import { typography, spacing } from '@/lib/theme';
+import { theme, glass, typography, spacing } from '@/lib/theme';
 
 const TABS = [
     { id: 'explore', label: 'Explore', icon: '🎛️' },
@@ -18,10 +18,11 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
                 left: 0,
                 right: 0,
                 zIndex: 100,
-                background: 'rgba(255, 255, 255, 0.92)',
+                background: glass.bg,
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                borderTop: '1px solid #E5E7EB',
+                borderTop: '1px solid ' + glass.border,
+                boxShadow: '0 -2px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
                 paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             }}
         >
@@ -46,7 +47,8 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
                                 alignItems: 'center',
                                 gap: '2px',
                                 padding: `${spacing[2]} 0`,
-                                background: 'transparent',
+                                background: isActive ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
+                                borderRadius: isActive ? '12px' : '0',
                                 border: 'none',
                                 cursor: 'pointer',
                                 fontFamily: typography.fontFamily,
@@ -67,7 +69,7 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
                                 style={{
                                     fontSize: '0.65rem',
                                     fontWeight: isActive ? typography.weight.semibold : typography.weight.medium,
-                                    color: isActive ? '#2563EB' : '#9CA3AF',
+                                    color: isActive ? theme.light.accent.primary : theme.light.text.tertiary,
                                     letterSpacing: '0.01em',
                                     transition: 'color 150ms ease',
                                 }}

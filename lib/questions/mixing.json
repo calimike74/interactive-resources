@@ -129,6 +129,105 @@
       "sampleAnswer": "Mix automation records and plays back changes to mixer parameters — such as volume, pan, and plugin settings — over time. It is used to make precise adjustments that cannot be performed in real time by hand, such as riding a vocal level, muting a noisy channel during a rest, or opening a filter gradually. It allows the mix to respond dynamically to the musical content.",
       "keyPoints": ["records parameter changes", "volume", "pan", "plugin parameters", "over time", "dynamic response", "precision"],
       "explanation": "Automation transforms a static mix into a dynamic one. A vocal track may need its level raised during quiet phrases and pulled back during louder ones — doing this accurately and repeatably by hand on a fader is impossible. Automation also enables subtle effects such as gradually widening the stereo image, automating a reverb send for a specific phrase, or muting bleed between takes."
+    },
+    {
+      "id": "mixing-mcq-07",
+      "type": "mcq",
+      "question": "On a traditional analogue console, an insert point uses a TRS jack. What is the correct signal flow through this connection?",
+      "options": [
+        "Tip = input from processor, Ring = output to processor, Sleeve = ground",
+        "Tip = left channel, Ring = right channel, Sleeve = ground",
+        "Tip = output to processor, Ring = input from processor, Sleeve = ground",
+        "Tip = pre-fader signal, Ring = post-fader signal, Sleeve = ground"
+      ],
+      "correctIndex": 2,
+      "explanation": "A console insert point uses a single TRS (tip-ring-sleeve) jack as a send/return loop. The tip carries the signal out to the external processor, the ring returns the processed signal back to the channel strip, and the sleeve is ground. This is a series connection — the entire channel signal passes through the processor. A Y-cable (TRS to two TS) is typically used to break this out to the processor's input and output."
+    },
+    {
+      "id": "mixing-mcq-08",
+      "type": "mcq",
+      "question": "A vocalist recording through a DAW hears a distracting echo of their own voice in the headphones. What is the most likely cause and solution?",
+      "options": [
+        "The reverb send is too high — reduce the aux send level",
+        "The sample rate is too low — increase to 96kHz",
+        "Monitoring latency from the DAW's buffer — enable direct monitoring on the audio interface",
+        "The pan position is incorrect — centre the vocal channel"
+      ],
+      "correctIndex": 2,
+      "explanation": "When a singer monitors through the DAW, the signal must travel through the ADC, into the software buffer, and back through the DAC. This round-trip delay (latency) creates a slapback echo effect in the headphones, which is distracting and can affect pitch and timing. Direct monitoring routes the input signal straight to the headphone output at the hardware level, bypassing the DAW entirely, so the performer hears themselves with negligible delay."
+    },
+    {
+      "id": "mixing-mcq-09",
+      "type": "mcq",
+      "question": "What is the key difference between a VCA group and an audio bus group in a DAW or console?",
+      "options": [
+        "A bus group only works with mono channels; a VCA group works with stereo",
+        "A VCA group sums the audio to a single channel strip; a bus group does not",
+        "A bus group routes audio through a shared channel where processing can be applied; a VCA group controls fader levels remotely without summing or rerouting audio",
+        "A VCA group adds compression automatically; a bus group requires manual insert"
+      ],
+      "correctIndex": 2,
+      "explanation": "A bus group physically routes audio from multiple channels through a shared bus, where collective processing (e.g., bus compression, EQ) can be applied. A VCA (Voltage Controlled Amplifier) group is a remote control — it scales the fader levels of its member channels proportionally without rerouting any audio. VCA groups preserve each channel's individual output routing and insert chain. This makes VCAs ideal for level management, while bus groups are better when shared processing is needed."
+    },
+    {
+      "id": "mixing-mcq-10",
+      "type": "mcq",
+      "question": "A mix engineer checks their master bus meter and sees a peak reading of -1 dBFS and an integrated LUFS reading of -16 LUFS. What do these two measurements tell them?",
+      "options": [
+        "The peak shows the average loudness; the LUFS shows the maximum transient level",
+        "Both measurements show the same thing using different scales",
+        "The peak shows the highest instantaneous sample value; the LUFS shows the perceptual loudness averaged over time",
+        "The LUFS reading means the mix is too quiet for streaming platforms"
+      ],
+      "correctIndex": 2,
+      "explanation": "Peak metering shows the highest instantaneous sample value — useful for preventing clipping. LUFS (Loudness Units Full Scale) measures perceived loudness over time, weighted to reflect human hearing sensitivity. -16 LUFS is close to the target for many streaming platforms (Spotify targets around -14 LUFS). A mix can have high peaks but low LUFS (very dynamic) or low peaks but high LUFS (heavily compressed). Both readings together reveal the dynamic character of the mix."
+    },
+    {
+      "id": "mixing-num-04",
+      "type": "numeric",
+      "question": "A DAW session is running at a buffer size of 256 samples at 48kHz. What is the input monitoring latency introduced by a single buffer pass (in milliseconds)? Round to 1 decimal place.",
+      "answer": 5.3,
+      "tolerance": 0.1,
+      "unit": "ms",
+      "explanation": "Latency = buffer size ÷ sample rate. 256 ÷ 48,000 = 0.00533 seconds = 5.3 ms. This is the latency for one direction (input). The total round-trip latency (input + output) would be approximately double this, plus any additional driver and converter latency. For recording with software monitoring, round-trip latency below 10ms is generally considered acceptable."
+    },
+    {
+      "id": "mixing-num-05",
+      "type": "numeric",
+      "question": "A mix engineer wants a tempo-synced delay at a dotted eighth note at 140 BPM. A dotted eighth note = 3/16 of a beat. Calculate the delay time in milliseconds, rounded to the nearest whole number. (Hint: one beat at 140 BPM = 60000 ÷ 140 ms.)",
+      "answer": 321,
+      "tolerance": 1,
+      "unit": "ms",
+      "explanation": "One beat at 140 BPM = 60,000 ÷ 140 = 428.57 ms. A dotted eighth note is 3/4 of a beat (an eighth note = 1/2 beat, plus a dot adds half its value = 1/4 beat, total = 3/4). 428.57 × 0.75 = 321.43 ms ≈ 321 ms. Tempo-synced delays create rhythmically musical echoes; the dotted eighth pattern is especially popular in guitar and vocal production for its syncopated, driving feel."
+    },
+    {
+      "id": "mixing-short-04",
+      "type": "short",
+      "question": "Describe the typical signal flow order of processing within a single channel strip on a mixing console (from input to output), and explain why the order matters.",
+      "sampleAnswer": "A typical channel strip signal flow is: input gain/trim → high-pass filter → insert point → EQ → dynamics (compressor/gate) → pre-fader send → fader → post-fader send → pan → bus/master output. The order matters because each processor affects the signal reaching the next stage. For example, EQ before compression means the compressor reacts to the equalised signal — boosting a frequency with EQ will cause the compressor to respond more to that range. Reversing the order produces a different tonal and dynamic result.",
+      "keyPoints": [
+        "Input gain/trim sets the initial level entering the channel",
+        "EQ shapes the tonal balance before or after dynamics depending on the console",
+        "Dynamics processing (compressor/gate) controls level after EQ on most consoles",
+        "Pre-fader sends are tapped before the fader for monitor mixes",
+        "Post-fader sends are tapped after the fader for effects like reverb",
+        "Order affects how each processor interacts with the signal"
+      ],
+      "explanation": "Understanding signal flow order is fundamental to mixing. The relationship between EQ and compression is the most commonly examined example: EQ before compression (the default on most consoles) means frequency boosts increase the level feeding the compressor, causing it to react more to those frequencies. Some engineers prefer compression before EQ so they can shape the tone after the dynamics are controlled. DAWs allow flexible reordering of insert plugins, but the principle remains the same."
+    },
+    {
+      "id": "mixing-short-05",
+      "type": "short",
+      "question": "Explain what stem exporting is, why a mix engineer might export stems rather than a single stereo mix, and give three examples of typical stems.",
+      "sampleAnswer": "Stem exporting is the process of bouncing groups of related tracks as separate stereo (or multichannel) files — for example, a drums stem, a bass stem, a vocals stem, a keys stem, and a guitars stem. Each stem contains the summed and processed audio for its group. Engineers export stems to give the mastering engineer, film mixer, or remix artist flexibility to adjust the balance between groups without needing access to the full multitrack session. Stems also serve as an archival format that preserves mix processing while remaining editable at the group level.",
+      "keyPoints": [
+        "Stems are grouped submixes bounced as separate audio files",
+        "Allow balance adjustments between groups without the full session",
+        "Used for mastering, film/TV delivery, remixes, and live performance playback",
+        "Examples: drums, bass, vocals, synths/keys, guitars, effects/atmospheres",
+        "Each stem includes the processing (EQ, compression, effects) applied in the mix"
+      ],
+      "explanation": "Stem delivery is standard practice in professional production. Film and TV require stems for dialogue, music, and effects (DME stems) so that foreign-language dubs can replace dialogue while keeping the music and effects. In music, mastering engineers sometimes request stems when a mix issue (e.g., vocal level) needs adjustment without recalling the full session. Stems differ from multitracks — a multitrack is every individual raw track; stems are processed group bounces."
     }
   ]
 }

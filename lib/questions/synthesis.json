@@ -124,6 +124,92 @@
       "sampleAnswer": "Resonance boosts the frequencies around the filter's cutoff point, creating a peak in the frequency response. As resonance increases, this peak becomes more pronounced, giving the sound a ringing, nasal quality. At extreme settings, the filter can self-oscillate.",
       "keyPoints": ["boost at cutoff", "peak", "ringing", "nasal", "self-oscillation"],
       "explanation": "Resonance (also called Q or emphasis) feeds some of the filter's output back into its input, amplifying the frequencies near the cutoff. This creates the characteristic 'wah' sweep sound when the cutoff is automated. At maximum resonance, the feedback sustains indefinitely — self-oscillation — generating a pure sine tone."
+    },
+    {
+      "id": "synthesis-mcq-07",
+      "type": "mcq",
+      "question": "Pulse width modulation (PWM) on a pulse/square wave oscillator changes:",
+      "options": [
+        "The frequency of the oscillator",
+        "The ratio of the high portion to the low portion of the waveform cycle",
+        "The amplitude of the waveform",
+        "The number of harmonics from odd-only to all harmonics"
+      ],
+      "correctIndex": 1,
+      "explanation": "Pulse width (or duty cycle) is the ratio of time the waveform spends in its high state versus its low state. A 50% pulse width is a standard square wave. Narrowing the pulse width changes the harmonic content — introducing even harmonics and creating a thinner, more nasal timbre. Modulating the pulse width over time (PWM) produces the classic animated, chorus-like movement heard in many analogue synthesiser pads."
+    },
+    {
+      "id": "synthesis-mcq-08",
+      "type": "mcq",
+      "question": "What is the purpose of the unison/detune feature on a synthesiser?",
+      "options": [
+        "To stack multiple slightly detuned copies of the oscillator for a thicker, wider sound",
+        "To lock two oscillators to exactly the same frequency",
+        "To automatically tune the oscillator to the nearest semitone",
+        "To apply vibrato from an internal LFO"
+      ],
+      "correctIndex": 0,
+      "explanation": "Unison mode duplicates the oscillator voice multiple times and detunes each copy by a small amount (typically measured in cents). The slight pitch differences create phasing and beating between the copies, resulting in a thicker, fatter, wider sound. The more voices and greater detune amount, the bigger the effect — though at the cost of increased CPU usage and potential tuning vagueness."
+    },
+    {
+      "id": "synthesis-mcq-09",
+      "type": "mcq",
+      "question": "Oscillator sync forces one oscillator (the slave) to:",
+      "options": [
+        "Play at half the frequency of the master oscillator",
+        "Use the same waveform shape as the master oscillator",
+        "Restart its waveform cycle every time the master oscillator completes a cycle",
+        "Match the amplitude envelope of the master oscillator"
+      ],
+      "correctIndex": 2,
+      "explanation": "In hard oscillator sync, the slave oscillator is forced to reset its waveform to the beginning each time the master completes one full cycle. If the slave is set to a different pitch, its waveform is repeatedly truncated, producing a distinctive harmonically rich, aggressive timbre. Sweeping the slave pitch while synced creates the classic 'sync sweep' lead sound."
+    },
+    {
+      "id": "synthesis-mcq-10",
+      "type": "mcq",
+      "question": "Ring modulation multiplies two signals together. If oscillator A is at 400 Hz and oscillator B is at 500 Hz, which frequencies appear in the output?",
+      "options": [
+        "400 Hz and 500 Hz only",
+        "900 Hz only",
+        "100 Hz and 900 Hz",
+        "450 Hz only (the average)"
+      ],
+      "correctIndex": 2,
+      "explanation": "Ring modulation produces sum and difference frequencies of the two inputs. The sum is 400 + 500 = 900 Hz and the difference is 500 − 400 = 100 Hz. The original input frequencies are removed. When the two inputs are not harmonically related, ring modulation produces metallic, bell-like, or dissonant inharmonic tones."
+    },
+    {
+      "id": "synthesis-num-04",
+      "type": "numeric",
+      "question": "A synthesiser plays a note at 440 Hz. Portamento (glide) is enabled and the next note played is one octave higher. What is the target frequency in Hz?",
+      "answer": 880,
+      "tolerance": 0,
+      "unit": "Hz",
+      "explanation": "One octave higher means doubling the frequency. 440 × 2 = 880 Hz. Portamento causes the pitch to slide smoothly from 440 Hz to 880 Hz over a set glide time rather than jumping instantly. This creates a characteristic sliding effect used in many lead synth patches."
+    },
+    {
+      "id": "synthesis-num-05",
+      "type": "numeric",
+      "question": "A pulse wave oscillator has a pulse width of 25%. What percentage of each cycle does the waveform spend in its low state?",
+      "answer": 75,
+      "tolerance": 0,
+      "unit": "%",
+      "explanation": "Pulse width defines the proportion of the cycle spent in the high state. If the pulse width is 25%, the remaining 100% − 25% = 75% is spent in the low state. A 25% pulse width produces a thinner, more nasal tone than a 50% square wave because the asymmetric duty cycle introduces even harmonics."
+    },
+    {
+      "id": "synthesis-short-04",
+      "type": "short",
+      "question": "Explain the difference between wavetable synthesis and subtractive synthesis. Why might a sound designer choose wavetable synthesis over subtractive for a particular patch?",
+      "sampleAnswer": "Subtractive synthesis starts with a fixed waveform (e.g. sawtooth or square) and uses a filter to remove harmonics. Wavetable synthesis stores a table of many different single-cycle waveforms and allows the oscillator to scan through them over time, creating evolving timbral changes that would be impossible with a static oscillator waveform. A sound designer might choose wavetable synthesis for pads or textures that need continuous tonal evolution without relying solely on filter movement.",
+      "keyPoints": ["subtractive uses fixed waveforms plus filter", "wavetable scans through stored waveforms", "evolving timbre", "timbral changes beyond what filtering alone achieves"],
+      "explanation": "Wavetable synthesis dramatically expands the timbral palette available at the oscillator stage. Instead of being limited to sawtooth, square, triangle, and sine, the oscillator can morph through hundreds of different waveshapes. This makes it particularly suited to modern electronic music sound design where evolving, complex textures are needed."
+    },
+    {
+      "id": "synthesis-short-05",
+      "type": "short",
+      "question": "Describe what envelope retriggering means and explain how it affects a monophonic synthesiser patch when playing legato (overlapping notes).",
+      "sampleAnswer": "Envelope retriggering determines whether the ADSR envelope restarts from the beginning of the attack stage each time a new note is played. With retriggering enabled, every new note starts a fresh envelope regardless of whether the previous note is still held. With retriggering disabled (legato mode), playing overlapping notes causes the envelope to continue from its current position — only the pitch changes. This produces a smoother, more connected playing style because subsequent notes skip the attack stage and glide into the new pitch.",
+      "keyPoints": ["retrigger restarts envelope from attack", "legato mode continues envelope", "pitch changes but envelope does not restart", "smoother connected phrasing"],
+      "explanation": "Retriggering behaviour is critical for expressive monophonic patches. Lead synth sounds often disable retriggering so that fast legato passages sound fluid rather than stuttered. Combined with portamento, this creates the classic sliding monosynth lead heard in many genres."
     }
   ]
 }

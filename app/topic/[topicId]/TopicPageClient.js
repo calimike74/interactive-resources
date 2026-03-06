@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import { getAvailableTopics } from '@/lib/questions';
 import { getQuizProgress } from '@/lib/quiz-persistence';
 
@@ -35,71 +35,183 @@ export default function TopicPageClient({ topic, resources }) {
             }}
         >
             {/* Topic Header */}
-            <header
-                style={{
-                    background: t.bg.primary,
-                    borderBottom: `3px solid ${topic.colour}`,
-                    padding: `${spacing[6]} ${spacing[8]}`,
-                }}
-            >
-                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                    <Link
-                        href="/"
+            {topic.heroVideo ? (
+                <header
+                    style={{
+                        position: 'relative',
+                        overflow: 'hidden',
+                        minHeight: '280px',
+                    }}
+                >
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        onLoadedData={(e) => { e.target.style.opacity = 1; }}
                         style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: spacing[2],
-                            color: t.text.secondary,
-                            textDecoration: 'none',
-                            fontSize: typography.size.sm,
-                            padding: `${spacing[2]} ${spacing[3]}`,
-                            borderRadius: borderRadius.md,
-                            background: t.bg.tertiary,
-                            transition: `all ${transitions.fast}`,
-                            marginBottom: spacing[4],
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            opacity: 0,
+                            transition: 'opacity 0.8s ease-out',
                         }}
-                    >
-                        ← All Topics
-                    </Link>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[2] }}>
-                        <span
+                        src={topic.heroVideo}
+                    />
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+                    }} />
+                    <div style={{
+                        position: 'relative',
+                        maxWidth: '1200px',
+                        margin: '0 auto',
+                        padding: `${spacing[10]} ${spacing[8]} ${spacing[8]}`,
+                    }}>
+                        <Link
+                            href="/"
                             style={{
-                                background: topic.colour + '18',
-                                color: topic.colour,
-                                padding: `${spacing[1]} ${spacing[3]}`,
-                                borderRadius: borderRadius.full,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: spacing[2],
+                                color: 'rgba(255,255,255,0.8)',
+                                textDecoration: 'none',
                                 fontSize: typography.size.sm,
-                                fontWeight: typography.weight.semibold,
+                                padding: `${spacing[2]} ${spacing[3]}`,
+                                borderRadius: borderRadius.md,
+                                background: 'rgba(255,255,255,0.15)',
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                border: '1px solid rgba(255,255,255,0.3)',
+                                boxShadow: glass.iconShadow,
+                                transition: `all ${transitions.fast}`,
+                                marginBottom: spacing[4],
                             }}
                         >
-                            {topic.specRef}
-                        </span>
-                    </div>
+                            ← All Topics
+                        </Link>
 
-                    <h1
-                        style={{
-                            fontSize: typography.size['3xl'],
-                            fontWeight: typography.weight.bold,
-                            color: t.text.primary,
-                            marginBottom: spacing[2],
-                            lineHeight: typography.lineHeight.tight,
-                        }}
-                    >
-                        {topic.name}
-                    </h1>
-                    <p
-                        style={{
-                            color: t.text.secondary,
-                            fontSize: typography.size.base,
-                            lineHeight: typography.lineHeight.relaxed,
-                            maxWidth: '640px',
-                        }}
-                    >
-                        {topic.description}
-                    </p>
-                </div>
-            </header>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[2] }}>
+                            <span
+                                style={{
+                                    background: 'rgba(255,255,255,0.2)',
+                                    color: '#ffffff',
+                                    padding: `${spacing[1]} ${spacing[3]}`,
+                                    borderRadius: borderRadius.full,
+                                    fontSize: typography.size.sm,
+                                    fontWeight: typography.weight.semibold,
+                                    backdropFilter: 'blur(8px)',
+                                    WebkitBackdropFilter: 'blur(8px)',
+                                    border: '1px solid rgba(255,255,255,0.3)',
+                                    boxShadow: glass.iconShadow,
+                                }}
+                            >
+                                {topic.specRef}
+                            </span>
+                        </div>
+
+                        <h1
+                            style={{
+                                fontSize: typography.size['3xl'],
+                                fontWeight: typography.weight.bold,
+                                color: '#ffffff',
+                                marginBottom: spacing[2],
+                                lineHeight: typography.lineHeight.tight,
+                                textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                            }}
+                        >
+                            {topic.name}
+                        </h1>
+                        <p
+                            style={{
+                                color: 'rgba(255,255,255,0.85)',
+                                fontSize: typography.size.base,
+                                lineHeight: typography.lineHeight.relaxed,
+                                maxWidth: '640px',
+                            }}
+                        >
+                            {topic.description}
+                        </p>
+                    </div>
+                </header>
+            ) : (
+                <header
+                    style={{
+                        background: t.bg.primary,
+                        borderBottom: `3px solid ${topic.colour}`,
+                        padding: `${spacing[6]} ${spacing[8]}`,
+                    }}
+                >
+                    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                        <Link
+                            href="/"
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: spacing[2],
+                                color: t.text.secondary,
+                                textDecoration: 'none',
+                                fontSize: typography.size.sm,
+                                padding: `${spacing[2]} ${spacing[3]}`,
+                                borderRadius: borderRadius.md,
+                                background: glass.bg,
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                border: '1px solid ' + glass.border,
+                                boxShadow: glass.iconShadow,
+                                transition: `all ${transitions.fast}`,
+                                marginBottom: spacing[4],
+                            }}
+                        >
+                            ← All Topics
+                        </Link>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[2] }}>
+                            <span
+                                style={{
+                                    background: topic.colour + '18',
+                                    color: topic.colour,
+                                    padding: `${spacing[1]} ${spacing[3]}`,
+                                    borderRadius: borderRadius.full,
+                                    fontSize: typography.size.sm,
+                                    fontWeight: typography.weight.semibold,
+                                    backdropFilter: 'blur(8px)',
+                                    WebkitBackdropFilter: 'blur(8px)',
+                                    border: '1px solid ' + topic.colour + '30',
+                                    boxShadow: glass.iconShadow,
+                                }}
+                            >
+                                {topic.specRef}
+                            </span>
+                        </div>
+
+                        <h1
+                            style={{
+                                fontSize: typography.size['3xl'],
+                                fontWeight: typography.weight.bold,
+                                color: t.text.primary,
+                                marginBottom: spacing[2],
+                                lineHeight: typography.lineHeight.tight,
+                            }}
+                        >
+                            {topic.name}
+                        </h1>
+                        <p
+                            style={{
+                                color: t.text.secondary,
+                                fontSize: typography.size.base,
+                                lineHeight: typography.lineHeight.relaxed,
+                                maxWidth: '640px',
+                            }}
+                        >
+                            {topic.description}
+                        </p>
+                    </div>
+                </header>
+            )}
 
             {/* Content Sections */}
             <main style={{ maxWidth: '1200px', margin: '0 auto', padding: spacing[8] }}>
@@ -165,7 +277,9 @@ export default function TopicPageClient({ topic, resources }) {
                             >
                                 <div
                                     style={{
-                                        background: t.bg.primary,
+                                        background: glass.bg,
+                                        backdropFilter: 'blur(' + glass.blur + ')',
+                                        WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                                         borderRadius: borderRadius.xl,
                                         border: `1px solid ${topic.colour}40`,
                                         padding: `${spacing[6]} ${spacing[6]}`,
@@ -174,16 +288,16 @@ export default function TopicPageClient({ topic, resources }) {
                                         justifyContent: 'space-between',
                                         cursor: 'pointer',
                                         transition: `all ${transitions.normal} ${transitions.easing}`,
-                                        boxShadow: t.shadow.sm,
+                                        boxShadow: glass.shadow,
                                     }}
                                     onMouseEnter={e => {
                                         e.currentTarget.style.borderColor = topic.colour;
-                                        e.currentTarget.style.boxShadow = t.shadow.md;
+                                        e.currentTarget.style.boxShadow = glass.shadowHover;
                                         e.currentTarget.style.transform = 'translateY(-1px)';
                                     }}
                                     onMouseLeave={e => {
                                         e.currentTarget.style.borderColor = topic.colour + '40';
-                                        e.currentTarget.style.boxShadow = t.shadow.sm;
+                                        e.currentTarget.style.boxShadow = glass.shadow;
                                         e.currentTarget.style.transform = 'none';
                                     }}
                                 >
@@ -207,6 +321,65 @@ export default function TopicPageClient({ topic, resources }) {
                                         color: topic.colour,
                                         fontSize: typography.size.xl,
                                         fontWeight: typography.weight.semibold,
+                                    }}>
+                                        →
+                                    </span>
+                                </div>
+                            </Link>
+
+                            {/* Exam Mode link */}
+                            <Link
+                                href={`/exam/${topic.id}`}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <div
+                                    style={{
+                                        background: glass.bg,
+                                        backdropFilter: 'blur(' + glass.blur + ')',
+                                        WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                                        borderRadius: borderRadius.xl,
+                                        border: `1px solid ${t.border.subtle}`,
+                                        padding: `${spacing[5]} ${spacing[6]}`,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        cursor: 'pointer',
+                                        transition: `all ${transitions.normal} ${transitions.easing}`,
+                                        boxShadow: glass.shadow,
+                                    }}
+                                    onMouseEnter={e => {
+                                        e.currentTarget.style.borderColor = t.border.medium;
+                                        e.currentTarget.style.boxShadow = glass.shadowHover;
+                                        e.currentTarget.style.transform = 'translateY(-1px)';
+                                    }}
+                                    onMouseLeave={e => {
+                                        e.currentTarget.style.borderColor = t.border.subtle;
+                                        e.currentTarget.style.boxShadow = glass.shadow;
+                                        e.currentTarget.style.transform = 'none';
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
+                                        <span style={{ fontSize: '1.25rem' }}>⏱️</span>
+                                        <div>
+                                            <h3 style={{
+                                                fontSize: typography.size.base,
+                                                fontWeight: typography.weight.semibold,
+                                                color: t.text.secondary,
+                                                marginBottom: spacing[0.5],
+                                            }}>
+                                                Exam Mode
+                                            </h3>
+                                            <p style={{
+                                                fontSize: typography.size.xs,
+                                                color: t.text.tertiary,
+                                            }}>
+                                                Timed, no going back
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span style={{
+                                        color: t.text.tertiary,
+                                        fontSize: typography.size.lg,
                                     }}>
                                         →
                                     </span>
@@ -264,10 +437,12 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
                 style={{
                     position: 'relative',
                     overflow: 'hidden',
-                    background: t.bg.primary,
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                     borderRadius: borderRadius.xl,
-                    border: `1px solid ${isHovered ? topicColour + '60' : t.border.subtle}`,
-                    boxShadow: isHovered ? t.shadow.md : t.shadow.sm,
+                    border: `1px solid ${isHovered ? topicColour + '60' : glass.border}`,
+                    boxShadow: isHovered ? glass.shadowHover : glass.shadow,
                     padding: spacing[6],
                     cursor: 'pointer',
                     transition: `all ${transitions.normal} ${transitions.easing}`,
@@ -304,7 +479,7 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
                         </span>
                         <span
                             style={{
-                                background: t.bg.tertiary,
+                                background: 'rgba(255, 255, 255, 0.5)',
                                 color: t.text.secondary,
                                 padding: `${spacing[1]} ${spacing[2]}`,
                                 borderRadius: borderRadius.md,
@@ -349,7 +524,7 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
                             alignItems: 'center',
                             paddingTop: spacing[3],
                             marginTop: spacing[4],
-                            borderTop: `1px solid ${t.border.subtle}`,
+                            borderTop: `1px solid ${glass.border}`,
                         }}
                     >
                         <span style={{ color: t.text.tertiary, fontSize: typography.size.xs }}>
@@ -375,11 +550,13 @@ function ProgressCard({ progress, topicColour, t }) {
 
     return (
         <div style={{
-            background: t.bg.primary,
+            background: glass.bg,
+            backdropFilter: 'blur(' + glass.blur + ')',
+            WebkitBackdropFilter: 'blur(' + glass.blur + ')',
             borderRadius: borderRadius.xl,
-            border: `1px solid ${t.border.subtle}`,
+            border: `1px solid ${glass.border}`,
             padding: `${spacing[5]} ${spacing[6]}`,
-            boxShadow: t.shadow.sm,
+            boxShadow: glass.shadow,
         }}>
             <div style={{
                 display: 'flex',
@@ -472,9 +649,11 @@ function ComingSoonPlaceholder({ label, theme: t }) {
     return (
         <div
             style={{
-                background: t.bg.primary,
+                background: glass.bg,
                 borderRadius: borderRadius.xl,
-                border: `1px dashed ${t.border.medium}`,
+                border: `1px dashed ${glass.border}`,
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
                 padding: `${spacing[8]} ${spacing[6]}`,
                 textAlign: 'center',
             }}

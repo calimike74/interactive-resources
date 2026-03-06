@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { Info } from 'lucide-react';
+import { typography, spacing } from '@/lib/theme';
 
 // Educational tooltip content
 const tooltips = {
@@ -403,11 +404,51 @@ const FilterRolloffVisualization = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto bg-white rounded-lg shadow-sm border m-4">
-      <div className="p-6 border-b">
-        <h2 className="text-2xl font-bold">Filter Rolloff Visualization</h2>
-        <p className="text-gray-600 mt-1">
-          Explore how cutoff frequency, rolloff rate, filter type, and resonance affect the filter response.
-        </p>
+      {/* Hero with video background */}
+      <div style={{
+          position: 'relative',
+          overflow: 'hidden',
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          marginBottom: spacing[6],
+          minHeight: '240px',
+      }}>
+          <video
+              autoPlay muted loop playsInline
+              onLoadedData={(e) => { e.target.style.opacity = 1; }}
+              style={{
+                  position: 'absolute', inset: 0,
+                  width: '100%', height: '100%',
+                  objectFit: 'cover',
+                  opacity: 0, transition: 'opacity 0.8s ease-out',
+              }}
+              src="/eq-hero.mp4"
+          />
+          <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+          }} />
+          <div style={{
+              position: 'relative',
+              maxWidth: '640px', margin: '0 auto',
+              padding: `${spacing[12]} ${spacing[6]} ${spacing[10]}`,
+              textAlign: 'center',
+          }}>
+              <h1 style={{
+                  fontSize: typography.size['4xl'],
+                  fontWeight: typography.weight.bold,
+                  color: '#ffffff',
+                  lineHeight: typography.lineHeight.tight,
+                  marginBottom: spacing[4],
+                  textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              }}>Filter Rolloff Visualization</h1>
+              <p style={{
+                  color: 'rgba(255,255,255,0.85)',
+                  fontSize: typography.size.lg,
+                  lineHeight: typography.lineHeight.relaxed,
+                  maxWidth: '480px', margin: '0 auto',
+              }}>Explore how cutoff frequency, rolloff rate, filter type, and resonance affect the filter response</p>
+          </div>
       </div>
 
       <div className="p-6">

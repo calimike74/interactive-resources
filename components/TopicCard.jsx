@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { theme, glass, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 
 export default function TopicCard({ topic, animationDelay = 0, comingSoon = false }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -28,10 +28,12 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
             style={{
                 position: 'relative',
                 overflow: 'hidden',
-                background: t.bg.primary,
+                background: glass.bg,
+                backdropFilter: 'blur(' + glass.blur + ')',
+                WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                 borderRadius: borderRadius.xl,
-                border: `1px solid ${hasResources && isHovered ? topic.colour + '60' : t.border.subtle}`,
-                boxShadow: hasResources && isHovered ? t.shadow.md : t.shadow.sm,
+                border: `1px solid ${hasResources && isHovered ? topic.colour + '60' : glass.border}`,
+                boxShadow: hasResources && isHovered ? glass.shadowHover : glass.shadow,
                 padding: spacing[6],
                 cursor: hasResources ? 'pointer' : 'default',
                 transition: `all ${transitions.normal} ${transitions.easing}`,
@@ -89,7 +91,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                     </div>
                     <span
                         style={{
-                            background: t.bg.tertiary,
+                            background: 'rgba(255, 255, 255, 0.5)',
                             color: t.text.tertiary,
                             padding: `${spacing[1]} ${spacing[2]}`,
                             borderRadius: borderRadius.md,
@@ -131,7 +133,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                 <div
                     style={{
                         paddingTop: spacing[3],
-                        borderTop: `1px solid ${t.border.subtle}`,
+                        borderTop: `1px solid ${glass.border}`,
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',

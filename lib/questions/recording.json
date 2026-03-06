@@ -147,6 +147,105 @@
         "Both techniques are often combined in multi-mic setups"
       ],
       "explanation": "The choice of mic placement fundamentally shapes the character of a recording. Close mics give isolation and control, useful in multi-track sessions to prevent bleed. Ambient mics capture the acoustic character of the room and are important in classical or orchestral recording where the hall is part of the sound. In studio rock recording, both are used together — for example, a close snare mic plus overheads plus a room mic blended in the mix."
+    },
+    {
+      "id": "recording-mcq-07",
+      "type": "mcq",
+      "question": "Which of the following best describes a ribbon microphone?",
+      "options": [
+        "It uses a piezoelectric crystal that generates voltage when deformed by sound pressure",
+        "It uses a thin metal ribbon suspended between the poles of a magnet, producing a figure-of-8 polar pattern",
+        "It uses a charged backplate and diaphragm forming a capacitor, requiring phantom power",
+        "It uses a coil of wire attached to a diaphragm moving within a magnetic field"
+      ],
+      "correctIndex": 1,
+      "explanation": "A ribbon microphone uses a very thin strip (ribbon) of aluminium foil suspended in a magnetic field. Sound waves cause the ribbon to vibrate, generating a voltage by electromagnetic induction. Ribbon mics naturally produce a figure-of-8 polar pattern because the ribbon is open to sound from both front and back. They are prized for their smooth, warm high-frequency response but are fragile and generally have lower output than condensers."
+    },
+    {
+      "id": "recording-mcq-08",
+      "type": "mcq",
+      "question": "A Blumlein pair stereo technique uses:",
+      "options": [
+        "Two omnidirectional microphones spaced several metres apart",
+        "One cardioid microphone and one figure-of-8 microphone at the same position",
+        "Two spaced cardioid microphones pointed directly at the source",
+        "Two coincident figure-of-8 microphones angled at 90° to each other"
+      ],
+      "correctIndex": 3,
+      "explanation": "The Blumlein pair, named after Alan Blumlein, uses two figure-of-8 microphones placed coincidentally (capsules as close as possible) and angled at 90° to each other. This captures a remarkably natural and spacious stereo image with excellent localisation. Because figure-of-8 mics pick up from the rear as well, the technique also captures significant room ambience, making it best suited to good-sounding acoustic spaces."
+    },
+    {
+      "id": "recording-mcq-09",
+      "type": "mcq",
+      "question": "The 3:1 rule in multi-microphone recording states that:",
+      "options": [
+        "Microphones should be placed at least three times the source-to-mic distance apart from each other to minimise phase cancellation",
+        "At least three microphones should be used for any stereo recording",
+        "The signal-to-noise ratio should be at least 3:1 for an acceptable recording",
+        "Microphone gain should be set to one-third of the maximum to avoid clipping"
+      ],
+      "correctIndex": 0,
+      "explanation": "The 3:1 rule is a practical guideline for reducing phase interference in multi-mic setups. If microphone A is 10 cm from a source, microphone B should be at least 30 cm from microphone A. This ensures the level difference between the two signals is large enough (approximately 10 dB) that any phase cancellation when the signals are summed is perceptually insignificant."
+    },
+    {
+      "id": "recording-mcq-10",
+      "type": "mcq",
+      "question": "What is the primary purpose of a pop shield (pop filter) placed in front of a microphone during vocal recording?",
+      "options": [
+        "To boost the high-frequency presence of the vocal",
+        "To provide acoustic isolation from room reflections behind the singer",
+        "To reduce plosive blasts of air (from 'p' and 'b' sounds) hitting the diaphragm",
+        "To attenuate sibilance on 's' and 't' sounds"
+      ],
+      "correctIndex": 2,
+      "explanation": "A pop shield is a mesh screen (nylon or metal) placed between the singer and the microphone. Its primary function is to diffuse the high-velocity bursts of air caused by plosive consonants ('p', 'b', 't'). Without a pop shield, these bursts hit the diaphragm directly, causing a low-frequency thump that can overload the capsule. Pop shields do not significantly affect sibilance — that is addressed by a de-esser."
+    },
+    {
+      "id": "recording-num-04",
+      "type": "numeric",
+      "question": "In a spaced pair (AB) stereo setup, two omnidirectional microphones are placed 60 cm apart. A sound arrives from the far left. Given that sound travels at 343 m/s, what is the time difference (in milliseconds) between the sound arriving at the nearer and farther microphone? Round to one decimal place.",
+      "answer": 1.7,
+      "tolerance": 0.1,
+      "unit": "ms",
+      "explanation": "If the sound arrives from the extreme left, the maximum path difference equals the spacing between the microphones: 0.6m. Time = distance ÷ speed = 0.6 ÷ 343 = 0.00175 seconds ≈ 1.7ms. This inter-channel time difference is what creates the stereo image in a spaced pair technique. Larger spacings give wider stereo but increase the risk of phase issues when summed to mono."
+    },
+    {
+      "id": "recording-num-05",
+      "type": "numeric",
+      "question": "A rectangular room is 5 metres long. Calculate the frequency of the lowest axial room mode along this dimension. Use the speed of sound as 343 m/s. Round to one decimal place.",
+      "answer": 34.3,
+      "tolerance": 0.5,
+      "unit": "Hz",
+      "explanation": "The lowest axial mode occurs when half a wavelength fits exactly between the two parallel walls. Frequency = speed of sound ÷ (2 × room length) = 343 ÷ (2 × 5) = 343 ÷ 10 = 34.3 Hz. Room modes cause standing waves at specific frequencies, creating peaks and nulls at different positions. Bass trapping is used to control these resonances in studio environments."
+    },
+    {
+      "id": "recording-short-04",
+      "type": "short",
+      "question": "Explain the difference between acoustic absorption and acoustic diffusion in studio treatment, and describe a situation where each would be the preferred choice.",
+      "sampleAnswer": "Acoustic absorption converts sound energy into heat using porous materials (such as rockwool panels or acoustic foam), reducing reflections and the overall reverberant energy in a room. It is preferred in vocal booths and control rooms where a dry, controlled acoustic is needed. Acoustic diffusion scatters sound reflections in many directions without removing energy, using surfaces with varied depths (such as polycylindrical or quadratic residue diffusers). Diffusion is preferred in live rooms and performance spaces where you want to reduce flutter echoes and harsh reflections while maintaining a sense of liveliness and ambience.",
+      "keyPoints": [
+        "absorption converts sound energy to heat using porous materials",
+        "absorption reduces reflections and reverberant energy",
+        "diffusion scatters reflections without removing energy",
+        "diffusion uses surfaces with varied depth profiles",
+        "absorption preferred for dead/controlled spaces (vocal booths)",
+        "diffusion preferred where liveliness is desired (live rooms)"
+      ],
+      "explanation": "A well-treated studio uses both absorption and diffusion strategically. Over-absorbing a room creates a dead, uncomfortable acoustic that can feel claustrophobic and make it difficult for musicians to perform naturally. Combining absorption (to control low-mid buildup and first reflections) with diffusion (to maintain a sense of space) creates a balanced acoustic environment suitable for both recording and critical listening."
+    },
+    {
+      "id": "recording-short-05",
+      "type": "short",
+      "question": "A student is recording an acoustic guitar in a home studio and notices the recording sounds thin and boxy. Explain two likely causes of this problem and suggest a practical solution for each.",
+      "sampleAnswer": "First cause: the microphone may be pointed directly at the sound hole, which produces a boomy, resonant low-mid frequency (the Helmholtz resonance of the guitar body) that masks the natural tonal balance — the perceived 'boxiness'. Solution: reposition the microphone to aim at the 12th fret area, where the string overtones and body resonance are more balanced, producing a fuller, more natural sound. Second cause: the untreated room is producing strong early reflections from nearby walls that combine with the direct sound, causing comb filtering (frequency cancellation) that thins out the tone. Solution: add absorption panels or even a duvet behind the microphone position and to the sides to reduce first reflections reaching the mic.",
+      "keyPoints": [
+        "mic aimed at sound hole captures boomy Helmholtz resonance",
+        "repositioning to 12th fret gives a more balanced tone",
+        "untreated room reflections cause comb filtering / thinness",
+        "adding absorption reduces problematic reflections",
+        "distance from walls affects reflection timing and severity"
+      ],
+      "explanation": "Home studio acoustics are the most common source of recording problems. The guitar's sound hole radiates strong low-mid energy that can overwhelm close microphones — pointing slightly away captures a more balanced frequency spectrum. Room reflections arriving within a few milliseconds of the direct sound create destructive interference at certain frequencies, thinning the tone. Simple treatment (absorption at first reflection points) dramatically improves recording quality without expensive studio construction."
     }
   ]
 }

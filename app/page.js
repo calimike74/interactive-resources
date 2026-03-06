@@ -6,6 +6,7 @@ import { theme, typography, borderRadius, spacing } from '@/lib/theme';
 import LiquidHero from '@/components/LiquidHero';
 import TopicCard from '@/components/TopicCard';
 import BottomTabBar from '@/components/BottomTabBar';
+import ProgressDashboard from '@/components/ProgressDashboard';
 
 // Mode descriptions shown under the hero
 const MODE_INFO = {
@@ -97,21 +98,9 @@ export default function ResourcesHub() {
                     </p>
                 </div>
 
-                {/* Progress tab — placeholder */}
+                {/* Progress tab — dashboard */}
                 {activeTab === 'progress' ? (
-                    <div
-                        style={{
-                            background: t.bg.primary,
-                            borderRadius: borderRadius.xl,
-                            border: `1px dashed ${t.border.medium}`,
-                            padding: `${spacing[12]} ${spacing[6]}`,
-                            textAlign: 'center',
-                        }}
-                    >
-                        <p style={{ color: t.text.tertiary, fontSize: typography.size.sm, fontStyle: 'italic' }}>
-                            Progress tracking coming soon
-                        </p>
-                    </div>
+                    <ProgressDashboard />
                 ) : !isLoaded ? (
                     /* Skeleton loading */
                     <div

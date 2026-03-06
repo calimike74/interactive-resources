@@ -147,6 +147,104 @@
         "high-frequency damping can warm the reverb so it sits behind the vocal"
       ],
       "explanation": "The main challenge is adding space without sacrificing intelligibility. Pre-delay (20–40ms) lets the vocal attack land cleanly before the reverb arrives — exploiting the Haas effect to maintain presence. A lower wet signal level in the mix keeps reverb as a background texture. A shorter decay time prevents the reverb tail from masking the next syllable. Damping high frequencies in the tail also pushes the reverb perceptually further back, leaving spectral space for the bright vocal."
+    },
+    {
+      "id": "reverb-mcq-07",
+      "type": "mcq",
+      "question": "A chorus effect and a phaser both create movement in a sound. What is the key difference in how they achieve this?",
+      "options": [
+        "A chorus modulates the pitch of a delayed copy, while a phaser uses an all-pass filter to shift phase at specific frequencies",
+        "A chorus uses feedback to create resonant peaks, while a phaser uses comb filtering",
+        "A chorus operates only on high frequencies, while a phaser affects the full spectrum",
+        "A chorus requires a figure-of-8 microphone configuration, while a phaser uses mid-side processing"
+      ],
+      "correctIndex": 0,
+      "explanation": "Chorus duplicates the signal and modulates the delay time of the copy (typically 20–50ms) with an LFO, causing slight pitch variations that thicken the sound. A phaser uses a chain of all-pass filters whose centre frequencies are swept by an LFO. The all-pass filters shift the phase at specific points in the spectrum, creating notches when summed with the dry signal. Chorus creates detuning; phaser creates sweeping spectral notches."
+    },
+    {
+      "id": "reverb-mcq-08",
+      "type": "mcq",
+      "question": "What is the defining characteristic of a ping-pong delay?",
+      "options": [
+        "The delay repeats alternate between the left and right stereo channels",
+        "The delay time randomly varies to simulate natural room reflections",
+        "Two separate delay lines are summed to mono before output",
+        "The feedback path includes a pitch shifter to create ascending repeats"
+      ],
+      "correctIndex": 0,
+      "explanation": "Ping-pong delay routes each successive repeat to the opposite stereo channel — left, right, left, right — creating a bouncing spatial effect. This is widely used on guitars, synths, and vocals to add rhythmic stereo movement. The delay time, feedback, and panning width can usually be adjusted independently."
+    },
+    {
+      "id": "reverb-mcq-09",
+      "type": "mcq",
+      "question": "Tape delay produces a characteristically warm, slightly degraded repeat. Which of the following best explains why?",
+      "options": [
+        "The feedback loop includes a digital bit-crusher that reduces bit depth",
+        "The tape machine's frequency response is perfectly flat, removing all colouration",
+        "Each repeat is re-recorded to tape, accumulating high-frequency loss, saturation, and wow/flutter",
+        "Tape delay uses convolution processing based on impulse responses of famous studios"
+      ],
+      "correctIndex": 2,
+      "explanation": "In a tape delay unit (such as a Roland RE-201 Space Echo), the signal is recorded to a loop of magnetic tape and played back by one or more heads. Each feedback pass re-records the signal, and the tape's limited high-frequency response, gentle saturation, and mechanical wow/flutter progressively degrade the repeats. This gives tape delay its signature warm, organic character that digital delays often emulate."
+    },
+    {
+      "id": "reverb-mcq-10",
+      "type": "mcq",
+      "question": "Gated reverb, famously used on Phil Collins' drums in the 1980s, is created by:",
+      "options": [
+        "Applying a long reverb and then using a noise gate to abruptly cut the tail after a set threshold",
+        "Recording drums in a very small, dead room with no reflections",
+        "Using a plate reverb with the damping set to maximum",
+        "Placing a compressor before the reverb to reduce the dynamic range of the input"
+      ],
+      "correctIndex": 0,
+      "explanation": "Gated reverb applies a large, explosive reverb (often a room or plate) to the signal, then uses a noise gate to abruptly silence the reverb tail once it falls below a threshold. This produces a dramatic, punchy burst of reverb that cuts off sharply rather than decaying naturally. The technique was pioneered by Hugh Padgham and Peter Gabriel and became a defining sound of 1980s pop and rock production."
+    },
+    {
+      "id": "reverb-num-04",
+      "type": "numeric",
+      "question": "A producer wants a tempo-synced delay at 140 BPM, set to a dotted crotchet subdivision (1.5 beats). Calculate the delay time in milliseconds. Round to the nearest whole number.",
+      "answer": 643,
+      "tolerance": 1,
+      "unit": "ms",
+      "explanation": "One beat at 140 BPM = 60,000 ÷ 140 = 428.57ms. A dotted crotchet = 1.5 beats, so delay time = 428.57 × 1.5 = 642.86ms ≈ 643ms. Dotted subdivisions create a syncopated, rolling feel because the repeats fall between the main beats — a very common creative choice in electronic and pop production."
+    },
+    {
+      "id": "reverb-num-05",
+      "type": "numeric",
+      "question": "A spring reverb unit contains a spring that is 25 cm long. If sound travels through the spring at approximately 50 m/s, how many milliseconds does it take for the signal to travel the full length of the spring?",
+      "answer": 5,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "Time = distance ÷ speed = 0.25m ÷ 50 m/s = 0.005 seconds = 5ms. In a spring reverb, a transducer excites one end of a coiled spring and a pickup captures vibrations at the other end. The signal bounces back and forth along the spring, creating the characteristic 'boing' and metallic reverb sound found in guitar amplifiers and vintage recording equipment."
+    },
+    {
+      "id": "reverb-short-04",
+      "type": "short",
+      "question": "Explain what the 'diffusion' parameter controls on a reverb unit and describe how low and high diffusion settings affect the reverb character.",
+      "sampleAnswer": "Diffusion controls how quickly the individual early reflections smear together into a smooth, dense reverb tail. At high diffusion, reflections blend rapidly into a thick, smooth wash — ideal for vocals and pads where a seamless reverb is desired. At low diffusion, individual reflections remain more distinct and audible, creating a more granular, echoey texture where discrete bounces can be heard. Low diffusion can sound more realistic for certain room simulations but may be distracting on busy arrangements.",
+      "keyPoints": [
+        "diffusion controls how rapidly reflections blend into a smooth tail",
+        "high diffusion = smooth, dense reverb wash",
+        "low diffusion = more distinct individual reflections",
+        "high diffusion suits vocals and sustained sounds",
+        "low diffusion can sound more realistic but potentially distracting"
+      ],
+      "explanation": "Diffusion is one of the less obvious reverb parameters but has a significant impact on the texture of the reverb. In real rooms, diffusion is affected by irregular surfaces (bookshelves, diffuser panels) that scatter reflections in many directions. Smooth walls create more distinct, specular reflections (low diffusion). Acousticians use dedicated diffuser panels to increase diffusion, creating a more even-sounding reverberant field."
+    },
+    {
+      "id": "reverb-short-05",
+      "type": "short",
+      "question": "Describe how a convolution reverb captures the acoustic character of a real space using an impulse response, and explain one limitation of convolution reverb compared to algorithmic reverb.",
+      "sampleAnswer": "To capture an impulse response (IR), a short, broadband sound (such as a starter pistol, a balloon pop, or a sine sweep) is played in the target space and the room's acoustic response is recorded. This recording — containing the full pattern of reflections, decay, and frequency absorption — becomes the IR file. Convolution reverb then mathematically convolves the dry input signal with this IR, effectively placing the audio into that space. A key limitation is that convolution reverb is static: the IR captures only one fixed state of the room, so parameters like decay time and room size cannot be freely adjusted in real time the way algorithmic reverb allows.",
+      "keyPoints": [
+        "impulse response captured by playing a short broadband sound in the space",
+        "room's acoustic response is recorded as the IR",
+        "dry signal is mathematically convolved with the IR",
+        "produces highly realistic reverb based on a real space",
+        "limitation: parameters are fixed — cannot freely adjust decay time or room size"
+      ],
+      "explanation": "Convolution reverb is prized for realism — you can place a vocal in the Sydney Opera House or a medieval cathedral using an IR recorded there. However, because the IR is a snapshot of one specific acoustic state, you cannot independently adjust parameters like early/late balance or decay time without artefacts. Algorithmic reverbs, while less realistic, offer full parametric control, making them more flexible for creative sound design."
     }
   ]
 }
