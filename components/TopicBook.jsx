@@ -51,120 +51,170 @@ function drawCover(canvas, topic) {
     const rand = seededRandom(topic.id);
     const { r, g, b } = hexToRgb(topic.colour);
 
-    // Background gradient
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 1)`);
-    grad.addColorStop(0.6, `rgba(${Math.max(r - 40, 0)}, ${Math.max(g - 40, 0)}, ${Math.max(b - 40, 0)}, 1)`);
-    grad.addColorStop(1, `rgba(${Math.max(r - 80, 0)}, ${Math.max(g - 80, 0)}, ${Math.max(b - 80, 0)}, 1)`);
+    // Very dark background with subtle topic colour tint (matches demo aesthetic)
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, `rgb(${Math.floor(r * 0.15 + 10)}, ${Math.floor(g * 0.12 + 8)}, ${Math.floor(b * 0.18 + 20)})`);
+    grad.addColorStop(0.5, `rgb(${Math.floor(r * 0.08 + 6)}, ${Math.floor(g * 0.06 + 5)}, ${Math.floor(b * 0.1 + 12)})`);
+    grad.addColorStop(1, `rgb(${Math.floor(r * 0.05 + 4)}, ${Math.floor(g * 0.04 + 3)}, ${Math.floor(b * 0.06 + 8)})`);
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W, H);
 
-    // Pattern layer
+    // Subtle grid underlay
+    ctx.strokeStyle = `rgba(255,255,255,0.03)`;
+    ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 20) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y < H; y += 20) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    // Pattern layer — high visibility
     const pattern = getPatternType(topic.id);
-    ctx.globalAlpha = 0.18;
+    const accentRgba = (a) => `rgba(${r}, ${g}, ${b}, ${a})`;
 
     if (pattern === 'waveform') {
-        // Sine-ish waveforms
-        for (let wave = 0; wave < 3; wave++) {
+        // Layered waveforms with colour
+        for (let wave = 0; wave < 5; wave++) {
             ctx.beginPath();
-            const yBase = H * 0.3 + wave * H * 0.15;
-            const amp = 12 + rand() * 20;
-            const freq = 0.02 + rand() * 0.03;
+            const yBase = H * 0.2 + wave * H * 0.12;
+            const amp = 15 + rand() * 25;
+            const freq = 0.015 + rand() * 0.025;
+            const phase = wave * 2.1;
             ctx.moveTo(0, yBase);
             for (let x = 0; x <= W; x += 2) {
-                const y = yBase + Math.sin(x * freq + wave * 2) * amp;
+                const y = yBase + Math.sin(x * freq + phase) * amp + Math.sin(x * freq * 2.3 + phase * 0.7) * amp * 0.3;
                 ctx.lineTo(x, y);
             }
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 1.5 + rand();
+            ctx.strokeStyle = accentRgba(0.15 + wave * 0.06);
+            ctx.lineWidth = 2 + rand() * 1.5;
             ctx.stroke();
         }
     } else if (pattern === 'spectrum') {
-        // Vertical frequency bars
-        const barCount = 18 + Math.floor(rand() * 10);
-        const barW = W / (barCount * 1.8);
+        // Bold frequency spectrum bars
+        const barCount = 20;
+        const gap = 4;
+        const totalGap = gap * (barCount - 1);
+        const barW = (W - 40 - totalGap) / barCount;
         for (let i = 0; i < barCount; i++) {
-            const barH = H * 0.15 + rand() * H * 0.45;
-            const x = (W / barCount) * i + barW * 0.4;
-            const y = H * 0.65 - barH;
-            ctx.fillStyle = '#fff';
+            const barH = H * 0.1 + rand() * H * 0.5 + Math.sin(i * 0.5) * H * 0.12;
+            const x = 20 + i * (barW + gap);
+            const y = H * 0.7 - barH;
+            const barGrad = ctx.createLinearGradient(x, y, x, y + barH);
+            barGrad.addColorStop(0, accentRgba(0.5));
+            barGrad.addColorStop(1, accentRgba(0.08));
+            ctx.fillStyle = barGrad;
             ctx.fillRect(x, y, barW, barH);
         }
+        // Horizontal frequency lines
+        ctx.strokeStyle = `rgba(255,255,255,0.04)`;
+        ctx.lineWidth = 1;
+        for (let y = H * 0.15; y < H * 0.75; y += H * 0.08) {
+            ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(W - 20, y); ctx.stroke();
+        }
     } else if (pattern === 'knobs') {
-        // Dial/knob circles
-        for (let i = 0; i < 5; i++) {
-            const cx = W * 0.2 + rand() * W * 0.6;
-            const cy = H * 0.25 + rand() * H * 0.4;
-            const radius = 10 + rand() * 18;
+        // Larger, more prominent knobs in a grid
+        const positions = [];
+        for (let row = 0; row < 2; row++) {
+            for (let col = 0; col < 3; col++) {
+                positions.push({
+                    cx: W * 0.22 + col * W * 0.28,
+                    cy: H * 0.22 + row * H * 0.28,
+                });
+            }
+        }
+        positions.forEach(({ cx, cy }) => {
+            const radius = 22 + rand() * 10;
+            // Outer ring
             ctx.beginPath();
             ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            // Indicator tick
-            const angle = rand() * Math.PI * 1.5 + Math.PI * 0.75;
-            ctx.beginPath();
-            ctx.moveTo(cx + Math.cos(angle) * radius * 0.5, cy + Math.sin(angle) * radius * 0.5);
-            ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+            ctx.strokeStyle = accentRgba(0.2);
             ctx.lineWidth = 2;
             ctx.stroke();
-        }
-    } else if (pattern === 'circuit') {
-        // Circuit-trace lines
-        for (let i = 0; i < 8; i++) {
+            // Arc indicator
+            const startAngle = Math.PI * 0.75;
+            const endAngle = startAngle + rand() * Math.PI * 1.3;
             ctx.beginPath();
-            let x = rand() * W;
-            let y = rand() * H * 0.7 + H * 0.1;
-            ctx.moveTo(x, y);
-            for (let seg = 0; seg < 4; seg++) {
-                if (rand() > 0.5) {
-                    x += (rand() - 0.3) * 60;
-                } else {
-                    y += (rand() - 0.3) * 40;
-                }
-                ctx.lineTo(Math.max(0, Math.min(W, x)), Math.max(0, Math.min(H, y)));
-            }
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 1 + rand();
+            ctx.arc(cx, cy, radius, startAngle, endAngle);
+            ctx.strokeStyle = accentRgba(0.5);
+            ctx.lineWidth = 3;
             ctx.stroke();
-            // Node dots at endpoints
+            // Centre dot
             ctx.beginPath();
-            ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-            ctx.fillStyle = '#fff';
+            ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,0.2)`;
+            ctx.fill();
+            // Tick marks around the arc
+            for (let a = startAngle; a < startAngle + Math.PI * 1.5; a += Math.PI * 0.15) {
+                ctx.beginPath();
+                ctx.moveTo(cx + Math.cos(a) * (radius + 4), cy + Math.sin(a) * (radius + 4));
+                ctx.lineTo(cx + Math.cos(a) * (radius + 7), cy + Math.sin(a) * (radius + 7));
+                ctx.strokeStyle = `rgba(255,255,255,0.08)`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+        });
+    } else if (pattern === 'circuit') {
+        // Circuit traces with right-angle paths and node dots
+        ctx.strokeStyle = accentRgba(0.3);
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < 14; i++) {
+            let x = rand() * W;
+            let y = rand() * H * 0.75 + H * 0.05;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            for (let seg = 0; seg < 5; seg++) {
+                const nx = x + (rand() - 0.5) * 100;
+                const ny = y + (rand() - 0.5) * 60;
+                // Right-angle path
+                ctx.lineTo(nx, y);
+                ctx.lineTo(nx, ny);
+                x = nx;
+                y = ny;
+            }
+            ctx.stroke();
+            // Node dots
+            ctx.fillStyle = accentRgba(0.5);
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
             ctx.fill();
         }
     } else if (pattern === 'binary') {
-        // Staircase / digital steps
+        // Background binary text
+        ctx.font = '12px monospace';
+        ctx.fillStyle = `rgba(255,255,255,0.04)`;
+        for (let y = 12; y < H; y += 16) {
+            let line = '';
+            for (let c = 0; c < 30; c++) line += rand() > 0.5 ? '1' : '0';
+            ctx.fillText(line, 8, y);
+        }
+        // Highlighted column
+        ctx.fillStyle = accentRgba(0.06);
+        ctx.fillRect(W * 0.25, 0, W * 0.2, H);
+        // ADC staircase — bold and prominent
         ctx.beginPath();
-        let x = 0;
-        let y = H * 0.35 + rand() * H * 0.1;
+        let x = W * 0.1;
+        let y = H * 0.65;
         ctx.moveTo(x, y);
-        while (x < W) {
-            const stepW = 8 + rand() * 20;
+        for (let s = 0; s < 12; s++) {
+            const stepW = 18 + rand() * 10;
+            const stepH = 18 + rand() * 15;
             ctx.lineTo(x + stepW, y);
             x += stepW;
-            const stepH = (rand() > 0.5 ? 1 : -1) * (8 + rand() * 25);
-            y = Math.max(H * 0.15, Math.min(H * 0.65, y + stepH));
+            y -= stepH;
+            y = Math.max(H * 0.1, y);
             ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = accentRgba(0.6);
+        ctx.lineWidth = 2.5;
         ctx.stroke();
-        // Scattered 0s and 1s
-        ctx.font = '10px monospace';
-        ctx.fillStyle = '#fff';
-        for (let i = 0; i < 20; i++) {
-            ctx.fillText(rand() > 0.5 ? '1' : '0', rand() * W, H * 0.7 + rand() * H * 0.2);
-        }
     }
-
-    ctx.globalAlpha = 1;
 
     // Noise texture
     const imageData = ctx.getImageData(0, 0, W, H);
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
-        const noise = (rand() - 0.5) * 18;
+        const noise = (rand() - 0.5) * 14;
         data[i] += noise;
         data[i + 1] += noise;
         data[i + 2] += noise;
@@ -172,27 +222,35 @@ function drawCover(canvas, topic) {
     ctx.putImageData(imageData, 0, 0);
 
     // Bottom gradient overlay for text readability
-    const textGrad = ctx.createLinearGradient(0, H * 0.55, 0, H);
+    const textGrad = ctx.createLinearGradient(0, H * 0.45, 0, H);
     textGrad.addColorStop(0, 'rgba(0,0,0,0)');
-    textGrad.addColorStop(1, 'rgba(0,0,0,0.45)');
+    textGrad.addColorStop(0.5, 'rgba(0,0,0,0.3)');
+    textGrad.addColorStop(1, 'rgba(0,0,0,0.85)');
     ctx.fillStyle = textGrad;
     ctx.fillRect(0, 0, W, H);
 
-    // Spec ref — small mono text top-right
-    ctx.globalAlpha = 0.7;
-    ctx.font = `500 11px ${typography.fontFamilyMono}`;
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'right';
-    ctx.fillText(topic.specRef, W - 12, 22);
-
-    // Topic name — bottom-left
-    ctx.globalAlpha = 1;
+    // Spec ref label with background pill
+    const specText = `TOPIC ${topic.specRef}`;
+    ctx.font = `600 ${Math.round(W * 0.035)}px ${typography.fontFamilyMono}`;
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#fff';
-    ctx.font = `600 15px ${typography.fontFamily}`;
+    const specMetrics = ctx.measureText(specText);
+    const pillX = 20;
+    const pillY = H - 90;
+    const pillW = specMetrics.width + 16;
+    const pillH = Math.round(W * 0.035) + 10;
+    ctx.fillStyle = accentRgba(0.25);
+    ctx.beginPath();
+    ctx.roundRect(pillX, pillY - pillH + 4, pillW, pillH, 4);
+    ctx.fill();
+    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx.fillText(specText, pillX + 8, pillY);
 
-    // Word-wrap the title
-    const maxWidth = W - 24;
+    // Topic name — bold, large
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `700 ${Math.round(W * 0.06)}px ${typography.fontFamily}`;
+    ctx.textAlign = 'left';
+
+    const maxWidth = W - 40;
     const words = topic.name.split(' ');
     const lines = [];
     let line = '';
@@ -207,11 +265,14 @@ function drawCover(canvas, topic) {
     }
     if (line) lines.push(line);
 
-    const lineH = 19;
-    const textY = H - 14 - (lines.length - 1) * lineH;
+    const lineH = Math.round(W * 0.07);
+    const textY = H - 20 - (lines.length - 1) * lineH;
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 6;
     lines.forEach((l, i) => {
-        ctx.fillText(l, 12, textY + i * lineH);
+        ctx.fillText(l, 20, textY + i * lineH);
     });
+    ctx.shadowBlur = 0;
 }
 
 // --- Book dimensions ---
