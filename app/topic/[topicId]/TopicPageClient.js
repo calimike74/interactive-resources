@@ -121,6 +121,12 @@ export default function TopicPageClient({ topic, resources }) {
                                 marginBottom: spacing[2],
                                 lineHeight: typography.lineHeight.tight,
                                 textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                                backgroundImage: 'linear-gradient(90deg, #ffffff 0%, #ffffff 40%, rgba(255,255,255,0.5) 50%, #ffffff 60%, #ffffff 100%)',
+                                backgroundSize: '200% 100%',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                animation: 'shimmerSweep 3s ease-in-out infinite',
                             }}
                         >
                             {topic.name}
@@ -195,6 +201,12 @@ export default function TopicPageClient({ topic, resources }) {
                                 color: t.text.primary,
                                 marginBottom: spacing[2],
                                 lineHeight: typography.lineHeight.tight,
+                                backgroundImage: `linear-gradient(90deg, ${t.text.primary} 0%, ${t.text.primary} 40%, ${t.text.tertiary} 50%, ${t.text.primary} 60%, ${t.text.primary} 100%)`,
+                                backgroundSize: '200% 100%',
+                                WebkitBackgroundClip: 'text',
+                                backgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                animation: 'shimmerSweep 3s ease-in-out infinite',
                             }}
                         >
                             {topic.name}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { theme, glass, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 
@@ -13,6 +13,42 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
     const hasResources = !comingSoon && topic.resourceIds.length > 0;
     const resourceCount = topic.resourceIds.length;
 
+    // Scramble effect state
+    const [displayName, setDisplayName] = useState(topic.name);
+    const scrambleRef = useRef(null);
+    const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    const triggerScramble = useCallback(() => {
+        if (!hasResources || scrambleRef.current) return;
+        const original = topic.name;
+        const duration = 400; // ms total
+        const interval = 30;
+        const steps = Math.floor(duration / interval);
+        let step = 0;
+        scrambleRef.current = setInterval(() => {
+            step++;
+            const progress = step / steps;
+            // Characters resolve left-to-right as progress increases
+            const resolved = Math.floor(progress * original.length);
+            const result = original.split('').map((ch, i) => {
+                if (i < resolved) return ch;
+                if (ch === ' ') return ' ';
+                return CHARS[Math.floor(Math.random() * CHARS.length)];
+            }).join('');
+            setDisplayName(result);
+            if (step >= steps) {
+                clearInterval(scrambleRef.current);
+                scrambleRef.current = null;
+                setDisplayName(original);
+            }
+        }, interval);
+    }, [hasResources, topic.name]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => { if (scrambleRef.current) clearInterval(scrambleRef.current); };
+    }, []);
+
     const handleMouseMove = useCallback((e) => {
         const rect = cardRef.current?.getBoundingClientRect();
         if (!rect) return;
@@ -22,7 +58,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
     const card = (
         <article
             ref={cardRef}
-            onMouseEnter={() => setIsHovered(true)}
+            onMouseEnter={() => { setIsHovered(true); triggerScramble(); }}
             onMouseLeave={() => setIsHovered(false)}
             onMouseMove={handleMouseMove}
             style={{
@@ -113,7 +149,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                         lineHeight: typography.lineHeight.tight,
                     }}
                 >
-                    {topic.name}
+                    {displayName}
                 </h3>
 
                 {/* Description */}

@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getAllTopicDefs } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing } from '@/lib/theme';
 import LiquidHero from '@/components/LiquidHero';
 import TopicCard from '@/components/TopicCard';
+import TopicBookShelf from '@/components/TopicBookShelf';
 import BottomTabBar from '@/components/BottomTabBar';
 import ProgressDashboard from '@/components/ProgressDashboard';
 
@@ -96,6 +97,7 @@ export default function ResourcesHub() {
                     >
                         {mode.subtitle}
                     </p>
+                    {activeTab === 'revise' && <TypewriterTeaser t={t} />}
                 </div>
 
                 {/* Progress tab — dashboard */}
@@ -116,6 +118,13 @@ export default function ResourcesHub() {
                     </div>
                 ) : (
                     <>
+                        {/* Book shelf — visual browse on explore tab */}
+                        {activeTab === 'explore' && activeTopics.length > 0 && (
+                            <div style={{ marginBottom: spacing[8] }}>
+                                <TopicBookShelf topics={activeTopics} />
+                            </div>
+                        )}
+
                         {/* Active topics */}
                         {activeTopics.length > 0 && (
                             <div
@@ -174,6 +183,79 @@ export default function ResourcesHub() {
             {/* Bottom Tab Bar */}
             <BottomTabBar activeTab={activeTab} onTabChange={setActiveTab} />
         </div>
+    );
+}
+
+const REVISION_QUESTIONS = [
+    'What is the Nyquist frequency?',
+    'Define quantisation error.',
+    'Explain the role of a compressor.',
+    'How does FM synthesis work?',
+    'What causes comb filtering?',
+    'Describe the purpose of phantom power.',
+];
+
+function TypewriterTeaser({ t }) {
+    const [displayed, setDisplayed] = useState('');
+    const [questionIdx, setQuestionIdx] = useState(0);
+    const [charIdx, setCharIdx] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const timerRef = useRef(null);
+
+    useEffect(() => {
+        const question = REVISION_QUESTIONS[questionIdx];
+
+        if (!isDeleting && charIdx <= question.length) {
+            timerRef.current = setTimeout(() => {
+                setDisplayed(question.slice(0, charIdx));
+                if (charIdx === question.length) {
+                    // Pause before deleting
+                    timerRef.current = setTimeout(() => setIsDeleting(true), 1800);
+                } else {
+                    setCharIdx(c => c + 1);
+                }
+            }, 45);
+        } else if (isDeleting && charIdx >= 0) {
+            timerRef.current = setTimeout(() => {
+                setDisplayed(question.slice(0, charIdx));
+                if (charIdx === 0) {
+                    setIsDeleting(false);
+                    setQuestionIdx((questionIdx + 1) % REVISION_QUESTIONS.length);
+                } else {
+                    setCharIdx(c => c - 1);
+                }
+            }, 25);
+        }
+
+        return () => clearTimeout(timerRef.current);
+    }, [charIdx, isDeleting, questionIdx]);
+
+    return (
+        <p
+            style={{
+                fontFamily: typography.fontFamilyMono,
+                color: t.text.tertiary,
+                fontSize: typography.size.sm,
+                marginTop: spacing[3],
+                minHeight: '1.5em',
+            }}
+            aria-live="polite"
+            aria-label="Sample revision question"
+        >
+            {displayed}
+            <span
+                style={{
+                    display: 'inline-block',
+                    width: '2px',
+                    height: '1em',
+                    background: t.accent.primary,
+                    marginLeft: '2px',
+                    verticalAlign: 'text-bottom',
+                    animation: 'blink 1s step-end infinite',
+                }}
+                aria-hidden="true"
+            />
+        </p>
     );
 }
 

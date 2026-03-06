@@ -100,6 +100,18 @@ a[href] article:active {
   transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+/* Typewriter cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Shimmer sweep for headings */
+@keyframes shimmerSweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
 /* Context menu entrance */
 @keyframes contextMenuIn {
   from {
