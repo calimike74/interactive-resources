@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import { getAvailableTopics } from '@/lib/questions';
 import { getQuizProgress } from '@/lib/quiz-persistence';
+import { hasLearnContent } from '@/lib/learn/topics';
 
 // Type labels for resource badges
 const typeLabels = {
@@ -227,6 +228,79 @@ export default function TopicPageClient({ topic, resources }) {
 
             {/* Content Sections */}
             <main style={{ maxWidth: '1200px', margin: '0 auto', padding: spacing[8] }}>
+                {/* Learn Section */}
+                <section style={{ marginBottom: spacing[10] }}>
+                    <h2
+                        style={{
+                            fontSize: typography.size['2xl'],
+                            fontWeight: typography.weight.semibold,
+                            color: t.text.primary,
+                            marginBottom: spacing[4],
+                        }}
+                    >
+                        Learn
+                    </h2>
+                    {hasLearnContent(topic.id) ? (
+                        <Link
+                            href={`/learn/${topic.id}`}
+                            style={{ textDecoration: 'none' }}
+                        >
+                            <div
+                                style={{
+                                    background: glass.bg,
+                                    backdropFilter: 'blur(' + glass.blur + ')',
+                                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                                    borderRadius: borderRadius.xl,
+                                    border: `1px solid ${topic.colour}40`,
+                                    padding: `${spacing[6]} ${spacing[6]}`,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    cursor: 'pointer',
+                                    transition: `all ${transitions.normal} ${transitions.easing}`,
+                                    boxShadow: glass.shadow,
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.borderColor = topic.colour;
+                                    e.currentTarget.style.boxShadow = glass.shadowHover;
+                                    e.currentTarget.style.transform = 'translateY(-1px)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.borderColor = topic.colour + '40';
+                                    e.currentTarget.style.boxShadow = glass.shadow;
+                                    e.currentTarget.style.transform = 'none';
+                                }}
+                            >
+                                <div>
+                                    <h3 style={{
+                                        fontSize: typography.size.lg,
+                                        fontWeight: typography.weight.semibold,
+                                        color: t.text.primary,
+                                        marginBottom: spacing[1],
+                                    }}>
+                                        Start Learning
+                                    </h3>
+                                    <p style={{
+                                        fontSize: typography.size.sm,
+                                        color: t.text.secondary,
+                                    }}>
+                                        Step-by-step walkthrough with animated diagrams and inline quizzes
+                                    </p>
+                                </div>
+                                <span style={{
+                                    color: topic.colour,
+                                    fontSize: typography.size.xl,
+                                    fontWeight: typography.weight.semibold,
+                                }}>
+                                    →
+                                </span>
+                            </div>
+                        </Link>
+                    ) : (
+                        <ComingSoonPlaceholder label="Guided lessons coming soon" theme={t} />
+                    )}
+                </section>
+
                 {/* Explore Section — Interactive Tools */}
                 <section style={{ marginBottom: spacing[10] }}>
                     <h2
@@ -403,20 +477,6 @@ export default function TopicPageClient({ topic, resources }) {
                     )}
                 </section>
 
-                {/* Learn Section — Placeholder for v2.0 */}
-                <section>
-                    <h2
-                        style={{
-                            fontSize: typography.size['2xl'],
-                            fontWeight: typography.weight.semibold,
-                            color: t.text.primary,
-                            marginBottom: spacing[4],
-                        }}
-                    >
-                        Learn
-                    </h2>
-                    <ComingSoonPlaceholder label="Guided lessons coming soon" theme={t} />
-                </section>
             </main>
         </div>
     );

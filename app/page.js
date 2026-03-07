@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { getAllTopicDefs } from '@/lib/topics';
+import { hasLearnContent } from '@/lib/learn/topics';
 import { theme, typography, borderRadius, spacing } from '@/lib/theme';
 import LiquidHero from '@/components/LiquidHero';
 import TopicCard from '@/components/TopicCard';
@@ -44,7 +45,7 @@ export default function ResourcesHub() {
     // Determine which topics have content for the current mode
     const getHasContent = (topic) => {
         if (activeTab === 'explore') return topic.resourceIds.length > 0;
-        // Learn and Revise have no content yet — all coming soon
+        if (activeTab === 'learn') return hasLearnContent(topic.id);
         return false;
     };
 
