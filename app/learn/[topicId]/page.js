@@ -1,6 +1,6 @@
-import { getLearnTopic, getLearnTopicIds } from '@/lib/learn/topics';
+import { getLearnLessons, getLearnTopicIds } from '@/lib/learn/topics';
 import { getTopic } from '@/lib/topics';
-import LearnPageClient from './LearnPageClient';
+import LearnPickerClient from './LearnPickerClient';
 
 export function generateStaticParams() {
     return getLearnTopicIds().map(id => ({ topicId: id }));
@@ -8,25 +8,22 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
     const { topicId } = await params;
-    const learnTopic = getLearnTopic(topicId);
-
-    if (!learnTopic) {
-        return { title: 'Lesson Not Found' };
-    }
+    const topic = getTopic(topicId);
 
     return {
-        title: `${learnTopic.title} — ${learnTopic.subtitle}`,
-        description: learnTopic.description,
+        title: topic ? `Learn — ${topic.name}` : 'Learn',
+        description: topic ? `Guided lessons for ${topic.name}` : 'Guided lessons',
     };
 }
 
-export default async function LearnPage({ params }) {
+export default async function LearnPickerPage({ params }) {
     const { topicId } = await params;
-    const learnTopic = getLearnTopic(topicId);
+    const topic = getTopic(topicId);
+    const lessons = getLearnLessons(topicId);
 
-    if (!learnTopic) {
-        return <div>Lesson not found</div>;
+    if (!topic) {
+        return <div>Topic not found</div>;
     }
 
-    return <LearnPageClient topic={learnTopic} parentTopicId={topicId} />;
+    return <LearnPickerClient topic={topic} lessons={lessons} />;
 }

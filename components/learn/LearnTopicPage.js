@@ -31,12 +31,12 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
                 borderBottom: '1px solid #E5E7EB',
             }}>
                 <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-                    <Link href={`/topic/${parentTopicId}`} style={{
+                    <Link href={`/learn/${parentTopicId}`} style={{
                         fontSize: '0.8125rem',
                         color: '#6B7280',
                         textDecoration: 'none',
                     }}>
-                        &larr; Back to topic
+                        &larr; Back to lessons
                     </Link>
 
                     <div style={{
