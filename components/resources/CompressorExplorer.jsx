@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { typography, spacing, borderRadius, transitions } from '@/lib/theme';
+import ProductionCopyButton from '@/components/ui/ProductionCopyButton';
+import { buildCompressorCopyMarkdown } from '@/lib/copy-for-ai';
 
 // ─── Design Tokens (light, warm, Ableton-inspired) ──────────────────────────
 
@@ -1439,6 +1441,29 @@ export default function CompressorExplorer() {
                                     {p.name}
                                 </button>
                             ))}
+                        </div>
+                        <div style={{ marginLeft: 'auto' }}>
+                            <ProductionCopyButton
+                                accent={SECTION_ACCENTS[currentSection] || COLORS.easy}
+                                buildContent={(mode) => {
+                                    const matchedPreset = PRESETS.find(p =>
+                                        p.threshold === threshold && p.ratio === ratio && p.attack === attack && p.release === release
+                                    );
+                                    const quizResults = quizSubmitted ? QUIZ_QUESTIONS.map((q, i) => ({
+                                        question: q.question,
+                                        studentAnswer: q.options[quizAnswers[i]] || '(none)',
+                                        correctAnswer: q.options[q.correct],
+                                        correct: quizAnswers[i] === q.correct,
+                                        explanation: q.explanation,
+                                    })) : null;
+                                    return buildCompressorCopyMarkdown({
+                                        threshold, ratio, attack, release, knee, makeupGain, source,
+                                        presetName: matchedPreset?.name,
+                                        quizResults,
+                                        mode,
+                                    });
+                                }}
+                            />
                         </div>
                     </div>
                 </InteractiveBox>

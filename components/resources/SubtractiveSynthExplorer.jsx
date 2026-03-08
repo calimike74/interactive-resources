@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { theme, typography, spacing, borderRadius, transitions } from '@/lib/theme';
+import ProductionCopyButton from '@/components/ui/ProductionCopyButton';
+import { buildSynthCopyMarkdown } from '@/lib/copy-for-ai';
 import Callout from '@/components/Callout';
 
 // ─── Design Tokens (light, warm, Ableton-inspired) ──────────────────────────
@@ -1207,12 +1209,36 @@ export default function SubtractiveSynthExplorer() {
                         <div style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontWeight: typography.weight.medium, marginBottom: spacing[2], textTransform: 'uppercase', letterSpacing: typography.letterSpacing.wide }}>
                             Presets
                         </div>
-                        <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap', alignItems: 'center' }}>
                             {PRESETS.map(p => (
                                 <button key={p.name} onClick={() => loadPreset(p)} style={btnStyle(false)}>
                                     {p.name}
                                 </button>
                             ))}
+                            <div style={{ marginLeft: 'auto' }}>
+                                <ProductionCopyButton
+                                    accent={COLORS.mastery || '#0891b2'}
+                                    buildContent={(mode) => {
+                                        const matchedPreset = PRESETS.find(p =>
+                                            p.waveform === waveform && p.cutoff === cutoff && p.filterType === filterType
+                                        );
+                                        const quizResults = quizSubmitted ? QUIZ_QUESTIONS.map((q, i) => ({
+                                            question: q.question,
+                                            studentAnswer: q.options[quizAnswers[i]] || '(none)',
+                                            correctAnswer: q.options[q.correct],
+                                            correct: quizAnswers[i] === q.correct,
+                                            explanation: q.explanation,
+                                        })) : null;
+                                        return buildSynthCopyMarkdown({
+                                            waveform, filterType, cutoff, resonance,
+                                            attack, decay, sustain, release, octave,
+                                            presetName: matchedPreset?.name,
+                                            quizResults,
+                                            mode,
+                                        });
+                                    }}
+                                />
+                            </div>
                         </div>
                     </div>
 

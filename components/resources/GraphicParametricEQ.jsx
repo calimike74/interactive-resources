@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import ProductionCopyButton from '@/components/ui/ProductionCopyButton';
+import { buildEQCopyMarkdown } from '@/lib/copy-for-ai';
 
 // ============================================
 // CONSTANTS
@@ -1232,7 +1234,7 @@ export default function GraphicParametricEQ() {
                                 </div>
 
                                 {/* Presets */}
-                                <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[4], flexWrap: 'wrap' }}>
+                                <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[4], flexWrap: 'wrap', alignItems: 'center' }}>
                                     {Object.entries(GRAPHIC_PRESETS).map(([key, preset]) => (
                                         <button
                                             key={key}
@@ -1251,6 +1253,30 @@ export default function GraphicParametricEQ() {
                                             {preset.name}
                                         </button>
                                     ))}
+                                    <div style={{ marginLeft: 'auto' }}>
+                                        <ProductionCopyButton
+                                            accent={t.accent.primary}
+                                            buildContent={(mode) => {
+                                                const matchedPreset = Object.values(GRAPHIC_PRESETS).find(p =>
+                                                    p.gains.every((g, i) => g === graphicGains[i])
+                                                );
+                                                const quizResults = showResults ? QUIZ_QUESTIONS.map((q, i) => ({
+                                                    question: q.question,
+                                                    studentAnswer: q.options[answers[i]] || '(none)',
+                                                    correctAnswer: q.options[q.correct],
+                                                    correct: answers[i] === q.correct,
+                                                    explanation: q.explanation,
+                                                })) : null;
+                                                return buildEQCopyMarkdown({
+                                                    bands: GRAPHIC_EQ_BANDS,
+                                                    gains: graphicGains,
+                                                    presetName: matchedPreset?.name,
+                                                    quizResults,
+                                                    mode,
+                                                });
+                                            }}
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Frequency Response */}
