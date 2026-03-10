@@ -229,8 +229,8 @@ const EXAMPLE_REVEALS = [
         topic: '1.11 EQ',
         description: 'Hover to reveal the frequency band annotations hidden beneath the EQ',
         mode: 'spotlight',
-        baseImage: '/eq-photo.png',
-        revealImage: '/eq-annotated.png',
+        baseImage: '/eq-photo.jpg',
+        revealImage: '/eq-annotated.jpg',
         maskSize: 400,
         maskShape: 'circle',
         infoPanel: {
