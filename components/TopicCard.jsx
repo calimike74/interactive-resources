@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { theme, glass, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { getResource } from '@/lib/resources';
 
 export default function TopicCard({ topic, animationDelay = 0, comingSoon = false }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -27,7 +28,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
             onMouseMove={handleMouseMove}
             style={{
                 position: 'relative',
-                overflow: 'hidden',
+                overflow: 'visible',
                 background: glass.bg,
                 backdropFilter: 'blur(' + glass.blur + ')',
                 WebkitBackdropFilter: 'blur(' + glass.blur + ')',
@@ -47,25 +48,34 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                 animation: `cardReveal 400ms ease-out ${animationDelay}ms both`,
             }}
         >
-            {/* Glow layer */}
+            {/* Glow layer — clipped to card bounds */}
             {hasResources && (
                 <div
                     style={{
                         position: 'absolute',
-                        top: mousePos.y - 150,
-                        left: mousePos.x - 150,
-                        width: 300,
-                        height: 300,
-                        borderRadius: '50%',
-                        background: `radial-gradient(circle, ${topic.colour}40 0%, ${topic.colour}15 40%, transparent 70%)`,
-                        filter: 'blur(28px) saturate(3) brightness(1.1)',
+                        inset: 0,
+                        overflow: 'hidden',
+                        borderRadius: borderRadius.xl,
                         pointerEvents: 'none',
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'opacity 300ms ease',
                         zIndex: 0,
                     }}
                     aria-hidden="true"
-                />
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: mousePos.y - 150,
+                            left: mousePos.x - 150,
+                            width: 300,
+                            height: 300,
+                            borderRadius: '50%',
+                            background: `radial-gradient(circle, ${topic.colour}40 0%, ${topic.colour}15 40%, transparent 70%)`,
+                            filter: 'blur(28px) saturate(3) brightness(1.1)',
+                            opacity: isHovered ? 1 : 0,
+                            transition: 'opacity 300ms ease',
+                        }}
+                    />
+                </div>
             )}
 
             <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -163,6 +173,79 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                         </span>
                     )}
                 </div>
+
+                {/* Hover popover — list of tools in this topic */}
+                {hasResources && isHovered && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            bottom: '100%',
+                            left: 0,
+                            marginBottom: 10,
+                            width: 220,
+                            padding: '10px 14px',
+                            borderRadius: borderRadius.lg,
+                            border: `1px solid ${topic.colour}30`,
+                            background: '#FFFFFF',
+                            boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+                            zIndex: 10,
+                            pointerEvents: 'none',
+                            animation: 'hintFadeIn 200ms ease-out',
+                        }}
+                    >
+                        <p style={{
+                            fontSize: 11,
+                            fontWeight: 600,
+                            color: topic.colour,
+                            margin: '0 0 6px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.03em',
+                        }}>
+                            Tools included
+                        </p>
+                        {topic.resourceIds.map((rid) => {
+                            const res = getResource(rid);
+                            return (
+                                <div
+                                    key={rid}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 6,
+                                        padding: '3px 0',
+                                    }}
+                                >
+                                    <div style={{
+                                        width: 5,
+                                        height: 5,
+                                        borderRadius: '50%',
+                                        background: topic.colour,
+                                        flexShrink: 0,
+                                        opacity: 0.6,
+                                    }} />
+                                    <span style={{
+                                        fontSize: 12,
+                                        color: t.text.secondary,
+                                        lineHeight: 1.4,
+                                    }}>
+                                        {res?.title || rid}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                        {/* Arrow */}
+                        <div style={{
+                            position: 'absolute',
+                            bottom: -6,
+                            left: 20,
+                            width: 0,
+                            height: 0,
+                            borderLeft: '6px solid transparent',
+                            borderRight: '6px solid transparent',
+                            borderTop: '6px solid #FFFFFF',
+                        }} />
+                    </div>
+                )}
             </div>
         </article>
     );

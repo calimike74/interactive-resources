@@ -129,6 +129,12 @@ main {
   animation: pageFadeIn 200ms ease-out;
 }
 
+/* Hint popover fade-in */
+@keyframes hintFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

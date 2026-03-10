@@ -32,9 +32,20 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
     const [copied, setCopied] = useState(false);
     const [blurring, setBlurring] = useState(false);
     const [showModes, setShowModes] = useState(false);
+    const [learnMode, setLearnMode] = useState(false);
+    const [showHint, setShowHint] = useState(false);
     const timeoutRef = useRef(null);
+    const hintTimer = useRef(null);
     const popoverRef = useRef(null);
     const buttonRef = useRef(null);
+
+    // Load learn mode from localStorage on mount
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem('copy-ai-learn-mode');
+            if (stored === 'true') setLearnMode(true);
+        } catch {}
+    }, []);
 
     useEffect(() => {
         if (!showModes) return;
@@ -48,9 +59,17 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [showModes]);
 
+    const toggleLearnMode = useCallback(() => {
+        setLearnMode(prev => {
+            const next = !prev;
+            try { localStorage.setItem('copy-ai-learn-mode', String(next)); } catch {}
+            return next;
+        });
+    }, []);
+
     const handleCopy = useCallback(async (mode) => {
         setShowModes(false);
-        const markdown = buildContent(mode);
+        const markdown = buildContent(mode, learnMode);
 
         try {
             await navigator.clipboard.writeText(markdown);
@@ -72,14 +91,32 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
         } catch (err) {
             console.warn('Clipboard API unavailable:', err);
         }
-    }, [buildContent]);
+    }, [buildContent, learnMode]);
+
+    const handleButtonEnter = () => {
+        if (showModes) return;
+        clearTimeout(hintTimer.current);
+        hintTimer.current = setTimeout(() => setShowHint(true), 400);
+    };
+
+    const handleButtonLeave = () => {
+        clearTimeout(hintTimer.current);
+        setShowHint(false);
+    };
+
+    const handleButtonClick = () => {
+        setShowHint(false);
+        clearTimeout(hintTimer.current);
+        setShowModes(!showModes);
+    };
 
     return (
         <div style={{ position: 'relative', display: 'inline-flex' }}>
             <button
                 ref={buttonRef}
-                onClick={() => setShowModes(!showModes)}
-                title="Copy settings for AI assistant"
+                onClick={handleButtonClick}
+                onMouseEnter={handleButtonEnter}
+                onMouseLeave={handleButtonLeave}
                 aria-label={copied ? 'Copied!' : 'Copy for AI'}
                 style={{
                     display: 'flex',
@@ -112,6 +149,45 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                 )}
             </button>
 
+            {/* Hover hint — explains what the button does */}
+            {showHint && !showModes && !copied && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: '100%',
+                        right: 0,
+                        marginBottom: 8,
+                        width: 200,
+                        padding: '8px 12px',
+                        borderRadius: borderRadius.lg,
+                        border: '1px solid #E5E7EB',
+                        background: '#FFFFFF',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                        zIndex: 40,
+                        pointerEvents: 'none',
+                        animation: 'hintFadeIn 150ms ease-out',
+                    }}
+                >
+                    <p style={{ fontSize: 12, fontWeight: 600, color: '#1A1A2E', margin: '0 0 3px' }}>
+                        Copy for AI
+                    </p>
+                    <p style={{ fontSize: 11, color: '#6B7280', margin: 0, lineHeight: 1.5 }}>
+                        Copies your current settings to paste into ChatGPT or similar — get help recreating this in Ableton.
+                    </p>
+                    {/* Arrow */}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: -6,
+                        right: 14,
+                        width: 0,
+                        height: 0,
+                        borderLeft: '6px solid transparent',
+                        borderRight: '6px solid transparent',
+                        borderTop: '6px solid #FFFFFF',
+                    }} />
+                </div>
+            )}
+
             {showModes && (
                 <div
                     ref={popoverRef}
@@ -129,10 +205,27 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                         overflow: 'hidden',
                     }}
                 >
-                    <div style={{ padding: '8px 14px', borderBottom: '1px solid #E5E7EB' }}>
+                    <div style={{ padding: '8px 14px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <p style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', margin: 0, textTransform: 'uppercase', letterSpacing: 0.5 }}>
                             Copy for AI
                         </p>
+                        <button
+                            onClick={toggleLearnMode}
+                            style={{
+                                fontSize: 10,
+                                fontWeight: 600,
+                                padding: '2px 8px',
+                                borderRadius: 9999,
+                                border: `1px solid ${learnMode ? accent : '#D1D5DB'}`,
+                                background: learnMode ? accent : '#F3F4F6',
+                                color: learnMode ? '#fff' : '#6B7280',
+                                cursor: 'pointer',
+                                transition: 'all 200ms ease',
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
+                            {learnMode ? 'Test me' : 'Teach me'}
+                        </button>
                     </div>
                     {PRODUCTION_MODES.map((m) => (
                         <button
