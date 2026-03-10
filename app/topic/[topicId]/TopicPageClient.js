@@ -6,6 +6,7 @@ import { theme, typography, borderRadius, spacing, transitions, glass } from '@/
 import { getAvailableTopics } from '@/lib/questions';
 import { getQuizProgress } from '@/lib/quiz-persistence';
 import { hasLearnContent } from '@/lib/learn/topics';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Type labels for resource badges
 const typeLabels = {
@@ -225,6 +226,8 @@ export default function TopicPageClient({ topic, resources }) {
                     </div>
                 </header>
             )}
+
+            <Breadcrumbs />
 
             {/* Content Sections */}
             <main style={{ maxWidth: '1200px', margin: '0 auto', padding: spacing[8] }}>

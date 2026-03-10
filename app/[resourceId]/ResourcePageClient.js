@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getResource, resourceExists } from '@/lib/resources';
 import { getTopicForResource } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Resource components registry
 // Add new components here as they're created
@@ -29,6 +30,21 @@ import CombinedDistortionLab from '@/components/resources/CombinedDistortionLab'
 import StereoPanning from '@/components/resources/StereoPanning';
 import ADCExplorer from '@/components/resources/ADCExplorer';
 import SignalChainBuilder from '@/components/resources/SignalChainBuilder';
+import CompressorImageExplorer from '@/components/resources/CompressorImageExplorer';
+import CompressorAssessment from '@/components/resources/CompressorAssessment';
+import GateImageExplorer from '@/components/resources/GateImageExplorer';
+import GateAssessment from '@/components/resources/GateAssessment';
+import AutoFilterImageExplorer from '@/components/resources/AutoFilterImageExplorer';
+import AutoFilterAssessment from '@/components/resources/AutoFilterAssessment';
+import EQ8ImageExplorer from '@/components/resources/EQ8ImageExplorer';
+import EQ8Assessment from '@/components/resources/EQ8Assessment';
+import ReverbImageExplorer from '@/components/resources/ReverbImageExplorer';
+import ReverbAssessment from '@/components/resources/ReverbAssessment';
+import DelayImageExplorer from '@/components/resources/DelayImageExplorer';
+import DelayAssessment from '@/components/resources/DelayAssessment';
+import OperatorImageExplorer from '@/components/resources/OperatorImageExplorer';
+import OperatorAssessment from '@/components/resources/OperatorAssessment';
+import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -52,6 +68,21 @@ const resourceComponents = {
     'StereoPanning': StereoPanning,
     'ADCExplorer': ADCExplorer,
     'SignalChainBuilder': SignalChainBuilder,
+    'CompressorImageExplorer': CompressorImageExplorer,
+    'CompressorAssessment': CompressorAssessment,
+    'GateImageExplorer': GateImageExplorer,
+    'GateAssessment': GateAssessment,
+    'AutoFilterImageExplorer': AutoFilterImageExplorer,
+    'AutoFilterAssessment': AutoFilterAssessment,
+    'EQ8ImageExplorer': EQ8ImageExplorer,
+    'EQ8Assessment': EQ8Assessment,
+    'ReverbImageExplorer': ReverbImageExplorer,
+    'ReverbAssessment': ReverbAssessment,
+    'DelayImageExplorer': DelayImageExplorer,
+    'DelayAssessment': DelayAssessment,
+    'OperatorImageExplorer': OperatorImageExplorer,
+    'OperatorAssessment': OperatorAssessment,
+    'PatchBaySimulator': PatchBaySimulator,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
@@ -174,6 +205,8 @@ export default function ResourcePageClient() {
                     )}
                 </div>
             </header>
+
+            <Breadcrumbs />
 
             {/* Resource Content */}
             <main>

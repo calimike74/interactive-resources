@@ -11,6 +11,7 @@ import BottomTabBar from '@/components/BottomTabBar';
 import ProgressDashboard from '@/components/ProgressDashboard';
 import BlurReveal from '@/components/BlurReveal';
 import SlideUpWords from '@/components/SlideUpWords';
+import CommandPalette from '@/components/CommandPalette';
 
 // Mode descriptions shown under the hero
 const MODE_INFO = {
@@ -82,18 +83,21 @@ export default function ResourcesHub() {
             >
                 {/* Mode heading */}
                 <div style={{ marginBottom: spacing[6] }}>
-                    <h2
-                        style={{
-                            fontSize: typography.size['2xl'],
-                            fontWeight: typography.weight.bold,
-                            color: t.text.primary,
-                            marginBottom: spacing[1],
-                        }}
-                    >
-                        <BlurReveal key={`heading-${activeTab}`} duration={600} blur={10}>
-                            {mode.heading}
-                        </BlurReveal>
-                    </h2>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing[1] }}>
+                        <h2
+                            style={{
+                                fontSize: typography.size['2xl'],
+                                fontWeight: typography.weight.bold,
+                                color: t.text.primary,
+                                margin: 0,
+                            }}
+                        >
+                            <BlurReveal key={`heading-${activeTab}`} duration={600} blur={10}>
+                                {mode.heading}
+                            </BlurReveal>
+                        </h2>
+                        <CommandPalette />
+                    </div>
                     <p
                         style={{
                             color: t.text.tertiary,

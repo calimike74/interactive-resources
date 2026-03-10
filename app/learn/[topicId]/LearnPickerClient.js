@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
-export default function LearnPickerClient({ topic, lessons }) {
+export default function LearnPickerClient({ topic, lessons, resources = [] }) {
     const t = theme.light;
 
     return (
@@ -12,6 +13,8 @@ export default function LearnPickerClient({ topic, lessons }) {
             background: '#f5f4f2',
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
         }}>
+            <Breadcrumbs />
+
             {/* Header */}
             <header style={{
                 padding: '3rem 1.5rem 2.5rem',
@@ -70,7 +73,7 @@ export default function LearnPickerClient({ topic, lessons }) {
                         fontSize: typography.size.sm,
                         color: t.text.tertiary,
                     }}>
-                        {lessons.length} {lessons.length === 1 ? 'lesson' : 'lessons'} available
+                        {lessons.length + resources.length} {lessons.length + resources.length === 1 ? 'activity' : 'activities'} available
                     </div>
                 </div>
             </header>
@@ -96,18 +99,24 @@ export default function LearnPickerClient({ topic, lessons }) {
                             index={i}
                         />
                     ))}
+                    {resources.map((resource, i) => (
+                        <ResourceCard
+                            key={resource.id}
+                            resource={resource}
+                            topicColour={topic.colour}
+                            t={t}
+                            index={lessons.length + i}
+                        />
+                    ))}
                 </div>
             </main>
         </div>
     );
 }
 
-function LessonCard({ lesson, topicId, topicColour, t, index }) {
+function CardShell({ href, topicColour, index, children }) {
     return (
-        <Link
-            href={`/learn/${topicId}/${lesson.id}`}
-            style={{ textDecoration: 'none' }}
-        >
+        <Link href={href} style={{ textDecoration: 'none' }}>
             <div
                 style={{
                     background: glass.bg,
@@ -121,6 +130,9 @@ function LessonCard({ lesson, topicId, topicColour, t, index }) {
                     boxShadow: glass.shadow,
                     opacity: 0,
                     animation: `fadeSlideUp 0.4s ease-out ${index * 100}ms forwards`,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
                 }}
                 onMouseEnter={e => {
                     e.currentTarget.style.borderColor = topicColour;
@@ -133,60 +145,7 @@ function LessonCard({ lesson, topicId, topicColour, t, index }) {
                     e.currentTarget.style.transform = 'none';
                 }}
             >
-                {/* Lesson number pill */}
-                <div style={{
-                    display: 'inline-block',
-                    padding: '0.15rem 0.5rem',
-                    borderRadius: '9999px',
-                    background: topicColour + '12',
-                    color: topicColour,
-                    fontSize: '0.7rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.025em',
-                    textTransform: 'uppercase',
-                    marginBottom: spacing[3],
-                }}>
-                    {lesson.subtitle}
-                </div>
-
-                <h2 style={{
-                    fontSize: typography.size.xl,
-                    fontWeight: typography.weight.semibold,
-                    color: t.text.primary,
-                    marginBottom: spacing[2],
-                    lineHeight: 1.25,
-                }}>
-                    {lesson.title}
-                </h2>
-
-                <p style={{
-                    fontSize: typography.size.sm,
-                    color: t.text.secondary,
-                    lineHeight: 1.5,
-                    marginBottom: spacing[4],
-                }}>
-                    {lesson.description}
-                </p>
-
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                }}>
-                    <span style={{
-                        fontSize: typography.size.xs,
-                        color: t.text.tertiary,
-                    }}>
-                        {lesson.rows.length} sections
-                    </span>
-                    <span style={{
-                        color: topicColour,
-                        fontSize: typography.size.lg,
-                        fontWeight: typography.weight.semibold,
-                    }}>
-                        &rarr;
-                    </span>
-                </div>
+                {children}
             </div>
 
             <style jsx global>{`
@@ -196,5 +155,113 @@ function LessonCard({ lesson, topicId, topicColour, t, index }) {
                 }
             `}</style>
         </Link>
+    );
+}
+
+function LessonCard({ lesson, topicId, topicColour, t, index }) {
+    return (
+        <CardShell href={`/learn/${topicId}/${lesson.id}`} topicColour={topicColour} index={index}>
+            <div style={{
+                display: 'inline-block',
+                padding: '0.15rem 0.5rem',
+                borderRadius: '9999px',
+                background: topicColour + '12',
+                color: topicColour,
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                letterSpacing: '0.025em',
+                textTransform: 'uppercase',
+                marginBottom: spacing[3],
+            }}>
+                {lesson.subtitle}
+            </div>
+
+            <h2 style={{
+                fontSize: typography.size.xl,
+                fontWeight: typography.weight.semibold,
+                color: t.text.primary,
+                marginBottom: spacing[2],
+                lineHeight: 1.25,
+            }}>
+                {lesson.title}
+            </h2>
+
+            <p style={{
+                fontSize: typography.size.sm,
+                color: t.text.secondary,
+                lineHeight: 1.5,
+                marginBottom: spacing[4],
+                flex: 1,
+            }}>
+                {lesson.description}
+            </p>
+
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+            }}>
+                <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
+                    {lesson.rows.length} sections
+                </span>
+                <span style={{ color: topicColour, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
+                    &rarr;
+                </span>
+            </div>
+        </CardShell>
+    );
+}
+
+function ResourceCard({ resource, topicColour, t, index }) {
+    return (
+        <CardShell href={resource.href} topicColour={topicColour} index={index}>
+            <div style={{
+                display: 'inline-block',
+                padding: '0.15rem 0.5rem',
+                borderRadius: '9999px',
+                background: topicColour + '12',
+                color: topicColour,
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                letterSpacing: '0.025em',
+                textTransform: 'uppercase',
+                marginBottom: spacing[3],
+            }}>
+                {resource.subtitle}
+            </div>
+
+            <h2 style={{
+                fontSize: typography.size.xl,
+                fontWeight: typography.weight.semibold,
+                color: t.text.primary,
+                marginBottom: spacing[2],
+                lineHeight: 1.25,
+            }}>
+                {resource.title}
+            </h2>
+
+            <p style={{
+                fontSize: typography.size.sm,
+                color: t.text.secondary,
+                lineHeight: 1.5,
+                marginBottom: spacing[4],
+                flex: 1,
+            }}>
+                {resource.description}
+            </p>
+
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+            }}>
+                <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
+                    {resource.estimatedTime}
+                </span>
+                <span style={{ color: topicColour, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
+                    &rarr;
+                </span>
+            </div>
+        </CardShell>
     );
 }

@@ -8,6 +8,7 @@ import { getNextAttemptNumber, saveQuizResponse, getQuizHistory, getQuestionPerf
 import { prioritiseQuestions } from '@/lib/spaced-repetition';
 import { supabase } from '@/lib/supabase';
 import AuthGate from './AuthGate';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function RevisePageClient({ topic }) {
     const t = theme.light;
@@ -400,6 +401,8 @@ export default function RevisePageClient({ topic }) {
 
 function QuizHeader({ topic, t, studentName, onSignOut }) {
     return (
+        <>
+        <Breadcrumbs />
         <header style={{
             background: t.bg.primary,
             borderBottom: `3px solid ${topic.colour}`,
@@ -471,6 +474,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                 </div>
             </div>
         </header>
+        </>
     );
 }
 
