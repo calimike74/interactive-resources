@@ -3,12 +3,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { getAllTopicDefs } from '@/lib/topics';
 import { hasLearnContent } from '@/lib/learn/topics';
-import { theme, typography, borderRadius, spacing } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import LiquidHero from '@/components/LiquidHero';
 import TopicCard from '@/components/TopicCard';
 import TopicBookShelf from '@/components/TopicBookShelf';
 import BottomTabBar from '@/components/BottomTabBar';
 import ProgressDashboard from '@/components/ProgressDashboard';
+import BlurReveal from '@/components/BlurReveal';
+import SlideUpWords from '@/components/SlideUpWords';
 
 // Mode descriptions shown under the hero
 const MODE_INFO = {
@@ -88,7 +90,9 @@ export default function ResourcesHub() {
                             marginBottom: spacing[1],
                         }}
                     >
-                        {mode.heading}
+                        <BlurReveal key={`heading-${activeTab}`} duration={600} blur={10}>
+                            {mode.heading}
+                        </BlurReveal>
                     </h2>
                     <p
                         style={{
@@ -96,7 +100,7 @@ export default function ResourcesHub() {
                             fontSize: typography.size.sm,
                         }}
                     >
-                        {mode.subtitle}
+                        <SlideUpWords key={`subtitle-${activeTab}`} text={mode.subtitle} delay={100} stagger={50} />
                     </p>
                     {activeTab === 'revise' && <TypewriterTeaser t={t} />}
                 </div>
@@ -110,7 +114,7 @@ export default function ResourcesHub() {
                         style={{
                             display: 'grid',
                             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                            gap: spacing[4],
+                            gap: spacing[5],
                         }}
                     >
                         {Array.from({ length: 6 }).map((_, i) => (
@@ -132,7 +136,7 @@ export default function ResourcesHub() {
                                 style={{
                                     display: 'grid',
                                     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                                    gap: spacing[4],
+                                    gap: spacing[5],
                                     marginBottom: comingSoonTopics.length > 0 ? spacing[8] : 0,
                                 }}
                             >
@@ -163,7 +167,7 @@ export default function ResourcesHub() {
                                     style={{
                                         display: 'grid',
                                         gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                                        gap: spacing[4],
+                                        gap: spacing[5],
                                     }}
                                 >
                                     {comingSoonTopics.map((topic, i) => (

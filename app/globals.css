@@ -18,15 +18,15 @@
   to { opacity: 1; }
 }
 
-/* Staggered card reveal */
+/* Staggered card reveal — refined easing */
 @keyframes cardReveal {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(16px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -127,4 +127,14 @@ a[href] article:active {
 /* Page transition */
 main {
   animation: pageFadeIn 200ms ease-out;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

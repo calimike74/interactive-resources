@@ -32,12 +32,14 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                 backdropFilter: 'blur(' + glass.blur + ')',
                 WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                 borderRadius: borderRadius.xl,
-                border: `1px solid ${hasResources && isHovered ? topic.colour + '60' : glass.border}`,
-                boxShadow: hasResources && isHovered ? glass.shadowHover : glass.shadow,
+                border: `1px solid ${hasResources && isHovered ? topic.colour + '40' : t.border.subtle}`,
+                boxShadow: hasResources && isHovered
+                    ? `6px 6px 0 ${topic.colour}18, 0 8px 32px rgba(0, 0, 0, 0.08)`
+                    : glass.shadow,
                 padding: spacing[6],
                 cursor: hasResources ? 'pointer' : 'default',
-                transition: `all ${transitions.normal} ${transitions.easing}`,
-                transform: hasResources && isHovered ? 'translateY(-2px)' : 'none',
+                transition: `all ${transitions.slow} ${transitions.easing}`,
+                transform: hasResources && isHovered ? 'translate(-3px, -4px)' : 'none',
                 opacity: hasResources ? 1 : 0.6,
                 height: '100%',
                 display: 'flex',
