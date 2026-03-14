@@ -6,6 +6,7 @@ import { getResource, resourceExists } from '@/lib/resources';
 import { getTopicForResource } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
 
 // Resource components registry
 // Add new components here as they're created
@@ -167,27 +168,36 @@ export default function ResourcePageClient() {
                             {backLabel}
                         </Link>
 
-                        {/* Topic badge */}
-                        <span
-                            style={{
-                                background: 'rgba(37, 99, 235, 0.12)',
-                                color: t.accent.info,
-                                padding: `${spacing[1]} ${spacing[3]}`,
-                                borderRadius: borderRadius.full,
-                                fontSize: typography.size.xs,
-                                fontWeight: typography.weight.medium,
-                                backdropFilter: 'blur(8px)',
-                                border: '1px solid rgba(37, 99, 235, 0.2)',
-                            }}
-                        >
-                            {resource.topic}
-                        </span>
+                        {/* Topic badge + examiner hint */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
+                            <span
+                                style={{
+                                    background: 'rgba(37, 99, 235, 0.12)',
+                                    color: t.accent.info,
+                                    padding: `${spacing[1]} ${spacing[3]}`,
+                                    borderRadius: borderRadius.full,
+                                    fontSize: typography.size.xs,
+                                    fontWeight: typography.weight.medium,
+                                    backdropFilter: 'blur(8px)',
+                                    border: '1px solid rgba(37, 99, 235, 0.2)',
+                                }}
+                            >
+                                {resource.topic}
+                            </span>
+                            {parentTopic && (
+                                <ExaminerHintBadge
+                                    topicCode={parentTopic.specRef}
+                                    topicColour={parentTopic.colour}
+                                    position="bottom"
+                                />
+                            )}
+                        </div>
                     </div>
 
                     {/* Related assessment link */}
                     {resource.prepFor && resource.prepFor.length > 0 && (
                         <a
-                            href={`https://waveform-assessment.vercel.app/${resource.prepFor[0]}`}
+                            href={`https://assess.musictechstudio.co.uk/${resource.prepFor[0]}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
@@ -300,7 +310,7 @@ export default function ResourcePageClient() {
 
                         {resource.prepFor && resource.prepFor.length > 0 && (
                             <a
-                                href={`https://waveform-assessment.vercel.app/${resource.prepFor[0]}`}
+                                href={`https://assess.musictechstudio.co.uk/${resource.prepFor[0]}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{

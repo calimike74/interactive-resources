@@ -21,7 +21,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://interactive-resources.vercel.app'),
+  metadataBase: new URL('https://resources.musictechstudio.co.uk'),
   title: {
     default: 'Interactive Resources | A-Level Music Technology',
     template: '%s | Interactive Resources',
@@ -30,7 +30,7 @@ export const metadata = {
   openGraph: {
     title: 'Interactive Resources | A-Level Music Technology',
     description: 'Interactive learning tools for Pearson Edexcel A-Level Music Technology. Practice EQ, synthesis, dynamics, and more.',
-    url: 'https://interactive-resources.vercel.app',
+    url: 'https://resources.musictechstudio.co.uk',
     siteName: 'Interactive Resources | A-Level Music Technology',
     locale: 'en_GB',
     type: 'website',

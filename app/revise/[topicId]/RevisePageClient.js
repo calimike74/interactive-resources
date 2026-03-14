@@ -9,6 +9,7 @@ import { prioritiseQuestions } from '@/lib/spaced-repetition';
 import { supabase } from '@/lib/supabase';
 import AuthGate from './AuthGate';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { getHintsForTopic, hasHints } from '@/lib/examiner-hints';
 
 export default function RevisePageClient({ topic }) {
     const t = theme.light;
@@ -179,7 +180,7 @@ export default function RevisePageClient({ topic }) {
                     total: totalScored,
                 }).then(() => {
                     // Trigger signal detection on grades-dashboard
-                    fetch('https://grades-dashboard.vercel.app/api/process-signals', {
+                    fetch('https://grades.musictechstudio.co.uk/api/process-signals', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -365,6 +366,37 @@ export default function RevisePageClient({ topic }) {
                             }}>
                                 {current.explanation}
                             </p>
+
+                            {/* Examiner hint — shown on incorrect answers */}
+                            {!isCorrect && current.type !== 'short' && hasHints(topic.specRef) && (
+                                <div style={{
+                                    marginTop: spacing[3],
+                                    padding: `${spacing[2]} ${spacing[3]}`,
+                                    backgroundColor: `${topic.colour}08`,
+                                    border: `1px solid ${topic.colour}20`,
+                                    borderRadius: borderRadius.lg,
+                                }}>
+                                    <p style={{
+                                        margin: 0,
+                                        fontSize: typography.size.xs,
+                                        fontWeight: typography.weight.semibold,
+                                        color: topic.colour,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.03em',
+                                        marginBottom: spacing[1],
+                                    }}>
+                                        Examiner tip
+                                    </p>
+                                    <p style={{
+                                        margin: 0,
+                                        fontSize: typography.size.sm,
+                                        color: t.text.secondary,
+                                        lineHeight: typography.lineHeight.relaxed,
+                                    }}>
+                                        {getHintsForTopic(topic.specRef)[0].hint}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     )}
 

@@ -3,7 +3,7 @@ import { getAllResources } from '@/lib/resources';
 export const dynamic = 'force-static';
 
 export default function sitemap() {
-  const baseUrl = 'https://interactive-resources.vercel.app';
+  const baseUrl = 'https://resources.musictechstudio.co.uk';
 
   const resources = getAllResources();
 

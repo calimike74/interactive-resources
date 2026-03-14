@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
         openGraph: {
             title: resource.title,
             description: resource.description,
-            url: `https://interactive-resources.vercel.app/${resource.id}`,
+            url: `https://resources.musictechstudio.co.uk/${resource.id}`,
             siteName: 'Interactive Resources | A-Level Music Technology',
             locale: 'en_GB',
             type: 'article',
