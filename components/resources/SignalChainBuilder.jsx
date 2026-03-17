@@ -13,12 +13,10 @@ const t = theme.light;
 
 const CORRECT_ORDER = [
     { id: 'sound', text: 'Acoustic Sound', domain: 'acoustic', hint: 'Sound waves travel through the air from the source' },
-    { id: 'mic', text: 'Microphone', domain: 'transducer', hint: 'Transducer: converts air pressure variations into electrical voltage' },
-    { id: 'antialiasing', text: 'Anti-Aliasing Filter', domain: 'analogue', hint: 'Analogue lowpass filter removes frequencies above the Nyquist frequency before sampling' },
+    { id: 'mic', text: 'Microphone', domain: 'transducer', hint: 'Transducer: converts air pressure variations into an analogue electrical signal' },
     { id: 'adc', text: 'ADC', domain: 'conversion', hint: 'Analogue-to-Digital Converter: samples the signal and converts to binary data' },
     { id: 'digital', text: 'Digital Processing (DAW)', domain: 'digital', hint: 'Editing, effects, mixing — all in the digital domain' },
     { id: 'dac', text: 'DAC', domain: 'conversion', hint: 'Digital-to-Analogue Converter: converts binary data back to a varying voltage' },
-    { id: 'reconstruction', text: 'Reconstruction Filter', domain: 'analogue', hint: 'Analogue lowpass filter smooths the stepped DAC output into a continuous waveform' },
     { id: 'amp', text: 'Amplifier & Speakers', domain: 'transducer', hint: 'Transducer: converts electrical signal back into acoustic sound' },
 ];
 
@@ -311,8 +309,8 @@ export default function SignalChainBuilder() {
                         }}>
                             <p style={{ fontSize: typography.size.xs, color: t.text.secondary }}>
                                 <strong>Hint:</strong> The chain starts with acoustic sound and ends with
-                                acoustic sound. Each converter (ADC/DAC) has a filter partner — the anti-aliasing
-                                filter goes <em>before</em> the ADC, the reconstruction filter goes <em>after</em> the DAC.
+                                acoustic sound. The microphone converts sound to an analogue electrical signal,
+                                the ADC converts it to digital, and the DAC converts it back for playback.
                             </p>
                         </div>
                     )}
@@ -388,11 +386,9 @@ export default function SignalChainBuilder() {
 // ─── Definitions Data ───────────────────────────────────────────
 const SIGNAL_CHAIN_DEFINITIONS = [
     { label: 'Transducer', text: 'A device that converts energy from one form to another. A microphone converts acoustic energy to electrical energy. A speaker does the reverse.' },
-    { label: 'Anti-Aliasing Filter', text: 'An analogue lowpass filter applied before the ADC to remove frequencies above the Nyquist frequency, preventing aliasing artefacts in the digital signal.' },
-    { label: 'ADC (Analogue-to-Digital Converter)', text: 'Converts the analogue electrical signal into digital binary data through sampling and quantisation. Found in audio interfaces.' },
+    { label: 'ADC (Analogue-to-Digital Converter)', text: 'Converts the analogue electrical signal into digital binary data by sampling at regular intervals. Found in audio interfaces.' },
     { label: 'DAC (Digital-to-Analogue Converter)', text: 'Converts digital binary data back into a continuously varying analogue electrical signal for playback. Produces a stepped output that needs filtering.' },
-    { label: 'Reconstruction Filter', text: 'An analogue lowpass filter placed after the DAC that smooths the stepped staircase output into a continuous waveform by removing high-frequency artefacts.' },
-    { label: 'Signal Chain', text: 'The complete path audio travels: Acoustic sound > Microphone > Anti-aliasing filter > ADC > Digital processing > DAC > Reconstruction filter > Amplifier & Speakers > Acoustic sound.' },
+    { label: 'Signal Chain', text: 'The complete path audio travels: Acoustic sound > Microphone > ADC > Digital processing > DAC > Amplifier & Speakers > Acoustic sound.' },
 ];
 
 // ─── KeyConcept (click-to-copy) ─────────────────────────────────
