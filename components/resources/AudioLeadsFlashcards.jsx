@@ -643,19 +643,42 @@ const AudioLeadsFlashcards = () => {
         </div>
       </div>
 
+      <style>{`
+        @keyframes flashcardReveal {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .fc-scroll-item {
+          animation: flashcardReveal 1s ease both;
+          animation-timeline: view();
+          animation-range: entry 0% entry 100%;
+        }
+        .fc-scroll-container {
+          scrollbar-width: thin;
+          scrollbar-color: #d1d5db transparent;
+        }
+        .fc-scroll-container::-webkit-scrollbar { width: 4px; }
+        .fc-scroll-container::-webkit-scrollbar-thumb {
+          background: #d1d5db;
+          border-radius: 2px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .fc-scroll-item { animation: none; opacity: 1; transform: none; }
+        }
+      `}</style>
       {Object.keys(needsReviewByCategory).length > 0 ? (
         <div className="mb-6">
           <h3 className="font-semibold flex items-center gap-2 mb-3">
             <BookOpen className="h-5 w-5 text-indigo-600" />
             Study Recommendations
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-4 fc-scroll-container" style={{ maxHeight: 300, overflowY: 'auto' }}>
             {Object.entries(needsReviewByCategory).map(([category, cards], idx) => (
               <div key={idx} className="bg-red-50 p-3 rounded-lg">
                 <h4 className="font-medium capitalize mb-2">{category} ({cards.length})</h4>
                 <ul className="space-y-2">
                   {cards.map((card, cardIdx) => (
-                    <li key={cardIdx} className="bg-white p-2 rounded border-l-4 border-red-400">
+                    <li key={cardIdx} className="fc-scroll-item bg-white p-2 rounded border-l-4 border-red-400">
                       <p className="font-medium">{card.question}</p>
                       <p className="text-sm text-gray-600 mt-1">{card.practicalExample}</p>
                     </li>
@@ -680,13 +703,13 @@ const AudioLeadsFlashcards = () => {
             <BookmarkCheck className="h-5 w-5 text-green-600" />
             Mastered Concepts
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-4 fc-scroll-container" style={{ maxHeight: 300, overflowY: 'auto' }}>
             {Object.entries(masteredByCategory).map(([category, cards], idx) => (
               <div key={idx} className="bg-green-50 p-3 rounded-lg">
                 <h4 className="font-medium capitalize mb-2">{category} ({cards.length})</h4>
                 <ul className="space-y-2">
                   {cards.map((card, cardIdx) => (
-                    <li key={cardIdx} className="bg-white p-2 rounded border-l-4 border-green-400">
+                    <li key={cardIdx} className="fc-scroll-item bg-white p-2 rounded border-l-4 border-green-400">
                       <p className="font-medium">{card.question}</p>
                       <p className="text-sm text-gray-600 mt-1">{card.furtherLearning}</p>
                     </li>

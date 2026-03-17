@@ -1256,7 +1256,7 @@ export default function GraphicParametricEQ() {
                                     <div style={{ marginLeft: 'auto' }}>
                                         <ProductionCopyButton
                                             accent={t.accent.primary}
-                                            buildContent={(mode) => {
+                                            buildContent={(mode, learnMode) => {
                                                 const matchedPreset = Object.values(GRAPHIC_PRESETS).find(p =>
                                                     p.gains.every((g, i) => g === graphicGains[i])
                                                 );
@@ -1272,7 +1272,7 @@ export default function GraphicParametricEQ() {
                                                     gains: graphicGains,
                                                     presetName: matchedPreset?.name,
                                                     quizResults,
-                                                    mode,
+                                                    mode, learnMode,
                                                 });
                                             }}
                                         />

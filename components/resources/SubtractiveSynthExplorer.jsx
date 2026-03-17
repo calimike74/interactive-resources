@@ -1218,7 +1218,7 @@ export default function SubtractiveSynthExplorer() {
                             <div style={{ marginLeft: 'auto' }}>
                                 <ProductionCopyButton
                                     accent={COLORS.mastery || '#0891b2'}
-                                    buildContent={(mode) => {
+                                    buildContent={(mode, learnMode) => {
                                         const matchedPreset = PRESETS.find(p =>
                                             p.waveform === waveform && p.cutoff === cutoff && p.filterType === filterType
                                         );
@@ -1234,7 +1234,7 @@ export default function SubtractiveSynthExplorer() {
                                             attack, decay, sustain, release, octave,
                                             presetName: matchedPreset?.name,
                                             quizResults,
-                                            mode,
+                                            mode, learnMode,
                                         });
                                     }}
                                 />

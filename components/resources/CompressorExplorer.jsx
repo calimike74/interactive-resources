@@ -1445,7 +1445,7 @@ export default function CompressorExplorer() {
                         <div style={{ marginLeft: 'auto' }}>
                             <ProductionCopyButton
                                 accent={SECTION_ACCENTS[currentSection] || COLORS.easy}
-                                buildContent={(mode) => {
+                                buildContent={(mode, learnMode) => {
                                     const matchedPreset = PRESETS.find(p =>
                                         p.threshold === threshold && p.ratio === ratio && p.attack === attack && p.release === release
                                     );
@@ -1460,7 +1460,7 @@ export default function CompressorExplorer() {
                                         threshold, ratio, attack, release, knee, makeupGain, source,
                                         presetName: matchedPreset?.name,
                                         quizResults,
-                                        mode,
+                                        mode, learnMode,
                                     });
                                 }}
                             />

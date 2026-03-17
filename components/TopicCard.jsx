@@ -1,9 +1,68 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { theme, glass, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import { getResource } from '@/lib/resources';
+import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
+
+// Spell-inspired: badge pops in with spring overshoot
+function AnimatedBadge({ children, delay = 0, color, style = {} }) {
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setVisible(true), delay + 10);
+        return () => clearTimeout(timer);
+    }, [delay]);
+
+    return (
+        <span
+            style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'scale(1)' : 'scale(0.5)',
+                transition: `opacity 300ms ${transitions.easing} ${delay}ms, transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms`,
+                willChange: 'opacity, transform',
+                ...style,
+            }}
+        >
+            {children}
+        </span>
+    );
+}
+
+// Spell-inspired: breathing glow behind coming-soon cards
+function PulseGlow({ children, color, intensity = 0.18 }) {
+    const [pulse, setPulse] = useState(false);
+
+    useEffect(() => {
+        const interval = setInterval(() => setPulse(p => !p), 2000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div style={{ position: 'relative' }}>
+            <div
+                style={{
+                    position: 'absolute',
+                    inset: '-2px -4px',
+                    borderRadius: borderRadius.xl,
+                    background: color,
+                    opacity: pulse ? intensity : intensity * 0.2,
+                    filter: 'blur(16px)',
+                    transition: 'opacity 2s ease-in-out',
+                    pointerEvents: 'none',
+                    zIndex: 0,
+                }}
+                aria-hidden="true"
+            />
+            <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>
+                {children}
+            </div>
+        </div>
+    );
+}
 
 export default function TopicCard({ topic, animationDelay = 0, comingSoon = false }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -101,18 +160,21 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                             }}
                         />
                     </div>
-                    <span
-                        style={{
-                            background: 'rgba(255, 255, 255, 0.5)',
-                            color: t.text.tertiary,
-                            padding: `${spacing[1]} ${spacing[2]}`,
-                            borderRadius: borderRadius.md,
-                            fontSize: typography.size.xs,
-                            fontWeight: typography.weight.medium,
-                        }}
-                    >
-                        {topic.specRef}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
+                        <span
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.5)',
+                                color: t.text.tertiary,
+                                padding: `${spacing[1]} ${spacing[2]}`,
+                                borderRadius: borderRadius.md,
+                                fontSize: typography.size.xs,
+                                fontWeight: typography.weight.medium,
+                            }}
+                        >
+                            {topic.specRef}
+                        </span>
+                        <ExaminerHintBadge topicCode={topic.specRef} topicColour={topic.colour} position="bottom" />
+                    </div>
                 </div>
 
                 {/* Topic name */}
@@ -153,12 +215,24 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                 >
                     {hasResources ? (
                         <>
-                            <span style={{ color: topic.colour, fontSize: typography.size.xs, fontWeight: typography.weight.semibold }}>
-                                {resourceCount} {resourceCount === 1 ? 'tool' : 'tools'}
-                            </span>
-                            <span style={{ color: t.text.tertiary, fontSize: typography.size.xs }}>
-                                Explore →
-                            </span>
+                            <AnimatedBadge delay={animationDelay + 300} color={topic.colour}>
+                                <span style={{
+                                    color: topic.colour,
+                                    fontSize: typography.size.xs,
+                                    fontWeight: typography.weight.semibold,
+                                    background: topic.colour + '14',
+                                    padding: `${spacing[0.5]} ${spacing[2]}`,
+                                    borderRadius: borderRadius.full,
+                                    border: `1px solid ${topic.colour}25`,
+                                }}>
+                                    {resourceCount} {resourceCount === 1 ? 'tool' : 'tools'}
+                                </span>
+                            </AnimatedBadge>
+                            <AnimatedBadge delay={animationDelay + 420} color={topic.colour}>
+                                <span style={{ color: t.text.tertiary, fontSize: typography.size.xs }}>
+                                    Explore →
+                                </span>
+                            </AnimatedBadge>
                         </>
                     ) : (
                         <span
@@ -191,8 +265,22 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                             zIndex: 10,
                             pointerEvents: 'none',
                             animation: 'hintFadeIn 200ms ease-out',
+                            maxHeight: 200,
+                            overflowY: 'auto',
                         }}
                     >
+                        <style>{`
+                            @keyframes popoverItemReveal {
+                                from { opacity: 0; transform: translateX(-6px); }
+                                to   { opacity: 1; transform: translateX(0); }
+                            }
+                            .popover-resource-item {
+                                animation: popoverItemReveal 300ms ease-out both;
+                            }
+                            @media (prefers-reduced-motion: reduce) {
+                                .popover-resource-item { animation: none; }
+                            }
+                        `}</style>
                         <p style={{
                             fontSize: 11,
                             fontWeight: 600,
@@ -203,16 +291,18 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                         }}>
                             Tools included
                         </p>
-                        {topic.resourceIds.map((rid) => {
+                        {topic.resourceIds.map((rid, idx) => {
                             const res = getResource(rid);
                             return (
                                 <div
                                     key={rid}
+                                    className="popover-resource-item"
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: 6,
                                         padding: '3px 0',
+                                        animationDelay: `${idx * 50}ms`,
                                     }}
                                 >
                                     <div style={{
@@ -250,7 +340,13 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
         </article>
     );
 
-    if (!hasResources) return card;
+    if (!hasResources) {
+        return (
+            <PulseGlow color={topic.colour} intensity={0.18}>
+                {card}
+            </PulseGlow>
+        );
+    }
 
     return (
         <Link href={`/topic/${topic.id}`} style={{ textDecoration: 'none' }}>
