@@ -1,6 +1,4 @@
-'use client';
-
-import { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { RotateCcw, ChevronDown, ChevronUp, Volume2, Zap, HardDrive, Music } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -12,41 +10,6 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 
 const FONT_HEADING = "'Playfair Display', Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
-
-const DESIGN_TOKENS_CSS = `
-  .digital-analogue-root {
-    --accent: #2563EB;
-    --accent-soft: rgba(37, 99, 235, 0.1);
-    --background: #FAFAFA;
-    --background-raised: #FFFFFF;
-    --foreground: #1A1A2E;
-    --foreground-secondary: #4A4F5A;
-    --foreground-tertiary: #8B909A;
-    --border: #E5E7EB;
-    --canvas-background: #0A0F1A;
-    --canvas-surface: #111827;
-    --canvas-foreground: #E8E4DF;
-    --canvas-foreground-secondary: #9CA3AF;
-    --canvas-foreground-tertiary: #6B7280;
-    --canvas-border: #1F2937;
-    --canvas-border-hover: #374151;
-    --canvas-highlight: #60A5FA;
-    --success: #059669;
-    --success-soft: rgba(5, 150, 105, 0.1);
-    --error: #DC2626;
-    --error-soft: rgba(220, 38, 38, 0.1);
-    --warning: #D97706;
-    --annotation-info: #0891B2;
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-    --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
-    --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
-    --text-xs: 0.75rem; --text-sm: 0.875rem; --text-base: 1rem;
-    --text-xl: 1.25rem; --text-3xl: 1.875rem; --text-4xl: 2.25rem;
-    --radius-md: 0.375rem; --radius-lg: 0.5rem; --radius-xl: 0.75rem;
-    --duration-fast: 150ms; --duration-normal: 300ms;
-    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-`;
 
 // ============================================
 // COPYABLE NOTE
@@ -78,12 +41,12 @@ const CopyableNote = ({ title, children, color = 'var(--annotation-info)', varia
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT_BODY }}>{title}</span>
         </div>
         <button onClick={handleCopy} style={{
-          background: copied ? 'var(--success)' : 'var(--canvas-surface)', border: `1px solid ${copied ? 'var(--success)' : 'var(--canvas-border-hover)'}`,
+          background: copied ? 'var(--success)' : 'var(--background-raised)', border: `1px solid ${copied ? 'var(--success)' : 'var(--border)'}`,
           borderRadius: 'var(--radius-md)', padding: '0.25rem 0.75rem', cursor: 'pointer',
-          color: copied ? '#fff' : 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY
+          color: copied ? '#fff' : 'var(--foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY
         }}>{copied ? '\u2713 Copied!' : '\u{1F4CB} Copy'}</button>
       </div>
-      <div ref={contentRef} style={{ color: 'var(--canvas-foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: '1.6', fontFamily: FONT_BODY }}>{children}</div>
+      <div ref={contentRef} style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: '1.6', fontFamily: FONT_BODY }}>{children}</div>
     </div>
   );
 };
@@ -155,20 +118,6 @@ const quizQuestions = [
     difficulty: 'foundation'
   },
   {
-    q: 'How many quantisation levels does 8-bit audio have?',
-    options: ['8', '64', '128', '256'],
-    correct: 3,
-    explanation: 'The number of quantisation levels is 2 raised to the power of the bit depth. For 8-bit audio: 2\u2078 = 256 possible amplitude levels. For 16-bit: 2\u00B9\u2076 = 65,536 levels.',
-    difficulty: 'intermediate'
-  },
-  {
-    q: 'What is the maximum frequency that can be accurately represented at a 44.1 kHz sample rate?',
-    options: ['44.1 kHz', '22.05 kHz', '20 kHz', '11.025 kHz'],
-    correct: 1,
-    explanation: 'According to the Nyquist\u2013Shannon theorem, the maximum representable frequency (Nyquist frequency) is half the sample rate. At 44.1 kHz: 44,100 \u00F7 2 = 22,050 Hz (22.05 kHz). This exceeds the ~20 kHz upper limit of human hearing.',
-    difficulty: 'intermediate'
-  },
-  {
     q: 'What is the approximate file size of a 3-minute stereo WAV file at 44.1 kHz / 16-bit?',
     options: ['5 MB', '15 MB', '30 MB', '60 MB'],
     correct: 2,
@@ -197,18 +146,6 @@ const quizQuestions = [
     ],
     correct: 1,
     explanation: 'When overdriven, valves (vacuum tubes) produce predominantly even-order harmonics (2nd, 4th, 6th), which are musically consonant and perceived as "warm". Transistors tend to produce odd-order harmonics, which can sound harsher and less musical.',
-    difficulty: 'advanced'
-  },
-  {
-    q: 'What is quantisation error?',
-    options: [
-      'An error in the sample rate setting',
-      'The difference between the actual analogue amplitude and the nearest available digital level',
-      'A fault in the D/A converter',
-      'Distortion caused by excessive volume'
-    ],
-    correct: 1,
-    explanation: 'Quantisation error (or quantisation noise) is the small inaccuracy introduced because the continuous analogue amplitude must be rounded to the nearest discrete digital value. This error is reduced by increasing bit depth, and dithering is used to mask it.',
     difficulty: 'advanced'
   },
   {
@@ -274,16 +211,6 @@ const learnSections = [
     title: 'Streaming Bit Rates and Perceptual Coding',
     content: 'Streaming services deliver audio at various bit rates depending on the subscription tier and platform. Typical rates include: 128 kbps (basic quality), 256 kbps (standard quality), 320 kbps (high quality), and some services now offer lossless streaming (e.g., CD-quality 1,411 kbps or hi-res). Lossy codecs like AAC and OGG Vorbis use perceptual coding \u2014 psychoacoustic models that exploit the limitations of human hearing (such as auditory masking) to discard sounds we are unlikely to notice. The effectiveness of this approach depends heavily on the bit rate and the complexity of the audio material.'
   },
-  {
-    level: 'advanced',
-    title: 'Nyquist\u2013Shannon Theorem',
-    content: 'The Nyquist\u2013Shannon sampling theorem states that to accurately capture a frequency, the sample rate must be at least twice that frequency. This critical frequency is called the Nyquist frequency (half the sample rate). For CD audio at 44.1 kHz, the Nyquist frequency is 22.05 kHz \u2014 just above the limit of human hearing (~20 kHz). If frequencies above the Nyquist frequency are present in the signal, they cause aliasing \u2014 false frequencies that were not in the original sound. An anti-aliasing filter is applied before A/D conversion to remove frequencies above the Nyquist frequency and prevent this artefact.'
-  },
-  {
-    level: 'advanced',
-    title: 'Quantisation Error and Dithering',
-    content: 'Quantisation error occurs because the continuous analogue amplitude must be rounded to the nearest discrete digital level. At lower bit depths, this error is more significant and can produce audible distortion, especially on quiet passages. Dithering is the deliberate addition of a very small amount of random noise before quantisation. Counter-intuitively, adding noise actually improves audio quality by converting the mathematically correlated quantisation distortion into a random, uncorrelated noise floor that is far less objectionable to the ear. Dithering is essential when reducing bit depth (e.g., from 24-bit to 16-bit for CD mastering).'
-  }
 ];
 
 // ============================================
@@ -311,41 +238,6 @@ const challengeScenarios = [
     working: '(96,000 \u00D7 24 \u00D7 2 \u00D7 120) \u00F7 8 \u00F7 1,048,576',
     unit: 'MB'
   },
-  {
-    type: 'quantisation',
-    description: 'How many quantisation levels does 12-bit audio have?',
-    answer: Math.pow(2, 12).toString(),
-    working: '2\u00B9\u00B2 = 4,096',
-    unit: 'levels'
-  },
-  {
-    type: 'quantisation',
-    description: 'How many quantisation levels does 16-bit audio have?',
-    answer: Math.pow(2, 16).toString(),
-    working: '2\u00B9\u2076 = 65,536',
-    unit: 'levels'
-  },
-  {
-    type: 'quantisation',
-    description: 'How many quantisation levels does 24-bit audio have?',
-    answer: Math.pow(2, 24).toString(),
-    working: '2\u00B2\u2074 = 16,777,216',
-    unit: 'levels'
-  },
-  {
-    type: 'nyquist',
-    description: 'A system samples at 48 kHz. What is the highest frequency it can accurately represent?',
-    answer: '24000',
-    working: '48,000 \u00F7 2 = 24,000 Hz (24 kHz)',
-    unit: 'Hz'
-  },
-  {
-    type: 'nyquist',
-    description: 'What minimum sample rate is required to capture a frequency of 18 kHz without aliasing?',
-    answer: '36000',
-    working: '18,000 \u00D7 2 = 36,000 Hz (36 kHz)',
-    unit: 'Hz'
-  }
 ];
 
 // ============================================
@@ -362,13 +254,6 @@ const bitDepthChartData = [
 // MAIN COMPONENT
 // ============================================
 const DigitalAnalogue = () => {
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = DESIGN_TOKENS_CSS;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
   const [activeTab, setActiveTab] = useState('learn');
   const tabs = [
     { id: 'learn', label: 'Learn', icon: Volume2 },
@@ -421,7 +306,9 @@ const DigitalAnalogue = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
-    const w = 560, h = 360;
+    const container = canvas.parentElement;
+    const w = Math.min(560, container ? container.clientWidth - 4 : 560);
+    const h = Math.round(w * (360 / 560));
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -561,7 +448,9 @@ const DigitalAnalogue = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
-    const w = 560, h = 240;
+    const container = canvas.parentElement;
+    const w = Math.min(560, container ? container.clientWidth - 4 : 560);
+    const h = Math.round(w * (240 / 560));
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     canvas.style.width = w + 'px';
@@ -723,7 +612,7 @@ const DigitalAnalogue = () => {
   const isCanvasTab = activeTab === 'interactive';
 
   return (
-    <div className="digital-analogue-root" style={{
+    <div style={{
       fontFamily: FONT_BODY,
       background: isCanvasTab ? 'var(--canvas-background)' : 'var(--background)',
       color: isCanvasTab ? 'var(--canvas-foreground)' : 'var(--foreground)',
@@ -781,7 +670,7 @@ const DigitalAnalogue = () => {
             </div>
 
             {/* Content sections */}
-            {learnSections.filter(s => learnFilter === 'all' || s.level === learnFilter).map((section, idx) => (
+            {learnSections.map((section, idx) => ({ section, idx })).filter(({ section }) => learnFilter === 'all' || section.level === learnFilter).map(({ section, idx }) => (
               <StudioCard key={idx} style={{ marginBottom: 'var(--space-4)' }}>
                 <button onClick={() => toggleSection(idx)} style={{
                   width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -872,7 +761,7 @@ const DigitalAnalogue = () => {
               {/* Info readout */}
               <div style={{ marginTop: 'var(--space-4)', display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
                 {[
-                  { label: 'Nyquist Freq', value: `${(sampleRate / 2000).toFixed(1)} kHz` },
+                  { label: 'Bit Rate (kbps)', value: `${((sampleRate * bitDepth * 2) / 1000).toFixed(0)} kbps` },
                   { label: 'Dynamic Range', value: `~${(bitDepth * 6.02).toFixed(0)} dB` },
                   { label: 'Covers Human Hearing', value: sampleRate >= 40000 ? '\u2705 Yes' : '\u274C No' }
                 ].map((info, i) => (
@@ -987,7 +876,7 @@ const DigitalAnalogue = () => {
               <div style={{ fontSize: 'var(--text-xs)', fontWeight: '300', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--canvas-highlight)', marginBottom: 'var(--space-2)' }}>Challenge Mode</div>
               <h3 style={{ fontFamily: FONT_HEADING, fontWeight: 700, fontSize: 'var(--text-xl)', margin: '0 0 var(--space-2)', color: 'var(--canvas-foreground)' }}>Calculate It</h3>
               <p style={{ fontSize: 'var(--text-sm)', color: 'var(--canvas-foreground-tertiary)', margin: '0 0 var(--space-4)' }}>
-                File sizes, quantisation levels (2<sup>n</sup>), and Nyquist frequencies
+                File size calculations using the standard formula
               </p>
 
               {!challengeActive ? (
@@ -999,7 +888,7 @@ const DigitalAnalogue = () => {
               ) : (
                 <div>
                   <div style={{ display: 'inline-block', padding: 'var(--space-1) var(--space-3)', borderRadius: 'var(--radius-sm)', background: 'var(--canvas-surface)', border: '1px solid var(--canvas-border-hover)', fontSize: 'var(--text-xs)', color: 'var(--canvas-highlight)', marginBottom: 'var(--space-3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {challengeParams?.type === 'filesize' ? 'File Size' : challengeParams?.type === 'quantisation' ? 'Quantisation Levels' : 'Nyquist Frequency'}
+                    {'File Size'}
                   </div>
                   <p style={{ color: 'var(--canvas-foreground-secondary)', fontSize: 'var(--text-base)', lineHeight: '1.6', marginBottom: 'var(--space-4)' }}>{challengeParams?.description}</p>
                   <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1036,7 +925,7 @@ const DigitalAnalogue = () => {
                         <strong style={{ color: isCorrect ? 'var(--success)' : 'var(--error)' }}>
                           {isCorrect ? 'Correct!' : `Not quite. The answer is ${Number(challengeParams.answer).toLocaleString()} ${challengeParams.unit}.`}
                         </strong>
-                        <p style={{ color: 'var(--canvas-foreground-secondary)', fontSize: 'var(--text-sm)', marginTop: 'var(--space-2)', lineHeight: '1.5' }}>
+                        <p style={{ color: 'var(--foreground)', fontSize: 'var(--text-sm)', marginTop: 'var(--space-2)', lineHeight: '1.5' }}>
                           Working: {challengeParams.working} = {Number(challengeParams.answer).toLocaleString()} {challengeParams.unit}
                         </p>
                       </div>
@@ -1127,11 +1016,11 @@ const DigitalAnalogue = () => {
             ) : (
               <StudioCard style={{ textAlign: 'center' }}>
                 <h2 style={{ fontFamily: FONT_HEADING, fontWeight: 900, fontSize: 'var(--text-3xl)', color: 'var(--foreground)', margin: '0 0 var(--space-4)' }}>Quiz Complete</h2>
-                <div style={{ fontSize: 'var(--text-4xl)', fontWeight: '700', color: score >= 7 ? 'var(--success)' : score >= 5 ? 'var(--warning)' : 'var(--error)', marginBottom: 'var(--space-4)' }}>
+                <div style={{ fontSize: 'var(--text-4xl)', fontWeight: '700', color: score >= 6 ? 'var(--success)' : score >= 4 ? 'var(--warning)' : 'var(--error)', marginBottom: 'var(--space-4)' }}>
                   {score} / {quizQuestions.length}
                 </div>
                 <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)' }}>
-                  {score >= 8 ? 'Excellent understanding of digital and analogue audio!' : score >= 5 ? 'Good foundation \u2014 review the areas you found challenging.' : 'Revisit the Learn tab and try again.'}
+                  {score >= 6 ? 'Excellent understanding of digital and analogue audio!' : score >= 4 ? 'Good foundation \u2014 review the areas you found challenging.' : 'Revisit the Learn tab and try again.'}
                 </p>
                 <PressButton onClick={resetQuiz} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
@@ -1231,12 +1120,8 @@ const DigitalAnalogue = () => {
               {[
                 { term: 'A/D Conversion', def: 'Analogue-to-digital conversion: the process of transforming a continuous analogue signal into discrete digital data through sampling and quantisation.' },
                 { term: 'D/A Conversion', def: 'Digital-to-analogue conversion: the reverse process, reconstructing a continuous analogue signal from digital data for playback through speakers or headphones.' },
-                { term: 'Sample Rate', def: 'The number of samples taken per second, measured in Hertz (Hz). Determines the highest frequency that can be captured (Nyquist frequency = sample rate \u00F7 2).' },
+                { term: 'Sample Rate', def: 'The number of samples taken per second, measured in Hertz (Hz). A higher sample rate captures a wider frequency range. CD audio uses 44.1 kHz; professional studio recording typically uses 48 kHz or higher.' },
                 { term: 'Bit Depth', def: 'The number of bits used to represent each sample. Determines the number of possible amplitude levels (2\u207F) and the dynamic range (~6 dB per bit).' },
-                { term: 'Quantisation', def: 'The process of assigning each sample to the nearest available discrete amplitude value during A/D conversion. Lower bit depths = fewer levels = more quantisation error.' },
-                { term: 'Nyquist Frequency', def: 'Half the sample rate \u2014 the maximum frequency that can be accurately represented in a digital system. Frequencies above this cause aliasing.' },
-                { term: 'Aliasing', def: 'False frequencies created when audio above the Nyquist frequency is sampled. Prevented by anti-aliasing filters applied before A/D conversion.' },
-                { term: 'Dithering', def: 'The deliberate addition of low-level random noise to mask quantisation distortion, especially important when reducing bit depth (e.g., 24-bit to 16-bit for CD mastering).' },
                 { term: 'PCM (Pulse Code Modulation)', def: 'The standard method of digitally encoding audio. Each sample is represented as a binary number. WAV and AIFF files store PCM data.' },
                 { term: 'Lossy Compression', def: 'Audio compression that permanently discards data using psychoacoustic models (perceptual coding) to reduce file size. Examples: MP3, AAC, OGG Vorbis.' },
                 { term: 'Lossless Compression', def: 'Audio compression that reduces file size without discarding any data \u2014 the original can be perfectly reconstructed. Examples: FLAC, ALAC.' },
@@ -1257,7 +1142,6 @@ const DigitalAnalogue = () => {
               </h3>
               {[
                 'For file size calculations, always show your full working: (Sample Rate \u00D7 Bit Depth \u00D7 Channels \u00D7 Duration) \u00F7 8 \u00F7 1,048,576. Convert the final answer to MB. This is a very common exam question.',
-                'When explaining the Nyquist\u2013Shannon theorem, state the rule (sample rate must be at least twice the highest frequency) AND give a practical example (44.1 kHz captures up to ~22.05 kHz, which exceeds the ~20 kHz limit of human hearing).',
                 'Know the difference between lossy and lossless formats. Be able to name examples of each and explain when you would choose one over the other \u2014 always relate your answer to the context given in the question.',
                 'When comparing analogue and digital clipping, describe both the waveform shape (soft curve vs hard flat-top) AND the sonic character (warm saturation vs harsh distortion). Include the term "harmonic distortion" in your answer.',
                 'If asked about valves vs transistors, explain the harmonic content: valves produce predominantly even-order harmonics (warm, musical), whilst transistors produce odd-order harmonics (harsher). Always link this to real-world examples of equipment.'
@@ -1274,13 +1158,13 @@ const DigitalAnalogue = () => {
                 {'\u{1F3B5}'} Music Examples for Exam Reference
               </h3>
               {[
-                { artist: 'Vinyl vs CD', context: 'Analogue warmth vs digital clarity \u2014 compare the same album on both formats to hear differences in noise floor, dynamic range, and harmonic character.' },
-                { artist: 'Daft Punk \u2014 "Get Lucky"', context: 'Recorded through analogue equipment (Neve console, valve preamps, tape) for warmth, then mixed digitally. Demonstrates the modern hybrid analogue/digital workflow.' },
-                { artist: 'Bon Iver \u2014 "Woods"', context: 'Digital vocal processing used creatively \u2014 Auto-Tune applied as an aesthetic choice rather than correction. The heavily processed digital sound is central to the artistic vision.' },
-                { artist: 'Jack White \u2014 various recordings', context: 'Deliberately lo-fi analogue recording approach using valve amps, tape machines, and limited track counts. Embraces analogue imperfections as a creative and sonic philosophy.' }
+                { artist: 'Daft Punk', track: 'Get Lucky', context: 'Listen for the warmth in the rhythm guitar and bass — recorded through vintage Neve console and valve preamps to tape before digital mixing. Compare the opening bars to any fully digital pop production.' },
+                { artist: 'Radiohead', track: 'Everything In Its Right Place', context: 'Listen to how the heavily processed vocals sit in the mix. The digital artefacts from pitch-shifting and granular processing are deliberately exposed rather than hidden.' },
+                { artist: 'Amy Winehouse', track: 'Back to Black', context: 'Recorded at Daptone Studios using analogue tape and vintage equipment. Listen for the tape saturation on the drums and the natural compression from the valve signal chain.' },
+                { artist: 'Billie Eilish', track: 'Bad Guy', context: 'Recorded entirely in a bedroom using a digital setup (Logic Pro, audio interface). Compare the clean digital bass and crisp high frequencies with the analogue warmth of the Winehouse track.' }
               ].map((ex, i) => (
                 <div key={i} style={{ padding: 'var(--space-3) 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
-                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong>
+                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &mdash; &ldquo;{ex.track}&rdquo;
                   <p style={{ margin: 'var(--space-1) 0 0', color: 'var(--foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: '1.5' }}>{ex.context}</p>
                 </div>
               ))}
