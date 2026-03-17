@@ -13,7 +13,6 @@ const t = theme.light;
 
 const TABS = [
     { id: 'sampling', label: 'Sampling' },
-    { id: 'nyquist', label: 'Nyquist & Aliasing' },
     { id: 'bitdepth', label: 'Bit Depth' },
 ];
 
@@ -98,7 +97,6 @@ export default function ADCExplorer() {
 
             {/* Tab content */}
             {activeTab === 'sampling' && <SamplingTab />}
-            {activeTab === 'nyquist' && <NyquistTab />}
             {activeTab === 'bitdepth' && <BitDepthTab />}
         </div>
     );
@@ -185,143 +183,7 @@ function SamplingTab() {
     );
 }
 
-// ─── Tab 2: Nyquist & Aliasing ──────────────────────────────────
-function NyquistTab() {
-    const [sampleRate, setSampleRate] = useState(20);
-    const [frequency, setFrequency] = useState(3);
 
-    const nyquistFreq = sampleRate / 2;
-    const isAliasing = sampleRate < frequency * 2;
-    const minimumRate = frequency * 2;
-
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[6] }}>
-            {/* Context */}
-            <div style={card}>
-                <span style={{ ...sectionLabel, color: TIER.intermediate }}>
-                    The Nyquist Theorem
-                </span>
-                <p style={bodyText}>
-                    The <strong style={strongText}>Nyquist theorem</strong> states: the sample rate must
-                    be <strong style={strongText}>at least twice</strong> the highest frequency in the
-                    signal. If it isn't, the digital version will contain <strong style={strongText}>false
-                    frequencies</strong> that weren't in the original sound. This is
-                    called <strong style={strongText}>aliasing</strong>.
-                </p>
-                <p style={{ ...bodyText, marginTop: spacing[3] }}>
-                    Try pushing the frequency higher than half the sample rate and watch what happens.
-                </p>
-            </div>
-
-            {/* Visualisation */}
-            <WaveformVisualiser
-                frequency={frequency}
-                sampleRate={sampleRate}
-                bitDepth={16}
-                showStaircase={false}
-                showQuantisationLines={false}
-            />
-
-            {/* Controls */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing[4] }}>
-                <Slider
-                    label="Signal Frequency"
-                    value={frequency}
-                    min={1}
-                    max={20}
-                    step={1}
-                    setter={setFrequency}
-                    colour={TIER.intermediate}
-                    unit=" Hz"
-                />
-                <Slider
-                    label="Sample Rate"
-                    value={sampleRate}
-                    min={4}
-                    max={80}
-                    step={2}
-                    setter={setSampleRate}
-                    colour={t.accent.primary}
-                    unit=" Hz"
-                />
-            </div>
-
-            {/* Aliasing warning or success */}
-            {isAliasing ? (
-                <div style={{
-                    ...card,
-                    background: t.accent.errorLight,
-                    borderColor: t.accent.error,
-                    borderLeft: `4px solid ${t.accent.error}`,
-                }}>
-                    <span style={{ ...sectionLabel, color: t.accent.error }}>
-                        Aliasing Detected
-                    </span>
-                    <p style={bodyText}>
-                        The signal frequency is <strong style={strongText}>{frequency} Hz</strong> but
-                        the Nyquist frequency is only <strong style={strongText}>{nyquistFreq} Hz</strong> (half
-                        of {sampleRate}). The sample rate needs to be at
-                        least <strong style={strongText}>{minimumRate} Hz</strong> (2 x {frequency}) to
-                        capture this signal accurately.
-                    </p>
-                    <p style={{ ...bodyText, marginTop: spacing[2] }}>
-                        The samples (orange dots) are connecting to form a <strong style={strongText}>different
-                        wave shape</strong> than the original blue wave — that's the alias. This false
-                        frequency <strong style={strongText}>cannot be removed</strong> once it's in the
-                        digital signal.
-                    </p>
-                </div>
-            ) : (
-                <div style={{
-                    ...card,
-                    background: t.accent.successLight,
-                    borderColor: t.accent.success,
-                    borderLeft: `4px solid ${t.accent.success}`,
-                }}>
-                    <span style={{ ...sectionLabel, color: t.accent.success }}>
-                        Nyquist Theorem Satisfied
-                    </span>
-                    <p style={bodyText}>
-                        Sample rate ({sampleRate} Hz) is at least 2x the signal
-                        frequency ({frequency} Hz). Minimum needed: {minimumRate} Hz.
-                        The Nyquist frequency is {nyquistFreq} Hz — any frequency
-                        below this can be accurately captured.
-                    </p>
-                </div>
-            )}
-
-            {/* Exam formula box */}
-            <div style={{
-                ...card,
-                background: t.accent.infoLight,
-                borderLeft: `4px solid ${t.accent.info}`,
-            }}>
-                <span style={{ ...sectionLabel, color: t.accent.info }}>
-                    Exam Formula
-                </span>
-                <p style={{
-                    fontFamily: typography.fontFamilyMono,
-                    fontSize: typography.size.base,
-                    color: t.text.primary,
-                    textAlign: 'center',
-                    padding: `${spacing[3]} 0`,
-                }}>
-                    Sample Rate &ge; 2 &times; Highest Frequency
-                </p>
-                <p style={{ ...bodyText, fontSize: typography.size.xs }}>
-                    Always show your working: state the formula, substitute values, give the answer with units.
-                    This is a common 2-3 mark calculation question.
-                </p>
-            </div>
-
-            {/* Key Definitions */}
-            <DefinitionsSection
-                title="Nyquist & Aliasing — Key Definitions (Section 2.4)"
-                definitions={NYQUIST_DEFINITIONS}
-            />
-        </div>
-    );
-}
 
 // ─── Tab 3: Bit Depth ───────────────────────────────────────────
 function BitDepthTab() {
@@ -341,10 +203,9 @@ function BitDepthTab() {
                 </span>
                 <p style={bodyText}>
                     Bit depth determines <strong style={strongText}>how many amplitude levels</strong> are
-                    available for each sample. Each sample must be rounded to the <strong style={strongText}>nearest
-                    available level</strong> — this rounding is
-                    called <strong style={strongText}>quantisation</strong>. More levels means less rounding,
-                    which means a more accurate representation of the original sound.
+                    available for each sample. More bits means more levels, which means
+                    a <strong style={strongText}>more accurate representation</strong> of the original sound
+                    and a <strong style={strongText}>wider dynamic range</strong>.
                 </p>
             </div>
 
@@ -444,7 +305,7 @@ function BitDepthTab() {
 
             {/* Key Definitions */}
             <DefinitionsSection
-                title="Bit Depth & Quantisation — Key Definitions (Section 2.4)"
+                title="Bit Depth & Dynamic Range — Key Definitions (Section 2.4)"
                 definitions={BITDEPTH_DEFINITIONS}
             />
         </div>
@@ -455,22 +316,13 @@ function BitDepthTab() {
 const SAMPLING_DEFINITIONS = [
     { label: 'Sampling', text: 'The process of measuring the amplitude of an analogue signal at regular intervals in time. Each measurement is called a sample.' },
     { label: 'Sample Rate', text: 'The number of samples taken per second, measured in Hertz (Hz). CD quality = 44,100 Hz. Professional = 48,000 Hz or 96,000 Hz.' },
-    { label: 'ADC (Analogue-to-Digital Converter)', text: 'A device that converts a continuously varying analogue electrical signal into a stream of binary numerical data by sampling and quantising the signal.' },
+    { label: 'ADC (Analogue-to-Digital Converter)', text: 'A device that converts a continuously varying analogue electrical signal into a stream of binary numerical data by sampling the signal at regular intervals.' },
     { label: 'Analogue Signal', text: 'A continuously varying electrical signal whose voltage is proportional to the original sound wave. Produced by microphones.' },
     { label: 'Digital Signal', text: 'A signal represented as a series of discrete binary numbers, each encoding the amplitude of the sound at a specific moment in time.' },
 ];
 
-const NYQUIST_DEFINITIONS = [
-    { label: 'Nyquist Theorem', text: 'The sample rate must be at least twice the highest frequency in the signal to faithfully capture it. Formula: sample rate >= 2 x highest frequency.' },
-    { label: 'Nyquist Frequency', text: 'The highest frequency that can be accurately represented at a given sample rate, equal to half the sample rate (sr / 2).' },
-    { label: 'Aliasing', text: 'Unwanted artefacts that occur when frequencies above the Nyquist frequency are sampled. These false frequencies are reflected back below the Nyquist and cannot be removed once in the digital signal.' },
-    { label: 'Anti-Aliasing Filter', text: 'An analogue lowpass filter applied before sampling to remove frequencies above the Nyquist frequency and prevent aliasing. Must be analogue because aliased frequencies cannot be removed after digital conversion.' },
-];
-
 const BITDEPTH_DEFINITIONS = [
     { label: 'Bit Depth', text: 'The number of bits used to represent each sample\'s amplitude. More bits = more amplitude levels = more accurate representation. CD = 16-bit, professional = 24-bit.' },
-    { label: 'Quantisation', text: 'The process of rounding each sample to the nearest available amplitude level. The number of levels = 2^n where n is the bit depth.' },
-    { label: 'Quantisation Error', text: 'The difference between the actual amplitude and the nearest quantised value. Fewer bits = larger errors = more audible noise, especially on quiet signals.' },
     { label: 'Dynamic Range', text: 'The ratio between the loudest and quietest sounds that can be represented. Calculated as bit depth x 6 dB. 16-bit = ~96 dB, 24-bit = ~144 dB.' },
     { label: 'DAC (Digital-to-Analogue Converter)', text: 'A device that converts binary numerical data back into a continuously varying analogue electrical signal for playback through speakers or headphones.' },
 ];
