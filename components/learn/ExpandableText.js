@@ -175,10 +175,8 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                                         data-expansion-bubble
                                         style={{
                                             display: 'block',
-                                            float: 'right',
-                                            clear: 'right',
-                                            width: '55%',
-                                            margin: '8px 0 12px 20px',
+                                            width: '100%',
+                                            margin: '10px 0 14px 0',
                                             padding: '14px 16px',
                                             borderRadius: '10px',
                                             backgroundColor: topicColor + '08',
@@ -186,8 +184,6 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                                             color: topicColor,
                                             fontSize: '0.9375rem',
                                             lineHeight: '1.7',
-                                            shapeOutside: 'margin-box',
-                                            shapeMargin: '14px',
                                             opacity: 0,
                                             animation: 'expandBubbleReveal 0.45s ease forwards',
                                             animationDelay: '0.05s',
