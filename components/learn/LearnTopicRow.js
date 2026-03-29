@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import diagrams from './diagrams';
 import SectionAssessment from './SectionAssessment';
+import ExpandableText from './ExpandableText';
 
 export default function LearnTopicRow({ row, index, topicColor, topicId, studentToken, answeredSections }) {
     const ref = useRef(null);
@@ -103,13 +104,7 @@ export default function LearnTopicRow({ row, index, topicColor, topicId, student
                     {row.heading}
                 </h3>
 
-                <p style={{
-                    fontSize: '1rem',
-                    color: '#374151',
-                    lineHeight: 1.65,
-                }}>
-                    {row.description}
-                </p>
+                <ExpandableText text={row.description} topicColor={topicColor} />
             </div>
 
             {row.assessment && showAssessment && (

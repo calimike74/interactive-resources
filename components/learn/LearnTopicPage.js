@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import LearnTopicRow from './LearnTopicRow';
 import { getTopicResponses } from '@/lib/learn/section-persistence';
@@ -79,10 +79,15 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
 
                     <div style={{
                         marginTop: '1rem',
-                        fontSize: '0.8125rem',
-                        color: '#9CA3AF',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
                     }}>
-                        {topic.rows.length} sections
+                        <span style={{ fontSize: '0.8125rem', color: '#9CA3AF' }}>
+                            {topic.rows.length} sections
+                        </span>
+                        <ExpandableHint color={topic.color} />
                     </div>
                 </div>
             </header>
@@ -106,5 +111,65 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
                 ))}
             </main>
         </div>
+    );
+}
+
+function ExpandableHint({ color }) {
+    const fullText = 'Highlight underlined terms to expand them';
+    const [charIdx, setCharIdx] = useState(0);
+    const [visible, setVisible] = useState(true);
+    const timerRef = useRef(null);
+
+    useEffect(() => {
+        // Start typing after a short delay
+        const startDelay = setTimeout(() => {
+            timerRef.current = setInterval(() => {
+                setCharIdx((c) => {
+                    if (c >= fullText.length) {
+                        clearInterval(timerRef.current);
+                        // Fade out after a pause
+                        setTimeout(() => setVisible(false), 4000);
+                        return c;
+                    }
+                    return c + 1;
+                });
+            }, 40);
+        }, 800);
+
+        return () => {
+            clearTimeout(startDelay);
+            clearInterval(timerRef.current);
+        };
+    }, []);
+
+    return (
+        <span style={{
+            fontSize: '0.75rem',
+            color: '#9CA3AF',
+            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
+            minHeight: '1.2em',
+            display: 'inline-flex',
+            alignItems: 'center',
+            opacity: visible ? 1 : 0,
+            transition: 'opacity 1s ease',
+        }}>
+            {fullText.slice(0, charIdx)}
+            {charIdx < fullText.length && (
+                <span style={{
+                    display: 'inline-block',
+                    width: '1.5px',
+                    height: '0.9em',
+                    background: color,
+                    marginLeft: '1px',
+                    verticalAlign: 'text-bottom',
+                    animation: 'blink 1s step-end infinite',
+                }} />
+            )}
+            <style>{`
+                @keyframes blink {
+                    50% { opacity: 0; }
+                }
+            `}</style>
+        </span>
     );
 }
