@@ -1,9 +1,39 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { findExpansion, getExpandableWordIndices } from '@/lib/learn/expansions';
+import { findExpansion, getExpandableWordIndices, ALL_EXPANSIONS } from '@/lib/learn/expansions';
 
-export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
+// Depth colour system — each level gets progressively deeper
+function getDepthColour(topicColor, depth) {
+    const opacities = ['08', '14', '22'];
+    const borderOpacities = ['40', '60', '80'];
+    const d = Math.min(depth, opacities.length - 1);
+    return {
+        bg: topicColor + opacities[d],
+        border: topicColor + borderOpacities[d],
+    };
+}
+
+// Renders expanded text with chained expandable terms underlined
+function ExpandableInlineText({ text, topicColor, depth }) {
+    const words = text.split(/\s+/);
+    const expandableIndices = getExpandableWordIndices(words);
+    if (expandableIndices.size === 0) return text;
+    return words.map((word, i) => (
+        <span
+            key={`chain-${i}-${word}`}
+            style={{
+                borderBottom: expandableIndices.has(i)
+                    ? `1.5px dotted ${topicColor}55`
+                    : undefined,
+            }}
+        >
+            {word}{' '}
+        </span>
+    ));
+}
+
+export default function ExpandableText({ text, topicColor = '#1a1a6e', onProgressChange }) {
     const [segments, setSegments] = useState(
         text.split(/\s+/).map((word) => ({ type: 'original', text: word }))
     );
@@ -14,12 +44,38 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
     const [expandingId, setExpandingId] = useState(null);
     const [history, setHistory] = useState([]);
     const [openExpansions, setOpenExpansions] = useState(new Set());
+    const [exploredTerms, setExploredTerms] = useState(new Set());
     const containerRef = useRef(null);
     const expandIdRef = useRef(0);
+    const totalTermsRef = useRef(0);
 
     const hasSelection = selStart !== null && selEnd !== null && selStart !== selEnd;
     const selMin = selStart !== null && selEnd !== null ? Math.min(selStart, selEnd) : null;
     const selMax = selStart !== null && selEnd !== null ? Math.max(selStart, selEnd) : null;
+
+    const allWords = segments.map((s) => s.type === 'original' ? s.text : s.originalText);
+    const expandableIndices = getExpandableWordIndices(allWords);
+
+    // Count unique expandable terms in this text
+    useEffect(() => {
+        const lower = text.toLowerCase();
+        const seen = new Set();
+        let count = 0;
+        for (const exp of ALL_EXPANSIONS) {
+            if (lower.includes(exp.trigger.toLowerCase()) && !seen.has(exp.trigger)) {
+                count++;
+                seen.add(exp.trigger);
+            }
+        }
+        totalTermsRef.current = count;
+    }, [text]);
+
+    // Report progress
+    useEffect(() => {
+        if (onProgressChange && totalTermsRef.current > 0) {
+            onProgressChange(exploredTerms.size, totalTermsRef.current);
+        }
+    }, [exploredTerms, onProgressChange]);
 
     useEffect(() => {
         const el = containerRef.current;
@@ -65,6 +121,17 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
         return segments.slice(selMin, selMax + 1).map((s) => s.text).join(' ');
     };
 
+    // Calculate depth based on whether we're inside an existing expansion
+    const getDepthAtIndex = (index) => {
+        for (let i = index - 1; i >= 0; i--) {
+            const seg = segments[i];
+            if (seg.type === 'expanded' && openExpansions.has(seg.id)) {
+                return (seg.depth || 0) + 1;
+            }
+        }
+        return 0;
+    };
+
     const triggerExpansion = async () => {
         if (selMin === null || selMax === null || isExpanding) return;
         setIsExpanding(true);
@@ -72,10 +139,11 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
 
         const selectedText = getSelectedText();
         const id = `exp-${++expandIdRef.current}`;
+        const depth = getDepthAtIndex(selMin);
 
         const newSegments = [
             ...segments.slice(0, selMin),
-            { type: 'expanded', text: '', originalText: selectedText, id },
+            { type: 'expanded', text: '', originalText: selectedText, id, depth, confidence: 'none' },
             ...segments.slice(selMax + 1),
         ];
         setSegments(newSegments);
@@ -83,6 +151,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
         setSelStart(null);
         setSelEnd(null);
         setOpenExpansions((prev) => new Set(prev).add(id));
+        setExploredTerms((prev) => new Set(prev).add(selectedText.toLowerCase()));
 
         const preGenerated = findExpansion(selectedText);
 
@@ -95,10 +164,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                         : seg
                 )
             );
-        }
-        // No API fallback on the live site — pre-generated only
-        // If no match, show a gentle message
-        if (!preGenerated) {
+        } else {
             setSegments((prev) =>
                 prev.map((seg) =>
                     seg.type === 'expanded' && seg.id === id
@@ -121,6 +187,23 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
         });
     };
 
+    const setConfidence = (id, confidence) => {
+        setSegments((prev) =>
+            prev.map((seg) =>
+                seg.type === 'expanded' && seg.id === id ? { ...seg, confidence } : seg
+            )
+        );
+        if (confidence === 'got-it') {
+            setTimeout(() => {
+                setOpenExpansions((prev) => {
+                    const next = new Set(prev);
+                    next.delete(id);
+                    return next;
+                });
+            }, 400);
+        }
+    };
+
     const handleUndo = () => {
         if (history.length === 0) return;
         setSegments(history[history.length - 1]);
@@ -132,9 +215,6 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
 
     const isSelected = (i) =>
         selMin !== null && selMax !== null && i >= selMin && i <= selMax;
-
-    const allWords = segments.map((s) => s.type === 'original' ? s.text : s.originalText);
-    const expandableIndices = getExpandableWordIndices(allWords);
 
     return (
         <div
@@ -150,26 +230,42 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                         const isOpen = openExpansions.has(seg.id);
                         const isLoading = expandingId === seg.id && !seg.text;
                         const hasContent = !!seg.text;
+                        const depth = seg.depth || 0;
+                        const colours = getDepthColour(topicColor, depth);
+                        const conf = seg.confidence || 'none';
+
+                        const pillBorderColour =
+                            conf === 'got-it' ? '#10B981' : conf === 'confused' ? '#F59E0B' : isOpen ? colours.border : 'transparent';
+                        const pillBg =
+                            conf === 'got-it' ? 'rgba(16, 185, 129, 0.08)'
+                            : conf === 'confused' ? 'rgba(245, 158, 11, 0.08)'
+                            : isOpen ? topicColor + '18' : topicColor + '0C';
+                        const pillTextColour =
+                            conf === 'got-it' ? '#059669' : conf === 'confused' ? '#D97706' : topicColor;
 
                         return (
                             <span key={`e-${seg.id}`} style={{ display: 'inline' }}>
+                                {/* Pill */}
                                 <span
                                     data-idx={index}
                                     onClick={() => !isExpanding && toggleExpansion(seg.id)}
                                     style={{
                                         padding: '1px 6px',
                                         borderRadius: '4px',
-                                        backgroundColor: isOpen ? topicColor + '18' : topicColor + '0C',
-                                        color: topicColor,
+                                        backgroundColor: pillBg,
+                                        color: pillTextColour,
                                         fontWeight: 600,
                                         cursor: 'pointer',
                                         transition: 'all 0.3s ease',
-                                        borderBottom: isOpen ? `2px solid ${topicColor}55` : '2px solid transparent',
+                                        borderBottom: `2px solid ${pillBorderColour}`,
                                     }}
                                 >
+                                    {conf === 'got-it' && <span style={{ marginRight: '3px' }}>&#10003;</span>}
+                                    {conf === 'confused' && <span style={{ marginRight: '3px' }}>?</span>}
                                     {seg.originalText}
                                 </span>
 
+                                {/* Expansion bubble */}
                                 {isOpen && (
                                     <span
                                         data-expansion-bubble
@@ -179,8 +275,8 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                                             margin: '10px 0 14px 0',
                                             padding: '14px 16px',
                                             borderRadius: '10px',
-                                            backgroundColor: topicColor + '08',
-                                            borderLeft: `3px solid ${topicColor}40`,
+                                            backgroundColor: colours.bg,
+                                            borderLeft: `3px solid ${colours.border}`,
                                             color: topicColor,
                                             fontSize: '0.9375rem',
                                             lineHeight: '1.7',
@@ -189,14 +285,75 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                                             animationDelay: '0.05s',
                                         }}
                                     >
+                                        {/* Depth indicator */}
+                                        {depth > 0 && (
+                                            <span style={{
+                                                display: 'block',
+                                                fontSize: '10px',
+                                                fontWeight: 600,
+                                                color: colours.border,
+                                                marginBottom: '6px',
+                                                letterSpacing: '0.05em',
+                                                textTransform: 'uppercase',
+                                            }}>
+                                                {'\u25CF'.repeat(depth + 1)} Depth {depth + 1}
+                                            </span>
+                                        )}
+
+                                        {/* Loading */}
                                         {isLoading && (
                                             <span style={{ color: topicColor, fontSize: '0.875rem' }}>
                                                 Expanding...
                                             </span>
                                         )}
+
+                                        {/* Expanded text with chained terms */}
                                         {hasContent && (
                                             <span style={{ opacity: 0, animation: 'expandFadeIn 0.5s ease 0.15s forwards' }}>
-                                                {seg.text}
+                                                <ExpandableInlineText text={seg.text} topicColor={topicColor} depth={depth + 1} />
+                                            </span>
+                                        )}
+
+                                        {/* Confidence buttons */}
+                                        {hasContent && conf === 'none' && (
+                                            <span style={{
+                                                display: 'flex',
+                                                gap: '8px',
+                                                marginTop: '12px',
+                                                opacity: 0,
+                                                animation: 'expandFadeIn 0.4s ease 0.4s forwards',
+                                            }}>
+                                                <button
+                                                    onClick={() => setConfidence(seg.id, 'got-it')}
+                                                    style={{
+                                                        padding: '4px 12px', borderRadius: '9999px', fontSize: '12px',
+                                                        fontWeight: 500, border: '1px solid #D1FAE5', background: '#ECFDF5',
+                                                        color: '#059669', cursor: 'pointer', transition: 'all 0.15s ease',
+                                                    }}
+                                                >
+                                                    &#10003; I get it
+                                                </button>
+                                                <button
+                                                    onClick={() => setConfidence(seg.id, 'confused')}
+                                                    style={{
+                                                        padding: '4px 12px', borderRadius: '9999px', fontSize: '12px',
+                                                        fontWeight: 500, border: '1px solid #FEF3C7', background: '#FFFBEB',
+                                                        color: '#D97706', cursor: 'pointer', transition: 'all 0.15s ease',
+                                                    }}
+                                                >
+                                                    ? Still confused
+                                                </button>
+                                            </span>
+                                        )}
+
+                                        {conf === 'got-it' && (
+                                            <span style={{ display: 'block', marginTop: '8px', fontSize: '12px', color: '#059669' }}>
+                                                &#10003; Marked as understood
+                                            </span>
+                                        )}
+                                        {conf === 'confused' && (
+                                            <span style={{ display: 'block', marginTop: '8px', fontSize: '12px', color: '#D97706' }}>
+                                                ? Flagged for revision
                                             </span>
                                         )}
                                     </span>
@@ -233,16 +390,10 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                     <button
                         onClick={triggerExpansion}
                         style={{
-                            background: topicColor,
-                            color: 'white',
-                            padding: '8px 20px',
-                            borderRadius: '9999px',
-                            fontSize: '0.8125rem',
-                            fontWeight: 500,
-                            border: 'none',
-                            cursor: 'pointer',
+                            background: topicColor, color: 'white', padding: '8px 20px',
+                            borderRadius: '9999px', fontSize: '0.8125rem', fontWeight: 500,
+                            border: 'none', cursor: 'pointer',
                             boxShadow: `0 3px 10px ${topicColor}30`,
-                            transition: 'transform 0.15s ease',
                         }}
                     >
                         Expand Selection
@@ -255,14 +406,9 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e' }) {
                     <button
                         onClick={handleUndo}
                         style={{
-                            background: 'transparent',
-                            color: '#9CA3AF',
-                            padding: '6px 16px',
-                            borderRadius: '9999px',
-                            fontSize: '0.8125rem',
-                            fontWeight: 500,
-                            border: '1px solid #E5E7EB',
-                            cursor: 'pointer',
+                            background: 'transparent', color: '#9CA3AF', padding: '6px 16px',
+                            borderRadius: '9999px', fontSize: '0.8125rem', fontWeight: 500,
+                            border: '1px solid #E5E7EB', cursor: 'pointer',
                         }}
                     >
                         Undo
