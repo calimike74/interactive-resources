@@ -104,7 +104,7 @@ export default function LearnTopicRow({ row, index, topicColor, topicId, student
                     {row.heading}
                 </h3>
 
-                <ExpandableText text={row.description} topicColor={topicColor} />
+                <ExpandableText text={row.description} topicColor={topicColor} topicId={topicId} studentToken={studentToken} />
             </div>
 
             {row.assessment && showAssessment && (

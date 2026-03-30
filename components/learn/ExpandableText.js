@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { findExpansion, getExpandableWordIndices, ALL_EXPANSIONS } from '@/lib/learn/expansions';
+import { saveConfidence, getStudentConfidence } from '@/lib/learn/confidence-persistence';
 
 // Depth colour system — each level gets progressively deeper
 function getDepthColour(topicColor, depth) {
@@ -33,7 +34,7 @@ function ExpandableInlineText({ text, topicColor, depth }) {
     ));
 }
 
-export default function ExpandableText({ text, topicColor = '#1a1a6e', onProgressChange }) {
+export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, studentToken, onProgressChange }) {
     const [segments, setSegments] = useState(
         text.split(/\s+/).map((word) => ({ type: 'original', text: word }))
     );
@@ -187,12 +188,22 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', onProgres
         });
     };
 
-    const setConfidence = (id, confidence) => {
+    const handleConfidence = (id, confidence) => {
+        // Find the original text for this expansion (used as the DB key)
+        const seg = segments.find((s) => s.type === 'expanded' && s.id === id);
+        const termTrigger = seg ? seg.originalText : '';
+
         setSegments((prev) =>
-            prev.map((seg) =>
-                seg.type === 'expanded' && seg.id === id ? { ...seg, confidence } : seg
+            prev.map((s) =>
+                s.type === 'expanded' && s.id === id ? { ...s, confidence } : s
             )
         );
+
+        // Persist to Supabase if we have a student token
+        if (studentToken && topicId && termTrigger) {
+            saveConfidence({ studentToken, topicId, termTrigger, confidence });
+        }
+
         if (confidence === 'got-it') {
             setTimeout(() => {
                 setOpenExpansions((prev) => {
@@ -324,7 +335,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', onProgres
                                                 animation: 'expandFadeIn 0.4s ease 0.4s forwards',
                                             }}>
                                                 <button
-                                                    onClick={() => setConfidence(seg.id, 'got-it')}
+                                                    onClick={() => handleConfidence(seg.id, 'got-it')}
                                                     style={{
                                                         padding: '4px 12px', borderRadius: '9999px', fontSize: '12px',
                                                         fontWeight: 500, border: '1px solid #D1FAE5', background: '#ECFDF5',
@@ -334,7 +345,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', onProgres
                                                     &#10003; I get it
                                                 </button>
                                                 <button
-                                                    onClick={() => setConfidence(seg.id, 'confused')}
+                                                    onClick={() => handleConfidence(seg.id, 'confused')}
                                                     style={{
                                                         padding: '4px 12px', borderRadius: '9999px', fontSize: '12px',
                                                         fontWeight: 500, border: '1px solid #FEF3C7', background: '#FFFBEB',
