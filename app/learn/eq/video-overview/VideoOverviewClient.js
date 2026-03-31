@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import NotesPanel from '@/components/learn/NotesPanel';
@@ -7,8 +8,56 @@ import { theme, typography, borderRadius, spacing, transitions } from '@/lib/the
 
 const YOUTUBE_ID = 'rguok2Q95FE';
 
+const KEY_TERMS = [
+    { term: 'Equalization (EQ)', timestamp: '0:48' },
+    { term: 'Frequency spectrum', timestamp: '0:55' },
+    { term: 'Highpass filter', timestamp: '1:34' },
+    { term: 'Cutoff frequency', timestamp: '1:49' },
+    { term: 'Lowpass filter', timestamp: '2:07' },
+    { term: 'Filter slope (dB/octave)', timestamp: '2:14' },
+    { term: 'Bandpass filter', timestamp: '2:45' },
+    { term: 'Bandwidth', timestamp: '2:55' },
+    { term: 'Bandreject (notch) filter', timestamp: '3:12' },
+    { term: 'Q factor', timestamp: '3:45' },
+    { term: 'Graphic equalizer', timestamp: '4:35' },
+    { term: 'Parallel filter routing', timestamp: '4:40' },
+    { term: 'Fixed bands (1/3 octave)', timestamp: '4:51' },
+    { term: 'Parametric equalizer', timestamp: '5:38' },
+    { term: 'Series filter routing', timestamp: '5:42' },
+    { term: 'Centre frequency / Gain / Q', timestamp: '5:53' },
+    { term: 'Shelving filter', timestamp: '6:10' },
+    { term: 'High shelf / Low shelf', timestamp: '6:27' },
+];
+
+const STORAGE_KEY = 'learn-eq-video-captured-terms';
+
 export default function VideoOverviewClient() {
     const t = theme.light;
+    const [captured, setCaptured] = useState(new Set());
+
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) setCaptured(new Set(JSON.parse(stored)));
+        } catch {}
+    }, []);
+
+    const toggleTerm = useCallback((term) => {
+        setCaptured(prev => {
+            const next = new Set(prev);
+            if (next.has(term)) {
+                next.delete(term);
+            } else {
+                next.add(term);
+            }
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
+            } catch {}
+            return next;
+        });
+    }, []);
+
+    const progress = KEY_TERMS.length > 0 ? Math.round((captured.size / KEY_TERMS.length) * 100) : 0;
 
     return (
         <div style={{
@@ -79,7 +128,7 @@ export default function VideoOverviewClient() {
                         lineHeight: 1.5,
                         maxWidth: '640px',
                     }}>
-                        A cinematic overview of equalization covering filter types, graphic vs parametric EQ, Q factor and bandwidth. Take notes as you watch.
+                        Watch this overview before your lesson. As each key term comes up, tap it below to mark it as captured, then write what you learned in your notes.
                     </p>
                 </div>
             </header>
@@ -93,32 +142,6 @@ export default function VideoOverviewClient() {
                 flexDirection: 'column',
                 gap: spacing[6],
             }}>
-                {/* Recommendation hint */}
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: spacing[2],
-                    padding: `${spacing[3]} ${spacing[4]}`,
-                    background: '#fefce8',
-                    border: '1px solid #fde68a',
-                    borderRadius: borderRadius.lg,
-                    fontSize: typography.size.sm,
-                    color: '#92400e',
-                }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="16" x2="12" y2="12" />
-                        <line x1="12" y1="8" x2="12.01" y2="8" />
-                    </svg>
-                    <span>
-                        <strong>Recommended:</strong> Complete the{' '}
-                        <Link href="/learn/eq/eq-filters" style={{ color: '#92400e', fontWeight: 600 }}>
-                            Equalisation lesson
-                        </Link>
-                        {' '}first to get the most from this video.
-                    </span>
-                </div>
-
                 {/* YouTube embed */}
                 <div style={{
                     borderRadius: borderRadius.xl,
@@ -146,6 +169,104 @@ export default function VideoOverviewClient() {
                                 border: 'none',
                             }}
                         />
+                    </div>
+                </div>
+
+                {/* Key terms checklist */}
+                <div style={{
+                    border: `1px solid ${t.border.subtle}`,
+                    borderRadius: borderRadius.xl,
+                    overflow: 'hidden',
+                    background: 'white',
+                }}>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: `${spacing[3]} ${spacing[4]}`,
+                        borderBottom: `1px solid ${t.border.subtle}`,
+                        background: t.bg.secondary,
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={t.text.tertiary} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 11 12 14 22 4" />
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                            </svg>
+                            <span style={{
+                                fontSize: typography.size.sm,
+                                fontWeight: typography.weight.semibold,
+                                color: t.text.secondary,
+                            }}>
+                                Key Terms — tap each one as you hear it discussed
+                            </span>
+                        </div>
+                        <span style={{
+                            fontSize: typography.size.xs,
+                            color: progress === 100 ? t.accent.success : t.text.tertiary,
+                            fontWeight: typography.weight.medium,
+                        }}>
+                            {captured.size}/{KEY_TERMS.length} captured
+                        </span>
+                    </div>
+
+                    {/* Progress bar */}
+                    <div style={{
+                        height: 3,
+                        background: t.bg.secondary,
+                    }}>
+                        <div style={{
+                            height: '100%',
+                            width: `${progress}%`,
+                            background: progress === 100 ? t.accent.success : '#16a34a',
+                            transition: `width ${transitions.normal} ${transitions.easing}`,
+                        }} />
+                    </div>
+
+                    {/* Term bubbles */}
+                    <div style={{
+                        padding: spacing[4],
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: spacing[2],
+                    }}>
+                        {KEY_TERMS.map(({ term, timestamp }) => {
+                            const isCaptured = captured.has(term);
+                            return (
+                                <button
+                                    key={term}
+                                    onClick={() => toggleTerm(term)}
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        padding: '0.35rem 0.75rem',
+                                        borderRadius: '9999px',
+                                        border: `1px solid ${isCaptured ? '#16a34a' : t.border.medium}`,
+                                        background: isCaptured ? '#16a34a12' : 'white',
+                                        color: isCaptured ? '#16a34a' : t.text.secondary,
+                                        fontSize: typography.size.sm,
+                                        fontWeight: isCaptured ? 600 : 400,
+                                        cursor: 'pointer',
+                                        transition: `all ${transitions.fast} ${transitions.easing}`,
+                                        textDecoration: isCaptured ? 'none' : 'none',
+                                    }}
+                                >
+                                    {isCaptured && (
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                    )}
+                                    <span>{term}</span>
+                                    <span style={{
+                                        fontSize: '0.7rem',
+                                        color: isCaptured ? '#16a34a80' : t.text.tertiary,
+                                        fontVariantNumeric: 'tabular-nums',
+                                    }}>
+                                        {timestamp}
+                                    </span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
