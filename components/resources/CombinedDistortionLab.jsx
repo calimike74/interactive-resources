@@ -7,6 +7,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Info, Music, Copy, BookOpen, GraduationCap, Lightbulb, Search, Activity } from 'lucide-react';
+import HearItAccordion from './HearItAccordion';
+import { audioExamples } from '../../lib/audio-examples';
 
 const DistortionLab = () => {
   // Navigation
@@ -650,6 +652,11 @@ const DistortionLab = () => {
               </Card>
             </CardContent>
           </Card>
+
+          <HearItAccordion
+            title={audioExamples['distortion'].title}
+            tracks={audioExamples['distortion'].tracks}
+          />
         </TabsContent>
 
         {/* ================================================================ */}

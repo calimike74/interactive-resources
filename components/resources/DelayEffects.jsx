@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import HearItAccordion from './HearItAccordion';
+import { audioExamples } from '../../lib/audio-examples';
 
 // ============================================
 // Delay Effects
@@ -548,6 +550,11 @@ const DelayEffects = () => {
                 </div>
               ))}
             </StudioCard>
+
+            <HearItAccordion
+              title={audioExamples['delay'].title}
+              tracks={audioExamples['delay'].tracks}
+            />
           </div>
         )}
 
