@@ -17,7 +17,7 @@ export default function AmpEnvelope() {
         canvas.height = H * 2;
         ctx.scale(2, 2);
 
-        const CYCLE = 500;
+        const CYCLE = 900;
         let animId;
 
         const easeOut = (t) => 1 - Math.pow(1 - t, 3);
@@ -101,25 +101,25 @@ export default function AmpEnvelope() {
             let morphT = 0;
             let fromP, toP;
 
-            if (f < 140) {
+            if (f < 250) {
                 currentPreset = presets[0];
                 fromP = toP = presets[0];
                 morphT = 0;
-            } else if (f < 200) {
+            } else if (f < 350) {
                 // Morphing from percussive to pad
                 fromP = presets[0];
                 toP = presets[1];
-                morphT = progress(f, 140, 50);
+                morphT = progress(f, 250, 80);
                 currentPreset = toP;
-            } else if (f < 300) {
+            } else if (f < 540) {
                 currentPreset = presets[1];
                 fromP = toP = presets[1];
                 morphT = 0;
-            } else if (f < 360) {
+            } else if (f < 640) {
                 // Morphing from pad to pluck
                 fromP = presets[1];
                 toP = presets[2];
-                morphT = progress(f, 300, 50);
+                morphT = progress(f, 540, 80);
                 currentPreset = toP;
             } else {
                 currentPreset = presets[2];
@@ -168,11 +168,11 @@ export default function AmpEnvelope() {
             ctx.globalAlpha = 1;
 
             // Preset name label
-            const nameP = f < 140 ? progress(f, 30, 25) :
-                f < 200 ? 1 :
-                    f < 300 ? progress(f, 200, 25) :
-                        f < 360 ? 1 :
-                            progress(f, 360, 25);
+            const nameP = f < 250 ? progress(f, 30, 40) :
+                f < 350 ? 1 :
+                    f < 540 ? progress(f, 350, 40) :
+                        f < 640 ? 1 :
+                            progress(f, 640, 40);
 
             ctx.globalAlpha = nameP;
             ctx.fillStyle = activeColor;
@@ -204,7 +204,7 @@ export default function AmpEnvelope() {
 
             // Animated volume level bar
             if (f >= 50) {
-                const cycleLen = 120;
+                const cycleLen = 200;
                 const localF = (f - 50) % cycleLen;
                 const playT = clamp(localF / cycleLen, 0, 1);
                 const vol = drawEnv(playT);

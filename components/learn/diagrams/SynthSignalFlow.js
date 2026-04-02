@@ -17,7 +17,7 @@ export default function SynthSignalFlow() {
         canvas.height = H * 2;
         ctx.scale(2, 2);
 
-        const CYCLE = 520;
+        const CYCLE = 940;
         let animId;
 
         const easeOut = (t) => 1 - Math.pow(1 - t, 3);
@@ -52,10 +52,10 @@ export default function SynthSignalFlow() {
             const startX = (W - totalW) / 2;
 
             const stages = [
-                { label: 'OSCILLATOR', sub: 'Generate', x: startX, frame: 20 },
-                { label: 'FILTER', sub: 'Shape tone', x: startX + boxW + gap, frame: 60 },
-                { label: 'AMPLIFIER', sub: 'Control volume', x: startX + 2 * (boxW + gap), frame: 100 },
-                { label: 'OUTPUT', sub: 'Speaker', x: startX + 3 * (boxW + gap), frame: 140 },
+                { label: 'OSCILLATOR', sub: 'Generate', x: startX, frame: 30 },
+                { label: 'FILTER', sub: 'Shape tone', x: startX + boxW + gap, frame: 100 },
+                { label: 'AMPLIFIER', sub: 'Control volume', x: startX + 2 * (boxW + gap), frame: 170 },
+                { label: 'OUTPUT', sub: 'Speaker', x: startX + 3 * (boxW + gap), frame: 240 },
             ];
 
             // Draw stages
@@ -185,9 +185,9 @@ export default function SynthSignalFlow() {
                 ctx.globalAlpha = 1;
             });
 
-            // --- Phase 5 (200-440): Signal dots flow through chain ---
-            if (f >= 200 && f < CYCLE - 60) {
-                const dotCycle = 90;
+            // --- Phase 5: Signal dots flow through chain ---
+            if (f >= 340 && f < CYCLE - 80) {
+                const dotCycle = 150;
                 const localT = ((f - 200) % dotCycle) / dotCycle;
                 const chainStart = startX;
                 const chainEnd = startX + totalW;
@@ -207,7 +207,7 @@ export default function SynthSignalFlow() {
                 ctx.fill();
 
                 // Second dot offset
-                const localT2 = ((f - 200 + dotCycle / 2) % dotCycle) / dotCycle;
+                const localT2 = ((f - 340 + dotCycle / 2) % dotCycle) / dotCycle;
                 const dotX2 = chainStart + localT2 * chainLen;
                 ctx.fillStyle = 'rgba(26, 26, 110, 0.1)';
                 ctx.beginPath();
@@ -219,11 +219,11 @@ export default function SynthSignalFlow() {
                 ctx.fill();
             }
 
-            // --- Phase 6 (250-440): Envelope connections from below ---
+            // --- Phase 6: Envelope connections from below ---
             const envLabels = [
-                { label: 'Filter Envelope', targetIdx: 1, frame: 250, color: '#7c3aed' },
-                { label: 'Amp Envelope', targetIdx: 2, frame: 290, color: '#DC2626' },
-                { label: 'LFO (optional)', targetIdx: 0, frame: 330, color: '#0891b2' },
+                { label: 'Filter Envelope', targetIdx: 1, frame: 430, color: '#7c3aed' },
+                { label: 'Amp Envelope', targetIdx: 2, frame: 510, color: '#DC2626' },
+                { label: 'LFO (optional)', targetIdx: 0, frame: 590, color: '#0891b2' },
             ];
 
             const envY = chainY + boxH + 40;
@@ -284,7 +284,7 @@ export default function SynthSignalFlow() {
             });
 
             // Signal flow direction label
-            const flowP = progress(f, 180, 25);
+            const flowP = progress(f, 310, 40);
             if (flowP > 0) {
                 ctx.globalAlpha = flowP;
                 ctx.fillStyle = '#9ca3af';
@@ -295,7 +295,7 @@ export default function SynthSignalFlow() {
             }
 
             // Phase indicator
-            const phase = f < 160 ? 'Building' : f < 250 ? 'Signal' : f < 380 ? 'Modulation' : 'Complete';
+            const phase = f < 280 ? 'Building' : f < 430 ? 'Signal' : f < 680 ? 'Modulation' : 'Complete';
             ctx.fillStyle = '#9ca3af';
             ctx.font = '8px -apple-system, sans-serif';
             ctx.textAlign = 'right';
