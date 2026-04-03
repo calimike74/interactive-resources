@@ -319,7 +319,7 @@ export default function TopicBook({ topic, animationDelay = 0 }) {
                     transform: isHovered && hasResources
                         ? 'rotateY(-6deg) translateY(-6px) scale(1.04)'
                         : 'rotateY(-18deg)',
-                    transition: `transform 400ms ${transitions.easing}`,
+                    transition: `transform ${transitions.springDuration} ${transitions.spring}`,
                 }}
             >
                 {/* Front cover */}
@@ -339,7 +339,7 @@ export default function TopicBook({ topic, animationDelay = 0 }) {
                         boxShadow: isHovered && hasResources
                             ? `4px 4px 20px rgba(0,0,0,0.25), 1px 1px 4px rgba(0,0,0,0.12)`
                             : `2px 4px 12px rgba(0,0,0,0.18), 1px 1px 3px rgba(0,0,0,0.08)`,
-                        transition: `box-shadow 400ms ${transitions.easing}`,
+                        transition: `box-shadow ${transitions.springDuration} ${transitions.spring}`,
                         transformOrigin: 'left center',
                     }}
                 >
@@ -360,7 +360,7 @@ export default function TopicBook({ topic, animationDelay = 0 }) {
                             )`,
                             borderRadius: '0 2px 2px 0',
                             opacity: isHovered ? 0.7 : 0.5,
-                            transition: `opacity 400ms ${transitions.easing}`,
+                            transition: `opacity ${transitions.springDuration} ${transitions.spring}`,
                         }}
                         aria-hidden="true"
                     />

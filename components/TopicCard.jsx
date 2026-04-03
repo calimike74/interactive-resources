@@ -22,7 +22,7 @@ function AnimatedBadge({ children, delay = 0, color, style = {} }) {
                 alignItems: 'center',
                 opacity: visible ? 1 : 0,
                 transform: visible ? 'scale(1)' : 'scale(0.5)',
-                transition: `opacity 300ms ${transitions.easing} ${delay}ms, transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms`,
+                transition: `opacity 300ms ${transitions.easing} ${delay}ms, transform ${transitions.springDuration} ${transitions.spring} ${delay}ms`,
                 willChange: 'opacity, transform',
                 ...style,
             }}
@@ -98,7 +98,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                     : glass.shadow,
                 padding: spacing[6],
                 cursor: hasResources ? 'pointer' : 'default',
-                transition: `all ${transitions.slow} ${transitions.easing}`,
+                transition: `all ${transitions.springDuration} ${transitions.spring}`,
                 transform: hasResources && isHovered ? 'translate(-3px, -4px)' : 'none',
                 opacity: hasResources ? 1 : 0.6,
                 height: '100%',
