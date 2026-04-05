@@ -3,7 +3,6 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import LearnTopicRow from './LearnTopicRow';
 import LearnSpineLayout from './LearnSpineLayout';
 import { getTopicResponses } from '@/lib/learn/section-persistence';
 
@@ -93,32 +92,12 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
                 </div>
             </header>
 
-            {/* Content rows */}
-            {topic.id === 'eq' ? (
-                <LearnSpineLayout
-                    topic={topic}
-                    token={token}
-                    answeredSections={answeredSections}
-                />
-            ) : (
-                <main style={{
-                    maxWidth: '960px',
-                    margin: '0 auto',
-                    padding: '1rem 1.5rem 4rem',
-                }}>
-                    {topic.rows.map((row, i) => (
-                        <LearnTopicRow
-                            key={row.id}
-                            row={row}
-                            index={i}
-                            topicColor={topic.color}
-                            topicId={topic.id}
-                            studentToken={token}
-                            answeredSections={answeredSections}
-                        />
-                    ))}
-                </main>
-            )}
+            {/* Content — spine layout for all learn flows */}
+            <LearnSpineLayout
+                topic={topic}
+                token={token}
+                answeredSections={answeredSections}
+            />
         </div>
     );
 }
