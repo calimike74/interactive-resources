@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import LearnTopicRow from './LearnTopicRow';
+import LearnSpineLayout from './LearnSpineLayout';
 import { getTopicResponses } from '@/lib/learn/section-persistence';
 
 export default function LearnTopicPage({ topic, parentTopicId }) {
@@ -93,23 +94,31 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
             </header>
 
             {/* Content rows */}
-            <main style={{
-                maxWidth: '960px',
-                margin: '0 auto',
-                padding: '1rem 1.5rem 4rem',
-            }}>
-                {topic.rows.map((row, i) => (
-                    <LearnTopicRow
-                        key={row.id}
-                        row={row}
-                        index={i}
-                        topicColor={topic.color}
-                        topicId={topic.id}
-                        studentToken={token}
-                        answeredSections={answeredSections}
-                    />
-                ))}
-            </main>
+            {topic.id === 'eq' ? (
+                <LearnSpineLayout
+                    topic={topic}
+                    token={token}
+                    answeredSections={answeredSections}
+                />
+            ) : (
+                <main style={{
+                    maxWidth: '960px',
+                    margin: '0 auto',
+                    padding: '1rem 1.5rem 4rem',
+                }}>
+                    {topic.rows.map((row, i) => (
+                        <LearnTopicRow
+                            key={row.id}
+                            row={row}
+                            index={i}
+                            topicColor={topic.color}
+                            topicId={topic.id}
+                            studentToken={token}
+                            answeredSections={answeredSections}
+                        />
+                    ))}
+                </main>
+            )}
         </div>
     );
 }
