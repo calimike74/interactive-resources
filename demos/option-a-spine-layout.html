@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option A — Spine Replaces Layout</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f4f2;
+    color: #1a1a2e;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    background: white;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 3rem 1.5rem 2rem;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .back-link {
+    font-size: 0.8125rem;
+    color: #6B7280;
+    text-decoration: none;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366F1;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.75rem;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .header p {
+    font-size: 1.0625rem;
+    color: #6B7280;
+    margin-top: 0.5rem;
+    max-width: 640px;
+  }
+  .section-count {
+    font-size: 0.8125rem;
+    color: #9CA3AF;
+    margin-top: 1rem;
+  }
+  .option-label {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #1a1a2e;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 100;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── Spine ─── */
+  .spine-container {
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 0;
+  }
+  .spine-track {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  .spine-fill {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 2px;
+    height: 0;
+    background: linear-gradient(180deg, #6366F1, #1a1a2e);
+    transform: translateX(-50%);
+    z-index: 2;
+    transition: height 0.12s ease-out;
+  }
+
+  /* ─── Section ─── */
+  .section {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 100px;
+    z-index: 3;
+    min-height: 200px;
+  }
+  .section:last-child { margin-bottom: 0; }
+  .section:nth-child(odd) { flex-direction: row; }
+  .section:nth-child(even) { flex-direction: row-reverse; }
+
+  /* Content card */
+  .section-content {
+    flex: 1;
+    max-width: calc(50% - 48px);
+    opacity: 0.25;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .section.active .section-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .section:nth-child(odd) .section-content { padding-right: 32px; }
+  .section:nth-child(even) .section-content { padding-left: 32px; }
+
+  .section-spacer { flex: 1; max-width: calc(50% - 48px); }
+
+  /* Diagram placeholder */
+  .diagram-placeholder {
+    background: #fafafa;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.75rem;
+    aspect-ratio: 480 / 280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0.25;
+    transition: opacity 0.5s ease;
+  }
+  .section.active .diagram-placeholder { opacity: 1; }
+
+  /* Node */
+  .section-node {
+    position: absolute;
+    left: 50%;
+    top: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f5f4f2;
+    border: 2px solid #e5e7eb;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #bbb;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 4;
+  }
+  .section.active .section-node {
+    background: #6366F1;
+    border-color: #6366F1;
+    color: #fff;
+    box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.15);
+    transform: translateX(-50%) scale(1.1);
+  }
+
+  /* Text */
+  .section-num {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366F1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .section-content h3 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .section-content p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.75;
+  }
+  .underline-term {
+    text-decoration: underline;
+    text-decoration-color: rgba(99, 102, 241, 0.3);
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  /* ─── Ripple ─── */
+  .ripple-zone {
+    position: relative;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    margin-top: 60px;
+  }
+  .ripple-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    position: relative;
+    z-index: 5;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+  }
+  .ripple-dot.complete {
+    background: #6366F1;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+  }
+  .ripple-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    pointer-events: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  .ripple-ring.animate {
+    animation: ripple 2.2s ease-out forwards;
+  }
+  .ripple-ring:nth-child(2).animate { animation-delay: 0.12s; }
+  .ripple-ring:nth-child(3).animate { animation-delay: 0.24s; }
+  .ripple-ring:nth-child(4).animate { animation-delay: 0.36s; }
+  .ripple-ring:nth-child(5).animate { animation-delay: 0.48s; }
+  .ripple-ring:nth-child(6).animate { animation-delay: 0.6s; }
+  .ripple-ring:nth-child(7).animate { animation-delay: 0.72s; }
+
+  @keyframes ripple {
+    0% { transform: translate(-50%, -50%) scale(0); border-color: rgba(99, 102, 241, 0.3); }
+    100% { transform: translate(-50%, -50%) scale(1); border-color: rgba(99, 102, 241, 0); }
+  }
+
+  .complete-msg {
+    text-align: center;
+    padding: 20px 24px 100px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease 1s, transform 0.6s ease 1s;
+  }
+  .complete-msg.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .complete-msg p {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+  .complete-msg span {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.875rem;
+    color: #9CA3AF;
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 768px) {
+    .section {
+      flex-direction: column !important;
+      align-items: stretch;
+      margin-left: 48px;
+      margin-bottom: 60px;
+    }
+    .section-content {
+      max-width: 100% !important;
+      padding: 0 !important;
+    }
+    .section-spacer { display: none; }
+    .diagram-placeholder { margin-top: 16px; }
+    .section-node {
+      left: -24px;
+      transform: translateX(-50%);
+    }
+    .section.active .section-node {
+      transform: translateX(-50%) scale(1.1);
+    }
+    .spine-track, .spine-fill {
+      left: 24px;
+      transform: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="option-label">Option A: Spine Layout</div>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="back-link" href="#">&larr; Back to lessons</a>
+    <div class="badge">Effects Processing</div>
+    <h1>Equalisation (EQ)</h1>
+    <p>How EQ shapes frequency balance — from broad tonal control to surgical precision.</p>
+    <div class="section-count">7 sections</div>
+  </div>
+</div>
+
+<div class="spine-container" id="spineContainer">
+  <div class="spine-track"></div>
+  <div class="spine-fill" id="spineFill"></div>
+
+  <!-- 1 -->
+  <div class="section" data-index="0">
+    <div class="section-content">
+      <div class="section-num">01</div>
+      <h3>What EQ Solves</h3>
+      <p>Every sound contains a mix of <span class="underline-term">frequencies</span>. Some are too loud, others too quiet. EQ lets you boost or cut specific frequency ranges to shape the <span class="underline-term">tonal balance</span> of a signal — fixing problems or enhancing character.</p>
+    </div>
+    <div class="section-node">1</div>
+    <div class="section-spacer">
+      <div class="diagram-placeholder">Frequency Spectrum animation</div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" data-index="1">
+    <div class="section-content">
+      <div class="section-num">02</div>
+      <h3>Graphic EQ</h3>
+      <p>A <span class="underline-term">graphic EQ</span> splits the frequency spectrum into fixed bands — typically 10 or 31. Each band has a slider that boosts or cuts at that specific frequency. The slider positions give you a visual "graph" of your EQ curve. Quick to use, but you can only adjust the frequencies it gives you.</p>
+    </div>
+    <div class="section-node">2</div>
+    <div class="section-spacer">
+      <div class="diagram-placeholder">Graphic EQ animation</div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" data-index="2">
+    <div class="section-content">
+      <div class="section-num">03</div>
+      <h3>Frequency Bands & Spacing</h3>
+      <p>Bands are spaced at <span class="underline-term">octave intervals</span> (10-band) or third-octave intervals (31-band). An octave means doubling the frequency — so bands go 125Hz, 250Hz, 500Hz, 1kHz, 2kHz, 4kHz. More bands means finer control, but the frequencies are still fixed.</p>
+    </div>
+    <div class="section-node">3</div>
+    <div class="section-spacer">
+      <div class="diagram-placeholder">Octave Bands animation</div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" data-index="3">
+    <div class="section-content">
+      <div class="section-num">04</div>
+      <h3>Parametric EQ</h3>
+      <p>A <span class="underline-term">parametric EQ</span> gives you full control over each band: choose any frequency, set the gain (boost/cut), and adjust the <span class="underline-term">Q</span> (bandwidth). Typically 4–7 bands, each fully sweepable. More surgical than graphic EQ — you target exactly the frequency you need.</p>
+    </div>
+    <div class="section-node">4</div>
+    <div class="section-spacer">
+      <div class="diagram-placeholder">Parametric EQ animation</div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" data-index="4">
+    <div class="section-content">
+      <div class="section-num">05</div>
+      <h3>Q Factor (Bandwidth)</h3>
+      <p><span class="underline-term">Q</span> controls how wide or narrow the EQ band is. Low Q = wide and gentle, affecting many frequencies around the target. High Q = narrow and precise, targeting a specific frequency. This is the key parameter that graphic EQ lacks.</p>
+    </div>
+    <div class="section-node">5</div>
+    <div class="section-spacer">
+      <div class="diagram-placeholder">Q Factor animation</div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" data-index="5">
+    <div class="section-content">
+      <div class="section-num">06</div>
+      <h3>Signal Routing</h3>
+      <p>Graphic EQ uses <span class="underline-term">parallel routing</span> — all bands process the signal simultaneously. Parametric EQ uses <span class="underline-term">series routing</span> — the signal passes through each band in sequence. Series routing means each band adds cumulative phase shift, which is why linear-phase EQs exist for mastering.</p>
+    </div>
+    <div class="section-node">6</div>
+    <div class="section-spacer">
+      <div class="diagram-placeholder">Signal Routing animation</div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" data-index="6">
+    <div class="section-content">
+      <div class="section-num">07</div>
+      <h3>When to Use Each</h3>
+      <p>Graphic EQ excels at quick, broad tonal adjustments — live sound, DJ monitoring, room correction. Parametric EQ is the tool for precise, surgical work — removing resonances, shaping individual tracks in a mix, mastering. Most DAWs default to parametric because of its flexibility.</p>
+    </div>
+    <div class="section-node">7</div>
+    <div class="section-spacer">
+      <div class="diagram-placeholder">Comparison animation</div>
+    </div>
+  </div>
+
+  <!-- Ripple -->
+  <div class="ripple-zone" id="rippleZone">
+    <div class="ripple-dot" id="rippleDot"></div>
+    <div class="ripple-ring" style="width:70px;height:70px;"></div>
+    <div class="ripple-ring" style="width:130px;height:130px;"></div>
+    <div class="ripple-ring" style="width:200px;height:200px;"></div>
+    <div class="ripple-ring" style="width:280px;height:280px;"></div>
+    <div class="ripple-ring" style="width:370px;height:370px;"></div>
+    <div class="ripple-ring" style="width:470px;height:470px;"></div>
+    <div class="ripple-ring" style="width:580px;height:580px;"></div>
+  </div>
+</div>
+
+<div class="complete-msg" id="completeMsg">
+  <p>Topic complete</p>
+  <span>7 of 7 sections covered</span>
+</div>
+
+<div style="height: 30vh;"></div>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const spineFill = document.getElementById('spineFill');
+  const container = document.getElementById('spineContainer');
+  const rippleDot = document.getElementById('rippleDot');
+  const rippleRings = document.querySelectorAll('.ripple-ring');
+  const completeMsg = document.getElementById('completeMsg');
+  let rippleFired = false;
+
+  function update() {
+    const rect = container.getBoundingClientRect();
+    const trigger = window.innerHeight * 0.55;
+
+    // Spine fill
+    const progress = Math.min(Math.max((trigger - rect.top) / rect.height, 0), 1);
+    spineFill.style.height = (progress * rect.height) + 'px';
+
+    // Sections
+    let allActive = true;
+    sections.forEach(s => {
+      const r = s.getBoundingClientRect();
+      if (r.top + r.height * 0.3 < trigger) {
+        s.classList.add('active');
+      } else {
+        allActive = false;
+      }
+    });
+
+    // Ripple
+    if (allActive && !rippleFired) {
+      rippleFired = true;
+      rippleDot.classList.add('complete');
+      rippleRings.forEach(r => r.classList.add('animate'));
+      completeMsg.classList.add('visible');
+    }
+
+    // Reset on scroll up
+    const last = sections[sections.length - 1];
+    if (last.getBoundingClientRect().top + last.offsetHeight * 0.3 > trigger && rippleFired) {
+      rippleFired = false;
+      rippleDot.classList.remove('complete');
+      rippleRings.forEach(r => { r.classList.remove('animate'); });
+      completeMsg.classList.remove('visible');
+    }
+  }
+
+  window.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+  update();
+</script>
+
+</body>
+</html>
