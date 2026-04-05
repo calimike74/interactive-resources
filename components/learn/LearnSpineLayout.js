@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import diagrams from './diagrams';
 import ExpandableText from './ExpandableText';
 import SectionAssessment from './SectionAssessment';
@@ -10,6 +10,71 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
     const [assessmentState, setAssessmentState] = useState({});
     const spineTrackRef = useRef(null);
     const spineFillRef = useRef(null);
+    const containerRef = useRef(null);
+    const sectionRefs = useRef([]);
+    const [activeIndexes, setActiveIndexes] = useState(new Set());
+    const [rippleFired, setRippleFired] = useState(false);
+
+    // IntersectionObserver for section activation
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                setActiveIndexes((prev) => {
+                    const next = new Set(prev);
+                    entries.forEach((entry) => {
+                        const idx = Number(entry.target.dataset.sectionIndex);
+                        if (entry.isIntersecting) {
+                            next.add(idx);
+                        } else {
+                            next.delete(idx);
+                        }
+                    });
+                    return next;
+                });
+            },
+            { rootMargin: '-45% 0px -45% 0px' }
+        );
+
+        const refs = sectionRefs.current;
+        refs.forEach((el) => {
+            if (el) observer.observe(el);
+        });
+
+        return () => observer.disconnect();
+    }, [topic.rows.length]);
+
+    // Scroll listener for spine fill
+    useEffect(() => {
+        let rafId;
+        const onScroll = () => {
+            rafId = requestAnimationFrame(() => {
+                const container = containerRef.current;
+                const fill = spineFillRef.current;
+                if (!container || !fill) return;
+                const rect = container.getBoundingClientRect();
+                const trigger = window.innerHeight * 0.55;
+                const progress = Math.min(1, Math.max(0, (trigger - rect.top) / rect.height));
+                fill.style.height = (progress * rect.height) + 'px';
+            });
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); // initial
+
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
+    }, []);
+
+    // Ripple trigger: fire when all sections active
+    useEffect(() => {
+        if (activeIndexes.size === topic.rows.length && topic.rows.length > 0) {
+            setRippleFired(true);
+        } else {
+            setRippleFired(false);
+        }
+    }, [activeIndexes, topic.rows.length]);
 
     const handleToggleAssessment = (i) => {
         const current = assessmentState[i] || { show: false, animating: false };
@@ -41,7 +106,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
     const ringSizes = [70, 130, 200, 280, 370, 470, 580];
 
     return (
-        <div style={{
+        <div ref={containerRef} style={{
             position: 'relative',
             maxWidth: '960px',
             margin: '0 auto',
@@ -73,6 +138,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     height: 0,
                     background: `linear-gradient(to bottom, ${topicColor}, #1a1a2e)`,
                     transform: 'translateX(-50%)',
+                    transition: 'height 0.12s ease-out',
                     zIndex: 2,
                 }}
             />
@@ -83,10 +149,13 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 const DiagramComponent = diagrams[row.animation];
                 const alreadyAnswered = answeredSections?.includes(row.id);
                 const state = assessmentState[i] || { show: false, animating: false };
+                const isActive = activeIndexes.has(i);
 
                 return (
                     <div
                         key={row.id}
+                        ref={el => sectionRefs.current[i] = el}
+                        data-section-index={i}
                         style={{
                             display: 'flex',
                             flexDirection: isOdd ? 'row' : 'row-reverse',
@@ -102,6 +171,9 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                             maxWidth: 'calc(50% - 48px)',
                             paddingRight: isOdd ? '32px' : undefined,
                             paddingLeft: isOdd ? undefined : '32px',
+                            opacity: isActive ? 1 : 0.25,
+                            transform: isActive ? 'translateY(0)' : 'translateY(24px)',
+                            transition: 'opacity 0.5s ease, transform 0.5s ease',
                         }}>
                             <div style={{
                                 position: 'relative',
@@ -209,19 +281,21 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                             position: 'absolute',
                             left: '50%',
                             top: '16px',
-                            transform: 'translate(-50%, 0)',
+                            transform: isActive ? 'translate(-50%, 0) scale(1.1)' : 'translate(-50%, 0)',
                             width: '40px',
                             height: '40px',
                             borderRadius: '50%',
-                            border: '2px solid #e5e7eb',
-                            background: '#f5f4f2',
-                            color: '#bbb',
+                            border: `2px solid ${isActive ? topicColor : '#e5e7eb'}`,
+                            background: isActive ? topicColor : '#f5f4f2',
+                            color: isActive ? '#fff' : '#bbb',
+                            boxShadow: isActive ? `0 0 0 5px ${topicColor}25` : 'none',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontSize: '0.8rem',
                             fontWeight: 700,
                             zIndex: 4,
+                            transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                         }}>
                             {i + 1}
                         </div>
@@ -230,6 +304,9 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                         <div style={{
                             flex: 1,
                             maxWidth: 'calc(50% - 48px)',
+                            opacity: isActive ? 1 : 0.25,
+                            transform: isActive ? 'translateY(0)' : 'translateY(24px)',
+                            transition: 'opacity 0.5s ease, transform 0.5s ease',
                         }}>
                             <div style={{
                                 background: '#fafafa',
@@ -258,9 +335,11 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     width: '14px',
                     height: '14px',
                     borderRadius: '50%',
-                    background: topicColor,
+                    background: rippleFired ? topicColor : '#e5e7eb',
+                    boxShadow: rippleFired ? `0 0 12px ${topicColor}66` : 'none',
                     position: 'relative',
                     zIndex: 2,
+                    transition: 'background 0.4s ease, box-shadow 0.4s ease',
                 }} />
 
                 {/* Ripple rings */}
@@ -269,11 +348,20 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                         key={ri}
                         style={{
                             position: 'absolute',
+                            left: '50%',
+                            top: '50%',
                             width: `${size}px`,
                             height: `${size}px`,
                             borderRadius: '50%',
                             border: `1.5px solid ${topicColor}`,
+                            transform: 'translate(-50%, -50%) scale(0)',
                             opacity: 0,
+                            ...(rippleFired ? {
+                                animation: 'spine-ripple 2.2s ease-out forwards',
+                                animationDelay: `${ri * 0.12}s`,
+                            } : {
+                                animation: 'none',
+                            }),
                         }}
                     />
                 ))}
@@ -283,6 +371,9 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
             <div style={{
                 textAlign: 'center',
                 paddingBottom: '4rem',
+                opacity: rippleFired ? 1 : 0,
+                transform: rippleFired ? 'translateY(0)' : 'translateY(10px)',
+                transition: 'opacity 0.6s ease 1s, transform 0.6s ease 1s',
             }}>
                 <h3 style={{
                     fontSize: '1.5rem',
@@ -296,16 +387,15 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     fontSize: '0.95rem',
                     color: '#6B7280',
                 }}>
-                    {answeredSections?.length || 0} of {topic.rows.length} sections covered
+                    {topic.rows.length} of {topic.rows.length} sections covered
                 </p>
             </div>
 
-            {/* Placeholder keyframes for ripple animation (Task 4) */}
+            {/* Keyframes for ripple animation */}
             <style>{`
                 @keyframes spine-ripple {
-                    0% { opacity: 0; transform: scale(0.8); }
-                    50% { opacity: 0.3; }
-                    100% { opacity: 0; transform: scale(1); }
+                    0% { transform: translate(-50%, -50%) scale(0); border-color: ${topicColor}4D; }
+                    100% { transform: translate(-50%, -50%) scale(1); border-color: ${topicColor}00; }
                 }
             `}</style>
         </div>
