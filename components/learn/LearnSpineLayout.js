@@ -13,8 +13,10 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
     const containerRef = useRef(null);
     const sectionRefs = useRef([]);
     const [activeIndexes, setActiveIndexes] = useState(new Set());
+    const [hasBeenVisible, setHasBeenVisible] = useState(new Set());
     const [rippleFired, setRippleFired] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const rafRef = useRef(null);
 
     // Mobile detection
     useEffect(() => {
@@ -41,6 +43,16 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     });
                     return next;
                 });
+                // Track which sections have ever been visible (for diagram persistence)
+                setHasBeenVisible((prev) => {
+                    const next = new Set(prev);
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            next.add(Number(entry.target.dataset.sectionIndex));
+                        }
+                    });
+                    return next.size !== prev.size ? next : prev;
+                });
             },
             { rootMargin: '-45% 0px -45% 0px' }
         );
@@ -55,9 +67,8 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
 
     // Scroll listener for spine fill
     useEffect(() => {
-        let rafId;
         const onScroll = () => {
-            rafId = requestAnimationFrame(() => {
+            rafRef.current = requestAnimationFrame(() => {
                 const container = containerRef.current;
                 const fill = spineFillRef.current;
                 if (!container || !fill) return;
@@ -73,7 +84,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
 
         return () => {
             window.removeEventListener('scroll', onScroll);
-            if (rafId) cancelAnimationFrame(rafId);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
         };
     }, []);
 
@@ -327,7 +338,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                                 aspectRatio: '480 / 280',
                                 overflow: 'hidden',
                             }}>
-                                {DiagramComponent && isActive && <DiagramComponent />}
+                                {DiagramComponent && hasBeenVisible.has(i) && <DiagramComponent />}
                             </div>
                         </div>
                     </div>
