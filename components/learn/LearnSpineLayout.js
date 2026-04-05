@@ -17,6 +17,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
     const [rippleFired, setRippleFired] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const rafRef = useRef(null);
+    const rippleZoneRef = useRef(null);
 
     // Mobile detection
     useEffect(() => {
@@ -54,7 +55,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     return next.size !== prev.size ? next : prev;
                 });
             },
-            { rootMargin: '-45% 0px -45% 0px' }
+            { rootMargin: '-35% 0px -15% 0px' }
         );
 
         const refs = sectionRefs.current;
@@ -73,9 +74,15 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 const fill = spineFillRef.current;
                 if (!container || !fill) return;
                 const rect = container.getBoundingClientRect();
-                const trigger = window.innerHeight * 0.55;
-                const progress = Math.min(1, Math.max(0, (trigger - rect.top) / rect.height));
-                fill.style.height = (progress * rect.height) + 'px';
+                const rippleZone = rippleZoneRef.current;
+                // Fill stops at the centre of the ripple dot
+                const dotY = rippleZone
+                    ? rippleZone.getBoundingClientRect().top - rect.top + rippleZone.offsetHeight / 2
+                    : rect.height;
+                // Page-level scroll progress: 0 at top, 1 at bottom
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+                fill.style.height = (Math.min(1, progress) * dotY) + 'px';
             });
         };
 
@@ -88,12 +95,20 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
         };
     }, []);
 
-    // Ripple trigger: fire when all sections have been scrolled through
+    // Ripple trigger: fire when scrolled near the bottom of the page
+    const rippleFiredRef = useRef(false);
     useEffect(() => {
-        if (hasBeenVisible.size === topic.rows.length && topic.rows.length > 0) {
-            setRippleFired(true);
-        }
-    }, [hasBeenVisible, topic.rows.length]);
+        if (rippleFiredRef.current) return;
+        const checkRipple = () => {
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            if (maxScroll > 0 && window.scrollY / maxScroll >= 0.92) {
+                rippleFiredRef.current = true;
+                setRippleFired(true);
+            }
+        };
+        window.addEventListener('scroll', checkRipple, { passive: true });
+        return () => window.removeEventListener('scroll', checkRipple);
+    }, []);
 
     const handleToggleAssessment = (i) => {
         const current = assessmentState[i] || { show: false, animating: false };
@@ -122,8 +137,6 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
         }
     };
 
-    const ringSizes = [70, 130, 200, 280, 370, 470, 580];
-
     return (
         <div ref={containerRef} style={{
             position: 'relative',
@@ -131,7 +144,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
             margin: '0 auto',
             padding: '3rem 1.5rem 0',
         }}>
-            {/* Spine track */}
+            {/* Spine track — height set dynamically to stop at ripple dot */}
             <div
                 ref={spineTrackRef}
                 style={{
@@ -145,6 +158,8 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     zIndex: 1,
                 }}
             />
+            {/* A second track segment below the ripple zone is intentionally omitted —
+                the grey line stops at the ripple dot */}
 
             {/* Spine fill (scroll-driven, starts at 0) */}
             <div
@@ -285,59 +300,78 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 );
             })}
 
-            {/* Ripple zone */}
-            <div style={{
-                height: '300px',
+            {/* Ripple zone — full-width bowl wave effect */}
+            <div ref={rippleZoneRef} style={{
                 position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: isMobile ? 'flex-start' : 'center',
-                paddingLeft: isMobile ? '18px' : undefined,
+                height: '400px',
+                overflow: 'hidden',
+                marginLeft: '-50vw',
+                marginRight: '-50vw',
+                left: '50%',
+                right: '50%',
+                width: '100vw',
             }}>
-                {/* Centre dot */}
+                {/* Centre dot on the spine */}
                 <div style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '40px',
+                    transform: 'translateX(-50%)',
                     width: '14px',
                     height: '14px',
                     borderRadius: '50%',
                     background: rippleFired ? topicColor : '#e5e7eb',
-                    boxShadow: rippleFired ? `0 0 12px ${topicColor}66` : 'none',
-                    position: 'relative',
-                    zIndex: 2,
+                    boxShadow: rippleFired ? `0 0 16px ${topicColor}66` : 'none',
+                    zIndex: 5,
                     transition: 'background 0.4s ease, box-shadow 0.4s ease',
                 }} />
 
-                {/* Ripple rings */}
-                {ringSizes.map((size, ri) => (
-                    <div
-                        key={ri}
-                        style={{
-                            position: 'absolute',
-                            left: '50%',
-                            top: '50%',
-                            width: `${size}px`,
-                            height: `${size}px`,
-                            borderRadius: '50%',
-                            border: `1.5px solid ${topicColor}`,
-                            transform: 'translate(-50%, -50%) scale(0)',
-                            opacity: 0,
-                            ...(rippleFired ? {
-                                animation: 'spine-ripple 2.2s ease-out forwards',
-                                animationDelay: `${ri * 0.12}s`,
-                            } : {
-                                animation: 'none',
-                            }),
-                        }}
-                    />
+                {/* Bowl wave arcs */}
+                {[1, 2, 3, 4, 5].map((n) => (
+                    <div key={n} style={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '40px',
+                        transform: 'translateX(-50%)',
+                        width: `${n * 40}%`,
+                        height: `${n * 70}px`,
+                        borderRadius: '0 0 50% 50%',
+                        border: 'none',
+                        borderBottom: `2px solid ${topicColor}`,
+                        opacity: 0,
+                        ...(rippleFired ? {
+                            animation: 'bowl-wave 2s ease-out forwards',
+                            animationDelay: `${n * 0.15}s`,
+                        } : {
+                            animation: 'none',
+                        }),
+                    }} />
                 ))}
+
+                {/* Gradient wash behind waves */}
+                <div style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: '40px',
+                    height: '360px',
+                    background: rippleFired
+                        ? `radial-gradient(ellipse 80% 100% at 50% 0%, ${topicColor}12 0%, ${topicColor}08 40%, transparent 70%)`
+                        : 'none',
+                    opacity: rippleFired ? 1 : 0,
+                    transition: 'opacity 1.5s ease 0.3s',
+                    pointerEvents: 'none',
+                }} />
             </div>
 
             {/* Complete message */}
             <div style={{
                 textAlign: 'center',
                 paddingBottom: '4rem',
+                marginTop: '-2rem',
                 opacity: rippleFired ? 1 : 0,
                 transform: rippleFired ? 'translateY(0)' : 'translateY(10px)',
-                transition: 'opacity 0.6s ease 1s, transform 0.6s ease 1s',
+                transition: 'opacity 0.6s ease 1.2s, transform 0.6s ease 1.2s',
             }}>
                 <h3 style={{
                     fontSize: '1.5rem',
@@ -355,11 +389,20 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 </p>
             </div>
 
-            {/* Keyframes for ripple animation */}
+            {/* Keyframes for bowl wave ripple */}
             <style>{`
-                @keyframes spine-ripple {
-                    0% { transform: translate(-50%, -50%) scale(0); border-color: ${topicColor}4D; }
-                    100% { transform: translate(-50%, -50%) scale(1); border-color: ${topicColor}00; }
+                @keyframes bowl-wave {
+                    0% {
+                        opacity: 0;
+                        transform: translateX(-50%) scaleX(0.3) scaleY(0.3);
+                    }
+                    30% {
+                        opacity: 0.6;
+                    }
+                    100% {
+                        opacity: 0;
+                        transform: translateX(-50%) scaleX(1) scaleY(1);
+                    }
                 }
             `}</style>
         </div>
