@@ -14,6 +14,16 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
     const sectionRefs = useRef([]);
     const [activeIndexes, setActiveIndexes] = useState(new Set());
     const [rippleFired, setRippleFired] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Mobile detection
+    useEffect(() => {
+        const mq = window.matchMedia('(max-width: 768px)');
+        setIsMobile(mq.matches);
+        const handler = (e) => setIsMobile(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
 
     // IntersectionObserver for section activation
     useEffect(() => {
@@ -117,12 +127,12 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 ref={spineTrackRef}
                 style={{
                     position: 'absolute',
-                    left: '50%',
+                    left: isMobile ? '24px' : '50%',
                     top: 0,
                     bottom: 0,
                     width: '2px',
                     background: '#e5e7eb',
-                    transform: 'translateX(-50%)',
+                    transform: isMobile ? 'none' : 'translateX(-50%)',
                     zIndex: 1,
                 }}
             />
@@ -132,12 +142,12 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 ref={spineFillRef}
                 style={{
                     position: 'absolute',
-                    left: '50%',
+                    left: isMobile ? '24px' : '50%',
                     top: 0,
                     width: '2px',
                     height: 0,
                     background: `linear-gradient(to bottom, ${topicColor}, #1a1a2e)`,
-                    transform: 'translateX(-50%)',
+                    transform: isMobile ? 'none' : 'translateX(-50%)',
                     transition: 'height 0.12s ease-out',
                     zIndex: 2,
                 }}
@@ -158,19 +168,20 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                         data-section-index={i}
                         style={{
                             display: 'flex',
-                            flexDirection: isOdd ? 'row' : 'row-reverse',
-                            marginBottom: '100px',
+                            flexDirection: isMobile ? 'column' : (isOdd ? 'row' : 'row-reverse'),
+                            marginBottom: isMobile ? '60px' : '100px',
                             position: 'relative',
                             zIndex: 3,
-                            minHeight: '200px',
+                            minHeight: isMobile ? 'auto' : '200px',
+                            ...(isMobile ? { paddingLeft: '48px' } : {}),
                         }}
                     >
                         {/* Text side */}
                         <div style={{
                             flex: 1,
-                            maxWidth: 'calc(50% - 48px)',
-                            paddingRight: isOdd ? '32px' : undefined,
-                            paddingLeft: isOdd ? undefined : '32px',
+                            maxWidth: isMobile ? '100%' : 'calc(50% - 48px)',
+                            paddingRight: isMobile ? undefined : (isOdd ? '32px' : undefined),
+                            paddingLeft: isMobile ? undefined : (isOdd ? undefined : '32px'),
                             opacity: isActive ? 1 : 0.25,
                             transform: isActive ? 'translateY(0)' : 'translateY(24px)',
                             transition: 'opacity 0.5s ease, transform 0.5s ease',
@@ -279,7 +290,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                         {/* Node on spine */}
                         <div style={{
                             position: 'absolute',
-                            left: '50%',
+                            left: isMobile ? '0px' : '50%',
                             top: '16px',
                             transform: isActive ? 'translate(-50%, 0) scale(1.1)' : 'translate(-50%, 0)',
                             width: '40px',
@@ -303,7 +314,8 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                         {/* Diagram side */}
                         <div style={{
                             flex: 1,
-                            maxWidth: 'calc(50% - 48px)',
+                            maxWidth: isMobile ? '100%' : 'calc(50% - 48px)',
+                            marginTop: isMobile ? '16px' : undefined,
                             opacity: isActive ? 1 : 0.25,
                             transform: isActive ? 'translateY(0)' : 'translateY(24px)',
                             transition: 'opacity 0.5s ease, transform 0.5s ease',
@@ -328,7 +340,8 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: isMobile ? 'flex-start' : 'center',
+                paddingLeft: isMobile ? '18px' : undefined,
             }}>
                 {/* Centre dot */}
                 <div style={{
