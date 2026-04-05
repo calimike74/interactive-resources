@@ -327,7 +327,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                                 aspectRatio: '480 / 280',
                                 overflow: 'hidden',
                             }}>
-                                {DiagramComponent && <DiagramComponent />}
+                                {DiagramComponent && isActive && <DiagramComponent />}
                             </div>
                         </div>
                     </div>
