@@ -88,14 +88,12 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
         };
     }, []);
 
-    // Ripple trigger: fire when all sections active
+    // Ripple trigger: fire when all sections have been scrolled through
     useEffect(() => {
-        if (activeIndexes.size === topic.rows.length && topic.rows.length > 0) {
+        if (hasBeenVisible.size === topic.rows.length && topic.rows.length > 0) {
             setRippleFired(true);
-        } else {
-            setRippleFired(false);
         }
-    }, [activeIndexes, topic.rows.length]);
+    }, [hasBeenVisible, topic.rows.length]);
 
     const handleToggleAssessment = (i) => {
         const current = assessmentState[i] || { show: false, animating: false };
@@ -129,7 +127,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
     return (
         <div ref={containerRef} style={{
             position: 'relative',
-            maxWidth: '960px',
+            maxWidth: '1140px',
             margin: '0 auto',
             padding: '3rem 1.5rem 0',
         }}>
@@ -172,175 +170,117 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 const state = assessmentState[i] || { show: false, animating: false };
                 const isActive = activeIndexes.has(i);
 
-                return (
-                    <div
-                        key={row.id}
-                        ref={el => sectionRefs.current[i] = el}
-                        data-section-index={i}
-                        style={{
-                            display: 'flex',
-                            flexDirection: isMobile ? 'column' : (isOdd ? 'row' : 'row-reverse'),
-                            marginBottom: isMobile ? '60px' : '100px',
-                            position: 'relative',
-                            zIndex: 3,
-                            minHeight: isMobile ? 'auto' : '200px',
-                            ...(isMobile ? { paddingLeft: '48px' } : {}),
-                        }}
-                    >
-                        {/* Text side */}
-                        <div style={{
-                            flex: 1,
-                            maxWidth: isMobile ? '100%' : 'calc(50% - 48px)',
-                            paddingRight: isMobile ? undefined : (isOdd ? '32px' : undefined),
-                            paddingLeft: isMobile ? undefined : (isOdd ? undefined : '32px'),
-                            opacity: isActive ? 1 : 0.25,
-                            transform: isActive ? 'translateY(0)' : 'translateY(24px)',
-                            transition: 'opacity 0.5s ease, transform 0.5s ease',
-                        }}>
-                            <div style={{
-                                position: 'relative',
-                                minHeight: state.show ? '200px' : 'auto',
-                            }}>
-                                {/* Section number badge + assessment toggle */}
+                const textBlock = (
+                    <div key={`text-${i}`} style={{
+                        opacity: isActive ? 1 : 0.25,
+                        transform: isActive ? 'translateY(0)' : 'translateY(24px)',
+                        transition: 'opacity 0.5s ease, transform 0.5s ease',
+                    }}>
+                        <div style={{ position: 'relative', minHeight: state.show ? '200px' : 'auto' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                                 <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    marginBottom: '0.75rem',
+                                    display: 'inline-block', padding: '0.2rem 0.6rem', borderRadius: '9999px',
+                                    background: topicColor + '12', color: topicColor, fontSize: '0.7rem',
+                                    fontWeight: 600, letterSpacing: '0.025em', textTransform: 'uppercase',
                                 }}>
-                                    <div style={{
-                                        display: 'inline-block',
-                                        padding: '0.2rem 0.6rem',
-                                        borderRadius: '9999px',
-                                        background: topicColor + '12',
-                                        color: topicColor,
-                                        fontSize: '0.7rem',
-                                        fontWeight: 600,
-                                        letterSpacing: '0.025em',
-                                        textTransform: 'uppercase',
-                                    }}>
-                                        {String(i + 1).padStart(2, '0')}
-                                    </div>
-
-                                    {row.assessment && (
-                                        <button
-                                            onClick={() => handleToggleAssessment(i)}
-                                            style={{
-                                                width: '24px',
-                                                height: '24px',
-                                                borderRadius: '50%',
-                                                border: `1.5px solid ${alreadyAnswered ? '#059669' : topicColor}`,
-                                                background: alreadyAnswered ? '#D1FAE5' : state.show ? topicColor + '15' : 'transparent',
-                                                color: alreadyAnswered ? '#059669' : topicColor,
-                                                fontSize: '0.7rem',
-                                                fontWeight: 700,
-                                                cursor: 'pointer',
-                                                transition: 'all 150ms ease',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                padding: 0,
-                                                fontFamily: 'inherit',
-                                            }}
-                                            title={alreadyAnswered ? 'Already answered' : 'Check your understanding'}
-                                        >
-                                            {alreadyAnswered ? '\u2713' : state.show ? '\u00d7' : '?'}
-                                        </button>
-                                    )}
+                                    {String(i + 1).padStart(2, '0')}
                                 </div>
-
-                                {/* Text description (crossfades out when assessment shown) */}
-                                <div style={{
-                                    opacity: state.show ? 0 : 1,
-                                    transform: state.show ? 'translateY(-8px)' : 'translateY(0)',
-                                    transition: 'opacity 0.25s ease, transform 0.25s ease',
-                                    pointerEvents: state.show ? 'none' : 'auto',
-                                    position: state.show ? 'absolute' : 'relative',
-                                    width: '100%',
-                                }}>
-                                    <h3 style={{
-                                        fontSize: '1.375rem',
-                                        fontWeight: 700,
-                                        color: '#1A1A2E',
-                                        lineHeight: 1.25,
-                                        marginBottom: '0.75rem',
-                                    }}>
-                                        {row.heading}
-                                    </h3>
-
-                                    <ExpandableText
-                                        text={row.description}
-                                        topicColor={topicColor}
-                                        topicId={topic.id}
-                                        studentToken={token}
-                                    />
-                                </div>
-
-                                {/* Assessment (scales in) */}
-                                {row.assessment && state.show && (
-                                    <div style={{
-                                        transformOrigin: 'top left',
-                                        transform: state.animating ? 'scale(1)' : 'scale(0.85)',
-                                        opacity: state.animating ? 1 : 0,
-                                        transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease',
-                                    }}>
-                                        <SectionAssessment
-                                            assessment={row.assessment}
-                                            topicId={topic.id}
-                                            sectionId={row.id}
-                                            topicColor={topicColor}
-                                            studentToken={token}
-                                            alreadyAnswered={alreadyAnswered}
-                                            onComplete={() => {}}
-                                        />
-                                    </div>
+                                {row.assessment && (
+                                    <button onClick={() => handleToggleAssessment(i)} style={{
+                                        width: '24px', height: '24px', borderRadius: '50%',
+                                        border: `1.5px solid ${alreadyAnswered ? '#059669' : topicColor}`,
+                                        background: alreadyAnswered ? '#D1FAE5' : state.show ? topicColor + '15' : 'transparent',
+                                        color: alreadyAnswered ? '#059669' : topicColor, fontSize: '0.7rem', fontWeight: 700,
+                                        cursor: 'pointer', transition: 'all 150ms ease', display: 'flex',
+                                        alignItems: 'center', justifyContent: 'center', padding: 0, fontFamily: 'inherit',
+                                    }} title={alreadyAnswered ? 'Already answered' : 'Check your understanding'}>
+                                        {alreadyAnswered ? '\u2713' : state.show ? '\u00d7' : '?'}
+                                    </button>
                                 )}
                             </div>
+                            <div style={{
+                                opacity: state.show ? 0 : 1, transform: state.show ? 'translateY(-8px)' : 'translateY(0)',
+                                transition: 'opacity 0.25s ease, transform 0.25s ease',
+                                pointerEvents: state.show ? 'none' : 'auto',
+                                position: state.show ? 'absolute' : 'relative', width: '100%',
+                            }}>
+                                <h3 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#1A1A2E', lineHeight: 1.25, marginBottom: '0.75rem' }}>
+                                    {row.heading}
+                                </h3>
+                                <ExpandableText text={row.description} topicColor={topicColor} topicId={topic.id} studentToken={token} />
+                            </div>
+                            {row.assessment && state.show && (
+                                <div style={{
+                                    transformOrigin: 'top left',
+                                    transform: state.animating ? 'scale(1)' : 'scale(0.85)',
+                                    opacity: state.animating ? 1 : 0,
+                                    transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease',
+                                }}>
+                                    <SectionAssessment assessment={row.assessment} topicId={topic.id} sectionId={row.id}
+                                        topicColor={topicColor} studentToken={token} alreadyAnswered={alreadyAnswered} onComplete={() => {}} />
+                                </div>
+                            )}
                         </div>
+                    </div>
+                );
 
-                        {/* Node on spine */}
+                const diagramBlock = (
+                    <div key={`diagram-${i}`} style={{
+                        opacity: isActive ? 1 : 0.25,
+                        transform: isActive ? 'translateY(0)' : 'translateY(24px)',
+                        transition: 'opacity 0.5s ease, transform 0.5s ease',
+                        ...(isMobile ? { marginTop: '16px' } : {}),
+                    }}>
                         <div style={{
-                            position: 'absolute',
-                            left: isMobile ? '0px' : '50%',
-                            top: '16px',
-                            transform: isActive ? 'translate(-50%, 0) scale(1.1)' : 'translate(-50%, 0)',
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            border: `2px solid ${isActive ? topicColor : '#e5e7eb'}`,
+                            background: '#fafafa', borderRadius: '0.75rem',
+                            border: '1px solid #E5E7EB', aspectRatio: '480 / 280', overflow: 'hidden',
+                        }}>
+                            {DiagramComponent && hasBeenVisible.has(i) && <DiagramComponent />}
+                        </div>
+                    </div>
+                );
+
+                const nodeBlock = (
+                    <div key={`node-${i}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{
+                            width: '56px', height: '56px', borderRadius: '50%',
+                            border: `3px solid ${isActive ? topicColor : '#e5e7eb'}`,
                             background: isActive ? topicColor : '#f5f4f2',
                             color: isActive ? '#fff' : '#bbb',
-                            boxShadow: isActive ? `0 0 0 5px ${topicColor}25` : 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '0.8rem',
-                            fontWeight: 700,
-                            zIndex: 4,
+                            boxShadow: isActive ? `0 0 0 8px ${topicColor}20, 0 0 0 16px ${topicColor}10` : 'none',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: '1rem', fontWeight: 700, zIndex: 4,
                             transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            transform: isActive ? 'scale(1.05)' : 'scale(1)',
                         }}>
                             {i + 1}
                         </div>
+                    </div>
+                );
 
-                        {/* Diagram side */}
-                        <div style={{
-                            flex: 1,
-                            maxWidth: isMobile ? '100%' : 'calc(50% - 48px)',
-                            marginTop: isMobile ? '16px' : undefined,
-                            opacity: isActive ? 1 : 0.25,
-                            transform: isActive ? 'translateY(0)' : 'translateY(24px)',
-                            transition: 'opacity 0.5s ease, transform 0.5s ease',
-                        }}>
-                            <div style={{
-                                background: '#fafafa',
-                                borderRadius: '0.75rem',
-                                border: '1px solid #E5E7EB',
-                                aspectRatio: '480 / 280',
-                                overflow: 'hidden',
-                            }}>
-                                {DiagramComponent && hasBeenVisible.has(i) && <DiagramComponent />}
+                if (isMobile) {
+                    return (
+                        <div key={row.id} ref={el => sectionRefs.current[i] = el} data-section-index={i}
+                            style={{ display: 'flex', flexDirection: 'column', marginBottom: '60px', position: 'relative', zIndex: 3, paddingLeft: '48px' }}>
+                            <div style={{ position: 'absolute', left: '0px', top: '0', transform: 'translate(-50%, 0)' }}>
+                                {nodeBlock}
                             </div>
+                            {textBlock}
+                            {diagramBlock}
                         </div>
+                    );
+                }
+
+                return (
+                    <div key={row.id} ref={el => sectionRefs.current[i] = el} data-section-index={i}
+                        style={{
+                            display: 'grid', gridTemplateColumns: '1fr 120px 1fr',
+                            marginBottom: '100px', position: 'relative', zIndex: 3,
+                            minHeight: '200px', alignItems: 'center',
+                        }}>
+                        {isOdd ? textBlock : diagramBlock}
+                        {nodeBlock}
+                        {isOdd ? diagramBlock : textBlock}
                     </div>
                 );
             })}
