@@ -27,13 +27,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
         } else {
             setAssessmentState((prev) => ({
                 ...prev,
-                [i]: { show: false, animating: false },
-            }));
-            // Let CSS transition finish before removing from DOM
-            // (animating false triggers opacity/scale out, then show false removes)
-            setAssessmentState((prev) => ({
-                ...prev,
-                [i]: { ...prev[i], animating: false },
+                [i]: { show: true, animating: false },
             }));
             setTimeout(() => {
                 setAssessmentState((prev) => ({
@@ -85,7 +79,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
 
             {/* Sections */}
             {topic.rows.map((row, i) => {
-                const isOdd = i % 2 === 1;
+                const isOdd = i % 2 === 0;
                 const DiagramComponent = diagrams[row.animation];
                 const alreadyAnswered = answeredSections?.includes(row.id);
                 const state = assessmentState[i] || { show: false, animating: false };
