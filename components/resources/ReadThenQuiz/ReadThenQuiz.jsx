@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { Suspense, useState, useRef, useCallback, useEffect } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { getTopicData } from '@/lib/read-then-quiz/topics';
 import { theme, typography, spacing, borderRadius, transitions } from '@/lib/theme';
@@ -20,14 +20,62 @@ const SCAFFOLD_LEVELS = [
 ];
 
 export default function ReadThenQuiz() {
+    return (
+        <Suspense fallback={<div style={{ padding: spacing[8], textAlign: 'center', color: t.text.secondary }}>Loading...</div>}>
+            <ReadThenQuizInner />
+        </Suspense>
+    );
+}
+
+function ReadThenQuizInner() {
     const { resourceId } = useParams();
+    const searchParams = useSearchParams();
     const topic = getTopicData(resourceId);
 
     const [phase, setPhase] = useState('entry');
     const [studentName, setStudentName] = useState('');
     const [scaffoldLevel, setScaffoldLevel] = useState('full');
     const [results, setResults] = useState({});
+    const [loading, setLoading] = useState(false);
     const startTimeRef = useRef(null);
+
+    useEffect(() => {
+        const resultId = searchParams.get('result');
+        if (!resultId || !topic) return;
+
+        setLoading(true);
+        supabase
+            .from('read_then_quiz_responses')
+            .select('*')
+            .eq('id', resultId)
+            .single()
+            .then(({ data, error }) => {
+                if (error || !data) {
+                    setLoading(false);
+                    return;
+                }
+                const keyTerms = topic.passage.keyTerms || [];
+                const keyTermResults = keyTerms.map(({ term }) => ({
+                    term,
+                    found: data.open_ended_response
+                        ? data.open_ended_response.toLowerCase().includes(term.toLowerCase())
+                        : false,
+                }));
+                setResults({
+                    mcqScore: data.mcq_score,
+                    mcqTotal: data.mcq_total,
+                    mcqAnswers: data.mcq_answers,
+                    openEndedResponse: data.open_ended_response,
+                    keyTermResults,
+                    readingTimeSeconds: data.reading_time_seconds,
+                    totalTimeSeconds: data.total_time_seconds,
+                });
+                setScaffoldLevel(data.scaffold_level);
+                setStudentName(data.student_name);
+                setPhase('results');
+                setLoading(false);
+            });
+    }, [searchParams, topic]);
 
     const handleStartReading = useCallback(() => {
         startTimeRef.current = Date.now();
@@ -39,8 +87,8 @@ export default function ReadThenQuiz() {
         setPhase('open-ended');
     }, []);
 
-    const handleOpenEndedComplete = useCallback(({ openEndedResponse, wordCount }) => {
-        setResults(prev => ({ ...prev, openEndedResponse, wordCount }));
+    const handleOpenEndedComplete = useCallback(({ openEndedResponse, wordCount, keyTermResults }) => {
+        setResults(prev => ({ ...prev, openEndedResponse, wordCount, keyTermResults }));
         setPhase('mcq');
     }, []);
 
@@ -56,23 +104,39 @@ export default function ReadThenQuiz() {
         setResults(finalResults);
         setPhase('results');
 
-        await supabase.from('read_then_quiz_responses').insert({
+        const { data } = await supabase.from('read_then_quiz_responses').insert({
             topic_id: topic.id,
             student_name: studentName.trim(),
             scaffold_level: scaffoldLevel,
             open_ended_response: finalResults.openEndedResponse,
+            key_terms_found: finalResults.keyTermResults ? finalResults.keyTermResults.filter(k => k.found).length : null,
+            key_terms_total: finalResults.keyTermResults ? finalResults.keyTermResults.length : null,
             mcq_answers: mcqAnswers,
             mcq_score: mcqScore,
             mcq_total: mcqTotal,
             reading_time_seconds: finalResults.readingTimeSeconds,
             total_time_seconds: totalTimeSeconds,
-        });
+        }).select('id').single();
+
+        if (data?.id) {
+            const url = new URL(window.location);
+            url.searchParams.set('result', data.id);
+            window.history.replaceState({}, '', url);
+        }
     }, [results, topic, studentName, scaffoldLevel]);
 
     if (!topic) {
         return (
             <div style={{ padding: spacing[8], textAlign: 'center', color: t.text.secondary }}>
                 Topic data not found for this resource.
+            </div>
+        );
+    }
+
+    if (loading) {
+        return (
+            <div style={{ padding: spacing[8], textAlign: 'center', color: t.text.secondary }}>
+                Loading results...
             </div>
         );
     }
@@ -228,6 +292,7 @@ export default function ReadThenQuiz() {
         return (
             <OpenEndedPhase
                 openEnded={topic.openEnded}
+                keyTerms={topic.passage.keyTerms}
                 scaffoldLevel={scaffoldLevel}
                 onComplete={handleOpenEndedComplete}
             />
@@ -251,6 +316,7 @@ export default function ReadThenQuiz() {
                 results={results}
                 questions={topic.mcq}
                 scaffoldLevel={scaffoldLevel}
+                studentName={studentName}
             />
         );
     }

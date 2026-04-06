@@ -7,6 +7,8 @@ CREATE TABLE read_then_quiz_responses (
     student_name TEXT NOT NULL,
     scaffold_level TEXT NOT NULL CHECK (scaffold_level IN ('full','medium','minimal','independent')),
     open_ended_response TEXT,
+    key_terms_found INTEGER,
+    key_terms_total INTEGER,
     mcq_answers JSONB,
     mcq_score INTEGER,
     mcq_total INTEGER,

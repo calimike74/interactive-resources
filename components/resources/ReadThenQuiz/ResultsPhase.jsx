@@ -10,11 +10,23 @@ function formatTime(seconds) {
     return `${mins}:${String(secs).padStart(2, '0')}`;
 }
 
-export default function ResultsPhase({ results, questions, scaffoldLevel }) {
-    const { mcqScore, mcqTotal, mcqAnswers, openEndedResponse, readingTimeSeconds, totalTimeSeconds } = results;
+export default function ResultsPhase({ results, questions, scaffoldLevel, studentName }) {
+    const { mcqScore, mcqTotal, mcqAnswers, openEndedResponse, keyTermResults, readingTimeSeconds, totalTimeSeconds } = results;
+    const keyTermsFound = keyTermResults ? keyTermResults.filter(k => k.found).length : 0;
+    const keyTermsTotal = keyTermResults ? keyTermResults.length : 0;
 
     return (
         <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+            {studentName && (
+                <p style={{
+                    textAlign: 'center',
+                    color: t.text.secondary,
+                    fontSize: typography.size.sm,
+                    marginBottom: spacing[2],
+                }}>
+                    Results for {studentName}
+                </p>
+            )}
             <div style={{ textAlign: 'center', marginBottom: spacing[6] }}>
                 <div style={{
                     fontSize: typography.size['4xl'],
@@ -94,6 +106,46 @@ export default function ResultsPhase({ results, questions, scaffoldLevel }) {
                     &ldquo;{openEndedResponse}&rdquo;
                 </p>
             </div>
+
+            {keyTermResults && keyTermResults.length > 0 && (
+                <div style={{
+                    background: t.bg.tertiary,
+                    borderRadius: borderRadius.lg,
+                    padding: spacing[4],
+                    marginBottom: spacing[4],
+                }}>
+                    <p style={{
+                        fontSize: typography.size.xs,
+                        fontWeight: typography.weight.semibold,
+                        color: t.accent.primary,
+                        marginBottom: spacing[2],
+                        textTransform: 'uppercase',
+                        letterSpacing: typography.letterSpacing.wide,
+                    }}>
+                        Key concepts mentioned — {keyTermsFound}/{keyTermsTotal}
+                    </p>
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: spacing[2],
+                        marginTop: spacing[2],
+                    }}>
+                        {keyTermResults.map(({ term, found }) => (
+                            <span key={term} style={{
+                                padding: `${spacing[1]} ${spacing[3]}`,
+                                borderRadius: borderRadius.full,
+                                fontSize: typography.size.xs,
+                                fontWeight: typography.weight.medium,
+                                background: found ? `${t.accent.success}18` : `${t.accent.error}18`,
+                                color: found ? t.accent.success : t.accent.error,
+                                border: `1px solid ${found ? t.accent.success : t.accent.error}30`,
+                            }}>
+                                {found ? '✓' : '✗'} {term}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div style={{
                 background: t.bg.tertiary,

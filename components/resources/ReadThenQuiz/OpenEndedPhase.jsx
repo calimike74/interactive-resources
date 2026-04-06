@@ -5,7 +5,15 @@ import { theme, typography, spacing, borderRadius, transitions } from '@/lib/the
 
 const t = theme.light;
 
-export default function OpenEndedPhase({ openEnded, scaffoldLevel, onComplete }) {
+function checkKeyTerms(text, keyTerms) {
+    const lower = text.toLowerCase();
+    return keyTerms.map(({ term }) => ({
+        term,
+        found: lower.includes(term.toLowerCase()),
+    }));
+}
+
+export default function OpenEndedPhase({ openEnded, keyTerms, scaffoldLevel, onComplete }) {
     const [response, setResponse] = useState('');
 
     const wordCount = response.trim() === '' ? 0 : response.trim().split(/\s+/).length;
@@ -14,7 +22,12 @@ export default function OpenEndedPhase({ openEnded, scaffoldLevel, onComplete })
 
     const handleSubmit = () => {
         if (wordCount === 0) return;
-        onComplete({ openEndedResponse: response.trim(), wordCount });
+        const keyTermResults = keyTerms ? checkKeyTerms(response, keyTerms) : [];
+        onComplete({
+            openEndedResponse: response.trim(),
+            wordCount,
+            keyTermResults,
+        });
     };
 
     return (
