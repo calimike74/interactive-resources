@@ -46,6 +46,8 @@ import DelayAssessment from '@/components/resources/DelayAssessment';
 import OperatorImageExplorer from '@/components/resources/OperatorImageExplorer';
 import OperatorAssessment from '@/components/resources/OperatorAssessment';
 import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
+import SamplingPlayground from '@/components/resources/SamplingPlayground';
+import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -84,6 +86,8 @@ const resourceComponents = {
     'OperatorImageExplorer': OperatorImageExplorer,
     'OperatorAssessment': OperatorAssessment,
     'PatchBaySimulator': PatchBaySimulator,
+    'SamplingPlayground': SamplingPlayground,
+    'ReadThenQuiz': ReadThenQuiz,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
