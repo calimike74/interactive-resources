@@ -14,7 +14,7 @@ export default function MCQPhase({ questions, scaffoldLevel, questionOffset, onC
 
     const question = questions[currentIndex];
     const isLast = currentIndex === questions.length - 1;
-    const showFeedback = scaffoldLevel !== 'independent';
+    const showFeedback = true;
     const showHintButton = scaffoldLevel === 'full';
     const isCorrect = selectedIndex === question.correct;
 
