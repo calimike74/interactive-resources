@@ -184,6 +184,7 @@ export default function RevisePageClient({ topic }) {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
+                            token: student.token,
                             student_id: student.studentId,
                             topic_key: topic.id,
                             score: correctCount,
