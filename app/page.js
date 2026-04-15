@@ -12,6 +12,9 @@ import ProgressDashboard from '@/components/ProgressDashboard';
 import BlurReveal from '@/components/BlurReveal';
 import SlideUpWords from '@/components/SlideUpWords';
 import CommandPalette from '@/components/CommandPalette';
+import GradientText from '@/components/GradientText';
+import SplashCursor from '@/components/SplashCursor';
+import ShapeBlur from '@/components/ShapeBlur';
 
 // Mode descriptions shown under the hero
 const MODE_INFO = {
@@ -65,12 +68,23 @@ export default function ResourcesHub() {
                 paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
             }}
         >
-            {/* Liquid Hero Banner */}
-            <LiquidHero
-                badge="A-Level Music Technology"
-                title={['Interactive Resources']}
-                tagline="Explore  •  Learn  •  Practice"
-            />
+            {/* Liquid Hero Banner with Splash Cursor overlay */}
+            <div style={{ position: 'relative', overflow: 'hidden' }}>
+                <LiquidHero
+                    badge="A-Level Music Technology"
+                    title={['Interactive Resources']}
+                    tagline="Explore  •  Learn  •  Practice"
+                />
+                <SplashCursor
+                    DENSITY_DISSIPATION={3}
+                    VELOCITY_DISSIPATION={2}
+                    SPLAT_RADIUS={0.15}
+                    SPLAT_FORCE={4000}
+                    CURL={5}
+                    COLOR_UPDATE_SPEED={8}
+                    TRANSPARENT={true}
+                />
+            </div>
 
             {/* Main Content */}
             <main
@@ -82,18 +96,45 @@ export default function ResourcesHub() {
                 role="main"
             >
                 {/* Mode heading */}
-                <div style={{ marginBottom: spacing[6] }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing[1] }}>
+                <div style={{ marginBottom: spacing[6], position: 'relative' }}>
+                    {/* ShapeBlur — decorative backdrop behind heading */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '-40px',
+                            left: '-60px',
+                            right: '-60px',
+                            bottom: '-20px',
+                            opacity: 0.12,
+                            pointerEvents: 'none',
+                            zIndex: 0,
+                        }}
+                    >
+                        <ShapeBlur
+                            variation={1}
+                            shapeSize={1.0}
+                            roundness={0.5}
+                            borderSize={0.05}
+                            circleSize={0.4}
+                            circleEdge={0.6}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing[1], position: 'relative', zIndex: 1 }}>
                         <h2
                             style={{
                                 fontSize: typography.size['2xl'],
                                 fontWeight: typography.weight.bold,
-                                color: t.text.primary,
                                 margin: 0,
                             }}
                         >
                             <BlurReveal key={`heading-${activeTab}`} duration={600} blur={10}>
-                                {mode.heading}
+                                <GradientText
+                                    colors={['#1A1A2E', '#2563EB', '#7C3AED', '#1A1A2E']}
+                                    animationSpeed={6}
+                                    style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
+                                >
+                                    {mode.heading}
+                                </GradientText>
                             </BlurReveal>
                         </h2>
                         <CommandPalette />
@@ -102,11 +143,13 @@ export default function ResourcesHub() {
                         style={{
                             color: t.text.tertiary,
                             fontSize: typography.size.sm,
+                            position: 'relative',
+                            zIndex: 1,
                         }}
                     >
                         <SlideUpWords key={`subtitle-${activeTab}`} text={mode.subtitle} delay={100} stagger={50} />
                     </p>
-                    {activeTab === 'revise' && <TypewriterTeaser t={t} />}
+                    {activeTab === 'revise' && <div style={{ position: 'relative', zIndex: 1 }}><TypewriterTeaser t={t} /></div>}
                 </div>
 
                 {/* Progress tab — dashboard */}
@@ -190,7 +233,14 @@ export default function ResourcesHub() {
             </main>
 
             {/* Bottom Tab Bar */}
-            <BottomTabBar activeTab={activeTab} onTabChange={setActiveTab} />
+            <BottomTabBar
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+                onPanelOption={(tabId, optionId) => {
+                    // For now, log the selection — wire to actual routes later
+                    console.log(`Panel option: ${tabId} → ${optionId}`);
+                }}
+            />
         </div>
     );
 }
