@@ -18,6 +18,14 @@ import AttackRelease from './AttackRelease';
 import KneeTypes from './KneeTypes';
 import MakeupGain from './MakeupGain';
 import BeforeAfterCompression from './BeforeAfterCompression';
+import DelayBasics from './DelayBasics';
+import DelayTime from './DelayTime';
+import FeedbackRepeats from './FeedbackRepeats';
+import DelayPanEQ from './DelayPanEQ';
+import Slapback from './Slapback';
+import TimedDelay from './TimedDelay';
+import PingPong from './PingPong';
+import ADT from './ADT';
 
 const diagrams = {
     'frequency-spectrum': FrequencySpectrum,
@@ -39,6 +47,14 @@ const diagrams = {
     'knee-types': KneeTypes,
     'makeup-gain': MakeupGain,
     'before-after-compression': BeforeAfterCompression,
+    'delay-basics': DelayBasics,
+    'delay-time': DelayTime,
+    'feedback-repeats': FeedbackRepeats,
+    'pan-eq': DelayPanEQ,
+    'slapback': Slapback,
+    'timed-delay': TimedDelay,
+    'ping-pong': PingPong,
+    'adt': ADT,
 };
 
 export default diagrams;
