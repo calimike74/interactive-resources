@@ -368,19 +368,6 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                     </span>
                                 )}
 
-                                {/* Hint indicator */}
-                                {hasHint && fb !== 'correct' && stage === 1 && (
-                                    <span style={{
-                                        position: 'absolute',
-                                        bottom: 2,
-                                        fontSize: '8px',
-                                        color: hotspot.color,
-                                        fontWeight: typography.weight.medium,
-                                        fontStyle: 'italic',
-                                    }}>
-                                        {hotspot.name.charAt(0)}...
-                                    </span>
-                                )}
                             </div>
                         );
                     })}
@@ -449,38 +436,78 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
 
             {/* Hint buttons (Stage 1 only) */}
             {stage === 1 && !stageComplete && (
-                <div style={{
-                    marginTop: spacing[3],
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: spacing[2],
-                    alignItems: 'center',
-                }}>
-                    <span style={{
-                        fontSize: '11px',
-                        color: t.text.tertiary,
-                        fontWeight: typography.weight.medium,
+                <div style={{ marginTop: spacing[3], display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: spacing[2],
+                        alignItems: 'center',
                     }}>
-                        Need a hint?
-                    </span>
-                    {activeHotspots.filter(h => feedback[h.id] !== 'correct' && !hintsUsed.has(h.id)).map(h => (
-                        <button
-                            key={h.id}
-                            onClick={() => handleHint(h.id)}
+                        <span style={{
+                            fontSize: '11px',
+                            color: t.text.tertiary,
+                            fontWeight: typography.weight.medium,
+                        }}>
+                            Need a hint?
+                        </span>
+                        {activeHotspots.filter(h => feedback[h.id] !== 'correct' && !hintsUsed.has(h.id)).map(h => (
+                            <button
+                                key={h.id}
+                                onClick={() => handleHint(h.id)}
+                                style={{
+                                    padding: '3px 10px',
+                                    background: hexToRgba(h.color, 0.08),
+                                    border: `1px solid ${hexToRgba(h.color, 0.2)}`,
+                                    borderRadius: borderRadius.full,
+                                    cursor: 'pointer',
+                                    fontSize: '11px',
+                                    fontWeight: typography.weight.medium,
+                                    color: h.color,
+                                    fontFamily: typography.fontFamily,
+                                }}
+                            >
+                                Hint for {h.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Revealed hints — show matchClue once requested */}
+                    {activeHotspots.filter(h => hintsUsed.has(h.id) && feedback[h.id] !== 'correct').map(h => (
+                        <div
+                            key={`hint-${h.id}`}
                             style={{
-                                padding: '3px 10px',
+                                padding: `${spacing[2]} ${spacing[3]}`,
                                 background: hexToRgba(h.color, 0.08),
-                                border: `1px solid ${hexToRgba(h.color, 0.2)}`,
-                                borderRadius: borderRadius.full,
-                                cursor: 'pointer',
-                                fontSize: '11px',
-                                fontWeight: typography.weight.medium,
-                                color: h.color,
-                                fontFamily: typography.fontFamily,
+                                border: `1px solid ${hexToRgba(h.color, 0.25)}`,
+                                borderRadius: borderRadius.lg,
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: spacing[2],
                             }}
                         >
-                            Hint for {h.label}
-                        </button>
+                            <span style={{
+                                flexShrink: 0,
+                                width: 22,
+                                height: 22,
+                                borderRadius: '50%',
+                                background: h.color,
+                                color: '#fff',
+                                fontSize: '11px',
+                                fontWeight: typography.weight.bold,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                {h.label}
+                            </span>
+                            <span style={{
+                                fontSize: '12px',
+                                color: t.text.secondary,
+                                lineHeight: 1.4,
+                            }}>
+                                {h.matchClue || stripRefs(h.description)}
+                            </span>
+                        </div>
                     ))}
                 </div>
             )}
