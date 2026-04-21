@@ -48,7 +48,6 @@ import OperatorAssessment from '@/components/resources/OperatorAssessment';
 import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
-import WaveformExplorer from '@/components/resources/WaveformExplorer';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -89,7 +88,6 @@ const resourceComponents = {
     'PatchBaySimulator': PatchBaySimulator,
     'SamplingPlayground': SamplingPlayground,
     'ReadThenQuiz': ReadThenQuiz,
-    'WaveformExplorer': WaveformExplorer,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
