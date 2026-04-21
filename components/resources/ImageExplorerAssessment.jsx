@@ -26,8 +26,8 @@ function stripRefs(text) {
     return text.replace(/\{\{[A-G]\}\}/g, '').replace(/\s{2,}/g, ' ').trim();
 }
 
-export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, title }) {
-    const [stage, setStage] = useState(1); // 1 = name matching, 2 = description matching
+export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, title, skipNameStage = false }) {
+    const [stage, setStage] = useState(skipNameStage ? 2 : 1); // 1 = name matching, 2 = description matching
     const [placements, setPlacements] = useState({}); // { hotspotId: draggedItemId }
     const [feedback, setFeedback] = useState({}); // { hotspotId: 'correct' | 'incorrect' }
     const [hintsUsed, setHintsUsed] = useState(new Set());
@@ -182,9 +182,13 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                 gap: spacing[3],
                 marginBottom: spacing[5],
             }}>
-                <StagePill active={stage === 1} label="Stage 1: Name the Controls" done={stage > 1} />
-                <span style={{ color: t.text.tertiary, fontSize: typography.size.sm }}>then</span>
-                <StagePill active={stage === 2} label="Stage 2: Match Descriptions" done={false} />
+                {!skipNameStage && (
+                    <>
+                        <StagePill active={stage === 1} label="Stage 1: Name the Controls" done={stage > 1} />
+                        <span style={{ color: t.text.tertiary, fontSize: typography.size.sm }}>then</span>
+                    </>
+                )}
+                <StagePill active={stage === 2} label={skipNameStage ? 'Match Descriptions' : 'Stage 2: Match Descriptions'} done={false} />
             </div>
 
             {/* Instructions */}
@@ -655,7 +659,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                 >
                                     Try Again
                                 </button>
-                                {score < total && (
+                                {score < total && !skipNameStage && (
                                     <button
                                         onClick={() => { setStage(1); resetStage(); }}
                                         style={{

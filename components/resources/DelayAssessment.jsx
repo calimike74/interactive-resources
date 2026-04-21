@@ -10,6 +10,7 @@ export default function DelayAssessment() {
             imageAlt={delayConfig.imageAlt}
             hotspots={delayConfig.hotspots}
             title="Delay Controls Assessment"
+            skipNameStage
         />
     );
 }
