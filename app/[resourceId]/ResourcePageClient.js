@@ -48,6 +48,7 @@ import OperatorAssessment from '@/components/resources/OperatorAssessment';
 import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
+import WaveformExplorer from '@/components/resources/WaveformExplorer';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -88,6 +89,7 @@ const resourceComponents = {
     'PatchBaySimulator': PatchBaySimulator,
     'SamplingPlayground': SamplingPlayground,
     'ReadThenQuiz': ReadThenQuiz,
+    'WaveformExplorer': WaveformExplorer,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
@@ -201,9 +203,7 @@ export default function ResourcePageClient() {
                     {/* Related assessment link */}
                     {resource.prepFor && resource.prepFor.length > 0 && (
                         <a
-                            href={`https://assess.musictechstudio.co.uk/${resource.prepFor[0]}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`/${resource.prepFor[0]}`}
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
