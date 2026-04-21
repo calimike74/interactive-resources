@@ -202,6 +202,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
             {/* Image with zones */}
             <div>
                 <div style={{
+                    position: 'relative',
                     borderRadius: `${borderRadius.xl} ${borderRadius.xl} 0 0`,
                     overflow: 'hidden',
                     background: t.bg.tertiary,
@@ -213,6 +214,41 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                         draggable={false}
                         style={{ display: 'block', width: '100%', height: 'auto' }}
                     />
+                    {hotspots.map((hotspot) => {
+                        if (!hotspot.anchor) return null;
+                        const isActive = activeHotspots.some(h => h.id === hotspot.id);
+                        const fb = feedback[hotspot.id];
+                        return (
+                            <div
+                                key={`anchor-${hotspot.id}`}
+                                aria-hidden="true"
+                                style={{
+                                    position: 'absolute',
+                                    left: `${hotspot.anchor.x}%`,
+                                    top: `${hotspot.anchor.y}%`,
+                                    transform: 'translate(-50%, -50%)',
+                                    width: 28,
+                                    height: 28,
+                                    borderRadius: '50%',
+                                    background: fb === 'correct' ? hotspot.color : '#FFFFFF',
+                                    color: fb === 'correct' ? '#FFFFFF' : hotspot.color,
+                                    border: `2px solid ${hotspot.color}`,
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.35)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '13px',
+                                    fontWeight: typography.weight.bold,
+                                    fontFamily: typography.fontFamily,
+                                    opacity: isActive ? 1 : 0.45,
+                                    pointerEvents: 'none',
+                                    transition: 'background 0.2s ease, color 0.2s ease',
+                                }}
+                            >
+                                {hotspot.label}
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {/* Drop zones strip */}
