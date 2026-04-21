@@ -16,6 +16,7 @@ function getPatternType(topicId) {
         dynamics: 'waveform',
         eq: 'spectrum',
         reverb: 'spectrum',
+        delay: 'spectrum',
         'digital-analogue': 'binary',
         numeracy: 'binary',
         general: 'circuit',
