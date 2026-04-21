@@ -325,8 +325,8 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
                                             </span>
                                         )}
 
-                                        {/* Confidence buttons */}
-                                        {hasContent && conf === 'none' && (
+                                        {/* Confidence buttons — only shown when the student is signed in, so ratings actually persist */}
+                                        {hasContent && conf === 'none' && studentToken && (
                                             <span style={{
                                                 display: 'flex',
                                                 gap: '8px',
@@ -354,6 +354,20 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
                                                 >
                                                     ? Still confused
                                                 </button>
+                                            </span>
+                                        )}
+
+                                        {hasContent && conf === 'none' && !studentToken && (
+                                            <span style={{
+                                                display: 'block',
+                                                marginTop: '12px',
+                                                fontSize: '12px',
+                                                color: '#6B7280',
+                                                fontStyle: 'italic',
+                                                opacity: 0,
+                                                animation: 'expandFadeIn 0.4s ease 0.4s forwards',
+                                            }}>
+                                                Sign in to flag this for revision or mark it as understood.
                                             </span>
                                         )}
 

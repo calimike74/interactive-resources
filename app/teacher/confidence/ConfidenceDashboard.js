@@ -7,6 +7,7 @@ const TOPICS = [
     { id: 'synthesis', label: 'Subtractive Synthesis', color: '#1a1a6e' },
     { id: 'eq', label: 'Equalisation', color: '#f97316' },
     { id: 'compression', label: 'Compression', color: '#e85d75' },
+    { id: 'delay', label: 'Delay', color: '#14b8a6' },
 ];
 
 export default function ConfidenceDashboard() {
