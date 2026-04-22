@@ -43,6 +43,7 @@ import ReverbImageExplorer from '@/components/resources/ReverbImageExplorer';
 import ReverbAssessment from '@/components/resources/ReverbAssessment';
 import DelayImageExplorer from '@/components/resources/DelayImageExplorer';
 import DelayAssessment from '@/components/resources/DelayAssessment';
+import DelayFlashcards from '@/components/resources/DelayFlashcards';
 import OperatorImageExplorer from '@/components/resources/OperatorImageExplorer';
 import OperatorAssessment from '@/components/resources/OperatorAssessment';
 import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
@@ -83,6 +84,7 @@ const resourceComponents = {
     'ReverbAssessment': ReverbAssessment,
     'DelayImageExplorer': DelayImageExplorer,
     'DelayAssessment': DelayAssessment,
+    'DelayFlashcards': DelayFlashcards,
     'OperatorImageExplorer': OperatorImageExplorer,
     'OperatorAssessment': OperatorAssessment,
     'PatchBaySimulator': PatchBaySimulator,
