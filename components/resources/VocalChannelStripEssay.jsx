@@ -13,6 +13,35 @@ const SCAFFOLD_LEVELS = [
 
 const ESSAY_QUESTION = 'Figure 1 shows the insert chain applied to a lead vocal in a contemporary pop ballad. The vocalist sings with wide dynamic range and occasional sibilance. Evaluate the suitability of the settings to achieve an intelligible, forward vocal with a sense of space.';
 
+// Cohort rosters — canonical csvKey values match the CSV column headers
+// in Assessment-and-Grades/...Results_2025_2026_*.csv exactly, so a row
+// saved here is trivially reconcilable back to Mike's CSV by (cohort, csvKey).
+const ROSTER = [
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'ALEX', display: 'Alex' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'ARCHIE', display: 'Archie' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'CHARLIE', display: 'Charlie' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'FERGUS', display: 'Fergus' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'FOREST', display: 'Forest' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'HECTOR', display: 'Hector' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'JAMES', display: 'James' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'LACHLAN', display: 'Lachlan' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'LILY', display: 'Lily' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'LIZZY', display: 'Lizzy' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'LORIN', display: 'Lorin' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'NED', display: 'Ned' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'PATRICK', display: 'Patrick' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'SAM_B', display: 'Sam B' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'SAM_R', display: 'Sam R' },
+    { cohort: 'upper-sixth', cohortLabel: 'Upper Sixth', csvKey: 'THEO', display: 'Theo' },
+    { cohort: 'lower-sixth', cohortLabel: 'Lower Sixth', csvKey: 'CHARLIE', display: 'Charlie' },
+    { cohort: 'lower-sixth', cohortLabel: 'Lower Sixth', csvKey: 'DELILAH', display: 'Delilah' },
+    { cohort: 'lower-sixth', cohortLabel: 'Lower Sixth', csvKey: 'EDDIE', display: 'Eddie' },
+    { cohort: 'lower-sixth', cohortLabel: 'Lower Sixth', csvKey: 'ESME', display: 'Esme' },
+    { cohort: 'lower-sixth', cohortLabel: 'Lower Sixth', csvKey: 'OLIVER_B', display: 'Oliver B' },
+    { cohort: 'lower-sixth', cohortLabel: 'Lower Sixth', csvKey: 'OLIVER_T', display: 'Oliver T' },
+    { cohort: 'lower-sixth', cohortLabel: 'Lower Sixth', csvKey: 'THOMAS', display: 'Thomas' },
+];
+
 // Scaffolds are deliberately phrased as QUESTIONS (not statements).
 // Sentence starters are bland grammatical launchers only — no AO3/AO4 content
 // is embedded, so copying a starter verbatim does not earn marks.
@@ -108,7 +137,9 @@ const SELF_ASSESSMENT = [
 
 export default function VocalChannelStripEssay() {
     const t = theme.light;
-    const [studentName, setStudentName] = useState('');
+    // studentKey format: `${cohort}::${csvKey}` — unique even when the same
+    // first name appears in both cohorts (Charlie). Empty string = no pick yet.
+    const [studentKey, setStudentKey] = useState('');
     const [scaffoldLevel, setScaffoldLevel] = useState('full');
     // Track every scaffold level the student opens during the session.
     // Seeded with 'full' because the page opens on Full Support by default —
@@ -156,9 +187,14 @@ export default function VocalChannelStripEssay() {
 
     const checkedCount = Object.values(checkedItems).filter(Boolean).length;
 
+    const selectedStudent = useMemo(
+        () => ROSTER.find(s => `${s.cohort}::${s.csvKey}` === studentKey),
+        [studentKey]
+    );
+
     const handleSubmit = async () => {
-        if (!studentName.trim()) {
-            alert('Please enter your name before submitting.');
+        if (!selectedStudent) {
+            alert('Please select your name from the list before submitting.');
             return;
         }
         const content = essayContent.response?.trim();
@@ -179,7 +215,8 @@ export default function VocalChannelStripEssay() {
                 .from('essay_responses')
                 .insert({
                     resource_id: 'vocal-channel-strip-essay',
-                    student_name: studentName.trim(),
+                    student_name: selectedStudent.csvKey,
+                    cohort: selectedStudent.cohort,
                     content,
                     word_count: wordCount,
                     scaffold_level: scaffoldLevel,
@@ -229,7 +266,7 @@ export default function VocalChannelStripEssay() {
                         color: t.text.secondary,
                         marginBottom: spacing[4],
                     }}>
-                        Thanks {studentName}. Your teacher will mark your response.
+                        Thanks {selectedStudent?.display}. Your teacher will mark your response.
                     </p>
                     <div style={{
                         fontSize: typography.size.xs,
@@ -650,37 +687,51 @@ export default function VocalChannelStripEssay() {
                         gap: spacing[4],
                         flexWrap: 'wrap',
                     }}>
-                        <input
-                            type="text"
-                            value={studentName}
-                            onChange={(e) => setStudentName(e.target.value)}
-                            placeholder="Your name"
+                        <select
+                            value={studentKey}
+                            onChange={(e) => setStudentKey(e.target.value)}
                             style={{
-                                flex: '1 1 200px',
+                                flex: '1 1 240px',
                                 padding: spacing[3],
                                 borderRadius: borderRadius.lg,
                                 border: `1px solid ${t.border.input}`,
                                 fontSize: typography.size.base,
                                 fontFamily: typography.fontFamily,
                                 background: t.bg.primary,
-                                color: t.text.primary,
+                                color: studentKey ? t.text.primary : t.text.tertiary,
                             }}
-                        />
+                        >
+                            <option value="">— Select your name —</option>
+                            <optgroup label="Upper Sixth">
+                                {ROSTER.filter(s => s.cohort === 'upper-sixth').map(s => (
+                                    <option key={`${s.cohort}::${s.csvKey}`} value={`${s.cohort}::${s.csvKey}`}>
+                                        {s.display}
+                                    </option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="Lower Sixth">
+                                {ROSTER.filter(s => s.cohort === 'lower-sixth').map(s => (
+                                    <option key={`${s.cohort}::${s.csvKey}`} value={`${s.cohort}::${s.csvKey}`}>
+                                        {s.display}
+                                    </option>
+                                ))}
+                            </optgroup>
+                        </select>
                         <button
                             onClick={handleSubmit}
-                            disabled={submitting || !studentName.trim() || wordCount < 20}
+                            disabled={submitting || !selectedStudent || wordCount < 20}
                             style={{
                                 padding: `${spacing[3]} ${spacing[6]}`,
                                 borderRadius: borderRadius.lg,
                                 border: 'none',
-                                cursor: submitting || !studentName.trim() || wordCount < 20 ? 'not-allowed' : 'pointer',
+                                cursor: submitting || !selectedStudent || wordCount < 20 ? 'not-allowed' : 'pointer',
                                 fontSize: typography.size.base,
                                 fontWeight: typography.weight.semibold,
                                 fontFamily: typography.fontFamily,
-                                background: submitting || !studentName.trim() || wordCount < 20
+                                background: submitting || !selectedStudent || wordCount < 20
                                     ? t.bg.tertiary
                                     : t.accent.primary,
-                                color: submitting || !studentName.trim() || wordCount < 20
+                                color: submitting || !selectedStudent || wordCount < 20
                                     ? t.text.tertiary
                                     : t.text.inverse,
                                 transition: `all ${transitions.fast}`,
