@@ -151,6 +151,10 @@ export default function VocalChannelStripEssay() {
     const [activeProcessor, setActiveProcessor] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    // When a student picks their name, we look up any existing submission and
+    // lock the page into the "already submitted" state if one is found.
+    const [checkingExisting, setCheckingExisting] = useState(false);
+    const [existingSubmission, setExistingSubmission] = useState(null);
     const tabListRef = useRef(null);
     const tabBtnRefs = useRef({});
     const [tabIndicator, setTabIndicator] = useState({ x: 0, width: 0, ready: false });
@@ -192,6 +196,37 @@ export default function VocalChannelStripEssay() {
         [studentKey]
     );
 
+    // When the student picks their name, check Supabase for an existing
+    // submission under (resource_id, cohort, student_name). If there is one,
+    // lock them out — they've already submitted and can't resubmit.
+    useEffect(() => {
+        if (!selectedStudent) {
+            setExistingSubmission(null);
+            return;
+        }
+        let cancelled = false;
+        setCheckingExisting(true);
+        supabase
+            .from('essay_responses')
+            .select('id, submitted_at, word_count')
+            .eq('resource_id', 'vocal-channel-strip-essay')
+            .eq('cohort', selectedStudent.cohort)
+            .eq('student_name', selectedStudent.csvKey)
+            .limit(1)
+            .maybeSingle()
+            .then(({ data, error }) => {
+                if (cancelled) return;
+                if (error) {
+                    console.error('Existing-submission lookup failed:', error);
+                    setExistingSubmission(null);
+                } else {
+                    setExistingSubmission(data || null);
+                }
+                setCheckingExisting(false);
+            });
+        return () => { cancelled = true; };
+    }, [selectedStudent]);
+
     const handleSubmit = async () => {
         if (!selectedStudent) {
             alert('Please select your name from the list before submitting.');
@@ -204,6 +239,22 @@ export default function VocalChannelStripEssay() {
         }
         setSubmitting(true);
         try {
+            // Race-condition re-check: between the useEffect lookup and this
+            // submit someone else (or another tab) may have inserted a row.
+            const { data: existing, error: checkError } = await supabase
+                .from('essay_responses')
+                .select('id')
+                .eq('resource_id', 'vocal-channel-strip-essay')
+                .eq('cohort', selectedStudent.cohort)
+                .eq('student_name', selectedStudent.csvKey)
+                .limit(1)
+                .maybeSingle();
+            if (checkError) throw checkError;
+            if (existing) {
+                setExistingSubmission(existing);
+                setSubmitting(false);
+                return;
+            }
             const levelsUsed = Array.from(scaffoldLevelsUsed);
             const maxSupport = levelsUsed.reduce((best, id) => {
                 const rank = SCAFFOLD_LEVELS.find(l => l.id === id)?.rank ?? 0;
@@ -231,6 +282,62 @@ export default function VocalChannelStripEssay() {
             setSubmitting(false);
         }
     };
+
+    // Locked-out state: this student has already submitted under a previous
+    // session. They cannot submit again — they must speak to the teacher.
+    if (existingSubmission && !submitted) {
+        const submittedDate = existingSubmission.submitted_at
+            ? new Date(existingSubmission.submitted_at).toLocaleString('en-GB', {
+                day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+            })
+            : null;
+        return (
+            <div style={{
+                maxWidth: '520px',
+                margin: '0 auto',
+                padding: spacing[10],
+                fontFamily: typography.fontFamily,
+                textAlign: 'center',
+            }}>
+                <div style={{
+                    background: t.bg.primary,
+                    borderRadius: borderRadius['2xl'],
+                    padding: spacing[8],
+                    boxShadow: t.shadow.lg,
+                    border: `1px solid ${t.border.subtle}`,
+                }}>
+                    <div style={{ fontSize: '3rem', marginBottom: spacing[4] }}>🔒</div>
+                    <h2 style={{
+                        fontSize: typography.size.xl,
+                        fontWeight: typography.weight.bold,
+                        color: t.text.primary,
+                        marginBottom: spacing[2],
+                    }}>
+                        You&apos;ve already submitted this essay
+                    </h2>
+                    <p style={{
+                        fontSize: typography.size.sm,
+                        color: t.text.secondary,
+                        marginBottom: spacing[4],
+                        lineHeight: typography.lineHeight.relaxed,
+                    }}>
+                        {selectedStudent?.display}, your response is locked and can&apos;t be changed. If you need to re-do this, speak to your teacher.
+                    </p>
+                    {submittedDate && (
+                        <p style={{
+                            fontSize: typography.size.xs,
+                            color: t.text.tertiary,
+                            fontFamily: typography.fontFamilyMono,
+                            margin: 0,
+                        }}>
+                            Submitted: {submittedDate}
+                            {existingSubmission.word_count != null && ` · ${existingSubmission.word_count} words`}
+                        </p>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     if (submitted) {
         const scaffoldMeta = SCAFFOLD_LEVELS.find(l => l.id === scaffoldLevel);
@@ -719,19 +826,19 @@ export default function VocalChannelStripEssay() {
                         </select>
                         <button
                             onClick={handleSubmit}
-                            disabled={submitting || !selectedStudent || wordCount < 20}
+                            disabled={submitting || checkingExisting || !selectedStudent || wordCount < 20}
                             style={{
                                 padding: `${spacing[3]} ${spacing[6]}`,
                                 borderRadius: borderRadius.lg,
                                 border: 'none',
-                                cursor: submitting || !selectedStudent || wordCount < 20 ? 'not-allowed' : 'pointer',
+                                cursor: submitting || checkingExisting || !selectedStudent || wordCount < 20 ? 'not-allowed' : 'pointer',
                                 fontSize: typography.size.base,
                                 fontWeight: typography.weight.semibold,
                                 fontFamily: typography.fontFamily,
-                                background: submitting || !selectedStudent || wordCount < 20
+                                background: submitting || checkingExisting || !selectedStudent || wordCount < 20
                                     ? t.bg.tertiary
                                     : t.accent.primary,
-                                color: submitting || !selectedStudent || wordCount < 20
+                                color: submitting || checkingExisting || !selectedStudent || wordCount < 20
                                     ? t.text.tertiary
                                     : t.text.inverse,
                                 transition: `all ${transitions.fast}`,
