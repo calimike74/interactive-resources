@@ -49,6 +49,7 @@ import OperatorAssessment from '@/components/resources/OperatorAssessment';
 import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
+import VocalChannelStripEssay from '@/components/resources/VocalChannelStripEssay';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -90,6 +91,7 @@ const resourceComponents = {
     'PatchBaySimulator': PatchBaySimulator,
     'SamplingPlayground': SamplingPlayground,
     'ReadThenQuiz': ReadThenQuiz,
+    'VocalChannelStripEssay': VocalChannelStripEssay,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
