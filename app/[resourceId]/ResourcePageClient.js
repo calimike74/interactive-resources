@@ -7,6 +7,7 @@ import { getTopicForResource } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
+import SpecBanner from '@/components/SpecBanner';
 
 // Resource components registry
 // Add new components here as they're created
@@ -50,6 +51,7 @@ import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
 import VocalChannelStripEssay from '@/components/resources/VocalChannelStripEssay';
+import WaveformExplorer from '@/components/resources/WaveformExplorer';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -92,6 +94,7 @@ const resourceComponents = {
     'SamplingPlayground': SamplingPlayground,
     'ReadThenQuiz': ReadThenQuiz,
     'VocalChannelStripEssay': VocalChannelStripEssay,
+    'WaveformExplorer': WaveformExplorer,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
@@ -223,6 +226,8 @@ export default function ResourcePageClient() {
             </header>
 
             <Breadcrumbs />
+
+            <SpecBanner topic={parentTopic} />
 
             {/* Resource Content */}
             <main>
