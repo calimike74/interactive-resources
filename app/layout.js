@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { ContextMenuProvider } from "@/components/ContextMenu";
+import { PHProvider } from "./posthog-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,9 +57,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
       >
-        <ContextMenuProvider>
-          {children}
-        </ContextMenuProvider>
+        <PHProvider>
+          <ContextMenuProvider>
+            {children}
+          </ContextMenuProvider>
+        </PHProvider>
       </body>
     </html>
   );
