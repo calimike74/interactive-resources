@@ -486,6 +486,586 @@ const TAPE_LAB_CSS = `
   color: var(--ink-faded); font-family: var(--f-body); font-weight: 500;
   font-size: 11px; letter-spacing: 0.02em;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   TAB NAV — Lesson · Visualise · Practice
+   ════════════════════════════════════════════════════════════════════ */
+.tape-lab .tl-tabs {
+  display: flex; gap: 0; margin: -8px 0 28px;
+  border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+.tape-lab .tl-tab-btn {
+  flex: 1; padding: 14px 10px;
+  font-family: var(--f-mono); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  background: transparent; border: none;
+  border-right: 1px solid var(--paper-edge);
+  color: var(--ink-faded); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: background 100ms, color 100ms;
+}
+.tape-lab .tl-tab-btn:last-child { border-right: none; }
+.tape-lab .tl-tab-btn:hover { background: var(--paper-edge); color: var(--ink); }
+.tape-lab .tl-tab-btn.active {
+  background: var(--ink); color: var(--paper);
+}
+.tape-lab .tl-tab-btn .tl-tab-num {
+  font-size: 9px; opacity: 0.6; font-weight: 600;
+}
+
+/* margin glossary (Direction A polish) */
+.tape-lab .tl-margin-glossary {
+  margin-top: 18px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.tape-lab .tl-margin-note {
+  font-family: var(--f-body); font-size: 12.5px;
+  line-height: 1.5; color: var(--ink-soft);
+  border-left: 2px solid var(--oxblood);
+  padding: 4px 0 4px 12px;
+}
+.tape-lab .tl-margin-term {
+  display: block;
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--oxblood); margin-bottom: 4px;
+}
+
+/* spec footer */
+.tape-lab .tl-spec-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 2px solid var(--ink); padding-top: 14px; margin-top: 28px;
+  font-family: var(--f-mono); font-size: 10.5px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faded);
+  flex-wrap: wrap; gap: 8px;
+}
+.tape-lab .tl-spec-footer strong { color: var(--ink); font-weight: 700; }
+
+/* ════════════════════════════════════════════════════════════════════
+   B — TAPE TRANSPORT (animated, draggable head, travelling hits)
+   ════════════════════════════════════════════════════════════════════ */
+.tape-lab .tl-bx {
+  background: radial-gradient(120% 80% at 50% 0%, #2a1c14 0%, var(--tape) 50%, var(--tape-edge) 100%);
+  border: 2px solid var(--ink);
+  padding: 24px 26px; margin-bottom: 28px;
+  color: var(--paper);
+  box-shadow: 0 4px 0 var(--ink), 6px 8px 0 rgba(26,22,18,0.08);
+}
+.tape-lab .tl-bx-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 18px;
+}
+.tape-lab .tl-bx-eyebrow {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--amber); text-shadow: 0 0 6px var(--amber-glow);
+  margin-bottom: 8px;
+}
+.tape-lab .tl-bx-title {
+  font-family: var(--f-display); font-weight: 600; font-size: 32px;
+  letter-spacing: -0.02em; line-height: 1; margin: 0;
+}
+.tape-lab .tl-bx-deck {
+  font-family: var(--f-display); font-style: italic; font-size: 14px;
+  color: #c8b89a; max-width: 520px; margin-top: 6px; line-height: 1.45;
+}
+.tape-lab .tl-bx-controls {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+}
+.tape-lab .tl-bx-btn {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 10px 14px; cursor: pointer;
+  background: var(--amber); color: #1a0f06;
+  border: 1.5px solid var(--amber); display: inline-flex; align-items: center; gap: 8px;
+}
+.tape-lab .tl-bx-btn:hover { background: var(--amber-glow); }
+.tape-lab .tl-bx-tri {
+  width: 0; height: 0;
+  border-left: 8px solid currentColor;
+  border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+}
+.tape-lab .tl-bx-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 12px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  font-family: var(--f-mono); font-size: 11px; color: var(--paper);
+}
+.tape-lab .tl-bx-chip-k { color: #c8b89a; letter-spacing: 0.14em; font-size: 10px; text-transform: uppercase; }
+.tape-lab .tl-bx-chip-v { color: var(--amber-glow); font-weight: 700; }
+
+.tape-lab .tl-bx-reels {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 40px; position: relative; z-index: 2; margin-bottom: -16px;
+}
+.tape-lab .tl-bx-reel {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c9b78a, #6a543a 60%, #2a1d12 100%);
+  border: 1px solid #1a1108;
+  box-shadow: inset 0 0 0 4px rgba(0,0,0,0.5), inset 0 0 0 5px rgba(255,255,255,0.05);
+  position: relative;
+}
+.tape-lab .tl-bx-reel.spinning { animation: tl-bx-reel 4s linear infinite; }
+.tape-lab .tl-bx-reel-pair { display: flex; gap: 24px; align-items: center; }
+.tape-lab .tl-bx-reel::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 14px; height: 14px; background: #0a0604;
+  border: 1px solid #2a1d12; border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.tape-lab .tl-bx-reel .tl-bx-reel-spoke {
+  position: absolute; left: 50%; top: 50%;
+  width: 28px; height: 1.5px; background: rgba(255,230,180,0.35);
+  transform-origin: 0 0;
+}
+@keyframes tl-bx-reel { to { transform: rotate(360deg); } }
+
+.tape-lab .tl-bx-readout {
+  background: linear-gradient(180deg, #1a110a 0%, #0e0805 100%);
+  color: var(--amber); border: 1px solid #2c1d12;
+  padding: 12px 18px;
+  font-family: var(--f-mono); font-size: 12px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  text-shadow: 0 0 8px var(--amber-glow);
+}
+.tape-lab .tl-bx-readout-big {
+  color: var(--amber-glow); font-size: 22px; font-weight: 700;
+  text-shadow: 0 0 10px rgba(247,192,105,0.7);
+  letter-spacing: 0.04em;
+}
+
+.tape-lab .tl-bx-tape-lane {
+  position: relative; height: 180px;
+  background: linear-gradient(180deg, #1d140d, #0f0805);
+  border: 1px solid #3a2a1c; overflow: hidden;
+  margin-top: 16px;
+}
+.tape-lab .tl-bx-tape {
+  position: absolute; left: 0; right: 0; top: 40px; bottom: 60px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,210,150,0.05) 0 1px, transparent 1px 6px),
+    linear-gradient(180deg, #a18253, #5a4528);
+  background-size: 6px 100%, 100% 100%;
+  border-top: 1px solid #6a4a2a; border-bottom: 1px solid #6a4a2a;
+}
+.tape-lab .tl-bx-tape.running {
+  animation: tl-bx-tape 1.5s linear infinite;
+}
+@keyframes tl-bx-tape {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: -120px 0, 0 0; }
+}
+
+.tape-lab .tl-bx-big-head {
+  position: absolute; top: 22px; width: 36px; height: 96px;
+  transform: translateX(-50%);
+}
+.tape-lab .tl-bx-big-head .tl-bx-bh-body {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,#e8d6ad,#9a7f50 60%,#6a4f28);
+  border: 1px solid #2a1d12;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+}
+.tape-lab .tl-bx-big-head.glow .tl-bx-bh-body {
+  box-shadow: 0 0 18px var(--amber-glow), inset 0 0 0 1px rgba(255,255,255,0.25);
+}
+.tape-lab .tl-bx-big-head .tl-bx-bh-gap {
+  position: absolute; inset: 14px 8px 30px;
+  background: var(--oxblood); border-radius: 1px;
+}
+.tape-lab .tl-bx-big-head.record .tl-bx-bh-gap { background: #c2333a; box-shadow: 0 0 14px #c2333acc inset; }
+.tape-lab .tl-bx-big-head.playback .tl-bx-bh-gap { background: var(--amber-glow); box-shadow: 0 0 14px var(--amber-glow) inset; }
+.tape-lab .tl-bx-big-head.erase .tl-bx-bh-gap { background: #6a584a; }
+.tape-lab .tl-bx-big-head .tl-bx-bh-label {
+  position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
+  color: #e9d8b3; font-family: var(--f-mono); font-size: 9px;
+  letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap;
+}
+.tape-lab .tl-bx-big-head.draggable { cursor: ew-resize; }
+.tape-lab .tl-bx-big-head .tl-bx-bh-arrow {
+  position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+  color: var(--amber); font-size: 14px; font-family: var(--f-mono);
+}
+
+.tape-lab .tl-bx-bracket {
+  position: absolute; top: 14px; height: 18px; pointer-events: none;
+}
+.tape-lab .tl-bx-bracket::before {
+  content: ''; position: absolute; inset: 0 0 6px 0;
+  border-left: 1px solid var(--amber);
+  border-right: 1px solid var(--amber);
+  border-bottom: 1px solid var(--amber);
+  opacity: 0.7;
+}
+.tape-lab .tl-bx-bracket-label {
+  position: absolute; left: 50%; top: -7px; transform: translateX(-50%);
+  background: #1d140d; padding: 0 8px;
+  color: var(--amber-glow); font-family: var(--f-mono); font-size: 12px; font-weight: 700;
+  text-shadow: 0 0 8px rgba(247,192,105,0.6);
+}
+.tape-lab .tl-bx-hit {
+  position: absolute; top: 78px; width: 12px; height: 12px;
+  border-radius: 50%; transform: translateX(-50%);
+  background: var(--amber-glow);
+  box-shadow: 0 0 12px var(--amber-glow), 0 0 30px rgba(247,192,105,0.5);
+  pointer-events: none;
+}
+.tape-lab .tl-bx-trace {
+  position: absolute; bottom: 10px; width: 2px; height: 30px;
+  background: var(--amber); box-shadow: 0 0 10px var(--amber-glow);
+  transition: opacity 60ms;
+}
+.tape-lab .tl-bx-ruler {
+  position: absolute; left: 0; right: 0; bottom: 4px;
+  display: flex; justify-content: space-between;
+  color: #c8b89a; font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 0 200px;
+}
+
+.tape-lab .tl-bx-snaps {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 14px;
+}
+@media (max-width: 700px) { .tape-lab .tl-bx-snaps { grid-template-columns: repeat(3, 1fr); } }
+.tape-lab .tl-bx-snap {
+  background: rgba(255,255,255,0.04); color: var(--paper);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 8px; cursor: pointer;
+  font-family: var(--f-body); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.tape-lab .tl-bx-snap:hover { background: rgba(255,255,255,0.08); }
+.tape-lab .tl-bx-snap.active {
+  background: var(--amber); color: #1a0f06; border-color: var(--amber);
+}
+.tape-lab .tl-bx-snap-ms { font-family: var(--f-mono); font-weight: 700; }
+.tape-lab .tl-bx-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 14px; flex-wrap: wrap; gap: 8px;
+  font-family: var(--f-mono); font-size: 10px;
+  color: #c8b89a; letter-spacing: 0.16em; text-transform: uppercase;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   C — BEAT GRID + OSCILLOSCOPE
+   ════════════════════════════════════════════════════════════════════ */
+.tape-lab .tl-bc {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 28px 30px;
+  box-shadow: 0 4px 0 var(--ink), 6px 8px 0 rgba(26,22,18,0.08);
+}
+.tape-lab .tl-bc-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 16px; flex-wrap: wrap;
+}
+.tape-lab .tl-bc-eyebrow {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--oxblood);
+  margin-bottom: 6px;
+}
+.tape-lab .tl-bc-title {
+  font-family: var(--f-display); font-weight: 600;
+  font-size: 36px; letter-spacing: -0.02em; line-height: 1; margin: 0;
+}
+.tape-lab .tl-bc-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+.tape-lab .tl-bc-deck {
+  font-family: var(--f-display); font-style: italic; font-size: 15px;
+  color: var(--ink-soft); margin-top: 6px; max-width: 600px; line-height: 1.45;
+}
+.tape-lab .tl-bc-readout {
+  background: linear-gradient(180deg, #1a110a 0%, #0e0805 100%);
+  color: var(--amber); border: 1px solid #2c1d12;
+  padding: 12px 16px; text-align: right; min-width: 180px;
+  text-shadow: 0 0 8px var(--amber-glow);
+}
+.tape-lab .tl-bc-readout-eyebrow {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; opacity: 0.7;
+}
+.tape-lab .tl-bc-readout-big {
+  font-family: var(--f-mono); font-size: 32px; font-weight: 800;
+  color: var(--amber-glow); line-height: 1; margin-top: 4px;
+  font-feature-settings: 'tnum';
+}
+.tape-lab .tl-bc-readout-unit { font-size: 13px; opacity: 0.7; margin-left: 2px; }
+
+.tape-lab .tl-bc-rule {
+  height: 0; border: none; border-top: 2px solid var(--ink); margin: 18px 0;
+}
+
+.tape-lab .tl-bc-picker {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 14px;
+}
+@media (max-width: 900px) { .tape-lab .tl-bc-picker { grid-template-columns: repeat(4, 1fr); } }
+.tape-lab .tl-bc-pick {
+  background: var(--paper-edge);
+  border: 1px solid var(--paper-edge);
+  padding: 9px 10px; cursor: pointer; text-align: left;
+  transition: all 120ms;
+}
+.tape-lab .tl-bc-pick-label {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faded);
+}
+.tape-lab .tl-bc-pick-ms {
+  font-family: var(--f-mono); font-size: 13px; font-weight: 700;
+  margin-top: 2px; color: var(--ink);
+}
+.tape-lab .tl-bc-pick.active .tl-bc-pick-label { color: rgba(255,255,255,0.75); }
+.tape-lab .tl-bc-pick.active .tl-bc-pick-ms { color: var(--paper); }
+
+.tape-lab .tl-bc-grid-frame {
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  padding: 14px 18px; position: relative;
+}
+.tape-lab .tl-bc-grid-head {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;
+}
+.tape-lab .tl-bc-grid-cap {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--oxblood);
+}
+.tape-lab .tl-bc-grid-cap-r {
+  font-family: var(--f-mono); font-weight: 500; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded);
+}
+.tape-lab .tl-bc-row {
+  position: relative; height: 26px; margin-bottom: 4px;
+  padding-left: 86px; padding-right: 8px;
+  cursor: pointer; transition: background 0.15s;
+  border-radius: 2px;
+}
+.tape-lab .tl-bc-row.active { background: rgba(122,31,43,0.05); }
+.tape-lab .tl-bc-row-label {
+  position: absolute; left: 0; top: 6px; width: 80px;
+  font-family: var(--f-mono); font-weight: 500; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded);
+}
+.tape-lab .tl-bc-row.active .tl-bc-row-label {
+  font-weight: 700;
+}
+.tape-lab .tl-bc-row-line {
+  position: absolute; left: 86px; right: 8px; top: 12px; height: 1px;
+  background: var(--paper-edge);
+}
+.tape-lab .tl-bc-marker {
+  position: absolute; top: 4px; width: 8px; height: 18px;
+  border-radius: 2px;
+  background: #bfae8a; opacity: 0.55;
+  transform: translateX(-50%);
+}
+.tape-lab .tl-bc-row.active .tl-bc-marker { opacity: 1; }
+
+.tape-lab .tl-bc-beats {
+  position: relative; height: 18px;
+  padding-left: 86px; padding-right: 8px; margin-top: 6px;
+  border-top: 1px dashed var(--paper-edge);
+}
+.tape-lab .tl-bc-beat {
+  position: absolute; top: 4px;
+  font-family: var(--f-mono); font-size: 11px; color: var(--ink-faded);
+  transform: translateX(-50%);
+}
+
+.tape-lab .tl-bc-osc-frame {
+  background: linear-gradient(180deg, #1a110a 0%, #0e0805 100%);
+  border: 1px solid #2c1d12;
+  padding: 14px 18px; margin-top: 14px;
+  box-shadow: inset 0 0 60px rgba(232,158,60,0.06);
+}
+.tape-lab .tl-bc-osc-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--amber); opacity: 0.85;
+  text-shadow: 0 0 6px var(--amber-glow); margin-bottom: 10px;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   D — PRACTICE / CHECK UNDERSTANDING
+   ════════════════════════════════════════════════════════════════════ */
+.tape-lab .tl-bd-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 18px;
+}
+.tape-lab .tl-bd-mode {
+  display: flex; gap: 4px; background: var(--paper-edge);
+  padding: 3px; border: 1px solid var(--paper-edge);
+}
+.tape-lab .tl-bd-mode-btn {
+  font-family: var(--f-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 8px 14px; cursor: pointer; border: none;
+  background: transparent; color: var(--ink-soft);
+}
+.tape-lab .tl-bd-mode-btn.active {
+  background: var(--ink); color: var(--paper);
+}
+.tape-lab .tl-bd-grid {
+  display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px;
+}
+@media (max-width: 880px) { .tape-lab .tl-bd-grid { grid-template-columns: 1fr; } }
+.tape-lab .tl-bd-card {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 22px 24px;
+  box-shadow: 0 4px 0 var(--ink), 6px 8px 0 rgba(26,22,18,0.08);
+}
+.tape-lab .tl-bd-cap {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--oxblood);
+  margin-bottom: 10px;
+}
+.tape-lab .tl-bd-q {
+  font-family: var(--f-display); font-size: 19px; line-height: 1.4;
+  color: var(--ink-soft);
+}
+.tape-lab .tl-bd-q strong { color: var(--ink); font-weight: 700; }
+.tape-lab .tl-bd-q em { color: var(--oxblood); font-style: italic; }
+.tape-lab .tl-bd-working {
+  margin-top: 16px; padding: 14px 16px;
+  background: var(--paper-edge);
+  border: 1px solid var(--paper-edge);
+}
+.tape-lab .tl-bd-working-cap {
+  font-family: var(--f-mono); font-weight: 700; font-size: 9.5px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-faded); margin-bottom: 8px;
+}
+.tape-lab .tl-bd-working-line {
+  font-family: var(--f-mono); font-size: 13px; line-height: 1.9;
+  color: var(--ink-soft);
+}
+.tape-lab .tl-bd-working-result {
+  background: var(--ink); color: var(--amber-glow);
+  padding: 2px 8px; font-weight: 700;
+  text-shadow: 0 0 8px rgba(247,192,105,0.6);
+}
+.tape-lab .tl-bd-teach {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px dashed var(--paper-edge);
+  font-family: var(--f-body); font-size: 12.5px; color: var(--ink-faded);
+  line-height: 1.55;
+}
+.tape-lab .tl-bd-teach strong { color: var(--oxblood); }
+
+.tape-lab .tl-bd-solve-row {
+  margin-top: 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.tape-lab .tl-bd-solve-label {
+  font-family: var(--f-mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faded);
+}
+.tape-lab .tl-bd-solve-input {
+  width: 110px; padding: 10px 12px;
+  background: var(--paper-edge); border: 1.5px solid var(--ink);
+  font-family: var(--f-mono); font-size: 22px; font-weight: 700;
+  color: var(--ink); outline: none; text-align: center;
+}
+.tape-lab .tl-bd-solve-btn {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 11px 16px; cursor: pointer;
+  background: var(--ink); color: var(--paper);
+  border: 1.5px solid var(--ink);
+}
+.tape-lab .tl-bd-solve-btn:hover { background: var(--oxblood); border-color: var(--oxblood); }
+.tape-lab .tl-bd-feedback {
+  margin-top: 14px; padding: 12px 14px;
+  font-family: var(--f-display); font-style: italic; font-size: 14px;
+  color: var(--ink-soft); line-height: 1.5;
+}
+.tape-lab .tl-bd-feedback.ok {
+  background: rgba(127,191,63,0.08);
+  border: 1px solid rgba(127,191,63,0.3);
+}
+.tape-lab .tl-bd-feedback.no {
+  background: rgba(122,31,43,0.06);
+  border: 1px solid rgba(122,31,43,0.3);
+}
+.tape-lab .tl-bd-feedback strong { color: var(--oxblood); font-style: normal; font-weight: 700; }
+.tape-lab .tl-bd-feedback .hint {
+  font-family: var(--f-mono); font-style: normal; font-size: 12px;
+  color: var(--ink-faded); display: block; margin-top: 4px;
+}
+
+.tape-lab .tl-bd-try {
+  margin-top: 14px; padding: 12px 14px;
+  background: #efe2c4; border: 1px solid var(--paper-edge);
+  border-left: 3px solid var(--oxblood);
+}
+.tape-lab .tl-bd-try-tag {
+  font-family: var(--f-mono); font-weight: 700; font-size: 9.5px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--oxblood);
+  margin-bottom: 4px;
+}
+.tape-lab .tl-bd-try p {
+  font-family: var(--f-display); font-style: italic; font-size: 14px;
+  color: var(--ink-soft); line-height: 1.45; margin: 0;
+}
+
+.tape-lab .tl-bd-presets-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-top: 22px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;
+}
+.tape-lab .tl-bd-presets {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+@media (max-width: 880px) { .tape-lab .tl-bd-presets { grid-template-columns: 1fr; } }
+.tape-lab .tl-bd-preset {
+  text-align: left; cursor: pointer;
+  background: var(--paper); border: 1.5px solid var(--paper-edge);
+  border-left: 3px solid var(--paper-edge);
+  padding: 14px 16px; transition: all 120ms;
+}
+.tape-lab .tl-bd-preset:hover { background: var(--paper-edge); }
+.tape-lab .tl-bd-preset.active {
+  background: #efe2c4; border-color: var(--oxblood); border-left-color: var(--oxblood);
+}
+.tape-lab .tl-bd-preset-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.tape-lab .tl-bd-preset-name {
+  font-family: var(--f-display); font-size: 18px; font-weight: 600;
+}
+.tape-lab .tl-bd-preset-ms {
+  font-family: var(--f-mono); font-size: 12px; color: var(--oxblood); font-weight: 700;
+}
+.tape-lab .tl-bd-preset-meta {
+  font-family: var(--f-mono); font-size: 10px; color: var(--ink-faded);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px;
+}
+.tape-lab .tl-bd-preset-blurb {
+  font-family: var(--f-display); font-style: italic; font-size: 13px;
+  color: var(--ink-soft); margin-top: 8px; line-height: 1.45;
+}
+
+.tape-lab .tl-bd-walk {
+  margin-top: 18px; padding: 12px 16px;
+  background: var(--paper); border: 1.5px solid var(--paper-edge);
+  border-left: 3px solid var(--oxblood);
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+}
+.tape-lab .tl-bd-walk-cap {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--oxblood);
+}
+.tape-lab .tl-bd-walk-steps {
+  display: flex; gap: 6px; flex: 1; flex-wrap: wrap;
+}
+.tape-lab .tl-bd-walk-step {
+  background: var(--paper-edge);
+  padding: 6px 10px;
+  font-family: var(--f-mono); font-size: 10.5px;
+  color: var(--ink-soft); display: flex; gap: 6px; align-items: center;
+}
+.tape-lab .tl-bd-walk-step .k {
+  font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faded);
+}
 `;
 
 // ════════════════════════════════════════════════════════════════════
@@ -873,6 +1453,7 @@ function NoteIcon({ id, size = 22 }) {
 // COMPONENT
 // ════════════════════════════════════════════════════════════════════
 function BPMDelayCalculator() {
+  const [tab, setTab] = useState('lesson');
   const [bpm, setBpm] = useState(120);
   const [noteId, setNoteId] = useState('quarter');
   const [loopOn, setLoopOn] = useState(false);
@@ -1091,6 +1672,25 @@ function BPMDelayCalculator() {
           </p>
         </header>
 
+        <nav className="tl-tabs" aria-label="Lesson sections">
+          {[
+            { id: 'lesson',    label: 'Lesson',    n: '01' },
+            { id: 'visualise', label: 'Visualise', n: '02' },
+            { id: 'practice',  label: 'Practice',  n: '03' },
+          ].map(t => (
+            <button
+              key={t.id}
+              type="button"
+              className={'tl-tab-btn' + (tab === t.id ? ' active' : '')}
+              onClick={() => setTab(t.id)}
+              aria-pressed={tab === t.id}
+            >
+              <span className="tl-tab-num">{t.n}</span>{t.label}
+            </button>
+          ))}
+        </nav>
+
+        {tab === 'lesson' && (
         <div className="tl-stage">
           <aside className="tl-stage-side">
             {/* VIDEO HERO */}
@@ -1105,6 +1705,25 @@ function BPMDelayCalculator() {
             <div className="tl-video-caption">
               <span>Tape transport · AUDIOTECH TR-1600</span>
               <span><b>{bpm}</b>&nbsp;BPM · 7½&nbsp;ips</span>
+            </div>
+
+            <div className="tl-margin-glossary">
+              <div className="tl-margin-note">
+                <span className="tl-margin-term">Record head</span>
+                The electromagnet that imprints the audio onto the tape as it passes.
+              </div>
+              <div className="tl-margin-note">
+                <span className="tl-margin-term">Playback head</span>
+                A second head, downstream, that reads the tape back. The gap between the two = the delay time.
+              </div>
+              <div className="tl-margin-note">
+                <span className="tl-margin-term">IPS</span>
+                Inches per second — how fast the tape moves. 7½ IPS is studio-standard.
+              </div>
+              <div className="tl-margin-note">
+                <span className="tl-margin-term">Wow &amp; flutter</span>
+                Pitch wobble caused by tiny speed variations of the tape — the &ldquo;warmth&rdquo; of analog delay.
+              </div>
             </div>
           </aside>
 
@@ -1278,8 +1897,22 @@ function BPMDelayCalculator() {
           Hit the <em>snare</em> pad and watch a glowing flux mark fly across the rail from <em>record</em> to <em>playback</em>. Drag BPM down — playback slides right, the bracket widens, the wet hit arrives later. Pick an eighth — the head jumps left, the gap halves. The maths and the geometry are the same idea.
         </p>
 
-          </div>{/* /tl-stage-main */}
-        </div>{/* /tl-stage */}
+          </div>
+        </div>
+        )}
+
+        {tab === 'visualise' && (
+          <VisualiseTab bpm={bpm} setBpm={setBpm} />
+        )}
+
+        {tab === 'practice' && (
+          <PracticeTab />
+        )}
+
+        <div className="tl-spec-footer">
+          <span>Eduqas A-Level Music Tech · <strong>Spec 1.12</strong> Delay</span>
+          <span>Lesson 03 · <strong>2.5 Numeracy</strong></span>
+        </div>
 
       </div>
 
@@ -1421,6 +2054,611 @@ function ReferencePanel({ onCopy, onPickBpm }) {
         <li><strong>Esc</strong> · close drawer</li>
       </ul>
     </>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════
+// VISUALISE TAB — Tape Transport (B) + Beat Grid + Oscilloscope (C)
+// ════════════════════════════════════════════════════════════════════
+const RECORD_PCT_BX = 18;
+const TAPE_RANGE_PCT = 70;
+const TAPE_MAX_MS = 1500;
+const msToPctBx = (ms) => RECORD_PCT_BX + (ms / TAPE_MAX_MS) * TAPE_RANGE_PCT;
+const pctToMsBx = (pct) => Math.round(((pct - RECORD_PCT_BX) / TAPE_RANGE_PCT) * TAPE_MAX_MS);
+
+const SUBDIVISIONS_BX = [
+  { id: 'sixteenth', label: 'Sixteenth',  n: 0.25 },
+  { id: 'trip-e',    label: 'Eighth Trip', n: 1/3 },
+  { id: 'eighth',    label: 'Eighth',     n: 0.5  },
+  { id: 'dot-e',     label: 'Dot · ⅛',    n: 0.75 },
+  { id: 'quarter',   label: 'Quarter',    n: 1    },
+  { id: 'dot-q',     label: 'Dot · ¼',    n: 1.5  },
+];
+
+const SUBDIVISIONS_BC = [
+  { id: 'whole',     label: 'Whole',      n: 4,    color: '#7a1e22' },
+  { id: 'half',      label: 'Half',       n: 2,    color: '#a3402a' },
+  { id: 'dot-q',     label: 'Dot · ¼',    n: 1.5,  color: '#c46a2a' },
+  { id: 'quarter',   label: 'Quarter',    n: 1,    color: '#e89e3c' },
+  { id: 'dot-e',     label: 'Dot · ⅛',    n: 0.75, color: '#b89c4a' },
+  { id: 'eighth',    label: 'Eighth',     n: 0.5,  color: '#7a8a3a' },
+  { id: 'trip-e',    label: '⅛ Triplet',  n: 1/3,  color: '#3f7a4a' },
+  { id: 'sixteenth', label: 'Sixteenth',  n: 0.25, color: '#2a6a7a' },
+];
+
+function ReelSpokes() {
+  return (
+    <>
+      {[0, 60, 120, 180, 240, 300].map(deg => (
+        <div
+          key={deg}
+          className="tl-bx-reel-spoke"
+          style={{ transform: `rotate(${deg}deg)` }}
+        />
+      ))}
+    </>
+  );
+}
+
+function VisualiseTab({ bpm, setBpm }) {
+  // ─── B: Tape transport ─────────────────────────────────────────────
+  const [headMs, setHeadMs] = useState(500);
+  const [running, setRunning] = useState(true);
+  const [t, setT] = useState(0);
+  const startRef = useRef(typeof performance !== 'undefined' ? performance.now() : 0);
+  const laneRef = useRef(null);
+
+  useEffect(() => {
+    let raf;
+    const tick = (now) => {
+      if (running) setT((now - startRef.current) / 1000);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [running]);
+
+  const playbackPctB = msToPctBx(headMs);
+
+  const beatMs = 60000 / bpm;
+  const lifeMs = headMs + 200;
+  const nowMs = t * 1000;
+  const earliest = nowMs - lifeMs;
+  const first = Math.ceil(earliest / beatMs);
+  const last = Math.floor(nowMs / beatMs);
+  const hits = [];
+  if (running) {
+    for (let i = first; i <= last; i++) {
+      const age = nowMs - i * beatMs;
+      const pct = RECORD_PCT_BX + (age / TAPE_MAX_MS) * TAPE_RANGE_PCT;
+      if (pct >= RECORD_PCT_BX && pct <= 100) {
+        hits.push({ id: i, pct });
+      }
+    }
+  }
+  const hitOnPlayback = hits.some(h => Math.abs(h.pct - playbackPctB) < 0.6);
+
+  const onDrag = useCallback((clientX) => {
+    if (!laneRef.current) return;
+    const rect = laneRef.current.getBoundingClientRect();
+    const pctRaw = ((clientX - rect.left) / rect.width) * 100;
+    const pctClamped = Math.max(RECORD_PCT_BX + 2, Math.min(95, pctRaw));
+    const ms = Math.max(60, Math.min(TAPE_MAX_MS, Math.round(pctToMsBx(pctClamped) / 5) * 5));
+    setHeadMs(ms);
+  }, []);
+
+  const beginDrag = useCallback((e) => {
+    e.preventDefault();
+    const move = (ev) => {
+      const x = ev.touches ? ev.touches[0].clientX : ev.clientX;
+      onDrag(x);
+    };
+    const end = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', end);
+      window.removeEventListener('touchmove', move);
+      window.removeEventListener('touchend', end);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    window.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('touchend', end);
+  }, [onDrag]);
+
+  const closestNote =
+    Math.abs(headMs - 60000 / bpm) < 8 ? 'Quarter' :
+    Math.abs(headMs - 30000 / bpm) < 6 ? 'Eighth' :
+    Math.abs(headMs - 90000 / bpm) < 8 ? 'Dotted ⅛' :
+    Math.abs(headMs - 15000 / bpm) < 6 ? 'Sixteenth' :
+    Math.abs(headMs - 20000 / bpm) < 6 ? 'Eighth Triplet' :
+    Math.abs(headMs - 90000 / bpm * 1) < 10 ? 'Dotted ¼' :
+    '—';
+
+  // ─── C: Beat grid ──────────────────────────────────────────────────
+  const [hovered, setHovered] = useState('quarter');
+  const activeC = SUBDIVISIONS_BC.find(s => s.id === hovered) || SUBDIVISIONS_BC[3];
+  const barMs = beatMs * 4;
+  const activeMsC = Math.round(beatMs * activeC.n);
+
+  return (
+    <>
+      {/* ─── B: Tape transport ──────────────────────────────────── */}
+      <div className="tl-bx">
+        <div className="tl-bx-head">
+          <div>
+            <div className="tl-bx-eyebrow">● Live · TR-1600 · 7½ IPS</div>
+            <h2 className="tl-bx-title">The travelling hit</h2>
+            <p className="tl-bx-deck">
+              Each tap is recorded by the red head. The tape carries it past the playback head — that gap, in time, <em>is</em> the delay.
+            </p>
+          </div>
+          <div className="tl-bx-controls">
+            <button
+              type="button"
+              className="tl-bx-btn"
+              onClick={() => setRunning(r => !r)}
+            >
+              <span className="tl-bx-tri" />
+              {running ? 'Pause tape' : 'Run tape'}
+            </button>
+            <span className="tl-bx-chip">
+              <span className="tl-bx-chip-k">BPM</span>
+              <span className="tl-bx-chip-v">{bpm}</span>
+            </span>
+            <span className="tl-bx-chip">
+              <span className="tl-bx-chip-k">Δt</span>
+              <span className="tl-bx-chip-v">{headMs} ms</span>
+            </span>
+          </div>
+        </div>
+
+        {/* BPM slider so you can change it inside Visualise too */}
+        <div className="tl-mixer-row" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)' }}>
+          <span className="tl-mixer-label" style={{ color: '#c8b89a' }}>Tempo</span>
+          <input
+            className="tl-mixer-slider"
+            type="range" min="60" max="180"
+            value={bpm}
+            onChange={e => setBpm(parseInt(e.target.value, 10))}
+            aria-label="Tempo BPM"
+          />
+          <span className="tl-mixer-value" style={{ color: 'var(--amber-glow)' }}>{bpm}</span>
+        </div>
+
+        {/* Reels + readout */}
+        <div className="tl-bx-reels">
+          <div className="tl-bx-reel-pair">
+            <div className={'tl-bx-reel' + (running ? ' spinning' : '')}><ReelSpokes/></div>
+            <div className={'tl-bx-reel' + (running ? ' spinning' : '')}><ReelSpokes/></div>
+          </div>
+          <div className="tl-bx-readout">
+            <span style={{ opacity: 0.7 }}>HEAD GAP =</span>{' '}
+            <span className="tl-bx-readout-big">{headMs}<span style={{ fontSize: 12, opacity: 0.7 }}>ms</span></span>{' '}
+            <span style={{ opacity: 0.6 }}>≈ {closestNote}</span>
+          </div>
+          <div className="tl-bx-reel-pair">
+            <div className={'tl-bx-reel' + (running ? ' spinning' : '')}><ReelSpokes/></div>
+            <div className={'tl-bx-reel' + (running ? ' spinning' : '')}><ReelSpokes/></div>
+          </div>
+        </div>
+
+        {/* Tape lane */}
+        <div className="tl-bx-tape-lane" ref={laneRef}>
+          <div className={'tl-bx-tape' + (running ? ' running' : '')} />
+
+          {/* Erase head */}
+          <div className="tl-bx-big-head erase" style={{ left: '6%' }}>
+            <div className="tl-bx-bh-body" />
+            <div className="tl-bx-bh-gap" />
+            <div className="tl-bx-bh-label">Erase</div>
+          </div>
+
+          {/* Record head */}
+          <div className="tl-bx-big-head record glow" style={{ left: RECORD_PCT_BX + '%' }}>
+            <div className="tl-bx-bh-body" />
+            <div className="tl-bx-bh-gap" />
+            <div className="tl-bx-bh-label">Record</div>
+          </div>
+
+          {/* Playback head (draggable) */}
+          <div
+            className="tl-bx-big-head playback glow draggable"
+            style={{ left: playbackPctB + '%' }}
+            onMouseDown={beginDrag}
+            onTouchStart={beginDrag}
+            role="slider"
+            aria-label="Playback head distance"
+            aria-valuemin={60}
+            aria-valuemax={TAPE_MAX_MS}
+            aria-valuenow={headMs}
+            tabIndex={0}
+          >
+            <div className="tl-bx-bh-arrow">↔</div>
+            <div className="tl-bx-bh-body" />
+            <div className="tl-bx-bh-gap" />
+            <div className="tl-bx-bh-label">Playback</div>
+          </div>
+
+          {/* Bracket between record and playback */}
+          <div
+            className="tl-bx-bracket"
+            style={{ left: RECORD_PCT_BX + '%', width: (playbackPctB - RECORD_PCT_BX) + '%' }}
+          >
+            <div className="tl-bx-bracket-label">{headMs} ms</div>
+          </div>
+
+          {/* Travelling hits */}
+          {hits.map(h => (
+            <div key={h.id} className="tl-bx-hit" style={{ left: h.pct + '%' }} />
+          ))}
+
+          {/* Playback trace flash */}
+          <div
+            className="tl-bx-trace"
+            style={{ left: playbackPctB + '%', opacity: hitOnPlayback ? 1 : 0.15 }}
+          />
+
+          {/* Ruler labels */}
+          <div className="tl-bx-ruler">
+            <span>0ms</span><span>250</span><span>500</span><span>750</span><span>1000</span>
+          </div>
+        </div>
+
+        {/* Subdivision snap buttons */}
+        <div className="tl-bx-snaps">
+          {SUBDIVISIONS_BX.map(s => {
+            const v = Math.round(60000 / bpm * s.n);
+            const active = Math.abs(v - headMs) < 4;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                className={'tl-bx-snap' + (active ? ' active' : '')}
+                onClick={() => setHeadMs(v)}
+              >
+                <span>{s.label}</span>
+                <span className="tl-bx-snap-ms">{v}ms</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="tl-bx-foot">
+          <span>Drag the playback head ▸ snap to a subdivision ▸ watch the hit travel</span>
+          <span>Spec 1.12 · Tape Delay</span>
+        </div>
+      </div>
+
+      {/* ─── C: Beat grid + oscilloscope ─────────────────────────── */}
+      <div className="tl-bc">
+        <div className="tl-bc-head">
+          <div>
+            <div className="tl-bc-eyebrow">Visualisation 02 · Beat Grid</div>
+            <h2 className="tl-bc-title">
+              One bar, every <em>subdivision</em>.
+            </h2>
+            <p className="tl-bc-deck">
+              Hover a note value. Watch where its hits land in the bar — and the same delay drawn onto the oscilloscope.
+            </p>
+          </div>
+          <div className="tl-bc-readout">
+            <div className="tl-bc-readout-eyebrow">{activeC.label.toUpperCase()} @ {bpm} BPM</div>
+            <div className="tl-bc-readout-big">
+              {activeMsC}<span className="tl-bc-readout-unit">ms</span>
+            </div>
+          </div>
+        </div>
+
+        <hr className="tl-bc-rule" />
+
+        {/* Picker chips */}
+        <div className="tl-bc-picker">
+          {SUBDIVISIONS_BC.map(s => {
+            const ms2 = Math.round(beatMs * s.n);
+            const isActive = s.id === hovered;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                className={'tl-bc-pick' + (isActive ? ' active' : '')}
+                onMouseEnter={() => setHovered(s.id)}
+                onClick={() => setHovered(s.id)}
+                style={isActive ? { background: s.color, borderColor: s.color } : undefined}
+              >
+                <div className="tl-bc-pick-label">{s.label}</div>
+                <div className="tl-bc-pick-ms">{ms2}ms</div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Beat grid */}
+        <div className="tl-bc-grid-frame">
+          <div className="tl-bc-grid-head">
+            <span className="tl-bc-grid-cap">One bar — 4 beats — {Math.round(barMs)} ms total</span>
+            <span className="tl-bc-grid-cap-r">Hits land where the colour falls</span>
+          </div>
+
+          {SUBDIVISIONS_BC.map(s => {
+            const count = Math.round(4 / s.n);
+            const isActive = s.id === hovered;
+            const markers = [];
+            for (let i = 0; i <= count; i++) {
+              markers.push((i / count) * 100);
+            }
+            return (
+              <div
+                key={s.id}
+                className={'tl-bc-row' + (isActive ? ' active' : '')}
+                onMouseEnter={() => setHovered(s.id)}
+                onClick={() => setHovered(s.id)}
+              >
+                <div
+                  className="tl-bc-row-label"
+                  style={isActive ? { color: s.color, fontWeight: 700 } : undefined}
+                >{s.label}</div>
+                <div className="tl-bc-row-line" />
+                {markers.map((pct, i) => (
+                  <div
+                    key={i}
+                    className="tl-bc-marker"
+                    style={{
+                      left: `calc(86px + ${pct}% * (100% - 94px) / 100%)`,
+                      background: isActive ? s.color : undefined,
+                      boxShadow: isActive ? `0 0 8px ${s.color}80` : 'none',
+                    }}
+                  />
+                ))}
+              </div>
+            );
+          })}
+
+          <div className="tl-bc-beats">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div
+                key={i}
+                className="tl-bc-beat"
+                style={{ left: `calc(86px + ${((i - 1) / 4) * 100}% * (100% - 94px) / 100%)` }}
+              >
+                {i === 5 ? '|' : i}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Oscilloscope */}
+        <div className="tl-bc-osc-frame">
+          <div className="tl-bc-osc-head">
+            <span>OSCILLOSCOPE — DRY ▸ WET</span>
+            <span>1 BAR · {Math.round(barMs)} MS</span>
+          </div>
+          <Oscilloscope barMs={barMs} delayMs={activeMsC} color={activeC.color} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Oscilloscope({ barMs, delayMs, color }) {
+  const W = 1180, H = 120;
+  const beatMsLocal = barMs / 4;
+  const dryHits = [0, 1, 2, 3].map(i => i * beatMsLocal);
+  const wetHits = dryHits.map(time => time + delayMs);
+
+  const buildPolyline = (hits) => {
+    const arr = [];
+    for (let x = 0; x <= W; x += 2) {
+      const time = (x / W) * barMs;
+      let y = 0;
+      for (const h of hits) {
+        const dt = time - h;
+        if (dt >= 0 && dt < 400) {
+          y += Math.sin(dt * 0.06) * 32 * Math.exp(-dt / 70);
+        }
+      }
+      arr.push(`${x},${(H / 2 - y).toFixed(2)}`);
+    }
+    return arr.join(' ');
+  };
+
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      style={{ width: '100%', height: H, display: 'block' }}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      {[0, 1, 2, 3, 4].map(i => (
+        <line
+          key={'g' + i}
+          x1={(i / 4) * W} x2={(i / 4) * W} y1={0} y2={H}
+          stroke="rgba(232,158,60,0.12)"
+        />
+      ))}
+      <line x1={0} x2={W} y1={H/2} y2={H/2} stroke="rgba(232,158,60,0.12)" />
+
+      <polyline fill="none" stroke="#c8b89a" strokeWidth="1.2" opacity="0.7"
+        points={buildPolyline(dryHits)} />
+      <polyline fill="none" stroke={color} strokeWidth="1.6" opacity="0.95"
+        points={buildPolyline(wetHits)}
+        style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
+
+      {dryHits.map((h, i) => (
+        <line key={'d' + i}
+          x1={(h / barMs) * W} x2={(h / barMs) * W}
+          y1={H/2 - 36} y2={H/2 + 36}
+          stroke="#c8b89a" strokeWidth="1" opacity="0.4" />
+      ))}
+      {wetHits.map((h, i) => {
+        const x = (h / barMs) * W;
+        if (x > W) return null;
+        return (
+          <line key={'w' + i} x1={x} x2={x}
+            y1={H/2 - 36} y2={H/2 + 36}
+            stroke={color} strokeWidth="1" opacity="0.9" />
+        );
+      })}
+    </svg>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════
+// PRACTICE TAB — Worked example, Solve-for-X, Genre presets (D)
+// ════════════════════════════════════════════════════════════════════
+const GENRE_PRESETS = [
+  { id: 'dub',   title: 'Dub',                bpm: 80,  note: 'Dot · ⅛',   n: 0.75,  blurb: 'King Tubby chains a dotted-eighth feedback delay against a slow groove — that off-beat shuffle is the genre.' },
+  { id: 'rocka', title: 'Rockabilly slap',    bpm: 168, note: 'Eighth',    n: 0.5,   blurb: 'Sun Studios slapback: a single short echo, just an eighth behind. Sounds like the room is twice as alive.' },
+  { id: 'edge',  title: 'Dotted-⅛ guitar',    bpm: 110, note: 'Dot · ⅛',   n: 0.75,  blurb: 'The Edge / U2: a clean guitar arpeggio with a dotted-eighth delay creates a counter-melody from one part.' },
+  { id: 'gilm',  title: 'Half-time lead',     bpm: 120, note: 'Half',      n: 2,     blurb: 'Long, lyrical solos sit beautifully against a half-note repeat — Gilmour territory.' },
+  { id: 'trip',  title: 'Triplet shuffle',    bpm: 140, note: '⅛ Triplet', n: 1/3,   blurb: 'Triplet eighths against a straight groove pull the rhythm sideways — common in shuffle blues and trap hi-hats.' },
+  { id: 'shoe',  title: 'Shoegaze wash',      bpm: 96,  note: 'Quarter',   n: 1,     blurb: 'A quarter-note delay with high feedback smears notes into a chord — the wall.' },
+];
+
+function PracticeTab() {
+  const [mode, setMode] = useState('student');
+  const [preset, setPreset] = useState(null);
+
+  return (
+    <div>
+      <div className="tl-bd-head">
+        <div>
+          <div className="tl-bc-eyebrow">Lesson 03 · Check Understanding</div>
+          <h2 className="tl-bc-title">
+            Solve for <em>X</em>, then listen for it.
+          </h2>
+        </div>
+        <div className="tl-bd-mode" role="tablist" aria-label="Mode">
+          {['student', 'teacher'].map(m => (
+            <button
+              key={m}
+              type="button"
+              className={'tl-bd-mode-btn' + (mode === m ? ' active' : '')}
+              onClick={() => setMode(m)}
+              aria-pressed={mode === m}
+            >{m} mode</button>
+          ))}
+        </div>
+      </div>
+
+      <hr className="tl-bc-rule" />
+
+      <div className="tl-bd-grid">
+        {/* Worked example */}
+        <div className="tl-bd-card">
+          <div className="tl-bd-cap">Worked example</div>
+          <div className="tl-bd-q">
+            A track at <strong>96 BPM</strong> needs a <em>dotted-eighth</em> delay. What time, in milliseconds, do you set?
+          </div>
+          <div className="tl-bd-working">
+            <div className="tl-bd-working-cap">Working</div>
+            <div className="tl-bd-working-line">
+              quarter @ 96 BPM = 60,000 ÷ 96 = <span style={{ color: 'var(--oxblood)' }}>625 ms</span><br/>
+              dotted-eighth = quarter × 0.75 = 625 × 0.75<br/>
+              =&nbsp;<span className="tl-bd-working-result">468.75 ms</span>
+            </div>
+          </div>
+          {mode === 'teacher' && (
+            <div className="tl-bd-teach">
+              <strong>Teacher note —</strong> common error: students multiply by 1.5 (the dot adds half), forgetting they started from an <em>eighth</em> (312.5 ms). Both routes give the same answer; check working.
+            </div>
+          )}
+        </div>
+
+        <SolveForX />
+      </div>
+
+      {/* Genre presets */}
+      <div className="tl-bd-presets-head">
+        <div className="tl-bd-cap" style={{ marginBottom: 0 }}>Where the numbers come from — genre presets</div>
+        <span style={{
+          fontFamily: 'var(--f-mono)', fontSize: 10, color: 'var(--ink-faded)',
+          letterSpacing: '0.14em', textTransform: 'uppercase',
+        }}>Click a card to highlight</span>
+      </div>
+      <div className="tl-bd-presets">
+        {GENRE_PRESETS.map(p => {
+          const ms = Math.round(60000 / p.bpm * p.n);
+          const isActive = preset === p.id;
+          return (
+            <button
+              key={p.id}
+              type="button"
+              className={'tl-bd-preset' + (isActive ? ' active' : '')}
+              onClick={() => setPreset(p.id)}
+              aria-pressed={isActive}
+            >
+              <div className="tl-bd-preset-row">
+                <div className="tl-bd-preset-name">{p.title}</div>
+                <div className="tl-bd-preset-ms">{ms} ms</div>
+              </div>
+              <div className="tl-bd-preset-meta">{p.bpm} BPM · {p.note}</div>
+              <div className="tl-bd-preset-blurb">{p.blurb}</div>
+            </button>
+          );
+        })}
+      </div>
+
+      {mode === 'teacher' && (
+        <div className="tl-bd-walk">
+          <span className="tl-bd-walk-cap">Walkthrough</span>
+          <div className="tl-bd-walk-steps">
+            {['Define heads', 'Run the formula', 'Hear quarter', 'Hear dotted-⅛', 'Genre listening', 'Mini-quiz'].map((step, i) => (
+              <div key={i} className="tl-bd-walk-step">
+                <span className="k">Step {i + 1}</span><span>{step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SolveForX() {
+  const [answer, setAnswer] = useState('');
+  const [reveal, setReveal] = useState(false);
+  const correct = 120; // 60000 / BPM × 0.75 = 375 → BPM = 120
+  const ok = parseInt(answer, 10) === correct;
+
+  return (
+    <div className="tl-bd-card">
+      <div className="tl-bd-cap">Solve for X</div>
+      <div className="tl-bd-q">
+        A delay reads <strong>375 ms</strong> on a <em>dotted-eighth</em> setting. What is the tempo?
+      </div>
+      <div className="tl-bd-solve-row">
+        <span className="tl-bd-solve-label">BPM =</span>
+        <input
+          className="tl-bd-solve-input"
+          inputMode="numeric"
+          value={answer}
+          placeholder="?"
+          onChange={(e) => {
+            setAnswer(e.target.value.replace(/[^0-9]/g, ''));
+            setReveal(false);
+          }}
+          onKeyDown={(e) => { if (e.key === 'Enter') setReveal(true); }}
+          aria-label="Tempo answer in BPM"
+        />
+        <button
+          type="button"
+          className="tl-bd-solve-btn"
+          onClick={() => setReveal(true)}
+        >Check</button>
+      </div>
+      {reveal && (
+        <div className={'tl-bd-feedback ' + (ok ? 'ok' : 'no')}>
+          {ok
+            ? <>Correct — at <strong>120 BPM</strong>, a dotted-eighth is exactly 375 ms.</>
+            : <>Not quite. <span className="hint">Hint: rearrange 60,000 ÷ BPM × 0.75 = 375.</span></>
+          }
+        </div>
+      )}
+      <div className="tl-bd-try">
+        <div className="tl-bd-try-tag">Try this</div>
+        <p>Now solve in reverse: the song is at <strong>92 BPM</strong>. What&rsquo;s the quarter-note delay? (Within ±5 ms is fine.)</p>
+      </div>
+    </div>
   );
 }
 
