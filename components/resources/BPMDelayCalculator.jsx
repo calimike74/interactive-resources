@@ -33,7 +33,45 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab * { box-sizing: border-box; }
 
-.tape-lab .tl-wrap { max-width: 920px; margin: 0 auto; }
+.tape-lab .tl-wrap { max-width: 1200px; margin: 0 auto; }
+.tape-lab .tl-stage { display: block; }
+@media (min-width: 980px) {
+  .tape-lab .tl-stage {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .tape-lab .tl-stage-side { position: sticky; top: 24px; }
+}
+.tape-lab .tl-mixer-row {
+  display: flex; align-items: center; gap: 14px;
+  border: 1.5px solid var(--ink); background: var(--paper);
+  padding: 10px 14px; margin: 0 0 18px;
+}
+.tape-lab .tl-mixer-row + .tl-mixer-row { margin-top: -10px; }
+.tape-lab .tl-mixer-label {
+  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faded);
+  min-width: 96px;
+}
+.tape-lab .tl-mixer-slider {
+  flex: 1; appearance: none; height: 4px;
+  background: var(--ink); outline: none; cursor: pointer;
+}
+.tape-lab .tl-mixer-slider::-webkit-slider-thumb {
+  appearance: none; width: 16px; height: 16px;
+  background: var(--oxblood); border: 2px solid var(--ink); cursor: ew-resize;
+  box-shadow: 0 2px 0 var(--ink);
+}
+.tape-lab .tl-mixer-slider::-moz-range-thumb {
+  width: 16px; height: 16px; background: var(--oxblood);
+  border: 2px solid var(--ink); cursor: ew-resize;
+}
+.tape-lab .tl-mixer-value {
+  font-family: var(--f-mono); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.08em; color: var(--ink); min-width: 38px; text-align: right;
+}
 
 .tape-lab header.tl-header { border-bottom: 2px solid var(--ink); padding-bottom: 20px; margin-bottom: 28px; }
 .tape-lab .tl-eyebrow {
@@ -162,12 +200,13 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-head.flash .tl-head-glow { opacity: 1; transform: translateX(-50%) scale(1); }
 
 .tape-lab .tl-head-label {
-  position: absolute; bottom: -22px; left: 50%;
+  position: absolute; bottom: -38px; left: 50%;
   transform: translateX(-50%);
   font-family: var(--f-mono); font-weight: 700; font-size: 10px;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--ink); white-space: nowrap;
-  transition: left 280ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: left 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              transform 200ms ease-out;
 }
 .tape-lab .tl-head-label .num { color: var(--oxblood); margin-right: 4px; font-weight: 800; }
 
@@ -190,7 +229,7 @@ const TAPE_LAB_CSS = `
 }
 
 .tape-lab .tl-ticks {
-  position: relative; margin: 60px 12px 0;
+  position: relative; margin: 80px 12px 0;
   height: 20px; border-top: 1px solid var(--ink-faded);
 }
 .tape-lab .tl-tick {
@@ -839,8 +878,12 @@ function BPMDelayCalculator() {
   const [loopOn, setLoopOn] = useState(false);
   const [beat, setBeat] = useState(-1);
   const [drawer, setDrawer] = useState(null);
+  const [loopVol, setLoopVol] = useState(0.6);
+  const [wetLevel, setWetLevel] = useState(0.7);
 
   const audioCtxRef = useRef(null);
+  const loopGainRef = useRef(null);
+  const wetGainRef = useRef(null);
   const loopTimerRef = useRef(null);
   const railRef = useRef(null);
   const recordHeadRef = useRef(null);
@@ -851,17 +894,40 @@ function BPMDelayCalculator() {
   const note = NOTE_VALUES.find(n => n.id === noteId) || NOTE_VALUES[3];
   const ms = calcMs(bpm, note.multiplier);
   const playbackPct = playbackPctFor(ms);
+  const labelsCrowded = (playbackPct - RECORD_LEFT_PCT) < 14;
 
   // Lazy-init audio
   const ensureAudio = useCallback(() => {
     if (!audioCtxRef.current && typeof window !== 'undefined') {
       audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
     }
-    if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
-      audioCtxRef.current.resume();
+    const ctx = audioCtxRef.current;
+    if (ctx && ctx.state === 'suspended') ctx.resume();
+    if (ctx && !loopGainRef.current) {
+      loopGainRef.current = ctx.createGain();
+      loopGainRef.current.gain.value = loopVol;
+      loopGainRef.current.connect(ctx.destination);
     }
-    return audioCtxRef.current;
+    if (ctx && !wetGainRef.current) {
+      wetGainRef.current = ctx.createGain();
+      wetGainRef.current.gain.value = wetLevel;
+      wetGainRef.current.connect(ctx.destination);
+    }
+    return ctx;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (loopGainRef.current && audioCtxRef.current) {
+      loopGainRef.current.gain.setTargetAtTime(loopVol, audioCtxRef.current.currentTime, 0.01);
+    }
+  }, [loopVol]);
+
+  useEffect(() => {
+    if (wetGainRef.current && audioCtxRef.current) {
+      wetGainRef.current.gain.setTargetAtTime(wetLevel, audioCtxRef.current.currentTime, 0.01);
+    }
+  }, [wetLevel]);
 
   // Inject fonts + CSS once
   useEffect(() => {
@@ -888,7 +954,8 @@ function BPMDelayCalculator() {
     const delayMs = calcMs(bpm, cur.multiplier);
 
     synths[sourceId](ctx, now, ctx.destination, 1);
-    synths[sourceId](ctx, now + delayMs / 1000, ctx.destination, 0.7);
+    const wetDest = wetGainRef.current || ctx.destination;
+    synths[sourceId](ctx, now + delayMs / 1000, wetDest, 1);
 
     if (recordHeadRef.current) {
       recordHeadRef.current.classList.add('flash');
@@ -947,9 +1014,10 @@ function BPMDelayCalculator() {
       const ahead = ctx.currentTime + 0.18;
       while (nextTime < ahead) {
         const which = b % 4;
-        if (which === 0 || which === 2) synths.kick(ctx, nextTime, ctx.destination, 1);
-        if (which === 1 || which === 3) synths.snare(ctx, nextTime, ctx.destination, 1);
-        synths.rim(ctx, nextTime + beatSec / 2, ctx.destination, 0.6);
+        const drumDest = loopGainRef.current || ctx.destination;
+        if (which === 0 || which === 2) synths.kick(ctx, nextTime, drumDest, 1);
+        if (which === 1 || which === 3) synths.snare(ctx, nextTime, drumDest, 1);
+        synths.rim(ctx, nextTime + beatSec / 2, drumDest, 0.6);
         const visualAt = (nextTime - ctx.currentTime) * 1000;
         const beatNow = b;
         setTimeout(() => setBeat(beatNow % 4), Math.max(0, visualAt));
@@ -1023,19 +1091,24 @@ function BPMDelayCalculator() {
           </p>
         </header>
 
-        {/* VIDEO HERO */}
-        <div className="tl-video-hero">
-          <video autoPlay loop muted playsInline preload="auto">
-            <source src="/Reel-to-reel-video.mp4" type="video/mp4" />
-          </video>
-          <div className="tl-video-grain" />
-          <div className="tl-video-flash" ref={videoFlashRef} />
-          <div className="tl-video-stencil">● Live · TR-1600</div>
-        </div>
-        <div className="tl-video-caption">
-          <span>Tape transport · AUDIOTECH TR-1600</span>
-          <span><b>{bpm}</b>&nbsp;BPM · 7½&nbsp;ips</span>
-        </div>
+        <div className="tl-stage">
+          <aside className="tl-stage-side">
+            {/* VIDEO HERO */}
+            <div className="tl-video-hero">
+              <video autoPlay loop muted playsInline preload="auto">
+                <source src="/Reel-to-reel-video.mp4" type="video/mp4" />
+              </video>
+              <div className="tl-video-grain" />
+              <div className="tl-video-flash" ref={videoFlashRef} />
+              <div className="tl-video-stencil">● Live · TR-1600</div>
+            </div>
+            <div className="tl-video-caption">
+              <span>Tape transport · AUDIOTECH TR-1600</span>
+              <span><b>{bpm}</b>&nbsp;BPM · 7½&nbsp;ips</span>
+            </div>
+          </aside>
+
+          <div className="tl-stage-main">
 
         {/* HEAD METER */}
         <div className="tl-gap-meter-frame">
@@ -1071,7 +1144,15 @@ function BPMDelayCalculator() {
             <div className="tl-head-label" style={{ left: RECORD_LEFT_PCT + '%' }}>
               <span className="num">②</span>Record
             </div>
-            <div className="tl-head-label" style={{ left: playbackPct + '%' }}>
+            <div
+              className="tl-head-label"
+              style={{
+                left: playbackPct + '%',
+                transform: labelsCrowded
+                  ? 'translateX(-50%) translateY(14px)'
+                  : 'translateX(-50%)',
+              }}
+            >
               <span className="num">③</span>Playback
             </div>
           </div>
@@ -1116,6 +1197,28 @@ function BPMDelayCalculator() {
               <div key={i} className={'tl-beat-led' + (beat === i ? ' on' : '')} />
             ))}
           </div>
+        </div>
+
+        {/* MIXER */}
+        <div className="tl-mixer-row">
+          <span className="tl-mixer-label">Drum loop</span>
+          <input
+            className="tl-mixer-slider" type="range" min="0" max="100"
+            value={Math.round(loopVol * 100)}
+            onChange={e => setLoopVol(parseInt(e.target.value, 10) / 100)}
+            aria-label="Drum loop volume"
+          />
+          <span className="tl-mixer-value">{Math.round(loopVol * 100)}%</span>
+        </div>
+        <div className="tl-mixer-row">
+          <span className="tl-mixer-label">Wet level</span>
+          <input
+            className="tl-mixer-slider" type="range" min="0" max="100"
+            value={Math.round(wetLevel * 100)}
+            onChange={e => setWetLevel(parseInt(e.target.value, 10) / 100)}
+            aria-label="Delay wet level"
+          />
+          <span className="tl-mixer-value">{Math.round(wetLevel * 100)}%</span>
         </div>
 
         {/* PADS */}
@@ -1174,6 +1277,9 @@ function BPMDelayCalculator() {
           <span className="tl-tag">Try this</span>
           Hit the <em>snare</em> pad and watch a glowing flux mark fly across the rail from <em>record</em> to <em>playback</em>. Drag BPM down — playback slides right, the bracket widens, the wet hit arrives later. Pick an eighth — the head jumps left, the gap halves. The maths and the geometry are the same idea.
         </p>
+
+          </div>{/* /tl-stage-main */}
+        </div>{/* /tl-stage */}
 
       </div>
 
