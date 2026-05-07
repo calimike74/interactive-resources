@@ -51,6 +51,8 @@ import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
 import WaveformExplorer from '@/components/resources/WaveformExplorer';
+import DelayEffects from '@/components/resources/DelayEffects';
+import BPMDelayCalculator from '@/components/resources/BPMDelayCalculator';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -93,6 +95,8 @@ const resourceComponents = {
     'SamplingPlayground': SamplingPlayground,
     'ReadThenQuiz': ReadThenQuiz,
     'WaveformExplorer': WaveformExplorer,
+    'DelayEffects': DelayEffects,
+    'BPMDelayCalculator': BPMDelayCalculator,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
