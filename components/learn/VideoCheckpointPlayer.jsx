@@ -5,6 +5,9 @@ import { theme, typography, borderRadius, spacing, transitions } from '@/lib/the
 
 const GRADES_API = 'https://grades.musictechstudio.co.uk/api/external/video-engagement';
 const POLL_INTERVAL_MS = 250;
+const REWIND_SECONDS = 2;       // seek back this far on resume so cut words aren't lost
+const FADE_MS = 1500;           // duration of volume fade-in on resume
+const FADE_STEPS = 30;          // ~50ms per step for a smooth ramp
 
 let ytApiPromise = null;
 function loadYouTubeApi() {
@@ -39,6 +42,7 @@ export default function VideoCheckpointPlayer({
     const triggeredRef = useRef(new Set());
     const checkpointsRef = useRef(checkpoints);
     const answeredIdsRef = useRef(null);
+    const fadeRef = useRef(null);
 
     const [activeCheckpoint, setActiveCheckpoint] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -92,6 +96,10 @@ export default function VideoCheckpointPlayer({
                     }
                     if (time >= cp.timestamp) {
                         triggeredRef.current.add(cp.id);
+                        if (fadeRef.current) {
+                            clearInterval(fadeRef.current);
+                            fadeRef.current = null;
+                        }
                         player.pauseVideo();
                         setActiveCheckpoint(cp);
                         setSelectedIndex(null);
@@ -125,6 +133,10 @@ export default function VideoCheckpointPlayer({
         return () => {
             cancelled = true;
             stopPolling();
+            if (fadeRef.current) {
+                clearInterval(fadeRef.current);
+                fadeRef.current = null;
+            }
             if (playerRef.current && typeof playerRef.current.destroy === 'function') {
                 playerRef.current.destroy();
             }
@@ -167,13 +179,47 @@ export default function VideoCheckpointPlayer({
     }, [selectedIndex, activeCheckpoint, submitted, answeredIds, persistAnswered, studentToken, videoId]);
 
     const continueVideo = useCallback(() => {
+        const cp = activeCheckpoint;
         setActiveCheckpoint(null);
         setSelectedIndex(null);
         setSubmitted(false);
-        if (playerRef.current && typeof playerRef.current.playVideo === 'function') {
-            playerRef.current.playVideo();
+
+        const player = playerRef.current;
+        if (!player || typeof player.playVideo !== 'function' || !cp) return;
+
+        // Capture the user's current volume so we can fade back to it.
+        const targetVolume = typeof player.getVolume === 'function'
+            ? player.getVolume()
+            : 100;
+
+        // Rewind a couple of seconds so cut-off words aren't lost.
+        const resumeTime = Math.max(0, cp.timestamp - REWIND_SECONDS);
+        if (typeof player.seekTo === 'function') {
+            player.seekTo(resumeTime, true);
         }
-    }, []);
+
+        // Mute, play, then fade volume back in over FADE_MS.
+        if (typeof player.setVolume === 'function') {
+            player.setVolume(0);
+        }
+        player.playVideo();
+
+        if (fadeRef.current) {
+            clearInterval(fadeRef.current);
+        }
+        let step = 0;
+        fadeRef.current = setInterval(() => {
+            step++;
+            const v = Math.min(targetVolume, (targetVolume * step) / FADE_STEPS);
+            if (playerRef.current && typeof playerRef.current.setVolume === 'function') {
+                playerRef.current.setVolume(v);
+            }
+            if (step >= FADE_STEPS) {
+                clearInterval(fadeRef.current);
+                fadeRef.current = null;
+            }
+        }, FADE_MS / FADE_STEPS);
+    }, [activeCheckpoint]);
 
     const completedCount = answeredIds.size;
     const totalCount = checkpoints.length;

@@ -44,7 +44,7 @@ const CHECKPOINTS = [
     },
     {
         id: 'q4-loudness-override-15db',
-        timestamp: 138,
+        timestamp: 148,
         question: 'How much louder must a delayed signal be to override the precedence effect and steal the perceived source position?',
         options: ['3 dB', '6 dB', '10 dB', '15 dB'],
         correctIndex: 3,
