@@ -37,6 +37,8 @@ export default function VideoCheckpointPlayer({
     const playerRef = useRef(null);
     const pollRef = useRef(null);
     const triggeredRef = useRef(new Set());
+    const checkpointsRef = useRef(checkpoints);
+    const answeredIdsRef = useRef(null);
 
     const [activeCheckpoint, setActiveCheckpoint] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -51,46 +53,55 @@ export default function VideoCheckpointPlayer({
         }
     });
 
+    // Keep refs in sync so polling can read the latest values
+    // without re-running the effect that creates the player.
+    useEffect(() => { checkpointsRef.current = checkpoints; }, [checkpoints]);
+    useEffect(() => { answeredIdsRef.current = answeredIds; }, [answeredIds]);
+
     const persistAnswered = useCallback((ids) => {
         try {
             localStorage.setItem(`video-engagement-answered-${videoId}`, JSON.stringify([...ids]));
         } catch {}
     }, [videoId]);
 
-    const stopPolling = useCallback(() => {
-        if (pollRef.current) {
-            clearInterval(pollRef.current);
-            pollRef.current = null;
-        }
-    }, []);
-
-    const startPolling = useCallback(() => {
-        stopPolling();
-        pollRef.current = setInterval(() => {
-            const player = playerRef.current;
-            if (!player || typeof player.getCurrentTime !== 'function') return;
-
-            const time = player.getCurrentTime();
-            for (const cp of checkpoints) {
-                if (triggeredRef.current.has(cp.id)) continue;
-                if (answeredIds.has(cp.id)) {
-                    triggeredRef.current.add(cp.id);
-                    continue;
-                }
-                if (time >= cp.timestamp) {
-                    triggeredRef.current.add(cp.id);
-                    player.pauseVideo();
-                    setActiveCheckpoint(cp);
-                    setSelectedIndex(null);
-                    setSubmitted(false);
-                    break;
-                }
-            }
-        }, POLL_INTERVAL_MS);
-    }, [checkpoints, answeredIds, stopPolling]);
-
     useEffect(() => {
         let cancelled = false;
+
+        const stopPolling = () => {
+            if (pollRef.current) {
+                clearInterval(pollRef.current);
+                pollRef.current = null;
+            }
+        };
+
+        const startPolling = () => {
+            stopPolling();
+            pollRef.current = setInterval(() => {
+                const player = playerRef.current;
+                if (!player || typeof player.getCurrentTime !== 'function') return;
+
+                const time = player.getCurrentTime();
+                const cps = checkpointsRef.current || [];
+                const answered = answeredIdsRef.current || new Set();
+
+                for (const cp of cps) {
+                    if (triggeredRef.current.has(cp.id)) continue;
+                    if (answered.has(cp.id)) {
+                        triggeredRef.current.add(cp.id);
+                        continue;
+                    }
+                    if (time >= cp.timestamp) {
+                        triggeredRef.current.add(cp.id);
+                        player.pauseVideo();
+                        setActiveCheckpoint(cp);
+                        setSelectedIndex(null);
+                        setSubmitted(false);
+                        break;
+                    }
+                }
+            }, POLL_INTERVAL_MS);
+        };
+
         loadYouTubeApi().then(YT => {
             if (cancelled || !YT || !containerRef.current) return;
             playerRef.current = new YT.Player(containerRef.current, {
@@ -119,7 +130,7 @@ export default function VideoCheckpointPlayer({
             }
             playerRef.current = null;
         };
-    }, [youtubeId, startPolling, stopPolling]);
+    }, [youtubeId]);
 
     const submitAnswer = useCallback(async () => {
         if (selectedIndex === null || !activeCheckpoint || submitted) return;
