@@ -15,7 +15,7 @@ const YOUTUBE_ID = 'Spyf2IYgZpI';
 const CHECKPOINTS = [
     {
         id: 'q1-source-location',
-        timestamp: 30,
+        timestamp: 36,
         question: 'What does the precedence effect (Haas effect) help your brain do?',
         options: [
             'Ignore reverb in noisy rooms',
@@ -28,7 +28,7 @@ const CHECKPOINTS = [
     },
     {
         id: 'q2-transient-fusion-5ms',
-        timestamp: 85,
+        timestamp: 87,
         question: 'For a short transient (snare hit, click), the second sound must arrive within how many milliseconds for the brain to fuse them?',
         options: ['5 ms', '10 ms', '25 ms', '40 ms'],
         correctIndex: 0,
@@ -36,7 +36,7 @@ const CHECKPOINTS = [
     },
     {
         id: 'q3-vocal-fusion-40ms',
-        timestamp: 110,
+        timestamp: 107,
         question: 'What is the approximate fusion window for human vocals?',
         options: ['5 ms', '10 ms', '40 ms', '100 ms'],
         correctIndex: 2,
@@ -44,7 +44,7 @@ const CHECKPOINTS = [
     },
     {
         id: 'q4-loudness-override-15db',
-        timestamp: 150,
+        timestamp: 138,
         question: 'How much louder must a delayed signal be to override the precedence effect and steal the perceived source position?',
         options: ['3 dB', '6 dB', '10 dB', '15 dB'],
         correctIndex: 3,
@@ -52,7 +52,7 @@ const CHECKPOINTS = [
     },
     {
         id: 'q5-worked-example-20ms-12db',
-        timestamp: 180,
+        timestamp: 177,
         question: 'You duplicate a vocal, delay the copy by 20 ms, and boost the copy by 12 dB. Which one determines the perceived location?',
         options: [
             'The delayed (boosted) track',
@@ -65,7 +65,7 @@ const CHECKPOINTS = [
     },
     {
         id: 'q6-stereo-width-25ms',
-        timestamp: 210,
+        timestamp: 213,
         question: 'An engineer pans a mono vocal hard left, duplicates it, applies a 25 ms delay, and pans the copy hard right at the same volume. What does the listener hear?',
         options: [
             'A clear echo on the right',
