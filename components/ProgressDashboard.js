@@ -33,8 +33,8 @@ export default function ProgressDashboard() {
         setLoading(true);
 
         Promise.all([
-            getAllTopicProgress(student.studentId),
-            getRecentActivity(student.studentId, 10),
+            getAllTopicProgress(student.token),
+            getRecentActivity(student.token, 10),
         ]).then(([progress, activity]) => {
             setProgressMap(progress);
             setRecentActivity(activity);

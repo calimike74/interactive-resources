@@ -313,7 +313,7 @@ export default function SpellDemos() {
                         {/* As a card treatment */}
                         <div style={{ display: 'flex', gap: spacing[4], flexWrap: 'wrap' }}>
                             {[
-                                { name: 'Mixing & Mastering', color: '#8B5CF6' },
+                                { name: 'Mixing & Mastering', color: '#5F7058' },
                                 { name: 'MIDI & Sequencing', color: '#06B6D4' },
                                 { name: 'Studio Acoustics', color: '#F59E0B' },
                             ].map((topic) => (

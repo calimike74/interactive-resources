@@ -30,7 +30,7 @@ const EQ_CONTROLS = [
         label: 'Q (Bandwidth) Control',
         shortLabel: 'Q',
         x: 340,
-        color: '#a855f7',
+        color: '#C99F44',
         question: 'What does Q control? How does high Q differ from low Q?',
         maxMarks: 5,
     },

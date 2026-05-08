@@ -93,7 +93,7 @@ const FrequencySlider = ({ value, onChange }) => {
         step={1}
         value={sliderPos}
         onChange={(e) => onChange(sliderToFreq(Number(e.target.value)))}
-        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-field-600"
       />
       <div className="flex justify-between text-xs text-gray-500">
         <span>20Hz</span>
@@ -101,7 +101,7 @@ const FrequencySlider = ({ value, onChange }) => {
         <span>2kHz</span>
         <span>20kHz</span>
       </div>
-      <div className="text-center text-sm font-medium text-indigo-600">
+      <div className="text-center text-sm font-medium text-field-600">
         {formatFreq(value)}
       </div>
     </div>
@@ -117,7 +117,7 @@ const Slider = ({ value, onChange, min, max, step }) => (
     step={step}
     value={value}
     onChange={(e) => onChange(Number(e.target.value))}
-    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-field-600"
   />
 );
 
@@ -243,7 +243,7 @@ const FilterRolloffVisualization = () => {
       <div className="space-y-2">
         <div className="flex items-center">
           <label className="text-sm font-medium">
-            Rolloff Rate {showComparison && <span className="text-indigo-600">(Filter A)</span>}
+            Rolloff Rate {showComparison && <span className="text-field-600">(Filter A)</span>}
           </label>
           <InfoTooltip tooltipKey="rolloff" />
         </div>
@@ -254,12 +254,12 @@ const FilterRolloffVisualization = () => {
               onClick={() => setRolloffRate(option.value)}
               className={`px-3 py-1.5 text-xs rounded-md border transition-colors flex flex-col items-center ${
                 rolloffRate === option.value
-                  ? 'bg-indigo-600 text-white border-indigo-600'
+                  ? 'bg-field-600 text-white border-field-600'
                   : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
               }`}
             >
               <span className="font-medium">{option.label}</span>
-              <span className={`text-[10px] ${rolloffRate === option.value ? 'text-indigo-200' : 'text-gray-400'}`}>
+              <span className={`text-[10px] ${rolloffRate === option.value ? 'text-field-200' : 'text-gray-400'}`}>
                 {option.sublabel}
               </span>
             </button>

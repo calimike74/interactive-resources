@@ -47,7 +47,7 @@ export default function ExamModeClient({ topic }) {
             const seconds = qs.length * 60; // 1 minute per question
             setTimeRemaining(seconds);
             setTotalTime(seconds);
-            getNextAttemptNumber(student.studentId, topic.id)
+            getNextAttemptNumber(student.token, topic.id)
                 .then(setAttemptNumber)
                 .catch(() => setAttemptNumber(1));
         }
@@ -63,7 +63,7 @@ export default function ExamModeClient({ topic }) {
         if (remaining > 0 && student && attemptNumber) {
             for (let i = answered; i < questions.length; i++) {
                 saveQuizResponse({
-                    studentId: student.studentId,
+                    token: student.token,
                     topicId: topic.id,
                     questionId: questions[i].id,
                     questionType: questions[i].type,
@@ -294,7 +294,7 @@ export default function ExamModeClient({ topic }) {
         // Persist to Supabase
         if (student && attemptNumber) {
             saveQuizResponse({
-                studentId: student.studentId,
+                token: student.token,
                 topicId: topic.id,
                 questionId: current.id,
                 questionType: current.type,

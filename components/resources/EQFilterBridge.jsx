@@ -57,7 +57,7 @@ const SYNTHESIS_CONCEPTS = [
         definition: 'Boosts frequencies at the cutoff point. Higher Q = more emphasis.',
         synthContext: 'High resonance creates squelchy, acidic sounds. Can self-oscillate!',
         svgType: 'q',
-        color: '#a855f7',
+        color: '#C99F44',
         glowColor: 'rgba(168, 85, 247, 0.4)'
     },
     {
@@ -501,8 +501,8 @@ const Part1Review = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #74b9ff 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
-                    <div style={{ fontSize: '0.7rem', color: '#a78bfa', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>From 1.3 Synthesis</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>From 1.3 Synthesis</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>What You Already Know</h2>
                 <p style={{ color: '#8b909a', maxWidth: '600px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -520,7 +520,7 @@ const Part1Review = ({ onComplete }) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
                 <div>
                     <div style={{ fontSize: '0.7rem', color: '#4a4f5a', marginBottom: '0.25rem', fontFamily: 'monospace', textTransform: 'uppercase' }}>Cards Revealed</div>
-                    <div style={{ fontSize: '2rem', fontWeight: '700', color: '#a78bfa' }}>{flippedCards.size} / {SYNTHESIS_CONCEPTS.length}</div>
+                    <div style={{ fontSize: '2rem', fontWeight: '700', color: '#DCC892' }}>{flippedCards.size} / {SYNTHESIS_CONCEPTS.length}</div>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     {!allRevealed && (
@@ -528,13 +528,13 @@ const Part1Review = ({ onComplete }) => {
                             Reveal All
                         </button>
                     )}
-                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #a78bfa 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                         Continue to Part 2 {allRevealed && '→'}
                     </button>
                 </div>
             </div>
 
-            <CopyableNote title="Filter Types - Key Definitions" color="#a78bfa" variant="definition">
+            <CopyableNote title="Filter Types - Key Definitions" color="#DCC892" variant="definition">
                 <strong>FILTER TYPES (from 1.3 Synthesis):</strong><br/><br/>
                 • <strong>LPF (Low-Pass Filter):</strong> Allows frequencies BELOW the cutoff to pass. Removes high frequencies. Creates warm, dark sounds.<br/><br/>
                 • <strong>HPF (High-Pass Filter):</strong> Allows frequencies ABOVE the cutoff to pass. Removes low frequencies. Creates thin, bright sounds.<br/><br/>
@@ -568,7 +568,7 @@ const Part2Bridge = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #34d399 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 2</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #34d399 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 2</div>
                     <div style={{ fontSize: '0.7rem', color: '#4a4f5a', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>The Connection</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Same Tools, Different Job</h2>
@@ -579,8 +579,8 @@ const Part2Bridge = ({ onComplete }) => {
             </div>
 
             <div style={{ background: '#101218', borderRadius: '16px', padding: '2rem', marginBottom: '2rem', textAlign: 'center', border: '1px solid rgba(255,200,100,0.15)' }}>
-                <div style={{ position: 'relative', height: '4px', background: 'linear-gradient(90deg, #a78bfa, #34d399)', borderRadius: '2px', marginBottom: '1.5rem' }} />
-                <div style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '1rem', fontFamily: 'monospace', background: 'linear-gradient(90deg, #a78bfa, #ff9f43, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <div style={{ position: 'relative', height: '4px', background: 'linear-gradient(90deg, #DCC892, #34d399)', borderRadius: '2px', marginBottom: '1.5rem' }} />
+                <div style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '1rem', fontFamily: 'monospace', background: 'linear-gradient(90deg, #DCC892, #ff9f43, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                     LPF = LPF = LPF
                 </div>
                 <p style={{ color: '#8b909a', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
@@ -592,7 +592,7 @@ const Part2Bridge = ({ onComplete }) => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                 <div style={{ background: 'linear-gradient(180deg, rgba(167,139,250,0.1) 0%, #101218 100%)', borderRadius: '16px', padding: '1.5rem', border: '1px solid rgba(167,139,250,0.3)' }}>
-                    <div style={{ fontSize: '0.7rem', fontFamily: 'monospace', color: '#a78bfa', marginBottom: '0.5rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>1.3 Synthesis Context</div>
+                    <div style={{ fontSize: '0.7rem', fontFamily: 'monospace', color: '#DCC892', marginBottom: '0.5rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>1.3 Synthesis Context</div>
                     <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#f8f9fa' }}>Creative Filtering</h3>
                     {comparisons.map((item, idx) => (
                         <div key={idx} style={{ padding: '0.75rem', background: '#16181f', borderRadius: '10px', marginBottom: idx < comparisons.length - 1 ? '0.5rem' : 0 }}>
@@ -950,7 +950,7 @@ const Part3NewConcepts = ({ onComplete }) => {
                         <p style={{ color: '#8b909a', fontSize: '0.9rem' }}>{filterCategories[activeCategory].description}</p>
                     </div>
                     {!filterCategories[activeCategory].isNew && (
-                        <div style={{ background: 'rgba(167,139,250,0.15)', color: '#a78bfa', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '600', fontFamily: 'monospace' }}>From 1.3</div>
+                        <div style={{ background: 'rgba(167,139,250,0.15)', color: '#DCC892', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '600', fontFamily: 'monospace' }}>From 1.3</div>
                     )}
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -1350,7 +1350,7 @@ const Part4Practice = () => {
             ctx.stroke();
             ctx.setLineDash([]);
 
-            ctx.fillStyle = '#a855f7';
+            ctx.fillStyle = '#C99F44';
             ctx.textAlign = 'left';
             ctx.fillText(`${challenge.gain > 0 ? '+' : ''}${challenge.gain}dB`, canvasWidth - padding.right + 5, gainY + 4);
         }
@@ -1560,7 +1560,7 @@ const Part4Practice = () => {
                             {(challenge.type === 'lowshelf' || challenge.type === 'highshelf' || challenge.type === 'bell') && (
                                 <div style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '0.65rem', color: '#4a4f5a', textTransform: 'uppercase' }}>Gain</div>
-                                    <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#a855f7', fontFamily: 'monospace' }}>{challenge.gain > 0 ? '+' : ''}{challenge.gain} dB</div>
+                                    <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#C99F44', fontFamily: 'monospace' }}>{challenge.gain > 0 ? '+' : ''}{challenge.gain} dB</div>
                                 </div>
                             )}
                             {(challenge.type === 'bell' || challenge.type === 'notch') && (
@@ -1762,7 +1762,7 @@ export default function EQFilterBridge() {
         setVisitedParts(prev => new Set([...prev, part]));
     };
 
-    const partColors = { 1: '#a78bfa', 2: '#ff9f43', 3: '#34d399', 4: '#74b9ff' };
+    const partColors = { 1: '#DCC892', 2: '#ff9f43', 3: '#34d399', 4: '#74b9ff' };
 
     return (
         <div style={{ minHeight: '100vh', background: '#050507', color: '#c9cdd4', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
@@ -1817,7 +1817,7 @@ export default function EQFilterBridge() {
                 <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
                         <h1 style={{ fontSize: '0.9rem', fontWeight: '400', letterSpacing: '0.15em', color: '#8b909a', textTransform: 'uppercase', margin: 0 }}>
-                            From <span style={{ color: '#a78bfa', fontWeight: '600' }}>Synthesis</span> to <span style={{ color: '#34d399', fontWeight: '600' }}>EQ</span>
+                            From <span style={{ color: '#DCC892', fontWeight: '600' }}>Synthesis</span> to <span style={{ color: '#34d399', fontWeight: '600' }}>EQ</span>
                         </h1>
                         <div style={{ fontSize: '0.65rem', color: '#4a4f5a', fontFamily: 'monospace', marginTop: '0.25rem' }}>
                             A-Level Music Technology | 1.3 → 1.11 Bridge

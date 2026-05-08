@@ -1,7 +1,107 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { typography, spacing } from '@/lib/theme';
+
+// ── Action panel options per tab ──
+const PANEL_OPTIONS = {
+    learn: [
+        {
+            id: 'continue',
+            label: 'Continue',
+            description: 'Pick up where you left off',
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+            ),
+        },
+        {
+            id: 'newTopic',
+            label: 'New Topic',
+            description: 'Browse all topics',
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+            ),
+        },
+        {
+            id: 'quickRecap',
+            label: 'Quick Recap',
+            description: '2-min refresher',
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+            ),
+        },
+    ],
+    revise: [
+        {
+            id: 'quick5',
+            label: 'Quick 5',
+            description: '5 random questions',
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+            ),
+        },
+        {
+            id: 'topicQuiz',
+            label: 'Topic Quiz',
+            description: 'Pick a topic to test',
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+                </svg>
+            ),
+        },
+        {
+            id: 'fullPaper',
+            label: 'Full Paper',
+            description: 'Timed practice paper',
+            icon: (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+            ),
+        },
+    ],
+};
+
+// ── Micro click sound via Web Audio API ──
+function useClickSound() {
+    const ctxRef = useRef(null);
+
+    const play = useCallback(() => {
+        try {
+            if (!ctxRef.current) {
+                ctxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const ctx = ctxRef.current;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1800, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.03);
+
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.04);
+        } catch {
+            // Audio not available — fail silently
+        }
+    }, []);
+
+    return play;
+}
 
 const TABS = [
     {
@@ -59,18 +159,68 @@ const NEU = {
     labelActive: '#1A1918',
 };
 
-export default function BottomTabBar({ activeTab, onTabChange }) {
+// Tabs that have an action panel
+const PANEL_TABS = new Set(Object.keys(PANEL_OPTIONS));
+
+export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) {
     const [bouncing, setBouncing] = useState(null);
+    const [openPanel, setOpenPanel] = useState(null); // 'learn' | 'revise' | null
+    const panelRef = useRef(null);
+    const playClick = useClickSound();
+
+    const panelOptions = openPanel ? PANEL_OPTIONS[openPanel] : [];
+
+    // Close panel when clicking outside
+    useEffect(() => {
+        if (!openPanel) return;
+        const handleClickOutside = (e) => {
+            if (panelRef.current && !panelRef.current.contains(e.target)) {
+                setOpenPanel(null);
+            }
+        };
+        document.addEventListener('pointerdown', handleClickOutside);
+        return () => document.removeEventListener('pointerdown', handleClickOutside);
+    }, [openPanel]);
+
+    // Close panel when switching away from its tab
+    useEffect(() => {
+        if (openPanel && activeTab !== openPanel) setOpenPanel(null);
+    }, [activeTab, openPanel]);
 
     const handleTabChange = (tabId) => {
+        playClick();
+
+        // Tabs with action panels
+        if (PANEL_TABS.has(tabId)) {
+            if (activeTab === tabId) {
+                // Already on this tab — toggle panel
+                setOpenPanel(prev => prev === tabId ? null : tabId);
+            } else {
+                // Switch to tab and open its panel
+                onTabChange(tabId);
+                setOpenPanel(tabId);
+            }
+            setBouncing(tabId);
+            setTimeout(() => setBouncing(null), 400);
+            return;
+        }
+
         if (tabId === activeTab) return;
+        setOpenPanel(null);
         setBouncing(tabId);
         onTabChange(tabId);
         setTimeout(() => setBouncing(null), 400);
     };
 
+    const handlePanelOption = (tabId, optionId) => {
+        playClick();
+        setOpenPanel(null);
+        if (onPanelOption) onPanelOption(tabId, optionId);
+    };
+
     return (
         <nav
+            ref={panelRef}
             style={{
                 position: 'fixed',
                 bottom: 0,
@@ -78,12 +228,117 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
                 right: 0,
                 zIndex: 100,
                 display: 'flex',
-                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center',
                 paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))',
                 paddingTop: '12px',
                 pointerEvents: 'none',
             }}
         >
+            {/* ── Action panel (Learn / Revise) ── */}
+            <div
+                style={{
+                    maxWidth: '340px',
+                    width: '90%',
+                    overflow: 'hidden',
+                    maxHeight: openPanel ? '220px' : '0px',
+                    opacity: openPanel ? 1 : 0,
+                    transition: 'max-height 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease',
+                    marginBottom: openPanel ? '8px' : '0px',
+                    pointerEvents: openPanel ? 'auto' : 'none',
+                }}
+            >
+                <div
+                    style={{
+                        background: NEU.bg,
+                        borderRadius: '20px',
+                        padding: '12px',
+                        boxShadow: [
+                            `6px 6px 14px ${NEU.shadowDark}`,
+                            `-6px -6px 14px ${NEU.shadowLight}`,
+                            `inset 1px 1px 2px rgba(255, 255, 255, 0.3)`,
+                        ].join(', '),
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px',
+                    }}
+                >
+                    {panelOptions.map((option, i) => (
+                        <button
+                            key={option.id}
+                            onClick={() => handlePanelOption(openPanel, option.id)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                padding: '12px 14px',
+                                border: 'none',
+                                borderRadius: '14px',
+                                background: 'transparent',
+                                cursor: 'pointer',
+                                fontFamily: typography.fontFamily,
+                                WebkitTapHighlightColor: 'transparent',
+                                transition: 'background 0.15s ease',
+                                width: '100%',
+                                textAlign: 'left',
+                                // Staggered entrance
+                                opacity: openPanel ? 1 : 0,
+                                transform: openPanel ? 'translateY(0)' : 'translateY(8px)',
+                                transitionDelay: openPanel ? `${i * 60}ms` : '0ms',
+                                transitionProperty: 'opacity, transform, background',
+                                transitionDuration: '0.3s, 0.3s, 0.15s',
+                            }}
+                            onPointerEnter={(e) => {
+                                e.currentTarget.style.background = 'rgba(255,255,255,0.6)';
+                            }}
+                            onPointerLeave={(e) => {
+                                e.currentTarget.style.background = 'transparent';
+                            }}
+                        >
+                            <span
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '10px',
+                                    background: '#FFFFFF',
+                                    border: `1.5px solid ${NEU.gold}`,
+                                    color: NEU.iconActive,
+                                    flexShrink: 0,
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                                }}
+                            >
+                                {option.icon}
+                            </span>
+                            <div>
+                                <div
+                                    style={{
+                                        fontSize: typography.size.sm,
+                                        fontWeight: 600,
+                                        color: NEU.iconActive,
+                                        lineHeight: 1.2,
+                                    }}
+                                >
+                                    {option.label}
+                                </div>
+                                <div
+                                    style={{
+                                        fontSize: '0.7rem',
+                                        color: NEU.labelInactive,
+                                        lineHeight: 1.3,
+                                    }}
+                                >
+                                    {option.description}
+                                </div>
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* ── Tab bar ── */}
             <div
                 style={{
                     display: 'flex',

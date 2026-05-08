@@ -39,7 +39,7 @@ export default function OscillatorWaveforms() {
             {
                 name: 'Square',
                 harmonics: 'Odd harmonics',
-                color: '#7c3aed',
+                color: '#9B7530',
                 fn: (x) => {
                     let v = 0;
                     for (let n = 1; n <= 12; n += 2) v += Math.sin(n * x * Math.PI * 2) / n;

@@ -27,8 +27,8 @@ const CALLOUT_TYPES = {
     listen: {
         icon: '♪',
         label: 'Try It',
-        colour: '#7c3aed',    // purple
-        bgTint: '#7c3aed08',
+        colour: '#9B7530',    // purple
+        bgTint: '#9B753008',
     },
     visual: {
         icon: '◈',

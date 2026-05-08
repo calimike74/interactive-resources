@@ -178,7 +178,7 @@ export default function FilterTypes() {
 
             const filters = [
                 { x: 20, y: topY, w: panelW, h: panelH, type: 'lp', color: '#1a1a6e', label: 'Low-Pass Filter' },
-                { x: 20, y: topY + panelH + gap, w: panelW, h: panelH, type: 'hp', color: '#7c3aed', label: 'High-Pass Filter' },
+                { x: 20, y: topY + panelH + gap, w: panelW, h: panelH, type: 'hp', color: '#9B7530', label: 'High-Pass Filter' },
                 { x: 20, y: topY + (panelH + gap) * 2, w: panelW, h: panelH, type: 'bp', color: '#0891b2', label: 'Band-Pass Filter' },
             ];
 

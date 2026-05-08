@@ -15,7 +15,7 @@ const DESIGN_TOKENS_CSS = `
   .delay-effects-root {
     --accent: #2563EB;
     --accent-soft: rgba(37, 99, 235, 0.1);
-    --secondary: #6366F1;
+    --secondary: #3A4A35;
     --background: #FAFAFA;
     --background-raised: #FFFFFF;
     --foreground: #1A1A2E;

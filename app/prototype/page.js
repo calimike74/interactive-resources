@@ -19,7 +19,7 @@ const C = {
     greenSoft: 'rgba(52, 211, 153, 0.12)',
     amber: '#fbbf24',
     amberSoft: 'rgba(251, 191, 36, 0.12)',
-    purple: '#a78bfa',
+    purple: '#DCC892',
     purpleSoft: 'rgba(167, 139, 250, 0.12)',
     border: '#222235',
     borderSubtle: '#1a1a2d',
@@ -30,7 +30,7 @@ const C = {
     ao3: '#06b6d4',
     ao3Soft: 'rgba(6, 182, 212, 0.10)',
     ao3Border: 'rgba(6, 182, 212, 0.25)',
-    ao4: '#a78bfa',
+    ao4: '#DCC892',
     ao4Soft: 'rgba(167, 139, 250, 0.10)',
     ao4Border: 'rgba(167, 139, 250, 0.25)',
 };
@@ -757,7 +757,7 @@ export default function PrototypePage() {
                     }}>
                         <span style={{ color: C.text }}>Essay Scaffold for </span>
                         <span style={{
-                            background: 'linear-gradient(135deg, #5b8def 0%, #8b5cf6 50%, #06b6d4 100%)',
+                            background: 'linear-gradient(135deg, #5b8def 0%, #5F7058 50%, #06b6d4 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                         }}>Music Technology</span>

@@ -89,23 +89,21 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
                     gap: spacing[5],
                 }}>
-                    {lessons.map((lesson, i) => (
+                    {lessons.map(lesson => (
                         <LessonCard
                             key={lesson.id}
                             lesson={lesson}
                             topicId={topic.id}
                             topicColour={topic.colour}
                             t={t}
-                            index={i}
                         />
                     ))}
-                    {resources.map((resource, i) => (
+                    {resources.map(resource => (
                         <ResourceCard
                             key={resource.id}
                             resource={resource}
                             topicColour={topic.colour}
                             t={t}
-                            index={lessons.length + i}
                         />
                     ))}
                 </div>
@@ -114,7 +112,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
     );
 }
 
-function CardShell({ href, topicColour, index, children }) {
+function CardShell({ href, topicColour, children }) {
     return (
         <Link href={href} style={{ textDecoration: 'none' }}>
             <div
@@ -128,8 +126,6 @@ function CardShell({ href, topicColour, index, children }) {
                     cursor: 'pointer',
                     transition: `all ${transitions.normal} ${transitions.easing}`,
                     boxShadow: glass.shadow,
-                    opacity: 0,
-                    animation: `fadeSlideUp 0.4s ease-out ${index * 100}ms forwards`,
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
@@ -147,20 +143,13 @@ function CardShell({ href, topicColour, index, children }) {
             >
                 {children}
             </div>
-
-            <style jsx global>{`
-                @keyframes fadeSlideUp {
-                    from { opacity: 0; transform: translateY(12px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-            `}</style>
         </Link>
     );
 }
 
-function LessonCard({ lesson, topicId, topicColour, t, index }) {
+function LessonCard({ lesson, topicId, topicColour, t }) {
     return (
-        <CardShell href={`/learn/${topicId}/${lesson.id}`} topicColour={topicColour} index={index}>
+        <CardShell href={`/learn/${topicId}/${lesson.id}`} topicColour={topicColour}>
             <div style={{
                 display: 'inline-block',
                 padding: '0.15rem 0.5rem',
@@ -212,9 +201,9 @@ function LessonCard({ lesson, topicId, topicColour, t, index }) {
     );
 }
 
-function ResourceCard({ resource, topicColour, t, index }) {
+function ResourceCard({ resource, topicColour, t }) {
     return (
-        <CardShell href={resource.href} topicColour={topicColour} index={index}>
+        <CardShell href={resource.href} topicColour={topicColour}>
             <div style={{
                 display: 'inline-block',
                 padding: '0.15rem 0.5rem',

@@ -615,7 +615,7 @@ const ExploreSection = () => {
                 <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Explore the Parameters</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
                     ADT was invented at <strong style={{ color: '#f8f9fa' }}>Abbey Road Studios in 1966</strong> to save John Lennon from
-                    re-singing. Adjust the controls to see how <span style={{ color: '#ff9f43' }}>delay</span> and <span style={{ color: '#a78bfa' }}>pitch modulation</span> create the effect.
+                    re-singing. Adjust the controls to see how <span style={{ color: '#ff9f43' }}>delay</span> and <span style={{ color: '#DCC892' }}>pitch modulation</span> create the effect.
                 </p>
             </div>
 
@@ -661,8 +661,8 @@ const ExploreSection = () => {
 
                     <div style={{ background: '#16181f', borderRadius: '12px', padding: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                            <span style={{ color: '#a78bfa', fontSize: '0.8rem', fontWeight: '600' }}>Pitch Modulation</span>
-                            <span style={{ color: '#a78bfa', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>+/-{pitchCents}c</span>
+                            <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Pitch Modulation</span>
+                            <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>+/-{pitchCents}c</span>
                         </div>
                         <input
                             type="range"
@@ -670,7 +670,7 @@ const ExploreSection = () => {
                             max="30"
                             value={pitchCents}
                             onChange={(e) => setPitchCents(parseInt(e.target.value))}
-                            style={{ width: '100%', accentColor: '#a78bfa' }}
+                            style={{ width: '100%', accentColor: '#DCC892' }}
                         />
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.7rem', color: '#4a4f5a' }}>
                             <span>0c</span>
@@ -744,7 +744,7 @@ const ExploreSection = () => {
                                 <td style={{ padding: '0.75rem', color: '#8b909a' }}>Timing variation (below Haas threshold)</td>
                             </tr>
                             <tr>
-                                <td style={{ padding: '0.75rem', color: '#a78bfa', fontFamily: 'monospace' }}>Pitch Mod</td>
+                                <td style={{ padding: '0.75rem', color: '#DCC892', fontFamily: 'monospace' }}>Pitch Mod</td>
                                 <td style={{ padding: '0.75rem', textAlign: 'center', color: '#f8f9fa', fontFamily: 'monospace' }}>+/-5-20c</td>
                                 <td style={{ padding: '0.75rem', color: '#8b909a' }}>Pitch variation via LFO modulation</td>
                             </tr>
@@ -872,7 +872,7 @@ const Quiz = () => {
                                                     ? '#ef4444'
                                                     : 'rgba(255,255,255,0.05)'
                                             : selectedAnswer === idx
-                                                ? '#a78bfa'
+                                                ? '#DCC892'
                                                 : 'rgba(255,255,255,0.05)'
                                     }`,
                                     borderRadius: '8px',
@@ -888,7 +888,7 @@ const Quiz = () => {
                                     width: '24px',
                                     height: '24px',
                                     borderRadius: '50%',
-                                    background: selectedAnswer === idx ? '#a78bfa' : 'rgba(255,255,255,0.1)',
+                                    background: selectedAnswer === idx ? '#DCC892' : 'rgba(255,255,255,0.1)',
                                     color: selectedAnswer === idx ? '#050507' : '#8b909a',
                                     textAlign: 'center',
                                     lineHeight: '24px',
@@ -931,7 +931,7 @@ const Quiz = () => {
                                                     ? '#ef4444'
                                                     : 'rgba(255,255,255,0.1)'
                                             : selectedAnswer === val
-                                                ? '#a78bfa'
+                                                ? '#DCC892'
                                                 : 'rgba(255,255,255,0.1)'
                                     }`,
                                     borderRadius: '12px',
@@ -1036,7 +1036,7 @@ const Quiz = () => {
                     borderRadius: '12px',
                     marginBottom: '1rem'
                 }}>
-                    <div style={{ fontSize: '0.7rem', color: '#a78bfa', fontFamily: 'monospace', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                         {currentQuestion?.type === 'identify_answer' ? 'Which answer scores marks?' : 'Question'}
                     </div>
                     <div style={{ fontSize: '1.1rem', color: '#f8f9fa', lineHeight: '1.5', marginBottom: '1.25rem' }}>
@@ -1058,7 +1058,7 @@ const Quiz = () => {
                             style={{
                                 flex: 1,
                                 padding: '0.75rem',
-                                background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)',
+                                background: 'linear-gradient(135deg, #DCC892 0%, #9B7530 100%)',
                                 border: 'none',
                                 borderRadius: '10px',
                                 color: '#fff',
@@ -1122,7 +1122,7 @@ const Quiz = () => {
             </div>
 
             {/* Exam Technique Notes */}
-            <CopyableNote title="A* Exam Answer - Double Tracking" color="#a78bfa" variant="exam">
+            <CopyableNote title="A* Exam Answer - Double Tracking" color="#DCC892" variant="exam">
                 <strong>QUESTION: "How would you create a double-tracked vocal effect?"</strong><br/><br/>
                 <strong>ZERO-MARKS ANSWER:</strong><br/>
                 "Copy the vocal track and layer them together."<br/><br/>
@@ -1256,7 +1256,7 @@ export default function DoubleTrackingExplorer() {
                 {/* Key Rules - Always visible */}
                 <div style={{ padding: '0 1.5rem 1.5rem 1.5rem' }}>
                     <div style={{ padding: '1.5rem', background: 'linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, #101218 100%)', borderRadius: '16px', border: '1px solid rgba(167, 139, 250, 0.3)' }}>
-                        <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#a78bfa', marginBottom: '1rem' }}>Key Rules to Remember</h3>
+                        <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#DCC892', marginBottom: '1rem' }}>Key Rules to Remember</h3>
                         <div style={{ display: 'grid', gap: '0.75rem' }}>
                             <div style={{ display: 'flex', gap: '1rem', padding: '0.75rem', background: '#16181f', borderRadius: '8px' }}>
                                 <span style={{ color: '#ef4444', fontSize: '1.25rem', fontWeight: '700' }}>1</span>

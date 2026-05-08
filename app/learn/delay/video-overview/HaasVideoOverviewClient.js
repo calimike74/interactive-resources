@@ -141,8 +141,8 @@ export default function HaasVideoOverviewClient() {
                             display: 'inline-block',
                             padding: '0.25rem 0.75rem',
                             borderRadius: '9999px',
-                            background: '#6366f115',
-                            color: '#6366f1',
+                            background: '#3A4A3515',
+                            color: '#3A4A35',
                             fontSize: '0.75rem',
                             fontWeight: 600,
                         }}>

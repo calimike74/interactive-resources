@@ -17,7 +17,7 @@ const COLORS = {
     border: '#d1d5db',        // subtle borders
     borderStrong: '#1a1a2e',  // interactive container borders
     // section accent colors
-    osc: '#7c3aed',           // purple - oscillators
+    osc: '#9B7530',           // purple - oscillators
     filter: '#0891b2',        // teal - filters
     env: '#059669',           // green - envelopes
     patch: '#d97706',         // amber - patch builder

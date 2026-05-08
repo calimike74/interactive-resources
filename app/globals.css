@@ -1,6 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* Botanical Press — three-accent system (see /Design-With-This!/BRAND.md) */
+@theme inline {
+  --color-field-50:    #EFF2EC;
+  --color-field-100:   #DDE3D7;
+  --color-field-200:   #BCC9B0;
+  --color-field-500:   #3A4A35;
+  --color-field-600:   #2D3A2A;
+  --color-field-700:   #1F2A1C;
+
+  --color-sienna-50:   #FBF1EB;
+  --color-sienna-100:  #F2D5C5;
+  --color-sienna-200:  #E5B097;
+  --color-sienna-500:  #B85A3F;
+  --color-sienna-600:  #95421F;
+  --color-sienna-700:  #6E2F12;
+
+  --color-mustard-50:  #FAF6E8;
+  --color-mustard-100: #EBE0BE;
+  --color-mustard-200: #DCC892;
+  --color-mustard-500: #C99F44;
+  --color-mustard-600: #9B7530;
+  --color-mustard-700: #6F541E;
+
+  --color-paper:       #F8F2E8;
+  --color-cream:       #F2EBE0;
+  --color-ink:         #1F2A1C;
+  --color-line:        #D4C9B4;
+}
+
 /* Animation keyframes */
 @keyframes slideUp {
   from {

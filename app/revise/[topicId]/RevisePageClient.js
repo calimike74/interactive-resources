@@ -6,7 +6,6 @@ import { theme, typography, borderRadius, spacing, transitions, glass } from '@/
 import { getQuestions } from '@/lib/questions';
 import { getNextAttemptNumber, saveQuizResponse, getQuizHistory, getQuestionPerformance } from '@/lib/quiz-persistence';
 import { prioritiseQuestions } from '@/lib/spaced-repetition';
-import { supabase } from '@/lib/supabase';
 import AuthGate from './AuthGate';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { getHintsForTopic, hasHints } from '@/lib/examiner-hints';
@@ -40,14 +39,14 @@ export default function RevisePageClient({ topic }) {
     useEffect(() => {
         if (student) {
             const rawQuestions = getQuestions(topic.id);
-            getNextAttemptNumber(student.studentId, topic.id)
+            getNextAttemptNumber(student.token, topic.id)
                 .then(setAttemptNumber)
                 .catch(() => setAttemptNumber(1));
 
             const QUIZ_SIZE = 12;
 
             // Apply spaced repetition ordering then pick a subset
-            getQuestionPerformance(student.studentId, topic.id)
+            getQuestionPerformance(student.token, topic.id)
                 .then(perfMap => {
                     const ordered = prioritiseQuestions(rawQuestions, perfMap);
                     if (perfMap.size > 0) {
@@ -146,7 +145,7 @@ export default function RevisePageClient({ topic }) {
         // Persist to Supabase (fire-and-forget)
         if (student && attemptNumber) {
             saveQuizResponse({
-                studentId: student.studentId,
+                token: student.token,
                 topicId: topic.id,
                 questionId: current.id,
                 questionType: current.type,
@@ -171,13 +170,17 @@ export default function RevisePageClient({ topic }) {
                 const totalScored = scored.length;
 
                 // Write to revision_quiz_attempts for teacher dashboard visibility
-                supabase.from('revision_quiz_attempts').insert({
-                    student_id: student.studentId,
-                    topic_key: topic.id,
-                    quiz_type: 'quick_recall',
-                    responses: JSON.stringify(responses),
-                    score: correctCount,
-                    total: totalScored,
+                fetch('https://grades.musictechstudio.co.uk/api/external/revision-attempt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: student.token,
+                        topicKey: topic.id,
+                        quizType: 'quick_recall',
+                        responses,
+                        score: correctCount,
+                        total: totalScored,
+                    }),
                 }).then(() => {
                     // Trigger signal detection on grades-dashboard
                     fetch('https://grades.musictechstudio.co.uk/api/process-signals', {
@@ -210,7 +213,7 @@ export default function RevisePageClient({ topic }) {
                         responses={responses}
                         questions={questions}
                         topic={topic}
-                        studentId={student?.studentId}
+                        token={student?.token}
                         t={t}
                     />
                 </main>
@@ -861,14 +864,14 @@ function calculateSummary(responses, questions) {
     return { correctCount, totalScored, shortCount, percentage, typeBreakdown };
 }
 
-function ResultsSummary({ responses, questions, topic, studentId, t }) {
+function ResultsSummary({ responses, questions, topic, token, t }) {
     const [history, setHistory] = useState([]);
 
     useEffect(() => {
-        if (studentId) {
-            getQuizHistory(studentId, topic.id).then(setHistory);
+        if (token) {
+            getQuizHistory(token, topic.id).then(setHistory);
         }
-    }, [studentId, topic.id]);
+    }, [token, topic.id]);
 
     const summary = calculateSummary(responses, questions);
     const { correctCount, totalScored, shortCount, percentage, typeBreakdown } = summary;

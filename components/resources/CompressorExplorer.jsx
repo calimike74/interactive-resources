@@ -18,7 +18,7 @@ const COLORS = {
     // section accent colors — tiered by complexity
     easy: '#059669',      // green  — Threshold, Ratio
     medium: '#d97706',    // amber  — Attack, Release
-    advanced: '#7c3aed',  // purple — Makeup Gain, Knee
+    advanced: '#9B7530',  // purple — Makeup Gain, Knee
     mastery: '#0891b2',   // teal   — Full Compressor (section 4)
 };
 

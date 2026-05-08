@@ -669,7 +669,7 @@ const AudioLeadsFlashcards = () => {
       {Object.keys(needsReviewByCategory).length > 0 ? (
         <div className="mb-6">
           <h3 className="font-semibold flex items-center gap-2 mb-3">
-            <BookOpen className="h-5 w-5 text-indigo-600" />
+            <BookOpen className="h-5 w-5 text-field-600" />
             Study Recommendations
           </h3>
           <div className="space-y-4 fc-scroll-container" style={{ maxHeight: 300, overflowY: 'auto' }}>
@@ -736,7 +736,7 @@ const AudioLeadsFlashcards = () => {
             setShowSummary(false);
             resetDeck();
           }}
-          className="flex items-center gap-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800"
+          className="flex items-center gap-2 bg-field-100 hover:bg-field-200 text-field-800"
         >
           {difficulty === "advanced" ? (
             <>
@@ -935,8 +935,8 @@ const AudioLeadsFlashcards = () => {
 
               {studyMode === "learn" && (
                 <div className="mt-4 space-y-3">
-                  <div className="bg-indigo-50 p-3 rounded-lg">
-                    <p className="text-sm text-indigo-800">
+                  <div className="bg-field-50 p-3 rounded-lg">
+                    <p className="text-sm text-field-800">
                       <span className="font-semibold">Practical Example: </span>
                       {currentCards[currentIndex].practicalExample}
                     </p>
