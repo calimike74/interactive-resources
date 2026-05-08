@@ -49,7 +49,7 @@ export default function QFactor() {
             // Q stages — step through discrete values
             const stages = [
                 { q: 0.8, label: 'Q = 0.8', desc: 'Very wide — affects many frequencies', start: 30, color: '#2563EB' },
-                { q: 2, label: 'Q = 2.0', desc: 'Moderate width', start: 120, color: '#7c3aed' },
+                { q: 2, label: 'Q = 2.0', desc: 'Moderate width', start: 120, color: '#9B7530' },
                 { q: 5, label: 'Q = 5.0', desc: 'Narrow — more surgical', start: 210, color: '#f97316' },
                 { q: 12, label: 'Q = 12.0', desc: 'Very narrow — targets one frequency', start: 300, color: '#DC2626' },
             ];

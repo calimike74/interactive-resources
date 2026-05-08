@@ -22,9 +22,9 @@ export default function TopicPageClient({ topic, resources }) {
     const [progress, setProgress] = useState(null);
 
     useEffect(() => {
-        const studentId = localStorage.getItem('revision_student_id');
-        if (studentId && getAvailableTopics().includes(topic.id)) {
-            getQuizProgress(studentId, topic.id).then(setProgress);
+        const token = localStorage.getItem('revision_token');
+        if (token && getAvailableTopics().includes(topic.id)) {
+            getQuizProgress(token, topic.id).then(setProgress);
         }
     }, [topic.id]);
 
@@ -231,6 +231,11 @@ export default function TopicPageClient({ topic, resources }) {
 
             {/* Content Sections */}
             <main style={{ maxWidth: '1200px', margin: '0 auto', padding: spacing[8] }}>
+                {/* Overview Section — topic spec orientation */}
+                {topic.overview && (
+                    <OverviewSection overview={topic.overview} topicColour={topic.colour} theme={t} />
+                )}
+
                 {/* Learn Section */}
                 <section style={{ marginBottom: spacing[10] }}>
                     <h2
@@ -717,6 +722,126 @@ function ProgressCard({ progress, topicColour, t }) {
                 </div>
             </div>
         </div>
+    );
+}
+
+function OverviewSection({ overview, topicColour, theme: t }) {
+    return (
+        <section style={{ marginBottom: spacing[10] }}>
+            <div
+                style={{
+                    background: glass.bg,
+                    backdropFilter: 'blur(' + glass.blur + ')',
+                    WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                    borderRadius: borderRadius.xl,
+                    border: `1px solid ${glass.border}`,
+                    borderLeft: `3px solid ${topicColour}`,
+                    padding: `${spacing[6]} ${spacing[7]}`,
+                    boxShadow: glass.shadow,
+                }}
+            >
+                {/* What you'll learn */}
+                <h2
+                    style={{
+                        fontSize: typography.size.lg,
+                        fontWeight: typography.weight.semibold,
+                        color: t.text.primary,
+                        marginBottom: spacing[3],
+                        letterSpacing: '0.02em',
+                    }}
+                >
+                    What you&rsquo;ll learn
+                </h2>
+                <ul
+                    style={{
+                        listStyle: 'none',
+                        padding: 0,
+                        margin: `0 0 ${spacing[6]} 0`,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: spacing[2],
+                    }}
+                >
+                    {overview.whatYoullLearn.map((item, i) => (
+                        <li
+                            key={i}
+                            style={{
+                                display: 'flex',
+                                gap: spacing[3],
+                                color: t.text.secondary,
+                                fontSize: typography.size.base,
+                                lineHeight: typography.lineHeight.relaxed,
+                            }}
+                        >
+                            <span style={{ color: topicColour, fontWeight: typography.weight.bold, flexShrink: 0 }}>→</span>
+                            <span>{item}</span>
+                        </li>
+                    ))}
+                </ul>
+
+                {/* Why it matters in the exam */}
+                {overview.examRelevance && (
+                    <>
+                        <h2
+                            style={{
+                                fontSize: typography.size.lg,
+                                fontWeight: typography.weight.semibold,
+                                color: t.text.primary,
+                                marginBottom: spacing[3],
+                                letterSpacing: '0.02em',
+                            }}
+                        >
+                            Why it matters in the exam
+                        </h2>
+                        <p
+                            style={{
+                                color: t.text.secondary,
+                                fontSize: typography.size.base,
+                                lineHeight: typography.lineHeight.relaxed,
+                                marginBottom: spacing[6],
+                            }}
+                        >
+                            {overview.examRelevance}
+                        </p>
+                    </>
+                )}
+
+                {/* Key words */}
+                {overview.keyWords && overview.keyWords.length > 0 && (
+                    <>
+                        <h2
+                            style={{
+                                fontSize: typography.size.lg,
+                                fontWeight: typography.weight.semibold,
+                                color: t.text.primary,
+                                marginBottom: spacing[3],
+                                letterSpacing: '0.02em',
+                            }}
+                        >
+                            Key words
+                        </h2>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing[2] }}>
+                            {overview.keyWords.map(word => (
+                                <span
+                                    key={word}
+                                    style={{
+                                        background: topicColour + '12',
+                                        color: topicColour,
+                                        border: `1px solid ${topicColour}30`,
+                                        padding: `${spacing[1]} ${spacing[3]}`,
+                                        borderRadius: borderRadius.full,
+                                        fontSize: typography.size.sm,
+                                        fontWeight: typography.weight.medium,
+                                    }}
+                                >
+                                    {word}
+                                </span>
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+        </section>
     );
 }
 

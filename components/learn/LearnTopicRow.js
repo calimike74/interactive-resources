@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import diagrams from './diagrams';
 import SectionAssessment from './SectionAssessment';
 import ExpandableText from './ExpandableText';
+import WaveformTextInteractive from './WaveformTextInteractive';
 
 export default function LearnTopicRow({ row, index, topicColor, topicId, studentToken, answeredSections }) {
     const ref = useRef(null);
@@ -105,6 +106,10 @@ export default function LearnTopicRow({ row, index, topicColor, topicId, student
                 </h3>
 
                 <ExpandableText text={row.description} topicColor={topicColor} topicId={topicId} studentToken={studentToken} />
+
+                {row.interactive === 'waveform-text' && (
+                    <WaveformTextInteractive topicColor={topicColor} />
+                )}
             </div>
 
             {row.assessment && showAssessment && (

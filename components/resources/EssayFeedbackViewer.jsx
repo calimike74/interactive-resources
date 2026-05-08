@@ -25,7 +25,7 @@ const AO_STYLES = {
         border: 'rgba(6, 182, 212, 0.25)',
     },
     ao4: {
-        colour: '#a78bfa',
+        colour: '#DCC892',
         soft: 'rgba(167, 139, 250, 0.10)',
         border: 'rgba(167, 139, 250, 0.25)',
     },
@@ -560,7 +560,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                                 <span>Essay Feedback</span>
                                 <span style={{ opacity: 0.4, margin: '0 6px' }}>·</span>
                                 <span style={{
-                                    background: 'linear-gradient(135deg, #06b6d4 0%, #a78bfa 100%)',
+                                    background: 'linear-gradient(135deg, #06b6d4 0%, #DCC892 100%)',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
                                 }}>
@@ -578,7 +578,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                             flexWrap: 'wrap',
                         }}>
                             <ScoreBadge label="AO3" awarded={summary.ao3.awarded} total={summary.ao3.total} colour="#06b6d4" />
-                            <ScoreBadge label="AO4" awarded={summary.ao4.awarded} total={summary.ao4.total} colour="#a78bfa" />
+                            <ScoreBadge label="AO4" awarded={summary.ao4.awarded} total={summary.ao4.total} colour="#DCC892" />
                             <ScoreBadge label="Total" awarded={summary.combined.awarded} total={summary.combined.total} colour="#fff" />
                         </div>
                     </div>

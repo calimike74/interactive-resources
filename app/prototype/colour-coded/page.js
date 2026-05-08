@@ -21,7 +21,7 @@ const C = {
     ao3: '#06b6d4',         // cyan
     ao3Soft: 'rgba(6, 182, 212, 0.10)',
     ao3Border: 'rgba(6, 182, 212, 0.25)',
-    ao4: '#a78bfa',         // purple
+    ao4: '#DCC892',         // purple
     ao4Soft: 'rgba(167, 139, 250, 0.10)',
     ao4Border: 'rgba(167, 139, 250, 0.25)',
 };
@@ -182,7 +182,7 @@ export default function ColourCodedPrototype() {
                     }}>
                         <span style={{ color: C.text }}>Colour-Coded </span>
                         <span style={{
-                            background: 'linear-gradient(135deg, #06b6d4 0%, #a78bfa 100%)',
+                            background: 'linear-gradient(135deg, #06b6d4 0%, #DCC892 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                         }}>Assessment Objectives</span>

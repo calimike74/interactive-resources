@@ -108,7 +108,7 @@ const QUIZ_QUESTIONS = [
 // ============================================
 const CYAN = '#22d3ee';
 const ORANGE = '#f97316';
-const PURPLE = '#a855f7';
+const PURPLE = '#C99F44';
 
 // ============================================
 // COPYABLE NOTE COMPONENT

@@ -221,7 +221,7 @@ export default function SynthSignalFlow() {
 
             // --- Phase 6: Envelope connections from below ---
             const envLabels = [
-                { label: 'Filter Envelope', targetIdx: 1, frame: 430, color: '#7c3aed' },
+                { label: 'Filter Envelope', targetIdx: 1, frame: 430, color: '#9B7530' },
                 { label: 'Amp Envelope', targetIdx: 2, frame: 510, color: '#DC2626' },
                 { label: 'LFO (optional)', targetIdx: 0, frame: 590, color: '#0891b2' },
             ];

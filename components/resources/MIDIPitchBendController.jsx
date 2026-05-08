@@ -67,7 +67,7 @@ export default function MIDIPitchBendController() {
   const { lsb, msb } = get14BitBytes();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-mustard-50 to-blue-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Hero with video background */}
         <div style={{
@@ -135,7 +135,7 @@ export default function MIDIPitchBendController() {
               onClick={() => setActiveTab('pitchbend')}
               className={`flex-1 py-4 px-6 font-semibold transition-colors ${
                 activeTab === 'pitchbend'
-                  ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
+                  ? 'text-mustard-600 border-b-2 border-mustard-600 bg-mustard-50'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -145,7 +145,7 @@ export default function MIDIPitchBendController() {
               onClick={() => setActiveTab('controllers')}
               className={`flex-1 py-4 px-6 font-semibold transition-colors ${
                 activeTab === 'controllers'
-                  ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
+                  ? 'text-mustard-600 border-b-2 border-mustard-600 bg-mustard-50'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -160,7 +160,7 @@ export default function MIDIPitchBendController() {
             {/* Interactive Pitch Bend Simulator */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Sliders className="w-6 h-6 text-purple-600" />
+                <Sliders className="w-6 h-6 text-mustard-600" />
                 <h2 className="text-2xl font-bold text-gray-800">Interactive Pitch Bend Simulator</h2>
               </div>
 
@@ -177,7 +177,7 @@ export default function MIDIPitchBendController() {
                       max="16383"
                       value={pitchBendValue}
                       onChange={(e) => setPitchBendValue(parseInt(e.target.value))}
-                      className="w-full h-3 bg-gradient-to-r from-blue-300 via-purple-300 to-blue-300 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-3 bg-gradient-to-r from-blue-300 via-mustard-300 to-blue-300 rounded-lg appearance-none cursor-pointer"
                       style={{
                         background: `linear-gradient(to right,
                           #93c5fd 0%,
@@ -195,7 +195,7 @@ export default function MIDIPitchBendController() {
 
                   <button
                     onClick={() => setPitchBendValue(8192)}
-                    className="w-full bg-purple-100 hover:bg-purple-200 text-purple-700 font-semibold py-2 px-4 rounded transition-colors"
+                    className="w-full bg-mustard-100 hover:bg-mustard-200 text-mustard-700 font-semibold py-2 px-4 rounded transition-colors"
                   >
                     Reset to Center
                   </button>
@@ -217,7 +217,7 @@ export default function MIDIPitchBendController() {
                       className="w-full"
                     />
                     <div className="flex justify-between items-center mt-2">
-                      <span className="text-2xl font-bold text-purple-600">{pitchBendRange} semitones</span>
+                      <span className="text-2xl font-bold text-mustard-600">{pitchBendRange} semitones</span>
                       <span className="text-sm text-gray-600">({(pitchBendRange / 12).toFixed(1)} octaves)</span>
                     </div>
                   </div>
@@ -225,13 +225,13 @@ export default function MIDIPitchBendController() {
 
                 {/* Real-time Display */}
                 <div className="space-y-4">
-                  <div className="bg-gradient-to-br from-purple-100 to-blue-100 p-6 rounded-lg">
+                  <div className="bg-gradient-to-br from-mustard-100 to-blue-100 p-6 rounded-lg">
                     <h3 className="font-bold text-gray-700 mb-3">Current Values</h3>
 
                     <div className="space-y-3">
                       <div className="bg-white p-3 rounded">
                         <div className="text-sm text-gray-600">14-bit MIDI Value</div>
-                        <div className="text-2xl font-bold text-purple-600">{pitchBendValue}</div>
+                        <div className="text-2xl font-bold text-mustard-600">{pitchBendValue}</div>
                       </div>
 
                       <div className="bg-white p-3 rounded">
@@ -243,13 +243,13 @@ export default function MIDIPitchBendController() {
 
                       <div className="bg-white p-3 rounded">
                         <div className="text-sm text-gray-600">Starting from E4, you're now at:</div>
-                        <div className="text-3xl font-bold text-purple-700">{calculateNote()}</div>
+                        <div className="text-3xl font-bold text-mustard-700">{calculateNote()}</div>
                       </div>
 
                       <div className="bg-white p-3 rounded">
                         <div className="text-sm text-gray-600">Three MIDI Bytes</div>
                         <div className="font-mono text-sm mt-1">
-                          <span className="text-purple-600">E0</span> <span className="text-gray-500">(Status: Pitch Bend, Channel 1)</span>
+                          <span className="text-mustard-600">E0</span> <span className="text-gray-500">(Status: Pitch Bend, Channel 1)</span>
                         </div>
                         <div className="font-mono text-sm">
                           <span className="text-blue-600">LSB: {lsb}</span> <span className="text-gray-500">(Least Significant Byte)</span>
@@ -287,7 +287,7 @@ export default function MIDIPitchBendController() {
                 {expandedSections.bytes && (
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                     <div className="mb-4">
-                      <div className="font-semibold text-purple-700 mb-2">Answer:</div>
+                      <div className="font-semibold text-mustard-700 mb-2">Answer:</div>
                       <p className="text-gray-700 mb-3">
                         MIDI uses <strong>THREE bytes total</strong> to transmit pitch bend data:
                       </p>
@@ -297,8 +297,8 @@ export default function MIDIPitchBendController() {
                       </ul>
                     </div>
 
-                    <div className="bg-white p-4 rounded border-l-4 border-purple-500">
-                      <div className="font-semibold text-purple-700 mb-2">Why does pitch bend need more bytes?</div>
+                    <div className="bg-white p-4 rounded border-l-4 border-mustard-500">
+                      <div className="font-semibold text-mustard-700 mb-2">Why does pitch bend need more bytes?</div>
                       <p className="text-gray-700 mb-2">
                         Pitch bend uses <strong>2 data bytes</strong> (instead of 1 like most controllers) because:
                       </p>
@@ -330,9 +330,9 @@ export default function MIDIPitchBendController() {
                         <div className="text-sm text-gray-600 mb-1">Full Downward Bend</div>
                         <div className="text-3xl font-bold text-blue-700">0</div>
                       </div>
-                      <div className="bg-purple-100 p-4 rounded-lg text-center">
+                      <div className="bg-mustard-100 p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-600 mb-1">Center (No Bend)</div>
-                        <div className="text-3xl font-bold text-purple-700">8192</div>
+                        <div className="text-3xl font-bold text-mustard-700">8192</div>
                       </div>
                       <div className="bg-blue-100 p-4 rounded-lg text-center">
                         <div className="text-sm text-gray-600 mb-1">Full Upward Bend</div>
@@ -366,7 +366,7 @@ export default function MIDIPitchBendController() {
                 {expandedSections.resolution && (
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                     <div className="mb-4">
-                      <div className="font-semibold text-purple-700 mb-2">What "14-bit" means:</div>
+                      <div className="font-semibold text-mustard-700 mb-2">What "14-bit" means:</div>
                       <p className="text-gray-700 mb-3">
                         "14-bit" means the system uses <strong>14 binary digits (bits)</strong> to represent the value.
                         This gives us 2<sup>14</sup> = <strong>16,384 different possible values</strong>.
@@ -448,8 +448,8 @@ export default function MIDIPitchBendController() {
                       </ul>
                     </div>
 
-                    <div className="bg-white p-4 rounded border-l-4 border-purple-500">
-                      <div className="font-bold text-purple-700 mb-2">7 Semitones</div>
+                    <div className="bg-white p-4 rounded border-l-4 border-mustard-500">
+                      <div className="font-bold text-mustard-700 mb-2">7 Semitones</div>
                       <p className="text-sm text-gray-700 mb-2"><strong>Musical use:</strong></p>
                       <ul className="text-sm text-gray-600 space-y-1">
                         <li>Perfect fifth bends</li>
@@ -477,8 +477,8 @@ export default function MIDIPitchBendController() {
                   <h3 className="font-bold text-gray-800 mb-3">3. How to create specific pitch bends</h3>
 
                   <div className="mb-6">
-                    <div className="bg-purple-100 p-3 rounded-lg mb-3">
-                      <h4 className="font-bold text-purple-700 mb-2">Creating a 7-semitone bend (Perfect Fifth)</h4>
+                    <div className="bg-mustard-100 p-3 rounded-lg mb-3">
+                      <h4 className="font-bold text-mustard-700 mb-2">Creating a 7-semitone bend (Perfect Fifth)</h4>
                     </div>
                     <div className="bg-white p-4 rounded">
                       <ol className="list-decimal list-inside space-y-2 text-gray-700">
@@ -526,7 +526,7 @@ export default function MIDIPitchBendController() {
                 </div>
 
                 {/* Try it yourself section */}
-                <div className="bg-gradient-to-r from-purple-100 to-blue-100 p-4 rounded-lg">
+                <div className="bg-gradient-to-r from-mustard-100 to-blue-100 p-4 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
                     <Lightbulb className="w-5 h-5 text-orange-600" />
                     <h4 className="font-bold text-gray-800">Try it yourself!</h4>
@@ -546,7 +546,7 @@ export default function MIDIPitchBendController() {
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Sliders className="w-6 h-6 text-purple-600" />
+                <Sliders className="w-6 h-6 text-mustard-600" />
                 <h2 className="text-2xl font-bold text-gray-800">Task 1C: MIDI Controllers Beyond Pitch Bend</h2>
               </div>
 
@@ -558,10 +558,10 @@ export default function MIDIPitchBendController() {
               {/* Controller Cards */}
               <div className="grid md:grid-cols-2 gap-6">
                 {/* CC 1 - Modulation */}
-                <div className="border-2 border-purple-200 rounded-lg p-5 bg-purple-50">
+                <div className="border-2 border-mustard-200 rounded-lg p-5 bg-mustard-50">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-purple-700">CC 1 - Modulation Wheel</h3>
-                    <span className="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold">CC 1</span>
+                    <h3 className="text-xl font-bold text-mustard-700">CC 1 - Modulation Wheel</h3>
+                    <span className="bg-mustard-200 text-mustard-800 px-3 py-1 rounded-full text-sm font-semibold">CC 1</span>
                   </div>
 
                   <div className="space-y-3">
@@ -578,8 +578,8 @@ export default function MIDIPitchBendController() {
                       <p className="text-gray-700">0-127 (7-bit)</p>
                     </div>
 
-                    <div className="bg-white p-3 rounded border-l-4 border-purple-500">
-                      <div className="text-sm font-semibold text-purple-700 mb-1">Production Example:</div>
+                    <div className="bg-white p-3 rounded border-l-4 border-mustard-500">
+                      <div className="text-sm font-semibold text-mustard-700 mb-1">Production Example:</div>
                       <p className="text-gray-700 text-sm">
                         <strong>Expressive Lead Synth:</strong> Draw a gradual increase in CC1 modulation during a held note
                         to add vibrato that builds intensity. Perfect for emotional lead lines - start clean,
@@ -794,7 +794,7 @@ export default function MIDIPitchBendController() {
               </div>
 
               {/* How to use in Ableton */}
-              <div className="mt-6 bg-gradient-to-r from-purple-100 to-blue-100 p-6 rounded-lg">
+              <div className="mt-6 bg-gradient-to-r from-mustard-100 to-blue-100 p-6 rounded-lg">
                 <div className="flex items-center gap-2 mb-3">
                   <Lightbulb className="w-6 h-6 text-orange-600" />
                   <h3 className="text-xl font-bold text-gray-800">How to Use MIDI CC in Ableton Live</h3>

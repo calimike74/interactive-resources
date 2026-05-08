@@ -34,9 +34,9 @@ function filterTypesSVG(w, h) {
     <line x1="10" y1="${mid}" x2="${w-10}" y2="${mid}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
     ${[
         { label: 'LPF', x: w*0.15, color: '#60a5fa', path: `M${w*0.05},${mid-25} Q${w*0.15},${mid-25} ${w*0.15},${mid} Q${w*0.15},${mid+25} ${w*0.25},${mid+25}` },
-        { label: 'HPF', x: w*0.38, color: '#f472b6', path: `M${w*0.28},${mid+25} Q${w*0.38},${mid+25} ${w*0.38},${mid} Q${w*0.38},${mid-25} ${w*0.48},${mid-25}` },
+        { label: 'HPF', x: w*0.38, color: '#D4724F', path: `M${w*0.28},${mid+25} Q${w*0.38},${mid+25} ${w*0.38},${mid} Q${w*0.38},${mid-25} ${w*0.48},${mid-25}` },
         { label: 'BPF', x: w*0.62, color: '#fbbf24', path: `M${w*0.52},${mid+20} Q${w*0.57},${mid+20} ${w*0.62},${mid-20} Q${w*0.67},${mid+20} ${w*0.72},${mid+20}` },
-        { label: 'Notch', x: w*0.85, color: '#a78bfa', path: `M${w*0.75},${mid-20} Q${w*0.80},${mid-20} ${w*0.85},${mid+20} Q${w*0.90},${mid-20} ${w*0.95},${mid-20}` },
+        { label: 'Notch', x: w*0.85, color: '#DCC892', path: `M${w*0.75},${mid-20} Q${w*0.80},${mid-20} ${w*0.85},${mid+20} Q${w*0.90},${mid-20} ${w*0.95},${mid-20}` },
     ].map(f => `
         <path d="${f.path}" fill="none" stroke="${f.color}" stroke-width="2.5" opacity="0.85"/>
         <text x="${f.x}" y="${h-12}" text-anchor="middle" font-size="10" fill="${f.color}" font-family="monospace" font-weight="600">${f.label}</text>
@@ -69,7 +69,7 @@ function qFactorSVG(w, h) {
 function graphicEqSVG(w, h) {
     const bands = [3, -2, 1, 4, -1, 2, -3, 5, 0, -2];
     const labels = ['31', '63', '125', '250', '500', '1k', '2k', '4k', '8k', '16k'];
-    const colors = ['#ef4444','#f97316','#fbbf24','#22c55e','#3b82f6','#8b5cf6','#ec4899','#06b6d4','#84cc16','#f43f5e'];
+    const colors = ['#ef4444','#f97316','#fbbf24','#22c55e','#3b82f6','#5F7058','#B85A3F','#06b6d4','#84cc16','#f43f5e'];
     const mid = h / 2;
     const bw = (w - 40) / bands.length;
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
@@ -108,11 +108,11 @@ function parametricEqSVG(w, h) {
     <circle cx="${w*0.15}" cy="${mid-25}" r="5" fill="#ef4444" opacity="0.9"/>
     <circle cx="${w*0.35}" cy="${mid+35}" r="5" fill="#f97316" opacity="0.9"/>
     <circle cx="${w*0.65}" cy="${mid-20}" r="5" fill="#22c55e" opacity="0.9"/>
-    <circle cx="${w*0.88}" cy="${mid-15}" r="5" fill="#8b5cf6" opacity="0.9"/>
+    <circle cx="${w*0.88}" cy="${mid-15}" r="5" fill="#5F7058" opacity="0.9"/>
     <text x="${w*0.15}" y="${mid-35}" text-anchor="middle" font-size="9" fill="#ef4444" font-family="monospace">+3dB</text>
     <text x="${w*0.35}" y="${mid+50}" text-anchor="middle" font-size="9" fill="#f97316" font-family="monospace">-4dB</text>
     <text x="${w*0.65}" y="${mid-30}" text-anchor="middle" font-size="9" fill="#22c55e" font-family="monospace">+2dB</text>
-    <text x="${w*0.88}" y="${mid-25}" text-anchor="middle" font-size="9" fill="#8b5cf6" font-family="monospace">+1.5dB</text>
+    <text x="${w*0.88}" y="${mid-25}" text-anchor="middle" font-size="9" fill="#5F7058" font-family="monospace">+1.5dB</text>
     </svg>`;
 }
 
@@ -133,9 +133,9 @@ function shelvingSVG(w, h) {
     <text x="${w/2}" y="18" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.35)" font-family="system-ui">SHELVING FILTERS</text>
     <line x1="10" y1="${mid}" x2="${w-10}" y2="${mid}" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
     <polyline points="${hiShelf.join(' ')}" fill="none" stroke="#3b82f6" stroke-width="2.5" opacity="0.8"/>
-    <polyline points="${loShelf.join(' ')}" fill="none" stroke="#f472b6" stroke-width="2.5" opacity="0.8"/>
+    <polyline points="${loShelf.join(' ')}" fill="none" stroke="#D4724F" stroke-width="2.5" opacity="0.8"/>
     <text x="${w*0.85}" y="${mid-28}" font-size="10" fill="#3b82f6" font-family="monospace" text-anchor="middle">High shelf +</text>
-    <text x="${w*0.15}" y="${mid+32}" font-size="10" fill="#f472b6" font-family="monospace" text-anchor="middle">Low shelf +</text>
+    <text x="${w*0.15}" y="${mid+32}" font-size="10" fill="#D4724F" font-family="monospace" text-anchor="middle">Low shelf +</text>
     </svg>`;
 }
 

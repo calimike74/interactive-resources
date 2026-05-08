@@ -111,7 +111,7 @@ const DistortionLab = () => {
     fuzz: {
       name: 'Fuzz',
       shortName: 'Fuzz',
-      color: '#7C3AED',
+      color: '#9B7530',
       description: 'Extreme clipping approaching square wave. Creates dense harmonic content and heavy compression.',
       characteristics: ['Square wave tendency', 'Extreme harmonics', 'Sustain', 'Thick texture'],
       technicalDetail: 'Very low threshold with aggressive clipping creates near-square waves. The original waveform is almost completely replaced by a new, harmonically rich signal.',
@@ -936,7 +936,7 @@ const DistortionLab = () => {
         {/* ================================================================ */}
         <TabsContent value="theory" className="space-y-4">
           <Card className="border-2">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-field-50">
               <CardTitle className="flex items-center gap-2">
                 <GraduationCap className="w-5 h-5 text-blue-700" />
                 Edexcel Music Technology Component 4: Theory & Exam Preparation
@@ -1199,7 +1199,7 @@ const DistortionLab = () => {
                   <div className="text-2xl text-gray-400">→</div>
 
                   <div className={`bg-white rounded-lg px-4 py-3 border-2 shadow-sm ${
-                    chainFilterEnabled ? 'border-purple-400' : 'border-gray-300 opacity-50'
+                    chainFilterEnabled ? 'border-mustard-400' : 'border-gray-300 opacity-50'
                   }`}>
                     <div className="text-xs text-gray-500 mb-1">LOW-PASS</div>
                     <div className="font-mono text-sm font-bold">
@@ -1249,8 +1249,8 @@ const DistortionLab = () => {
                       Input → Tube Saturation → Low-Pass Filter → Subtle Compression → Output
                     </p>
                   </div>
-                  <div className="p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded border">
-                    <strong className="text-purple-900">Drum Character:</strong>
+                  <div className="p-3 bg-gradient-to-r from-mustard-50 to-mustard-100 rounded border">
+                    <strong className="text-mustard-900">Drum Character:</strong>
                     <p className="text-gray-700 mt-1">
                       Input → Transient Shaper → Soft Clipping → EQ → Parallel Compression → Output
                     </p>

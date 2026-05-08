@@ -473,7 +473,7 @@ const AcousticsFlashcards = () => {
               setShowSummary(false);
               resetDeck();
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-field-100 hover:bg-field-200 text-field-800 rounded-lg transition-colors"
           >
             <Star className="h-4 w-4" />
             Try {difficulty === "basic" ? "Intermediate" : difficulty === "intermediate" ? "Advanced" : "Basic"}
@@ -701,7 +701,7 @@ const AcousticsFlashcards = () => {
 
               {studyMode === "learn" && (
                 <div className="space-y-3">
-                  <div className="bg-indigo-50 p-3 rounded-lg">
+                  <div className="bg-field-50 p-3 rounded-lg">
                     <p className="text-sm">
                       <span className="font-semibold">Practical Example: </span>
                       {currentCards[currentIndex]?.practicalExample}

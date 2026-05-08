@@ -129,7 +129,7 @@ export default function ResourcesHub() {
                         >
                             <BlurReveal key={`heading-${activeTab}`} duration={600} blur={10}>
                                 <GradientText
-                                    colors={['#1A1A2E', '#2563EB', '#7C3AED', '#1A1A2E']}
+                                    colors={['#1A1A2E', '#2563EB', '#9B7530', '#1A1A2E']}
                                     animationSpeed={6}
                                     style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
                                 >

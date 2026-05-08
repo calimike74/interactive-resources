@@ -461,8 +461,8 @@ const Part1Foundations = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #74b9ff 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
-                    <div style={{ fontSize: '0.7rem', color: '#a78bfa', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Foundation Concepts</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Foundation Concepts</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Understanding Waveform Diagrams</h2>
                 <p style={{ color: '#8b909a', maxWidth: '600px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -480,7 +480,7 @@ const Part1Foundations = ({ onComplete }) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
                 <div>
                     <div style={{ fontSize: '0.7rem', color: '#4a4f5a', marginBottom: '0.25rem', fontFamily: 'monospace', textTransform: 'uppercase' }}>Cards Revealed</div>
-                    <div style={{ fontSize: '2rem', fontWeight: '700', color: '#a78bfa' }}>{flippedCards.size} / {WAVEFORM_CONCEPTS.length}</div>
+                    <div style={{ fontSize: '2rem', fontWeight: '700', color: '#DCC892' }}>{flippedCards.size} / {WAVEFORM_CONCEPTS.length}</div>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     {!allRevealed && (
@@ -488,13 +488,13 @@ const Part1Foundations = ({ onComplete }) => {
                             Reveal All
                         </button>
                     )}
-                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #a78bfa 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                         Continue to Part 2 {allRevealed && '→'}
                     </button>
                 </div>
             </div>
 
-            <CopyableNote title="Waveform Axes - Key Definitions" color="#a78bfa" variant="definition">
+            <CopyableNote title="Waveform Axes - Key Definitions" color="#DCC892" variant="definition">
                 <strong>WAVEFORM DIAGRAM AXES:</strong><br/><br/>
                 • <strong>X-Axis (Horizontal):</strong> TIME - measured in milliseconds (ms) or seconds (s). Period is measured along this axis.<br/><br/>
                 • <strong>Y-Axis (Vertical):</strong> AMPLITUDE - the strength of the signal. Determines LOUDNESS, not pitch.<br/><br/>
@@ -1438,7 +1438,7 @@ export default function OctavePeriodTrainer() {
         setVisitedParts(prev => new Set([...prev, part]));
     };
 
-    const partColors = { 1: '#a78bfa', 2: '#ef4444', 3: '#22d3ee', 4: '#74b9ff' };
+    const partColors = { 1: '#DCC892', 2: '#ef4444', 3: '#22d3ee', 4: '#74b9ff' };
     const partNames = { 1: 'Foundations', 2: 'The Mistake', 3: 'Explore', 4: 'Draw' };
 
     return (

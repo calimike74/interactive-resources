@@ -57,7 +57,7 @@ function WaveformLetters({ text, waveType = 'sine', amplitude = 10, speed = 2, c
 
 const WAVEFORMS = [
     { id: 'saw', label: 'Sawtooth', color: '#1a1a6e', desc: 'All harmonics — bright, buzzy' },
-    { id: 'square', label: 'Square', color: '#7c3aed', desc: 'Odd harmonics — hollow, reedy' },
+    { id: 'square', label: 'Square', color: '#9B7530', desc: 'Odd harmonics — hollow, reedy' },
     { id: 'triangle', label: 'Triangle', color: '#0891b2', desc: 'Weak harmonics — mellow' },
     { id: 'sine', label: 'Sine', color: '#059669', desc: 'No harmonics — pure fundamental' },
 ];

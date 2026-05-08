@@ -78,7 +78,7 @@ export default function DelayTime() {
                 wetGap = 18;
                 zoneLabel = 'thickening';
                 zoneMs = '< 30 ms';
-                zoneColor = '#a78bfa';
+                zoneColor = '#DCC892';
             } else if (f < PHASE_4) {
                 wetGap = 70;
                 zoneLabel = 'slapback';

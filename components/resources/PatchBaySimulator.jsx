@@ -7,10 +7,10 @@ import { theme, typography, borderRadius, spacing } from '@/lib/theme';
 
 const ROOM_COLOURS = {
     'studio-1': '#3B82F6',
-    'studio-2': '#8B5CF6',
-    'recital': '#EC4899',
+    'studio-2': '#5F7058',
+    'recital': '#B85A3F',
     'lobby': '#F59E0B',
-    'console': '#6366F1',
+    'console': '#3A4A35',
     'tla-red7': '#EF4444',
 };
 
