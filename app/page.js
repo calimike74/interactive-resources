@@ -11,6 +11,7 @@ import ProgressDashboard from '@/components/ProgressDashboard';
 import BlurReveal from '@/components/BlurReveal';
 import SlideUpWords from '@/components/SlideUpWords';
 import CommandPalette from '@/components/CommandPalette';
+import SplashCursor from '@/components/SplashCursor';
 
 // Editorial palette — white surface (matches LiquidHero), warm-ink type.
 const ED = {
@@ -78,12 +79,23 @@ export default function ResourcesHub() {
                 paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
             }}
         >
-            {/* Liquid Hero Banner — native click/touch ripples on the liquid surface */}
-            <LiquidHero
-                badge="A-Level Music Technology"
-                title={['Interactive Resources']}
-                tagline="Explore  •  Learn  •  Practice"
-            />
+            {/* Liquid Hero Banner with Splash Cursor overlay */}
+            <div style={{ position: 'relative', overflow: 'hidden' }}>
+                <LiquidHero
+                    badge="A-Level Music Technology"
+                    title={['Interactive Resources']}
+                    tagline="Explore  •  Learn  •  Practice"
+                />
+                <SplashCursor
+                    DENSITY_DISSIPATION={3}
+                    VELOCITY_DISSIPATION={2}
+                    SPLAT_RADIUS={0.15}
+                    SPLAT_FORCE={4000}
+                    CURL={5}
+                    COLOR_UPDATE_SPEED={8}
+                    TRANSPARENT={true}
+                />
+            </div>
 
             {/* Main Content */}
             <main
