@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import { getQuestions } from '@/lib/questions';
 import { getNextAttemptNumber, saveQuizResponse } from '@/lib/quiz-persistence';
 import AuthGate from '@/app/revise/[topicId]/AuthGate';
@@ -133,7 +133,7 @@ export default function ExamModeClient({ topic }) {
             <div style={{ minHeight: '100vh', background: t.bg.secondary, fontFamily: typography.fontFamily }}>
                 <ExamHeader topic={topic} t={t} />
                 <main style={{ maxWidth: '720px', margin: '0 auto', padding: spacing[8] }}>
-                    <AuthGate topicColour={topic.colour} onAuthenticated={setStudent} />
+                    <AuthGate onAuthenticated={setStudent} />
                 </main>
             </div>
         );
@@ -176,7 +176,7 @@ export default function ExamModeClient({ topic }) {
                             width: '64px',
                             height: '64px',
                             borderRadius: borderRadius.full,
-                            background: topic.colour + '15',
+                            background: ED.accentTint,
                             marginBottom: spacing[4],
                         }}>
                             <span style={{ fontSize: '2rem' }}>⏱️</span>
@@ -217,7 +217,7 @@ export default function ExamModeClient({ topic }) {
                             onClick={handleStart}
                             style={{
                                 padding: `${spacing[3]} ${spacing[8]}`,
-                                background: topic.colour,
+                                background: ED.accent,
                                 color: t.text.inverse,
                                 border: '1px solid ' + glass.border,
                                 borderRadius: borderRadius.lg,
@@ -374,7 +374,7 @@ export default function ExamModeClient({ topic }) {
                         <div style={{
                             height: '100%',
                             width: `${(progress / total) * 100}%`,
-                            background: topic.colour,
+                            background: ED.accent,
                             borderRadius: borderRadius.full,
                             transition: `width ${transitions.normal} ${transitions.easing}`,
                         }} />
@@ -408,7 +408,6 @@ export default function ExamModeClient({ topic }) {
                             selectedIndex={currentAnswer}
                             showFeedback={showFeedback}
                             onSelect={submitAnswer}
-                            topicColour={topic.colour}
                             t={t}
                         />
                     )}
@@ -475,7 +474,7 @@ export default function ExamModeClient({ topic }) {
                                 marginTop: spacing[5],
                                 width: '100%',
                                 padding: `${spacing[3]} ${spacing[6]}`,
-                                background: topic.colour,
+                                background: ED.accent,
                                 color: t.text.inverse,
                                 border: '1px solid ' + glass.border,
                                 borderRadius: borderRadius.lg,
@@ -506,7 +505,7 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
             backdropFilter: 'blur(' + glass.blur + ')',
             WebkitBackdropFilter: 'blur(' + glass.blur + ')',
             boxShadow: glass.shadow,
-            borderBottom: `3px solid ${topic.colour}`,
+            borderBottom: `1px solid ${ED.rule}`,
             padding: `${spacing[4]} ${spacing[8]}`,
         }}>
             <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -590,7 +589,7 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
 
 // Reused question type components — simplified for exam mode
 
-function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSelect, topicColour, t }) {
+function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSelect, t }) {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
             {options.map((option, i) => {
@@ -606,8 +605,8 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                         borderColor = t.accent.error;
                     }
                 } else if (i === selectedIndex) {
-                    bg = topicColour + '15';
-                    borderColor = topicColour;
+                    bg = ED.accentTint;
+                    borderColor = ED.accent;
                 }
 
                 return (
@@ -981,7 +980,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                     style={{
                         flex: 1,
                         padding: `${spacing[3]} ${spacing[5]}`,
-                        background: topic.colour,
+                        background: ED.accent,
                         color: t.text.inverse,
                         border: '1px solid ' + glass.border,
                         borderRadius: borderRadius.lg,

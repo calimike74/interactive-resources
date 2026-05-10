@@ -6,9 +6,8 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import NotesPanel from '@/components/learn/NotesPanel';
 import VideoCheckpointPlayer from '@/components/learn/VideoCheckpointPlayer';
 import AuthGate from '@/app/revise/[topicId]/AuthGate';
-import { theme, typography, borderRadius, spacing } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, editorial as ED } from '@/lib/theme';
 
-const TOPIC_COLOUR = '#14b8a6';
 const VIDEO_ID = 'adt-1.12';
 const YOUTUBE_ID = 'YCJubmiPg5E';
 
@@ -131,26 +130,14 @@ export default function ADTVideoOverviewClient() {
                         flexWrap: 'wrap',
                     }}>
                         <span style={{
-                            display: 'inline-block',
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '9999px',
-                            background: `${TOPIC_COLOUR}15`,
-                            color: TOPIC_COLOUR,
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
+                            fontFamily: ED.mono,
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            letterSpacing: '0.18em',
+                            textTransform: 'uppercase',
+                            color: ED.inkFade,
                         }}>
-                            Topic 1.12
-                        </span>
-                        <span style={{
-                            display: 'inline-block',
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '9999px',
-                            background: '#3A4A3515',
-                            color: '#3A4A35',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                        }}>
-                            Video + Checkpoints
+                            § 1.12 · Video + Checkpoints
                         </span>
                     </div>
 
@@ -195,7 +182,6 @@ export default function ADTVideoOverviewClient() {
                             Enter your student token so your answers count toward your engagement record.
                         </p>
                         <AuthGate
-                            topicColour={TOPIC_COLOUR}
                             onAuthenticated={(s) => setStudent(s)}
                         />
                     </div>
@@ -206,7 +192,7 @@ export default function ADTVideoOverviewClient() {
                             youtubeId={YOUTUBE_ID}
                             checkpoints={CHECKPOINTS}
                             studentToken={student.token}
-                            accentColor={TOPIC_COLOUR}
+                            accentColor={ED.accent}
                         />
 
                         <div style={{
@@ -227,7 +213,7 @@ export default function ADTVideoOverviewClient() {
                                 href="/learn/delay"
                                 style={{
                                     fontSize: typography.size.sm,
-                                    color: TOPIC_COLOUR,
+                                    color: ED.accent,
                                     textDecoration: 'none',
                                     fontWeight: 500,
                                 }}

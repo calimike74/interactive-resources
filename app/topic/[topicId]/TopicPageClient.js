@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import { getAvailableTopics } from '@/lib/questions';
 import { getQuizProgress } from '@/lib/quiz-persistence';
 import { hasLearnContent } from '@/lib/learn/topics';
@@ -15,21 +15,6 @@ const typeLabels = {
     practice: 'Practice',
     revision: 'Revision',
     assessment: 'Assessment',
-};
-
-// Editorial palette — single accent, no per-topic colours.
-const ED = {
-    ink: '#181410',
-    inkSoft: '#4d463c',
-    inkFade: '#8a8175',
-    rule: '#d9d1be',
-    ruleSoft: '#e8e1cc',
-    accent: '#2d5d4f',
-    accentTint: 'rgba(45, 93, 79, 0.08)',
-    accentFaint: 'rgba(45, 93, 79, 0.18)',
-    accentMid: 'rgba(45, 93, 79, 0.30)',
-    serif: 'var(--font-fraunces), Georgia, serif',
-    mono: 'var(--font-jbmono), ui-monospace, monospace',
 };
 
 export default function TopicPageClient({ topic, resources }) {
@@ -527,19 +512,16 @@ function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
                 }}
             >
                 <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    {/* Header: icon + type badge */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing[3] }}>
-                        <span style={{ fontSize: '2rem' }} aria-hidden="true">
-                            {resource.icon || '🎛️'}
-                        </span>
+                    {/* Type label — editorial mono */}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: spacing[3] }}>
                         <span
                             style={{
-                                background: 'rgba(255, 255, 255, 0.5)',
-                                color: t.text.secondary,
-                                padding: `${spacing[1]} ${spacing[2]}`,
-                                borderRadius: borderRadius.md,
-                                fontSize: typography.size.xs,
-                                fontWeight: typography.weight.medium,
+                                fontFamily: ED.mono,
+                                fontSize: '10px',
+                                fontWeight: 500,
+                                letterSpacing: '0.18em',
+                                textTransform: 'uppercase',
+                                color: ED.inkFade,
                             }}
                         >
                             {typeLabels[resource.type] || resource.type}

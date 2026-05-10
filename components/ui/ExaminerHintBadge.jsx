@@ -1,25 +1,24 @@
 'use client';
 
 import { getHintsForTopic, hasHints } from '@/lib/examiner-hints';
-import { theme, typography, spacing, borderRadius } from '@/lib/theme';
+import { theme, typography, spacing, borderRadius, editorial as ED } from '@/lib/theme';
 import Popover from './Popover';
 
 /**
  * Examiner hint badge — click to see curated examiner guidance for a topic.
- * Flowbite-style: tinted header + white body.
+ * Editorial style: single accent palette.
  *
  * @param {Object} props
  * @param {string} props.topicCode - Spec reference like '1.9'
- * @param {string} [props.topicColour] - Optional topic accent colour for the header
  * @param {'top'|'bottom'|'left'|'right'} [props.position='top'] - Popover position
  */
-export default function ExaminerHintBadge({ topicCode, topicColour, position = 'top' }) {
+export default function ExaminerHintBadge({ topicCode, position = 'top' }) {
     if (!hasHints(topicCode)) return null;
 
     const hints = getHintsForTopic(topicCode);
     const t = theme.light;
-    const accentBg = topicColour ? `${topicColour}18` : t.accent.infoLight;
-    const accentBorder = topicColour || t.accent.info;
+    const accentBg = ED.accentTint;
+    const accentBorder = ED.accent;
 
     const badge = (
         <span

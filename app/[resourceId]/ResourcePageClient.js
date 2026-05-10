@@ -200,7 +200,6 @@ export default function ResourcePageClient() {
                             {parentTopic && (
                                 <ExaminerHintBadge
                                     topicCode={parentTopic.specRef}
-                                    topicColour={parentTopic.colour}
                                     position="bottom"
                                 />
                             )}

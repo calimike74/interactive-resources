@@ -104,7 +104,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                     Unit
                     <span style={{ color: ED.ink, marginLeft: '4px' }}>{topic.specRef}</span>
                 </span>
-                <ExaminerHintBadge topicCode={topic.specRef} topicColour={ED.ink} position="bottom" />
+                <ExaminerHintBadge topicCode={topic.specRef} position="bottom" />
             </div>
 
             {/* Topic name — italic Fraunces */}
