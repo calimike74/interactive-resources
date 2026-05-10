@@ -3,6 +3,7 @@ import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import { useEffect, useState, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { getConsent, onConsentChange } from '@/lib/consent';
 
 function PostHogPageview() {
     const pathname = usePathname();
@@ -22,25 +23,44 @@ function PostHogPageview() {
 
 export function PHProvider({ children }) {
     const [ready, setReady] = useState(false);
+    const initialised = useRef(false);
 
     useEffect(() => {
         const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
         if (!key) return;
 
-        posthog.init(key, {
-            api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
-            capture_pageview: false,
-            capture_pageleave: true,
-            cross_subdomain_cookie: true,
-            session_recording: {
-                maskAllInputs: true,
-                maskTextSelector: '[data-student]',
-            },
-            loaded: () => {
-                posthog.capture('posthog_heartbeat', { host: window.location.host });
-                setReady(true);
-            },
+        const init = () => {
+            if (initialised.current) return;
+            initialised.current = true;
+            posthog.init(key, {
+                api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
+                capture_pageview: false,
+                capture_pageleave: true,
+                cross_subdomain_cookie: true,
+                session_recording: {
+                    maskAllInputs: true,
+                    maskTextSelector: '[data-student]',
+                },
+                loaded: () => {
+                    posthog.capture('posthog_heartbeat', { host: window.location.host });
+                    setReady(true);
+                },
+            });
+        };
+
+        if (getConsent() === 'all') init();
+
+        const off = onConsentChange((value) => {
+            if (value === 'all') {
+                if (!initialised.current) init();
+                else if (posthog.opt_in_capturing) posthog.opt_in_capturing();
+            } else if (value === 'essential' && initialised.current) {
+                if (posthog.opt_out_capturing) posthog.opt_out_capturing();
+                if (posthog.reset) posthog.reset();
+            }
         });
+
+        return off;
     }, []);
 
     if (!ready) return <>{children}</>;

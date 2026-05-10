@@ -3,6 +3,8 @@ import { Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { ContextMenuProvider } from "@/components/ContextMenu";
 import { PHProvider } from "./posthog-provider";
+import CookieBanner from "@/components/CookieBanner";
+import SiteFooter from "@/components/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,8 +62,10 @@ export default function RootLayout({ children }) {
         <PHProvider>
           <ContextMenuProvider>
             {children}
+            <SiteFooter />
           </ContextMenuProvider>
         </PHProvider>
+        <CookieBanner />
       </body>
     </html>
   );
