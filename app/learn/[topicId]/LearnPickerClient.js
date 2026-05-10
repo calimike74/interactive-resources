@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import GlassMorphismGrid from '@/components/GlassMorphismGrid';
 
 export default function LearnPickerClient({ topic, lessons, resources = [] }) {
     const t = theme.light;
@@ -15,18 +16,26 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
         }}>
             <Breadcrumbs />
 
-            {/* Header */}
+            {/* Header — interactive glass-grid background with editorial text overlay */}
             <header style={{
-                padding: '3rem 1.5rem 2.5rem',
+                position: 'relative',
+                padding: '4rem 1.5rem 3rem',
                 background: 'white',
                 borderBottom: `1px solid ${ED.rule}`,
+                overflow: 'hidden',
+                minHeight: '320px',
             }}>
-                <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-                    <Link href={`/topic/${topic.id}`} style={{
-                        fontSize: typography.size.sm,
-                        color: t.text.tertiary,
-                        textDecoration: 'none',
-                    }}>
+                <GlassMorphismGrid rows={4} cols={14} revealRadius={300} />
+                <div style={{ maxWidth: '960px', margin: '0 auto', position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
+                    <Link
+                        href={`/topic/${topic.id}`}
+                        style={{
+                            fontSize: typography.size.sm,
+                            color: ED.inkSoft,
+                            textDecoration: 'none',
+                            pointerEvents: 'auto',
+                        }}
+                    >
                         &larr; Back to {topic.name}
                     </Link>
 
@@ -34,7 +43,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.75rem',
-                        marginTop: '0.75rem',
+                        marginTop: '1.25rem',
                     }}>
                         <span style={{
                             fontFamily: ED.mono,
@@ -52,20 +61,20 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                         fontFamily: ED.serif,
                         fontStyle: 'italic',
                         fontWeight: 400,
-                        fontSize: 'clamp(28px, 5vw, 44px)',
-                        lineHeight: 1.05,
-                        letterSpacing: '-0.02em',
+                        fontSize: 'clamp(36px, 6vw, 60px)',
+                        lineHeight: 1.0,
+                        letterSpacing: '-0.025em',
                         color: ED.ink,
                         marginTop: '0.5rem',
                     }}>
                         Learn: {topic.name}
                     </h1>
                     <p style={{
-                        fontSize: typography.size.base,
-                        color: t.text.secondary,
-                        marginTop: '0.5rem',
-                        lineHeight: 1.5,
-                        maxWidth: '640px',
+                        fontSize: '16px',
+                        color: ED.inkSoft,
+                        marginTop: '0.75rem',
+                        lineHeight: 1.55,
+                        maxWidth: '560px',
                     }}>
                         Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks.
                     </p>
@@ -73,7 +82,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                     <div style={{
                         marginTop: '1rem',
                         fontSize: typography.size.sm,
-                        color: t.text.tertiary,
+                        color: ED.inkFade,
                     }}>
                         {lessons.length + resources.length} {lessons.length + resources.length === 1 ? 'activity' : 'activities'} available
                     </div>
