@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Target } from 'lucide-react';
 
 // ============================================
 // CORE CONCEPTS (What students need to know)
@@ -1416,7 +1417,7 @@ const Part4Draw = () => {
             </CopyableNote>
 
             <div style={{ marginTop: '2rem', padding: '2rem', background: 'linear-gradient(135deg, rgba(52,211,153,0.1) 0%, #101218 100%)', borderRadius: '16px', border: '1px solid rgba(52,211,153,0.3)', textAlign: 'center' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎯</div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.5rem' }}><Target size={28} strokeWidth={1.75} color="#34d399" aria-hidden="true" /></div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#34d399', marginBottom: '0.5rem' }}>Ready for the Exam!</h3>
                 <p style={{ color: '#8b909a', maxWidth: '500px', margin: '0 auto' }}>
                     You now understand what "very few candidates" got right. Use the navigation above to revisit any section, and copy the notes to OneNote for revision.

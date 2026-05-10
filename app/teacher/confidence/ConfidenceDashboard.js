@@ -111,7 +111,7 @@ export default function ConfidenceDashboard() {
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {report.map((term) => (
-                            <TermRow key={term.term} term={term} topicColor={topic.color} />
+                            <TermRow key={term.term} term={term} />
                         ))}
                     </div>
                 )}
@@ -138,7 +138,7 @@ function StatCard({ label, value, color }) {
     );
 }
 
-function TermRow({ term, topicColor }) {
+function TermRow({ term }) {
     const total = term.gotIt + term.confused;
     const gotItPct = total > 0 ? Math.round((term.gotIt / total) * 100) : 0;
     const confusedPct = total > 0 ? Math.round((term.confused / total) * 100) : 0;

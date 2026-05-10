@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { AlertTriangle } from 'lucide-react';
 
 // ============================================
 // DOUBLE TRACKING vs COPYING EXPLORER
@@ -306,7 +307,7 @@ const MistakeSection = ({ onComplete }) => {
                 border: '1px solid rgba(239, 68, 68, 0.3)'
             }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                    <span style={{ fontSize: '2rem' }}>⚠️</span>
+                    <AlertTriangle size={28} strokeWidth={1.75} color="#ef4444" aria-hidden="true" />
                     <div>
                         <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#ef4444', margin: '0 0 0.5rem 0' }}>
                             EXAMINER WARNING (2022-2024)
