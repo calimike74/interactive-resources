@@ -66,9 +66,9 @@ export default function CookieBanner() {
                 Cookies on this site
             </p>
             <p style={{ margin: 0, marginBottom: 16, fontSize: 13, color: t.text.secondary, lineHeight: 1.5 }}>
-                We use optional analytics cookies to understand how the site is used. Essential cookies are always on.{' '}
+                Help me improve the site by accepting analytics cookies — they show which pages and tools actually get used. No personal info is captured.{' '}
                 <Link href="/privacy" style={{ color: t.text.link, textDecoration: 'underline' }}>
-                    Read our privacy notice
+                    Read more
                 </Link>.
             </p>
             <div style={{ display: 'flex', gap: 8 }}>
