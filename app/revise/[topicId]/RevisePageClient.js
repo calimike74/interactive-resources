@@ -503,7 +503,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                         textTransform: 'uppercase',
                         color: ED.inkFade,
                     }}>
-                        § {topic.specRef}
+                        Topic {topic.specRef}
                     </span>
                 </div>
             </div>

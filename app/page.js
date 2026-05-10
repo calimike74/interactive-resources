@@ -196,7 +196,6 @@ export default function ResourcesHub() {
                                             gap: spacing[3],
                                         }}
                                     >
-                                        <span style={{ fontFamily: ED.mono, fontStyle: 'normal', fontSize: '11px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade }}>§ </span>
                                         In preparation
                                     </h3>
                                 )}

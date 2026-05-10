@@ -187,7 +187,7 @@ export default function TopicPageClient({ topic, resources }) {
                                     color: ED.inkFade,
                                 }}
                             >
-                                Topic § {topic.specRef}
+                                Topic {topic.specRef}
                             </span>
                         </div>
 

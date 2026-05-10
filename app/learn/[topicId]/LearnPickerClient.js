@@ -44,7 +44,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                             textTransform: 'uppercase',
                             color: ED.inkFade,
                         }}>
-                            § {topic.specRef}
+                            Topic {topic.specRef}
                         </span>
                     </div>
 

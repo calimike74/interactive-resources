@@ -137,7 +137,7 @@ export default function ADTVideoOverviewClient() {
                             textTransform: 'uppercase',
                             color: ED.inkFade,
                         }}>
-                            § 1.12 · Video + Checkpoints
+                            Topic 1.12 · Video + Checkpoints
                         </span>
                     </div>
 
