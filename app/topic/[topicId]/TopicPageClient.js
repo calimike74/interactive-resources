@@ -715,43 +715,47 @@ function OverviewSection({ overview, theme: t }) {
                 }}
             >
                 {/* What you'll learn */}
-                <h2
-                    style={{
-                        fontSize: typography.size.lg,
-                        fontWeight: typography.weight.semibold,
-                        color: t.text.primary,
-                        marginBottom: spacing[3],
-                        letterSpacing: '0.02em',
-                    }}
-                >
-                    What you&rsquo;ll learn
-                </h2>
-                <ul
-                    style={{
-                        listStyle: 'none',
-                        padding: 0,
-                        margin: `0 0 ${spacing[6]} 0`,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: spacing[2],
-                    }}
-                >
-                    {overview.whatYoullLearn.map((item, i) => (
-                        <li
-                            key={i}
+                {overview.whatYoullLearn && overview.whatYoullLearn.length > 0 && (
+                    <>
+                        <h2
                             style={{
-                                display: 'flex',
-                                gap: spacing[3],
-                                color: t.text.secondary,
-                                fontSize: typography.size.base,
-                                lineHeight: typography.lineHeight.relaxed,
+                                fontSize: typography.size.lg,
+                                fontWeight: typography.weight.semibold,
+                                color: t.text.primary,
+                                marginBottom: spacing[3],
+                                letterSpacing: '0.02em',
                             }}
                         >
-                            <span style={{ color: ED.accent, fontWeight: typography.weight.bold, flexShrink: 0 }}>→</span>
-                            <span>{item}</span>
-                        </li>
-                    ))}
-                </ul>
+                            What you&rsquo;ll learn
+                        </h2>
+                        <ul
+                            style={{
+                                listStyle: 'none',
+                                padding: 0,
+                                margin: `0 0 ${spacing[6]} 0`,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: spacing[2],
+                            }}
+                        >
+                            {overview.whatYoullLearn.map((item, i) => (
+                                <li
+                                    key={i}
+                                    style={{
+                                        display: 'flex',
+                                        gap: spacing[3],
+                                        color: t.text.secondary,
+                                        fontSize: typography.size.base,
+                                        lineHeight: typography.lineHeight.relaxed,
+                                    }}
+                                >
+                                    <span style={{ color: ED.accent, fontWeight: typography.weight.bold, flexShrink: 0 }}>→</span>
+                                    <span>{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
 
                 {/* Why it matters in the exam */}
                 {overview.examRelevance && (
