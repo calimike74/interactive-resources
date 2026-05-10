@@ -171,7 +171,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     top: 0,
                     width: '2px',
                     height: 0,
-                    background: `linear-gradient(to bottom, ${topicColor}, #1a1a2e)`,
+                    background: `linear-gradient(to bottom, ${topicColor}, ${ED.ink})`,
                     transform: isMobile ? 'none' : 'translateX(-50%)',
                     transition: 'height 0.12s ease-out',
                     zIndex: 2,

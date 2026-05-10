@@ -76,7 +76,7 @@ export default function TopicPageClient({ topic, resources }) {
                     <div style={{
                         position: 'absolute',
                         inset: 0,
-                        background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+                        background: 'linear-gradient(to bottom, rgba(24,20,16,0.35) 0%, rgba(24,20,16,0.65) 100%)',
                     }} />
                     <div style={{
                         position: 'relative',
