@@ -4,9 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import diagrams from './diagrams';
 import ExpandableText from './ExpandableText';
 import SectionAssessment from './SectionAssessment';
+import { editorial as ED } from '@/lib/theme';
 
 export default function LearnSpineLayout({ topic, token, answeredSections }) {
-    const topicColor = topic.color || '#f97316';
+    const topicColor = ED.accent;
     const [assessmentState, setAssessmentState] = useState({});
     const spineTrackRef = useRef(null);
     const spineFillRef = useRef(null);

@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import LearnSpineLayout from './LearnSpineLayout';
 import { getTopicResponses } from '@/lib/learn/section-persistence';
+import { editorial as ED } from '@/lib/theme';
 
 export default function LearnTopicPage({ topic, parentTopicId }) {
     const searchParams = useSearchParams();
@@ -45,17 +46,16 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
                         gap: '0.75rem',
                         marginTop: '0.75rem',
                     }}>
-                        <div style={{
-                            display: 'inline-block',
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '9999px',
-                            background: topic.color + '15',
-                            color: topic.color,
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
+                        <span style={{
+                            fontFamily: ED.mono,
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            letterSpacing: '0.18em',
+                            textTransform: 'uppercase',
+                            color: ED.inkFade,
                         }}>
                             {topic.subtitle}
-                        </div>
+                        </span>
                     </div>
 
                     <h1 style={{
@@ -87,7 +87,7 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
                         <span style={{ fontSize: '0.8125rem', color: '#9CA3AF' }}>
                             {topic.rows.length} sections
                         </span>
-                        <ExpandableHint color={topic.color} />
+                        <ExpandableHint color={ED.accent} />
                     </div>
                 </div>
             </header>
