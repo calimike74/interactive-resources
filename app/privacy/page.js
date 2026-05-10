@@ -40,7 +40,7 @@ export default function PrivacyPage() {
                         Music Tech Studio is operated by Mike Lehnert, a Music Technology teacher.
                         For the purposes of UK GDPR and PECR, Music Tech Studio is the <strong>data controller</strong> for personal data collected through this site.
                     </p>
-                    <p>Contact: <a href="mailto:calimike@me.com" style={{ color: t.text.link }}>calimike@me.com</a></p>
+                    <p>Contact: <a href="mailto:privacy@musictechstudio.co.uk" style={{ color: t.text.link }}>privacy@musictechstudio.co.uk</a></p>
                 </Section>
 
                 <Section title="What we collect" t={t}>
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
                 <Section title="Your rights" t={t}>
                     <p>Under UK GDPR you have the right to access, correct, delete, restrict, export, or withdraw consent for your personal data.</p>
                     <p>
-                        To exercise any of these, email <a href="mailto:calimike@me.com" style={{ color: t.text.link }}>calimike@me.com</a>.
+                        To exercise any of these, email <a href="mailto:privacy@musictechstudio.co.uk" style={{ color: t.text.link }}>privacy@musictechstudio.co.uk</a>.
                         You also have the right to complain to the{' '}
                         <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" style={{ color: t.text.link }}>
                             UK Information Commissioner's Office
