@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Sparkles, Eye, Pencil, RotateCcw, ClipboardCheck, Timer, Clock } from 'lucide-react';
 import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import { getAvailableTopics } from '@/lib/questions';
 import { getQuizProgress } from '@/lib/quiz-persistence';
@@ -15,6 +16,15 @@ const typeLabels = {
     practice: 'Practice',
     revision: 'Revision',
     assessment: 'Assessment',
+};
+
+// Editorial line-icon per resource type — replaces emoji clutter.
+const typeIcons = {
+    interactive: Sparkles,
+    demonstration: Eye,
+    practice: Pencil,
+    revision: RotateCcw,
+    assessment: ClipboardCheck,
 };
 
 export default function TopicPageClient({ topic, resources }) {
@@ -145,9 +155,9 @@ export default function TopicPageClient({ topic, resources }) {
             ) : (
                 <header
                     style={{
-                        background: t.bg.primary,
+                        background: '#faf6ec',
                         borderBottom: `1px solid ${ED.rule}`,
-                        padding: `${spacing[6]} ${spacing[8]}`,
+                        padding: `${spacing[10]} ${spacing[8]} ${spacing[10]}`,
                     }}
                 >
                     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -157,24 +167,16 @@ export default function TopicPageClient({ topic, resources }) {
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: spacing[2],
-                                color: t.text.secondary,
+                                color: ED.inkSoft,
                                 textDecoration: 'none',
                                 fontSize: typography.size.sm,
-                                padding: `${spacing[2]} ${spacing[3]}`,
-                                borderRadius: borderRadius.md,
-                                background: glass.bg,
-                                backdropFilter: 'blur(8px)',
-                                WebkitBackdropFilter: 'blur(8px)',
-                                border: '1px solid ' + glass.border,
-                                boxShadow: glass.iconShadow,
-                                transition: `all ${transitions.fast}`,
-                                marginBottom: spacing[4],
+                                marginBottom: spacing[8],
                             }}
                         >
                             ← All Topics
                         </Link>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[3] }}>
+                        <div style={{ marginBottom: spacing[3] }}>
                             <span
                                 style={{
                                     fontFamily: ED.mono,
@@ -185,7 +187,7 @@ export default function TopicPageClient({ topic, resources }) {
                                     color: ED.inkFade,
                                 }}
                             >
-                                § {topic.specRef}
+                                Topic § {topic.specRef}
                             </span>
                         </div>
 
@@ -194,20 +196,30 @@ export default function TopicPageClient({ topic, resources }) {
                                 fontFamily: ED.serif,
                                 fontStyle: 'italic',
                                 fontWeight: 400,
-                                fontSize: 'clamp(36px, 6vw, 56px)',
-                                lineHeight: 1.05,
-                                letterSpacing: '-0.02em',
+                                fontSize: 'clamp(44px, 8vw, 76px)',
+                                lineHeight: 1.0,
+                                letterSpacing: '-0.025em',
                                 color: ED.ink,
-                                marginBottom: spacing[2],
+                                marginBottom: spacing[5],
+                                maxWidth: '900px',
                             }}
                         >
                             {topic.name}
                         </h1>
+                        <div
+                            aria-hidden="true"
+                            style={{
+                                width: '64px',
+                                height: '1px',
+                                background: ED.accent,
+                                marginBottom: spacing[5],
+                            }}
+                        />
                         <p
                             style={{
-                                color: t.text.secondary,
-                                fontSize: typography.size.base,
-                                lineHeight: typography.lineHeight.relaxed,
+                                color: ED.inkSoft,
+                                fontSize: '17px',
+                                lineHeight: 1.55,
                                 maxWidth: '640px',
                             }}
                         >
@@ -442,7 +454,7 @@ export default function TopicPageClient({ topic, resources }) {
                                     }}
                                 >
                                     <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
-                                        <span style={{ fontSize: '1.25rem' }}>⏱️</span>
+                                        <Timer size={20} strokeWidth={1.5} color={ED.inkSoft} aria-hidden="true" />
                                         <div>
                                             <h3 style={{
                                                 fontSize: typography.size.base,
@@ -512,8 +524,12 @@ function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
                 }}
             >
                 <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    {/* Type label — editorial mono */}
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: spacing[3] }}>
+                    {/* Type icon (left) + type label (right) */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[4] }}>
+                        {(() => {
+                            const Icon = typeIcons[resource.type] || Sparkles;
+                            return <Icon size={20} strokeWidth={1.5} color={ED.inkSoft} aria-hidden="true" />;
+                        })()}
                         <span
                             style={{
                                 fontFamily: ED.mono,
@@ -564,8 +580,9 @@ function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
                             borderTop: `1px solid ${glass.border}`,
                         }}
                     >
-                        <span style={{ color: t.text.tertiary, fontSize: typography.size.xs }}>
-                            ⏱️ {resource.estimatedTime}
+                        <span style={{ color: t.text.tertiary, fontSize: typography.size.xs, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <Clock size={12} strokeWidth={1.5} aria-hidden="true" />
+                            {resource.estimatedTime}
                         </span>
                         <span style={{ color: ED.accent, fontSize: typography.size.xs, fontWeight: typography.weight.medium }}>
                             Open →

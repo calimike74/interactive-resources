@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import { Timer } from 'lucide-react';
 import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import { getQuestions } from '@/lib/questions';
 import { getNextAttemptNumber, saveQuizResponse } from '@/lib/quiz-persistence';
@@ -179,7 +180,7 @@ export default function ExamModeClient({ topic }) {
                             background: ED.accentTint,
                             marginBottom: spacing[4],
                         }}>
-                            <span style={{ fontSize: '2rem' }}>⏱️</span>
+                            <Timer size={28} strokeWidth={1.5} color={ED.accent} aria-hidden="true" />
                         </div>
                         <h2 style={{
                             fontSize: typography.size['2xl'],

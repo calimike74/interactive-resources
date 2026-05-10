@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { KeyRound } from 'lucide-react';
 import { theme, typography, borderRadius, spacing, transitions, editorial as ED } from '@/lib/theme';
 import { supabase } from '@/lib/supabase';
 
@@ -68,7 +69,7 @@ export default function AuthGate({ onAuthenticated }) {
                     background: ED.accentTint,
                     marginBottom: spacing[3],
                 }}>
-                    <span style={{ fontSize: '1.5rem' }}>🔑</span>
+                    <KeyRound size={22} strokeWidth={1.5} color={ED.accent} aria-hidden="true" />
                 </div>
                 <h2 style={{
                     fontSize: typography.size.xl,
