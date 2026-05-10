@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import { getAvailableTopics } from '@/lib/questions';
@@ -15,6 +15,21 @@ const typeLabels = {
     practice: 'Practice',
     revision: 'Revision',
     assessment: 'Assessment',
+};
+
+// Editorial palette — single accent, no per-topic colours.
+const ED = {
+    ink: '#181410',
+    inkSoft: '#4d463c',
+    inkFade: '#8a8175',
+    rule: '#d9d1be',
+    ruleSoft: '#e8e1cc',
+    accent: '#2d5d4f',
+    accentTint: 'rgba(45, 93, 79, 0.08)',
+    accentFaint: 'rgba(45, 93, 79, 0.18)',
+    accentMid: 'rgba(45, 93, 79, 0.30)',
+    serif: 'var(--font-fraunces), Georgia, serif',
+    mono: 'var(--font-jbmono), ui-monospace, monospace',
 };
 
 export default function TopicPageClient({ topic, resources }) {
@@ -117,18 +132,15 @@ export default function TopicPageClient({ topic, resources }) {
 
                         <h1
                             style={{
-                                fontSize: typography.size['3xl'],
-                                fontWeight: typography.weight.bold,
+                                fontFamily: ED.serif,
+                                fontStyle: 'italic',
+                                fontWeight: 400,
+                                fontSize: 'clamp(36px, 6vw, 56px)',
+                                lineHeight: 1.05,
+                                letterSpacing: '-0.02em',
                                 color: '#ffffff',
                                 marginBottom: spacing[2],
-                                lineHeight: typography.lineHeight.tight,
-                                textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                                backgroundImage: 'linear-gradient(90deg, #ffffff 0%, #ffffff 40%, rgba(255,255,255,0.5) 50%, #ffffff 60%, #ffffff 100%)',
-                                backgroundSize: '200% 100%',
-                                WebkitBackgroundClip: 'text',
-                                backgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                animation: 'shimmerSweep 3s ease-in-out infinite',
+                                textShadow: '0 2px 12px rgba(0,0,0,0.35)',
                             }}
                         >
                             {topic.name}
@@ -149,7 +161,7 @@ export default function TopicPageClient({ topic, resources }) {
                 <header
                     style={{
                         background: t.bg.primary,
-                        borderBottom: `3px solid ${topic.colour}`,
+                        borderBottom: `1px solid ${ED.rule}`,
                         padding: `${spacing[6]} ${spacing[8]}`,
                     }}
                 >
@@ -177,38 +189,31 @@ export default function TopicPageClient({ topic, resources }) {
                             ← All Topics
                         </Link>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[2] }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[3] }}>
                             <span
                                 style={{
-                                    background: topic.colour + '18',
-                                    color: topic.colour,
-                                    padding: `${spacing[1]} ${spacing[3]}`,
-                                    borderRadius: borderRadius.full,
-                                    fontSize: typography.size.sm,
-                                    fontWeight: typography.weight.semibold,
-                                    backdropFilter: 'blur(8px)',
-                                    WebkitBackdropFilter: 'blur(8px)',
-                                    border: '1px solid ' + topic.colour + '30',
-                                    boxShadow: glass.iconShadow,
+                                    fontFamily: ED.mono,
+                                    fontSize: '11px',
+                                    fontWeight: 500,
+                                    letterSpacing: '0.18em',
+                                    textTransform: 'uppercase',
+                                    color: ED.inkFade,
                                 }}
                             >
-                                {topic.specRef}
+                                § {topic.specRef}
                             </span>
                         </div>
 
                         <h1
                             style={{
-                                fontSize: typography.size['3xl'],
-                                fontWeight: typography.weight.bold,
-                                color: t.text.primary,
+                                fontFamily: ED.serif,
+                                fontStyle: 'italic',
+                                fontWeight: 400,
+                                fontSize: 'clamp(36px, 6vw, 56px)',
+                                lineHeight: 1.05,
+                                letterSpacing: '-0.02em',
+                                color: ED.ink,
                                 marginBottom: spacing[2],
-                                lineHeight: typography.lineHeight.tight,
-                                backgroundImage: `linear-gradient(90deg, ${t.text.primary} 0%, ${t.text.primary} 40%, ${t.text.tertiary} 50%, ${t.text.primary} 60%, ${t.text.primary} 100%)`,
-                                backgroundSize: '200% 100%',
-                                WebkitBackgroundClip: 'text',
-                                backgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                animation: 'shimmerSweep 3s ease-in-out infinite',
                             }}
                         >
                             {topic.name}
@@ -233,7 +238,7 @@ export default function TopicPageClient({ topic, resources }) {
             <main style={{ maxWidth: '1200px', margin: '0 auto', padding: spacing[8] }}>
                 {/* Overview Section — topic spec orientation */}
                 {topic.overview && (
-                    <OverviewSection overview={topic.overview} topicColour={topic.colour} theme={t} />
+                    <OverviewSection overview={topic.overview} theme={t} />
                 )}
 
                 {/* Learn Section */}
@@ -259,7 +264,7 @@ export default function TopicPageClient({ topic, resources }) {
                                     backdropFilter: 'blur(' + glass.blur + ')',
                                     WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                                     borderRadius: borderRadius.xl,
-                                    border: `1px solid ${topic.colour}40`,
+                                    border: `1px solid ${ED.accentFaint}`,
                                     padding: `${spacing[6]} ${spacing[6]}`,
                                     display: 'flex',
                                     alignItems: 'center',
@@ -269,12 +274,12 @@ export default function TopicPageClient({ topic, resources }) {
                                     boxShadow: glass.shadow,
                                 }}
                                 onMouseEnter={e => {
-                                    e.currentTarget.style.borderColor = topic.colour;
+                                    e.currentTarget.style.borderColor = ED.accent;
                                     e.currentTarget.style.boxShadow = glass.shadowHover;
                                     e.currentTarget.style.transform = 'translateY(-1px)';
                                 }}
                                 onMouseLeave={e => {
-                                    e.currentTarget.style.borderColor = topic.colour + '40';
+                                    e.currentTarget.style.borderColor = ED.accentFaint;
                                     e.currentTarget.style.boxShadow = glass.shadow;
                                     e.currentTarget.style.transform = 'none';
                                 }}
@@ -296,7 +301,7 @@ export default function TopicPageClient({ topic, resources }) {
                                     </p>
                                 </div>
                                 <span style={{
-                                    color: topic.colour,
+                                    color: ED.accent,
                                     fontSize: typography.size.xl,
                                     fontWeight: typography.weight.semibold,
                                 }}>
@@ -334,7 +339,6 @@ export default function TopicPageClient({ topic, resources }) {
                                 <ResourceCard
                                     key={resource.id}
                                     resource={resource}
-                                    topicColour={topic.colour}
                                     theme={t}
                                     animationDelay={i * 80}
                                 />
@@ -361,7 +365,7 @@ export default function TopicPageClient({ topic, resources }) {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[4] }}>
                             {/* Progress card — shown when student has history */}
                             {progress && (
-                                <ProgressCard progress={progress} topicColour={topic.colour} t={t} />
+                                <ProgressCard progress={progress} t={t} />
                             )}
 
                             {/* Start Revision link */}
@@ -375,7 +379,7 @@ export default function TopicPageClient({ topic, resources }) {
                                         backdropFilter: 'blur(' + glass.blur + ')',
                                         WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                                         borderRadius: borderRadius.xl,
-                                        border: `1px solid ${topic.colour}40`,
+                                        border: `1px solid ${ED.accentFaint}`,
                                         padding: `${spacing[6]} ${spacing[6]}`,
                                         display: 'flex',
                                         alignItems: 'center',
@@ -385,12 +389,12 @@ export default function TopicPageClient({ topic, resources }) {
                                         boxShadow: glass.shadow,
                                     }}
                                     onMouseEnter={e => {
-                                        e.currentTarget.style.borderColor = topic.colour;
+                                        e.currentTarget.style.borderColor = ED.accent;
                                         e.currentTarget.style.boxShadow = glass.shadowHover;
                                         e.currentTarget.style.transform = 'translateY(-1px)';
                                     }}
                                     onMouseLeave={e => {
-                                        e.currentTarget.style.borderColor = topic.colour + '40';
+                                        e.currentTarget.style.borderColor = ED.accentFaint;
                                         e.currentTarget.style.boxShadow = glass.shadow;
                                         e.currentTarget.style.transform = 'none';
                                     }}
@@ -412,7 +416,7 @@ export default function TopicPageClient({ topic, resources }) {
                                         </p>
                                     </div>
                                     <span style={{
-                                        color: topic.colour,
+                                        color: ED.accent,
                                         fontSize: typography.size.xl,
                                         fontWeight: typography.weight.semibold,
                                     }}>
@@ -490,16 +494,8 @@ export default function TopicPageClient({ topic, resources }) {
     );
 }
 
-function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
+function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
     const [isHovered, setIsHovered] = useState(false);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-    const cardRef = useRef(null);
-
-    const handleMouseMove = useCallback((e) => {
-        const rect = cardRef.current?.getBoundingClientRect();
-        if (!rect) return;
-        setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    }, []);
 
     return (
         <Link
@@ -510,10 +506,8 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
             }}
         >
             <article
-                ref={cardRef}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                onMouseMove={handleMouseMove}
                 style={{
                     position: 'relative',
                     overflow: 'hidden',
@@ -521,7 +515,7 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
                     backdropFilter: 'blur(' + glass.blur + ')',
                     WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                     borderRadius: borderRadius.xl,
-                    border: `1px solid ${isHovered ? topicColour + '60' : glass.border}`,
+                    border: `1px solid ${isHovered ? ED.accentMid : glass.border}`,
                     boxShadow: isHovered ? glass.shadowHover : glass.shadow,
                     padding: spacing[6],
                     cursor: 'pointer',
@@ -532,25 +526,6 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
                     flexDirection: 'column',
                 }}
             >
-                {/* Glow layer */}
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: mousePos.y - 150,
-                        left: mousePos.x - 150,
-                        width: 300,
-                        height: 300,
-                        borderRadius: '50%',
-                        background: `radial-gradient(circle, ${topicColour}40 0%, ${topicColour}15 40%, transparent 70%)`,
-                        filter: 'blur(28px) saturate(3) brightness(1.1)',
-                        pointerEvents: 'none',
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'opacity 300ms ease',
-                        zIndex: 0,
-                    }}
-                    aria-hidden="true"
-                />
-
                 <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
                     {/* Header: icon + type badge */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing[3] }}>
@@ -610,7 +585,7 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
                         <span style={{ color: t.text.tertiary, fontSize: typography.size.xs }}>
                             ⏱️ {resource.estimatedTime}
                         </span>
-                        <span style={{ color: topicColour, fontSize: typography.size.xs, fontWeight: typography.weight.medium }}>
+                        <span style={{ color: ED.accent, fontSize: typography.size.xs, fontWeight: typography.weight.medium }}>
                             Open →
                         </span>
                     </div>
@@ -620,7 +595,7 @@ function ResourceCard({ resource, topicColour, theme: t, animationDelay = 0 }) {
     );
 }
 
-function ProgressCard({ progress, topicColour, t }) {
+function ProgressCard({ progress, t }) {
     const scoreColor = progress.bestScore >= 70 ? t.accent.success
         : progress.bestScore >= 40 ? t.accent.warning
         : t.accent.error;
@@ -669,7 +644,7 @@ function ProgressCard({ progress, topicColour, t }) {
                     <p style={{
                         fontSize: typography.size['2xl'],
                         fontWeight: typography.weight.bold,
-                        color: topicColour,
+                        color: ED.accent,
                         lineHeight: 1,
                         marginBottom: spacing[1],
                     }}>
@@ -725,7 +700,7 @@ function ProgressCard({ progress, topicColour, t }) {
     );
 }
 
-function OverviewSection({ overview, topicColour, theme: t }) {
+function OverviewSection({ overview, theme: t }) {
     return (
         <section style={{ marginBottom: spacing[10] }}>
             <div
@@ -735,7 +710,7 @@ function OverviewSection({ overview, topicColour, theme: t }) {
                     WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                     borderRadius: borderRadius.xl,
                     border: `1px solid ${glass.border}`,
-                    borderLeft: `3px solid ${topicColour}`,
+                    borderLeft: `1px solid ${ED.accentFaint}`,
                     padding: `${spacing[6]} ${spacing[7]}`,
                     boxShadow: glass.shadow,
                 }}
@@ -773,7 +748,7 @@ function OverviewSection({ overview, topicColour, theme: t }) {
                                 lineHeight: typography.lineHeight.relaxed,
                             }}
                         >
-                            <span style={{ color: topicColour, fontWeight: typography.weight.bold, flexShrink: 0 }}>→</span>
+                            <span style={{ color: ED.accent, fontWeight: typography.weight.bold, flexShrink: 0 }}>→</span>
                             <span>{item}</span>
                         </li>
                     ))}
@@ -825,9 +800,9 @@ function OverviewSection({ overview, topicColour, theme: t }) {
                                 <span
                                     key={word}
                                     style={{
-                                        background: topicColour + '12',
-                                        color: topicColour,
-                                        border: `1px solid ${topicColour}30`,
+                                        background: ED.accentTint,
+                                        color: ED.accent,
+                                        border: `1px solid ${ED.accentFaint}`,
                                         padding: `${spacing[1]} ${spacing[3]}`,
                                         borderRadius: borderRadius.full,
                                         fontSize: typography.size.sm,
