@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, editorial as ED } from '@/lib/theme';
 import { supabase } from '@/lib/supabase';
 
-export default function AuthGate({ topicColour, onAuthenticated }) {
+export default function AuthGate({ onAuthenticated }) {
     const t = theme.light;
     const [token, setToken] = useState('');
     const [loading, setLoading] = useState(false);
@@ -65,7 +65,7 @@ export default function AuthGate({ topicColour, onAuthenticated }) {
                     width: '48px',
                     height: '48px',
                     borderRadius: borderRadius.full,
-                    background: topicColour + '15',
+                    background: ED.accentTint,
                     marginBottom: spacing[3],
                 }}>
                     <span style={{ fontSize: '1.5rem' }}>🔑</span>
@@ -108,7 +108,7 @@ export default function AuthGate({ topicColour, onAuthenticated }) {
                         transition: `border-color ${transitions.fast}`,
                     }}
                     onFocus={e => {
-                        if (!error) e.currentTarget.style.borderColor = topicColour;
+                        if (!error) e.currentTarget.style.borderColor = ED.accent;
                     }}
                     onBlur={e => {
                         if (!error) e.currentTarget.style.borderColor = t.border.input;
@@ -132,7 +132,7 @@ export default function AuthGate({ topicColour, onAuthenticated }) {
                         marginTop: spacing[4],
                         width: '100%',
                         padding: `${spacing[3]} ${spacing[5]}`,
-                        background: token.trim() && !loading ? topicColour : t.bg.tertiary,
+                        background: token.trim() && !loading ? ED.accent : t.bg.tertiary,
                         color: token.trim() && !loading ? t.text.inverse : t.text.tertiary,
                         border: 'none',
                         borderRadius: borderRadius.lg,

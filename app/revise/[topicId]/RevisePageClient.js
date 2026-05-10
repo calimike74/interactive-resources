@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import { getQuestions } from '@/lib/questions';
 import { getNextAttemptNumber, saveQuizResponse, getQuizHistory, getQuestionPerformance } from '@/lib/quiz-persistence';
 import { prioritiseQuestions } from '@/lib/spaced-repetition';
@@ -92,7 +92,6 @@ export default function RevisePageClient({ topic }) {
                 <QuizHeader topic={topic} t={t} />
                 <main style={{ maxWidth: '720px', margin: '0 auto', padding: spacing[8] }}>
                     <AuthGate
-                        topicColour={topic.colour}
                         onAuthenticated={setStudent}
                     />
                 </main>
@@ -259,7 +258,7 @@ export default function RevisePageClient({ topic }) {
                         <div style={{
                             height: '100%',
                             width: `${(progress / total) * 100}%`,
-                            background: topic.colour,
+                            background: ED.accent,
                             borderRadius: borderRadius.full,
                             transition: `width ${transitions.normal} ${transitions.easing}`,
                         }} />
@@ -306,7 +305,6 @@ export default function RevisePageClient({ topic }) {
                             selectedIndex={currentAnswer}
                             showFeedback={showFeedback}
                             onSelect={submitAnswer}
-                            topicColour={topic.colour}
                             t={t}
                         />
                     )}
@@ -376,15 +374,15 @@ export default function RevisePageClient({ topic }) {
                                 <div style={{
                                     marginTop: spacing[3],
                                     padding: `${spacing[2]} ${spacing[3]}`,
-                                    backgroundColor: `${topic.colour}08`,
-                                    border: `1px solid ${topic.colour}20`,
+                                    backgroundColor: ED.accentTint,
+                                    border: `1px solid ${ED.accentFaint}`,
                                     borderRadius: borderRadius.lg,
                                 }}>
                                     <p style={{
                                         margin: 0,
                                         fontSize: typography.size.xs,
                                         fontWeight: typography.weight.semibold,
-                                        color: topic.colour,
+                                        color: ED.accent,
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.03em',
                                         marginBottom: spacing[1],
@@ -412,7 +410,7 @@ export default function RevisePageClient({ topic }) {
                                 marginTop: spacing[5],
                                 width: '100%',
                                 padding: `${spacing[3]} ${spacing[6]}`,
-                                background: topic.colour,
+                                background: ED.accent,
                                 color: t.text.inverse,
                                 border: 'none',
                                 borderRadius: borderRadius.lg,
@@ -441,7 +439,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
         <Breadcrumbs />
         <header style={{
             background: t.bg.primary,
-            borderBottom: `3px solid ${topic.colour}`,
+            borderBottom: `1px solid ${ED.rule}`,
             padding: `${spacing[4]} ${spacing[8]}`,
         }}>
             <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -498,14 +496,14 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                         </button>
                     )}
                     <span style={{
-                        background: topic.colour + '18',
-                        color: topic.colour,
-                        padding: `${spacing[1]} ${spacing[3]}`,
-                        borderRadius: borderRadius.full,
-                        fontSize: typography.size.sm,
-                        fontWeight: typography.weight.semibold,
+                        fontFamily: ED.mono,
+                        fontSize: '11px',
+                        fontWeight: 500,
+                        letterSpacing: '0.18em',
+                        textTransform: 'uppercase',
+                        color: ED.inkFade,
                     }}>
-                        {topic.specRef}
+                        § {topic.specRef}
                     </span>
                 </div>
             </div>
@@ -514,7 +512,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
     );
 }
 
-function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSelect, topicColour, t }) {
+function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSelect, t }) {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
             {options.map((option, i) => {
@@ -531,8 +529,8 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                         borderColor = t.accent.error;
                     }
                 } else if (i === selectedIndex) {
-                    bg = topicColour + '15';
-                    borderColor = topicColour;
+                    bg = ED.accentTint;
+                    borderColor = ED.accent;
                 }
 
                 return (
@@ -752,7 +750,7 @@ function ShortAnswer({ showFeedback, onSubmit, sampleAnswer, keyPoints, t }) {
     );
 }
 
-function TrajectoryChart({ history, topicColour, t }) {
+function TrajectoryChart({ history, t }) {
     const width = 400;
     const height = 160;
     const padLeft = 36;
@@ -797,16 +795,16 @@ function TrajectoryChart({ history, topicColour, t }) {
                 })}
 
                 {/* Area fill */}
-                <polygon points={area} fill={topicColour + '15'} />
+                <polygon points={area} fill={ED.accentTint} />
 
                 {/* Line */}
-                <polyline points={polyline} fill="none" stroke={topicColour} strokeWidth="2.5"
+                <polyline points={polyline} fill="none" stroke={ED.accent} strokeWidth="2.5"
                     strokeLinecap="round" strokeLinejoin="round" />
 
                 {/* Data points */}
                 {points.map((p, i) => (
                     <g key={i}>
-                        <circle cx={p.x} cy={p.y} r="5" fill={t.bg.primary} stroke={topicColour} strokeWidth="2.5" />
+                        <circle cx={p.x} cy={p.y} r="5" fill={t.bg.primary} stroke={ED.accent} strokeWidth="2.5" />
                         <text x={p.x} y={padTop + chartH + 16} textAnchor="middle"
                             fill={t.text.tertiary} fontSize="10" fontFamily={typography.fontFamily}>
                             #{p.attempt}
@@ -820,7 +818,7 @@ function TrajectoryChart({ history, topicColour, t }) {
                         x={points[points.length - 1].x}
                         y={points[points.length - 1].y - 10}
                         textAnchor="middle"
-                        fill={topicColour}
+                        fill={ED.accent}
                         fontSize="12"
                         fontWeight="600"
                         fontFamily={typography.fontFamily}
@@ -1010,7 +1008,7 @@ function ResultsSummary({ responses, questions, topic, token, t }) {
                     }}>
                         Your Progress
                     </h3>
-                    <TrajectoryChart history={history} topicColour={topic.colour} t={t} />
+                    <TrajectoryChart history={history} t={t} />
                 </div>
             )}
 
@@ -1103,7 +1101,7 @@ function ResultsSummary({ responses, questions, topic, token, t }) {
                     style={{
                         flex: 1,
                         padding: `${spacing[3]} ${spacing[5]}`,
-                        background: topic.colour,
+                        background: ED.accent,
                         color: t.text.inverse,
                         border: 'none',
                         borderRadius: borderRadius.lg,

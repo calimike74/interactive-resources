@@ -135,12 +135,6 @@ a[href] article:active {
   50% { opacity: 0; }
 }
 
-/* Shimmer sweep for headings */
-@keyframes shimmerSweep {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
 /* Context menu entrance */
 @keyframes contextMenuIn {
   from {

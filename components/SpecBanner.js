@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 
 export default function SpecBanner({ topic }) {
     const t = theme.light;
@@ -30,7 +30,7 @@ export default function SpecBanner({ topic }) {
         } catch {}
     };
 
-    const tint = topic.colour || t.accent.info;
+    const tint = ED.accent;
 
     return (
         <section

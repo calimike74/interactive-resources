@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function LearnPickerClient({ topic, lessons, resources = [] }) {
@@ -19,7 +19,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
             <header style={{
                 padding: '3rem 1.5rem 2.5rem',
                 background: 'white',
-                borderBottom: '1px solid #E5E7EB',
+                borderBottom: `1px solid ${ED.rule}`,
             }}>
                 <div style={{ maxWidth: '960px', margin: '0 auto' }}>
                     <Link href={`/topic/${topic.id}`} style={{
@@ -36,25 +36,27 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                         gap: '0.75rem',
                         marginTop: '0.75rem',
                     }}>
-                        <div style={{
-                            display: 'inline-block',
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '9999px',
-                            background: topic.colour + '15',
-                            color: topic.colour,
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
+                        <span style={{
+                            fontFamily: ED.mono,
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            letterSpacing: '0.18em',
+                            textTransform: 'uppercase',
+                            color: ED.inkFade,
                         }}>
-                            Topic {topic.specRef}
-                        </div>
+                            § {topic.specRef}
+                        </span>
                     </div>
 
                     <h1 style={{
-                        fontSize: '2rem',
-                        fontWeight: 700,
-                        color: t.text.primary,
+                        fontFamily: ED.serif,
+                        fontStyle: 'italic',
+                        fontWeight: 400,
+                        fontSize: 'clamp(28px, 5vw, 44px)',
+                        lineHeight: 1.05,
+                        letterSpacing: '-0.02em',
+                        color: ED.ink,
                         marginTop: '0.5rem',
-                        lineHeight: 1.2,
                     }}>
                         Learn: {topic.name}
                     </h1>
@@ -94,7 +96,6 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                             key={lesson.id}
                             lesson={lesson}
                             topicId={topic.id}
-                            topicColour={topic.colour}
                             t={t}
                         />
                     ))}
@@ -102,7 +103,6 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                         <ResourceCard
                             key={resource.id}
                             resource={resource}
-                            topicColour={topic.colour}
                             t={t}
                         />
                     ))}
@@ -112,7 +112,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
     );
 }
 
-function CardShell({ href, topicColour, children }) {
+function CardShell({ href, children }) {
     return (
         <Link href={href} style={{ textDecoration: 'none' }}>
             <div
@@ -121,7 +121,7 @@ function CardShell({ href, topicColour, children }) {
                     backdropFilter: 'blur(' + glass.blur + ')',
                     WebkitBackdropFilter: 'blur(' + glass.blur + ')',
                     borderRadius: borderRadius.xl,
-                    border: `1px solid ${topicColour}30`,
+                    border: `1px solid ${ED.accentFaint}`,
                     padding: spacing[6],
                     cursor: 'pointer',
                     transition: `all ${transitions.normal} ${transitions.easing}`,
@@ -131,12 +131,12 @@ function CardShell({ href, topicColour, children }) {
                     flexDirection: 'column',
                 }}
                 onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = topicColour;
+                    e.currentTarget.style.borderColor = ED.accent;
                     e.currentTarget.style.boxShadow = glass.shadowHover;
                     e.currentTarget.style.transform = 'translateY(-2px)';
                 }}
                 onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = topicColour + '30';
+                    e.currentTarget.style.borderColor = ED.accentFaint;
                     e.currentTarget.style.boxShadow = glass.shadow;
                     e.currentTarget.style.transform = 'none';
                 }}
@@ -147,19 +147,16 @@ function CardShell({ href, topicColour, children }) {
     );
 }
 
-function LessonCard({ lesson, topicId, topicColour, t }) {
+function LessonCard({ lesson, topicId, t }) {
     return (
-        <CardShell href={`/learn/${topicId}/${lesson.id}`} topicColour={topicColour}>
+        <CardShell href={`/learn/${topicId}/${lesson.id}`}>
             <div style={{
-                display: 'inline-block',
-                padding: '0.15rem 0.5rem',
-                borderRadius: '9999px',
-                background: topicColour + '12',
-                color: topicColour,
-                fontSize: '0.7rem',
-                fontWeight: 600,
-                letterSpacing: '0.025em',
+                fontFamily: ED.mono,
+                fontSize: '11px',
+                fontWeight: 500,
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
+                color: ED.inkFade,
                 marginBottom: spacing[3],
             }}>
                 {lesson.subtitle}
@@ -193,7 +190,7 @@ function LessonCard({ lesson, topicId, topicColour, t }) {
                 <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
                     {lesson.rows.length} sections
                 </span>
-                <span style={{ color: topicColour, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
+                <span style={{ color: ED.accent, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
                     &rarr;
                 </span>
             </div>
@@ -201,19 +198,16 @@ function LessonCard({ lesson, topicId, topicColour, t }) {
     );
 }
 
-function ResourceCard({ resource, topicColour, t }) {
+function ResourceCard({ resource, t }) {
     return (
-        <CardShell href={resource.href} topicColour={topicColour}>
+        <CardShell href={resource.href}>
             <div style={{
-                display: 'inline-block',
-                padding: '0.15rem 0.5rem',
-                borderRadius: '9999px',
-                background: topicColour + '12',
-                color: topicColour,
-                fontSize: '0.7rem',
-                fontWeight: 600,
-                letterSpacing: '0.025em',
+                fontFamily: ED.mono,
+                fontSize: '11px',
+                fontWeight: 500,
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
+                color: ED.inkFade,
                 marginBottom: spacing[3],
             }}>
                 {resource.subtitle}
@@ -247,7 +241,7 @@ function ResourceCard({ resource, topicColour, t }) {
                 <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
                     {resource.estimatedTime}
                 </span>
-                <span style={{ color: topicColour, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
+                <span style={{ color: ED.accent, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
                     &rarr;
                 </span>
             </div>

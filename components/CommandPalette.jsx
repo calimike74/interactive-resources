@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAllTopicDefs, getTopicForResource } from '@/lib/topics';
 import { getAllResources } from '@/lib/resources';
-import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 
 const t = theme.light;
 const MAX_RESULTS = 10;
@@ -42,7 +42,7 @@ export default function CommandPalette() {
                 title: resource.title,
                 description: resource.description,
                 topicName: parentTopic?.name || resource.topic || '',
-                topicColour: parentTopic?.colour || '#6B7280',
+                topicColour: ED.accent,
                 specRef: parentTopic?.specRef || '',
                 href: `/${resource.id}`,
                 keywords: resource.keywords || [],
@@ -56,7 +56,7 @@ export default function CommandPalette() {
                 title: topic.name,
                 description: topic.description,
                 topicName: topic.name,
-                topicColour: topic.colour,
+                topicColour: ED.accent,
                 specRef: topic.specRef,
                 href: `/topic/${topic.id}`,
                 keywords: [],

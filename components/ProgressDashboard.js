@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, editorial as ED } from '@/lib/theme';
 import { getAllTopicProgress, getRecentActivity } from '@/lib/quiz-persistence';
 import { getAllTopicDefs } from '@/lib/topics';
 import AuthGate from '@/app/revise/[topicId]/AuthGate';
@@ -48,7 +48,6 @@ export default function ProgressDashboard() {
         return (
             <div style={{ maxWidth: '480px', margin: '0 auto' }}>
                 <AuthGate
-                    topicColour={t.accent.primary}
                     onAuthenticated={setStudent}
                 />
             </div>
@@ -286,7 +285,7 @@ export default function ProgressDashboard() {
                                         width: '8px',
                                         height: '8px',
                                         borderRadius: borderRadius.full,
-                                        background: topic.colour,
+                                        background: ED.accent,
                                         flexShrink: 0,
                                     }} />
                                     <span style={{
@@ -405,7 +404,7 @@ function TopicProgressCard({ topic, progress, t }) {
             background: t.bg.primary,
             borderRadius: borderRadius.lg,
             border: `1px solid ${t.border.subtle}`,
-            borderLeft: `4px solid ${topic.colour}`,
+            borderLeft: `2px solid ${ED.accentFaint}`,
             padding: `${spacing[4]} ${spacing[5]}`,
             display: 'flex',
             alignItems: 'center',
