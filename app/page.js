@@ -12,9 +12,20 @@ import ProgressDashboard from '@/components/ProgressDashboard';
 import BlurReveal from '@/components/BlurReveal';
 import SlideUpWords from '@/components/SlideUpWords';
 import CommandPalette from '@/components/CommandPalette';
-import GradientText from '@/components/GradientText';
 import SplashCursor from '@/components/SplashCursor';
-import ShapeBlur from '@/components/ShapeBlur';
+
+// Editorial palette — paper & ink, used directly on the hub page.
+const ED = {
+    paper: '#f7f2e8',
+    ink: '#181410',
+    inkSoft: '#4d463c',
+    inkFade: '#8a8175',
+    rule: '#d9d1be',
+    visited: '#2d5d4f',
+    serif: 'var(--font-fraunces), Georgia, serif',
+    sans: 'var(--font-manrope), -apple-system, sans-serif',
+    mono: 'var(--font-jbmono), ui-monospace, monospace',
+};
 
 // Mode descriptions shown under the hero
 const MODE_INFO = {
@@ -62,8 +73,10 @@ export default function ResourcesHub() {
         <div
             style={{
                 minHeight: '100vh',
-                background: t.bg.secondary,
-                fontFamily: typography.fontFamily,
+                background: ED.paper,
+                backgroundImage: 'radial-gradient(circle at 18% 20%, rgba(184,138,44,.05), transparent 40%), radial-gradient(circle at 82% 90%, rgba(45,93,79,.04), transparent 50%)',
+                fontFamily: ED.sans,
+                color: ED.ink,
                 // Pad bottom for fixed tab bar + safe area
                 paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
             }}
@@ -95,61 +108,41 @@ export default function ResourcesHub() {
                 }}
                 role="main"
             >
-                {/* Mode heading */}
+                {/* Mode heading — editorial */}
                 <div style={{ marginBottom: spacing[6], position: 'relative' }}>
-                    {/* ShapeBlur — decorative backdrop behind heading */}
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: '-40px',
-                            left: '-60px',
-                            right: '-60px',
-                            bottom: '-20px',
-                            opacity: 0.12,
-                            pointerEvents: 'none',
-                            zIndex: 0,
-                        }}
-                    >
-                        <ShapeBlur
-                            variation={1}
-                            shapeSize={1.0}
-                            roundness={0.5}
-                            borderSize={0.05}
-                            circleSize={0.4}
-                            circleEdge={0.6}
-                        />
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing[1], position: 'relative', zIndex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: spacing[4], marginBottom: spacing[2] }}>
                         <h2
                             style={{
-                                fontSize: typography.size['2xl'],
-                                fontWeight: typography.weight.bold,
+                                fontFamily: ED.serif,
+                                fontStyle: 'italic',
+                                fontWeight: 400,
+                                fontSize: '40px',
+                                lineHeight: 1.05,
+                                letterSpacing: '-0.02em',
+                                color: ED.ink,
                                 margin: 0,
                             }}
                         >
                             <BlurReveal key={`heading-${activeTab}`} duration={600} blur={10}>
-                                <GradientText
-                                    colors={['#1A1A2E', '#2563EB', '#9B7530', '#1A1A2E']}
-                                    animationSpeed={6}
-                                    style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
-                                >
-                                    {mode.heading}
-                                </GradientText>
+                                {mode.heading}
                             </BlurReveal>
                         </h2>
                         <CommandPalette />
                     </div>
                     <p
                         style={{
-                            color: t.text.tertiary,
-                            fontSize: typography.size.sm,
-                            position: 'relative',
-                            zIndex: 1,
+                            fontFamily: ED.serif,
+                            fontStyle: 'italic',
+                            color: ED.inkSoft,
+                            fontSize: '17px',
+                            lineHeight: 1.5,
+                            margin: 0,
+                            maxWidth: '560px',
                         }}
                     >
                         <SlideUpWords key={`subtitle-${activeTab}`} text={mode.subtitle} delay={100} stagger={50} />
                     </p>
-                    {activeTab === 'revise' && <div style={{ position: 'relative', zIndex: 1 }}><TypewriterTeaser t={t} /></div>}
+                    {activeTab === 'revise' && <div><TypewriterTeaser t={t} /></div>}
                 </div>
 
                 {/* Progress tab — dashboard */}
@@ -199,15 +192,21 @@ export default function ResourcesHub() {
                                 {activeTopics.length > 0 && (
                                     <h3
                                         style={{
-                                            fontSize: typography.size.lg,
-                                            fontWeight: typography.weight.medium,
-                                            color: t.text.tertiary,
+                                            fontFamily: ED.serif,
+                                            fontStyle: 'italic',
+                                            fontWeight: 400,
+                                            fontSize: '22px',
+                                            color: ED.inkSoft,
                                             marginBottom: spacing[4],
                                             paddingBottom: spacing[2],
-                                            borderBottom: `1px solid ${t.border.subtle}`,
+                                            borderBottom: `1px solid ${ED.rule}`,
+                                            display: 'flex',
+                                            alignItems: 'baseline',
+                                            gap: spacing[3],
                                         }}
                                     >
-                                        Coming Soon
+                                        <span style={{ fontFamily: ED.mono, fontStyle: 'normal', fontSize: '11px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade }}>§ </span>
+                                        In preparation
                                     </h3>
                                 )}
                                 <div

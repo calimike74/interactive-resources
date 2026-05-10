@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { Instrument_Serif } from "next/font/google";
+import { Instrument_Serif, Fraunces, Manrope, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ContextMenuProvider } from "@/components/ContextMenu";
 import { PHProvider } from "./posthog-provider";
@@ -21,6 +21,25 @@ const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: ["normal", "italic"],
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  variable: "--font-jbmono",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata = {
@@ -57,7 +76,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${fraunces.variable} ${manrope.variable} ${jetBrainsMono.variable} antialiased`}
       >
         <PHProvider>
           <ContextMenuProvider>

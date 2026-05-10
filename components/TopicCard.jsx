@@ -1,13 +1,31 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { theme, glass, typography, borderRadius, spacing, transitions } from '@/lib/theme';
+import { typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import { getResource } from '@/lib/resources';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
 
-// Spell-inspired: badge pops in with spring overshoot
-function AnimatedBadge({ children, delay = 0, color, style = {} }) {
+// Editorial palette — paper & ink, no per-topic colour noise.
+const ED = {
+    card: '#ffffff',
+    paperWarm: '#faf6ec',
+    ink: '#181410',
+    inkSoft: '#4d463c',
+    inkFade: '#8a8175',
+    rule: '#d9d1be',
+    ruleSoft: '#e8e1cc',
+    visited: '#2d5d4f',
+    gold: '#b88a2c',
+    goldBg: '#f6e9c8',
+    chase: '#a8541a',
+    serif: 'var(--font-fraunces), Georgia, serif',
+    sans: 'var(--font-manrope), -apple-system, sans-serif',
+    mono: 'var(--font-jbmono), ui-monospace, monospace',
+};
+
+// Spell-inspired: badge pops in with a small spring overshoot
+function AnimatedBadge({ children, delay = 0, style = {} }) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
@@ -32,320 +50,282 @@ function AnimatedBadge({ children, delay = 0, color, style = {} }) {
     );
 }
 
-// Spell-inspired: breathing glow behind coming-soon cards
-function PulseGlow({ children, color, intensity = 0.18 }) {
-    const [pulse, setPulse] = useState(false);
-
-    useEffect(() => {
-        const interval = setInterval(() => setPulse(p => !p), 2000);
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div style={{ position: 'relative' }}>
-            <div
-                style={{
-                    position: 'absolute',
-                    inset: '-2px -4px',
-                    borderRadius: borderRadius.xl,
-                    background: color,
-                    opacity: pulse ? intensity : intensity * 0.2,
-                    filter: 'blur(16px)',
-                    transition: 'opacity 2s ease-in-out',
-                    pointerEvents: 'none',
-                    zIndex: 0,
-                }}
-                aria-hidden="true"
-            />
-            <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>
-                {children}
-            </div>
-        </div>
-    );
-}
-
 export default function TopicCard({ topic, animationDelay = 0, comingSoon = false }) {
     const [isHovered, setIsHovered] = useState(false);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-    const cardRef = useRef(null);
-    const t = theme.light;
 
     const hasResources = !comingSoon && topic.resourceIds.length > 0;
     const resourceCount = topic.resourceIds.length;
 
-    const handleMouseMove = useCallback((e) => {
-        const rect = cardRef.current?.getBoundingClientRect();
-        if (!rect) return;
-        setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    }, []);
-
     const card = (
         <article
-            ref={cardRef}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onMouseMove={handleMouseMove}
             style={{
                 position: 'relative',
-                overflow: 'visible',
-                background: glass.bg,
-                backdropFilter: 'blur(' + glass.blur + ')',
-                WebkitBackdropFilter: 'blur(' + glass.blur + ')',
-                borderRadius: borderRadius.xl,
-                border: `1px solid ${hasResources && isHovered ? topic.colour + '40' : t.border.subtle}`,
-                boxShadow: hasResources && isHovered
-                    ? `6px 6px 0 ${topic.colour}18, 0 8px 32px rgba(0, 0, 0, 0.08)`
-                    : glass.shadow,
+                background: ED.card,
+                borderRadius: borderRadius.lg,
+                border: `1px solid ${isHovered && hasResources ? ED.inkFade : ED.rule}`,
+                boxShadow: isHovered && hasResources
+                    ? '0 1px 0 rgba(24,20,16,.04), 0 8px 24px -12px rgba(24,20,16,.18), 0 24px 48px -28px rgba(24,20,16,.18)'
+                    : '0 1px 2px rgba(24,20,16,.04), 0 8px 16px -8px rgba(24,20,16,.08)',
                 padding: spacing[6],
                 cursor: hasResources ? 'pointer' : 'default',
-                transition: `all ${transitions.springDuration} ${transitions.spring}`,
-                transform: hasResources && isHovered ? 'translate(-3px, -4px)' : 'none',
-                opacity: hasResources ? 1 : 0.6,
+                transition: `transform 220ms ${transitions.easing}, box-shadow 220ms, border-color 220ms`,
+                transform: isHovered && hasResources ? 'translateY(-2px)' : 'none',
+                opacity: hasResources ? 1 : 0.65,
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 animation: `cardReveal 400ms ease-out ${animationDelay}ms both`,
+                fontFamily: ED.sans,
             }}
         >
-            {/* Glow layer — clipped to card bounds */}
-            {hasResources && (
+            {/* Header: unit code + spec ref */}
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline',
+                    paddingBottom: spacing[3],
+                    marginBottom: spacing[3],
+                    borderBottom: `1px solid ${ED.ruleSoft}`,
+                }}
+            >
+                <span
+                    style={{
+                        fontFamily: ED.mono,
+                        fontSize: '10px',
+                        fontWeight: 500,
+                        letterSpacing: '0.18em',
+                        textTransform: 'uppercase',
+                        color: ED.inkFade,
+                    }}
+                >
+                    Unit
+                    <span style={{ color: ED.ink, marginLeft: '4px' }}>{topic.specRef}</span>
+                </span>
+                <ExaminerHintBadge topicCode={topic.specRef} topicColour={ED.ink} position="bottom" />
+            </div>
+
+            {/* Topic name — italic Fraunces */}
+            <h3
+                style={{
+                    fontFamily: ED.serif,
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                    fontSize: '24px',
+                    lineHeight: 1.12,
+                    letterSpacing: '-0.012em',
+                    color: hasResources ? ED.ink : ED.inkSoft,
+                    margin: `${spacing[1]} 0 ${spacing[3]}`,
+                }}
+            >
+                {topic.name}
+            </h3>
+
+            {/* Description */}
+            <p
+                style={{
+                    fontFamily: ED.sans,
+                    fontSize: '13px',
+                    lineHeight: 1.5,
+                    color: ED.inkSoft,
+                    margin: 0,
+                    marginBottom: spacing[4],
+                    flex: 1,
+                }}
+            >
+                {topic.description}
+            </p>
+
+            {/* Footer: tool count + CTA */}
+            <div
+                style={{
+                    paddingTop: spacing[3],
+                    borderTop: `1px dashed ${ED.ruleSoft}`,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline',
+                }}
+            >
+                {hasResources ? (
+                    <>
+                        <AnimatedBadge delay={animationDelay + 300}>
+                            <span
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'baseline',
+                                    gap: '5px',
+                                    fontFamily: ED.mono,
+                                    fontSize: '9.5px',
+                                    fontWeight: 500,
+                                    letterSpacing: '0.12em',
+                                    textTransform: 'uppercase',
+                                    color: ED.inkSoft,
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontFamily: ED.serif,
+                                        fontStyle: 'italic',
+                                        fontSize: '22px',
+                                        color: ED.ink,
+                                        fontWeight: 400,
+                                        lineHeight: 0.9,
+                                    }}
+                                >
+                                    {resourceCount}
+                                </span>
+                                {resourceCount === 1 ? 'tool' : 'tools'}
+                            </span>
+                        </AnimatedBadge>
+                        <AnimatedBadge delay={animationDelay + 420}>
+                            <span
+                                style={{
+                                    fontFamily: ED.mono,
+                                    fontSize: '9.5px',
+                                    fontWeight: 500,
+                                    letterSpacing: '0.14em',
+                                    textTransform: 'uppercase',
+                                    color: isHovered ? ED.visited : ED.inkFade,
+                                    transition: 'color 180ms',
+                                }}
+                            >
+                                Explore
+                                <span
+                                    style={{
+                                        display: 'inline-block',
+                                        marginLeft: '6px',
+                                        transform: isHovered ? 'translateX(3px)' : 'none',
+                                        transition: 'transform 180ms',
+                                    }}
+                                >
+                                    →
+                                </span>
+                            </span>
+                        </AnimatedBadge>
+                    </>
+                ) : (
+                    <span
+                        style={{
+                            fontFamily: ED.serif,
+                            fontStyle: 'italic',
+                            fontSize: '13px',
+                            color: ED.chase,
+                        }}
+                    >
+                        In preparation
+                    </span>
+                )}
+            </div>
+
+            {/* Hover popover — list of tools in this topic, editorial style */}
+            {hasResources && isHovered && (
                 <div
                     style={{
                         position: 'absolute',
-                        inset: 0,
-                        overflow: 'hidden',
-                        borderRadius: borderRadius.xl,
+                        bottom: '100%',
+                        left: 0,
+                        marginBottom: 10,
+                        width: 240,
+                        padding: '12px 14px',
+                        borderRadius: borderRadius.lg,
+                        border: `1px solid ${ED.rule}`,
+                        background: ED.card,
+                        boxShadow: '0 14px 32px -10px rgba(24,20,16,.22), 0 2px 6px -2px rgba(24,20,16,.08)',
+                        zIndex: 10,
                         pointerEvents: 'none',
-                        zIndex: 0,
+                        animation: 'hintFadeIn 200ms ease-out',
+                        maxHeight: 220,
+                        overflowY: 'auto',
+                        fontFamily: ED.sans,
                     }}
-                    aria-hidden="true"
                 >
+                    <style>{`
+                        @keyframes popoverItemReveal {
+                            from { opacity: 0; transform: translateX(-6px); }
+                            to   { opacity: 1; transform: translateX(0); }
+                        }
+                        .popover-resource-item {
+                            animation: popoverItemReveal 300ms ease-out both;
+                        }
+                        @media (prefers-reduced-motion: reduce) {
+                            .popover-resource-item { animation: none; }
+                        }
+                    `}</style>
+                    <p
+                        style={{
+                            fontFamily: ED.mono,
+                            fontSize: '9.5px',
+                            fontWeight: 500,
+                            letterSpacing: '0.16em',
+                            textTransform: 'uppercase',
+                            color: ED.inkFade,
+                            margin: '0 0 8px',
+                        }}
+                    >
+                        Tools included
+                    </p>
+                    {topic.resourceIds.map((rid, idx) => {
+                        const res = getResource(rid);
+                        return (
+                            <div
+                                key={rid}
+                                className="popover-resource-item"
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'baseline',
+                                    gap: 8,
+                                    padding: '4px 0',
+                                    animationDelay: `${idx * 50}ms`,
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontFamily: ED.mono,
+                                        fontSize: '8.5px',
+                                        color: ED.inkFade,
+                                        fontVariantNumeric: 'tabular-nums',
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                    {String(idx + 1).padStart(2, '0')}
+                                </span>
+                                <span
+                                    style={{
+                                        fontFamily: ED.serif,
+                                        fontStyle: 'italic',
+                                        fontSize: '14px',
+                                        color: ED.ink,
+                                        lineHeight: 1.3,
+                                    }}
+                                >
+                                    {res?.title || rid}
+                                </span>
+                            </div>
+                        );
+                    })}
+                    {/* Arrow tail */}
                     <div
                         style={{
                             position: 'absolute',
-                            top: mousePos.y - 150,
-                            left: mousePos.x - 150,
-                            width: 300,
-                            height: 300,
-                            borderRadius: '50%',
-                            background: `radial-gradient(circle, ${topic.colour}40 0%, ${topic.colour}15 40%, transparent 70%)`,
-                            filter: 'blur(28px) saturate(3) brightness(1.1)',
-                            opacity: isHovered ? 1 : 0,
-                            transition: 'opacity 300ms ease',
+                            bottom: -7,
+                            left: 24,
+                            width: 0,
+                            height: 0,
+                            borderLeft: '7px solid transparent',
+                            borderRight: '7px solid transparent',
+                            borderTop: `7px solid ${ED.card}`,
+                            filter: `drop-shadow(0 1px 0 ${ED.rule})`,
                         }}
                     />
                 </div>
             )}
-
-            <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', flex: 1 }}>
-                {/* Header: colour accent bar + spec ref */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[3] }}>
-                    <div
-                        style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: borderRadius.lg,
-                            background: hasResources ? topic.colour + '18' : t.bg.tertiary,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: '50%',
-                                background: hasResources ? topic.colour : t.text.tertiary,
-                            }}
-                        />
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
-                        <span
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.5)',
-                                color: t.text.tertiary,
-                                padding: `${spacing[1]} ${spacing[2]}`,
-                                borderRadius: borderRadius.md,
-                                fontSize: typography.size.xs,
-                                fontWeight: typography.weight.medium,
-                            }}
-                        >
-                            {topic.specRef}
-                        </span>
-                        <ExaminerHintBadge topicCode={topic.specRef} topicColour={topic.colour} position="bottom" />
-                    </div>
-                </div>
-
-                {/* Topic name */}
-                <h3
-                    style={{
-                        fontSize: typography.size.lg,
-                        fontWeight: typography.weight.semibold,
-                        color: hasResources ? t.text.primary : t.text.tertiary,
-                        marginBottom: spacing[2],
-                        lineHeight: typography.lineHeight.tight,
-                    }}
-                >
-                    {topic.name}
-                </h3>
-
-                {/* Description */}
-                <p
-                    style={{
-                        color: t.text.secondary,
-                        fontSize: typography.size.sm,
-                        lineHeight: typography.lineHeight.relaxed,
-                        marginBottom: spacing[4],
-                        flex: 1,
-                    }}
-                >
-                    {topic.description}
-                </p>
-
-                {/* Footer: resource count or coming soon */}
-                <div
-                    style={{
-                        paddingTop: spacing[3],
-                        borderTop: `1px solid ${glass.border}`,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
-                    {hasResources ? (
-                        <>
-                            <AnimatedBadge delay={animationDelay + 300} color={topic.colour}>
-                                <span style={{
-                                    color: topic.colour,
-                                    fontSize: typography.size.xs,
-                                    fontWeight: typography.weight.semibold,
-                                    background: topic.colour + '14',
-                                    padding: `${spacing[0.5]} ${spacing[2]}`,
-                                    borderRadius: borderRadius.full,
-                                    border: `1px solid ${topic.colour}25`,
-                                }}>
-                                    {resourceCount} {resourceCount === 1 ? 'tool' : 'tools'}
-                                </span>
-                            </AnimatedBadge>
-                            <AnimatedBadge delay={animationDelay + 420} color={topic.colour}>
-                                <span style={{ color: t.text.tertiary, fontSize: typography.size.xs }}>
-                                    Explore →
-                                </span>
-                            </AnimatedBadge>
-                        </>
-                    ) : (
-                        <span
-                            style={{
-                                color: t.text.tertiary,
-                                fontSize: typography.size.xs,
-                                fontWeight: typography.weight.medium,
-                                fontStyle: 'italic',
-                            }}
-                        >
-                            Coming Soon
-                        </span>
-                    )}
-                </div>
-
-                {/* Hover popover — list of tools in this topic */}
-                {hasResources && isHovered && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            bottom: '100%',
-                            left: 0,
-                            marginBottom: 10,
-                            width: 220,
-                            padding: '10px 14px',
-                            borderRadius: borderRadius.lg,
-                            border: `1px solid ${topic.colour}30`,
-                            background: '#FFFFFF',
-                            boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                            zIndex: 10,
-                            pointerEvents: 'none',
-                            animation: 'hintFadeIn 200ms ease-out',
-                            maxHeight: 200,
-                            overflowY: 'auto',
-                        }}
-                    >
-                        <style>{`
-                            @keyframes popoverItemReveal {
-                                from { opacity: 0; transform: translateX(-6px); }
-                                to   { opacity: 1; transform: translateX(0); }
-                            }
-                            .popover-resource-item {
-                                animation: popoverItemReveal 300ms ease-out both;
-                            }
-                            @media (prefers-reduced-motion: reduce) {
-                                .popover-resource-item { animation: none; }
-                            }
-                        `}</style>
-                        <p style={{
-                            fontSize: 11,
-                            fontWeight: 600,
-                            color: topic.colour,
-                            margin: '0 0 6px',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.03em',
-                        }}>
-                            Tools included
-                        </p>
-                        {topic.resourceIds.map((rid, idx) => {
-                            const res = getResource(rid);
-                            return (
-                                <div
-                                    key={rid}
-                                    className="popover-resource-item"
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: 6,
-                                        padding: '3px 0',
-                                        animationDelay: `${idx * 50}ms`,
-                                    }}
-                                >
-                                    <div style={{
-                                        width: 5,
-                                        height: 5,
-                                        borderRadius: '50%',
-                                        background: topic.colour,
-                                        flexShrink: 0,
-                                        opacity: 0.6,
-                                    }} />
-                                    <span style={{
-                                        fontSize: 12,
-                                        color: t.text.secondary,
-                                        lineHeight: 1.4,
-                                    }}>
-                                        {res?.title || rid}
-                                    </span>
-                                </div>
-                            );
-                        })}
-                        {/* Arrow */}
-                        <div style={{
-                            position: 'absolute',
-                            bottom: -6,
-                            left: 20,
-                            width: 0,
-                            height: 0,
-                            borderLeft: '6px solid transparent',
-                            borderRight: '6px solid transparent',
-                            borderTop: '6px solid #FFFFFF',
-                        }} />
-                    </div>
-                )}
-            </div>
         </article>
     );
 
     if (!hasResources) {
-        return (
-            <PulseGlow color={topic.colour} intensity={0.18}>
-                {card}
-            </PulseGlow>
-        );
+        return card;
     }
 
     return (
