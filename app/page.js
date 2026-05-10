@@ -6,7 +6,6 @@ import { hasLearnContent } from '@/lib/learn/topics';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import LiquidHero from '@/components/LiquidHero';
 import TopicCard from '@/components/TopicCard';
-import TopicBookShelf from '@/components/TopicBookShelf';
 import BottomTabBar from '@/components/BottomTabBar';
 import ProgressDashboard from '@/components/ProgressDashboard';
 import BlurReveal from '@/components/BlurReveal';
@@ -14,9 +13,9 @@ import SlideUpWords from '@/components/SlideUpWords';
 import CommandPalette from '@/components/CommandPalette';
 import SplashCursor from '@/components/SplashCursor';
 
-// Editorial palette — paper & ink, used directly on the hub page.
+// Editorial palette — white surface (matches LiquidHero), warm-ink type.
 const ED = {
-    paper: '#f7f2e8',
+    page: '#f5f4f2',
     ink: '#181410',
     inkSoft: '#4d463c',
     inkFade: '#8a8175',
@@ -73,8 +72,7 @@ export default function ResourcesHub() {
         <div
             style={{
                 minHeight: '100vh',
-                background: ED.paper,
-                backgroundImage: 'radial-gradient(circle at 18% 20%, rgba(184,138,44,.05), transparent 40%), radial-gradient(circle at 82% 90%, rgba(45,93,79,.04), transparent 50%)',
+                background: ED.page,
                 fontFamily: ED.sans,
                 color: ED.ink,
                 // Pad bottom for fixed tab bar + safe area
@@ -163,13 +161,6 @@ export default function ResourcesHub() {
                     </div>
                 ) : (
                     <>
-                        {/* Book shelf — visual browse on explore tab */}
-                        {activeTab === 'explore' && activeTopics.length > 0 && (
-                            <div style={{ marginBottom: spacing[8] }}>
-                                <TopicBookShelf topics={activeTopics} />
-                            </div>
-                        )}
-
                         {/* Active topics */}
                         {activeTopics.length > 0 && (
                             <div
