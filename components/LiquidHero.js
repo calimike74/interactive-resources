@@ -223,7 +223,7 @@ export default function LiquidHero({
                     left: 0,
                     right: 0,
                     height: '40px',
-                    background: 'linear-gradient(to bottom, transparent, #F8F9FA)',
+                    background: 'linear-gradient(to bottom, transparent, #f5f4f2)',
                     pointerEvents: 'none',
                     zIndex: 2,
                 }}
