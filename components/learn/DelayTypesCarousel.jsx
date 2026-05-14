@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 // Botanical Press palette — matches globals.css tokens
 const C = {
@@ -22,7 +23,7 @@ const sans  = 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI
 const serif = 'var(--font-fraunces), Georgia, serif';
 const mono  = 'var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace';
 
-// Edexcel 1.12 Delay — six delay forms
+// Edexcel 1.12 Delay — six delay forms with detail content
 export const DELAY_TYPES = [
   {
     n: '01', name: 'Clean',
@@ -30,6 +31,16 @@ export const DELAY_TYPES = [
     title: 'Clean',
     desc: 'Even repeats locked to the grid. The reference delay — no colour, no slip.',
     diagram: 'clean',
+    details: {
+      listenFor: 'Even-spaced echoes locked to tempo. No tonal change between repeats — each one sounds identical to the last but quieter.',
+      examples: [
+        'Modern pop production — Billie Eilish ad-lib delays',
+        'Hip-hop ad-libs and 808-tail filler',
+        'Aphex Twin — grid-locked rhythmic delays',
+      ],
+      settings: 'Time: ¼ note · Feedback: 35% · Mix: 25%',
+      examPointer: 'Digital delay is bit-perfect playback — repeats decay only in level, never in tone. That tonal cleanliness is the exam point.',
+    },
   },
   {
     n: '02', name: 'Multi-tap',
@@ -37,6 +48,16 @@ export const DELAY_TYPES = [
     title: 'Multi-tap',
     desc: 'Several taps at irregular times. Rhythm built from one source hit.',
     diagram: 'multitap',
+    details: {
+      listenFor: 'Several distinct echoes at fixed gaps — not a decaying chain. Often panned across the stereo field for rhythmic interest.',
+      examples: [
+        'Pink Floyd "Run Like Hell" — syncopated guitar taps',
+        'Dub reggae (King Tubby) — wide stereo tap patterns',
+        'Modern EDM build-ups and drop fills',
+      ],
+      settings: 'Tap 1: ⅛ note · Tap 2: dotted ⅛ · Tap 3: ¼ · per-tap pan + level',
+      examPointer: 'Each tap has its own time, level and pan. There is no feedback loop — this is what separates multi-tap from a feedback delay.',
+    },
   },
   {
     n: '03', name: 'Slapback',
@@ -44,6 +65,16 @@ export const DELAY_TYPES = [
     title: 'Slapback',
     desc: 'One short repeat, 10–120 ms, no feedback. The Elvis sound.',
     diagram: 'slapback',
+    details: {
+      listenFor: 'A single short echo close behind the original. The recording feels "doubled" rather than echoing into space.',
+      examples: [
+        'Elvis Presley — Sun Sessions 1954–56',
+        'Scotty Moore — rockabilly lead guitar',
+        'Modern indie revival (Arctic Monkeys, Tame Impala)',
+      ],
+      settings: 'Time: 80 ms · Feedback: 0% · Mix: 30%',
+      examPointer: 'Short time (50–120 ms), zero feedback, single audible repeat. The Sun Studio sound — name those three parameters in any question on slapback.',
+    },
   },
   {
     n: '04', name: 'Tape delay',
@@ -51,6 +82,16 @@ export const DELAY_TYPES = [
     title: 'Tape echo',
     desc: 'Head spacing sets time. Each pass loses high end — repeats darken.',
     diagram: 'tape',
+    details: {
+      listenFor: 'Repeats progressively lose top end and pick up flutter and saturation. The echo feels warmer and darker as it decays.',
+      examples: [
+        'Dub reggae — King Tubby, Lee "Scratch" Perry',
+        'Pink Floyd "Echoes" — Binson Echorec',
+        'U2, The Edge — Roland Space Echo',
+      ],
+      settings: 'Head spacing: dotted ⅛ · Feedback: 55% · Tape age: warm',
+      examPointer: 'Tape character comes from playback head wear and tape saturation — each pass loses high frequencies. That tonal evolution is the signature.',
+    },
   },
   {
     n: '05', name: 'Ping-pong',
@@ -58,6 +99,16 @@ export const DELAY_TYPES = [
     title: 'Ping-pong',
     desc: 'Two delay lines, crossed feedback. Repeats bounce L ↔ R.',
     diagram: 'pingpong',
+    details: {
+      listenFor: 'Repeats alternate between the left and right speakers — the dry signal sits centre while the echoes bounce side to side.',
+      examples: [
+        'Pink Floyd "Money" — synth bass repeats',
+        'U2 "Where the Streets Have No Name" — The Edge\'s guitar',
+        'Modern ambient (Brian Eno, Tycho)',
+      ],
+      settings: 'L Time: ¼ · R Time: ⅛ · Feedback: 55%',
+      examPointer: 'Two delay lines with crossed feedback. Repeats alternate channels — stereo motion from a mono source.',
+    },
   },
   {
     n: '06', name: 'Modulated',
@@ -65,6 +116,16 @@ export const DELAY_TYPES = [
     title: 'Modulated',
     desc: 'Delay time wavers under an LFO. Pitch shifts on each repeat — chorus territory.',
     diagram: 'modulated',
+    details: {
+      listenFor: 'Each repeat is slightly pitch-shifted up and down — a wobble or chorus on the wet path that the dry signal does not share.',
+      examples: [
+        'Eddie Van Halen "Cathedral" — modulated delay textures',
+        'Cocteau Twins — Robin Guthrie\'s lush guitar',
+        '80s ambient (Brian Eno, Harold Budd)',
+      ],
+      settings: 'Time: 280 ms · Feedback: 45% · LFO rate: 0.8 Hz · Depth: 20%',
+      examPointer: 'At short times this overlaps with chorus and flange. At longer times it produces audible pitch-wobbling echoes — that LFO modulation is the defining feature.',
+    },
   },
 ];
 
@@ -74,26 +135,52 @@ const RADIUS = 320;
 
 export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex = 0 }) {
   const [index, setIndex] = useState(initialIndex);
+  const [openIndex, setOpenIndex] = useState(null);
   const total = types.length;
   const theta = 360 / total;
 
   const next = useCallback(() => setIndex(i => i + 1), []);
   const prev = useCallback(() => setIndex(i => i - 1), []);
 
+  const isOpen = openIndex !== null;
+
   useEffect(() => {
     function onKey(e) {
-      if (e.key === 'ArrowRight') next();
-      if (e.key === 'ArrowLeft')  prev();
+      if (isOpen) {
+        if (e.key === 'Escape')     { setOpenIndex(null); }
+        if (e.key === 'ArrowRight') { setIndex(i => i + 1); setOpenIndex(i => (i + 1) % total); }
+        if (e.key === 'ArrowLeft')  { setIndex(i => i - 1); setOpenIndex(i => (i - 1 + total) % total); }
+      } else {
+        if (e.key === 'ArrowRight') next();
+        if (e.key === 'ArrowLeft')  prev();
+      }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [next, prev]);
+  }, [isOpen, total, next, prev]);
+
+  // Lock scroll when overlay is open
+  useEffect(() => {
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [isOpen]);
 
   const angle  = -1 * theta * index;
   const active = types[((index % total) + total) % total];
 
+  const handleCardClick = (i) => {
+    // bring the clicked card to the front, then open
+    const delta = ((i - ((index % total) + total) % total + total) % total);
+    const stepped = delta > total / 2 ? delta - total : delta;
+    setIndex(idx => idx + stepped);
+    setOpenIndex(i);
+  };
+
   return (
-    <div style={{ fontFamily: sans, color: C.ink }}>
+    <div style={{ fontFamily: sans, color: C.ink, position: 'relative' }}>
       {/* 3D scene */}
       <div style={{
         perspective: 1500,
@@ -109,13 +196,18 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
           transition: 'transform 0.9s cubic-bezier(.22,.9,.32,1)',
           transform: `translateZ(-${RADIUS}px) rotateY(${angle}deg)`,
         }}>
-          {types.map((t, i) => (
-            <CardFace
-              key={t.n}
-              t={t}
-              style={{ transform: `rotateY(${theta * i}deg) translateZ(${RADIUS}px)` }}
-            />
-          ))}
+          {types.map((t, i) => {
+            const isFront = i === ((index % total) + total) % total;
+            return (
+              <CardFace
+                key={t.n}
+                t={t}
+                isFront={isFront}
+                onClick={() => handleCardClick(i)}
+                style={{ transform: `rotateY(${theta * i}deg) translateZ(${RADIUS}px)` }}
+              />
+            );
+          })}
         </div>
       </div>
 
@@ -140,26 +232,55 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
 
         <button onClick={next} style={btn(true)} aria-label="Next delay type">Next →</button>
       </div>
+
+      <p style={{
+        marginTop: 16, textAlign: 'center',
+        fontFamily: mono, fontSize: 11, letterSpacing: '0.1em',
+        color: C.inkSoft, opacity: 0.7,
+      }}>
+        Click a card for details · ←/→ to browse · ESC to close
+      </p>
+
+      {/* Detail overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <DetailOverlay
+            t={types[openIndex]}
+            onClose={() => setOpenIndex(null)}
+            onPrev={() => { setIndex(i => i - 1); setOpenIndex(i => (i - 1 + total) % total); }}
+            onNext={() => { setIndex(i => i + 1); setOpenIndex(i => (i + 1) % total); }}
+            position={`${(openIndex ?? 0) + 1} / ${total}`}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-/* ---------- Card face ---------- */
+/* ---------- Card face (carousel) ---------- */
 
-function CardFace({ t, style }) {
+function CardFace({ t, style, onClick, isFront }) {
   return (
-    <div style={{
-      position: 'absolute',
-      width: CARD_W, height: CARD_H,
-      borderRadius: 20,
-      padding: '22px 24px 20px',
-      background: t.bg,
-      color: t.fg,
-      border: t.border ? `1px solid ${t.border}` : 0,
-      boxShadow: '0 30px 70px rgba(31, 42, 28, 0.28), 0 1px 0 rgba(255,255,255,0.05) inset',
-      display: 'flex', flexDirection: 'column',
-      ...style,
-    }}>
+    <motion.div
+      layoutId={`delay-card-${t.n}`}
+      onClick={onClick}
+      role="button"
+      tabIndex={isFront ? 0 : -1}
+      aria-label={`Open details for ${t.title}`}
+      style={{
+        position: 'absolute',
+        width: CARD_W, height: CARD_H,
+        borderRadius: 20,
+        padding: '22px 24px 20px',
+        background: t.bg,
+        color: t.fg,
+        border: t.border ? `1px solid ${t.border}` : 0,
+        boxShadow: '0 30px 70px rgba(31, 42, 28, 0.28), 0 1px 0 rgba(255,255,255,0.05) inset',
+        display: 'flex', flexDirection: 'column',
+        cursor: isFront ? 'pointer' : 'default',
+        ...style,
+      }}
+    >
       <p style={{
         fontFamily: mono, fontSize: 10.5, letterSpacing: '0.16em',
         textTransform: 'uppercase', opacity: 0.72, margin: 0,
@@ -182,9 +303,184 @@ function CardFace({ t, style }) {
       <div style={{ marginTop: 8 }}>
         <Diagram kind={t.diagram} fg={t.fg} accent={t.accent} />
       </div>
+    </motion.div>
+  );
+}
+
+/* ---------- Detail overlay ---------- */
+
+function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(15, 18, 14, 0.65)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        zIndex: 60,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 'clamp(16px, 4vw, 48px)',
+        overflow: 'auto',
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: '100%', maxWidth: 1080,
+          display: 'grid',
+          gridTemplateColumns: 'minmax(280px, 360px) 1fr',
+          gap: 'clamp(16px, 3vw, 32px)',
+          alignItems: 'start',
+        }}
+        className="delay-detail-grid"
+      >
+        {/* Morphed card */}
+        <motion.div
+          layoutId={`delay-card-${t.n}`}
+          style={{
+            width: '100%', aspectRatio: `${CARD_W} / ${CARD_H}`,
+            borderRadius: 24,
+            padding: '24px 26px 22px',
+            background: t.bg,
+            color: t.fg,
+            border: t.border ? `1px solid ${t.border}` : 0,
+            boxShadow: '0 40px 80px rgba(0, 0, 0, 0.45)',
+            display: 'flex', flexDirection: 'column',
+          }}
+        >
+          <p style={{
+            fontFamily: mono, fontSize: 11, letterSpacing: '0.16em',
+            textTransform: 'uppercase', opacity: 0.72, margin: 0,
+          }}>
+            Type {t.n} <span style={{ opacity: 0.55 }}>·</span> 06 <span style={{ opacity: 0.55 }}>·</span> {t.name}
+          </p>
+
+          <h2 style={{
+            fontFamily: serif, fontSize: 'clamp(36px, 4vw, 46px)', lineHeight: 1.0,
+            margin: '14px 0 10px', fontWeight: 500, letterSpacing: '-0.015em',
+          }}>{t.title}</h2>
+
+          <p style={{
+            fontSize: 14, lineHeight: 1.45, margin: 0, opacity: 0.92,
+            maxWidth: '28ch',
+          }}>{t.desc}</p>
+
+          <div style={{ flex: 1 }} />
+
+          <div style={{ marginTop: 8 }}>
+            <Diagram kind={t.diagram} fg={t.fg} accent={t.accent} />
+          </div>
+        </motion.div>
+
+        {/* Detail panel */}
+        <motion.div
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 24 }}
+          transition={{ duration: 0.35, delay: 0.15 }}
+          style={{
+            background: C.paper,
+            color: C.ink,
+            borderRadius: 24,
+            padding: 'clamp(24px, 3vw, 36px) clamp(24px, 3vw, 40px)',
+            boxShadow: '0 40px 80px rgba(0, 0, 0, 0.25)',
+            position: 'relative',
+          }}
+        >
+          {/* Header row */}
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            marginBottom: 18,
+          }}>
+            <span style={{
+              fontFamily: mono, fontSize: 11, letterSpacing: '0.14em',
+              textTransform: 'uppercase', color: C.inkSoft,
+            }}>
+              Position {position}
+            </span>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button onClick={onPrev} style={iconBtn} aria-label="Previous type">←</button>
+              <button onClick={onNext} style={iconBtn} aria-label="Next type">→</button>
+              <button onClick={onClose} style={{ ...iconBtn, marginLeft: 6 }} aria-label="Close">×</button>
+            </div>
+          </div>
+
+          <Section label="Listen for">
+            <p style={pBody}>{t.details.listenFor}</p>
+          </Section>
+
+          <Section label="Where you hear it">
+            <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none' }}>
+              {t.details.examples.map((ex, i) => (
+                <li key={i} style={{
+                  ...pBody, padding: '6px 0',
+                  borderTop: i === 0 ? 'none' : `1px solid ${C.line}`,
+                }}>
+                  <span style={{
+                    fontFamily: mono, fontSize: 10, color: C.inkSoft,
+                    marginRight: 10, letterSpacing: '0.08em',
+                  }}>{String(i + 1).padStart(2, '0')}</span>
+                  {ex}
+                </li>
+              ))}
+            </ul>
+          </Section>
+
+          <Section label="Settings to try">
+            <p style={{ ...pBody, fontFamily: mono, fontSize: 13 }}>{t.details.settings}</p>
+          </Section>
+
+          <Section label="Exam pointer" last>
+            <p style={pBody}>{t.details.examPointer}</p>
+          </Section>
+        </motion.div>
+      </div>
+
+      <style>{`
+        @media (max-width: 720px) {
+          .delay-detail-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </motion.div>
+  );
+}
+
+function Section({ label, last, children }) {
+  return (
+    <div style={{ marginBottom: last ? 0 : 20 }}>
+      <p style={{
+        fontFamily: mono, fontSize: 10.5, letterSpacing: '0.16em',
+        textTransform: 'uppercase', color: C.field500, margin: '0 0 8px',
+      }}>{label}</p>
+      {children}
     </div>
   );
 }
+
+const pBody = {
+  fontFamily: sans, fontSize: 15, lineHeight: 1.55,
+  color: C.ink, margin: 0,
+};
+
+const iconBtn = {
+  appearance: 'none',
+  background: 'transparent',
+  color: C.ink,
+  border: `1px solid ${C.line}`,
+  borderRadius: 999,
+  width: 32, height: 32,
+  fontSize: 14,
+  cursor: 'pointer',
+  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+  lineHeight: 1,
+};
 
 /* ---------- Diagram registry ---------- */
 
