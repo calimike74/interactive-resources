@@ -260,50 +260,60 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
 /* ---------- Card face (carousel) ---------- */
 
 function CardFace({ t, style, onClick, isFront }) {
+  // Outer div owns the 3D transform (rotateY + translateZ).
+  // Inner motion.div owns the morph (layoutId). Separating them is what
+  // keeps motion's layout engine from clobbering the 3D positioning.
   return (
-    <motion.div
-      layoutId={`delay-card-${t.n}`}
-      onClick={onClick}
-      role="button"
-      tabIndex={isFront ? 0 : -1}
-      aria-label={`Open details for ${t.title}`}
-      style={{
-        position: 'absolute',
-        width: CARD_W, height: CARD_H,
-        borderRadius: 20,
-        padding: '22px 24px 20px',
-        background: t.bg,
-        color: t.fg,
-        border: t.border ? `1px solid ${t.border}` : 0,
-        boxShadow: '0 30px 70px rgba(31, 42, 28, 0.28), 0 1px 0 rgba(255,255,255,0.05) inset',
-        display: 'flex', flexDirection: 'column',
-        cursor: isFront ? 'pointer' : 'default',
-        ...style,
-      }}
-    >
-      <p style={{
-        fontFamily: mono, fontSize: 10.5, letterSpacing: '0.16em',
-        textTransform: 'uppercase', opacity: 0.72, margin: 0,
-      }}>
-        Type {t.n} <span style={{ opacity: 0.55 }}>·</span> 06 <span style={{ opacity: 0.55 }}>·</span> {t.name}
-      </p>
+    <div style={{
+      position: 'absolute',
+      width: CARD_W, height: CARD_H,
+      transformStyle: 'preserve-3d',
+      ...style,
+    }}>
+      <motion.div
+        layoutId={`delay-card-${t.n}`}
+        onClick={onClick}
+        role="button"
+        tabIndex={isFront ? 0 : -1}
+        aria-label={`Open details for ${t.title}`}
+        transition={{ layout: { duration: 0.85, ease: [0.22, 0.9, 0.32, 1] } }}
+        style={{
+          width: '100%', height: '100%',
+          borderRadius: 20,
+          padding: '22px 24px 20px',
+          background: t.bg,
+          color: t.fg,
+          border: t.border ? `1px solid ${t.border}` : 0,
+          boxShadow: '0 30px 70px rgba(31, 42, 28, 0.28), 0 1px 0 rgba(255,255,255,0.05) inset',
+          display: 'flex', flexDirection: 'column',
+          cursor: isFront ? 'pointer' : 'default',
+          boxSizing: 'border-box',
+        }}
+      >
+        <p style={{
+          fontFamily: mono, fontSize: 10.5, letterSpacing: '0.16em',
+          textTransform: 'uppercase', opacity: 0.72, margin: 0,
+        }}>
+          Type {t.n} <span style={{ opacity: 0.55 }}>·</span> 06 <span style={{ opacity: 0.55 }}>·</span> {t.name}
+        </p>
 
-      <h2 style={{
-        fontFamily: serif, fontSize: 42, lineHeight: 1.0,
-        margin: '14px 0 10px', fontWeight: 500, letterSpacing: '-0.015em',
-      }}>{t.title}</h2>
+        <h2 style={{
+          fontFamily: serif, fontSize: 42, lineHeight: 1.0,
+          margin: '14px 0 10px', fontWeight: 500, letterSpacing: '-0.015em',
+        }}>{t.title}</h2>
 
-      <p style={{
-        fontSize: 13.5, lineHeight: 1.45, margin: 0, opacity: 0.92,
-        maxWidth: '24ch',
-      }}>{t.desc}</p>
+        <p style={{
+          fontSize: 13.5, lineHeight: 1.45, margin: 0, opacity: 0.92,
+          maxWidth: '24ch',
+        }}>{t.desc}</p>
 
-      <div style={{ flex: 1 }} />
+        <div style={{ flex: 1 }} />
 
-      <div style={{ marginTop: 8 }}>
-        <Diagram kind={t.diagram} fg={t.fg} accent={t.accent} />
-      </div>
-    </motion.div>
+        <div style={{ marginTop: 8 }}>
+          <Diagram kind={t.diagram} fg={t.fg} accent={t.accent} />
+        </div>
+      </motion.div>
+    </div>
   );
 }
 
@@ -315,7 +325,7 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
+      transition={{ duration: 0.4 }}
       onClick={onClose}
       style={{
         position: 'fixed', inset: 0,
@@ -342,6 +352,7 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
         {/* Morphed card */}
         <motion.div
           layoutId={`delay-card-${t.n}`}
+          transition={{ layout: { duration: 0.85, ease: [0.22, 0.9, 0.32, 1] } }}
           style={{
             width: '100%', aspectRatio: `${CARD_W} / ${CARD_H}`,
             borderRadius: 24,
@@ -379,10 +390,10 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
 
         {/* Detail panel */}
         <motion.div
-          initial={{ opacity: 0, x: 24 }}
+          initial={{ opacity: 0, x: 36 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 24 }}
-          transition={{ duration: 0.35, delay: 0.15 }}
+          exit={{ opacity: 0, x: 36 }}
+          transition={{ duration: 0.55, delay: 0.35, ease: [0.22, 0.9, 0.32, 1] }}
           style={{
             background: C.paper,
             color: C.ink,
