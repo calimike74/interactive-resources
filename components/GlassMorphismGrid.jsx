@@ -377,17 +377,12 @@ export default function GlassMorphismGrid({
             mouseX = e.clientX - rect.left;
             mouseY = e.clientY - rect.top;
         }
-        function onMouseLeave() {
-            mouseX = -9999;
-            mouseY = -9999;
-        }
 
         const ro = new ResizeObserver(resize);
         ro.observe(wrapper);
         resize();
 
         wrapper.addEventListener('mousemove', onMouseMove);
-        wrapper.addEventListener('mouseleave', onMouseLeave);
 
         rafId = requestAnimationFrame(draw);
 
@@ -395,7 +390,6 @@ export default function GlassMorphismGrid({
             cancelAnimationFrame(rafId);
             ro.disconnect();
             wrapper.removeEventListener('mousemove', onMouseMove);
-            wrapper.removeEventListener('mouseleave', onMouseLeave);
         };
     }, [rows, cols, revealRadius, corner, crevice, minCell, maxCell]);
 
