@@ -34,9 +34,9 @@ export const DELAY_TYPES = [
     details: {
       listenFor: 'Even-spaced echoes locked to tempo. No tonal change between repeats — each one sounds identical to the last but quieter.',
       examples: [
-        'Modern pop production — Billie Eilish ad-lib delays',
-        'Hip-hop ad-libs and 808-tail filler',
-        'Aphex Twin — grid-locked rhythmic delays',
+        'Radiohead "Pyramid Song" — tempo-locked clean digital delay',
+        'Travis Scott / Mike Dean — grid-locked vocal throws on ad-libs',
+        'Modern pop production — clean ¼-note delay as the default vocal echo',
       ],
       settings: 'Time: ¼ note · Feedback: 35% · Mix: 25%',
       examPointer: 'Digital delay is bit-perfect playback — repeats decay only in level, never in tone. That tonal cleanliness is the exam point.',
@@ -51,9 +51,9 @@ export const DELAY_TYPES = [
     details: {
       listenFor: 'Several distinct echoes at fixed gaps — not a decaying chain. Often panned across the stereo field for rhythmic interest.',
       examples: [
-        'Pink Floyd "Run Like Hell" — syncopated guitar taps',
-        'Dub reggae (King Tubby) — wide stereo tap patterns',
-        'Modern EDM build-ups and drop fills',
+        'Pink Floyd "Run Like Hell" — Gilmour stacks two dotted-eighth delays for a multi-tap feel',
+        'Deadmau5, Skrillex EDM build-ups — multi-tap risers and fills',
+        'Ableton Echo / Logic Tape Delay — multi-tap modes built into modern DAWs',
       ],
       settings: 'Tap 1: ⅛ note · Tap 2: dotted ⅛ · Tap 3: ¼ · per-tap pan + level',
       examPointer: 'Each tap has its own time, level and pan. There is no feedback loop — this is what separates multi-tap from a feedback delay.',
@@ -68,9 +68,9 @@ export const DELAY_TYPES = [
     details: {
       listenFor: 'A single short echo close behind the original. The recording feels "doubled" rather than echoing into space.',
       examples: [
-        'Elvis Presley — Sun Sessions 1954–56',
-        'Scotty Moore — rockabilly lead guitar',
-        'Modern indie revival (Arctic Monkeys, Tame Impala)',
+        'Elvis Presley — Sun Sessions 1954–56 (Sam Phillips, two offset tape machines)',
+        'Scotty Moore — Ray Butts EchoSonic amp for live rockabilly slapback',
+        'Arctic Monkeys, Tame Impala — slapback vocals across indie revival',
       ],
       settings: 'Time: 80 ms · Feedback: 0% · Mix: 30%',
       examPointer: 'Short time (50–120 ms), zero feedback, single audible repeat. The Sun Studio sound — name those three parameters in any question on slapback.',
@@ -85,9 +85,9 @@ export const DELAY_TYPES = [
     details: {
       listenFor: 'Repeats progressively lose top end and pick up flutter and saturation. The echo feels warmer and darker as it decays.',
       examples: [
-        'Dub reggae — King Tubby, Lee "Scratch" Perry',
-        'Pink Floyd "Echoes" — Binson Echorec',
-        'U2, The Edge — Roland Space Echo',
+        'Pink Floyd "Echoes" — Binson Echorec on David Gilmour\'s guitar',
+        'Dub reggae — King Tubby, Lee "Scratch" Perry on Echoplex / Roland Space Echo',
+        'Hank Marvin & The Shadows — Meazzi tape echo on "Apache" (1960)',
       ],
       settings: 'Head spacing: dotted ⅛ · Feedback: 55% · Tape age: warm',
       examPointer: 'Tape character comes from playback head wear and tape saturation — each pass loses high frequencies. That tonal evolution is the signature.',
@@ -102,9 +102,9 @@ export const DELAY_TYPES = [
     details: {
       listenFor: 'Repeats alternate between the left and right speakers — the dry signal sits centre while the echoes bounce side to side.',
       examples: [
-        'Pink Floyd "Money" — synth bass repeats',
-        'U2 "Where the Streets Have No Name" — The Edge\'s guitar',
-        'Modern ambient (Brian Eno, Tycho)',
+        'Pink Floyd "On the Run" — VCS3 synth sequence panned with stereo delay',
+        'U2 "Bad" — The Edge\'s stereo ping-pong guitar',
+        'Tycho — ping-pong as a core ambient/electronic texture',
       ],
       settings: 'L Time: ¼ · R Time: ⅛ · Feedback: 55%',
       examPointer: 'Two delay lines with crossed feedback. Repeats alternate channels — stereo motion from a mono source.',
@@ -119,9 +119,9 @@ export const DELAY_TYPES = [
     details: {
       listenFor: 'Each repeat is slightly pitch-shifted up and down — a wobble or chorus on the wet path that the dry signal does not share.',
       examples: [
-        'Eddie Van Halen "Cathedral" — modulated delay textures',
-        'Cocteau Twins — Robin Guthrie\'s lush guitar',
-        '80s ambient (Brian Eno, Harold Budd)',
+        'The Police "Walking on the Moon" — Andy Summers\' chorused/modulated delay',
+        'Cocteau Twins — Robin Guthrie stacks chorus after delay (EHX Poly Chorus)',
+        'Harold Budd & Brian Eno "The Plateaux of Mirror" — AMS digital + tape modulation',
       ],
       settings: 'Time: 280 ms · Feedback: 45% · LFO rate: 0.8 Hz · Depth: 20%',
       examPointer: 'At short times this overlaps with chorus and flange. At longer times it produces audible pitch-wobbling echoes — that LFO modulation is the defining feature.',
