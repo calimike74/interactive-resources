@@ -7,7 +7,6 @@ import { getTopicForResource } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
-import SpecBanner from '@/components/SpecBanner';
 
 // Resource components registry
 // Add new components here as they're created
@@ -229,8 +228,6 @@ export default function ResourcePageClient() {
             </header>
 
             <Breadcrumbs />
-
-            <SpecBanner topic={parentTopic} />
 
             {/* Resource Content */}
             <main>
