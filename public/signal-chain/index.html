@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Chain — Eurorack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Cutive+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="patch.css">
+</head>
+<body>
+
+<main>
+
+<header class="masthead">
+  <div>
+    <div class="eyebrow">
+      <span class="led" aria-hidden="true"></span>
+      <strong>Signal Chain</strong>
+      <span class="rule" aria-hidden="true"></span>
+      <span>Eurorack edition · Edexcel 9MT0</span>
+    </div>
+    <h1 class="title">Patch the chain. <em>Then ask why this order.</em></h1>
+    <p class="lede">Modules wire together top-to-bottom of the rack. Each effect is a piece of named gear with the knobs, meters and switches you'd find on the real thing. Switch to <em>Diagnose</em> to fix a broken patch and read how the failure is documented in examiner reports.</p>
+  </div>
+  <div class="masthead-meta">
+    <div>Topics</div>
+    <strong>1.9</strong>&nbsp;<span>Dynamics</span><br>
+    <strong>1.11</strong>&nbsp;<span>Equalisation</span><br>
+    <strong>1.12</strong>&nbsp;<span>Time-based FX</span><br>
+    <strong>2.3</strong>&nbsp;<span>Signals &amp; stereo</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="mode-toggle" role="tablist" aria-label="Mode">
+    <button class="mode-btn active" data-mode="build" role="tab" aria-selected="true"><span class="led" aria-hidden="true"></span>Build</button>
+    <button class="mode-btn" data-mode="diagnose" role="tab" aria-selected="false"><span class="led" aria-hidden="true"></span>Diagnose</button>
+  </div>
+  <div class="toolbar-meta">
+    <span><span class="kbd">Click</span>&nbsp;chip</span>
+    <span><span class="kbd">Drag</span>&nbsp;reorder</span>
+    <span><span class="kbd">Click cable</span>&nbsp;unplug</span>
+  </div>
+</div>
+
+<div class="caveat">
+  <span class="caveat-tag">Examiner note</span>
+  <div class="caveat-body">
+    <strong>Read these chains as examples, not formulas.</strong> Edexcel examiners explicitly criticise candidates who write "I would apply compression and EQ on every channel" without justifying it for the specific track. Processing should be <em>reactionary</em> — responding to what each track actually needs — and you must quote <strong>parameter settings</strong> (threshold, ratio, attack, release, cutoff, RT60 etc.), not just the effect names. <em>Track-specific detail beats general points</em> (2025 C3 PEF, verbatim).
+  </div>
+</div>
+
+<div class="pill-row" id="presets-row" role="toolbar" aria-label="Preset chains">
+  <span class="pill-row-label">Preset chains</span>
+  <button class="pill" data-preset="vocal">Bright vocal</button>
+  <button class="pill" data-preset="bass">Warm bass</button>
+  <button class="pill" data-preset="drums">Aggressive drums</button>
+  <button class="pill" data-preset="orchestral">Orchestral mix-bus</button>
+  <button class="pill" data-preset="electronic">Electronic synth-stack</button>
+  <button class="pill" data-preset="hiphop">Hip-hop vocal chain</button>
+  <button class="pill" data-preset="acoustic">Acoustic singer-songwriter</button>
+  <button class="pill-ghost" id="reset">Clear rack ×</button>
+</div>
+
+<div class="pill-row scenarios" id="scenarios" role="toolbar" aria-label="Broken-chain scenarios">
+  <span class="pill-row-label">Broken scenarios</span>
+  <button class="pill danger" data-scenario="smeared_vocal">Smeared vocal</button>
+  <button class="pill danger" data-scenario="muddy_drums">Muddy drums</button>
+  <button class="pill danger" data-scenario="pumping_master">Pumping master</button>
+  <button class="pill danger" data-scenario="harsh_bass">Harsh bass</button>
+  <button class="pill danger" data-scenario="choppy_vocal">Choppy vocal</button>
+  <button class="pill danger" data-scenario="sidechain_kick_bass">Kick masks bass</button>
+  <button class="pill danger" data-scenario="glitchy_gate">Glitchy gate</button>
+  <button class="pill-cta" id="diagnose-btn" disabled>Diagnose</button>
+</div>
+
+<!-- The rack -->
+<section class="rack" id="rack"></section>
+
+<!-- Detail / palette -->
+<section class="bottom" id="bottom"></section>
+
+<footer>
+  <div><strong>Signal Chain · Eurorack edition</strong> · self-study tool for A-Level Music Technology (Edexcel 9MT0)</div>
+  <div>Effects vocabulary: <strong>1.9</strong> · <strong>1.11</strong> · <strong>1.12</strong> · <strong>2.3</strong></div>
+</footer>
+
+</main>
+
+<script src="displays.js"></script>
+<script src="data.js"></script>
+<script src="modules.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

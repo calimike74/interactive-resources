@@ -32,6 +32,7 @@ import CombinedDistortionLab from '@/components/resources/CombinedDistortionLab'
 import StereoPanning from '@/components/resources/StereoPanning';
 import ADCExplorer from '@/components/resources/ADCExplorer';
 import SignalChainBuilder from '@/components/resources/SignalChainBuilder';
+import SignalChainEurorack from '@/components/resources/SignalChainEurorack';
 import CompressorImageExplorer from '@/components/resources/CompressorImageExplorer';
 import CompressorAssessment from '@/components/resources/CompressorAssessment';
 import GateImageExplorer from '@/components/resources/GateImageExplorer';
@@ -76,6 +77,7 @@ const resourceComponents = {
     'StereoPanning': StereoPanning,
     'ADCExplorer': ADCExplorer,
     'SignalChainBuilder': SignalChainBuilder,
+    'SignalChainEurorack': SignalChainEurorack,
     'CompressorImageExplorer': CompressorImageExplorer,
     'CompressorAssessment': CompressorAssessment,
     'GateImageExplorer': GateImageExplorer,
