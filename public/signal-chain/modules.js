@@ -672,6 +672,19 @@
         `;
       },
     },
+    tremolo: {
+      hp: 6, brand: 'WAVELAB', model: 'TRM·5', serial: '0512',
+      tagline: 'AMPLITUDE TREMOLO',
+      drawControls(key, id, w) {
+        return `
+          ${chickenHead(w/2 - 18, CTRL_Y + 18, 16, kv(key, 0), 'RATE', id)}
+          ${chickenHead(w/2 + 18, CTRL_Y + 18, 16, kv(key, 1), 'DEPTH', id)}
+          ${chickenHead(w/2, CTRL_Y + 58, 14, kv(key, 2), 'MIX', id)}
+          ${toggle(w/2 - 14, CTRL_Y + 94, 1, ['SQR', 'SIN'], 'WAVE')}
+          ${toggle(w/2 + 14, CTRL_Y + 94, 1, ['1/8', '1/4'], 'SYNC')}
+        `;
+      },
+    },
   };
 
   /* =====================================================================

@@ -479,6 +479,37 @@
       <text class="label" x="38" y="98">SINE · ¼-NOTE</text>
     </svg>
   `,
+
+  tremolo: () => `
+    <svg viewBox="0 0 240 100" preserveAspectRatio="none" class="display">
+      <line class="axis" x1="0" y1="52" x2="240" y2="52"/>
+      <!-- amplitude envelope: a sine-wave-shaped volume curve enveloping the carrier -->
+      <!-- upper envelope -->
+      <path class="curve-2" d="M 0 28 Q 30 12 60 28 Q 90 44 120 28 Q 150 12 180 28 Q 210 44 240 28"/>
+      <!-- lower envelope (mirror) -->
+      <path class="curve-2" d="M 0 76 Q 30 92 60 76 Q 90 60 120 76 Q 150 92 180 76 Q 210 60 240 76"/>
+      <!-- carrier signal inside the envelope -->
+      <path class="curve" d="
+        M 0 52 L 4 36 L 8 52 L 12 68 L 16 52
+        L 20 28 L 24 52 L 28 76 L 32 52
+        L 36 30 L 40 52 L 44 74 L 48 52
+        L 52 36 L 56 52 L 60 68 L 64 52
+        L 68 44 L 72 52 L 76 60 L 80 52
+        L 84 38 L 88 52 L 92 66 L 96 52
+        L 100 30 L 104 52 L 108 74 L 112 52
+        L 116 30 L 120 52 L 124 74 L 128 52
+        L 132 36 L 136 52 L 140 68 L 144 52
+        L 148 44 L 152 52 L 156 60 L 160 52
+        L 164 36 L 168 52 L 172 68 L 176 52
+        L 180 30 L 184 52 L 188 74 L 192 52
+        L 196 36 L 200 52 L 204 68 L 208 52
+        L 212 44 L 216 52 L 220 60 L 224 52
+        L 228 38 L 232 52 L 236 66 L 240 52"/>
+      <text class="label" x="4" y="14">LFO 5 Hz · 40% DEPTH</text>
+      <text class="label-dim" x="234" y="14" text-anchor="end">SIN · ¼</text>
+      <text class="label-dim" x="4" y="98">AMPLITUDE MOD</text>
+    </svg>
+  `,
   };
 
   window.DISPLAYS = D;

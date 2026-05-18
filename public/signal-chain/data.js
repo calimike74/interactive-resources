@@ -23,6 +23,7 @@ window.EFFECTS = {
   phaser:     { name: 'Phaser',               category: 'modulation', params: '4-stage · 0.3 Hz',       what: 'A network of all-pass filters whose centre frequencies are modulated by an LFO. The result is a series of moving notches in the spectrum — unlike a flanger\'s evenly-spaced comb, these notches are non-harmonic.', use: 'Synth leads, Rhodes electric piano, funk guitar. The 4-stage analogue phaser is the warm classic; modern digital phasers offer many more stages for more pronounced sweep.', spec: '1.12 (modulation cousin)' },
   transient_shaper: { name: 'Transient shaper', category: 'dynamics', params: 'Attack +4 · Sustain 0',  what: 'Splits the envelope into attack and sustain. Two knobs let you boost or cut each independently, regardless of input level — different to a compressor, which always reacts to level.', use: 'Sharpens drum hits without needing the right compressor settings. Brings out the pick attack on acoustic guitar. Pulls back the body of a too-thick snare. The producer\'s second compressor.', spec: '1.9 Dynamic processing' },
   auto_pan:   { name: 'Auto-pan',             category: 'modulation', params: 'Sine · ¼-note rate',     what: 'An LFO drives the panning position automatically — typically a sine for smooth movement, a square for hard L/R alternation. Rate often synced to song tempo.', use: 'Movement on otherwise static elements (pads, hi-hats, FX returns). Stereo width without phase trickery. In a mono-summed mix it disappears, so it\'s decoration not foundation.', spec: '2.3 Signals (stereo image)' },
+  tremolo:    { name: 'Tremolo',              category: 'modulation', params: '5 Hz · 40% depth · sin', what: 'An LFO directly modulates the amplitude of the signal — not the pitch (vibrato) and not the delay time (chorus/flanger). Result is a rhythmic level wobble whose shape depends on the LFO waveform (sine for smooth, square for chop).', use: 'Surf-rock Fender Twin guitar, Wurlitzer electric piano (the wobble IS the instrument), helicopter chop on synth pads. Slow + shallow for breathing movement, fast + deep for the choppy classic sound. Rate-synced to song tempo so it sits with the groove rather than fighting it.', spec: '1.12 (modulation cousin)' },
 };
 
 window.PRESETS = {
@@ -195,17 +196,19 @@ window.DIAGNOSTICS = {
     ],
     cleanMessage: 'Chain is clean. Without the noise gate, the vocal\'s breath and consonants survive intact — manual volume automation is the engineer\'s tool for breath control on lead vocals.',
   },
-  sidechain_kick_bass: {
-    name: 'Kick masks bass',
-    brief: 'The kick and bass are fighting for the same low-frequency space — every kick hit feels stifled by the bass. The classic fix is sidechain compression on the bass, keyed externally by the kick. The chain below shows the bass insert chain only; the side-chain routing piece is implied. Add the missing dynamics processor and click Diagnose.',
-    brokenChain: ['hpf', 'peq'],
+  seasick_chorus: {
+    name: 'Seasick chorus on vocal',
+    brief: 'A lead vocal has been fed into a chorus module that is set to behave like a vibrato pedal — fast rate, very deep modulation, mix pushed past unity. The result is a wobbly, pitched-up, "seasick" tone that obscures the lyric and clashes with anything tuned. The chain order is fine; the wrong choice is using chorus this aggressively on a featured vocal at all. Click Diagnose to see how an examiner would phrase it.',
+    brokenChain: ['hpf', 'deesser', 'comp', 'peq', 'chorus', 'plate'],
     faults: [
-      { id: 'no_compressor_for_sidechain',
-        detect: function (c) { return c.indexOf('comp') === -1; },
-        examinerLanguage: '"Sidechain compression" is named verbatim in the 2023, 2024 and 2025 C3 Edexcel PEFs as a topic where well-prepared candidates score full marks. The convention: a compressor on the bass channel is keyed externally from the kick drum. When the kick hits, the bass compressor ducks the bass by 4–6 dB; when the kick stops, the bass returns. The settings: ratio 4:1 to 8:1, attack ~1 ms (very fast), release matched to the kick\'s rhythmic value, threshold low enough that the compressor engages on every kick hit.',
-        hint: 'Add a Compressor to the chain. In a real session you would also route the kick to the compressor\'s side-chain input — this prototype shows the bass insert chain only, so add the compressor and read the examiner-language for the routing piece.' },
+      { id: 'chorus_on_lead_vocal',
+        detect: function (c) {
+          return c.indexOf('chorus') !== -1 && (c.indexOf('deesser') !== -1 || c.indexOf('plate') !== -1);
+        },
+        examinerLanguage: 'Audible pitch modulation on a sustained vocal note; perceived intonation drift; loss of lyric intelligibility. 2024 C3 PEF criticises "modulation applied to the lead vocal" where candidates added chorus to thicken a thin voice instead of fixing it with EQ and saturation. Chorus modulates a short delay line with an LFO — at depths beyond about 15% the pitch wobble becomes obvious and starts to argue with anything tuned in the arrangement. The conventional vocal-thickening tools are: a doubled vocal track (recorded twice, hard-panned), parallel saturation, or a high-shelf boost — not insert chorus on the lead.',
+        hint: 'Remove the Chorus from the chain (the × on its node). For "thicker" lead vocal, double-track the part, add parallel saturation, or shelve-up 8–10 kHz — name the technique in your written answer.' },
     ],
-    cleanMessage: 'Chain now contains a compressor. In a real session, route the kick to its side-chain input. With ratio 4:1 to 8:1, fast attack (~1 ms) and release matched to the kick rhythm, the bass ducks briefly on each kick hit and the two share the low end without masking each other.',
+    cleanMessage: 'Chain is clean. Without the chorus, the vocal stays present and tuned. In your written answer, name the alternative thickening techniques (double-tracking, parallel saturation, high-shelf air) so the examiner sees you knew why chorus was wrong here.',
   },
   glitchy_gate: {
     name: 'Glitchy gate',

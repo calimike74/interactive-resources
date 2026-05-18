@@ -560,6 +560,8 @@
           state.chain.forEach((k, i) => { if (k === 'saturation' || k === 'peq') faultIdx.add(i); });
         } else if (f.id === 'gate_on_vocal') {
           state.chain.forEach((k, i) => { if (k === 'gate') faultIdx.add(i); });
+        } else if (f.id === 'chorus_on_lead_vocal') {
+          state.chain.forEach((k, i) => { if (k === 'chorus') faultIdx.add(i); });
         }
       });
       state._diagState = { phase: 'fault', html };
