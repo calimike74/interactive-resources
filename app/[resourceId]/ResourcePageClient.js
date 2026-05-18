@@ -51,8 +51,16 @@ import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
 import WaveformExplorer from '@/components/resources/WaveformExplorer';
+import WaveformDrawingAssessment from '@/components/resources/WaveformDrawingAssessment';
 import DelayEffects from '@/components/resources/DelayEffects';
 import BPMDelayCalculator from '@/components/resources/BPMDelayCalculator';
+import DigitalAudioAssessment from '@/components/resources/DigitalAudioAssessment';
+import PitchSynthMonitorsAssessment from '@/components/resources/PitchSynthMonitorsAssessment';
+import LevelsMeteringAssessment from '@/components/resources/LevelsMeteringAssessment';
+import MIDIBinaryAssessment from '@/components/resources/MIDIBinaryAssessment';
+import AcousticsPsychoacoustics from '@/components/resources/AcousticsPsychoacoustics';
+import MixingProduction from '@/components/resources/MixingProduction';
+import ProductionAnalysis from '@/components/resources/ProductionAnalysis';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -96,8 +104,16 @@ const resourceComponents = {
     'SamplingPlayground': SamplingPlayground,
     'ReadThenQuiz': ReadThenQuiz,
     'WaveformExplorer': WaveformExplorer,
+    'WaveformDrawingAssessment': WaveformDrawingAssessment,
     'DelayEffects': DelayEffects,
     'BPMDelayCalculator': BPMDelayCalculator,
+    'DigitalAudioAssessment': DigitalAudioAssessment,
+    'PitchSynthMonitorsAssessment': PitchSynthMonitorsAssessment,
+    'LevelsMeteringAssessment': LevelsMeteringAssessment,
+    'MIDIBinaryAssessment': MIDIBinaryAssessment,
+    'AcousticsPsychoacoustics': AcousticsPsychoacoustics,
+    'MixingProduction': MixingProduction,
+    'ProductionAnalysis': ProductionAnalysis,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
