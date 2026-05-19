@@ -710,7 +710,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                             justifyContent: 'center',
                             gap: spacing[6],
                         }}>
-                            <div style={{ fontSize: '3rem', opacity: 0.5 }}>🔦</div>
+                            <div style={{ fontSize: '3rem', opacity: 0.5 }}></div>
                             <p style={{ color: t.text.secondary, maxWidth: '400px' }}>
                                 Upload a <strong>base image</strong> (what students see initially) and a <strong>reveal image</strong> (what's hidden underneath).
                             </p>
@@ -1211,7 +1211,7 @@ const GalleryView = ({ onSelectExample }) => {
                             position: 'relative',
                             overflow: 'hidden',
                         }}>
-                            {!example.baseImage && <span style={{ fontSize: '2rem', opacity: 0.5 }}>🔍</span>}
+                            {!example.baseImage && <span style={{ fontSize: '2rem', opacity: 0.5 }}></span>}
                             <div style={{
                                 position: 'absolute',
                                 bottom: spacing[2],
@@ -1222,7 +1222,7 @@ const GalleryView = ({ onSelectExample }) => {
                                 padding: `${spacing[1]} ${spacing[2]}`,
                                 borderRadius: borderRadius.full,
                             }}>
-                                {example.mode === 'spotlight' ? '🔦 spotlight' : `${example.hotspots?.length || 0} hotspots`}
+                                {example.mode === 'spotlight' ? 'spotlight' : `${example.hotspots?.length || 0} hotspots`}
                             </div>
                         </div>
 
@@ -1706,7 +1706,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
                                 fontSize: typography.size.sm,
                                 margin: 0,
                             }}>
-                                🔦 Hover over the image to reveal hidden annotations
+                                 Hover over the image to reveal hidden annotations
                             </p>
                         </div>
                     </div>
@@ -1758,7 +1758,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
                             zIndex: 10,
                         }}
                     >
-                        <span style={{ fontSize: '1.1em' }}>✋</span>
+                        <span style={{ fontSize: '1.1em' }}></span>
                         {handControlEnabled ? 'Hand Control ON' : 'Enable Hand Control'}
                     </button>
 
@@ -2122,7 +2122,7 @@ const BuilderView = ({ onBack }) => {
                             </>
                         ) : (
                             <div style={{ textAlign: 'center', padding: spacing[8] }}>
-                                <div style={{ fontSize: '3rem', marginBottom: spacing[4], opacity: 0.5 }}>📷</div>
+                                <div style={{ fontSize: '3rem', marginBottom: spacing[4], opacity: 0.5 }}></div>
                                 <p style={{
                                     color: t.text.secondary,
                                     marginBottom: spacing[4],
@@ -2542,7 +2542,7 @@ export default function RevealExplorer() {
                             alignItems: 'center',
                             gap: spacing[2],
                         }}>
-                            <span>🔍</span> Reveal Explorer
+                            <span></span> Reveal Explorer
                         </h1>
                         <p style={{
                             fontSize: typography.size.sm,
@@ -2562,9 +2562,9 @@ export default function RevealExplorer() {
                         borderRadius: borderRadius.lg,
                     }}>
                         {[
-                            { id: 'gallery', label: 'Gallery', icon: '📚' },
-                            { id: 'spotlight', label: 'Spotlight', icon: '🔦' },
-                            { id: 'builder', label: 'Hotspots', icon: '🎯' },
+                            { id: 'gallery', label: 'Gallery', icon: '' },
+                            { id: 'spotlight', label: 'Spotlight', icon: '' },
+                            { id: 'builder', label: 'Hotspots', icon: '' },
                         ].map(tab => (
                             <button
                                 key={tab.id}
@@ -2651,7 +2651,7 @@ export default function RevealExplorer() {
                                 <div style={{
                                     fontSize: '1.5rem',
                                     marginBottom: spacing[2],
-                                }}>📚</div>
+                                }}></div>
                                 <h3 style={{
                                     fontSize: typography.size.base,
                                     fontWeight: typography.weight.semibold,
@@ -2673,7 +2673,7 @@ export default function RevealExplorer() {
                                 <div style={{
                                     fontSize: '1.5rem',
                                     marginBottom: spacing[2],
-                                }}>🔍</div>
+                                }}></div>
                                 <h3 style={{
                                     fontSize: typography.size.base,
                                     fontWeight: typography.weight.semibold,
@@ -2695,7 +2695,7 @@ export default function RevealExplorer() {
                                 <div style={{
                                     fontSize: '1.5rem',
                                     marginBottom: spacing[2],
-                                }}>🛠️</div>
+                                }}></div>
                                 <h3 style={{
                                     fontSize: typography.size.base,
                                     fontWeight: typography.weight.semibold,

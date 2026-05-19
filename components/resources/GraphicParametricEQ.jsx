@@ -148,9 +148,9 @@ const CopyableNote = ({ title, children, variant = 'definition' }) => {
     };
 
     const icons = {
-        definition: '📝',
-        key: '⭐',
-        exam: '📋',
+        definition: '',
+        key: '',
+        exam: '',
         warning: '⚠️',
     };
 
@@ -203,7 +203,7 @@ const CopyableNote = ({ title, children, variant = 'definition' }) => {
                         transition: `all ${transitions.fast}`,
                     }}
                 >
-                    {copied ? '✓ Copied!' : '📋 Copy'}
+                    {copied ? '✓ Copied!' : 'Copy'}
                 </button>
             </div>
             <div
@@ -897,7 +897,7 @@ export default function GraphicParametricEQ() {
     ]);
 
     const tabs = [
-        { id: 'concept', label: 'Concept', icon: '💡' },
+        { id: 'concept', label: 'Concept', icon: '' },
         { id: 'compare', label: 'Compare', icon: '⚖️' },
         { id: 'practice', label: 'In Practice', icon: '🎛️' },
         { id: 'quiz', label: 'Test Yourself', icon: '✅' },

@@ -39,9 +39,9 @@ const font = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica 
 const mono = 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace';
 
 const TABS = [
-    { key: 'understand', label: 'Understand', icon: '🎨' },
-    { key: 'practice', label: 'Practice', icon: '🪜' },
-    { key: 'test', label: 'Test', icon: '🧠' },
+    { key: 'understand', label: 'Understand', icon: '' },
+    { key: 'practice', label: 'Practice', icon: '' },
+    { key: 'test', label: 'Test', icon: '' },
 ];
 
 // ─── Shared scaffold data ────────────────────────────────────────────────────
@@ -60,9 +60,9 @@ const ao3Pct = Math.round((ao3Count / scaffoldPoints.length) * 100);
 const ao4Pct = 100 - ao3Pct;
 
 const LEVELS = [
-    { key: 'full', label: 'Full', icon: '📋' },
-    { key: 'partial', label: 'Partial', icon: '✏️' },
-    { key: 'minimal', label: 'Minimal', icon: '💭' },
+    { key: 'full', label: 'Full', icon: '' },
+    { key: 'partial', label: 'Partial', icon: '' },
+    { key: 'minimal', label: 'Minimal', icon: '' },
 ];
 
 // ─── SideLabel ───────────────────────────────────────────────────────────────
@@ -250,7 +250,7 @@ function UnderstandTab() {
                     background: C.bgInner, border: `1px solid ${C.border}`,
                     borderRadius: 10, padding: 14, marginTop: 14,
                 }}>
-                    <div style={{ fontSize: 12, color: C.accent, fontWeight: 600, marginBottom: 4 }}>💡 Examiner Tip</div>
+                    <div style={{ fontSize: 12, color: C.accent, fontWeight: 600, marginBottom: 4 }}>Examiner Tip</div>
                     <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.5 }}>
                         {hoveredPoint !== null
                             ? scaffoldPoints[hoveredPoint].tip
@@ -365,9 +365,9 @@ function PracticeTab() {
                     borderRadius: 10, padding: 14, marginTop: 14,
                 }}>
                     <div style={{ fontSize: 13, color: C.green, fontWeight: 600, marginBottom: 4 }}>
-                        {activeLevel === 'full' && '📋 Full Scaffold — Study the structure'}
-                        {activeLevel === 'partial' && '✏️ Partial Scaffold — Fill the gaps'}
-                        {activeLevel === 'minimal' && '💭 Minimal Scaffold — Build it yourself'}
+                        {activeLevel === 'full' && 'Full Scaffold — Study the structure'}
+                        {activeLevel === 'partial' && 'Partial Scaffold — Fill the gaps'}
+                        {activeLevel === 'minimal' && 'Minimal Scaffold — Build it yourself'}
                     </div>
                     <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.5 }}>
                         {activeLevel === 'full' && 'Read through the complete scaffold. Understand why each point is included and in this order.'}
@@ -609,7 +609,7 @@ function TestTab() {
                             alignItems: 'center', justifyContent: 'center', gap: 14,
                             background: 'rgba(25, 25, 42, 0.4)',
                         }}>
-                            <div style={{ fontSize: 36 }}>🔒</div>
+                            <div style={{ fontSize: 36 }}></div>
                             <div style={{ fontSize: 14, color: C.text, fontWeight: 600, fontFamily: font, textAlign: 'center' }}>
                                 Write your plan first
                             </div>
@@ -630,7 +630,7 @@ function TestTab() {
                                     boxShadow: attempt.length > 20 ? '0 0 20px rgba(251,191,36,0.3)' : 'none',
                                 }}
                             >
-                                {attempt.length > 20 ? '👁 Reveal Scaffold' : '👁 Reveal (try writing first)'}
+                                {attempt.length > 20 ? 'Reveal Scaffold' : 'Reveal (try writing first)'}
                             </button>
                         </div>
                     )}
@@ -673,38 +673,38 @@ function TestTab() {
 const SIDE_ICONS = {
     understand: {
         left: [
-            { icon: '🔬', label: 'Analyse', y: 60 },
-            { icon: '💡', label: 'Apply', y: 220 },
-            { icon: '📐', label: 'Technical', y: 380 },
+            { icon: '', label: 'Analyse', y: 60 },
+            { icon: '', label: 'Apply', y: 220 },
+            { icon: '', label: 'Technical', y: 380 },
         ],
         right: [
             { icon: '⚖️', label: 'Evaluate', y: 60 },
-            { icon: '🎯', label: 'Judge', y: 220 },
-            { icon: '📊', label: 'Balance', y: 380 },
+            { icon: '', label: 'Judge', y: 220 },
+            { icon: '', label: 'Balance', y: 380 },
         ],
     },
     practice: {
         left: [
             { icon: '❓', label: 'Question', y: 60 },
-            { icon: '🎯', label: 'Focus', y: 220 },
-            { icon: '📝', label: 'Plan', y: 380 },
+            { icon: '', label: 'Focus', y: 220 },
+            { icon: '', label: 'Plan', y: 380 },
         ],
         right: [
-            { icon: '🔬', label: 'AO3', y: 60 },
+            { icon: '', label: 'AO3', y: 60 },
             { icon: '⚖️', label: 'AO4', y: 220 },
-            { icon: '📊', label: 'Marks', y: 380 },
+            { icon: '', label: 'Marks', y: 380 },
         ],
     },
     test: {
         left: [
-            { icon: '🧠', label: 'Recall', y: 60 },
+            { icon: '', label: 'Recall', y: 60 },
             { icon: '✍️', label: 'Attempt', y: 220 },
-            { icon: '🔄', label: 'Compare', y: 380 },
+            { icon: '', label: 'Compare', y: 380 },
         ],
         right: [
-            { icon: '👁', label: 'Reveal', y: 60 },
-            { icon: '🔍', label: 'Check', y: 220 },
-            { icon: '📈', label: 'Improve', y: 380 },
+            { icon: '', label: 'Reveal', y: 60 },
+            { icon: '', label: 'Check', y: 220 },
+            { icon: '', label: 'Improve', y: 380 },
         ],
     },
 };

@@ -132,9 +132,9 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
     };
 
     const icons = {
-        definition: '📝',
-        key: '⭐',
-        exam: '📋',
+        definition: '',
+        key: '',
+        exam: '',
         warning: '⚠️'
     };
 
@@ -182,7 +182,7 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
                         fontFamily: 'monospace'
                     }}
                 >
-                    {copied ? '✓ Copied!' : '📋 Copy'}
+                    {copied ? '✓ Copied!' : 'Copy'}
                 </button>
             </div>
             <div ref={contentRef} style={{ color: '#c9cdd4', fontSize: '0.9rem', lineHeight: '1.6' }}>
@@ -1142,7 +1142,7 @@ export default function DoubleTrackingExplorer() {
 
     const tabs = [
         { id: 'mistake', label: 'The Mistake', icon: '❌' },
-        { id: 'explore', label: 'Explore ADT', icon: '🔍' },
+        { id: 'explore', label: 'Explore ADT', icon: '' },
         { id: 'quiz', label: 'Quiz', icon: '?' },
     ];
 

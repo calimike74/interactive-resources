@@ -99,9 +99,9 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
     };
 
     const icons = {
-        definition: '📝',
-        key: '⭐',
-        exam: '📋',
+        definition: '',
+        key: '',
+        exam: '',
         warning: '⚠️'
     };
 
@@ -149,7 +149,7 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
                         fontFamily: 'monospace'
                     }}
                 >
-                    {copied ? '✓ Copied!' : '📋 Copy'}
+                    {copied ? '✓ Copied!' : 'Copy'}
                 </button>
             </div>
             <div ref={contentRef} style={{ color: '#c9cdd4', fontSize: '0.9rem', lineHeight: '1.6' }}>
@@ -312,7 +312,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                                 flexShrink: 0
                             }}
                         >
-                            {copied ? '✓' : '📋'}
+                            {copied ? '✓' : ''}
                         </button>
                     </div>
                     
@@ -557,11 +557,11 @@ const Part1Review = ({ onComplete }) => {
 // ============================================
 const Part2Bridge = ({ onComplete }) => {
     const comparisons = [
-        { aspect: 'Primary Purpose', synthesis: { text: 'Creative sound design', icon: '✨' }, eq: { text: 'Corrective mixing', icon: '🔧' } },
+        { aspect: 'Primary Purpose', synthesis: { text: 'Creative sound design', icon: '' }, eq: { text: 'Corrective mixing', icon: '' } },
         { aspect: 'What It Affects', synthesis: { text: 'Raw synthesized waveforms', icon: '〜' }, eq: { text: 'Recorded audio', icon: '🎤' } },
         { aspect: 'How It\'s Used', synthesis: { text: 'Dynamic - sweeps, modulation, LFO', icon: '↗' }, eq: { text: 'Static - set and forget', icon: '▬' } },
-        { aspect: 'Resonance Use', synthesis: { text: 'Extreme - self-oscillation, acid', icon: '🔊' }, eq: { text: 'Subtle - narrow surgical cuts', icon: '✂' } },
-        { aspect: 'Typical Settings', synthesis: { text: 'Wide sweeps, high resonance', icon: '📈' }, eq: { text: 'Precise frequencies, 3-6dB', icon: '📊' } }
+        { aspect: 'Resonance Use', synthesis: { text: 'Extreme - self-oscillation, acid', icon: '🔊' }, eq: { text: 'Subtle - narrow surgical cuts', icon: '' } },
+        { aspect: 'Typical Settings', synthesis: { text: 'Wide sweeps, high resonance', icon: '' }, eq: { text: 'Precise frequencies, 3-6dB', icon: '' } }
     ];
 
     return (
@@ -841,7 +841,7 @@ const AudioEngine = ({ filterType, frequency, gain, q, categoryColor }) => {
                     fontSize: '0.8rem',
                     color: '#8b909a'
                 }}>
-                    💡 <strong style={{ color: '#c9cdd4' }}>Try this:</strong> Move the frequency slider while listening. 
+                     <strong style={{ color: '#c9cdd4' }}>Try this:</strong> Move the frequency slider while listening. 
                     Notice how the {filterType === 'highpass' || filterType === 'lowpass' ? 'cutoff point' : 
                     filterType === 'bell' ? 'center of the boost/cut' : 'filter'} changes which frequencies you hear.
                 </div>
@@ -1517,7 +1517,7 @@ const Part4Practice = () => {
                         fontWeight: '600'
                     }}
                 >
-                    🎯 Guided Mode
+                     Guided Mode
                 </button>
                 <button
                     onClick={() => { setDrawingMode('challenge'); clearDrawing(); }}
@@ -1532,10 +1532,10 @@ const Part4Practice = () => {
                         fontWeight: '600'
                     }}
                 >
-                    🏆 Challenge Mode
+                     Challenge Mode
                 </button>
                 <div style={{ marginLeft: 'auto', padding: '0.75rem 1rem', background: '#16181f', borderRadius: '12px', fontSize: '0.8rem', color: '#8b909a' }}>
-                    {drawingMode === 'guided' ? '💡 Faded guide curve visible • Trace over it to learn the shape' : '🔥 No hints • Draw from memory'}
+                    {drawingMode === 'guided' ? 'Faded guide curve visible • Trace over it to learn the shape' : 'No hints • Draw from memory'}
                 </div>
             </div>
 
@@ -1548,7 +1548,7 @@ const Part4Practice = () => {
                             <div style={{ fontSize: '1.5rem', fontWeight: '700', color: challenge.color }}>{challenge.name}</div>
                             {drawingMode === 'guided' && (
                                 <div style={{ fontSize: '0.85rem', color: '#8b909a', marginTop: '0.5rem', fontStyle: 'italic' }}>
-                                    💡 {challenge.hint}
+                                     {challenge.hint}
                                 </div>
                             )}
                         </div>
@@ -1621,7 +1621,7 @@ const Part4Practice = () => {
                                 fontWeight: '600'
                             }}
                         >
-                            🎲 New Challenge
+                             New Challenge
                         </button>
                     </div>
 
@@ -1680,7 +1680,7 @@ const Part4Practice = () => {
                                 {score !== null ? `${score}%` : '—'}
                             </div>
                             <div style={{ fontSize: '1rem', fontWeight: '600', color: '#f8f9fa' }}>
-                                {score >= 85 ? '🌟 Excellent!' : score >= 70 ? '👍 Good work!' : score >= 50 ? '📈 Getting there!' : '💪 Keep practicing!'}
+                                {score >= 85 ? 'Excellent!' : score >= 70 ? 'Good work!' : score >= 50 ? 'Getting there!' : 'Keep practicing!'}
                             </div>
                         </div>
                         {feedback && (
@@ -1697,10 +1697,10 @@ const Part4Practice = () => {
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#f8f9fa', marginBottom: '1.5rem' }}>Key Takeaways</h3>
                 <div style={{ display: 'grid', gap: '1rem' }}>
                     {[
-                        { icon: '🔗', title: 'Same Filters, Different Context', desc: 'LPF, HPF, BPF, and Notch work identically in synthesis and EQ - only the application differs.' },
+                        { icon: '', title: 'Same Filters, Different Context', desc: 'LPF, HPF, BPF, and Notch work identically in synthesis and EQ - only the application differs.' },
                         { icon: '🎛️', title: 'Synthesis = Creative, EQ = Corrective', desc: 'Synthesis uses dynamic sweeps and extreme resonance. EQ uses static, subtle settings.' },
-                        { icon: '📈', title: 'New in EQ: Shelf Filters', desc: 'Boost or cut all frequencies above/below a point without removing them completely.' },
-                        { icon: '🔔', title: 'New in EQ: Bell/Parametric', desc: 'The most common EQ type - boost or cut around a center frequency with adjustable Q.' }
+                        { icon: '', title: 'New in EQ: Shelf Filters', desc: 'Boost or cut all frequencies above/below a point without removing them completely.' },
+                        { icon: '', title: 'New in EQ: Bell/Parametric', desc: 'The most common EQ type - boost or cut around a center frequency with adjustable Q.' }
                     ].map((item, idx) => (
                         <div key={idx} style={{ display: 'flex', gap: '1rem', padding: '1rem', background: '#16181f', borderRadius: '12px' }}>
                             <span style={{ fontSize: '1.5rem' }}>{item.icon}</span>
@@ -1740,7 +1740,7 @@ const Part4Practice = () => {
             </CopyableNote>
 
             <div style={{ marginTop: '2rem', padding: '2rem', background: 'linear-gradient(135deg, rgba(52,211,153,0.1) 0%, #101218 100%)', borderRadius: '16px', border: '1px solid rgba(52,211,153,0.3)', textAlign: 'center' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎉</div>
+                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}></div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#34d399', marginBottom: '0.5rem' }}>Well Done!</h3>
                 <p style={{ color: '#8b909a', maxWidth: '500px', margin: '0 auto' }}>
                     You've bridged your synthesis knowledge to EQ. Use the navigation above to revisit any section, and copy the notes to OneNote for revision.

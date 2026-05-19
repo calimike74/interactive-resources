@@ -27,9 +27,9 @@ const font = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica 
 const mono = 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace';
 
 const LEVELS = [
-    { key: 'full', label: 'Full', icon: '📋' },
-    { key: 'partial', label: 'Partial', icon: '✏️' },
-    { key: 'minimal', label: 'Minimal', icon: '💭' },
+    { key: 'full', label: 'Full', icon: '' },
+    { key: 'partial', label: 'Partial', icon: '' },
+    { key: 'minimal', label: 'Minimal', icon: '' },
 ];
 
 const scaffoldPoints = [
@@ -260,8 +260,8 @@ export default function LevelsPrototype() {
                 <div style={{ position: 'relative', width: '100%', maxWidth: 720, display: 'flex', justifyContent: 'center' }}>
                     <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 0 }}>
                         <SideLabel icon="❓" label="Question" side="left" y={60} />
-                        <SideLabel icon="🎯" label="Focus" side="left" y={210} />
-                        <SideLabel icon="📝" label="Plan" side="left" y={360} />
+                        <SideLabel icon="" label="Focus" side="left" y={210} />
+                        <SideLabel icon="" label="Plan" side="left" y={360} />
                     </div>
 
                     <BrowserCard title="essay-scaffold">
@@ -310,9 +310,9 @@ export default function LevelsPrototype() {
                                     borderRadius: 10, padding: 14,
                                 }}>
                                     <div style={{ fontSize: 13, color: C.green, fontWeight: 600, marginBottom: 4 }}>
-                                        {activeLevel === 'full' && '📋 Full Scaffold — Study the structure'}
-                                        {activeLevel === 'partial' && '✏️ Partial Scaffold — Fill the gaps'}
-                                        {activeLevel === 'minimal' && '💭 Minimal Scaffold — Build it yourself'}
+                                        {activeLevel === 'full' && 'Full Scaffold — Study the structure'}
+                                        {activeLevel === 'partial' && 'Partial Scaffold — Fill the gaps'}
+                                        {activeLevel === 'minimal' && 'Minimal Scaffold — Build it yourself'}
                                     </div>
                                     <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.5 }}>
                                         {activeLevel === 'full' && 'Read through the complete scaffold. Understand why each point is included and in this order.'}
@@ -440,9 +440,9 @@ export default function LevelsPrototype() {
                     </BrowserCard>
 
                     <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 0 }}>
-                        <SideLabel icon="🔬" label="AO3" side="right" y={60} />
+                        <SideLabel icon="" label="AO3" side="right" y={60} />
                         <SideLabel icon="⚖️" label="AO4" side="right" y={210} />
-                        <SideLabel icon="📊" label="Marks" side="right" y={360} />
+                        <SideLabel icon="" label="Marks" side="right" y={360} />
                     </div>
                 </div>
             </div>

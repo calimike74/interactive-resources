@@ -535,10 +535,10 @@ const DistortionLab = () => {
             Signal Chain
           </TabsTrigger>
           <TabsTrigger value="quiz" className="flex items-center gap-2">
-            📝 Quiz
+             Quiz
           </TabsTrigger>
           <TabsTrigger value="glossary" className="flex items-center gap-2">
-            📚 Glossary
+             Glossary
           </TabsTrigger>
         </TabsList>
 

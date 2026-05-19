@@ -168,9 +168,9 @@ export default function RetrievalPrototype() {
                 {/* Card */}
                 <div style={{ position: 'relative', width: '100%', maxWidth: 720, display: 'flex', justifyContent: 'center' }}>
                     <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 0 }}>
-                        <SideLabel icon="🧠" label="Recall" side="left" y={60} />
+                        <SideLabel icon="" label="Recall" side="left" y={60} />
                         <SideLabel icon="✍️" label="Attempt" side="left" y={220} />
-                        <SideLabel icon="🔄" label="Compare" side="left" y={380} />
+                        <SideLabel icon="" label="Compare" side="left" y={380} />
                     </div>
 
                     <BrowserCard title="essay-scaffold · retrieval">
@@ -301,7 +301,7 @@ export default function RetrievalPrototype() {
                                         }}>
                                             <div style={{
                                                 fontSize: 40, marginBottom: 4,
-                                            }}>🔒</div>
+                                            }}></div>
                                             <div style={{
                                                 fontSize: 14, color: C.text, fontWeight: 600,
                                                 fontFamily: font, textAlign: 'center',
@@ -337,7 +337,7 @@ export default function RetrievalPrototype() {
                                                         : 'none',
                                                 }}
                                             >
-                                                {attempt.length > 20 ? '👁 Reveal Scaffold' : '👁 Reveal (try writing first)'}
+                                                {attempt.length > 20 ? 'Reveal Scaffold' : 'Reveal (try writing first)'}
                                             </button>
                                         </div>
                                     )}
@@ -383,9 +383,9 @@ export default function RetrievalPrototype() {
                     </BrowserCard>
 
                     <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 0 }}>
-                        <SideLabel icon="👁" label="Reveal" side="right" y={60} />
-                        <SideLabel icon="🔍" label="Check" side="right" y={220} />
-                        <SideLabel icon="📈" label="Improve" side="right" y={380} />
+                        <SideLabel icon="" label="Reveal" side="right" y={60} />
+                        <SideLabel icon="" label="Check" side="right" y={220} />
+                        <SideLabel icon="" label="Improve" side="right" y={380} />
                     </div>
                 </div>
             </div>

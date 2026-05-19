@@ -175,14 +175,14 @@ export default function Comparison() {
             const leftCases = [
                 { text: 'Live sound', icon: '🎤' },
                 { text: 'DJ booth monitoring', icon: '🎧' },
-                { text: 'Room correction', icon: '🏠' },
-                { text: 'Quick tonal fixes', icon: '⚡' },
+                { text: 'Room correction', icon: '' },
+                { text: 'Quick tonal fixes', icon: '' },
             ];
             const rightCases = [
                 { text: 'Mix engineering', icon: '🎚' },
-                { text: 'Mastering', icon: '💿' },
-                { text: 'Removing resonances', icon: '🔍' },
-                { text: 'Surgical corrections', icon: '🎯' },
+                { text: 'Mastering', icon: '' },
+                { text: 'Removing resonances', icon: '' },
+                { text: 'Surgical corrections', icon: '' },
             ];
 
             leftCases.forEach((c, i) => {

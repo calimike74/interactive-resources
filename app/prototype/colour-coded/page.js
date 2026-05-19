@@ -218,9 +218,9 @@ export default function ColourCodedPrototype() {
                 {/* Card */}
                 <div style={{ position: 'relative', width: '100%', maxWidth: 720, display: 'flex', justifyContent: 'center' }}>
                     <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 0 }}>
-                        <SideLabel icon="🔬" label="Analyse" side="left" y={60} />
-                        <SideLabel icon="💡" label="Apply" side="left" y={220} />
-                        <SideLabel icon="📐" label="Technical" side="left" y={380} />
+                        <SideLabel icon="" label="Analyse" side="left" y={60} />
+                        <SideLabel icon="" label="Apply" side="left" y={220} />
+                        <SideLabel icon="" label="Technical" side="left" y={380} />
                     </div>
 
                     <BrowserCard title="essay-scaffold · ao-view">
@@ -273,7 +273,7 @@ export default function ColourCodedPrototype() {
                                     borderRadius: 10, padding: 14,
                                 }}>
                                     <div style={{ fontSize: 12, color: C.accent, fontWeight: 600, marginBottom: 4 }}>
-                                        💡 Examiner Tip
+                                         Examiner Tip
                                     </div>
                                     <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.5 }}>
                                         {hoveredPoint !== null
@@ -342,8 +342,8 @@ export default function ColourCodedPrototype() {
 
                     <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 0 }}>
                         <SideLabel icon="⚖️" label="Evaluate" side="right" y={60} />
-                        <SideLabel icon="🎯" label="Judge" side="right" y={220} />
-                        <SideLabel icon="📊" label="Balance" side="right" y={380} />
+                        <SideLabel icon="" label="Judge" side="right" y={220} />
+                        <SideLabel icon="" label="Balance" side="right" y={380} />
                     </div>
                 </div>
             </div>

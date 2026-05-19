@@ -54,7 +54,7 @@ const FONT_MONO = "'Geist Mono', ui-monospace, monospace";
 const CopyableNote = ({ title, children, color = 'var(--annotation-info)', variant = 'definition' }) => {
   const [copied, setCopied] = useState(false);
   const contentRef = useRef(null);
-  const icons = { definition: '\u{1F4DD}', key: '⭐', exam: '\u{1F4CB}', warning: '⚠️' };
+  const icons = { definition: '\u{1F4DD}', key: '', exam: '\u{1F4CB}', warning: '⚠️' };
   const handleCopy = async () => {
     if (contentRef.current) {
       try {
