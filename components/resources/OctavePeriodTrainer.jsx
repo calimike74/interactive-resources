@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Target } from 'lucide-react';
 
 // ============================================
@@ -57,7 +57,7 @@ const WAVEFORM_CONCEPTS = [
 // ============================================
 // COPYABLE NOTE COMPONENT
 // ============================================
-const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definition' }) => {
+const CopyableNote = ({ title, children, color = '#DCC892', variant = 'definition' }) => {
     const [copied, setCopied] = useState(false);
     const contentRef = useRef(null);
 
@@ -454,13 +454,13 @@ const Part1Foundations = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
                     <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Foundation Concepts</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Understanding Waveform Diagrams</h2>
                 <p style={{ color: '#8b909a', maxWidth: '600px', fontSize: '1rem', lineHeight: '1.7' }}>
                     Before you can draw transposed waveforms, you need to understand what each axis represents.
-                    <span style={{ color: '#ff9f43' }}> Click each card</span> to reveal the key concepts.
+                    <span style={{ color: '#DCC892' }}> Click each card</span> to reveal the key concepts.
                 </p>
             </div>
 
@@ -481,7 +481,7 @@ const Part1Foundations = ({ onComplete }) => {
                             Reveal All
                         </button>
                     )}
-                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                         Continue to Part 2 {allRevealed && '→'}
                     </button>
                 </div>
@@ -494,7 +494,7 @@ const Part1Foundations = ({ onComplete }) => {
                 <strong>CRITICAL RULE:</strong> Pitch changes affect the X-axis (time/period). Loudness changes affect the Y-axis (amplitude). They are independent!
             </CopyableNote>
 
-            <CopyableNote title="Period and Frequency Relationship" color="#ff9f43" variant="key">
+            <CopyableNote title="Period and Frequency Relationship" color="#DCC892" variant="key">
                 <strong>THE FUNDAMENTAL RELATIONSHIP:</strong><br/><br/>
                 Period (T) = 1 / Frequency (f)<br/>
                 Frequency (f) = 1 / Period (T)<br/><br/>
@@ -518,7 +518,7 @@ const Part2Mistake = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #ef4444 0%, #f97316 100%)', color: '#fff', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 2</div>
+                    <div style={{ background: '#ef4444', color: '#fff', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 2</div>
                     <div style={{ fontSize: '0.7rem', color: '#ef4444', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Critical Warning</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>The Common Mistake</h2>
@@ -681,7 +681,7 @@ const Part2Mistake = ({ onComplete }) => {
 // ============================================
 // PART 3: INTERACTIVE EXPLORATION
 // ============================================
-const Part3Explore = ({ onComplete }) => {
+const Part3Explore = () => {
     const [originalCycles, setOriginalCycles] = useState(4);
     const [octaveShift, setOctaveShift] = useState(-1); // -2, -1, 0, +1, +2
 
@@ -694,10 +694,10 @@ const Part3Explore = ({ onComplete }) => {
     const transposedCycles = getTransposedCycles();
 
     const octaveDescriptions = {
-        '-2': { label: '2 Octaves Lower', color: '#3b82f6', explanation: 'Frequency ÷ 4, Period × 4' },
+        '-2': { label: '2 Octaves Lower', color: '#DCC892', explanation: 'Frequency ÷ 4, Period × 4' },
         '-1': { label: '1 Octave Lower', color: '#22c55e', explanation: 'Frequency ÷ 2, Period × 2' },
         '0': { label: 'Original', color: '#8b909a', explanation: 'No change' },
-        '1': { label: '1 Octave Higher', color: '#f59e0b', explanation: 'Frequency × 2, Period ÷ 2' },
+        '1': { label: '1 Octave Higher', color: '#DCC892', explanation: 'Frequency × 2, Period ÷ 2' },
         '2': { label: '2 Octaves Higher', color: '#ef4444', explanation: 'Frequency × 4, Period ÷ 4' }
     };
 
@@ -707,13 +707,13 @@ const Part3Explore = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 3</div>
-                    <div style={{ fontSize: '0.7rem', color: '#22d3ee', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Interactive Exploration</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 3</div>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Interactive Exploration</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>See the Relationship</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
                     Adjust the controls to see how octave transposition affects the waveform.
-                    <span style={{ color: '#22d3ee' }}> Count the cycles</span> and observe how they change.
+                    <span style={{ color: '#DCC892' }}> Count the cycles</span> and observe how they change.
                 </p>
             </div>
 
@@ -722,7 +722,7 @@ const Part3Explore = ({ onComplete }) => {
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.5rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
                         <span style={{ color: '#8b909a', fontSize: '0.9rem' }}>Original Cycles</span>
-                        <span style={{ color: '#22d3ee', fontFamily: 'monospace', fontWeight: '600', fontSize: '1.25rem' }}>{originalCycles}</span>
+                        <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '600', fontSize: '1.25rem' }}>{originalCycles}</span>
                     </div>
                     <input
                         type="range"
@@ -730,7 +730,7 @@ const Part3Explore = ({ onComplete }) => {
                         max={8}
                         value={originalCycles}
                         onChange={(e) => setOriginalCycles(Number(e.target.value))}
-                        style={{ width: '100%', accentColor: '#22d3ee' }}
+                        style={{ width: '100%', accentColor: '#DCC892' }}
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.7rem', color: '#4a4f5a' }}>
                         <span>2</span>
@@ -862,10 +862,10 @@ const Part3Explore = ({ onComplete }) => {
                         </thead>
                         <tbody>
                             {[
-                                { shift: '2 Octaves Lower', freq: '÷ 4', period: '× 4', cycles: '÷ 4', color: '#3b82f6' },
+                                { shift: '2 Octaves Lower', freq: '÷ 4', period: '× 4', cycles: '÷ 4', color: '#DCC892' },
                                 { shift: '1 Octave Lower', freq: '÷ 2', period: '× 2', cycles: '÷ 2', color: '#22c55e' },
                                 { shift: 'Original', freq: '—', period: '—', cycles: '—', color: '#8b909a' },
-                                { shift: '1 Octave Higher', freq: '× 2', period: '÷ 2', cycles: '× 2', color: '#f59e0b' },
+                                { shift: '1 Octave Higher', freq: '× 2', period: '÷ 2', cycles: '× 2', color: '#DCC892' },
                                 { shift: '2 Octaves Higher', freq: '× 4', period: '÷ 4', cycles: '× 4', color: '#ef4444' },
                             ].map((row, idx) => (
                                 <tr key={idx} style={{ borderBottom: '1px solid #ffffff08' }}>
@@ -880,7 +880,7 @@ const Part3Explore = ({ onComplete }) => {
                 </div>
             </div>
 
-            <CopyableNote title="Octave Transformation Rules" color="#22d3ee" variant="key">
+            <CopyableNote title="Octave Transformation Rules" color="#DCC892" variant="key">
                 <strong>OCTAVE RELATIONSHIPS:</strong><br/><br/>
                 <strong>1 OCTAVE LOWER:</strong><br/>
                 • Frequency ÷ 2 (halved)<br/>
@@ -897,520 +897,6 @@ const Part3Explore = ({ onComplete }) => {
 };
 
 // ============================================
-// PART 4: DRAWING PRACTICE
-// ============================================
-const Part4Draw = () => {
-    const canvasRef = useRef(null);
-    const [isDrawing, setIsDrawing] = useState(false);
-    const [userPoints, setUserPoints] = useState([]);
-    const [showSolution, setShowSolution] = useState(false);
-    const [challenge, setChallenge] = useState(null);
-    const [drawingMode, setDrawingMode] = useState('guided');
-    const [score, setScore] = useState(null);
-    const [feedback, setFeedback] = useState(null);
-
-    const canvasWidth = 600;
-    const canvasHeight = 300;
-    const padding = { top: 40, right: 40, bottom: 50, left: 50 };
-
-    const challenges = [
-        { name: '1 Octave Lower', originalCycles: 4, direction: 'lower', octaves: 1, expectedCycles: 2, color: '#22c55e', hint: 'Period doubles - draw HALF as many cycles, each TWICE as wide' },
-        { name: '1 Octave Lower', originalCycles: 6, direction: 'lower', octaves: 1, expectedCycles: 3, color: '#22c55e', hint: 'Period doubles - 6 cycles become 3 cycles' },
-        { name: '2 Octaves Lower', originalCycles: 8, direction: 'lower', octaves: 2, expectedCycles: 2, color: '#3b82f6', hint: 'Period quadruples - draw only 1/4 as many cycles' },
-        { name: '1 Octave Higher', originalCycles: 2, direction: 'higher', octaves: 1, expectedCycles: 4, color: '#f59e0b', hint: 'Period halves - draw TWICE as many cycles, each HALF as wide' },
-        { name: '1 Octave Higher', originalCycles: 3, direction: 'higher', octaves: 1, expectedCycles: 6, color: '#f59e0b', hint: 'Period halves - 3 cycles become 6 cycles' },
-        { name: '2 Octaves Higher', originalCycles: 2, direction: 'higher', octaves: 2, expectedCycles: 8, color: '#ef4444', hint: 'Period is quartered - draw 4 times as many cycles' },
-    ];
-
-    const generateNewChallenge = useCallback(() => {
-        const newChallenge = challenges[Math.floor(Math.random() * challenges.length)];
-        setChallenge(newChallenge);
-        setShowSolution(false);
-        setUserPoints([]);
-        setScore(null);
-        setFeedback(null);
-    }, []);
-
-    useEffect(() => {
-        if (!challenge) generateNewChallenge();
-    }, [challenge, generateNewChallenge]);
-
-    const drawGrid = useCallback((ctx) => {
-        const innerWidth = canvasWidth - padding.left - padding.right;
-        const innerHeight = canvasHeight - padding.top - padding.bottom;
-
-        ctx.fillStyle = '#050507';
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-        // Grid
-        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-        ctx.lineWidth = 1;
-        for (let i = 0; i <= 8; i++) {
-            const x = padding.left + (i / 8) * innerWidth;
-            ctx.beginPath();
-            ctx.moveTo(x, padding.top);
-            ctx.lineTo(x, canvasHeight - padding.bottom);
-            ctx.stroke();
-        }
-        for (let i = 0; i <= 4; i++) {
-            const y = padding.top + (i / 4) * innerHeight;
-            ctx.beginPath();
-            ctx.moveTo(padding.left, y);
-            ctx.lineTo(canvasWidth - padding.right, y);
-            ctx.stroke();
-        }
-
-        // Centre line
-        ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, canvasHeight / 2);
-        ctx.lineTo(canvasWidth - padding.right, canvasHeight / 2);
-        ctx.stroke();
-
-        // Axes
-        ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, padding.top);
-        ctx.lineTo(padding.left, canvasHeight - padding.bottom);
-        ctx.lineTo(canvasWidth - padding.right, canvasHeight - padding.bottom);
-        ctx.stroke();
-
-        // Labels
-        ctx.fillStyle = '#8b909a';
-        ctx.font = '11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Time', canvasWidth / 2, canvasHeight - 10);
-
-        ctx.save();
-        ctx.translate(15, canvasHeight / 2);
-        ctx.rotate(-Math.PI / 2);
-        ctx.fillText('Amplitude', 0, 0);
-        ctx.restore();
-    }, []);
-
-    const drawOriginalWaveform = useCallback((ctx) => {
-        if (!challenge) return;
-
-        const innerWidth = canvasWidth - padding.left - padding.right;
-        const innerHeight = canvasHeight - padding.top - padding.bottom;
-        const amplitude = (innerHeight * 0.35);
-        const midY = canvasHeight / 2;
-
-        ctx.strokeStyle = 'rgba(139,144,154,0.5)';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-
-        for (let i = 0; i <= innerWidth; i++) {
-            const x = padding.left + i;
-            const progress = i / innerWidth;
-            const y = midY - Math.sin(progress * challenge.originalCycles * 2 * Math.PI) * amplitude;
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Label
-        ctx.fillStyle = '#8b909a';
-        ctx.font = '10px monospace';
-        ctx.textAlign = 'left';
-        ctx.fillText(`Original: ${challenge.originalCycles} cycles`, padding.left + 5, padding.top + 15);
-    }, [challenge]);
-
-    const drawGuidedHint = useCallback((ctx) => {
-        if (!challenge || drawingMode !== 'guided') return;
-
-        const innerWidth = canvasWidth - padding.left - padding.right;
-        const innerHeight = canvasHeight - padding.top - padding.bottom;
-        const amplitude = (innerHeight * 0.35);
-        const midY = canvasHeight / 2;
-
-        ctx.strokeStyle = challenge.color + '30';
-        ctx.lineWidth = 12;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-
-        for (let i = 0; i <= innerWidth; i++) {
-            const x = padding.left + i;
-            const progress = i / innerWidth;
-            const y = midY - Math.sin(progress * challenge.expectedCycles * 2 * Math.PI) * amplitude;
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-    }, [challenge, drawingMode]);
-
-    const drawUserLine = useCallback((ctx) => {
-        if (userPoints.length < 2) return;
-
-        ctx.strokeStyle = '#3b82f6';
-        ctx.lineWidth = 3;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.shadowColor = '#3b82f6';
-        ctx.shadowBlur = 6;
-
-        ctx.beginPath();
-        ctx.moveTo(userPoints[0].x, userPoints[0].y);
-        for (let i = 1; i < userPoints.length; i++) {
-            ctx.lineTo(userPoints[i].x, userPoints[i].y);
-        }
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-    }, [userPoints]);
-
-    const drawSolutionCurve = useCallback((ctx) => {
-        if (!challenge || !showSolution) return;
-
-        const innerWidth = canvasWidth - padding.left - padding.right;
-        const innerHeight = canvasHeight - padding.top - padding.bottom;
-        const amplitude = (innerHeight * 0.35);
-        const midY = canvasHeight / 2;
-
-        ctx.strokeStyle = challenge.color;
-        ctx.lineWidth = 3;
-        ctx.lineCap = 'round';
-        ctx.shadowColor = challenge.color;
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-
-        for (let i = 0; i <= innerWidth; i++) {
-            const x = padding.left + i;
-            const progress = i / innerWidth;
-            const y = midY - Math.sin(progress * challenge.expectedCycles * 2 * Math.PI) * amplitude;
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        // Label
-        ctx.fillStyle = challenge.color;
-        ctx.font = 'bold 10px monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText(`Correct: ${challenge.expectedCycles} cycles`, canvasWidth - padding.right - 5, padding.top + 15);
-    }, [challenge, showSolution]);
-
-    const redrawCanvas = useCallback(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        drawGrid(ctx);
-        drawOriginalWaveform(ctx);
-        drawGuidedHint(ctx);
-        drawUserLine(ctx);
-        drawSolutionCurve(ctx);
-    }, [drawGrid, drawOriginalWaveform, drawGuidedHint, drawUserLine, drawSolutionCurve]);
-
-    useEffect(() => {
-        redrawCanvas();
-    }, [redrawCanvas, userPoints, showSolution, challenge, drawingMode]);
-
-    const getMousePos = (e) => {
-        const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-
-        if (e.touches) {
-            return {
-                x: (e.touches[0].clientX - rect.left) * scaleX,
-                y: (e.touches[0].clientY - rect.top) * scaleY
-            };
-        }
-        return {
-            x: (e.clientX - rect.left) * scaleX,
-            y: (e.clientY - rect.top) * scaleY
-        };
-    };
-
-    const handleStart = (e) => {
-        e.preventDefault();
-        const pos = getMousePos(e);
-        if (pos.x >= padding.left && pos.x <= canvasWidth - padding.right &&
-            pos.y >= padding.top && pos.y <= canvasHeight - padding.bottom) {
-            setIsDrawing(true);
-            setUserPoints([pos]);
-            setScore(null);
-            setFeedback(null);
-        }
-    };
-
-    const handleMove = (e) => {
-        if (!isDrawing) return;
-        e.preventDefault();
-        const pos = getMousePos(e);
-        if (pos.x >= padding.left && pos.x <= canvasWidth - padding.right &&
-            pos.y >= padding.top && pos.y <= canvasHeight - padding.bottom) {
-            setUserPoints(prev => [...prev, pos]);
-        }
-    };
-
-    const handleEnd = () => {
-        setIsDrawing(false);
-    };
-
-    const clearDrawing = () => {
-        setUserPoints([]);
-        setShowSolution(false);
-        setScore(null);
-        setFeedback(null);
-    };
-
-    const checkAnswer = () => {
-        setShowSolution(true);
-
-        if (userPoints.length < 20) {
-            setFeedback("Draw more of the waveform to get feedback!");
-            return;
-        }
-
-        // Simple scoring based on user's approximate cycle count
-        const innerWidth = canvasWidth - padding.left - padding.right;
-        const midY = canvasHeight / 2;
-        let crossings = 0;
-
-        for (let i = 1; i < userPoints.length; i++) {
-            const prev = userPoints[i-1].y;
-            const curr = userPoints[i].y;
-            if ((prev < midY && curr >= midY) || (prev >= midY && curr < midY)) {
-                crossings++;
-            }
-        }
-
-        const estimatedCycles = crossings / 2;
-        const accuracy = Math.max(0, 100 - Math.abs(estimatedCycles - challenge.expectedCycles) * 25);
-        setScore(Math.round(accuracy));
-
-        if (accuracy >= 80) {
-            setFeedback(`Excellent! Your waveform shows approximately ${estimatedCycles.toFixed(1)} cycles - very close to the correct ${challenge.expectedCycles} cycles.`);
-        } else if (accuracy >= 50) {
-            setFeedback(`Good attempt! You drew about ${estimatedCycles.toFixed(1)} cycles. The correct answer is ${challenge.expectedCycles} cycles. Remember: ${challenge.direction === 'lower' ? 'lower pitch = wider cycles' : 'higher pitch = narrower cycles'}.`);
-        } else {
-            setFeedback(`Keep practising! You drew about ${estimatedCycles.toFixed(1)} cycles, but the correct answer is ${challenge.expectedCycles} cycles. ${challenge.direction === 'lower' ? 'Octave lower means the period doubles, so there should be FEWER cycles.' : 'Octave higher means the period halves, so there should be MORE cycles.'}`);
-        }
-    };
-
-    return (
-        <div style={{ padding: '1.5rem' }}>
-            <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 4</div>
-                    <div style={{ fontSize: '0.7rem', color: '#74b9ff', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Draw & Practice</div>
-                </div>
-                <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Draw the Transposed Waveform</h2>
-                <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
-                    Now it's your turn. Draw what the waveform should look like after transposition.
-                    <span style={{ color: '#74b9ff' }}> The original is shown as a dashed line.</span>
-                </p>
-            </div>
-
-            {/* Mode Selector */}
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                <button
-                    onClick={() => { setDrawingMode('guided'); clearDrawing(); }}
-                    style={{
-                        padding: '0.75rem 1.5rem',
-                        background: drawingMode === 'guided' ? 'linear-gradient(135deg, #34d399 0%, #10b981 100%)' : '#16181f',
-                        border: `1px solid ${drawingMode === 'guided' ? '#34d399' : '#ffffff15'}`,
-                        borderRadius: '12px',
-                        color: drawingMode === 'guided' ? '#050507' : '#8b909a',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: '600'
-                    }}
-                >
-                    Guided Mode
-                </button>
-                <button
-                    onClick={() => { setDrawingMode('challenge'); clearDrawing(); }}
-                    style={{
-                        padding: '0.75rem 1.5rem',
-                        background: drawingMode === 'challenge' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : '#16181f',
-                        border: `1px solid ${drawingMode === 'challenge' ? '#f59e0b' : '#ffffff15'}`,
-                        borderRadius: '12px',
-                        color: drawingMode === 'challenge' ? '#050507' : '#8b909a',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: '600'
-                    }}
-                >
-                    Challenge Mode
-                </button>
-                <div style={{ marginLeft: 'auto', padding: '0.75rem 1rem', background: '#16181f', borderRadius: '12px', fontSize: '0.8rem', color: '#8b909a' }}>
-                    {drawingMode === 'guided' ? 'Faded guide visible - trace over it' : 'No hints - draw from understanding'}
-                </div>
-            </div>
-
-            {/* Challenge Display */}
-            {challenge && (
-                <div style={{ background: '#101218', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem', border: `1px solid ${challenge.color}50` }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                        <div>
-                            <div style={{ fontSize: '0.7rem', color: '#4a4f5a', fontFamily: 'monospace', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Draw This</div>
-                            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: challenge.color }}>{challenge.name}</div>
-                            {drawingMode === 'guided' && (
-                                <div style={{ fontSize: '0.85rem', color: '#8b909a', marginTop: '0.5rem', fontStyle: 'italic' }}>
-                                    {challenge.hint}
-                                </div>
-                            )}
-                        </div>
-                        <div style={{ display: 'flex', gap: '1.5rem' }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.65rem', color: '#4a4f5a', textTransform: 'uppercase' }}>Original</div>
-                                <div style={{ fontSize: '1.25rem', fontWeight: '600', color: '#8b909a', fontFamily: 'monospace' }}>{challenge.originalCycles} cycles</div>
-                            </div>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.65rem', color: '#4a4f5a', textTransform: 'uppercase' }}>Expected</div>
-                                <div style={{ fontSize: '1.25rem', fontWeight: '600', color: challenge.color, fontFamily: 'monospace' }}>{challenge.expectedCycles} cycles</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Canvas */}
-            <div style={{ background: '#101218', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
-                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                        <button onClick={checkAnswer} style={{ padding: '0.75rem 1.25rem', background: showSolution ? '#34d399' : '#16181f', border: `1px solid ${showSolution ? '#34d399' : '#ffffff15'}`, borderRadius: '10px', color: showSolution ? '#050507' : '#c9cdd4', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600' }}>
-                            Check Answer
-                        </button>
-                        <button onClick={clearDrawing} style={{ padding: '0.75rem 1.25rem', background: '#16181f', border: '1px solid #ffffff15', borderRadius: '10px', color: '#c9cdd4', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600' }}>
-                            Clear
-                        </button>
-                        <button onClick={generateNewChallenge} style={{ padding: '0.75rem 1.25rem', background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)', border: 'none', borderRadius: '10px', color: '#050507', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600' }}>
-                            New Challenge
-                        </button>
-                    </div>
-
-                    {/* Legend */}
-                    <div style={{ background: '#16181f', borderRadius: '8px', padding: '0.75rem 1rem', display: 'flex', gap: '1rem', fontSize: '0.75rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <div style={{ width: '20px', height: '2px', borderTop: '2px dashed #8b909a' }} />
-                            <span style={{ color: '#8b909a' }}>Original</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <div style={{ width: '20px', height: '3px', background: '#3b82f6', borderRadius: '2px' }} />
-                            <span style={{ color: '#8b909a' }}>Your drawing</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <div style={{ width: '20px', height: '3px', background: challenge?.color || '#22c55e', borderRadius: '2px' }} />
-                            <span style={{ color: '#8b909a' }}>Correct</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <canvas
-                        ref={canvasRef}
-                        width={canvasWidth}
-                        height={canvasHeight}
-                        onMouseDown={handleStart}
-                        onMouseMove={handleMove}
-                        onMouseUp={handleEnd}
-                        onMouseLeave={handleEnd}
-                        onTouchStart={handleStart}
-                        onTouchMove={handleMove}
-                        onTouchEnd={handleEnd}
-                        style={{
-                            borderRadius: '12px',
-                            cursor: 'crosshair',
-                            maxWidth: '100%',
-                            height: 'auto',
-                            touchAction: 'none'
-                        }}
-                    />
-                </div>
-
-                {/* Feedback */}
-                {(score !== null || feedback) && (
-                    <div style={{
-                        marginTop: '1.5rem',
-                        padding: '1.25rem',
-                        background: score >= 70 ? 'rgba(34,197,94,0.1)' : score >= 50 ? 'rgba(251,191,36,0.1)' : 'rgba(239,68,68,0.1)',
-                        borderRadius: '12px',
-                        border: `1px solid ${score >= 70 ? '#22c55e50' : score >= 50 ? '#fbbf2450' : '#ef444450'}`
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem' }}>
-                            <div style={{
-                                fontSize: '2rem',
-                                fontWeight: '700',
-                                color: score >= 70 ? '#22c55e' : score >= 50 ? '#fbbf24' : '#ef4444',
-                                fontFamily: 'monospace'
-                            }}>
-                                {score !== null ? `${score}%` : '—'}
-                            </div>
-                            <div style={{ fontSize: '1rem', fontWeight: '600', color: '#f8f9fa' }}>
-                                {score >= 80 ? 'Excellent!' : score >= 50 ? 'Good attempt!' : 'Keep practising!'}
-                            </div>
-                        </div>
-                        {feedback && (
-                            <div style={{ fontSize: '0.9rem', color: '#c9cdd4', lineHeight: '1.6' }}>
-                                {feedback}
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-
-            {/* Key Takeaways */}
-            <div style={{ background: '#101218', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#f8f9fa', marginBottom: '1.5rem' }}>Key Takeaways</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                    {[
-                        { title: 'X-Axis = Time, Y-Axis = Amplitude', desc: 'Pitch changes affect the X-axis (horizontal). Loudness changes affect the Y-axis (vertical).' },
-                        { title: 'Lower Pitch = Wider Cycles', desc: 'Octave lower means period doubles. Cycles stretch horizontally, fewer fit in the same time.' },
-                        { title: 'Higher Pitch = Narrower Cycles', desc: 'Octave higher means period halves. Cycles compress horizontally, more fit in the same time.' },
-                        { title: 'Amplitude Stays the Same', desc: 'Changing pitch does NOT move the waveform up or down. The height (amplitude) is unchanged.' }
-                    ].map((item, idx) => (
-                        <div key={idx} style={{ display: 'flex', gap: '1rem', padding: '1rem', background: '#16181f', borderRadius: '12px' }}>
-                            <div>
-                                <div style={{ fontWeight: '600', color: '#f8f9fa', marginBottom: '0.25rem' }}>{item.title}</div>
-                                <div style={{ fontSize: '0.9rem', color: '#8b909a' }}>{item.desc}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            <CopyableNote title="Exam Drawing Technique" color="#74b9ff" variant="exam">
-                <strong>WHEN ASKED TO DRAW A WAVEFORM ONE OCTAVE LOWER:</strong><br/><br/>
-                1. Keep the Y-axis (amplitude/height) exactly the same<br/>
-                2. Double the width of each cycle (period × 2)<br/>
-                3. Result: Half as many cycles fit in the same time span<br/><br/>
-                <strong>DO NOT:</strong> Shift the waveform down on the page. This would represent quieter, not lower pitch.
-            </CopyableNote>
-
-            <CopyableNote title="Complete Summary for Exams" color="#22c55e" variant="key">
-                <strong>OCTAVE = DOUBLE/HALVE THE PERIOD</strong><br/><br/>
-                <strong>OCTAVE LOWER:</strong><br/>
-                • Frequency ÷ 2 → Period × 2<br/>
-                • Fewer, wider cycles<br/>
-                • Waveform stretches horizontally<br/><br/>
-                <strong>OCTAVE HIGHER:</strong><br/>
-                • Frequency × 2 → Period ÷ 2<br/>
-                • More, narrower cycles<br/>
-                • Waveform compresses horizontally<br/><br/>
-                <strong>AMPLITUDE:</strong> Stays the same - pitch and loudness are independent!
-            </CopyableNote>
-
-            <div style={{ marginTop: '2rem', padding: '2rem', background: 'linear-gradient(135deg, rgba(52,211,153,0.1) 0%, #101218 100%)', borderRadius: '16px', border: '1px solid rgba(52,211,153,0.3)', textAlign: 'center' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.5rem' }}><Target size={28} strokeWidth={1.75} color="#34d399" aria-hidden="true" /></div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#34d399', marginBottom: '0.5rem' }}>Ready for the Exam!</h3>
-                <p style={{ color: '#8b909a', maxWidth: '500px', margin: '0 auto' }}>
-                    You now understand what "very few candidates" got right. Use the navigation above to revisit any section, and copy the notes to OneNote for revision.
-                </p>
-            </div>
-        </div>
-    );
-};
-
-// ============================================
 // MAIN APP
 // ============================================
 export default function OctavePeriodTrainer() {
@@ -1422,8 +908,8 @@ export default function OctavePeriodTrainer() {
         setVisitedParts(prev => new Set([...prev, part]));
     };
 
-    const partColors = { 1: '#DCC892', 2: '#ef4444', 3: '#22d3ee', 4: '#74b9ff' };
-    const partNames = { 1: 'Foundations', 2: 'The Mistake', 3: 'Explore', 4: 'Draw' };
+    const partColors = { 1: '#DCC892', 2: '#ef4444', 3: '#DCC892' };
+    const partNames = { 1: 'Foundations', 2: 'The Mistake', 3: 'Explore' };
 
     return (
         <div style={{ minHeight: '100vh', background: '#050507', color: '#c9cdd4', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
@@ -1432,14 +918,14 @@ export default function OctavePeriodTrainer() {
                 <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
                         <h1 style={{ fontSize: '0.9rem', fontWeight: '400', letterSpacing: '0.15em', color: '#8b909a', textTransform: 'uppercase', margin: 0 }}>
-                            <span style={{ color: '#22d3ee', fontWeight: '600' }}>Octave</span> = Double the <span style={{ color: '#ff9f43', fontWeight: '600' }}>Period</span>
+                            <span style={{ color: '#DCC892', fontWeight: '600' }}>Octave</span> = Double the <span style={{ color: '#DCC892', fontWeight: '600' }}>Period</span>
                         </h1>
                         <div style={{ fontSize: '0.65rem', color: '#4a4f5a', fontFamily: 'monospace', marginTop: '0.25rem' }}>
                             A-Level Music Technology | 2.5 Numeracy
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        {[1, 2, 3, 4].map(part => (
+                        {[1, 2, 3].map(part => (
                             <button
                                 key={part}
                                 onClick={() => goToPart(part)}
@@ -1524,8 +1010,7 @@ export default function OctavePeriodTrainer() {
             <main style={{ maxWidth: '1100px', margin: '0 auto' }}>
                 {currentPart === 1 && <Part1Foundations onComplete={() => goToPart(2)} />}
                 {currentPart === 2 && <Part2Mistake onComplete={() => goToPart(3)} />}
-                {currentPart === 3 && <Part3Explore onComplete={() => goToPart(4)} />}
-                {currentPart === 4 && <Part4Draw />}
+                {currentPart === 3 && <Part3Explore />}
             </main>
 
             {/* Footer */}
