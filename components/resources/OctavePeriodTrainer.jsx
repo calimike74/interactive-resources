@@ -13,8 +13,8 @@ const WAVEFORM_CONCEPTS = [
         definition: 'The horizontal axis represents TIME (milliseconds or seconds). Shows how the waveform changes over time.',
         keyPoint: 'Period is measured along the X-axis. Lower pitch = wider cycles along the X-axis.',
         svgType: 'xaxis',
-        color: '#00d4ff',
-        glowColor: 'rgba(0, 212, 255, 0.4)'
+        color: '#DCC892',
+        glowColor: 'rgba(220, 200, 146, 0.35)'
     },
     {
         id: 'yaxis',
@@ -22,8 +22,8 @@ const WAVEFORM_CONCEPTS = [
         definition: 'The vertical axis represents AMPLITUDE (air pressure displacement or voltage). Shows the strength of the signal.',
         keyPoint: 'Amplitude determines LOUDNESS, not pitch. Changing octave does NOT change amplitude.',
         svgType: 'yaxis',
-        color: '#00ff88',
-        glowColor: 'rgba(0, 255, 136, 0.4)'
+        color: '#DCC892',
+        glowColor: 'rgba(220, 200, 146, 0.35)'
     },
     {
         id: 'period',
@@ -31,8 +31,8 @@ const WAVEFORM_CONCEPTS = [
         definition: 'The time for ONE complete cycle of the waveform. Measured in seconds or milliseconds.',
         keyPoint: 'Period = 1 / Frequency. Lower frequency = longer period = wider cycles.',
         svgType: 'period',
-        color: '#ff9f43',
-        glowColor: 'rgba(255, 159, 67, 0.4)'
+        color: '#DCC892',
+        glowColor: 'rgba(220, 200, 146, 0.35)'
     },
     {
         id: 'frequency',
@@ -40,8 +40,8 @@ const WAVEFORM_CONCEPTS = [
         definition: 'The number of complete cycles per second. Measured in Hertz (Hz).',
         keyPoint: 'Frequency = 1 / Period. Higher frequency = higher pitch = more cycles per second.',
         svgType: 'frequency',
-        color: '#e879f9',
-        glowColor: 'rgba(232, 121, 249, 0.4)'
+        color: '#DCC892',
+        glowColor: 'rgba(220, 200, 146, 0.35)'
     },
     {
         id: 'octave',
@@ -49,8 +49,8 @@ const WAVEFORM_CONCEPTS = [
         definition: 'A doubling or halving of frequency. Going up one octave = frequency x 2. Going down = frequency / 2.',
         keyPoint: 'Octave up = period HALVES. Octave down = period DOUBLES.',
         svgType: 'octave',
-        color: '#22d3ee',
-        glowColor: 'rgba(34, 211, 238, 0.4)'
+        color: '#DCC892',
+        glowColor: 'rgba(220, 200, 146, 0.35)'
     }
 ];
 
@@ -878,12 +878,6 @@ const Part3Explore = ({ onComplete }) => {
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
-                <button onClick={onComplete} style={{ padding: '0.875rem 1.75rem', background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)', border: 'none', borderRadius: '12px', color: '#050507', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
-                    Continue to Part 4: Draw Practice →
-                </button>
             </div>
 
             <CopyableNote title="Octave Transformation Rules" color="#22d3ee" variant="key">
