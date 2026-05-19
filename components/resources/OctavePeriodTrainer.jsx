@@ -81,13 +81,6 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
         }
     };
 
-    const icons = {
-        definition: '📝',
-        key: '⭐',
-        exam: '📋',
-        warning: '⚠️'
-    };
-
     return (
         <div style={{
             background: `linear-gradient(135deg, ${color}15 0%, ${color}08 100%)`,
@@ -104,7 +97,6 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
                 marginBottom: '0.5rem'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ fontSize: '1rem' }}>{icons[variant]}</span>
                     <span style={{
                         fontSize: '0.7rem',
                         fontWeight: '700',
@@ -132,7 +124,7 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
                         fontFamily: 'monospace'
                     }}
                 >
-                    {copied ? '✓ Copied!' : '📋 Copy'}
+                    {copied ? 'Copied' : 'Copy'}
                 </button>
             </div>
             <div ref={contentRef} style={{ color: '#c9cdd4', fontSize: '0.9rem', lineHeight: '1.6' }}>
@@ -309,7 +301,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                                 fontFamily: 'monospace'
                             }}
                         >
-                            {copied ? '✓' : '📋'}
+                            {copied ? 'Copied' : 'Copy'}
                         </button>
                     </div>
 
@@ -545,7 +537,6 @@ const Part2Mistake = ({ onComplete }) => {
                 border: '2px solid #ef4444'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                    <span style={{ fontSize: '2.5rem' }}>❌</span>
                     <div>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ef4444', margin: 0 }}>WRONG: "Lower = Down on the Page"</h3>
                         <p style={{ color: '#8b909a', margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>This is what most students draw when asked for "one octave lower"</p>
@@ -610,7 +601,6 @@ const Part2Mistake = ({ onComplete }) => {
                 transition: 'opacity 0.5s'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                    <span style={{ fontSize: '2.5rem' }}>✓</span>
                     <div>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#22c55e', margin: 0 }}>CORRECT: "Lower = Wider Cycles"</h3>
                         <p style={{ color: '#8b909a', margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>The waveform stretches HORIZONTALLY, not moves down</p>
@@ -1379,13 +1369,12 @@ const Part4Draw = () => {
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#f8f9fa', marginBottom: '1.5rem' }}>Key Takeaways</h3>
                 <div style={{ display: 'grid', gap: '1rem' }}>
                     {[
-                        { icon: '📐', title: 'X-Axis = Time, Y-Axis = Amplitude', desc: 'Pitch changes affect the X-axis (horizontal). Loudness changes affect the Y-axis (vertical).' },
-                        { icon: '⬅️', title: 'Lower Pitch = Wider Cycles', desc: 'Octave lower means period doubles. Cycles stretch horizontally, fewer fit in the same time.' },
-                        { icon: '➡️', title: 'Higher Pitch = Narrower Cycles', desc: 'Octave higher means period halves. Cycles compress horizontally, more fit in the same time.' },
-                        { icon: '⚠️', title: 'Amplitude Stays the Same', desc: 'Changing pitch does NOT move the waveform up or down. The height (amplitude) is unchanged.' }
+                        { title: 'X-Axis = Time, Y-Axis = Amplitude', desc: 'Pitch changes affect the X-axis (horizontal). Loudness changes affect the Y-axis (vertical).' },
+                        { title: 'Lower Pitch = Wider Cycles', desc: 'Octave lower means period doubles. Cycles stretch horizontally, fewer fit in the same time.' },
+                        { title: 'Higher Pitch = Narrower Cycles', desc: 'Octave higher means period halves. Cycles compress horizontally, more fit in the same time.' },
+                        { title: 'Amplitude Stays the Same', desc: 'Changing pitch does NOT move the waveform up or down. The height (amplitude) is unchanged.' }
                     ].map((item, idx) => (
                         <div key={idx} style={{ display: 'flex', gap: '1rem', padding: '1rem', background: '#16181f', borderRadius: '12px' }}>
-                            <span style={{ fontSize: '1.5rem' }}>{item.icon}</span>
                             <div>
                                 <div style={{ fontWeight: '600', color: '#f8f9fa', marginBottom: '0.25rem' }}>{item.title}</div>
                                 <div style={{ fontSize: '0.9rem', color: '#8b909a' }}>{item.desc}</div>
