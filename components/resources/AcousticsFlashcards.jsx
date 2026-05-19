@@ -143,11 +143,11 @@ const AcousticsFlashcards = () => {
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="20" y="20" width="160" height="60" stroke="#64748b" strokeWidth="2" fill="none" />
-        <circle cx="50" cy="50" r="4" fill="#3b82f6" />
-        <text x="45" y="65" fill="#3b82f6" fontSize="8">Source</text>
-        <circle cx="50" cy="50" r="8" stroke="#3b82f6" strokeWidth="1" fill="none" opacity="0.7" />
-        <circle cx="50" cy="50" r="16" stroke="#3b82f6" strokeWidth="1" fill="none" opacity="0.5" />
-        <circle cx="50" cy="50" r="24" stroke="#3b82f6" strokeWidth="1" fill="none" opacity="0.3" />
+        <circle cx="50" cy="50" r="4" fill="#DCC892" />
+        <text x="45" y="65" fill="#DCC892" fontSize="8">Source</text>
+        <circle cx="50" cy="50" r="8" stroke="#DCC892" strokeWidth="1" fill="none" opacity="0.7" />
+        <circle cx="50" cy="50" r="16" stroke="#DCC892" strokeWidth="1" fill="none" opacity="0.5" />
+        <circle cx="50" cy="50" r="24" stroke="#DCC892" strokeWidth="1" fill="none" opacity="0.3" />
         <circle cx="150" cy="50" r="3" fill="#10b981" />
         <text x="142" y="65" fill="#10b981" fontSize="8">Listener</text>
         <text x="85" y="15" fill="#64748b" fontSize="9">Room Boundaries</text>
@@ -159,13 +159,13 @@ const AcousticsFlashcards = () => {
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="120" y="10" width="8" height="80" fill="#64748b" />
         <text x="130" y="55" fill="#64748b" fontSize="8">Wall</text>
-        <path d="M10,50 Q30,40 50,50 Q70,60 90,50 Q110,40 120,50" stroke="#3b82f6" strokeWidth="2" fill="none" />
-        <text x="60" y="35" fill="#3b82f6" fontSize="7">Incident Wave</text>
+        <path d="M10,50 Q30,40 50,50 Q70,60 90,50 Q110,40 120,50" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <text x="60" y="35" fill="#DCC892" fontSize="7">Incident Wave</text>
         <path d="M128,50 Q140,45 150,50 Q160,55 170,50 Q180,45 190,50" stroke="#10b981" strokeWidth="2" fill="none" />
         <text x="135" y="35" fill="#10b981" fontSize="7">Transmitted</text>
         <path d="M120,50 Q110,60 90,50 Q70,40 50,50 Q30,60 10,50" stroke="#ef4444" strokeWidth="2" fill="none" strokeDasharray="3,2" />
         <text x="50" y="70" fill="#ef4444" fontSize="7">Reflected</text>
-        <text x="105" y="85" fill="#eab308" fontSize="7">Absorbed</text>
+        <text x="105" y="85" fill="#DCC892" fontSize="7">Absorbed</text>
       </svg>
     ),
     "reverb-stages": (
@@ -173,9 +173,9 @@ const AcousticsFlashcards = () => {
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <line x1="20" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <text x="90" y="95" fill="#000" fontSize="8">Time (ms)</text>
-        <line x1="30" y1="20" x2="30" y2="80" stroke="#3b82f6" strokeWidth="3" />
-        <text x="15" y="15" fill="#3b82f6" fontSize="7">Direct</text>
-        <text x="15" y="90" fill="#3b82f6" fontSize="6">~3.5ms</text>
+        <line x1="30" y1="20" x2="30" y2="80" stroke="#DCC892" strokeWidth="3" />
+        <text x="15" y="15" fill="#DCC892" fontSize="7">Direct</text>
+        <text x="15" y="90" fill="#DCC892" fontSize="6">~3.5ms</text>
         <line x1="50" y1="30" x2="50" y2="80" stroke="#10b981" strokeWidth="2" />
         <line x1="60" y1="35" x2="60" y2="80" stroke="#10b981" strokeWidth="2" />
         <line x1="75" y1="25" x2="75" y2="80" stroke="#10b981" strokeWidth="2" />
@@ -193,8 +193,8 @@ const AcousticsFlashcards = () => {
         <line x1="30" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <line x1="30" y1="20" x2="30" y2="80" stroke="#000" strokeWidth="1" />
         <text x="100" y="95" fill="#000" fontSize="8">Time</text>
-        <line x1="40" y1="25" x2="40" y2="80" stroke="#3b82f6" strokeWidth="3" />
-        <text x="42" y="30" fill="#3b82f6" fontSize="7">Initial Impulse</text>
+        <line x1="40" y1="25" x2="40" y2="80" stroke="#DCC892" strokeWidth="3" />
+        <text x="42" y="30" fill="#DCC892" fontSize="7">Initial Impulse</text>
         <path d="M40,25 Q60,35 80,45 Q100,55 120,62 Q140,68 160,72 Q180,76 195,78" stroke="#ef4444" strokeWidth="2" fill="none" />
         <text x="8" y="28" fill="#64748b" fontSize="6">0dB</text>
         <text x="5" y="82" fill="#64748b" fontSize="6">-60dB</text>
@@ -208,9 +208,9 @@ const AcousticsFlashcards = () => {
         <rect x="20" y="20" width="40" height="60" fill="#9ca3af" stroke="#64748b" strokeWidth="2" />
         <text x="25" y="15" fill="#64748b" fontSize="8">Hard Surface</text>
         <text x="30" y="90" fill="#64748b" fontSize="7">(Reflective)</text>
-        <rect x="80" y="20" width="40" height="60" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" />
-        <text x="85" y="15" fill="#f59e0b" fontSize="8">Soft Surface</text>
-        <text x="87" y="90" fill="#f59e0b" fontSize="7">(Absorptive)</text>
+        <rect x="80" y="20" width="40" height="60" fill="#fef3c7" stroke="#DCC892" strokeWidth="2" />
+        <text x="85" y="15" fill="#DCC892" fontSize="8">Soft Surface</text>
+        <text x="87" y="90" fill="#DCC892" fontSize="7">(Absorptive)</text>
         <rect x="140" y="20" width="4" height="60" fill="#e5e7eb" stroke="#6b7280" strokeWidth="1" />
         <text x="130" y="15" fill="#6b7280" fontSize="8">Thin Surface</text>
         <text x="132" y="90" fill="#6b7280" fontSize="7">(Transmissive)</text>
@@ -219,14 +219,14 @@ const AcousticsFlashcards = () => {
     "room-size-effect": (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
-        <rect x="10" y="20" width="60" height="40" stroke="#3b82f6" strokeWidth="2" fill="none" />
-        <circle cx="25" cy="40" r="2" fill="#3b82f6" />
-        <text x="12" y="15" fill="#3b82f6" fontSize="8">Small Room</text>
+        <rect x="10" y="20" width="60" height="40" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <circle cx="25" cy="40" r="2" fill="#DCC892" />
+        <text x="12" y="15" fill="#DCC892" fontSize="8">Small Room</text>
         <text x="15" y="70" fill="#ef4444" fontSize="7">Quick reflections</text>
         <rect x="100" y="10" width="90" height="70" stroke="#10b981" strokeWidth="2" fill="none" />
         <circle cx="125" cy="45" r="2" fill="#10b981" />
         <text x="102" y="8" fill="#10b981" fontSize="8">Large Room</text>
-        <text x="130" y="90" fill="#eab308" fontSize="7">Delayed reflections</text>
+        <text x="130" y="90" fill="#DCC892" fontSize="7">Delayed reflections</text>
         <text x="75" y="95" fill="#64748b" fontSize="8">Room size affects reflection timing</text>
       </svg>
     ),
@@ -237,8 +237,8 @@ const AcousticsFlashcards = () => {
         <line x1="30" y1="20" x2="30" y2="80" stroke="#000" strokeWidth="1" />
         <text x="100" y="95" fill="#000" fontSize="8">Time</text>
         <path d="M35,25 L45,30 L55,35 L70,40 L90,48 L120,55 L150,62 L180,68" stroke="#ef4444" strokeWidth="3" fill="none" />
-        <line x1="35" y1="25" x2="35" y2="75" stroke="#3b82f6" strokeWidth="2" />
-        <text x="37" y="22" fill="#3b82f6" fontSize="7">Initial Impulse</text>
+        <line x1="35" y1="25" x2="35" y2="75" stroke="#DCC892" strokeWidth="2" />
+        <text x="37" y="22" fill="#DCC892" fontSize="7">Initial Impulse</text>
         <line x1="45" y1="30" x2="45" y2="70" stroke="#10b981" strokeWidth="1.5" />
         <line x1="55" y1="35" x2="55" y2="68" stroke="#10b981" strokeWidth="1.5" />
         <text x="50" y="15" fill="#10b981" fontSize="7">Early Reflections</text>
@@ -249,28 +249,28 @@ const AcousticsFlashcards = () => {
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="20" y="20" width="160" height="50" stroke="#64748b" strokeWidth="2" fill="none" />
-        <circle cx="60" cy="45" r="3" fill="#3b82f6" />
-        <text x="50" y="35" fill="#3b82f6" fontSize="8">Source</text>
+        <circle cx="60" cy="45" r="3" fill="#DCC892" />
+        <text x="50" y="35" fill="#DCC892" fontSize="8">Source</text>
         <circle cx="140" cy="45" r="3" fill="#10b981" />
         <text x="125" y="35" fill="#10b981" fontSize="8">Listener</text>
-        <line x1="63" y1="45" x2="137" y2="45" stroke="#3b82f6" strokeWidth="2" />
-        <text x="95" y="40" fill="#3b82f6" fontSize="7">Direct (~3.5ms)</text>
+        <line x1="63" y1="45" x2="137" y2="45" stroke="#DCC892" strokeWidth="2" />
+        <text x="95" y="40" fill="#DCC892" fontSize="7">Direct (~3.5ms)</text>
         <path d="M60,45 L25,25 L140,45" stroke="#ef4444" strokeWidth="2" fill="none" />
         <text x="30" y="20" fill="#ef4444" fontSize="7">Ceiling (~8ms)</text>
-        <path d="M60,45 L25,65 L140,45" stroke="#eab308" strokeWidth="2" fill="none" />
-        <text x="30" y="80" fill="#eab308" fontSize="7">Floor (~10ms)</text>
+        <path d="M60,45 L25,65 L140,45" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <text x="30" y="80" fill="#DCC892" fontSize="7">Floor (~10ms)</text>
       </svg>
     ),
     "treated-room": (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="30" y="20" width="140" height="60" stroke="#64748b" strokeWidth="2" fill="none" />
-        <path d="M35,25 Q40,22 45,25 Q50,28 55,25 Q60,22 65,25" stroke="#f59e0b" strokeWidth="2" fill="none" />
-        <path d="M35,40 Q40,37 45,40 Q50,43 55,40 Q60,37 65,40" stroke="#f59e0b" strokeWidth="2" fill="none" />
-        <path d="M35,55 Q40,52 45,55 Q50,58 55,55 Q60,52 65,55" stroke="#f59e0b" strokeWidth="2" fill="none" />
-        <circle cx="80" cy="50" r="3" fill="#3b82f6" />
-        <text x="45" y="15" fill="#f59e0b" fontSize="8">Fibreglass</text>
-        <text x="45" y="92" fill="#f59e0b" fontSize="8">Absorption</text>
+        <path d="M35,25 Q40,22 45,25 Q50,28 55,25 Q60,22 65,25" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <path d="M35,40 Q40,37 45,40 Q50,43 55,40 Q60,37 65,40" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <path d="M35,55 Q40,52 45,55 Q50,58 55,55 Q60,52 65,55" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <circle cx="80" cy="50" r="3" fill="#DCC892" />
+        <text x="45" y="15" fill="#DCC892" fontSize="8">Fibreglass</text>
+        <text x="45" y="92" fill="#DCC892" fontSize="8">Absorption</text>
         <text x="90" y="15" fill="#64748b" fontSize="9">Small Treated Room</text>
         <text x="90" y="92" fill="#64748b" fontSize="8">Very short RT60 (~0.2s)</text>
       </svg>
@@ -281,12 +281,12 @@ const AcousticsFlashcards = () => {
         <line x1="30" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <line x1="30" y1="20" x2="30" y2="80" stroke="#000" strokeWidth="1" />
         <text x="100" y="95" fill="#000" fontSize="8">Frequency (Hz)</text>
-        <path d="M35,35 Q50,30 70,40 Q90,50 110,55 Q130,60 150,65 Q170,68 180,70" stroke="#3b82f6" strokeWidth="3" fill="none" />
+        <path d="M35,35 Q50,30 70,40 Q90,50 110,55 Q130,60 150,65 Q170,68 180,70" stroke="#DCC892" strokeWidth="3" fill="none" />
         <text x="40" y="25" fill="#ef4444" fontSize="7">Bass</text>
         <text x="40" y="32" fill="#ef4444" fontSize="7">Longer RT60</text>
         <text x="130" y="75" fill="#10b981" fontSize="7">Highs</text>
         <text x="130" y="82" fill="#10b981" fontSize="7">Shorter RT60</text>
-        <text x="80" y="15" fill="#3b82f6" fontSize="9">Frequency-Dependent RT60</text>
+        <text x="80" y="15" fill="#DCC892" fontSize="9">Frequency-Dependent RT60</text>
       </svg>
     ),
     "optimal-rt60": (
@@ -297,26 +297,26 @@ const AcousticsFlashcards = () => {
         <text x="90" y="95" fill="#000" fontSize="8">Application Type</text>
         <rect x="40" y="75" width="15" height="5" fill="#10b981" />
         <text x="35" y="90" fill="#10b981" fontSize="7">Recording</text>
-        <rect x="70" y="65" width="15" height="15" fill="#3b82f6" />
-        <text x="70" y="90" fill="#3b82f6" fontSize="7">Speech</text>
-        <rect x="100" y="50" width="15" height="30" fill="#eab308" />
-        <text x="100" y="90" fill="#eab308" fontSize="7">Theater</text>
+        <rect x="70" y="65" width="15" height="15" fill="#DCC892" />
+        <text x="70" y="90" fill="#DCC892" fontSize="7">Speech</text>
+        <rect x="100" y="50" width="15" height="30" fill="#DCC892" />
+        <text x="100" y="90" fill="#DCC892" fontSize="7">Theater</text>
         <rect x="130" y="35" width="15" height="45" fill="#ef4444" />
         <text x="130" y="90" fill="#ef4444" fontSize="7">Concert</text>
-        <rect x="160" y="30" width="15" height="50" fill="#9333ea" />
-        <text x="162" y="90" fill="#9333ea" fontSize="7">Church</text>
+        <rect x="160" y="30" width="15" height="50" fill="#DCC892" />
+        <text x="162" y="90" fill="#DCC892" fontSize="7">Church</text>
         <text x="90" y="15" fill="#64748b" fontSize="9">Optimal RT60 by Application</text>
       </svg>
     ),
     "reflection-control": (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
-        <path d="M50,20 L80,40 L60,70" stroke="#3b82f6" strokeWidth="3" fill="none" />
-        <text x="45" y="15" fill="#3b82f6" fontSize="8">Angled Reflector</text>
+        <path d="M50,20 L80,40 L60,70" stroke="#DCC892" strokeWidth="3" fill="none" />
+        <text x="45" y="15" fill="#DCC892" fontSize="8">Angled Reflector</text>
         <text x="75" y="70" fill="#ef4444" fontSize="7">Controlled reflection</text>
         <path d="M120,20 L125,25 L130,18 L135,27 L140,15 L145,30 L150,12 L155,32 L160,20" stroke="#10b981" strokeWidth="3" fill="none" />
         <text x="130" y="12" fill="#10b981" fontSize="8">Diffuser</text>
-        <text x="135" y="50" fill="#eab308" fontSize="7">Scattered energy</text>
+        <text x="135" y="50" fill="#DCC892" fontSize="7">Scattered energy</text>
         <text x="70" y="90" fill="#64748b" fontSize="9">Controlling Reflection Patterns</text>
       </svg>
     )

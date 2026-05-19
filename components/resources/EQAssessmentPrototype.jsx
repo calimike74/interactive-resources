@@ -12,7 +12,7 @@ const EQ_CONTROLS = [
         label: 'Frequency Control',
         shortLabel: 'FREQ',
         x: 100,
-        color: '#22d3ee',
+        color: '#DCC892',
         question: 'What does the Frequency control do on this EQ band?',
         maxMarks: 4,
     },
@@ -21,7 +21,7 @@ const EQ_CONTROLS = [
         label: 'Gain Control',
         shortLabel: 'GAIN',
         x: 220,
-        color: '#f97316',
+        color: '#DCC892',
         question: 'Explain the purpose of the Gain control.',
         maxMarks: 4,
     },
@@ -342,7 +342,7 @@ const InlinePopover = ({ control, number, response, onResponseChange, onSave, on
                             onClick={onSave}
                             disabled={!response.trim()}
                             style={{
-                                background: response.trim() ? '#3b82f6' : '#374151',
+                                background: response.trim() ? '#DCC892' : '#374151',
                                 border: 'none',
                                 borderRadius: '10px',
                                 padding: '12px 24px',
@@ -508,7 +508,7 @@ export default function EQAssessmentPrototype() {
                         style={{
                             width: `${(answeredCount / totalControls) * 100}%`,
                             height: '100%',
-                            background: answeredCount === totalControls ? '#22c55e' : '#3b82f6',
+                            background: answeredCount === totalControls ? '#22c55e' : '#DCC892',
                             transition: 'width 0.3s ease',
                         }}
                     />
@@ -588,8 +588,8 @@ export default function EQAssessmentPrototype() {
                         rx={4}
                         fill="#0f172a"
                     />
-                    <text x={140} y={145} textAnchor="middle" fontSize="10" fill="#3b82f6">PARAMETRIC EQ</text>
-                    <text x={140} y={165} textAnchor="middle" fontSize="14" fill="#22d3ee" fontWeight="600">BAND 1</text>
+                    <text x={140} y={145} textAnchor="middle" fontSize="10" fill="#DCC892">PARAMETRIC EQ</text>
+                    <text x={140} y={165} textAnchor="middle" fontSize="14" fill="#DCC892" fontWeight="600">BAND 1</text>
 
                     {/* Knobs */}
                     {EQ_CONTROLS.map((control, index) => (
@@ -617,7 +617,7 @@ export default function EQAssessmentPrototype() {
                         onClick={handleSubmitAll}
                         disabled={answeredCount === 0}
                         style={{
-                            background: answeredCount === totalControls ? '#22c55e' : answeredCount > 0 ? '#3b82f6' : t.bg.tertiary,
+                            background: answeredCount === totalControls ? '#22c55e' : answeredCount > 0 ? '#DCC892' : t.bg.tertiary,
                             border: 'none',
                             borderRadius: borderRadius.xl,
                             padding: `${spacing[4]} ${spacing[8]}`,

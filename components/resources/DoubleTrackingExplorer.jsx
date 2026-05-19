@@ -107,7 +107,7 @@ const QUIZ_QUESTIONS = {
 // ============================================
 // COPYABLE NOTE COMPONENT
 // ============================================
-const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definition' }) => {
+const CopyableNote = ({ title, children, color = '#DCC892', variant = 'definition' }) => {
     const [copied, setCopied] = useState(false);
     const contentRef = useRef(null);
 
@@ -399,10 +399,10 @@ const MistakeSection = ({ onComplete }) => {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1rem' }}>
                     <div style={{ background: '#16181f', borderRadius: '12px', padding: '1rem' }}>
-                        <WaveformDisplay cycles={4} color="#22d3ee" label="Original Take" width={280} height={90} showCycleCount={false} />
+                        <WaveformDisplay cycles={4} color="#DCC892" label="Original Take" width={280} height={90} showCycleCount={false} />
                     </div>
                     <div style={{ background: '#16181f', borderRadius: '12px', padding: '1rem' }}>
-                        <WaveformDisplay cycles={4} color="#ff9f43" label="Second Take (VARIED)" width={280} height={90} showCycleCount={false} offset={0.5} freqMod={0.03} />
+                        <WaveformDisplay cycles={4} color="#DCC892" label="Second Take (VARIED)" width={280} height={90} showCycleCount={false} offset={0.5} freqMod={0.03} />
                     </div>
                 </div>
 
@@ -536,9 +536,9 @@ const ExploreSection = () => {
         const freqMod = ((pitchCents - 5) / 15) * 0.03 + 0.01;
 
         // Original waveform
-        ctx.strokeStyle = '#22d3ee';
+        ctx.strokeStyle = '#DCC892';
         ctx.lineWidth = 2.5;
-        ctx.shadowColor = '#22d3ee';
+        ctx.shadowColor = '#DCC892';
         ctx.shadowBlur = 6;
         ctx.beginPath();
 
@@ -553,9 +553,9 @@ const ExploreSection = () => {
         ctx.shadowBlur = 0;
 
         // ADT processed waveform
-        ctx.strokeStyle = '#ff9f43';
+        ctx.strokeStyle = '#DCC892';
         ctx.lineWidth = 2.5;
-        ctx.shadowColor = '#ff9f43';
+        ctx.shadowColor = '#DCC892';
         ctx.shadowBlur = 6;
         ctx.beginPath();
 
@@ -571,10 +571,10 @@ const ExploreSection = () => {
 
         // Legend
         ctx.font = '11px monospace';
-        ctx.fillStyle = '#22d3ee';
+        ctx.fillStyle = '#DCC892';
         ctx.textAlign = 'left';
         ctx.fillText('Original', padding, 25);
-        ctx.fillStyle = '#ff9f43';
+        ctx.fillStyle = '#DCC892';
         ctx.fillText('ADT Processed', padding + 80, 25);
 
     }, [delayMs, pitchCents]);
@@ -609,13 +609,13 @@ const ExploreSection = () => {
             {/* ADT Intro */}
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #ff9f43 0%, #f59e0b 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>ADT</div>
-                    <div style={{ fontSize: '0.7rem', color: '#ff9f43', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Automatic Double Tracking</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>ADT</div>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Automatic Double Tracking</div>
                 </div>
                 <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Explore the Parameters</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
                     ADT was invented at <strong style={{ color: '#f8f9fa' }}>Abbey Road Studios in 1966</strong> to save John Lennon from
-                    re-singing. Adjust the controls to see how <span style={{ color: '#ff9f43' }}>delay</span> and <span style={{ color: '#DCC892' }}>pitch modulation</span> create the effect.
+                    re-singing. Adjust the controls to see how <span style={{ color: '#DCC892' }}>delay</span> and <span style={{ color: '#DCC892' }}>pitch modulation</span> create the effect.
                 </p>
             </div>
 
@@ -639,8 +639,8 @@ const ExploreSection = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
                     <div style={{ background: '#16181f', borderRadius: '12px', padding: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                            <span style={{ color: '#ff9f43', fontSize: '0.8rem', fontWeight: '600' }}>Delay Time</span>
-                            <span style={{ color: '#ff9f43', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>{delayMs}ms</span>
+                            <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Delay Time</span>
+                            <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>{delayMs}ms</span>
                         </div>
                         <input
                             type="range"
@@ -648,7 +648,7 @@ const ExploreSection = () => {
                             max="80"
                             value={delayMs}
                             onChange={(e) => setDelayMs(parseInt(e.target.value))}
-                            style={{ width: '100%', accentColor: '#ff9f43' }}
+                            style={{ width: '100%', accentColor: '#DCC892' }}
                         />
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.7rem', color: '#4a4f5a' }}>
                             <span>5ms</span>
@@ -674,7 +674,7 @@ const ExploreSection = () => {
                         />
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.7rem', color: '#4a4f5a' }}>
                             <span>0c</span>
-                            <span style={{ color: pitchCents >= 5 && pitchCents <= 20 ? '#22c55e' : '#f59e0b' }}>
+                            <span style={{ color: pitchCents >= 5 && pitchCents <= 20 ? '#22c55e' : '#DCC892' }}>
                                 {pitchCents < 5 ? 'Too subtle' : pitchCents > 20 ? 'Noticeable' : 'Sweet spot'}
                             </span>
                             <span>30c</span>
@@ -739,7 +739,7 @@ const ExploreSection = () => {
                         </thead>
                         <tbody>
                             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <td style={{ padding: '0.75rem', color: '#ff9f43', fontFamily: 'monospace' }}>Delay</td>
+                                <td style={{ padding: '0.75rem', color: '#DCC892', fontFamily: 'monospace' }}>Delay</td>
                                 <td style={{ padding: '0.75rem', textAlign: 'center', color: '#f8f9fa', fontFamily: 'monospace' }}>10-40ms</td>
                                 <td style={{ padding: '0.75rem', color: '#8b909a' }}>Timing variation (below Haas threshold)</td>
                             </tr>
@@ -754,7 +754,7 @@ const ExploreSection = () => {
             </div>
 
             {/* Copyable Notes */}
-            <CopyableNote title="ADT - How It Works" color="#ff9f43" variant="definition">
+            <CopyableNote title="ADT - How It Works" color="#DCC892" variant="definition">
                 <strong>AUTOMATIC DOUBLE TRACKING (ADT)</strong><br/><br/>
                 <strong>Invented:</strong> Abbey Road Studios, 1966 (Ken Townsend)<br/>
                 <strong>Purpose:</strong> Simulate double tracking from a single take<br/><br/>
@@ -766,7 +766,7 @@ const ExploreSection = () => {
                 • Result sounds like two separate performances
             </CopyableNote>
 
-            <CopyableNote title="The Haas Effect" color="#22d3ee" variant="key">
+            <CopyableNote title="The Haas Effect" color="#DCC892" variant="key">
                 <strong>HAAS EFFECT (PRECEDENCE EFFECT)</strong><br/><br/>
                 Sounds arriving within 30-40ms are perceived as ONE fused sound, not separate echoes.<br/><br/>
                 <strong>FOR ADT:</strong><br/>
@@ -998,7 +998,7 @@ const Quiz = () => {
                                 style={{
                                     padding: '0.5rem 1rem',
                                     background: difficulty === level
-                                        ? (level === 'easy' ? '#22c55e' : level === 'medium' ? '#f59e0b' : '#ef4444')
+                                        ? (level === 'easy' ? '#22c55e' : level === 'medium' ? '#DCC892' : '#ef4444')
                                         : 'transparent',
                                     border: `1px solid ${difficulty === level ? 'transparent' : 'rgba(255,255,255,0.15)'}`,
                                     borderRadius: '8px',
@@ -1079,7 +1079,7 @@ const Quiz = () => {
                             style={{
                                 flex: 1,
                                 padding: '0.75rem',
-                                background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)',
+                                background: 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)',
                                 border: 'none',
                                 borderRadius: '10px',
                                 color: '#050507',
@@ -1153,7 +1153,7 @@ export default function DoubleTrackingExplorer() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                         <div>
                             <h1 style={{ fontSize: '1rem', fontWeight: '600', letterSpacing: '0.1em', color: '#f8f9fa', margin: 0 }}>
-                                <span style={{ color: '#22d3ee' }}>Double Tracking</span> <span style={{ color: '#ef4444' }}>vs Copying</span>
+                                <span style={{ color: '#DCC892' }}>Double Tracking</span> <span style={{ color: '#ef4444' }}>vs Copying</span>
                             </h1>
                             <div style={{ fontSize: '0.65rem', color: '#4a4f5a', fontFamily: 'monospace', marginTop: '0.25rem' }}>
                                 A-Level Music Technology | 1.4 Sampling | A* Extension
@@ -1167,7 +1167,7 @@ export default function DoubleTrackingExplorer() {
                                     onClick={() => setActiveTab(tab.id)}
                                     style={{
                                         padding: '0.5rem 1rem',
-                                        background: activeTab === tab.id ? 'linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)' : 'transparent',
+                                        background: activeTab === tab.id ? 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)' : 'transparent',
                                         border: `1px solid ${activeTab === tab.id ? 'transparent' : '#ffffff15'}`,
                                         borderRadius: '8px',
                                         color: activeTab === tab.id ? '#050507' : '#8b909a',
@@ -1273,7 +1273,7 @@ export default function DoubleTrackingExplorer() {
                                 </div>
                             </div>
                             <div style={{ display: 'flex', gap: '1rem', padding: '0.75rem', background: '#16181f', borderRadius: '8px' }}>
-                                <span style={{ color: '#ff9f43', fontSize: '1.25rem', fontWeight: '700' }}>3</span>
+                                <span style={{ color: '#DCC892', fontSize: '1.25rem', fontWeight: '700' }}>3</span>
                                 <div>
                                     <div style={{ fontWeight: '600', color: '#f8f9fa' }}>ADT: DELAY 10-40ms + PITCH +/-5-20 cents</div>
                                     <div style={{ fontSize: '0.85rem', color: '#8b909a' }}>Short delay (Haas zone) + subtle pitch modulation</div>

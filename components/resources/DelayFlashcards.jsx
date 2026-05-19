@@ -22,12 +22,12 @@ const DESIGN_TOKENS_CSS = `
     --fg-tertiary: #8B909A;
     --border: #E5E7EB;
     --border-strong: #9CA3AF;
-    --accent: #2563EB;
-    --accent-hover: #1D4ED8;
+    --accent: #DCC892;
+    --accent-hover: #DCC892;
     --accent-soft: rgba(37, 99, 235, 0.08);
     --success: #059669;
     --success-soft: rgba(5, 150, 105, 0.08);
-    --warning: #D97706;
+    --warning: #DCC892;
     --warning-soft: rgba(217, 119, 6, 0.08);
     --danger: #DC2626;
     --danger-soft: rgba(220, 38, 38, 0.08);
@@ -752,8 +752,8 @@ const DelayFlashcards = () => {
         <text x="90" y="90" fill="#64748b" fontSize="8">Time</text>
         
         {/* Original sound */}
-        <path d="M40,70 L40,30 L50,30 L50,70" stroke="#3b82f6" strokeWidth="2" fill="none" />
-        <text x="30" y="20" fill="#3b82f6" fontSize="8">Original Sound</text>
+        <path d="M40,70 L40,30 L50,30 L50,70" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <text x="30" y="20" fill="#DCC892" fontSize="8">Original Sound</text>
         
         {/* Delay time arrow */}
         <line x1="50" y1="80" x2="100" y2="80" stroke="#ef4444" strokeWidth="1" />
@@ -774,17 +774,17 @@ const DelayFlashcards = () => {
         <polygon points="160,50 155,47 155,53" fill="#64748b" />
         
         {/* Input */}
-        <rect x="20" y="40" width="20" height="20" fill="#3b82f6" rx="2" />
+        <rect x="20" y="40" width="20" height="20" fill="#DCC892" rx="2" />
         <text x="26" y="54" fill="white" fontSize="8">In</text>
         
         {/* Output */}
-        <rect x="160" y="40" width="20" height="20" fill="#3b82f6" rx="2" />
+        <rect x="160" y="40" width="20" height="20" fill="#DCC892" rx="2" />
         <text x="164" y="54" fill="white" fontSize="8">Out</text>
         
         {/* Direct path (no effects) */}
-        <path d="M40,50 L160,50" stroke="#3b82f6" strokeWidth="3" fill="none" />
-        <text x="85" y="40" fill="#3b82f6" fontSize="10" fontWeight="bold">DRY SIGNAL</text>
-        <text x="85" y="65" fill="#3b82f6" fontSize="7">(Unprocessed Audio)</text>
+        <path d="M40,50 L160,50" stroke="#DCC892" strokeWidth="3" fill="none" />
+        <text x="85" y="40" fill="#DCC892" fontSize="10" fontWeight="bold">DRY SIGNAL</text>
+        <text x="85" y="65" fill="#DCC892" fontSize="7">(Unprocessed Audio)</text>
       </svg>
     ),
     "wet-signal": (
@@ -796,7 +796,7 @@ const DelayFlashcards = () => {
         <polygon points="160,50 155,47 155,53" fill="#64748b" />
         
         {/* Input */}
-        <rect x="20" y="40" width="20" height="20" fill="#3b82f6" rx="2" />
+        <rect x="20" y="40" width="20" height="20" fill="#DCC892" rx="2" />
         <text x="26" y="54" fill="white" fontSize="8">In</text>
         
         {/* Effect unit */}
@@ -809,7 +809,7 @@ const DelayFlashcards = () => {
         <text x="164" y="54" fill="white" fontSize="8">Out</text>
         
         {/* Effect path */}
-        <path d="M40,50 L80,50" stroke="#3b82f6" strokeWidth="2" fill="none" />
+        <path d="M40,50 L80,50" stroke="#DCC892" strokeWidth="2" fill="none" />
         <path d="M120,50 L160,50" stroke="#ef4444" strokeWidth="3" fill="none" />
         <text x="130" y="40" fill="#ef4444" fontSize="10" fontWeight="bold">WET</text>
         <text x="120" y="70" fill="#ef4444" fontSize="7">(Processed Audio)</text>
@@ -824,8 +824,8 @@ const DelayFlashcards = () => {
         <text x="90" y="90" fill="#64748b" fontSize="8">Time</text>
         
         {/* Original sound */}
-        <rect x="30" y="30" width="15" height="40" fill="#3b82f6" />
-        <text x="30" y="20" fill="#3b82f6" fontSize="8">Original</text>
+        <rect x="30" y="30" width="15" height="40" fill="#DCC892" />
+        <text x="30" y="20" fill="#DCC892" fontSize="8">Original</text>
         
         {/* Echoes with decreasing amplitude */}
         <rect x="70" y="40" width="15" height="30" fill="#ef4444" fillOpacity="0.8" />
@@ -847,10 +847,10 @@ const DelayFlashcards = () => {
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Input and output */}
-        <rect x="20" y="40" width="20" height="20" fill="#3b82f6" rx="2" />
+        <rect x="20" y="40" width="20" height="20" fill="#DCC892" rx="2" />
         <text x="26" y="54" fill="white" fontSize="8">In</text>
         
-        <rect x="160" y="40" width="20" height="20" fill="#3b82f6" rx="2" />
+        <rect x="160" y="40" width="20" height="20" fill="#DCC892" rx="2" />
         <text x="164" y="54" fill="white" fontSize="8">Out</text>
         
         {/* Delay unit */}
@@ -860,7 +860,7 @@ const DelayFlashcards = () => {
         
         {/* Signal paths */}
         {/* Input to delay */}
-        <path d="M40,50 L80,50" stroke="#3b82f6" strokeWidth="2" fill="none" />
+        <path d="M40,50 L80,50" stroke="#DCC892" strokeWidth="2" fill="none" />
         
         {/* Delay to output */}
         <path d="M120,50 L160,50" stroke="#ef4444" strokeWidth="2" fill="none" />
@@ -885,11 +885,11 @@ const DelayFlashcards = () => {
         <text x="90" y="95" fill="#64748b" fontSize="8">Time</text>
         
         {/* Short delay (doubling effect) */}
-        <text x="20" y="20" fill="#3b82f6" fontSize="8">Short Delay (&lt;50ms)</text>
-        <rect x="20" y="30" width="10" height="20" fill="#3b82f6" />
-        <rect x="32" y="30" width="10" height="20" fill="#3b82f6" fillOpacity="0.7" />
-        <path d="M20,60 Q31,40 42,60" stroke="#3b82f6" strokeWidth="1" fill="none" />
-        <text x="15" y="70" fill="#3b82f6" fontSize="6">Perceived as one sound</text>
+        <text x="20" y="20" fill="#DCC892" fontSize="8">Short Delay (&lt;50ms)</text>
+        <rect x="20" y="30" width="10" height="20" fill="#DCC892" />
+        <rect x="32" y="30" width="10" height="20" fill="#DCC892" fillOpacity="0.7" />
+        <path d="M20,60 Q31,40 42,60" stroke="#DCC892" strokeWidth="1" fill="none" />
+        <text x="15" y="70" fill="#DCC892" fontSize="6">Perceived as one sound</text>
         
         {/* Echo (distinct repetitions) */}
         <text x="120" y="20" fill="#ef4444" fontSize="8">Echo (&gt;50ms)</text>
@@ -910,7 +910,7 @@ const DelayFlashcards = () => {
         <line x1="10" y1="25" x2="190" y2="25" stroke="#64748b" strokeWidth="1" strokeDasharray="1,1" />
         
         {/* Original sound (center) */}
-        <rect x="90" y="30" width="20" height="30" fill="#3b82f6" />
+        <rect x="90" y="30" width="20" height="30" fill="#DCC892" />
         <text x="93" y="50" fill="white" fontSize="6">Orig</text>
         
         {/* Ping-pong echoes */}
@@ -948,8 +948,8 @@ const DelayFlashcards = () => {
         <text x="92" y="68" fill="white" fontSize="8">MIX</text>
         
         {/* Dry signal path */}
-        <path d="M20,40 L80,40" stroke="#3b82f6" strokeWidth="3" fill="none" />
-        <text x="35" y="35" fill="#3b82f6" fontSize="8">Dry Signal</text>
+        <path d="M20,40 L80,40" stroke="#DCC892" strokeWidth="3" fill="none" />
+        <text x="35" y="35" fill="#DCC892" fontSize="8">Dry Signal</text>
         
         {/* Wet signal path */}
         <path d="M20,90 C40,90 60,90 80,90" stroke="#ef4444" strokeWidth="3" fill="none" />
@@ -982,8 +982,8 @@ const DelayFlashcards = () => {
         <text x="95" y="90" fill="#64748b" fontSize="8">Beat Divisions</text>
         
         {/* Original notes */}
-        <rect x="20" y="50" width="10" height="20" fill="#3b82f6" />
-        <text x="20" y="45" fill="#3b82f6" fontSize="8">Original</text>
+        <rect x="20" y="50" width="10" height="20" fill="#DCC892" />
+        <text x="20" y="45" fill="#DCC892" fontSize="8">Original</text>
         
         {/* Quarter note delay */}
         <rect x="60" y="50" width="10" height="20" fill="#ef4444" fillOpacity="0.7" />
@@ -1007,8 +1007,8 @@ const DelayFlashcards = () => {
         <text x="5" y="50" fill="#64748b" fontSize="8">Volume</text>
         
         {/* Original sound */}
-        <rect x="30" y="60" width="10" height="20" fill="#3b82f6" />
-        <text x="25" y="55" fill="#3b82f6" fontSize="6">Input</text>
+        <rect x="30" y="60" width="10" height="20" fill="#DCC892" />
+        <text x="25" y="55" fill="#DCC892" fontSize="6">Input</text>
         
         {/* Normal feedback (decaying) */}
         <path d="M50,70 L50,50 L55,50 L55,70 M70,70 L70,55 L75,55 L75,70 M90,70 L90,60 L95,60 L95,70" 
@@ -1039,8 +1039,8 @@ const DelayFlashcards = () => {
         <text x="90" y="90" fill="#64748b" fontSize="8">Time</text>
         
         {/* Original sound */}
-        <rect x="30" y="40" width="10" height="30" fill="#3b82f6" />
-        <text x="27" y="35" fill="#3b82f6" fontSize="7">Input</text>
+        <rect x="30" y="40" width="10" height="30" fill="#DCC892" />
+        <text x="27" y="35" fill="#DCC892" fontSize="7">Input</text>
         
         {/* Multiple delay taps with different amplitudes and positions */}
         <rect x="60" y="45" width="8" height="25" fill="#ef4444" fillOpacity="0.8" />
@@ -1075,11 +1075,11 @@ const DelayFlashcards = () => {
         <text x="20" y="20" fill="#64748b" fontSize="8">Standard vs Modulated Delay</text>
         
         {/* Standard delay (evenly spaced) */}
-        <rect x="40" y="30" width="8" height="15" fill="#3b82f6" />
-        <rect x="80" y="30" width="8" height="15" fill="#3b82f6" fillOpacity="0.7" />
-        <rect x="120" y="30" width="8" height="15" fill="#3b82f6" fillOpacity="0.5" />
-        <rect x="160" y="30" width="8" height="15" fill="#3b82f6" fillOpacity="0.3" />
-        <text x="40" y="25" fill="#3b82f6" fontSize="6">Standard Delay</text>
+        <rect x="40" y="30" width="8" height="15" fill="#DCC892" />
+        <rect x="80" y="30" width="8" height="15" fill="#DCC892" fillOpacity="0.7" />
+        <rect x="120" y="30" width="8" height="15" fill="#DCC892" fillOpacity="0.5" />
+        <rect x="160" y="30" width="8" height="15" fill="#DCC892" fillOpacity="0.3" />
+        <text x="40" y="25" fill="#DCC892" fontSize="6">Standard Delay</text>
         
         {/* Modulated delay (slightly varying time and pitch) */}
         <rect x="38" y="70" width="8" height="15" fill="#ef4444" />
@@ -1105,8 +1105,8 @@ const DelayFlashcards = () => {
         <text x="90" y="95" fill="#64748b" fontSize="8">Time</text>
         
         {/* Direct sound */}
-        <rect x="30" y="30" width="10" height="50" fill="#3b82f6" />
-        <text x="28" y="25" fill="#3b82f6" fontSize="7">Direct</text>
+        <rect x="30" y="30" width="10" height="50" fill="#DCC892" />
+        <text x="28" y="25" fill="#DCC892" fontSize="7">Direct</text>
         
         {/* Pre-delay gap */}
         <line x1="40" y1="55" x2="70" y2="55" stroke="#ef4444" strokeWidth="1" strokeDasharray="2,1" />

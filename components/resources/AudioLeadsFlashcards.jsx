@@ -204,8 +204,8 @@ const AudioLeadsFlashcards = () => {
         <text x="172" y="55" fill="#2d3748" fontSize="7" textAnchor="middle">Sleeve</text>
 
         {/* Usage examples */}
-        <text x="50" y="70" fill="#3182ce" fontSize="8" textAnchor="middle">Guitar cables</text>
-        <text x="150" y="70" fill="#3182ce" fontSize="8" textAnchor="middle">Headphones/Balanced</text>
+        <text x="50" y="70" fill="#DCC892" fontSize="8" textAnchor="middle">Guitar cables</text>
+        <text x="150" y="70" fill="#DCC892" fontSize="8" textAnchor="middle">Headphones/Balanced</text>
       </svg>
     ),
     "balanced-signal": (
@@ -213,8 +213,8 @@ const AudioLeadsFlashcards = () => {
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Signal waves */}
-        <path d="M20,40 Q30,30 40,40 Q50,50 60,40 Q70,30 80,40" stroke="#3182ce" strokeWidth="2" fill="none" />
-        <text x="50" y="25" fill="#3182ce" fontSize="8" textAnchor="middle">Hot (+)</text>
+        <path d="M20,40 Q30,30 40,40 Q50,50 60,40 Q70,30 80,40" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <text x="50" y="25" fill="#DCC892" fontSize="8" textAnchor="middle">Hot (+)</text>
 
         <path d="M20,60 Q30,70 40,60 Q50,50 60,60 Q70,70 80,60" stroke="#e53e3e" strokeWidth="2" fill="none" />
         <text x="50" y="80" fill="#e53e3e" fontSize="8" textAnchor="middle">Cold (-)</text>
@@ -344,14 +344,14 @@ const AudioLeadsFlashcards = () => {
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Speakon connector body */}
-        <circle cx="80" cy="50" r="20" fill="#1e40af" stroke="#1e3a8a" strokeWidth="2" />
+        <circle cx="80" cy="50" r="20" fill="#DCC892" stroke="#DCC892" strokeWidth="2" />
 
         {/* Locking mechanism */}
-        <path d="M70,35 Q80,28 90,35" stroke="#3b82f6" strokeWidth="2" fill="none" />
-        <circle cx="80" cy="35" r="2" fill="#3b82f6" />
+        <path d="M70,35 Q80,28 90,35" stroke="#DCC892" strokeWidth="2" fill="none" />
+        <circle cx="80" cy="35" r="2" fill="#DCC892" />
 
         {/* Connection points */}
-        <rect x="75" y="46" width="10" height="8" fill="#1e3a8a" rx="1" />
+        <rect x="75" y="46" width="10" height="8" fill="#DCC892" rx="1" />
         <circle cx="77" cy="50" r="1.5" fill="#f1f5f9" />
         <circle cx="83" cy="50" r="1.5" fill="#f1f5f9" />
 
@@ -371,18 +371,18 @@ const AudioLeadsFlashcards = () => {
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Orange RCA for digital */}
-        <circle cx="70" cy="40" r="18" fill="#fb923c" />
+        <circle cx="70" cy="40" r="18" fill="#DCC892" />
         <circle cx="70" cy="40" r="10" fill="#2d3748" />
         <circle cx="70" cy="40" r="4" fill="#f1f5f9" />
-        <text x="70" y="70" fill="#fb923c" fontSize="10" textAnchor="middle">Orange RCA</text>
+        <text x="70" y="70" fill="#DCC892" fontSize="10" textAnchor="middle">Orange RCA</text>
         <text x="70" y="80" fill="#2d3748" fontSize="8" textAnchor="middle">S/PDIF Digital</text>
 
         {/* Digital signal representation */}
-        <rect x="100" y="35" width="3" height="10" fill="#3b82f6" />
-        <rect x="108" y="35" width="3" height="5" fill="#3b82f6" />
-        <rect x="116" y="35" width="3" height="10" fill="#3b82f6" />
-        <rect x="124" y="35" width="3" height="7" fill="#3b82f6" />
-        <rect x="132" y="35" width="3" height="3" fill="#3b82f6" />
+        <rect x="100" y="35" width="3" height="10" fill="#DCC892" />
+        <rect x="108" y="35" width="3" height="5" fill="#DCC892" />
+        <rect x="116" y="35" width="3" height="10" fill="#DCC892" />
+        <rect x="124" y="35" width="3" height="7" fill="#DCC892" />
+        <rect x="132" y="35" width="3" height="3" fill="#DCC892" />
 
         <text x="120" y="55" fill="#2d3748" fontSize="8" textAnchor="middle">Digital Data</text>
         <text x="120" y="20" fill="#2d3748" fontSize="9" textAnchor="middle">75&#937; Impedance Required</text>
@@ -431,7 +431,7 @@ const AudioLeadsFlashcards = () => {
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Signal chain */}
-        <rect x="10" y="35" width="20" height="15" fill="#3b82f6" />
+        <rect x="10" y="35" width="20" height="15" fill="#DCC892" />
         <text x="20" y="45" fill="#f1f5f9" fontSize="6" textAnchor="middle">Source</text>
 
         <line x1="30" y1="42" x2="50" y2="42" stroke="#2d3748" strokeWidth="2" />
@@ -470,14 +470,14 @@ const AudioLeadsFlashcards = () => {
         <circle cx="77" cy="50" r="2" fill="#e2e8f0" />
 
         {/* Digital signal */}
-        <rect x="100" y="40" width="2" height="10" fill="#3b82f6" />
-        <rect x="105" y="40" width="2" height="6" fill="#3b82f6" />
-        <rect x="110" y="40" width="2" height="10" fill="#3b82f6" />
-        <rect x="115" y="40" width="2" height="4" fill="#3b82f6" />
-        <rect x="120" y="40" width="2" height="8" fill="#3b82f6" />
+        <rect x="100" y="40" width="2" height="10" fill="#DCC892" />
+        <rect x="105" y="40" width="2" height="6" fill="#DCC892" />
+        <rect x="110" y="40" width="2" height="10" fill="#DCC892" />
+        <rect x="115" y="40" width="2" height="4" fill="#DCC892" />
+        <rect x="120" y="40" width="2" height="8" fill="#DCC892" />
 
         <text x="70" y="75" fill="#2d3748" fontSize="10" textAnchor="middle">AES/EBU Digital</text>
-        <text x="111" y="60" fill="#3b82f6" fontSize="8" textAnchor="middle">Digital Audio</text>
+        <text x="111" y="60" fill="#DCC892" fontSize="8" textAnchor="middle">Digital Audio</text>
 
         {/* Specifications */}
         <text x="145" y="30" fill="#2d3748" fontSize="8">110&#937; Impedance</text>
