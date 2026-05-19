@@ -173,13 +173,13 @@ export default function Comparison() {
 
             // === Phase 4 (260-400): Use cases appear line by line ===
             const leftCases = [
-                { text: 'Live sound', icon: '🎤' },
-                { text: 'DJ booth monitoring', icon: '🎧' },
+                { text: 'Live sound', icon: '' },
+                { text: 'DJ booth monitoring', icon: '' },
                 { text: 'Room correction', icon: '' },
                 { text: 'Quick tonal fixes', icon: '' },
             ];
             const rightCases = [
-                { text: 'Mix engineering', icon: '🎚' },
+                { text: 'Mix engineering', icon: '' },
                 { text: 'Mastering', icon: '' },
                 { text: 'Removing resonances', icon: '' },
                 { text: 'Surgical corrections', icon: '' },

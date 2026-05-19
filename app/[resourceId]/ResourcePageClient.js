@@ -391,7 +391,6 @@ function ResourceNotFound({ resourceId, theme: t }) {
                     boxShadow: glass.shadowHover,
                 }}
             >
-                <div style={{ fontSize: '4rem', marginBottom: spacing[4] }}></div>
                 <h1
                     style={{
                         fontSize: typography.size['2xl'],
@@ -460,7 +459,6 @@ function ComponentNotFound({ resource, theme: t }) {
                     boxShadow: glass.shadowHover,
                 }}
             >
-                <div style={{ fontSize: '4rem', marginBottom: spacing[4] }}></div>
                 <h1
                     style={{
                         fontSize: typography.size['2xl'],

@@ -50,7 +50,7 @@ const ESSAY_TOPICS = [
     {
         id: 'dynamics',
         label: 'Dynamics',
-        icon: '🎚️',
+        icon: '',
         question: 'Evaluate the use of dynamics processing in the production of a modern pop track.',
         marks: { total: 20, ao3: 5, ao4: 15 },
         points: [
@@ -78,7 +78,7 @@ const ESSAY_TOPICS = [
     {
         id: 'reverb',
         label: 'Reverb & Delay',
-        icon: '🔊',
+        icon: '',
         question: 'Evaluate the use of reverb and delay effects in a studio recording.',
         marks: { total: 20, ao3: 5, ao4: 15 },
         points: [
@@ -92,7 +92,7 @@ const ESSAY_TOPICS = [
     {
         id: 'stereo',
         label: 'Stereo Recording',
-        icon: '🎙️',
+        icon: '',
         question: 'Evaluate the use of stereo recording techniques in capturing a live acoustic performance.',
         marks: { total: 20, ao3: 5, ao4: 15 },
         points: [
@@ -106,7 +106,7 @@ const ESSAY_TOPICS = [
     {
         id: 'microphones',
         label: 'Microphones',
-        icon: '🎤',
+        icon: '',
         question: 'Evaluate the selection and use of microphones in a studio recording session.',
         marks: { total: 20, ao3: 5, ao4: 15 },
         points: [
@@ -684,7 +684,6 @@ function TestTab({ topic }) {
                             alignItems: 'center', justifyContent: 'center', gap: 14,
                             background: 'rgba(25, 25, 42, 0.4)',
                         }}>
-                            <div style={{ fontSize: 36 }}></div>
                             <div style={{ fontSize: 14, color: C.text, fontWeight: 600, fontFamily: font, textAlign: 'center' }}>
                                 Write your plan first
                             </div>
@@ -753,27 +752,27 @@ const SIDE_ICONS = {
             { icon: '', label: 'Technical', y: 380 },
         ],
         right: [
-            { icon: '⚖️', label: 'Evaluate', y: 60 },
+            { icon: '', label: 'Evaluate', y: 60 },
             { icon: '', label: 'Judge', y: 220 },
             { icon: '', label: 'Balance', y: 380 },
         ],
     },
     practice: {
         left: [
-            { icon: '❓', label: 'Question', y: 60 },
+            { icon: '', label: 'Question', y: 60 },
             { icon: '', label: 'Focus', y: 220 },
             { icon: '', label: 'Plan', y: 380 },
         ],
         right: [
             { icon: '', label: 'AO3', y: 60 },
-            { icon: '⚖️', label: 'AO4', y: 220 },
+            { icon: '', label: 'AO4', y: 220 },
             { icon: '', label: 'Marks', y: 380 },
         ],
     },
     test: {
         left: [
             { icon: '', label: 'Recall', y: 60 },
-            { icon: '✍️', label: 'Attempt', y: 220 },
+            { icon: '', label: 'Attempt', y: 220 },
             { icon: '', label: 'Compare', y: 380 },
         ],
         right: [

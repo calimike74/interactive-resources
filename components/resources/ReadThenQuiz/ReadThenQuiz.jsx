@@ -145,7 +145,6 @@ function ReadThenQuizInner() {
         const canStart = studentName.trim().length > 0;
         return (
             <div style={{ maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
-                <div style={{ fontSize: '32px', marginBottom: spacing[3] }}></div>
                 <h2 style={{
                     fontSize: typography.size['2xl'],
                     fontWeight: typography.weight.bold,

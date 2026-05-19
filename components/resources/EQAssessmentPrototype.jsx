@@ -648,7 +648,6 @@ export default function EQAssessmentPrototype() {
                         textAlign: 'center',
                     }}
                 >
-                    <div style={{ fontSize: '3rem', marginBottom: spacing[3] }}>✅</div>
                     <h3 style={{ fontSize: typography.size.xl, fontWeight: typography.weight.semibold, color: '#22c55e', marginBottom: spacing[2] }}>
                         Submitted
                     </h3>

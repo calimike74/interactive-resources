@@ -827,17 +827,14 @@ const DistortionLab = () => {
                 <div className="flex justify-center gap-4 mt-2 text-xs">
                   {showOriginal && (
                     <span className="flex items-center gap-2">
-                      <div className="w-4 h-0.5 bg-gray-400"></div>
                       Original
                     </span>
                   )}
                   <span className="flex items-center gap-2">
-                    <div className="w-4 h-0.5" style={{ backgroundColor: activeColor }}></div>
                     Distorted
                   </span>
                   {showThreshold && (
                     <span className="flex items-center gap-2">
-                      <div className="w-4 h-0.5 bg-red-500 opacity-50"></div>
                       Threshold
                     </span>
                   )}
@@ -1211,7 +1208,6 @@ const DistortionLab = () => {
 
                   <div className="bg-white rounded-lg px-4 py-3 border-2 border-red-400 shadow-sm">
                     <div className="text-xs text-gray-500 mb-1">OUTPUT</div>
-                    <div className="font-mono text-sm font-bold">🔊</div>
                   </div>
                 </div>
               </div>

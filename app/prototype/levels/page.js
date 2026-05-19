@@ -259,7 +259,7 @@ export default function LevelsPrototype() {
                 {/* Card with side icons */}
                 <div style={{ position: 'relative', width: '100%', maxWidth: 720, display: 'flex', justifyContent: 'center' }}>
                     <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 0 }}>
-                        <SideLabel icon="❓" label="Question" side="left" y={60} />
+                        <SideLabel icon="" label="Question" side="left" y={60} />
                         <SideLabel icon="" label="Focus" side="left" y={210} />
                         <SideLabel icon="" label="Plan" side="left" y={360} />
                     </div>
@@ -441,7 +441,7 @@ export default function LevelsPrototype() {
 
                     <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 0 }}>
                         <SideLabel icon="" label="AO3" side="right" y={60} />
-                        <SideLabel icon="⚖️" label="AO4" side="right" y={210} />
+                        <SideLabel icon="" label="AO4" side="right" y={210} />
                         <SideLabel icon="" label="Marks" side="right" y={360} />
                     </div>
                 </div>

@@ -135,7 +135,7 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
         definition: '',
         key: '',
         exam: '',
-        warning: '⚠️'
+        warning: ''
     };
 
     return (
@@ -339,7 +339,6 @@ const MistakeSection = ({ onComplete }) => {
                 border: '2px solid #ef4444'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                    <span style={{ fontSize: '2.5rem' }}>❌</span>
                     <div>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ef4444', margin: 0 }}>WRONG: "Just copy the track"</h3>
                         <p style={{ color: '#8b909a', margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>This is what students write - and lose marks every year</p>
@@ -1141,7 +1140,7 @@ export default function DoubleTrackingExplorer() {
     const [activeTab, setActiveTab] = useState('mistake');
 
     const tabs = [
-        { id: 'mistake', label: 'The Mistake', icon: '❌' },
+        { id: 'mistake', label: 'The Mistake', icon: '' },
         { id: 'explore', label: 'Explore ADT', icon: '' },
         { id: 'quiz', label: 'Quiz', icon: '?' },
     ];

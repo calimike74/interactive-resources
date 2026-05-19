@@ -341,7 +341,7 @@ export default function ColourCodedPrototype() {
                     </BrowserCard>
 
                     <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 0 }}>
-                        <SideLabel icon="⚖️" label="Evaluate" side="right" y={60} />
+                        <SideLabel icon="" label="Evaluate" side="right" y={60} />
                         <SideLabel icon="" label="Judge" side="right" y={220} />
                         <SideLabel icon="" label="Balance" side="right" y={380} />
                     </div>

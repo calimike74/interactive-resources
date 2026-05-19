@@ -409,7 +409,6 @@ const AcousticsFlashcards = () => {
             Overall Progress
           </h3>
           <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-3">
-            <div className={`h-full ${getProgressColor(masteryScore)}`} style={{ width: `${masteryScore}%` }}></div>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center text-sm">
             <div>
@@ -637,7 +636,6 @@ const AcousticsFlashcards = () => {
           </span>
         </div>
         <div className="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
-          <div className={`h-full ${getProgressColor(masteryScore)}`} style={{ width: `${masteryScore}%` }}></div>
         </div>
       </div>
 

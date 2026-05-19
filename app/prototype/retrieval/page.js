@@ -169,7 +169,7 @@ export default function RetrievalPrototype() {
                 <div style={{ position: 'relative', width: '100%', maxWidth: 720, display: 'flex', justifyContent: 'center' }}>
                     <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 0 }}>
                         <SideLabel icon="" label="Recall" side="left" y={60} />
-                        <SideLabel icon="✍️" label="Attempt" side="left" y={220} />
+                        <SideLabel icon="" label="Attempt" side="left" y={220} />
                         <SideLabel icon="" label="Compare" side="left" y={380} />
                     </div>
 

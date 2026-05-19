@@ -37,7 +37,7 @@ const CALLOUT_TYPES = {
         bgTint: '#0891b208',
     },
     warning: {
-        icon: '⚠',
+        icon: '',
         label: 'Common Mistake',
         colour: '#dc2626',    // red
         bgTint: '#dc262608',

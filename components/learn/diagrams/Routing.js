@@ -249,7 +249,7 @@ export default function Routing() {
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText('Signal passes through each band in sequence', W / 2, botY + 50);
-                ctx.fillText('⚠ Cumulative phase shift: φ₁ + φ₂ + φ₃ + φ₄', W / 2, botY + 62);
+                ctx.fillText('Cumulative phase shift: φ₁ + φ₂ + φ₃ + φ₄', W / 2, botY + 62);
                 ctx.globalAlpha = 1;
             }
 

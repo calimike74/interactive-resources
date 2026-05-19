@@ -27,7 +27,6 @@ export default function HearItAccordion({ title, tracks }) {
         listStyle: 'none',
         userSelect: 'none',
       }}>
-        <span role="img" aria-label="headphones">🎧</span>
         <span style={{ flex: 1 }}>{title}</span>
         <span style={{
           background: '#2563eb',

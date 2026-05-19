@@ -151,7 +151,7 @@ const CopyableNote = ({ title, children, variant = 'definition' }) => {
         definition: '',
         key: '',
         exam: '',
-        warning: '⚠️',
+        warning: '',
     };
 
     return (
@@ -898,9 +898,9 @@ export default function GraphicParametricEQ() {
 
     const tabs = [
         { id: 'concept', label: 'Concept', icon: '' },
-        { id: 'compare', label: 'Compare', icon: '⚖️' },
-        { id: 'practice', label: 'In Practice', icon: '🎛️' },
-        { id: 'quiz', label: 'Test Yourself', icon: '✅' },
+        { id: 'compare', label: 'Compare', icon: '' },
+        { id: 'practice', label: 'In Practice', icon: '' },
+        { id: 'quiz', label: 'Test Yourself', icon: '' },
     ];
 
     const handleGraphicPreset = (presetKey) => {
@@ -1043,7 +1043,7 @@ export default function GraphicParametricEQ() {
                                             fontWeight: typography.weight.medium,
                                         }}
                                     >
-                                        🟡 Key Concept:
+                                         Key Concept:
                                     </p>
                                     <p style={{ fontSize: typography.size.lg, color: t.text.primary, fontWeight: typography.weight.semibold }}>
                                         Many bands, few controls
@@ -1130,7 +1130,7 @@ export default function GraphicParametricEQ() {
                                             fontWeight: typography.weight.medium,
                                         }}
                                     >
-                                        🔴 Key Concept:
+                                         Key Concept:
                                     </p>
                                     <p style={{ fontSize: typography.size.lg, color: t.text.primary, fontWeight: typography.weight.semibold }}>
                                         Few bands, full control
@@ -1412,7 +1412,6 @@ export default function GraphicParametricEQ() {
                                 }}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[4] }}>
-                                    <span style={{ fontSize: '2rem' }}>🎤</span>
                                     <h3 style={{ fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary }}>
                                         Live Sound
                                     </h3>
@@ -1483,7 +1482,6 @@ export default function GraphicParametricEQ() {
                                 }}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[4] }}>
-                                    <span style={{ fontSize: '2rem' }}>🎚️</span>
                                     <h3 style={{ fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary }}>
                                         Studio Mixing
                                     </h3>

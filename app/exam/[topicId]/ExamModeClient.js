@@ -948,7 +948,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                                     fontWeight: isSlow ? typography.weight.semibold : typography.weight.normal,
                                     whiteSpace: 'nowrap',
                                 }}>
-                                    {timeStr}{isSlow ? ' ⚠' : ''}
+                                    {timeStr}{isSlow ? ' ' : ''}
                                 </span>
                             </div>
                         );

@@ -710,7 +710,6 @@ const SpotlightBuilderView = ({ onBack }) => {
                             justifyContent: 'center',
                             gap: spacing[6],
                         }}>
-                            <div style={{ fontSize: '3rem', opacity: 0.5 }}></div>
                             <p style={{ color: t.text.secondary, maxWidth: '400px' }}>
                                 Upload a <strong>base image</strong> (what students see initially) and a <strong>reveal image</strong> (what's hidden underneath).
                             </p>
@@ -1211,7 +1210,6 @@ const GalleryView = ({ onSelectExample }) => {
                             position: 'relative',
                             overflow: 'hidden',
                         }}>
-                            {!example.baseImage && <span style={{ fontSize: '2rem', opacity: 0.5 }}></span>}
                             <div style={{
                                 position: 'absolute',
                                 bottom: spacing[2],
@@ -1545,7 +1543,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
                                     justifyContent: 'center',
                                     fontSize: '1.25rem',
                                 }}>
-                                    🎛️
+                                    
                                 </div>
                                 <div>
                                     <div style={{
@@ -1758,7 +1756,6 @@ const SpotlightExplorerView = ({ example, onBack }) => {
                             zIndex: 10,
                         }}
                     >
-                        <span style={{ fontSize: '1.1em' }}></span>
                         {handControlEnabled ? 'Hand Control ON' : 'Enable Hand Control'}
                     </button>
 
@@ -2122,7 +2119,6 @@ const BuilderView = ({ onBack }) => {
                             </>
                         ) : (
                             <div style={{ textAlign: 'center', padding: spacing[8] }}>
-                                <div style={{ fontSize: '3rem', marginBottom: spacing[4], opacity: 0.5 }}></div>
                                 <p style={{
                                     color: t.text.secondary,
                                     marginBottom: spacing[4],
