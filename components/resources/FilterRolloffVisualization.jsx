@@ -38,7 +38,7 @@ const InfoTooltip = ({ tooltipKey }) => {
 
   return (
     <div className="relative inline-block ml-2">
-      <button
+      <button type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="text-gray-400 hover:text-gray-600 transition-colors"
         aria-label={`Info about ${info.title}`}
@@ -86,7 +86,7 @@ const FrequencySlider = ({ value, onChange }) => {
 
   return (
     <div className="space-y-2">
-      <input
+      <input aria-label="Slider"
         type="range"
         min={0}
         max={1000}
@@ -110,7 +110,7 @@ const FrequencySlider = ({ value, onChange }) => {
 
 // Linear slider for resonance
 const Slider = ({ value, onChange, min, max, step }) => (
-  <input
+  <input aria-label="Slider"
     type="range"
     min={min}
     max={max}
@@ -224,8 +224,8 @@ const FilterRolloffVisualization = () => {
     setData(newData);
   }, [cutoffFrequency, rolloffRate, filterType, resonance, compareRolloff, activeTab, generateFilterResponse]);
 
-  // Filter controls component
-  const FilterControls = ({ showComparison = false }) => (
+  // Filter controls — local render helper (not a component; uses parent closure)
+  const renderFilterControls = ({ showComparison = false }) => (
     <div className="space-y-5">
       {/* Cutoff Frequency */}
       <div className="space-y-2">
@@ -249,7 +249,7 @@ const FilterRolloffVisualization = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {rolloffOptions.map((option) => (
-            <button
+            <button type="button"
               key={option.value}
               onClick={() => setRolloffRate(option.value)}
               className={`px-3 py-1.5 text-xs rounded-md border transition-colors flex flex-col items-center ${
@@ -277,7 +277,7 @@ const FilterRolloffVisualization = () => {
           </div>
           <div className="flex flex-wrap gap-2">
             {rolloffOptions.map((option) => (
-              <button
+              <button type="button"
                 key={option.value}
                 onClick={() => setCompareRolloff(option.value)}
                 className={`px-3 py-1.5 text-xs rounded-md border transition-colors flex flex-col items-center ${
@@ -337,8 +337,8 @@ const FilterRolloffVisualization = () => {
     </div>
   );
 
-  // Chart component
-  const FilterChart = ({ showComparison = false }) => (
+  // Chart — local render helper (not a component; uses parent closure)
+  const renderFilterChart = ({ showComparison = false }) => (
     <div className="space-y-2">
       <ResponsiveContainer width="100%" height={380}>
         <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
@@ -413,7 +413,7 @@ const FilterRolloffVisualization = () => {
           marginBottom: spacing[6],
           minHeight: '240px',
       }}>
-          <video
+          <video aria-hidden="true"
               autoPlay muted loop playsInline
               onLoadedData={(e) => { e.target.style.opacity = 1; }}
               style={{
@@ -455,7 +455,7 @@ const FilterRolloffVisualization = () => {
         {/* Tabs */}
         <div className="flex gap-1 mb-6 bg-gray-100 p-1 rounded-lg w-fit">
           {['interactive', 'compare', 'learn'].map((tab) => (
-            <button
+            <button type="button"
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -473,10 +473,10 @@ const FilterRolloffVisualization = () => {
         {activeTab === 'interactive' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1">
-              <FilterControls showComparison={false} />
+              {renderFilterControls({ showComparison: false })}
             </div>
             <div className="lg:col-span-2">
-              <FilterChart showComparison={false} />
+              {renderFilterChart({ showComparison: false })}
             </div>
           </div>
         )}
@@ -492,10 +492,10 @@ const FilterRolloffVisualization = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-1">
-                <FilterControls showComparison={true} />
+                {renderFilterControls({ showComparison: true })}
               </div>
               <div className="lg:col-span-2">
-                <FilterChart showComparison={true} />
+                {renderFilterChart({ showComparison: true })}
               </div>
             </div>
           </div>

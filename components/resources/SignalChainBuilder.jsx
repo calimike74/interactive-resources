@@ -139,7 +139,7 @@ export default function SignalChainBuilder() {
                     minHeight: '4rem',
                 }}>
                     {available.map(item => (
-                        <button
+                        <button type="button"
                             key={item.id}
                             onClick={() => addToChain(item)}
                             style={chipStyle(item.domain, false)}
@@ -175,7 +175,7 @@ export default function SignalChainBuilder() {
                 }}>
                     {chain.map((item, idx) => (
                         <span key={item.id} style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
-                            <button
+                            <button type="button"
                                 onClick={() => removeFromChain(item)}
                                 style={chipStyle(item.domain, true)}
                             >
@@ -206,7 +206,7 @@ export default function SignalChainBuilder() {
 
             {/* Actions */}
             <div style={{ display: 'flex', gap: spacing[3], justifyContent: 'flex-end' }}>
-                <button onClick={resetGame} style={{
+                <button type="button" onClick={resetGame} style={{
                     padding: `${spacing[3]} ${spacing[5]}`,
                     borderRadius: borderRadius.lg,
                     border: `1px solid ${t.border.medium}`,
@@ -219,7 +219,7 @@ export default function SignalChainBuilder() {
                 }}>
                     Reset
                 </button>
-                <button onClick={checkAnswer} style={{
+                <button type="button" onClick={checkAnswer} style={{
                     padding: `${spacing[3]} ${spacing[5]}`,
                     borderRadius: borderRadius.lg,
                     border: 'none',
@@ -467,7 +467,7 @@ function CopyAllNotes({ notes, title }) {
     }, [notes, title]);
 
     return (
-        <button
+        <button type="button"
             onClick={handleCopy}
             style={{
                 display: 'flex', alignItems: 'center', gap: spacing[2],

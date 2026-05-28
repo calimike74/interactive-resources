@@ -112,7 +112,7 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
 
     return (
         <div style={{ position: 'relative', display: 'inline-flex' }}>
-            <button
+            <button type="button"
                 ref={buttonRef}
                 onClick={handleButtonClick}
                 onMouseEnter={handleButtonEnter}
@@ -209,7 +209,7 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                         <p style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', margin: 0, textTransform: 'uppercase', letterSpacing: 0.5 }}>
                             Copy for AI
                         </p>
-                        <button
+                        <button type="button"
                             onClick={toggleLearnMode}
                             style={{
                                 fontSize: 10,
@@ -220,7 +220,7 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                                 background: learnMode ? accent : '#F3F4F6',
                                 color: learnMode ? '#fff' : '#6B7280',
                                 cursor: 'pointer',
-                                transition: 'all 200ms ease',
+                                transition: 'transform, opacity, background-color, color, border-color, box-shadow 200ms ease',
                                 whiteSpace: 'nowrap',
                             }}
                         >
@@ -228,7 +228,7 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                         </button>
                     </div>
                     {PRODUCTION_MODES.map((m) => (
-                        <button
+                        <button type="button"
                             key={m.key}
                             onClick={() => handleCopy(m.key)}
                             style={{

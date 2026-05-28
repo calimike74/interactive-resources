@@ -157,14 +157,14 @@ function SideLabel({ icon, label, side = 'left', lineWidth = 55, y = 0 }) {
                         : `linear-gradient(145deg, ${C.iconBg}, #101018)`,
                     border: `1px solid ${hovered ? 'rgba(91,141,239,0.4)' : C.iconBorder}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'all 0.3s ease',
+                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s ease',
                     boxShadow: hovered
                         ? '0 0 20px rgba(91,141,239,0.2), inset 0 1px 1px rgba(255,255,255,0.05)'
                         : 'inset 0 1px 1px rgba(255,255,255,0.03), 0 2px 8px rgba(0,0,0,0.3)',
                 }}>
                     <span style={{
                         fontSize: 22, lineHeight: 1,
-                        transition: 'all 0.3s ease',
+                        transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s ease',
                         transform: hovered ? 'scale(1.08)' : 'scale(1)',
                         filter: hovered ? 'brightness(1.2)' : 'brightness(0.85)',
                     }}>{icon}</span>
@@ -476,7 +476,7 @@ function PracticeTab({ topic }) {
                             willChange: 'transform, width',
                         }} />
                         {LEVELS.map((level) => (
-                            <button
+                            <button type="button"
                                 key={level.key}
                                 ref={el => { levelTabBtnRefs.current[level.key] = el; }}
                                 onClick={() => setActiveLevel(level.key)}
@@ -579,7 +579,7 @@ function PracticeTab({ topic }) {
                             height: '100%', borderRadius: 2,
                             background: activeLevel === 'full' ? C.green : activeLevel === 'partial' ? C.accent : C.amber,
                             width: activeLevel === 'full' ? '33%' : activeLevel === 'partial' ? '66%' : '100%',
-                            transition: 'all 0.5s ease',
+                            transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.5s ease',
                         }} />
                     </div>
                 </div>
@@ -607,7 +607,7 @@ function TestTab({ topic }) {
                         fontWeight: 600, marginBottom: 8,
                     }}>Your Plan</div>
                     <div style={{ position: 'relative' }}>
-                        <textarea
+                        <textarea aria-label="Response"
                             value={attempt}
                             onChange={(e) => setAttempt(e.target.value)}
                             placeholder="How would you structure this essay? List your key points before revealing the scaffold..."
@@ -690,7 +690,7 @@ function TestTab({ topic }) {
                             <div style={{ fontSize: 12, color: C.textSecondary, fontFamily: font, textAlign: 'center', maxWidth: 200, lineHeight: 1.5 }}>
                                 Attempting from memory before checking strengthens your recall
                             </div>
-                            <button
+                            <button type="button"
                                 onClick={() => setRevealed(true)}
                                 style={{
                                     background: attempt.length > 20
@@ -700,7 +700,7 @@ function TestTab({ topic }) {
                                     borderRadius: 10, padding: '10px 24px',
                                     fontSize: 14, fontWeight: 600,
                                     cursor: 'pointer', fontFamily: font,
-                                    transition: 'all 0.3s ease',
+                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s ease',
                                     boxShadow: attempt.length > 20 ? '0 0 20px rgba(251,191,36,0.3)' : 'none',
                                 }}
                             >
@@ -726,7 +726,7 @@ function TestTab({ topic }) {
 
                 {revealed && (
                     <div style={{ marginTop: 10 }}>
-                        <button
+                        <button type="button"
                             onClick={() => { setRevealed(false); setAttempt(''); }}
                             style={{
                                 background: C.surface, border: `1px solid ${C.border}`,
@@ -833,7 +833,7 @@ export default function EssayScaffoldPractice() {
                     marginLeft: 'calc(-50vw + 50%)',
                     minHeight: 240,
                 }}>
-                    <video
+                    <video aria-hidden="true"
                         autoPlay
                         muted
                         loop
@@ -888,7 +888,7 @@ export default function EssayScaffoldPractice() {
                         const isActive = selectedTopic.id === topic.id;
                         const isHovered = topicHover === topic.id;
                         return (
-                            <button
+                            <button type="button"
                                 key={topic.id}
                                 onClick={() => setSelectedTopic(topic)}
                                 onMouseEnter={() => setTopicHover(topic.id)}
@@ -903,7 +903,7 @@ export default function EssayScaffoldPractice() {
                                     fontFamily: font,
                                     color: isActive ? C.accent : C.textSecondary,
                                     cursor: 'pointer',
-                                    transition: 'all 0.25s ease',
+                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.25s ease',
                                     display: 'flex', alignItems: 'center', gap: 7,
                                     whiteSpace: 'nowrap',
                                 }}
@@ -940,7 +940,7 @@ export default function EssayScaffoldPractice() {
                         willChange: 'transform, width',
                     }} />
                     {TABS.map((tab) => (
-                        <button
+                        <button type="button"
                             key={tab.key}
                             ref={el => { tabBtnRefs.current[tab.key] = el; }}
                             onClick={() => setActiveTab(tab.key)}

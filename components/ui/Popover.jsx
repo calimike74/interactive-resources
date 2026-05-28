@@ -153,7 +153,7 @@ export default function Popover({ trigger, children, position = 'top' }) {
 
     return (
         <>
-            <button
+            <button type="button"
                 ref={triggerRef}
                 onClick={handleToggle}
                 aria-expanded={open}

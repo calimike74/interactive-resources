@@ -75,7 +75,7 @@ const CopyableNote = ({ title, children, color = 'var(--annotation-info)', varia
           <span>{icons[variant] || icons.definition}</span>
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT_BODY }}>{title}</span>
         </div>
-        <button data-press onClick={handleCopy} style={{
+        <button type="button" data-press onClick={handleCopy} style={{
           background: copied ? 'var(--success)' : 'var(--canvas-surface)', border: `1px solid ${copied ? 'var(--success)' : 'var(--canvas-border-hover)'}`,
           borderRadius: 'var(--radius-md)', padding: '0.25rem 0.75rem', cursor: 'pointer',
           color: copied ? '#fff' : 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY
@@ -93,7 +93,7 @@ const StudioCard = ({ children, style = {} }) => (
   <div style={{
     background: 'var(--background-raised)', border: '1px solid var(--border)',
     borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)',
-    boxShadow: 'var(--shadow-md)', transition: 'all var(--duration-normal) var(--ease-out)', ...style
+    boxShadow: 'var(--shadow-md)', transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-normal) var(--ease-out)', ...style
   }}>{children}</div>
 );
 
@@ -564,13 +564,13 @@ const StereoPanning = () => {
       {/* Tab Bar */}
       <div style={{ display: 'flex', borderBottom: `1px solid ${isCanvasTab ? 'var(--canvas-border)' : 'var(--border)'}`, margin: '0 var(--space-6)' }}>
         {tabs.map(tab => (
-          <button data-press key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+          <button type="button" data-press key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
             flex: 1, padding: 'var(--space-3)', fontSize: 'var(--text-xs)', fontWeight: '600',
             fontFamily: FONT_BODY, textTransform: 'uppercase', letterSpacing: '0.05em',
             color: activeTab === tab.id ? 'var(--accent)' : (isCanvasTab ? 'var(--canvas-foreground-tertiary)' : 'var(--foreground-tertiary)'),
             background: activeTab === tab.id ? 'var(--accent-soft)' : 'transparent',
             borderBottom: activeTab === tab.id ? '2px solid var(--accent)' : '2px solid transparent',
-            border: 'none', cursor: 'pointer', transition: 'all var(--duration-fast) var(--ease-out)'
+            border: 'none', cursor: 'pointer', transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)'
           }}>{tab.label}</button>
         ))}
       </div>
@@ -583,7 +583,7 @@ const StereoPanning = () => {
           <div>
             <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)', flexWrap: 'wrap' }}>
               {[{ id: 'all', label: 'All Topics' }, { id: 'foundation', label: '\u{1F7E2} Foundation' }, { id: 'intermediate', label: '\u{1F7E1} Intermediate' }, { id: 'advanced', label: '\u{1F534} Advanced' }].map(f => (
-                <button data-press key={f.id} onClick={() => setLearnFilter(f.id)} style={{
+                <button type="button" data-press key={f.id} onClick={() => setLearnFilter(f.id)} style={{
                   padding: 'var(--space-2) var(--space-4)', borderRadius: 'var(--radius-md)',
                   border: `1px solid ${learnFilter === f.id ? 'var(--accent)' : 'var(--border)'}`,
                   background: learnFilter === f.id ? 'var(--accent-soft)' : 'var(--background-raised)',
@@ -595,7 +595,7 @@ const StereoPanning = () => {
 
             {learnSections.filter(s => learnFilter === 'all' || s.level === learnFilter).map((section, idx) => (
               <StudioCard key={idx} style={{ marginBottom: 'var(--space-4)' }}>
-                <button data-press onClick={() => toggleSection(idx)} style={{
+                <button type="button" data-press onClick={() => toggleSection(idx)} style={{
                   width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left'
                 }}>
@@ -642,7 +642,7 @@ const StereoPanning = () => {
             {/* Preset selector */}
             <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap', justifyContent: 'center' }}>
               {Object.entries(INSTRUMENT_PRESETS).map(([key, preset]) => (
-                <button data-press key={key} onClick={() => loadPreset(key)} style={{
+                <button type="button" data-press key={key} onClick={() => loadPreset(key)} style={{
                   padding: 'var(--space-2) var(--space-4)', borderRadius: 'var(--radius-md)',
                   border: `1px solid ${activePreset === key && !challengeActive ? 'var(--accent)' : 'var(--canvas-border-hover)'}`,
                   background: activePreset === key && !challengeActive ? 'var(--accent-soft)' : 'var(--canvas-surface)',
@@ -661,7 +661,7 @@ const StereoPanning = () => {
                 <div style={{ fontSize: 'var(--text-xs)', fontWeight: '300', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--canvas-highlight)' }}>
                   Stereo Field {challengeActive ? '\u2014 Challenge Mode' : `\u2014 ${INSTRUMENT_PRESETS[activePreset].name}`}
                 </div>
-                <button data-press onClick={() => setMonoCheck(m => !m)} style={{
+                <button type="button" data-press onClick={() => setMonoCheck(m => !m)} style={{
                   padding: 'var(--space-1) var(--space-3)', borderRadius: 'var(--radius-sm)',
                   border: `1px solid ${monoCheck ? '#EF4444' : 'var(--canvas-border-hover)'}`,
                   background: monoCheck ? 'rgba(239, 68, 68, 0.15)' : 'var(--canvas-surface)',
@@ -693,7 +693,7 @@ const StereoPanning = () => {
                 </div>
                 <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
                   {[{ id: 'xy', label: 'X-Y Coincident' }, { id: 'ab', label: 'A-B Spaced' }].map(m => (
-                    <button data-press key={m.id} onClick={() => setMicMode(m.id)} style={{
+                    <button type="button" data-press key={m.id} onClick={() => setMicMode(m.id)} style={{
                       flex: 1, padding: 'var(--space-2)', borderRadius: 'var(--radius-sm)',
                       border: `1px solid ${micMode === m.id ? 'var(--accent)' : 'var(--canvas-border-hover)'}`,
                       background: micMode === m.id ? 'var(--accent-soft)' : 'transparent',
@@ -709,7 +709,7 @@ const StereoPanning = () => {
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)' }}>Angle</span>
                       <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{micAngle}&deg;</span>
                     </div>
-                    <input type="range" min={60} max={180} value={micAngle} onChange={e => setMicAngle(parseInt(e.target.value))}
+                    <input aria-label="Slider" type="range" min={60} max={180} value={micAngle} onChange={e => setMicAngle(parseInt(e.target.value))}
                       style={{ width: '100%', accentColor: '#FF6B35' }} />
                   </div>
                 ) : (
@@ -718,7 +718,7 @@ const StereoPanning = () => {
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)' }}>Spacing</span>
                       <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{micSpacing} cm</span>
                     </div>
-                    <input type="range" min={30} max={300} step={5} value={micSpacing} onChange={e => setMicSpacing(parseInt(e.target.value))}
+                    <input aria-label="Slider" type="range" min={30} max={300} step={5} value={micSpacing} onChange={e => setMicSpacing(parseInt(e.target.value))}
                       style={{ width: '100%', accentColor: '#FF6B35' }} />
                   </div>
                 )}
@@ -753,13 +753,13 @@ const StereoPanning = () => {
                 Drag each instrument to its correct pan position in a standard rock mix. Kick, bass, and lead vocal should be centre; hi-hat off-centre; guitars panned wide.
               </p>
               {!challengeActive ? (
-                <button data-press onClick={startChallenge} style={{
+                <button type="button" data-press onClick={startChallenge} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
                   border: 'none', borderRadius: 'var(--radius-md)', color: '#fff',
                   cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600'
                 }}>Start Challenge</button>
               ) : !challengeSubmitted ? (
-                <button data-press onClick={submitChallenge} style={{
+                <button type="button" data-press onClick={submitChallenge} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
                   border: 'none', borderRadius: 'var(--radius-md)', color: '#fff',
                   cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600'
@@ -786,7 +786,7 @@ const StereoPanning = () => {
                       })}
                     </div>
                   </div>
-                  <button data-press onClick={startChallenge} style={{
+                  <button type="button" data-press onClick={startChallenge} style={{
                     padding: 'var(--space-2) var(--space-5)', background: 'var(--canvas-surface)',
                     border: '1px solid var(--canvas-border-hover)', borderRadius: 'var(--radius-md)',
                     color: 'var(--canvas-foreground-tertiary)', cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)'
@@ -796,7 +796,7 @@ const StereoPanning = () => {
             </div>
 
             {/* Reset */}
-            <button data-press onClick={resetInteractive} style={{
+            <button type="button" data-press onClick={resetInteractive} style={{
               marginTop: 'var(--space-4)', padding: 'var(--space-2) var(--space-4)',
               background: 'var(--canvas-surface)', border: '1px solid var(--canvas-border-hover)',
               borderRadius: 'var(--radius-md)', color: 'var(--canvas-foreground-tertiary)',
@@ -833,12 +833,12 @@ const StereoPanning = () => {
                       else if (showFeedback && isCorrect) { bg = 'var(--success-soft)'; borderColor = 'var(--success)'; }
 
                       return (
-                        <button data-press key={i} onClick={() => handleAnswer(i)} style={{
+                        <button type="button" data-press key={i} onClick={() => handleAnswer(i)} style={{
                           padding: 'var(--space-3) var(--space-4)', background: bg,
                           border: `2px solid ${borderColor}`, borderRadius: 'var(--radius-md)',
                           cursor: showFeedback ? 'default' : 'pointer', textAlign: 'left',
                           fontSize: 'var(--text-base)', fontFamily: FONT_BODY, color: 'var(--foreground)',
-                          transition: 'all var(--duration-fast) var(--ease-out)'
+                          transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)'
                         }}>{opt}</button>
                       );
                     })}
@@ -858,7 +858,7 @@ const StereoPanning = () => {
                           {quizQuestions[quizIndex].explanation}
                         </p>
                       </div>
-                      <button data-press onClick={nextQuestion} style={{
+                      <button type="button" data-press onClick={nextQuestion} style={{
                         marginTop: 'var(--space-4)', padding: 'var(--space-2) var(--space-5)',
                         background: 'var(--accent)', border: 'none', borderRadius: 'var(--radius-md)',
                         color: '#fff', cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600'
@@ -876,7 +876,7 @@ const StereoPanning = () => {
                 <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)' }}>
                   {score >= 8 ? 'Excellent understanding of stereo and panning!' : score >= 5 ? 'Good foundation \u2014 review stereo mic techniques and phase concepts.' : 'Revisit the Learn tab and try again.'}
                 </p>
-                <button data-press onClick={resetQuiz} style={{
+                <button type="button" data-press onClick={resetQuiz} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
                   border: 'none', borderRadius: 'var(--radius-md)', color: '#fff',
                   cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600'

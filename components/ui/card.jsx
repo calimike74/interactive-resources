@@ -32,7 +32,7 @@ export function CardContent({ className = '', children, ...props }) {
     );
 }
 
-export function CardDescription({ className = '', children, ...props }) {
+function CardDescription({ className = '', children, ...props }) {
     return (
         <p className={`text-sm text-gray-500 ${className}`} {...props}>
             {children}

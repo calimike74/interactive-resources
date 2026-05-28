@@ -201,7 +201,7 @@ function ReadThenQuizInner() {
                     }}>
                         Your name
                     </label>
-                    <input
+                    <input aria-label="Input"
                         type="text"
                         value={studentName}
                         onChange={(e) => setStudentName(e.target.value)}
@@ -232,7 +232,7 @@ function ReadThenQuizInner() {
                     </label>
                     <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
                         {SCAFFOLD_LEVELS.map(level => (
-                            <button
+                            <button type="button"
                                 key={level.id}
                                 onClick={() => setScaffoldLevel(level.id)}
                                 title={level.description}
@@ -255,7 +255,7 @@ function ReadThenQuizInner() {
                     </div>
                 </div>
 
-                <button
+                <button type="button"
                     onClick={handleStartReading}
                     disabled={!canStart}
                     style={{

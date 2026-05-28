@@ -1373,24 +1373,25 @@ async function copyToClipboard(text) {
 // NOTE ICON — SVG glyphs for all 8 note values
 // (Unicode music symbols require SMuFL fonts; SVG is universal.)
 // ════════════════════════════════════════════════════════════════════
+const Stem = () => <rect x="14.5" y="4" width="1.6" height="20" fill="currentColor" />;
+const HeadFilled = () => (
+  <ellipse cx="9" cy="22" rx="6" ry="4.2" transform="rotate(-22 9 22)" fill="currentColor" />
+);
+const HeadHollow = () => (
+  <ellipse cx="9" cy="22" rx="6" ry="4.2" transform="rotate(-22 9 22)"
+    fill="none" stroke="currentColor" strokeWidth="1.8" />
+);
+const Dot = () => <circle cx="18.5" cy="22" r="1.4" fill="currentColor" />;
+const Flag1 = () => (
+  <path d="M 16 4 Q 22 7.5 19.5 13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+);
+const Flag2 = () => (
+  <path d="M 16 9 Q 22 12.5 19.5 17.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+);
+
 function NoteIcon({ id, size = 22 }) {
   const w = size;
   const h = Math.round(size * 1.27);
-  const Stem = () => <rect x="14.5" y="4" width="1.6" height="20" fill="currentColor" />;
-  const HeadFilled = () => (
-    <ellipse cx="9" cy="22" rx="6" ry="4.2" transform="rotate(-22 9 22)" fill="currentColor" />
-  );
-  const HeadHollow = () => (
-    <ellipse cx="9" cy="22" rx="6" ry="4.2" transform="rotate(-22 9 22)"
-      fill="none" stroke="currentColor" strokeWidth="1.8" />
-  );
-  const Dot = () => <circle cx="18.5" cy="22" r="1.4" fill="currentColor" />;
-  const Flag1 = () => (
-    <path d="M 16 4 Q 22 7.5 19.5 13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-  );
-  const Flag2 = () => (
-    <path d="M 16 9 Q 22 12.5 19.5 17.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-  );
 
   switch (id) {
     case 'whole':
@@ -1695,7 +1696,7 @@ function BPMDelayCalculator() {
           <aside className="tl-stage-side">
             {/* VIDEO HERO */}
             <div className="tl-video-hero">
-              <video autoPlay loop muted playsInline preload="auto">
+              <video aria-hidden="true" autoPlay loop muted playsInline preload="auto">
                 <source src="/Reel-to-reel-video.mp4" type="video/mp4" />
               </video>
               <div className="tl-video-grain" />
@@ -1804,7 +1805,7 @@ function BPMDelayCalculator() {
 
         {/* LOOP */}
         <div className="tl-loop-row">
-          <button
+          <button type="button"
             className={'tl-loop-btn' + (loopOn ? ' on' : '')}
             onClick={() => setLoopOn(v => !v)}
           >
@@ -1857,7 +1858,7 @@ function BPMDelayCalculator() {
               <div className="tl-bpm-display">
                 {bpm}<span className="small">BPM</span>
               </div>
-              <input
+              <input aria-label="Slider"
                 className="tl-bpm-slider" type="range" min="60" max="180"
                 value={bpm}
                 onChange={e => setBpm(parseInt(e.target.value, 10))}
@@ -1865,7 +1866,7 @@ function BPMDelayCalculator() {
             </div>
             <div className="tl-bpm-presets">
               {BPM_PRESETS.map(p => (
-                <button
+                <button type="button"
                   key={p}
                   className={'tl-bpm-preset' + (bpm === p ? ' active' : '')}
                   onClick={() => setBpm(p)}
@@ -1918,8 +1919,8 @@ function BPMDelayCalculator() {
 
       {/* DRAWER HANDLES */}
       <div className="tl-drawer-handle">
-        <button onClick={() => setDrawer('theory')}>Theory</button>
-        <button onClick={() => setDrawer('reference')}>Reference</button>
+        <button type="button" onClick={() => setDrawer('theory')}>Theory</button>
+        <button type="button" onClick={() => setDrawer('reference')}>Reference</button>
       </div>
 
       {/* DRAWER */}
@@ -1927,7 +1928,7 @@ function BPMDelayCalculator() {
         <>
           <div className="tl-drawer-overlay" onClick={() => setDrawer(null)} />
           <div className="tl-drawer">
-            <button className="tl-drawer-close" onClick={() => setDrawer(null)}>×</button>
+            <button type="button" className="tl-drawer-close" onClick={() => setDrawer(null)}>×</button>
             {drawer === 'theory' && (
               <TheoryPanel onCopy={handleCopy} />
             )}
@@ -1952,10 +1953,10 @@ function TheoryPanel({ onCopy }) {
     <>
       <div className="tl-drawer-eyebrow">1.12 Delay · Theory</div>
       <div className="tl-copy-row">
-        <button className="tl-copy-btn" onClick={(e) => onCopy('theory-text', e.currentTarget)}>
+        <button type="button" className="tl-copy-btn" onClick={(e) => onCopy('theory-text', e.currentTarget)}>
           Copy as text
         </button>
-        <button className="tl-copy-btn" onClick={(e) => onCopy('theory-md', e.currentTarget)}>
+        <button type="button" className="tl-copy-btn" onClick={(e) => onCopy('theory-md', e.currentTarget)}>
           Copy as Markdown
         </button>
         <span className="tl-copy-hint">Text → notes · Markdown → AI assistants</span>
@@ -2010,10 +2011,10 @@ function ReferencePanel({ onCopy, onPickBpm }) {
     <>
       <div className="tl-drawer-eyebrow">1.12 Delay · Reference</div>
       <div className="tl-copy-row">
-        <button className="tl-copy-btn" onClick={(e) => onCopy('reference-text', e.currentTarget)}>
+        <button type="button" className="tl-copy-btn" onClick={(e) => onCopy('reference-text', e.currentTarget)}>
           Copy as text
         </button>
-        <button className="tl-copy-btn" onClick={(e) => onCopy('reference-md', e.currentTarget)}>
+        <button type="button" className="tl-copy-btn" onClick={(e) => onCopy('reference-md', e.currentTarget)}>
           Copy as Markdown
         </button>
         <span className="tl-copy-hint">Text → notes · Markdown → AI assistants</span>

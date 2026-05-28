@@ -334,7 +334,7 @@ export default function StudyFlowClient() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     {mode === 'arrange' && (
-                        <button
+                        <button type="button"
                             onClick={handleReset}
                             style={{
                                 background: 'rgba(255,255,255,0.06)',
@@ -356,7 +356,7 @@ export default function StudyFlowClient() {
                         padding: 3,
                         gap: 2,
                     }}>
-                        <button
+                        <button type="button"
                             onClick={() => setMode('read')}
                             style={{
                                 padding: '6px 16px',
@@ -371,7 +371,7 @@ export default function StudyFlowClient() {
                         >
                             Read
                         </button>
-                        <button
+                        <button type="button"
                             onClick={() => setMode('arrange')}
                             style={{
                                 padding: '6px 16px',

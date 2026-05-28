@@ -187,7 +187,7 @@ const CopyableNote = ({ title, children, variant = 'definition' }) => {
                         {title || 'Copy to Notes'}
                     </span>
                 </div>
-                <button
+                <button type="button"
                     onClick={handleCopy}
                     style={{
                         background: copied ? t.accent.success : t.bg.tertiary,
@@ -509,7 +509,7 @@ const GraphicEQSlider = ({ band, gain, onChange }) => {
                     }}
                 />
                 {/* Slider input */}
-                <input
+                <input aria-label="Slider"
                     type="range"
                     min={-12}
                     max={12}
@@ -581,7 +581,7 @@ const ParametricEQBand = ({ band, index, onChange }) => {
                         {formatFreq(band.freq)}
                     </span>
                 </div>
-                <input
+                <input aria-label="Slider"
                     type="range"
                     min={0}
                     max={1000}
@@ -604,7 +604,7 @@ const ParametricEQBand = ({ band, index, onChange }) => {
                         {band.gain > 0 ? '+' : ''}{band.gain}dB
                     </span>
                 </div>
-                <input
+                <input aria-label="Slider"
                     type="range"
                     min={-12}
                     max={12}
@@ -623,7 +623,7 @@ const ParametricEQBand = ({ band, index, onChange }) => {
                         {band.q.toFixed(1)}
                     </span>
                 </div>
-                <input
+                <input aria-label="Slider"
                     type="range"
                     min={0.5}
                     max={10}
@@ -730,7 +730,7 @@ const Quiz = ({ questions }) => {
                                 }
 
                                 return (
-                                    <button
+                                    <button type="button"
                                         key={oIndex}
                                         onClick={() => handleAnswer(qIndex, oIndex)}
                                         disabled={showResults}
@@ -780,7 +780,7 @@ const Quiz = ({ questions }) => {
                 }}
             >
                 {!showResults ? (
-                    <button
+                    <button type="button"
                         onClick={handleShowResults}
                         disabled={Object.keys(answers).length < questions.length}
                         style={{
@@ -811,7 +811,7 @@ const Quiz = ({ questions }) => {
                         >
                             Score: {score}/{questions.length}
                         </div>
-                        <button
+                        <button type="button"
                             onClick={handleReset}
                             style={{
                                 background: t.bg.tertiary,
@@ -853,7 +853,7 @@ const TabNav = ({ tabs, activeTab, onTabChange }) => {
             }}
         >
             {tabs.map((tab) => (
-                <button
+                <button type="button"
                     key={tab.id}
                     onClick={() => onTabChange(tab.id)}
                     style={{
@@ -931,7 +931,7 @@ export default function GraphicParametricEQ() {
                 marginBottom: spacing[8],
                 minHeight: '200px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop
@@ -1236,7 +1236,7 @@ export default function GraphicParametricEQ() {
                                 {/* Presets */}
                                 <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[4], flexWrap: 'wrap', alignItems: 'center' }}>
                                     {Object.entries(GRAPHIC_PRESETS).map(([key, preset]) => (
-                                        <button
+                                        <button type="button"
                                             key={key}
                                             onClick={() => handleGraphicPreset(key)}
                                             style={{

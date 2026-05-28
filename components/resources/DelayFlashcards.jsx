@@ -1537,12 +1537,12 @@ const DelayFlashcards = () => {
 
             <div className="dfc-summary-actions">
               {weakCount > 0 && (
-                <button className="dfc-btn dfc-btn-primary" onClick={studyWeakCards}>
+                <button type="button" className="dfc-btn dfc-btn-primary" onClick={studyWeakCards}>
                   Study weak cards ({weakCount})
                 </button>
               )}
-              <button className="dfc-btn" onClick={resetDeck}>Study this deck again</button>
-              <button
+              <button type="button" className="dfc-btn" onClick={resetDeck}>Study this deck again</button>
+              <button type="button"
                 className="dfc-btn"
                 onClick={() => {
                   setDifficulty(difficulty === "basic" ? "intermediate" : difficulty === "intermediate" ? "advanced" : "basic");
@@ -1559,17 +1559,17 @@ const DelayFlashcards = () => {
               <div className="dfc-control-group">
                 <span className="dfc-control-label">Mode</span>
                 <div className="dfc-segmented" role="tablist" aria-label="Study mode">
-                  <button role="tab" data-active={studyMode === 'learn'} onClick={() => setStudyMode('learn')}>Learn</button>
-                  <button role="tab" data-active={studyMode === 'test'} onClick={() => setStudyMode('test')}>Assessment prep</button>
+                  <button type="button" role="tab" data-active={studyMode === 'learn'} onClick={() => setStudyMode('learn')}>Learn</button>
+                  <button type="button" role="tab" data-active={studyMode === 'test'} onClick={() => setStudyMode('test')}>Assessment prep</button>
                 </div>
               </div>
               <div className="dfc-control-group">
                 <span className="dfc-control-label">Level</span>
                 <div className="dfc-segmented" role="tablist" aria-label="Difficulty">
-                  <button role="tab" data-active={difficulty === 'basic'} onClick={() => setDifficulty('basic')}>Foundation</button>
-                  <button role="tab" data-active={difficulty === 'intermediate'} onClick={() => setDifficulty('intermediate')}>Standard</button>
-                  <button role="tab" data-active={difficulty === 'advanced'} onClick={() => setDifficulty('advanced')}>Advanced</button>
-                  <button role="tab" data-active={difficulty === 'all'} onClick={() => setDifficulty('all')}>All</button>
+                  <button type="button" role="tab" data-active={difficulty === 'basic'} onClick={() => setDifficulty('basic')}>Foundation</button>
+                  <button type="button" role="tab" data-active={difficulty === 'intermediate'} onClick={() => setDifficulty('intermediate')}>Standard</button>
+                  <button type="button" role="tab" data-active={difficulty === 'advanced'} onClick={() => setDifficulty('advanced')}>Advanced</button>
+                  <button type="button" role="tab" data-active={difficulty === 'all'} onClick={() => setDifficulty('all')}>All</button>
                 </div>
               </div>
             </div>
@@ -1598,8 +1598,8 @@ const DelayFlashcards = () => {
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button className="dfc-btn dfc-btn-primary" onClick={() => setShowInstructions(false)}>Begin</button>
-                  <button className="dfc-btn dfc-btn-ghost" onClick={() => setShowInstructions(false)}>Skip</button>
+                  <button type="button" className="dfc-btn dfc-btn-primary" onClick={() => setShowInstructions(false)}>Begin</button>
+                  <button type="button" className="dfc-btn dfc-btn-ghost" onClick={() => setShowInstructions(false)}>Skip</button>
                 </div>
               </div>
             )}
@@ -1635,7 +1635,7 @@ const DelayFlashcards = () => {
                 >
                   <div className="dfc-card-head">
                     <span>{difficultyLabel}</span>
-                    <button
+                    <button type="button"
                       className="dfc-btn dfc-btn-ghost"
                       onClick={toggleHint}
                       style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
@@ -1658,7 +1658,7 @@ const DelayFlashcards = () => {
                         </div>
                       )}
                       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                        <button className="dfc-btn dfc-btn-primary" onClick={toggleAnswer}>
+                        <button type="button" className="dfc-btn dfc-btn-primary" onClick={toggleAnswer}>
                           {studyMode === 'learn' ? 'Show explanation' : 'Show answer'}
                         </button>
                       </div>
@@ -1695,7 +1695,7 @@ const DelayFlashcards = () => {
                       )}
                       <div className="dfc-tools">
                         <span className="dfc-tools-label">Study tools</span>
-                        <button
+                        <button type="button"
                           className="dfc-tool-btn"
                           data-copied={copyStatus === 'notes'}
                           onClick={() => copyCurrentCard('notes')}
@@ -1704,7 +1704,7 @@ const DelayFlashcards = () => {
                           {copyStatus === 'notes' ? 'Copied' : 'Copy for notes'}
                         </button>
                         <div style={{ position: 'relative' }}>
-                          <button
+                          <button type="button"
                             ref={aiButtonRef}
                             className="dfc-tool-btn"
                             data-active={aiMenuOpen}
@@ -1720,7 +1720,7 @@ const DelayFlashcards = () => {
                           {aiMenuOpen && (
                             <div className="dfc-ai-popover" ref={aiMenuRef} role="menu">
                               {FLASHCARD_MODES.map(m => (
-                                <button
+                                <button type="button"
                                   key={m.key}
                                   className="dfc-ai-option"
                                   role="menuitem"
@@ -1745,7 +1745,7 @@ const DelayFlashcards = () => {
                       </div>
 
                       <div className="dfc-ratings">
-                        <button
+                        <button type="button"
                           className="dfc-rating-btn"
                           data-rating="again"
                           onClick={() => rateCard('again')}
@@ -1753,7 +1753,7 @@ const DelayFlashcards = () => {
                           Again
                           <span className="dfc-rating-hint">1 &middot; back to box 1</span>
                         </button>
-                        <button
+                        <button type="button"
                           className="dfc-rating-btn"
                           data-rating="hard"
                           onClick={() => rateCard('hard')}
@@ -1761,7 +1761,7 @@ const DelayFlashcards = () => {
                           Hard
                           <span className="dfc-rating-hint">2 &middot; stay in box</span>
                         </button>
-                        <button
+                        <button type="button"
                           className="dfc-rating-btn"
                           data-rating="good"
                           onClick={() => rateCard('good')}
@@ -1777,16 +1777,16 @@ const DelayFlashcards = () => {
             </div>
 
             <div className="dfc-nav">
-              <button className="dfc-btn" onClick={handlePrevious} disabled={currentIndex === 0}>
+              <button type="button" className="dfc-btn" onClick={handlePrevious} disabled={currentIndex === 0}>
                 Previous
               </button>
               <div className="dfc-nav-center">
-                <button className="dfc-btn" onClick={resetDeck}>Reset deck</button>
+                <button type="button" className="dfc-btn" onClick={resetDeck}>Reset deck</button>
                 {Object.keys(confidence).length > 0 && (
-                  <button className="dfc-btn" onClick={() => setShowSummary(true)}>Summary</button>
+                  <button type="button" className="dfc-btn" onClick={() => setShowSummary(true)}>Summary</button>
                 )}
               </div>
-              <button
+              <button type="button"
                 className="dfc-btn"
                 onClick={handleNext}
                 disabled={currentIndex === currentCards.length - 1 && studyMode === 'test' && !showAnswer}

@@ -609,7 +609,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                 gap: spacing[4],
             }}>
                 <div>
-                    <button
+                    <button type="button"
                         onClick={onBack}
                         style={{
                             background: 'none',
@@ -639,7 +639,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                     </p>
                 </div>
 
-                <button
+                <button type="button"
                     onClick={saveProject}
                     disabled={!baseImage || !revealImage}
                     style={{
@@ -674,7 +674,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                         }}>
                             Project Title
                         </label>
-                        <input
+                        <input aria-label="Input"
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -818,7 +818,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                             }}>
                                 Spotlight Size: {maskSize}px
                             </label>
-                            <input
+                            <input aria-label="Slider"
                                 type="range"
                                 min="60"
                                 max="300"
@@ -840,7 +840,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                             </label>
                             <div style={{ display: 'flex', gap: spacing[2] }}>
                                 {['circle', 'square'].map(shape => (
-                                    <button
+                                    <button type="button"
                                         key={shape}
                                         onClick={() => setMaskShape(shape)}
                                         style={{
@@ -918,7 +918,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                                             borderRadius: borderRadius.md,
                                         }}
                                     >
-                                        <button
+                                        <button type="button"
                                             onClick={() => loadProject(project)}
                                             style={{
                                                 background: 'none',
@@ -932,7 +932,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                                         >
                                             {project.title}
                                         </button>
-                                        <button
+                                        <button type="button"
                                             onClick={() => deleteProject(project.id)}
                                             style={{
                                                 background: 'none',
@@ -1115,7 +1115,7 @@ const HotspotPanel = ({ hotspot, onClose }) => {
                         {hotspot.label}
                     </h3>
                 </div>
-                <button
+                <button type="button"
                     onClick={onClose}
                     style={{
                         background: 'none',
@@ -1172,7 +1172,7 @@ const GalleryView = ({ onSelectExample }) => {
                 gap: spacing[6],
             }}>
                 {EXAMPLE_REVEALS.map((example) => (
-                    <button
+                    <button type="button"
                         key={example.id}
                         onClick={() => onSelectExample(example)}
                         style={{
@@ -1274,7 +1274,7 @@ const ExplorerView = ({ example, onBack }) => {
                 gap: spacing[4],
             }}>
                 <div>
-                    <button
+                    <button type="button"
                         onClick={onBack}
                         style={{
                             background: 'none',
@@ -1387,7 +1387,7 @@ const ExplorerView = ({ example, onBack }) => {
                 gap: spacing[2],
             }}>
                 {example.hotspots.map((hotspot, idx) => (
-                    <button
+                    <button type="button"
                         key={hotspot.id}
                         onClick={() => handleHotspotClick(hotspot)}
                         style={{
@@ -1462,7 +1462,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
             background: t.bg.secondary,
         }}>
             {/* Minimal back button */}
-            <button
+            <button type="button"
                 onClick={onBack}
                 style={{
                     background: 'none',
@@ -1731,7 +1731,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
                     />
 
                     {/* Hand control toggle button */}
-                    <button
+                    <button type="button"
                         onClick={() => setHandControlEnabled(!handControlEnabled)}
                         style={{
                             position: 'absolute',
@@ -1965,7 +1965,7 @@ const BuilderView = ({ onBack }) => {
                 gap: spacing[4],
             }}>
                 <div>
-                    <button
+                    <button type="button"
                         onClick={onBack}
                         style={{
                             background: 'none',
@@ -1995,7 +1995,7 @@ const BuilderView = ({ onBack }) => {
                     </p>
                 </div>
 
-                <button
+                <button type="button"
                     onClick={saveProject}
                     disabled={!baseImage || hotspots.length === 0}
                     style={{
@@ -2035,7 +2035,7 @@ const BuilderView = ({ onBack }) => {
                         }}>
                             Project Title
                         </label>
-                        <input
+                        <input aria-label="Input"
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -2149,7 +2149,7 @@ const BuilderView = ({ onBack }) => {
                     {/* Add hotspot button */}
                     {baseImage && (
                         <div style={{ marginTop: spacing[4], display: 'flex', gap: spacing[3] }}>
-                            <button
+                            <button type="button"
                                 onClick={() => setIsAddingHotspot(!isAddingHotspot)}
                                 style={{
                                     background: isAddingHotspot ? t.accent.warning : t.bg.primary,
@@ -2215,7 +2215,7 @@ const BuilderView = ({ onBack }) => {
                                 }}>
                                     Label
                                 </label>
-                                <input
+                                <input aria-label="Input"
                                     type="text"
                                     value={editingHotspot.label}
                                     onChange={(e) => updateHotspot(editingHotspot.id, { label: e.target.value })}
@@ -2240,7 +2240,7 @@ const BuilderView = ({ onBack }) => {
                                 }}>
                                     Description
                                 </label>
-                                <textarea
+                                <textarea aria-label="Response"
                                     value={editingHotspot.description}
                                     onChange={(e) => updateHotspot(editingHotspot.id, { description: e.target.value })}
                                     rows={4}
@@ -2268,7 +2268,7 @@ const BuilderView = ({ onBack }) => {
                                 </label>
                                 <div style={{ display: 'flex', gap: spacing[2] }}>
                                     {['circle', 'rect'].map(shape => (
-                                        <button
+                                        <button type="button"
                                             key={shape}
                                             onClick={() => updateHotspot(editingHotspot.id, { shape })}
                                             style={{
@@ -2293,7 +2293,7 @@ const BuilderView = ({ onBack }) => {
                                 </div>
                             </div>
 
-                            <button
+                            <button type="button"
                                 onClick={() => deleteHotspot(editingHotspot.id)}
                                 style={{
                                     width: '100%',
@@ -2340,7 +2340,7 @@ const BuilderView = ({ onBack }) => {
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
                                 {hotspots.map((hotspot, idx) => (
-                                    <button
+                                    <button type="button"
                                         key={hotspot.id}
                                         onClick={() => setEditingHotspot(hotspot)}
                                         style={{
@@ -2420,7 +2420,7 @@ const BuilderView = ({ onBack }) => {
                                             borderRadius: borderRadius.md,
                                         }}
                                     >
-                                        <button
+                                        <button type="button"
                                             onClick={() => loadProject(project)}
                                             style={{
                                                 background: 'none',
@@ -2437,7 +2437,7 @@ const BuilderView = ({ onBack }) => {
                                         >
                                             {project.title}
                                         </button>
-                                        <button
+                                        <button type="button"
                                             onClick={() => deleteProject(project.id)}
                                             style={{
                                                 background: 'none',
@@ -2562,7 +2562,7 @@ export default function RevealExplorer() {
                             { id: 'spotlight', label: 'Spotlight', icon: '' },
                             { id: 'builder', label: 'Hotspots', icon: '' },
                         ].map(tab => (
-                            <button
+                            <button type="button"
                                 key={tab.id}
                                 onClick={() => {
                                     setView(tab.id);

@@ -10,6 +10,18 @@ import { Info, Music, Copy, BookOpen, GraduationCap, Lightbulb, Search, Activity
 import HearItAccordion from './HearItAccordion';
 import { audioExamples } from '../../lib/audio-examples';
 
+const DIFFICULTY_BADGE_COLORS = {
+  foundation: 'bg-green-100 text-green-700 border-green-300',
+  intermediate: 'bg-yellow-100 text-yellow-700 border-yellow-300',
+  advanced: 'bg-red-100 text-red-700 border-red-300'
+};
+
+const DifficultyBadge = ({ level }) => (
+  <span className={`text-xs px-2 py-0.5 rounded border ${DIFFICULTY_BADGE_COLORS[level]}`}>
+    {level.charAt(0).toUpperCase() + level.slice(1)}
+  </span>
+);
+
 const DistortionLab = () => {
   // Navigation
   const [activeTab, setActiveTab] = useState('learn');
@@ -477,23 +489,6 @@ const DistortionLab = () => {
     term.definition.toLowerCase().includes(glossarySearch.toLowerCase())
   );
 
-  // ============================================================================
-  // RENDER COMPONENTS
-  // ============================================================================
-
-  const DifficultyBadge = ({ level }) => {
-    const colors = {
-      foundation: 'bg-green-100 text-green-700 border-green-300',
-      intermediate: 'bg-yellow-100 text-yellow-700 border-yellow-300',
-      advanced: 'bg-red-100 text-red-700 border-red-300'
-    };
-
-    return (
-      <span className={`text-xs px-2 py-0.5 rounded border ${colors[level]}`}>
-        {level.charAt(0).toUpperCase() + level.slice(1)}
-      </span>
-    );
-  };
 
   const waveData = generateWaveform();
   const harmonics = generateHarmonics();
@@ -677,7 +672,7 @@ const DistortionLab = () => {
                   <label className="text-sm font-medium mb-2 block">Distortion Type</label>
                   <div className="flex flex-wrap gap-2">
                     {Object.entries(distortionTypes).map(([key, config]) => (
-                      <button
+                      <button type="button"
                         key={key}
                         onClick={() => setDistortionType(key)}
                         className={`px-3 py-2 rounded text-sm font-medium transition-all ${
@@ -700,7 +695,7 @@ const DistortionLab = () => {
                   <label className="text-sm font-medium mb-2 block">Input Waveform</label>
                   <div className="flex gap-2">
                     {Object.entries(waveformTypes).map(([key, config]) => (
-                      <button
+                      <button type="button"
                         key={key}
                         onClick={() => setWaveformType(key)}
                         className={`px-3 py-2 rounded text-sm font-medium ${
@@ -1281,7 +1276,7 @@ const DistortionLab = () => {
                   <div className="flex gap-2 p-3 bg-gray-50 rounded border">
                     <span className="text-sm font-medium">Filter by difficulty:</span>
                     {['all', 'foundation', 'intermediate', 'advanced'].map(diff => (
-                      <button
+                      <button type="button"
                         key={diff}
                         onClick={() => {
                           setQuizDifficulty(diff);
@@ -1320,7 +1315,7 @@ const DistortionLab = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {filteredQuestions[currentQuestion].options.map((option, idx) => (
-                        <button
+                        <button type="button"
                           key={idx}
                           onClick={() => !showFeedback && handleAnswer(idx)}
                           disabled={showFeedback}
@@ -1473,7 +1468,7 @@ const DistortionLab = () => {
               {/* Search */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
+                <input aria-label="Input"
                   type="text"
                   placeholder="Search terms or definitions..."
                   value={glossarySearch}
@@ -1503,7 +1498,7 @@ const DistortionLab = () => {
               <div className="space-y-2">
                 {filteredGlossary.map((item, index) => (
                   <div key={index} className="border-2 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                    <button
+                    <button type="button"
                       onClick={() => setExpandedTerm(expandedTerm === index ? null : index)}
                       className="w-full text-left p-4 flex items-center justify-between hover:bg-gray-50"
                     >
@@ -1526,7 +1521,7 @@ const DistortionLab = () => {
                               {item.related.map((rel, i) => {
                                 const relatedIndex = glossaryTerms.findIndex(t => t.term === rel);
                                 return (
-                                  <button
+                                  <button type="button"
                                     key={i}
                                     onClick={() => setExpandedTerm(relatedIndex)}
                                     className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors"

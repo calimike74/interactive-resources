@@ -25,7 +25,7 @@ export function AlertDescription({ className = '', children, ...props }) {
     );
 }
 
-export function AlertTitle({ className = '', children, ...props }) {
+function AlertTitle({ className = '', children, ...props }) {
     return (
         <h5 className={`mb-1 font-medium leading-none tracking-tight ${className}`} {...props}>
             {children}

@@ -78,7 +78,7 @@ export default function MIDIPitchBendController() {
           marginBottom: '1.5rem',
           minHeight: '240px',
         }}>
-          <video
+          <video aria-hidden="true"
             autoPlay
             muted
             loop
@@ -131,7 +131,7 @@ export default function MIDIPitchBendController() {
         {/* Tab Navigation */}
         <div className="bg-white rounded-lg shadow-lg mb-6">
           <div className="flex border-b">
-            <button
+            <button type="button"
               onClick={() => setActiveTab('pitchbend')}
               className={`flex-1 py-4 px-6 font-semibold transition-colors ${
                 activeTab === 'pitchbend'
@@ -141,7 +141,7 @@ export default function MIDIPitchBendController() {
             >
               Task 1A & 1B: Pitch Bend Data
             </button>
-            <button
+            <button type="button"
               onClick={() => setActiveTab('controllers')}
               className={`flex-1 py-4 px-6 font-semibold transition-colors ${
                 activeTab === 'controllers'
@@ -171,7 +171,7 @@ export default function MIDIPitchBendController() {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Move the Pitch Bend Wheel
                     </label>
-                    <input
+                    <input aria-label="Slider"
                       type="range"
                       min="0"
                       max="16383"
@@ -193,7 +193,7 @@ export default function MIDIPitchBendController() {
                     </div>
                   </div>
 
-                  <button
+                  <button type="button"
                     onClick={() => setPitchBendValue(8192)}
                     className="w-full bg-mustard-100 hover:bg-mustard-200 text-mustard-700 font-semibold py-2 px-4 rounded transition-colors"
                   >
@@ -208,7 +208,7 @@ export default function MIDIPitchBendController() {
                     <p className="text-xs text-gray-600 mb-3">
                       This is the setting you'd change in Operator's "Global" tab
                     </p>
-                    <input
+                    <input aria-label="Slider"
                       type="range"
                       min="1"
                       max="24"
@@ -276,7 +276,7 @@ export default function MIDIPitchBendController() {
 
               {/* Question 1: Bytes */}
               <div className="mb-6">
-                <button
+                <button type="button"
                   onClick={() => toggleSection('bytes')}
                   className="w-full flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors"
                 >
@@ -315,7 +315,7 @@ export default function MIDIPitchBendController() {
 
               {/* Question 2: Range */}
               <div className="mb-6">
-                <button
+                <button type="button"
                   onClick={() => toggleSection('range')}
                   className="w-full flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors"
                 >
@@ -355,7 +355,7 @@ export default function MIDIPitchBendController() {
 
               {/* Question 3: 14-bit Resolution */}
               <div className="mb-6">
-                <button
+                <button type="button"
                   onClick={() => toggleSection('resolution')}
                   className="w-full flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors"
                 >

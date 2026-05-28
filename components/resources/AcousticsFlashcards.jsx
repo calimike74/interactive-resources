@@ -459,14 +459,14 @@ const AcousticsFlashcards = () => {
         )}
 
         <div className="flex flex-wrap justify-center gap-3">
-          <button
+          <button type="button"
             onClick={resetDeck}
             className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg transition-colors"
           >
             <RefreshCcw className="h-4 w-4" />
             Study Again
           </button>
-          <button
+          <button type="button"
             onClick={() => {
               setDifficulty(difficulty === "basic" ? "intermediate" : difficulty === "intermediate" ? "advanced" : "basic");
               setShowSummary(false);
@@ -493,7 +493,7 @@ const AcousticsFlashcards = () => {
         marginLeft: 'calc(-50vw + 50%)',
         minHeight: '240px',
       }}>
-        <video
+        <video aria-hidden="true"
           autoPlay
           muted
           loop
@@ -551,7 +551,7 @@ const AcousticsFlashcards = () => {
           <div className="flex gap-2 flex-wrap">
             {/* Study Mode Toggle */}
             <div className="flex bg-gray-100 p-1 rounded-lg">
-              <button
+              <button type="button"
                 onClick={() => setStudyMode("learn")}
                 className={`px-3 py-1 text-xs rounded-md flex items-center gap-1 transition-colors ${
                   studyMode === "learn" ? "bg-white shadow-sm" : "text-gray-600"
@@ -559,7 +559,7 @@ const AcousticsFlashcards = () => {
               >
                 <BookCopy className="h-3 w-3" /> Learn
               </button>
-              <button
+              <button type="button"
                 onClick={() => setStudyMode("test")}
                 className={`px-3 py-1 text-xs rounded-md flex items-center gap-1 transition-colors ${
                   studyMode === "test" ? "bg-white shadow-sm" : "text-gray-600"
@@ -572,7 +572,7 @@ const AcousticsFlashcards = () => {
             {/* Difficulty Toggle */}
             <div className="flex bg-gray-100 p-1 rounded-lg">
               {["basic", "intermediate", "advanced", "all"].map((level) => (
-                <button
+                <button type="button"
                   key={level}
                   onClick={() => setDifficulty(level)}
                   className={`px-2 py-1 text-xs rounded-md transition-colors capitalize ${
@@ -599,7 +599,7 @@ const AcousticsFlashcards = () => {
                 <li>Use visual hints to understand acoustic concepts</li>
                 <li>Track your progress with confidence ratings</li>
               </ol>
-              <button
+              <button type="button"
                 onClick={() => setShowInstructions(false)}
                 className="mt-3 px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg text-sm"
               >
@@ -649,7 +649,7 @@ const AcousticsFlashcards = () => {
                 <Star key={i} className="h-4 w-4 text-amber-400 fill-amber-400" />
               ))}
             </div>
-            <button
+            <button type="button"
               onClick={toggleHint}
               className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800"
             >
@@ -674,7 +674,7 @@ const AcousticsFlashcards = () => {
               )}
 
               <div className="flex justify-center mt-4">
-                <button
+                <button type="button"
                   onClick={toggleAnswer}
                   className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
                 >
@@ -715,14 +715,14 @@ const AcousticsFlashcards = () => {
               )}
 
               <div className="flex justify-center gap-4 mt-6">
-                <button
+                <button type="button"
                   onClick={() => setCardConfidence(false)}
                   className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors"
                 >
                   <ThumbsDown className="h-4 w-4" />
                   Need Review
                 </button>
-                <button
+                <button type="button"
                   onClick={() => setCardConfidence(true)}
                   className="flex items-center gap-2 px-4 py-2 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg transition-colors"
                 >
@@ -737,7 +737,7 @@ const AcousticsFlashcards = () => {
 
       {/* Navigation */}
       <div className="flex justify-between items-center">
-        <button
+        <button type="button"
           onClick={handlePrevious}
           disabled={currentIndex === 0}
           className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -747,7 +747,7 @@ const AcousticsFlashcards = () => {
         </button>
 
         <div className="flex gap-2">
-          <button
+          <button type="button"
             onClick={resetDeck}
             className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-yellow-50"
           >
@@ -755,7 +755,7 @@ const AcousticsFlashcards = () => {
             Reset
           </button>
           {Object.keys(confidence).length > 0 && (
-            <button
+            <button type="button"
               onClick={() => setShowSummary(true)}
               className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-blue-50"
             >
@@ -765,7 +765,7 @@ const AcousticsFlashcards = () => {
           )}
         </div>
 
-        <button
+        <button type="button"
           onClick={handleNext}
           disabled={currentIndex === currentCards.length - 1 && studyMode === "test" && !showAnswer}
           className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"

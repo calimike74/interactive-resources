@@ -54,7 +54,7 @@ export default function ConfidenceDashboard() {
                     {/* Topic tabs */}
                     <div style={{ display: 'flex', gap: '8px', marginTop: '1.25rem' }}>
                         {TOPICS.map((t) => (
-                            <button
+                            <button type="button"
                                 key={t.id}
                                 onClick={() => setActiveTopic(t.id)}
                                 style={{

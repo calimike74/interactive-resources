@@ -615,7 +615,7 @@ const AudioLeadsFlashcards = () => {
     return "bg-green-500";
   };
 
-  const SummaryView = () => (
+  const renderSummaryView = () => (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-center mb-3">Audio Leads & Connectors Mastery</h2>
 
@@ -757,7 +757,7 @@ const AudioLeadsFlashcards = () => {
   if (showSummary) {
     return (
       <div className="w-full max-w-3xl mx-auto p-4">
-        <SummaryView />
+        {renderSummaryView()}
       </div>
     );
   }

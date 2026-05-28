@@ -232,7 +232,7 @@ export default function VideoOverviewClient() {
                         {KEY_TERMS.map(({ term, timestamp }) => {
                             const isCaptured = captured.has(term);
                             return (
-                                <button
+                                <button type="button"
                                     key={term}
                                     onClick={() => toggleTerm(term)}
                                     style={{

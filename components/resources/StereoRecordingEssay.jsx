@@ -210,7 +210,7 @@ export default function StereoRecordingEssay() {
                 marginBottom: spacing[6],
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop
@@ -294,7 +294,7 @@ export default function StereoRecordingEssay() {
                         willChange: 'transform, width',
                     }} />
                     {SCAFFOLD_LEVELS.map(level => (
-                        <button
+                        <button type="button"
                             key={level.id}
                             ref={el => { tabBtnRefs.current[level.id] = el; }}
                             onClick={() => setScaffoldLevel(level.id)}
@@ -388,7 +388,7 @@ export default function StereoRecordingEssay() {
                         border: `1px solid ${t.border.subtle}`,
                         overflow: 'hidden',
                     }}>
-                        <button
+                        <button type="button"
                             onClick={() => setShowExtension(!showExtension)}
                             style={{
                                 width: '100%',
@@ -514,7 +514,7 @@ export default function StereoRecordingEssay() {
                                         {section.guidance}
                                     </p>
                                 )}
-                                <textarea
+                                <textarea aria-label="Response"
                                     value={essayContent[section.id] || ''}
                                     onChange={(e) => updateSection(section.id, e.target.value)}
                                     placeholder={section.placeholder}
@@ -602,7 +602,7 @@ export default function StereoRecordingEssay() {
                         gap: spacing[4],
                         flexWrap: 'wrap',
                     }}>
-                        <input
+                        <input aria-label="Input"
                             type="text"
                             value={studentName}
                             onChange={(e) => setStudentName(e.target.value)}
@@ -618,7 +618,7 @@ export default function StereoRecordingEssay() {
                                 color: t.text.primary,
                             }}
                         />
-                        <button
+                        <button type="button"
                             onClick={handleSubmit}
                             disabled={submitting || !studentName.trim() || wordCount < 20}
                             style={{
@@ -682,7 +682,7 @@ function TechniqueCard({ technique, level, isActive, onToggle, theme: t }) {
             overflow: 'hidden',
             transition: `border-color ${transitions.fast}`,
         }}>
-            <button
+            <button type="button"
                 onClick={onToggle}
                 style={{
                     width: '100%',

@@ -47,7 +47,7 @@ export default function Quiz({ data, onComplete }) {
                     }
 
                     return (
-                        <button
+                        <button type="button"
                             key={i}
                             onClick={() => !submitted && setSelectedIndex(i)}
                             style={{
@@ -114,7 +114,7 @@ export default function Quiz({ data, onComplete }) {
 
             {/* Actions */}
             {!submitted ? (
-                <button
+                <button type="button"
                     onClick={handleSubmit}
                     disabled={selectedIndex === null}
                     style={{
@@ -133,7 +133,7 @@ export default function Quiz({ data, onComplete }) {
                     Check Answer
                 </button>
             ) : (
-                <button
+                <button type="button"
                     onClick={() => onComplete({ correct: isCorrect, selectedIndex })}
                     style={{
                         marginTop: spacing[4],

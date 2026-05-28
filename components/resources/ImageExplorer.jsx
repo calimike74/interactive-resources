@@ -549,7 +549,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                 }}>
                                     {isFoundation ? 'Foundation' : 'Advanced'}
                                 </span>
-                                <button
+                                <button type="button"
                                     onClick={() => setSelectedId(null)}
                                     aria-label="Close detail panel"
                                     style={{
@@ -594,7 +594,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                                         {hotspot.questions.map((item, qi) => (
                                             <div key={qi}>
-                                                <button
+                                                <button type="button"
                                                     onClick={() => setExpandedQ(prev => ({
                                                         ...prev,
                                                         [hotspot.id]: prev[hotspot.id] === qi ? null : qi,
@@ -615,7 +615,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                                         fontWeight: typography.weight.medium,
                                                         color: t.text.primary,
                                                         lineHeight: 1.45,
-                                                        transition: 'all 0.15s ease',
+                                                        transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.15s ease',
                                                     }}
                                                 >
                                                     <span style={{
@@ -809,7 +809,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                             const isFoundation = hotspot.level === 'foundation';
 
                             return (
-                            <button
+                            <button type="button"
                                 key={hotspot.id}
                                 ref={el => { cardRefs.current[hotspot.id] = el; }}
                                 data-close="true"
@@ -828,7 +828,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                     borderRadius: borderRadius.lg,
                                     cursor: 'pointer',
                                     animation: 'fadeSlideIn 0.3s ease-out',
-                                    transition: 'all 0.15s ease',
+                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.15s ease',
                                     textAlign: 'left',
                                     fontFamily: typography.fontFamily,
                                 }}

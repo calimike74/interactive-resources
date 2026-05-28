@@ -388,7 +388,7 @@ export default function DigitalAudioAssessment() {
                     )}
 
                     {showFeedback && (
-                        <button
+                        <button type="button"
                             onClick={nextQuestion}
                             className="mt-5 w-full py-3 px-6 bg-amber-700 hover:bg-amber-800 text-white rounded-lg font-semibold transition-colors"
                         >
@@ -445,7 +445,7 @@ function FileSizeCalculator({ onClose }) {
                         Try the formula before the next question
                     </h3>
                 </div>
-                <button
+                <button type="button"
                     onClick={onClose}
                     className="text-stone-500 hover:text-stone-800 text-2xl leading-none"
                     aria-label="Close calculator"
@@ -487,7 +487,7 @@ function FileSizeCalculator({ onClose }) {
                 Exam convention: 1 MB = 1,000,000 bytes (decimal MB).
             </p>
 
-            <button
+            <button type="button"
                 onClick={onClose}
                 className="mt-4 w-full py-2.5 px-4 bg-amber-700 hover:bg-amber-800 text-white rounded-lg font-semibold transition-colors"
             >
@@ -535,7 +535,7 @@ function McqOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                 }
 
                 return (
-                    <button
+                    <button type="button"
                         key={i}
                         onClick={() => !showFeedback && onSelect(i)}
                         disabled={showFeedback}
@@ -562,7 +562,7 @@ function NumericInput({ unit, showFeedback, onSubmit }) {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-            <input
+            <input aria-label="Input"
                 type="text"
                 inputMode="decimal"
                 value={value}
@@ -600,7 +600,7 @@ function ShortAnswer({ showFeedback, onSubmit, sampleAnswer, keyPoints }) {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <textarea
+                <textarea aria-label="Response"
                     value={value}
                     onChange={e => setValue(e.target.value)}
                     disabled={showFeedback}
@@ -680,7 +680,7 @@ function ClozeInput({ blanks, showFeedback, onSubmit }) {
                                     cls = 'bg-amber-50 border-amber-500 text-amber-900';
                                 }
                                 return (
-                                    <button
+                                    <button type="button"
                                         key={oi}
                                         onClick={() => !showFeedback && setSelection(bi, oi)}
                                         disabled={showFeedback}
@@ -696,7 +696,7 @@ function ClozeInput({ blanks, showFeedback, onSubmit }) {
             })}
 
             {!showFeedback && (
-                <button
+                <button type="button"
                     onClick={handleSubmit}
                     disabled={!allChosen}
                     className="w-full px-6 py-3 bg-amber-700 hover:bg-amber-800 disabled:bg-stone-300 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors"
@@ -827,7 +827,7 @@ function ResultsScreen({ responses, questions, onRestart }) {
                     </div>
                 </div>
 
-                <button
+                <button type="button"
                     onClick={onRestart}
                     className="w-full py-3 px-6 bg-amber-700 hover:bg-amber-800 text-white rounded-lg font-semibold transition-colors"
                 >

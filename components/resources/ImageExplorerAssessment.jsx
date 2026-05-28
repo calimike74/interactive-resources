@@ -290,7 +290,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                     justifyContent: 'center',
                                     gap: 2,
                                     padding: '4px 6px',
-                                    transition: 'all 0.2s ease',
+                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
                                     cursor: isActive && fb !== 'correct' ? 'default' : 'not-allowed',
                                     borderRight: i < hotspots.length - 1 ? '2px solid rgba(255,255,255,0.4)' : 'none',
                                     animation: fb === 'incorrect' ? 'shake 0.3s ease' : fb === 'correct' ? 'correctPop 0.3s ease' : 'none',
@@ -428,7 +428,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                     lineHeight: 1.4,
                                     maxWidth: stage === 2 ? '280px' : 'auto',
                                     userSelect: 'none',
-                                    transition: 'all 0.15s ease',
+                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.15s ease',
                                 }}
                             >
                                 {stage === 1 ? item.name : item.clue}
@@ -455,7 +455,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                             Need a hint?
                         </span>
                         {activeHotspots.filter(h => feedback[h.id] !== 'correct' && !hintsUsed.has(h.id)).map(h => (
-                            <button
+                            <button type="button"
                                 key={h.id}
                                 onClick={() => handleHint(h.id)}
                                 style={{
@@ -519,7 +519,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
             {/* Submit button (Stage 2 only) */}
             {stage === 2 && !submitted && Object.keys(placements).length > 0 && (
                 <div style={{ marginTop: spacing[4], display: 'flex', gap: spacing[3] }}>
-                    <button
+                    <button type="button"
                         onClick={handleSubmitStage2}
                         style={{
                             padding: `${spacing[3]} ${spacing[6]}`,
@@ -535,7 +535,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                     >
                         Submit Answers
                     </button>
-                    <button
+                    <button type="button"
                         onClick={resetStage}
                         style={{
                             padding: `${spacing[3]} ${spacing[5]}`,
@@ -582,7 +582,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                 {hintsUsed.size > 0 ? ` (${hintsUsed.size} hint${hintsUsed.size > 1 ? 's' : ''} used)` : ' without any hints'}.
                                 Ready for the next challenge?
                             </p>
-                            <button
+                            <button type="button"
                                 onClick={goToStage2}
                                 style={{
                                     padding: `${spacing[3]} ${spacing[6]}`,
@@ -643,7 +643,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                             )}
 
                             <div style={{ marginTop: spacing[4], display: 'flex', gap: spacing[3] }}>
-                                <button
+                                <button type="button"
                                     onClick={resetStage}
                                     style={{
                                         padding: `${spacing[3]} ${spacing[5]}`,
@@ -660,7 +660,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                     Try Again
                                 </button>
                                 {score < total && !skipNameStage && (
-                                    <button
+                                    <button type="button"
                                         onClick={() => { setStage(1); resetStage(); }}
                                         style={{
                                             padding: `${spacing[3]} ${spacing[5]}`,

@@ -283,7 +283,7 @@ const InlinePopover = ({ control, number, response, onResponseChange, onSave, on
                                 {control.maxMarks} marks available
                             </div>
                         </div>
-                        <button
+                        <button type="button"
                             onClick={onClose}
                             style={{
                                 background: 'none',
@@ -318,7 +318,7 @@ const InlinePopover = ({ control, number, response, onResponseChange, onSave, on
                             alignItems: 'stretch',
                         }}
                     >
-                        <textarea
+                        <textarea aria-label="Response"
                             ref={inputRef}
                             value={response}
                             onChange={(e) => onResponseChange(e.target.value)}
@@ -338,7 +338,7 @@ const InlinePopover = ({ control, number, response, onResponseChange, onSave, on
                                 outline: 'none',
                             }}
                         />
-                        <button
+                        <button type="button"
                             onClick={onSave}
                             disabled={!response.trim()}
                             style={{
@@ -350,7 +350,7 @@ const InlinePopover = ({ control, number, response, onResponseChange, onSave, on
                                 fontSize: '14px',
                                 fontWeight: '600',
                                 cursor: response.trim() ? 'pointer' : 'not-allowed',
-                                transition: 'all 0.15s ease',
+                                transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.15s ease',
                             }}
                         >
                             Save
@@ -431,7 +431,7 @@ export default function EQAssessmentPrototype() {
                 marginBottom: spacing[6],
                 minHeight: '180px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop
@@ -613,7 +613,7 @@ export default function EQAssessmentPrototype() {
             {/* Submit Section */}
             {!submitted ? (
                 <div style={{ textAlign: 'center' }}>
-                    <button
+                    <button type="button"
                         onClick={handleSubmitAll}
                         disabled={answeredCount === 0}
                         style={{
@@ -625,7 +625,7 @@ export default function EQAssessmentPrototype() {
                             fontWeight: typography.weight.semibold,
                             color: answeredCount > 0 ? 'white' : t.text.tertiary,
                             cursor: answeredCount > 0 ? 'pointer' : 'not-allowed',
-                            transition: 'all 0.2s ease',
+                            transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
                         }}
                     >
                         {answeredCount === totalControls

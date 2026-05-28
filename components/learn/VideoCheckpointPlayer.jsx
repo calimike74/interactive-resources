@@ -343,7 +343,7 @@ export default function VideoCheckpointPlayer({
                                 }
 
                                 return (
-                                    <button
+                                    <button type="button"
                                         key={i}
                                         onClick={() => !submitted && setSelectedIndex(i)}
                                         disabled={submitted}
@@ -392,7 +392,7 @@ export default function VideoCheckpointPlayer({
                             justifyContent: 'flex-end',
                         }}>
                             {!submitted ? (
-                                <button
+                                <button type="button"
                                     onClick={submitAnswer}
                                     disabled={selectedIndex === null}
                                     style={{
@@ -410,7 +410,7 @@ export default function VideoCheckpointPlayer({
                                     Submit
                                 </button>
                             ) : (
-                                <button
+                                <button type="button"
                                     onClick={continueVideo}
                                     style={{
                                         padding: `${spacing[3]} ${spacing[5]}`,

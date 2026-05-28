@@ -66,7 +66,7 @@ export default function NotesPanel({ storageKey }) {
                     </span>
                 )}
             </div>
-            <textarea
+            <textarea aria-label="Response"
                 value={notes}
                 onChange={(e) => handleChange(e.target.value)}
                 placeholder="Write your observations and key takeaways as you watch..."

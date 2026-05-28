@@ -90,7 +90,7 @@ export default function HearItAccordion({ title, tracks }) {
                 />
               </div>
             ) : (
-              <button
+              <button type="button"
                 onClick={() => setExpandedTrack(i)}
                 style={{
                   background: 'rgba(37, 99, 235, 0.08)',

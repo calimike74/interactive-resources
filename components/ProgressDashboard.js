@@ -110,7 +110,7 @@ export default function ProgressDashboard() {
                 }}>
                     Logged in as <strong style={{ color: t.text.secondary }}>{student.studentName}</strong>
                 </p>
-                <button
+                <button type="button"
                     onClick={() => {
                         localStorage.removeItem('revision_token');
                         localStorage.removeItem('revision_student_id');

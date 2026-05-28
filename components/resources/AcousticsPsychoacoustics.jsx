@@ -75,7 +75,7 @@ const CopyableNote = ({ title, children, color = 'var(--annotation-info)', varia
           <span>{icons[variant] || icons.definition}</span>
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT_BODY }}>{title}</span>
         </div>
-        <button data-press onClick={handleCopy} style={{
+        <button type="button" data-press onClick={handleCopy} style={{
           background: copied ? 'var(--success)' : 'var(--canvas-surface)',
           border: `1px solid ${copied ? 'var(--success)' : 'var(--canvas-border-hover)'}`,
           borderRadius: 'var(--radius-md)', padding: '0.25rem 0.75rem', cursor: 'pointer',
@@ -324,7 +324,7 @@ const AcousticsPsychoacoustics = () => {
         {/* Tabs */}
         <nav style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)', borderBottom: '1px solid var(--border)', flexWrap: 'wrap' }}>
           {tabs.map(tab => (
-            <button key={tab.id} data-press onClick={() => setActiveTab(tab.id)}
+            <button type="button" key={tab.id} data-press onClick={() => setActiveTab(tab.id)}
               style={{
                 padding: 'var(--space-3) var(--space-5)', background: 'transparent',
                 border: 'none', borderBottom: activeTab === tab.id ? '2px solid var(--accent)' : '2px solid transparent',
@@ -342,7 +342,7 @@ const AcousticsPsychoacoustics = () => {
                 { v: 'all', label: 'All' }, { v: 'foundation', label: '\u{1F7E2} Foundation' },
                 { v: 'intermediate', label: '\u{1F7E1} Intermediate' }, { v: 'advanced', label: '\u{1F534} Advanced' },
               ].map(f => (
-                <button key={f.v} data-press onClick={() => setLearnFilter(f.v)}
+                <button type="button" key={f.v} data-press onClick={() => setLearnFilter(f.v)}
                   style={{
                     padding: 'var(--space-2) var(--space-4)',
                     background: learnFilter === f.v ? 'var(--accent)' : 'var(--background-raised)',
@@ -409,7 +409,7 @@ const AcousticsPsychoacoustics = () => {
 
             <div style={{ marginTop: 'var(--space-4)', display: 'flex', gap: 'var(--space-3)', alignItems: 'center' }}>
               <span style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)' }}>Listening level</span>
-              <input type="range" min={10} max={100} step={10} value={phon} onChange={e => setPhon(Number(e.target.value))}
+              <input aria-label="Slider" type="range" min={10} max={100} step={10} value={phon} onChange={e => setPhon(Number(e.target.value))}
                 style={{ flex: 1, accentColor: 'var(--mustard)' }} />
               <span style={{ color: 'var(--canvas-foreground)', fontFamily: FONT_MONO, fontSize: 12, minWidth: 60, textAlign: 'right' }}>{phon} phon</span>
             </div>
@@ -478,19 +478,19 @@ const AcousticsPsychoacoustics = () => {
               <div>
                 <div style={{ color: 'var(--sienna)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Masker (the loud sound)</div>
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Frequency {maskerFreq} Hz</label>
-                <input type="range" min={50} max={10000} value={maskerFreq} onChange={e => setMaskerFreq(Number(e.target.value))}
+                <input aria-label="Slider" type="range" min={50} max={10000} value={maskerFreq} onChange={e => setMaskerFreq(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sienna)' }} />
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Level {maskerLevel} dB</label>
-                <input type="range" min={20} max={95} value={maskerLevel} onChange={e => setMaskerLevel(Number(e.target.value))}
+                <input aria-label="Slider" type="range" min={20} max={95} value={maskerLevel} onChange={e => setMaskerLevel(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sienna)' }} />
               </div>
               <div>
                 <div style={{ color: 'var(--mustard)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Target (the quieter sound)</div>
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Frequency {targetFreq} Hz</label>
-                <input type="range" min={50} max={10000} value={targetFreq} onChange={e => setTargetFreq(Number(e.target.value))}
+                <input aria-label="Slider" type="range" min={50} max={10000} value={targetFreq} onChange={e => setTargetFreq(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Level {targetLevel} dB</label>
-                <input type="range" min={0} max={95} value={targetLevel} onChange={e => setTargetLevel(Number(e.target.value))}
+                <input aria-label="Slider" type="range" min={0} max={95} value={targetLevel} onChange={e => setTargetLevel(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
               </div>
             </div>
@@ -570,10 +570,10 @@ const AcousticsPsychoacoustics = () => {
                 }}>
                   <div style={{ color: item.color, fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>{item.label}</div>
                   <div style={{ display: 'flex', gap: 4 }}>
-                    <button data-press onClick={() => item.set(Math.max(0, item.value - 1))}
+                    <button type="button" data-press onClick={() => item.set(Math.max(0, item.value - 1))}
                       style={{ flex: 1, padding: 6, background: 'var(--canvas-surface-2)', color: 'var(--canvas-foreground)', border: 'none', borderRadius: 4, cursor: 'pointer', fontFamily: FONT_BODY }}>−</button>
                     <div style={{ flex: 2, textAlign: 'center', color: 'var(--canvas-foreground)', fontFamily: FONT_MONO, padding: 6 }}>{item.value} / {item.max}</div>
-                    <button data-press onClick={() => item.set(Math.min(item.max, item.value + 1))}
+                    <button type="button" data-press onClick={() => item.set(Math.min(item.max, item.value + 1))}
                       style={{ flex: 1, padding: 6, background: 'var(--canvas-surface-2)', color: 'var(--canvas-foreground)', border: 'none', borderRadius: 4, cursor: 'pointer', fontFamily: FONT_BODY }}>+</button>
                   </div>
                 </div>
@@ -615,7 +615,7 @@ const AcousticsPsychoacoustics = () => {
                 <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-lg)', marginBottom: 'var(--space-4)' }}>
                   You scored <strong style={{ color: 'var(--accent)' }}>{score}</strong> / {quizQuestions.length}.
                 </p>
-                <button data-press onClick={resetQuiz} style={{
+                <button type="button" data-press onClick={resetQuiz} style={{
                   padding: 'var(--space-3) var(--space-5)', background: 'var(--accent)', color: '#fff',
                   border: 'none', borderRadius: 'var(--radius-md)', fontFamily: FONT_BODY, fontWeight: 600, cursor: 'pointer'
                 }}>Try again</button>
@@ -635,7 +635,7 @@ const AcousticsPsychoacoustics = () => {
                     if (showFeedback && isCorrect) { bg = 'var(--success-soft)'; border = `2px solid var(--success)`; color = 'var(--success)'; }
                     else if (showFeedback && isSelected && !isCorrect) { bg = 'var(--error-soft)'; border = `2px solid var(--error)`; color = 'var(--error)'; }
                     return (
-                      <button key={i} data-press onClick={() => handleAnswer(i)} disabled={showFeedback}
+                      <button type="button" key={i} data-press onClick={() => handleAnswer(i)} disabled={showFeedback}
                         style={{
                           textAlign: 'left', padding: 'var(--space-4)', background: bg, border, color,
                           borderRadius: 'var(--radius-md)', cursor: showFeedback ? 'default' : 'pointer',
@@ -650,7 +650,7 @@ const AcousticsPsychoacoustics = () => {
                       color={selectedAnswer === quizQuestions[quizIndex].correct ? 'var(--success)' : 'var(--annotation-info)'} variant="key">
                       {quizQuestions[quizIndex].explanation}
                     </CopyableNote>
-                    <button data-press onClick={nextQuestion} style={{
+                    <button type="button" data-press onClick={nextQuestion} style={{
                       marginTop: 'var(--space-4)', padding: 'var(--space-3) var(--space-5)', background: 'var(--accent)',
                       color: '#fff', border: 'none', borderRadius: 'var(--radius-md)', fontFamily: FONT_BODY, fontWeight: 600, cursor: 'pointer'
                     }}>{quizIndex + 1 >= quizQuestions.length ? 'Finish' : 'Next question'}</button>

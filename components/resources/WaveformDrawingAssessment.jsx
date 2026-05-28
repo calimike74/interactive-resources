@@ -522,7 +522,7 @@ function NumericInput({ unit, showFeedback, onSubmit }) {
 
     return (
         <form onSubmit={handleSubmit} className="flex items-center gap-3">
-            <input
+            <input aria-label="Input"
                 ref={inputRef}
                 type="text"
                 inputMode="decimal"
@@ -561,7 +561,7 @@ function ShortAnswer({ showFeedback, onSubmit }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <textarea
+            <textarea aria-label="Response"
                 value={value}
                 onChange={e => setValue(e.target.value)}
                 disabled={showFeedback}

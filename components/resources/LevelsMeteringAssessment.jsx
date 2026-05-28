@@ -487,7 +487,7 @@ function ShortAnswer({ showFeedback, onSubmit, sampleAnswer, keyPoints, shortSel
     return (
         <div className="mt-6">
             <form onSubmit={handleSubmit}>
-                <textarea
+                <textarea aria-label="Response"
                     value={value}
                     onChange={e => setValue(e.target.value)}
                     disabled={showFeedback}

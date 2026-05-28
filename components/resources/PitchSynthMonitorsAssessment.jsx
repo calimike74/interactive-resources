@@ -435,7 +435,7 @@ export default function PitchSynthMonitorsAssessment() {
 
                     {/* Next button */}
                     {showFeedback && (
-                        <button
+                        <button type="button"
                             onClick={handleNext}
                             className="mt-6 w-full rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700"
                         >
@@ -466,7 +466,7 @@ function McqOptions({ options, correctIndex, selected, showFeedback, onSelect })
                         : ' border-slate-200 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-50';
                 }
                 return (
-                    <button
+                    <button type="button"
                         key={i}
                         disabled={showFeedback}
                         onClick={() => onSelect(i)}
@@ -492,7 +492,7 @@ function NumericForm({ value, onChange, disabled, unit, onSubmit }) {
             onSubmit={e => { e.preventDefault(); onSubmit(); }}
             className="flex items-center gap-3"
         >
-            <input
+            <input aria-label="Input"
                 type="text"
                 inputMode="decimal"
                 value={value}
@@ -625,7 +625,7 @@ function ResultsScreen({ responses, questions, onRestart, hasToken }) {
                         </div>
                     </div>
 
-                    <button
+                    <button type="button"
                         onClick={onRestart}
                         className="w-full rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700"
                     >

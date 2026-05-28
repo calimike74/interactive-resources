@@ -1,0 +1,10 @@
+{
+  "ignore": {
+    "files": [
+      "out/**",
+      ".next/**",
+      "ios/**",
+      "public/signal-chain/**"
+    ]
+  }
+}

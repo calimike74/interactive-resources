@@ -166,7 +166,7 @@ const CopyableNote = ({ title, children, color = '#DCC892', variant = 'definitio
                         {title || 'Copy to Notes'}
                     </span>
                 </div>
-                <button
+                <button type="button"
                     onClick={handleCopy}
                     style={{
                         background: copied ? '#34d399' : '#1c1f28',
@@ -420,7 +420,7 @@ const MistakeSection = ({ onComplete }) => {
 
             {!showCorrect && (
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <button
+                    <button type="button"
                         onClick={() => setShowCorrect(true)}
                         style={{
                             padding: '1rem 2rem',
@@ -642,7 +642,7 @@ const ExploreSection = () => {
                             <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Delay Time</span>
                             <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>{delayMs}ms</span>
                         </div>
-                        <input
+                        <input aria-label="Slider"
                             type="range"
                             min="5"
                             max="80"
@@ -664,7 +664,7 @@ const ExploreSection = () => {
                             <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Pitch Modulation</span>
                             <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>+/-{pitchCents}c</span>
                         </div>
-                        <input
+                        <input aria-label="Slider"
                             type="range"
                             min="0"
                             max="30"
@@ -706,7 +706,7 @@ const ExploreSection = () => {
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <button
+                    <button type="button"
                         onClick={() => setIsAnimating(!isAnimating)}
                         style={{
                             padding: '0.5rem 1.25rem',
@@ -849,7 +849,7 @@ const Quiz = () => {
                 return (
                     <div style={{ display: 'grid', gap: '0.5rem' }}>
                         {currentQuestion.options.map((option, idx) => (
-                            <button
+                            <button type="button"
                                 key={idx}
                                 onClick={() => !showResult && setSelectedAnswer(idx)}
                                 disabled={showResult}
@@ -880,7 +880,7 @@ const Quiz = () => {
                                     fontSize: '0.9rem',
                                     textAlign: 'left',
                                     cursor: showResult ? 'default' : 'pointer',
-                                    transition: 'all 0.2s'
+                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s'
                                 }}
                             >
                                 <span style={{
@@ -908,7 +908,7 @@ const Quiz = () => {
                 return (
                     <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
                         {[true, false].map((val) => (
-                            <button
+                            <button type="button"
                                 key={String(val)}
                                 onClick={() => !showResult && setSelectedAnswer(val)}
                                 disabled={showResult}
@@ -949,7 +949,7 @@ const Quiz = () => {
 
             case 'fill_blank':
                 return (
-                    <input
+                    <input aria-label="Input"
                         type="text"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
@@ -992,7 +992,7 @@ const Quiz = () => {
 
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         {['easy', 'medium', 'hard'].map(level => (
-                            <button
+                            <button type="button"
                                 key={level}
                                 onClick={() => setDifficulty(level)}
                                 style={{
@@ -1049,7 +1049,7 @@ const Quiz = () => {
                 {/* Check/Next buttons */}
                 <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
                     {!showResult ? (
-                        <button
+                        <button type="button"
                             onClick={checkAnswer}
                             disabled={
                                 (currentQuestion?.type === 'fill_blank' && !userInput.trim()) ||
@@ -1074,7 +1074,7 @@ const Quiz = () => {
                             Check Answer
                         </button>
                     ) : (
-                        <button
+                        <button type="button"
                             onClick={getNewQuestion}
                             style={{
                                 flex: 1,
@@ -1162,7 +1162,7 @@ export default function DoubleTrackingExplorer() {
 
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                             {tabs.map(tab => (
-                                <button
+                                <button type="button"
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     style={{
@@ -1197,7 +1197,7 @@ export default function DoubleTrackingExplorer() {
                 marginBottom: '1.5rem',
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop

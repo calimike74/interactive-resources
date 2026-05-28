@@ -120,7 +120,7 @@ function LevelStrip({ currentLevel, levels }) {
                     const isActive = levelNum === currentNum;
 
                     return (
-                        <button
+                        <button type="button"
                             key={ld.level}
                             onMouseEnter={() => setHoveredLevel(levelNum)}
                             onMouseLeave={() => setHoveredLevel(null)}
@@ -596,7 +596,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                         padding: '3px',
                     }}>
                         {TOGGLE_MODES.map(mode => (
-                            <button
+                            <button type="button"
                                 key={mode.id}
                                 onClick={() => { setToggleMode(mode.id); setExpandedId(null); }}
                                 style={{
@@ -649,7 +649,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                     {/* Font size */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <span style={{ fontSize: '0.85em', opacity: 0.6 }}>Aa</span>
-                        <button
+                        <button type="button"
                             className="toolbar-btn"
                             onClick={() => setFontSize(s => Math.max(14, s - 2))}
                             style={toolbarBtnStyle(t)}
@@ -664,7 +664,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                         }}>
                             {fontSize}
                         </span>
-                        <button
+                        <button type="button"
                             className="toolbar-btn"
                             onClick={() => setFontSize(s => Math.min(28, s + 2))}
                             style={toolbarBtnStyle(t)}
@@ -677,7 +677,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                     <div style={{ width: '1px', height: '20px', backgroundColor: t.border.subtle, opacity: 0.5 }} />
 
                     {/* Font family */}
-                    <button
+                    <button type="button"
                         className="toolbar-btn"
                         onClick={() => setFontFamily(f => f === 'default' ? 'dyslexic' : 'default')}
                         style={{
@@ -695,7 +695,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                     {/* Background tint */}
                     <div style={{ display: 'flex', gap: '6px' }}>
                         {BG_TINTS.map(tint => (
-                            <button
+                            <button type="button"
                                 key={tint.id}
                                 onClick={() => setBgTint(tint.id)}
                                 title={tint.label}
@@ -719,7 +719,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                     <div style={{ width: '1px', height: '20px', backgroundColor: t.border.subtle, opacity: 0.5 }} />
 
                     {/* Line spacing */}
-                    <button
+                    <button type="button"
                         className="toolbar-btn"
                         onClick={() => setLineSpacing(s => s === 'normal' ? 'wide' : 'normal')}
                         style={{
@@ -807,7 +807,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                 transition: 'background-color 0.3s ease',
             }}>
                 <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-                    <button
+                    <button type="button"
                         className="copy-btn"
                         onClick={handleCopy}
                         style={{

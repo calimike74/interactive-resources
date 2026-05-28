@@ -133,7 +133,7 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
                         {title || 'Copy to Notes'}
                     </span>
                 </div>
-                <button
+                <button type="button"
                     onClick={handleCopy}
                     style={{
                         background: copied ? '#34d399' : '#1c1f28',
@@ -295,7 +295,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                         }}>
                             {concept.term}
                         </div>
-                        <button
+                        <button type="button"
                             onClick={handleCopy}
                             style={{
                                 background: copied ? '#050507' : 'rgba(0,0,0,0.2)',
@@ -524,11 +524,11 @@ const Part1Review = ({ onComplete }) => {
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     {!allRevealed && (
-                        <button onClick={revealAll} style={{ padding: '0.875rem 1.5rem', background: 'transparent', border: '1px solid #ffffff15', borderRadius: '12px', color: '#8b909a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500' }}>
+                        <button type="button" onClick={revealAll} style={{ padding: '0.875rem 1.5rem', background: 'transparent', border: '1px solid #ffffff15', borderRadius: '12px', color: '#8b909a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500' }}>
                             Reveal All
                         </button>
                     )}
-                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <button type="button" onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                         Continue to Part 2 {allRevealed && '→'}
                     </button>
                 </div>
@@ -625,7 +625,7 @@ const Part2Bridge = ({ onComplete }) => {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
-                <button onClick={onComplete} style={{ padding: '0.875rem 1.75rem', background: 'linear-gradient(135deg, #34d399 0%, #0ea5e9 100%)', border: 'none', borderRadius: '12px', color: '#050507', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                <button type="button" onClick={onComplete} style={{ padding: '0.875rem 1.75rem', background: 'linear-gradient(135deg, #34d399 0%, #0ea5e9 100%)', border: 'none', borderRadius: '12px', color: '#050507', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                     Continue to Part 3: New EQ Concepts →
                 </button>
             </div>
@@ -800,7 +800,7 @@ const AudioEngine = ({ filterType, frequency, gain, q, categoryColor }) => {
             border: `1px solid ${isPlaying ? categoryColor + '50' : '#ffffff10'}`
         }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <button
+                <button type="button"
                     onClick={toggleAudio}
                     style={{
                         width: '50px',
@@ -817,7 +817,7 @@ const AudioEngine = ({ filterType, frequency, gain, q, categoryColor }) => {
                         fontSize: '1.25rem',
                         color: isPlaying ? '#050507' : '#8b909a',
                         boxShadow: isPlaying ? `0 0 20px ${categoryColor}60` : 'none',
-                        transition: 'all 0.2s'
+                        transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s'
                     }}
                 >
                     {isPlaying ? '' : '▶'}
@@ -919,7 +919,7 @@ const Part3NewConcepts = ({ onComplete }) => {
             {/* Category Tabs */}
             <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
                 {filterCategories.map((cat, idx) => (
-                    <button
+                    <button type="button"
                         key={idx}
                         onClick={() => { setActiveCategory(idx); handleFilterSelect(cat.filters[0]); }}
                         style={{
@@ -955,7 +955,7 @@ const Part3NewConcepts = ({ onComplete }) => {
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                     {filterCategories[activeCategory].filters.map(filter => (
-                        <button
+                        <button type="button"
                             key={filter.id}
                             onClick={() => handleFilterSelect(filter)}
                             style={{
@@ -994,21 +994,21 @@ const Part3NewConcepts = ({ onComplete }) => {
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Frequency</span>
                         <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{formatFreq(frequency)} Hz</span>
                     </div>
-                    <input type="range" min={20} max={20000} value={frequency} onChange={(e) => setFrequency(Number(e.target.value))} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
+                    <input aria-label="Slider" type="range" min={20} max={20000} value={frequency} onChange={(e) => setFrequency(Number(e.target.value))} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                 </div>
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.25rem', opacity: filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch' ? 0.4 : 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Gain</span>
                         <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{gain > 0 ? '+' : ''}{gain} dB</span>
                     </div>
-                    <input type="range" min={-18} max={18} value={gain} onChange={(e) => setGain(Number(e.target.value))} disabled={filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
+                    <input aria-label="Slider" type="range" min={-18} max={18} value={gain} onChange={(e) => setGain(Number(e.target.value))} disabled={filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                 </div>
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.25rem', opacity: filterType === 'bell' || filterType === 'notch' ? 1 : 0.4 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Q (Bandwidth)</span>
                         <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{q.toFixed(1)}</span>
                     </div>
-                    <input type="range" min={0.3} max={18} step={0.1} value={q} onChange={(e) => setQ(Number(e.target.value))} disabled={filterType !== 'bell' && filterType !== 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
+                    <input aria-label="Slider" type="range" min={0.3} max={18} step={0.1} value={q} onChange={(e) => setQ(Number(e.target.value))} disabled={filterType !== 'bell' && filterType !== 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.65rem', color: '#4a4f5a' }}>
                         <span>Wide (musical)</span>
                         <span>Narrow (surgical)</span>
@@ -1037,7 +1037,7 @@ const Part3NewConcepts = ({ onComplete }) => {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
-                <button onClick={onComplete} style={{ padding: '0.875rem 1.75rem', background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)', border: 'none', borderRadius: '12px', color: '#050507', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                <button type="button" onClick={onComplete} style={{ padding: '0.875rem 1.75rem', background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)', border: 'none', borderRadius: '12px', color: '#050507', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                     Continue to Part 4: Practice Drawing →
                 </button>
             </div>
@@ -1504,7 +1504,7 @@ const Part4Practice = () => {
 
             {/* Mode Selector */}
             <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                <button
+                <button type="button"
                     onClick={() => { setDrawingMode('guided'); clearDrawing(); }}
                     style={{
                         padding: '0.75rem 1.5rem',
@@ -1519,7 +1519,7 @@ const Part4Practice = () => {
                 >
                      Guided Mode
                 </button>
-                <button
+                <button type="button"
                     onClick={() => { setDrawingMode('challenge'); clearDrawing(); }}
                     style={{
                         padding: '0.75rem 1.5rem',
@@ -1578,7 +1578,7 @@ const Part4Practice = () => {
             <div style={{ background: '#101218', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
                     <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                        <button
+                        <button type="button"
                             onClick={checkAnswer}
                             style={{
                                 padding: '0.75rem 1.25rem',
@@ -1593,7 +1593,7 @@ const Part4Practice = () => {
                         >
                             ✓ Check Answer
                         </button>
-                        <button
+                        <button type="button"
                             onClick={clearDrawing}
                             style={{
                                 padding: '0.75rem 1.25rem',
@@ -1608,7 +1608,7 @@ const Part4Practice = () => {
                         >
                             ✕ Clear Drawing
                         </button>
-                        <button
+                        <button type="button"
                             onClick={generateNewChallenge}
                             style={{
                                 padding: '0.75rem 1.25rem',
@@ -1773,7 +1773,7 @@ export default function EQFilterBridge() {
                 marginLeft: 'calc(-50vw + 50%)',
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay muted loop playsInline
                     onLoadedData={(e) => { e.target.style.opacity = 1; }}
                     style={{
@@ -1824,7 +1824,7 @@ export default function EQFilterBridge() {
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         {[1, 2, 3, 4].map(part => (
-                            <button
+                            <button type="button"
                                 key={part}
                                 onClick={() => goToPart(part)}
                                 style={{
@@ -1855,7 +1855,7 @@ export default function EQFilterBridge() {
                 marginBottom: '1.5rem',
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay muted loop playsInline
                     onLoadedData={(e) => { e.target.style.opacity = 1; }}
                     style={{

@@ -136,7 +136,7 @@ function KeyConcept({ children, label }) {
                     padding: `${spacing[1]} ${spacing[3]}`,
                     borderRadius: '100px',
                     border: `1px solid ${copied ? '#059669' : COLORS.border}`,
-                    transition: 'all 0.2s ease',
+                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
                     whiteSpace: 'nowrap',
                 }}>
                     {copied ? 'Copied!' : 'Copy'}
@@ -162,7 +162,7 @@ function CopyAllNotes({ notes, title }) {
     }, [notes, title]);
 
     return (
-        <button
+        <button type="button"
             onClick={handleCopy}
             style={{
                 display: 'flex', alignItems: 'center', gap: spacing[2],
@@ -177,7 +177,7 @@ function CopyAllNotes({ notes, title }) {
                 fontWeight: typography.weight.semibold,
                 color: '#FFFFFF',
                 marginTop: spacing[4],
-                transition: 'all 0.2s ease',
+                transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
                 justifyContent: 'center',
             }}
         >
@@ -308,7 +308,7 @@ function CompressorControl({ label, value, min, max, step, onChange, unit = '', 
                 </label>
                 <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamilyMono }}>{displayVal}{unit}</span>
             </div>
-            <input
+            <input aria-label="Slider"
                 type="range"
                 min={min}
                 max={max}
@@ -345,7 +345,7 @@ function CompactParam({ label, value, min, max, step, onChange, unit = '' }) {
                 </span>
                 <span style={{ fontSize: '0.55rem', color: '#ccc', fontWeight: 500 }}>{unit}</span>
             </div>
-            <input
+            <input aria-label="Slider"
                 type="range"
                 min={min}
                 max={max}
@@ -1437,7 +1437,7 @@ export default function CompressorExplorer() {
                         </span>
                         <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
                             {PRESETS.map(p => (
-                                <button key={p.name} onClick={() => loadPreset(p)} style={btnStyle(false)}>
+                                <button type="button" key={p.name} onClick={() => loadPreset(p)} style={btnStyle(false)}>
                                     {p.name}
                                 </button>
                             ))}
@@ -1495,7 +1495,7 @@ export default function CompressorExplorer() {
                                     }
 
                                     return (
-                                        <button
+                                        <button type="button"
                                             key={oi}
                                             onClick={() => { if (!quizSubmitted) setQuizAnswers(prev => ({ ...prev, [qi]: oi })); }}
                                             style={{
@@ -1531,7 +1531,7 @@ export default function CompressorExplorer() {
                     ))}
 
                     {!quizSubmitted ? (
-                        <button
+                        <button type="button"
                             onClick={() => setQuizSubmitted(true)}
                             disabled={Object.keys(quizAnswers).length < QUIZ_QUESTIONS.length}
                             style={{
@@ -1594,7 +1594,7 @@ export default function CompressorExplorer() {
                         { n: 3, label: 'Knee & Gain' },
                         { n: 4, label: 'Full Compressor' },
                     ].map(s => (
-                        <button
+                        <button type="button"
                             key={s.n}
                             ref={el => { tabBtnRefs.current[s.n] = el; }}
                             onClick={() => goToSection(s.n)}
@@ -1632,7 +1632,7 @@ export default function CompressorExplorer() {
                 marginBottom: spacing[6],
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop
@@ -1695,7 +1695,7 @@ export default function CompressorExplorer() {
                 display: 'flex', justifyContent: 'space-between',
             }}>
                 {currentSection > 1 ? (
-                    <button
+                    <button type="button"
                         onMouseEnter={() => setPrevHovered(true)}
                         onMouseLeave={() => setPrevHovered(false)}
                         onClick={() => goToSection(currentSection - 1)}
@@ -1714,7 +1714,7 @@ export default function CompressorExplorer() {
                     </button>
                 ) : <div />}
                 {currentSection < 4 && (
-                    <button
+                    <button type="button"
                         onMouseEnter={() => setNextHovered(true)}
                         onMouseLeave={() => setNextHovered(false)}
                         onClick={() => goToSection(currentSection + 1)}

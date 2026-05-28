@@ -100,7 +100,7 @@ export default function EssayScaffold() {
                 marginBottom: spacing[6],
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop
@@ -167,7 +167,7 @@ export default function EssayScaffold() {
                     padding: spacing[1],
                 }}>
                     {SCAFFOLD_LEVELS.map(level => (
-                        <button
+                        <button type="button"
                             key={level.id}
                             onClick={() => setScaffoldLevel(level.id)}
                             title={level.description}
@@ -330,7 +330,7 @@ export default function EssayScaffold() {
                                     {section.guidance}
                                 </p>
                             )}
-                            <textarea
+                            <textarea aria-label="Response"
                                 value={essayContent[section.id] || ''}
                                 onChange={(e) => updateSection(section.id, e.target.value)}
                                 placeholder={section.placeholder}

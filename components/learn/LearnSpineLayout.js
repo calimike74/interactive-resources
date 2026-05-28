@@ -202,7 +202,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                                     {String(i + 1).padStart(2, '0')}
                                 </div>
                                 {row.assessment && (
-                                    <button onClick={() => handleToggleAssessment(i)} style={{
+                                    <button type="button" onClick={() => handleToggleAssessment(i)} style={{
                                         width: '24px', height: '24px', borderRadius: '50%',
                                         border: `1.5px solid ${alreadyAnswered ? '#059669' : topicColor}`,
                                         background: alreadyAnswered ? '#D1FAE5' : state.show ? topicColor + '15' : 'transparent',

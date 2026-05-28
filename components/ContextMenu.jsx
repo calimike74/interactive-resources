@@ -14,7 +14,7 @@ const ICON_SIZE = 15;
 const ContextMenuContext = createContext(null);
 
 // Hook for resources to register custom menu items
-export function useContextMenu() {
+function useContextMenu() {
     const ctx = useContext(ContextMenuContext);
     if (!ctx) return { registerItems: () => {}, unregisterItems: () => {} };
     return ctx;
@@ -389,7 +389,7 @@ function MenuItem({ item, onClose, theme: t }) {
     const [hovered, setHovered] = useState(false);
 
     return (
-        <button
+        <button type="button"
             data-menu-item
             role="menuitem"
             onClick={() => {
@@ -520,7 +520,7 @@ const DefinitionPopup = forwardRef(function DefinitionPopup({ entry, x, y, onClo
                             {entry.term}
                         </h3>
                     </div>
-                    <button
+                    <button type="button"
                         onClick={onClose}
                         style={{
                             background: 'none',
@@ -638,7 +638,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                     </h3>
                     <div style={{ display: 'flex', gap: spacing[1], alignItems: 'center' }}>
                         {/* Mode toggle */}
-                        <button
+                        <button type="button"
                             onClick={() => { setMode('mc'); setRevealed(false); setSelected(null); }}
                             style={{
                                 padding: `${spacing[1]} ${spacing[2]}`,
@@ -656,7 +656,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                         >
                             Multiple Choice
                         </button>
-                        <button
+                        <button type="button"
                             onClick={() => { setMode('recall'); setRevealed(false); setSelected(null); }}
                             style={{
                                 padding: `${spacing[1]} ${spacing[2]}`,
@@ -674,7 +674,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                         >
                             Open Recall
                         </button>
-                        <button
+                        <button type="button"
                             onClick={onClose}
                             style={{
                                 background: 'none',
@@ -727,7 +727,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                             }
 
                             return (
-                                <button
+                                <button type="button"
                                     key={i}
                                     onClick={() => { if (selected === null) setSelected(i); }}
                                     style={{
@@ -768,7 +768,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                         </p>
 
                         {!revealed ? (
-                            <button
+                            <button type="button"
                                 onClick={() => setRevealed(true)}
                                 style={{
                                     width: '100%',
@@ -838,7 +838,7 @@ function PopupButton({ label, onClick, primary, icon }) {
     const t = theme.light;
 
     return (
-        <button
+        <button type="button"
             onClick={onClick}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}

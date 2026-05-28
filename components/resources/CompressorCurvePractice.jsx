@@ -321,10 +321,10 @@ function DrawTab() {
                         Draw the Curve
                     </h2>
                     <div style={{ display: 'flex', gap: spacing[2] }}>
-                        <button onClick={() => setShowInstructions(!showInstructions)} style={btnStyle(glass.bg, t.text.secondary, t.border.subtle)}>
+                        <button type="button" onClick={() => setShowInstructions(!showInstructions)} style={btnStyle(glass.bg, t.text.secondary, t.border.subtle)}>
                             {showInstructions ? 'Hide Tips' : 'Show Tips'}
                         </button>
-                        <button onClick={newSettings} style={btnStyle(glass.bgPrimary, t.text.inverse)}>
+                        <button type="button" onClick={newSettings} style={btnStyle(glass.bgPrimary, t.text.inverse)}>
                             New Settings
                         </button>
                     </div>
@@ -375,13 +375,13 @@ function DrawTab() {
 
             {/* Action buttons */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: spacing[3], flexWrap: 'wrap', marginBottom: spacing[6] }}>
-                <button onClick={clear} style={btnStyle(t.bg.tertiary, t.text.primary)}>Clear Drawing</button>
-                <button onClick={compare} disabled={showSolution} style={{
+                <button type="button" onClick={clear} style={btnStyle(t.bg.tertiary, t.text.primary)}>Clear Drawing</button>
+                <button type="button" onClick={compare} disabled={showSolution} style={{
                     ...btnStyle(glass.bgPrimary, t.text.inverse),
                     opacity: showSolution ? 0.5 : 1,
                     cursor: showSolution ? 'not-allowed' : 'pointer',
                 }}>Compare with Solution</button>
-                <button onClick={toggleSolution} style={btnStyle(showSolution ? glass.bgWarning : glass.bgSuccess, t.text.inverse)}>
+                <button type="button" onClick={toggleSolution} style={btnStyle(showSolution ? glass.bgWarning : glass.bgSuccess, t.text.inverse)}>
                     {showSolution ? 'Hide Solution' : 'Show Solution'}
                 </button>
             </div>
@@ -540,21 +540,21 @@ function AnalyseTab() {
                         <label style={{ display: 'block', fontSize: typography.size.sm, fontWeight: typography.weight.medium, color: t.text.secondary, marginBottom: spacing[1] }}>
                             Threshold (dB)
                         </label>
-                        <input type="text" value={userThreshold} onChange={e => setUserThreshold(e.target.value)} placeholder="e.g. -20"
+                        <input aria-label="Input" type="text" value={userThreshold} onChange={e => setUserThreshold(e.target.value)} placeholder="e.g. -20"
                             style={inputStyle(result?.thOk)} />
                     </div>
                     <div>
                         <label style={{ display: 'block', fontSize: typography.size.sm, fontWeight: typography.weight.medium, color: t.text.secondary, marginBottom: spacing[1] }}>
                             Ratio (X:1)
                         </label>
-                        <input type="text" value={userRatio} onChange={e => setUserRatio(e.target.value)} placeholder="e.g. 4"
+                        <input aria-label="Input" type="text" value={userRatio} onChange={e => setUserRatio(e.target.value)} placeholder="e.g. 4"
                             style={inputStyle(result?.rOk)} />
                     </div>
                     <div>
                         <label style={{ display: 'block', fontSize: typography.size.sm, fontWeight: typography.weight.medium, color: t.text.secondary, marginBottom: spacing[1] }}>
                             Makeup Gain (dB)
                         </label>
-                        <input type="text" value={userMakeup} onChange={e => setUserMakeup(e.target.value)} placeholder="e.g. 5"
+                        <input aria-label="Input" type="text" value={userMakeup} onChange={e => setUserMakeup(e.target.value)} placeholder="e.g. 5"
                             style={inputStyle(result?.mgOk)} />
                     </div>
 
@@ -576,12 +576,12 @@ function AnalyseTab() {
 
                     {/* Buttons */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing[2] }}>
-                        <button onClick={check} style={btnStyle(glass.bgPrimary, t.text.inverse)}>Check</button>
-                        <button onClick={() => setShowAnswer(!showAnswer)} style={btnStyle('rgba(124, 58, 237, 0.85)', t.text.inverse)}>
+                        <button type="button" onClick={check} style={btnStyle(glass.bgPrimary, t.text.inverse)}>Check</button>
+                        <button type="button" onClick={() => setShowAnswer(!showAnswer)} style={btnStyle('rgba(124, 58, 237, 0.85)', t.text.inverse)}>
                             {showAnswer ? 'Hide Answer' : 'Show Answer'}
                         </button>
                     </div>
-                    <button onClick={newCurve} style={{ ...btnStyle(glass.bgSuccess, t.text.inverse), width: '100%' }}>
+                    <button type="button" onClick={newCurve} style={{ ...btnStyle(glass.bgSuccess, t.text.inverse), width: '100%' }}>
                         New Curve
                     </button>
                 </div>
@@ -668,7 +668,7 @@ export default function CompressorCurvePractice() {
                 overflow: 'hidden',
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop
@@ -729,10 +729,10 @@ export default function CompressorCurvePractice() {
                     marginBottom: spacing[6],
                     gap: spacing[1],
                 }}>
-                    <button onClick={() => setActiveTab('draw')} style={tabStyle(activeTab === 'draw')}>
+                    <button type="button" onClick={() => setActiveTab('draw')} style={tabStyle(activeTab === 'draw')}>
                         Draw Compressor Curve
                     </button>
-                    <button onClick={() => setActiveTab('analyse')} style={tabStyle(activeTab === 'analyse')}>
+                    <button type="button" onClick={() => setActiveTab('analyse')} style={tabStyle(activeTab === 'analyse')}>
                         Analyse Compressor Curve
                     </button>
                 </div>

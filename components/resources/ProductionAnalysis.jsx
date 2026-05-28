@@ -75,7 +75,7 @@ const CopyableNote = ({ title, children, color = 'var(--annotation-info)', varia
           <span>{icons[variant] || icons.definition}</span>
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT_BODY }}>{title}</span>
         </div>
-        <button data-press onClick={handleCopy} style={{
+        <button type="button" data-press onClick={handleCopy} style={{
           background: copied ? 'var(--success)' : 'var(--canvas-surface)',
           border: `1px solid ${copied ? 'var(--success)' : 'var(--canvas-border-hover)'}`,
           borderRadius: 'var(--radius-md)', padding: '0.25rem 0.75rem', cursor: 'pointer',
@@ -296,7 +296,7 @@ const ProductionAnalysis = () => {
         {/* Tabs */}
         <nav style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)', borderBottom: '1px solid var(--border)', flexWrap: 'wrap' }}>
           {tabs.map(tab => (
-            <button key={tab.id} data-press onClick={() => setActiveTab(tab.id)}
+            <button type="button" key={tab.id} data-press onClick={() => setActiveTab(tab.id)}
               style={{
                 padding: 'var(--space-3) var(--space-5)', background: 'transparent',
                 border: 'none', borderBottom: activeTab === tab.id ? '2px solid var(--accent)' : '2px solid transparent',
@@ -314,7 +314,7 @@ const ProductionAnalysis = () => {
                 { v: 'all', label: 'All' }, { v: 'foundation', label: '\u{1F7E2} Foundation' },
                 { v: 'intermediate', label: '\u{1F7E1} Intermediate' }, { v: 'advanced', label: '\u{1F534} Advanced' },
               ].map(f => (
-                <button key={f.v} data-press onClick={() => setLearnFilter(f.v)}
+                <button type="button" key={f.v} data-press onClick={() => setLearnFilter(f.v)}
                   style={{
                     padding: 'var(--space-2) var(--space-4)',
                     background: learnFilter === f.v ? 'var(--accent)' : 'var(--background-raised)',
@@ -380,7 +380,7 @@ const ProductionAnalysis = () => {
           <div>
             <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
               {workedExamples.map(ex => (
-                <button key={ex.id} data-press onClick={() => setActiveExample(ex.id)}
+                <button type="button" key={ex.id} data-press onClick={() => setActiveExample(ex.id)}
                   style={{
                     padding: 'var(--space-2) var(--space-4)',
                     background: activeExample === ex.id ? 'var(--accent)' : 'var(--background-raised)',
@@ -409,7 +409,7 @@ const ProductionAnalysis = () => {
                           <span style={{ color: 'var(--sienna)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Question {qi + 1} · {q.marks} marks</span>
                           <p style={{ marginTop: 'var(--space-2)', fontWeight: 600 }}>{q.q}</p>
                         </div>
-                        <button data-press onClick={() => toggleModel(qi)} style={{
+                        <button type="button" data-press onClick={() => toggleModel(qi)} style={{
                           padding: 'var(--space-2) var(--space-3)', background: visible ? 'var(--canvas-foreground-tertiary)' : 'var(--accent)',
                           color: '#fff', border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer',
                           fontFamily: FONT_BODY, fontSize: 'var(--text-xs)', fontWeight: 600, whiteSpace: 'nowrap'
@@ -450,7 +450,7 @@ const ProductionAnalysis = () => {
               <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
                 <div>
                   <label style={{ display: 'block', fontWeight: 700, color: 'var(--accent)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>1. Evidence — what you can hear, with a section or timestamp</label>
-                  <textarea value={practiceEvidence} onChange={e => setPracticeEvidence(e.target.value)}
+                  <textarea aria-label="Response" value={practiceEvidence} onChange={e => setPracticeEvidence(e.target.value)}
                     placeholder="e.g. In the chorus from 0:48, the lead vocal sits in a wider, more reverberant space than in the verse…"
                     style={{
                       width: '100%', minHeight: 80, padding: 'var(--space-3)',
@@ -465,7 +465,7 @@ const ProductionAnalysis = () => {
                     {PROCESS_LIBRARY.map(p => {
                       const active = practiceTechniques.includes(p.id);
                       return (
-                        <button key={p.id} data-press onClick={() => toggleTechnique(p.id)}
+                        <button type="button" key={p.id} data-press onClick={() => toggleTechnique(p.id)}
                           style={{
                             padding: 'var(--space-2) var(--space-3)',
                             background: active ? 'var(--sienna)' : 'var(--background)',
@@ -479,7 +479,7 @@ const ProductionAnalysis = () => {
                 </div>
                 <div>
                   <label style={{ display: 'block', fontWeight: 700, color: 'var(--moss)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>3. Effect — what the technique does for the music</label>
-                  <textarea value={practiceEffect} onChange={e => setPracticeEffect(e.target.value)}
+                  <textarea aria-label="Response" value={practiceEffect} onChange={e => setPracticeEffect(e.target.value)}
                     placeholder="e.g. it pushes the vocal into a shared space with the rest of the band, signalling the chorus arrival without losing intelligibility…"
                     style={{
                       width: '100%', minHeight: 80, padding: 'var(--space-3)',
@@ -491,12 +491,12 @@ const ProductionAnalysis = () => {
               </div>
 
               <div style={{ display: 'flex', gap: 'var(--space-3)', marginTop: 'var(--space-4)' }}>
-                <button data-press onClick={buildAnswer} style={{
+                <button type="button" data-press onClick={buildAnswer} style={{
                   padding: 'var(--space-3) var(--space-5)', background: 'var(--accent)', color: '#fff',
                   border: 'none', borderRadius: 'var(--radius-md)', cursor: 'pointer',
                   fontFamily: FONT_BODY, fontWeight: 600
                 }}>Build sentence</button>
-                <button data-press onClick={resetPractice} style={{
+                <button type="button" data-press onClick={resetPractice} style={{
                   padding: 'var(--space-3) var(--space-5)', background: 'transparent',
                   color: 'var(--foreground-secondary)', border: '1px solid var(--border)',
                   borderRadius: 'var(--radius-md)', cursor: 'pointer', fontFamily: FONT_BODY

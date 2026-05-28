@@ -214,7 +214,7 @@ export default function ExamModeClient({ topic }) {
                                 When time runs out, unanswered questions are automatically submitted.
                             </p>
                         </div>
-                        <button
+                        <button type="button"
                             onClick={handleStart}
                             style={{
                                 padding: `${spacing[3]} ${spacing[8]}`,
@@ -469,7 +469,7 @@ export default function ExamModeClient({ topic }) {
 
                     {/* Next button */}
                     {showFeedback && (
-                        <button
+                        <button type="button"
                             onClick={nextQuestion}
                             style={{
                                 marginTop: spacing[5],
@@ -566,7 +566,7 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
                         </span>
                     )}
                     {onSignOut && (
-                        <button
+                        <button type="button"
                             onClick={onSignOut}
                             style={{
                                 background: 'none',
@@ -611,7 +611,7 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                 }
 
                 return (
-                    <button
+                    <button type="button"
                         key={i}
                         onClick={() => !showFeedback && onSelect(i)}
                         disabled={showFeedback}
@@ -976,7 +976,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                 >
                     Back to Topic
                 </Link>
-                <button
+                <button type="button"
                     onClick={() => window.location.reload()}
                     style={{
                         flex: 1,

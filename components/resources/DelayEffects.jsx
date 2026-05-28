@@ -92,7 +92,7 @@ const CopyableNote = ({ title, children, color = 'var(--annotation-info)', varia
           <span>{icons[variant] || icons.definition}</span>
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT_BODY }}>{title}</span>
         </div>
-        <button data-press onClick={handleCopy} style={{
+        <button type="button" data-press onClick={handleCopy} style={{
           background: copied ? 'var(--success)' : 'var(--canvas-surface)', border: `1px solid ${copied ? 'var(--success)' : 'var(--canvas-border-hover)'}`,
           borderRadius: 'var(--radius-md)', padding: '0.25rem 0.75rem', cursor: 'pointer',
           color: copied ? '#fff' : 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY
@@ -110,7 +110,7 @@ const StudioCard = ({ children, style = {} }) => (
   <div style={{
     background: 'var(--background-raised)', border: '1px solid var(--border)',
     borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)',
-    boxShadow: 'var(--shadow-md)', transition: 'all var(--duration-normal) var(--ease-out)', ...style
+    boxShadow: 'var(--shadow-md)', transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-normal) var(--ease-out)', ...style
   }}>{children}</div>
 );
 
@@ -478,13 +478,13 @@ const DelayEffects = () => {
       {/* Tab Bar */}
       <div style={{ display: 'flex', borderBottom: `1px solid ${isCanvasTab ? 'var(--canvas-border)' : 'var(--border)'}`, margin: '0 var(--space-6)' }}>
         {tabs.map(tab => (
-          <button data-press key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+          <button type="button" data-press key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
             flex: 1, padding: 'var(--space-3)', fontSize: 'var(--text-xs)', fontWeight: '600',
             fontFamily: FONT_BODY, textTransform: 'uppercase', letterSpacing: '0.05em',
             color: activeTab === tab.id ? 'var(--accent)' : (isCanvasTab ? 'var(--canvas-foreground-tertiary)' : 'var(--foreground-tertiary)'),
             background: activeTab === tab.id ? 'var(--accent-soft)' : 'transparent',
             borderBottom: activeTab === tab.id ? '2px solid var(--accent)' : '2px solid transparent',
-            border: 'none', cursor: 'pointer', transition: 'all var(--duration-fast) var(--ease-out)',
+            border: 'none', cursor: 'pointer', transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)',
             ':active': { transform: 'scale(0.97)' }
           }}>{tab.label}</button>
         ))}
@@ -499,7 +499,7 @@ const DelayEffects = () => {
             {/* Filter buttons */}
             <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-6)', flexWrap: 'wrap' }}>
               {[{ id: 'all', label: 'All Topics' }, { id: 'foundation', label: '\u{1F7E2} Foundation' }, { id: 'intermediate', label: '\u{1F7E1} Intermediate' }, { id: 'advanced', label: '\u{1F534} Advanced' }].map(f => (
-                <button data-press key={f.id} onClick={() => setLearnFilter(f.id)} style={{
+                <button type="button" data-press key={f.id} onClick={() => setLearnFilter(f.id)} style={{
                   padding: 'var(--space-2) var(--space-4)', borderRadius: 'var(--radius-md)',
                   border: `1px solid ${learnFilter === f.id ? 'var(--accent)' : 'var(--border)'}`,
                   background: learnFilter === f.id ? 'var(--accent-soft)' : 'var(--background-raised)',
@@ -512,7 +512,7 @@ const DelayEffects = () => {
             {/* Content sections */}
             {learnSections.filter(s => learnFilter === 'all' || s.level === learnFilter).map((section, idx) => (
               <StudioCard key={idx} style={{ marginBottom: 'var(--space-4)' }}>
-                <button data-press onClick={() => toggleSection(idx)} style={{
+                <button type="button" data-press onClick={() => toggleSection(idx)} style={{
                   width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left'
                 }}>
@@ -569,7 +569,7 @@ const DelayEffects = () => {
                 { id: 'pingpong', label: 'Ping-Pong' },
                 { id: 'slapback', label: 'Slapback' }
               ].map(m => (
-                <button data-press key={m.id} onClick={() => setDelayType(m.id)} style={{
+                <button type="button" data-press key={m.id} onClick={() => setDelayType(m.id)} style={{
                   padding: 'var(--space-2) var(--space-5)', borderRadius: 'var(--radius-md)',
                   border: `1px solid ${delayType === m.id ? 'var(--accent)' : 'var(--canvas-border-hover)'}`,
                   background: delayType === m.id ? 'var(--accent-soft)' : 'var(--canvas-surface)',
@@ -583,7 +583,7 @@ const DelayEffects = () => {
             <div style={{
               background: 'var(--canvas-surface)', border: '1px solid var(--canvas-border)',
               borderRadius: 'var(--radius-xl)', padding: 'var(--space-4)', marginBottom: 'var(--space-6)',
-              transition: 'all var(--duration-normal) var(--ease-out)', overflowX: 'auto'
+              transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-normal) var(--ease-out)', overflowX: 'auto'
             }}>
               <div style={{ fontSize: 'var(--text-xs)', fontWeight: '300', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--canvas-highlight)', marginBottom: 'var(--space-2)', textAlign: 'center' }}>
                 Delay Line Visualisation
@@ -603,7 +603,7 @@ const DelayEffects = () => {
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{ctrl.label}</span>
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{ctrl.value}{ctrl.unit}</span>
                   </div>
-                  <input type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
+                  <input aria-label="Slider" type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
                     onChange={e => ctrl.set(parseFloat(e.target.value))}
                     style={{ width: '100%', accentColor: '#FF6B35' }} />
                 </div>
@@ -617,7 +617,7 @@ const DelayEffects = () => {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
                 <label style={{ fontSize: 'var(--text-sm)', color: 'var(--canvas-foreground-secondary)' }}>BPM:</label>
-                <input type="number" min="20" max="300" value={bpmInput} onChange={e => setBpmInput(Math.max(20, Math.min(300, parseInt(e.target.value) || 120)))}
+                <input aria-label="Input" type="number" min="20" max="300" value={bpmInput} onChange={e => setBpmInput(Math.max(20, Math.min(300, parseInt(e.target.value) || 120)))}
                   style={{
                     padding: 'var(--space-2) var(--space-3)', background: 'var(--canvas-surface)',
                     border: '1px solid var(--canvas-border-hover)', borderRadius: 'var(--radius-md)',
@@ -653,7 +653,7 @@ const DelayEffects = () => {
               <h3 style={{ fontFamily: FONT_HEADING, fontWeight: 700, fontSize: 'var(--text-xl)', margin: '0 0 var(--space-4)', color: 'var(--canvas-foreground)' }}>Calculate the Delay Time</h3>
 
               {!challengeActive ? (
-                <button data-press onClick={generateChallenge} style={{
+                <button type="button" data-press onClick={generateChallenge} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
                   border: 'none', borderRadius: 'var(--radius-md)', color: '#fff',
                   cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600'
@@ -664,7 +664,7 @@ const DelayEffects = () => {
                     At <strong style={{ color: 'var(--accent)' }}>{challengeData?.bpm} BPM</strong>, what is the delay time for a <strong style={{ color: 'var(--accent)' }}>{challengeData?.noteValue}</strong>?
                   </p>
                   <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', flexWrap: 'wrap' }}>
-                    <input type="number" step="1" value={userGuess} onChange={e => setUserGuess(e.target.value)}
+                    <input aria-label="Input" type="number" step="1" value={userGuess} onChange={e => setUserGuess(e.target.value)}
                       placeholder="Your answer (ms)" disabled={challengeSubmitted}
                       style={{
                         padding: 'var(--space-2) var(--space-3)', background: 'var(--canvas-surface)',
@@ -673,14 +673,14 @@ const DelayEffects = () => {
                         fontSize: 'var(--text-sm)', width: '180px'
                       }} />
                     {!challengeSubmitted ? (
-                      <button data-press onClick={submitChallenge} disabled={!userGuess} style={{
+                      <button type="button" data-press onClick={submitChallenge} disabled={!userGuess} style={{
                         padding: 'var(--space-2) var(--space-5)', background: userGuess ? 'var(--accent)' : 'var(--canvas-surface)',
                         border: 'none', borderRadius: 'var(--radius-md)', color: '#fff',
                         cursor: userGuess ? 'pointer' : 'default', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600',
                         opacity: userGuess ? 1 : 0.5
                       }}>Submit</button>
                     ) : (
-                      <button data-press onClick={generateChallenge} style={{
+                      <button type="button" data-press onClick={generateChallenge} style={{
                         padding: 'var(--space-2) var(--space-5)', background: 'var(--canvas-surface)',
                         border: '1px solid var(--canvas-border-hover)', borderRadius: 'var(--radius-md)',
                         color: 'var(--canvas-foreground-tertiary)', cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)'
@@ -712,7 +712,7 @@ const DelayEffects = () => {
             </div>
 
             {/* Reset */}
-            <button data-press onClick={resetInteractive} style={{
+            <button type="button" data-press onClick={resetInteractive} style={{
               marginTop: 'var(--space-4)', padding: 'var(--space-2) var(--space-4)',
               background: 'var(--canvas-surface)', border: '1px solid var(--canvas-border-hover)',
               borderRadius: 'var(--radius-md)', color: 'var(--canvas-foreground-tertiary)',
@@ -750,12 +750,12 @@ const DelayEffects = () => {
                       else if (showFeedback && isCorrect) { bg = 'var(--success-soft)'; borderColor = 'var(--success)'; }
 
                       return (
-                        <button data-press key={i} onClick={() => handleAnswer(i)} style={{
+                        <button type="button" data-press key={i} onClick={() => handleAnswer(i)} style={{
                           padding: 'var(--space-3) var(--space-4)', background: bg,
                           border: `2px solid ${borderColor}`, borderRadius: 'var(--radius-md)',
                           cursor: showFeedback ? 'default' : 'pointer', textAlign: 'left',
                           fontSize: 'var(--text-base)', fontFamily: FONT_BODY, color: 'var(--foreground)',
-                          transition: 'all var(--duration-fast) var(--ease-out)'
+                          transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)'
                         }}>{opt}</button>
                       );
                     })}
@@ -775,7 +775,7 @@ const DelayEffects = () => {
                           {quizQuestions[quizIndex].explanation}
                         </p>
                       </div>
-                      <button data-press onClick={nextQuestion} style={{
+                      <button type="button" data-press onClick={nextQuestion} style={{
                         marginTop: 'var(--space-4)', padding: 'var(--space-2) var(--space-5)',
                         background: 'var(--accent)', border: 'none', borderRadius: 'var(--radius-md)',
                         color: '#fff', cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600'
@@ -793,7 +793,7 @@ const DelayEffects = () => {
                 <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)' }}>
                   {score >= 8 ? 'Excellent understanding of delay effects!' : score >= 5 ? 'Good foundation \u2014 review the areas you found challenging.' : 'Revisit the Learn tab and try again.'}
                 </p>
-                <button data-press onClick={resetQuiz} style={{
+                <button type="button" data-press onClick={resetQuiz} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
                   border: 'none', borderRadius: 'var(--radius-md)', color: '#fff',
                   cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: '600'

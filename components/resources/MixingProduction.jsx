@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Fragment, useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 // ============================================
 // Mixing & Production
@@ -78,7 +78,7 @@ const CopyableNote = ({ title, children, color = 'var(--annotation-info)', varia
           <span>{icons[variant] || icons.definition}</span>
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT_BODY }}>{title}</span>
         </div>
-        <button data-press onClick={handleCopy} style={{
+        <button type="button" data-press onClick={handleCopy} style={{
           background: copied ? 'var(--success)' : 'var(--canvas-surface)',
           border: `1px solid ${copied ? 'var(--success)' : 'var(--canvas-border-hover)'}`,
           borderRadius: 'var(--radius-md)', padding: '0.25rem 0.75rem', cursor: 'pointer',
@@ -355,7 +355,7 @@ const MixingProduction = () => {
   // ============================================
   // RENDER HELPERS
   // ============================================
-  const ChannelStrip = ({ id }) => {
+  const renderChannelStrip = ({ id }) => {
     const t = trackInfo(id);
     const audible = isAudible(t);
     return (
@@ -374,7 +374,7 @@ const MixingProduction = () => {
           <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: FONT_MONO, marginBottom: 2 }}>
             PAN {t.pan === 0 ? 'C' : (t.pan < 0 ? `L${Math.abs(t.pan)}` : `R${t.pan}`)}
           </div>
-          <input type="range" min={-100} max={100} value={t.pan}
+          <input aria-label="Slider" type="range" min={-100} max={100} value={t.pan}
             onChange={e => setProp(id, 'pan', Number(e.target.value))}
             style={{ width: '100%', accentColor: t.color }} />
         </div>
@@ -383,13 +383,13 @@ const MixingProduction = () => {
           <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: FONT_MONO, marginBottom: 2 }}>
             SEND {Math.round(t.send * 100)}
           </div>
-          <input type="range" min={0} max={100} value={Math.round(t.send * 100)}
+          <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(t.send * 100)}
             onChange={e => setProp(id, 'send', Number(e.target.value) / 100)}
             style={{ width: '100%', accentColor: 'var(--moss)' }} />
         </div>
         {/* Fader */}
         <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--space-2) 0' }}>
-          <input type="range" min={0} max={100} value={Math.round(t.gain * 100)}
+          <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(t.gain * 100)}
             onChange={e => setProp(id, 'gain', Number(e.target.value) / 100)}
             style={{
               writingMode: 'vertical-lr', WebkitAppearance: 'slider-vertical',
@@ -401,14 +401,14 @@ const MixingProduction = () => {
         </div>
         {/* M/S buttons */}
         <div style={{ display: 'flex', gap: 4 }}>
-          <button data-press onClick={() => setProp(id, 'mute', !t.mute)}
+          <button type="button" data-press onClick={() => setProp(id, 'mute', !t.mute)}
             style={{
               flex: 1, padding: '4px 0', fontSize: 10, fontFamily: FONT_BODY, fontWeight: 700,
               background: t.mute ? 'var(--error)' : 'var(--canvas-surface-2)',
               color: t.mute ? '#fff' : 'var(--canvas-foreground-tertiary)',
               border: `1px solid var(--canvas-border-hover)`, borderRadius: 4, cursor: 'pointer'
             }}>M</button>
-          <button data-press onClick={() => setProp(id, 'solo', !t.solo)}
+          <button type="button" data-press onClick={() => setProp(id, 'solo', !t.solo)}
             style={{
               flex: 1, padding: '4px 0', fontSize: 10, fontFamily: FONT_BODY, fontWeight: 700,
               background: t.solo ? 'var(--warning)' : 'var(--canvas-surface-2)',
@@ -449,7 +449,7 @@ const MixingProduction = () => {
           borderBottom: '1px solid var(--border)'
         }}>
           {tabs.map(tab => (
-            <button key={tab.id} data-press onClick={() => setActiveTab(tab.id)}
+            <button type="button" key={tab.id} data-press onClick={() => setActiveTab(tab.id)}
               style={{
                 padding: 'var(--space-3) var(--space-5)', background: 'transparent',
                 border: 'none', borderBottom: activeTab === tab.id ? '2px solid var(--accent)' : '2px solid transparent',
@@ -470,7 +470,7 @@ const MixingProduction = () => {
                 { v: 'all', label: 'All' }, { v: 'foundation', label: '\u{1F7E2} Foundation' },
                 { v: 'intermediate', label: '\u{1F7E1} Intermediate' }, { v: 'advanced', label: '\u{1F534} Advanced' },
               ].map(f => (
-                <button key={f.v} data-press onClick={() => setLearnFilter(f.v)}
+                <button type="button" key={f.v} data-press onClick={() => setLearnFilter(f.v)}
                   style={{
                     padding: 'var(--space-2) var(--space-4)',
                     background: learnFilter === f.v ? 'var(--accent)' : 'var(--background-raised)',
@@ -513,7 +513,7 @@ const MixingProduction = () => {
                 { n: 2, label: '2 · Place pans + sends' },
                 { n: 3, label: '3 · Mixdown' },
               ].map(s => (
-                <button key={s.n} data-press onClick={() => startScenario(s.n)}
+                <button type="button" key={s.n} data-press onClick={() => startScenario(s.n)}
                   style={{
                     padding: 'var(--space-2) var(--space-3)',
                     background: scenarioStep === s.n ? 'var(--mustard)' : 'var(--canvas-surface)',
@@ -522,7 +522,7 @@ const MixingProduction = () => {
                     cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-xs)', fontWeight: 600
                   }}>{s.label}</button>
               ))}
-              <button data-press onClick={loadDefaults}
+              <button type="button" data-press onClick={loadDefaults}
                 style={{
                   marginLeft: 'auto', padding: 'var(--space-2) var(--space-3)',
                   background: 'var(--canvas-surface)', color: 'var(--canvas-foreground-tertiary)',
@@ -536,7 +536,7 @@ const MixingProduction = () => {
               display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(84px, 1fr))',
               gap: 'var(--space-2)', marginBottom: 'var(--space-5)'
             }}>
-              {TRACKS.map(t => <ChannelStrip key={t.id} id={t.id} />)}
+              {TRACKS.map(t => <Fragment key={t.id}>{renderChannelStrip({ id: t.id })}</Fragment>)}
             </div>
 
             {/* Reverb bus + master */}
@@ -552,7 +552,7 @@ const MixingProduction = () => {
                     pre-fader
                   </label>
                 </div>
-                <input type="range" min={0} max={100} value={Math.round(reverbReturn * 100)}
+                <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(reverbReturn * 100)}
                   onChange={e => setReverbReturn(Number(e.target.value) / 100)}
                   style={{ width: '100%', accentColor: 'var(--moss)' }} />
                 <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_MONO, textAlign: 'center', marginTop: 4 }}>
@@ -570,7 +570,7 @@ const MixingProduction = () => {
                     glue comp on
                   </label>
                 </div>
-                <input type="range" min={0} max={100} value={Math.round(drumBusComp * 100)}
+                <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(drumBusComp * 100)}
                   onChange={e => setDrumBusComp(Number(e.target.value) / 100)}
                   disabled={!drumBusEnabled}
                   style={{ width: '100%', accentColor: 'var(--sienna)', opacity: drumBusEnabled ? 1 : 0.4 }} />
@@ -588,7 +588,7 @@ const MixingProduction = () => {
             }}>
               <div>
                 <div style={{ color: 'var(--mustard)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Master fader</div>
-                <input type="range" min={0} max={100} value={Math.round(masterFader * 100)}
+                <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(masterFader * 100)}
                   onChange={e => setMasterFader(Number(e.target.value) / 100)}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
                 <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_MONO, textAlign: 'center', marginTop: 4 }}>
@@ -627,7 +627,7 @@ const MixingProduction = () => {
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
                   <span style={{ color: 'var(--canvas-foreground-secondary)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Signal flow</span>
-                  <button data-press onClick={() => setShowSignalFlow(s => !s)}
+                  <button type="button" data-press onClick={() => setShowSignalFlow(s => !s)}
                     style={{ background: 'none', border: 'none', color: 'var(--canvas-highlight)', cursor: 'pointer', fontSize: 11 }}>
                     {showSignalFlow ? 'hide' : 'show'}
                   </button>
@@ -673,7 +673,7 @@ ${drumBusEnabled ? '\nDrum tracks → Drums Bus → Glue Comp → Master' : ''}`
                 <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-lg)', marginBottom: 'var(--space-4)' }}>
                   You scored <strong style={{ color: 'var(--accent)' }}>{score}</strong> / {quizQuestions.length}.
                 </p>
-                <button data-press onClick={resetQuiz} style={{
+                <button type="button" data-press onClick={resetQuiz} style={{
                   padding: 'var(--space-3) var(--space-5)', background: 'var(--accent)', color: '#fff',
                   border: 'none', borderRadius: 'var(--radius-md)', fontFamily: FONT_BODY, fontWeight: 600,
                   cursor: 'pointer'
@@ -698,7 +698,7 @@ ${drumBusEnabled ? '\nDrum tracks → Drums Bus → Glue Comp → Master' : ''}`
                     if (showFeedback && isCorrect) { bg = 'var(--success-soft)'; border = `2px solid var(--success)`; color = 'var(--success)'; }
                     else if (showFeedback && isSelected && !isCorrect) { bg = 'var(--error-soft)'; border = `2px solid var(--error)`; color = 'var(--error)'; }
                     return (
-                      <button key={i} data-press onClick={() => handleAnswer(i)} disabled={showFeedback}
+                      <button type="button" key={i} data-press onClick={() => handleAnswer(i)} disabled={showFeedback}
                         style={{
                           textAlign: 'left', padding: 'var(--space-4)',
                           background: bg, border, color,
@@ -716,7 +716,7 @@ ${drumBusEnabled ? '\nDrum tracks → Drums Bus → Glue Comp → Master' : ''}`
                       variant="key">
                       {quizQuestions[quizIndex].explanation}
                     </CopyableNote>
-                    <button data-press onClick={nextQuestion} style={{
+                    <button type="button" data-press onClick={nextQuestion} style={{
                       marginTop: 'var(--space-4)',
                       padding: 'var(--space-3) var(--space-5)', background: 'var(--accent)', color: '#fff',
                       border: 'none', borderRadius: 'var(--radius-md)', fontFamily: FONT_BODY, fontWeight: 600, cursor: 'pointer'

@@ -72,7 +72,7 @@ export default function ADCExplorer() {
                 padding: spacing[1],
             }}>
                 {TABS.map(tab => (
-                    <button
+                    <button type="button"
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         style={{
@@ -403,7 +403,7 @@ function CopyAllNotes({ notes, title }) {
     }, [notes, title]);
 
     return (
-        <button
+        <button type="button"
             onClick={handleCopy}
             style={{
                 display: 'flex', alignItems: 'center', gap: spacing[2],
@@ -607,7 +607,7 @@ function Slider({ label, value, min, max, step, setter, colour, unit }) {
             }}>
                 {label}: {value}{unit}
             </label>
-            <input
+            <input aria-label="Slider"
                 type="range"
                 min={min} max={max} step={step}
                 value={value}

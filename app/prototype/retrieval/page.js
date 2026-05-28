@@ -315,7 +315,7 @@ export default function RetrievalPrototype() {
                                             }}>
                                                 Attempting from memory before checking strengthens your recall
                                             </div>
-                                            <button
+                                            <button type="button"
                                                 onClick={() => setRevealed(true)}
                                                 style={{
                                                     background: attempt.length > 20
@@ -364,7 +364,7 @@ export default function RetrievalPrototype() {
                                 {/* Reset button */}
                                 {revealed && (
                                     <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
-                                        <button
+                                        <button type="button"
                                             onClick={() => { setRevealed(false); setAttempt(''); }}
                                             style={{
                                                 background: C.surface,

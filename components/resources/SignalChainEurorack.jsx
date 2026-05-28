@@ -6,6 +6,7 @@ export default function SignalChainEurorack() {
       <iframe
         src="/signal-chain"
         title="Signal Chain Builder"
+        sandbox="allow-scripts"
         style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
       />
     </div>

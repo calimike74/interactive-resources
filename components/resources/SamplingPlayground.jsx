@@ -59,7 +59,7 @@ function SectionNav({ active, onNavigate }) {
       border: `1px solid ${T.border}`,
     }}>
       {sections.map(s => (
-        <button
+        <button type="button"
           key={s.id}
           onClick={() => onNavigate(s.id)}
           style={{
@@ -75,7 +75,7 @@ function SectionNav({ active, onNavigate }) {
             borderRadius: '8px',
             border: 'none',
             cursor: 'pointer',
-            transition: 'all 0.2s ease',
+            transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
           }}
         >
           {s.label}
@@ -259,7 +259,7 @@ function SamplingExplorer() {
           minLabel="Low" maxLabel="High" />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button onClick={() => setShowReconstructed(v => !v)} aria-label="Toggle reconstructed signal" style={{
+          <button type="button" onClick={() => setShowReconstructed(v => !v)} aria-label="Toggle reconstructed signal" style={{
             width: '40px', height: '22px', borderRadius: '11px', border: 'none', cursor: 'pointer',
             background: showReconstructed ? T.accent : 'rgba(74, 127, 212, 0.2)', position: 'relative', transition: 'background 0.2s', flexShrink: 0,
           }}>
@@ -510,7 +510,7 @@ function FileSizeChallenge() {
             );
           })}
         </div>
-        <button onClick={handleRestart} style={{
+        <button type="button" onClick={handleRestart} style={{
           display: 'block', margin: '0 auto', background: T.accent, color: '#fff', border: 'none',
           borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: FONT_BODY,
         }}>Try again</button>
@@ -584,7 +584,7 @@ function FileSizeChallenge() {
               onFocus={e => { e.target.style.borderColor = 'rgba(74, 127, 212, 0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(74, 127, 212, 0.12)'; }}
               onBlur={e => { e.target.style.borderColor = 'rgba(74, 127, 212, 0.2)'; e.target.style.boxShadow = 'none'; }}
             />
-            <button onClick={handleCommit} disabled={!input || isNaN(parseFloat(input))}
+            <button type="button" onClick={handleCommit} disabled={!input || isNaN(parseFloat(input))}
               style={{
                 background: T.accent, color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 22px',
                 fontSize: '14px', fontWeight: 600, cursor: input ? 'pointer' : 'not-allowed',
@@ -634,7 +634,7 @@ function FileSizeChallenge() {
             })()}
           </div>
 
-          <button onClick={handleNext} style={{
+          <button type="button" onClick={handleNext} style={{
             marginTop: '16px', background: T.accent, color: '#fff', border: 'none', borderRadius: '10px',
             padding: '12px 24px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: FONT_BODY, width: '100%',
           }}>{idx >= SCENARIOS.length - 1 ? 'See final score' : 'Next scenario →'}</button>
@@ -703,7 +703,7 @@ function EvaluateResponse() {
       {/* Response */}
       <Card>
         <CardLabel>Your Response</CardLabel>
-        <textarea value={response} onChange={e => setResponse(e.target.value)}
+        <textarea aria-label="Response" value={response} onChange={e => setResponse(e.target.value)}
           placeholder="Start by identifying your recommended settings..."
           rows={6}
           style={{
@@ -733,7 +733,7 @@ function EvaluateResponse() {
               width: '20px', height: '20px', minWidth: '20px', borderRadius: '5px',
               border: checked[i] ? '2px solid #059669' : '2px solid rgba(74, 127, 212, 0.3)',
               background: checked[i] ? 'rgba(5, 150, 105, 0.15)' : 'transparent',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px', transition: 'all 0.2s',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px', transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s',
             }}>
               {checked[i] && <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
             </div>
@@ -742,13 +742,13 @@ function EvaluateResponse() {
         ))}
 
         <div style={{ marginTop: '24px' }}>
-          <button onClick={() => canReveal && setModelRevealed(true)} disabled={!canReveal} aria-disabled={!canReveal}
+          <button type="button" onClick={() => canReveal && setModelRevealed(true)} disabled={!canReveal} aria-disabled={!canReveal}
             style={{
               display: 'block', margin: '4px auto 0', padding: '12px 28px',
               background: canReveal ? T.accent : 'rgba(255, 107, 53, 0.25)',
               color: canReveal ? '#fff' : 'rgba(255, 107, 53, 0.5)',
               border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 600,
-              cursor: canReveal ? 'pointer' : 'not-allowed', fontFamily: FONT_BODY, transition: 'all 0.2s',
+              cursor: canReveal ? 'pointer' : 'not-allowed', fontFamily: FONT_BODY, transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s',
             }}>How did I do?</button>
           {!canReveal && <p style={{ textAlign: 'center', color: T.textTertiary, fontSize: '12px', marginTop: '8px' }}>Tick at least 3 items to unlock the model answer</p>}
         </div>
@@ -801,7 +801,7 @@ function SliderControl({ label, value, min, max, accent, displayValue, onChange,
         <label style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: T.textTertiary }}>{label}</label>
         <span style={{ fontSize: '15px', fontWeight: 700, color: accent }}>{displayValue}</span>
       </div>
-      <input type="range" min={min} max={max} step={1} value={value} onChange={e => onChange(Number(e.target.value))}
+      <input aria-label="Slider" type="range" min={min} max={max} step={1} value={value} onChange={e => onChange(Number(e.target.value))}
         style={{
           width: '100%', appearance: 'none', WebkitAppearance: 'none', height: '4px', borderRadius: '2px',
           background: `linear-gradient(to right, ${accent} 0%, ${accent} ${pct}%, rgba(74,127,212,0.2) ${pct}%)`,

@@ -24,7 +24,7 @@ const serif = 'var(--font-fraunces), Georgia, serif';
 const mono  = 'var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace';
 
 // Edexcel 1.12 Delay — six delay forms with detail content
-export const DELAY_TYPES = [
+const DELAY_TYPES = [
   {
     n: '01', name: 'Clean',
     bg: C.field700, fg: C.paper, accent: C.mustard500,
@@ -216,7 +216,7 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: 16,
       }}>
-        <button onClick={prev} style={btn(false)} aria-label="Previous delay type">← Previous</button>
+        <button type="button" onClick={prev} style={btn(false)} aria-label="Previous delay type">← Previous</button>
 
         <div style={{
           fontFamily: mono, fontSize: 12, color: C.inkSoft,
@@ -230,7 +230,7 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
           <span style={{ color: C.ink }}>{active.name}</span>
         </div>
 
-        <button onClick={next} style={btn(true)} aria-label="Next delay type">Next →</button>
+        <button type="button" onClick={next} style={btn(true)} aria-label="Next delay type">Next →</button>
       </div>
 
       <p style={{
@@ -415,9 +415,9 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
               Position {position}
             </span>
             <div style={{ display: 'flex', gap: 6 }}>
-              <button onClick={onPrev} style={iconBtn} aria-label="Previous type">←</button>
-              <button onClick={onNext} style={iconBtn} aria-label="Next type">→</button>
-              <button onClick={onClose} style={{ ...iconBtn, marginLeft: 6 }} aria-label="Close">×</button>
+              <button type="button" onClick={onPrev} style={iconBtn} aria-label="Previous type">←</button>
+              <button type="button" onClick={onNext} style={iconBtn} aria-label="Next type">→</button>
+              <button type="button" onClick={onClose} style={{ ...iconBtn, marginLeft: 6 }} aria-label="Close">×</button>
             </div>
           </div>
 

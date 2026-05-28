@@ -40,7 +40,7 @@ const CopyableNote = ({ title, children, color = 'var(--annotation-info)', varia
           <span>{icons[variant] || icons.definition}</span>
           <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: FONT_BODY }}>{title}</span>
         </div>
-        <button onClick={handleCopy} style={{
+        <button type="button" onClick={handleCopy} style={{
           background: copied ? 'var(--success)' : 'var(--background-raised)', border: `1px solid ${copied ? 'var(--success)' : 'var(--border)'}`,
           borderRadius: 'var(--radius-md)', padding: '0.25rem 0.75rem', cursor: 'pointer',
           color: copied ? '#fff' : 'var(--foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY
@@ -58,7 +58,7 @@ const StudioCard = ({ children, style = {} }) => (
   <div style={{
     background: 'var(--background-raised)', border: '1px solid var(--border)',
     borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)',
-    boxShadow: 'var(--shadow-md)', transition: 'all var(--duration-normal) var(--ease-out)', ...style
+    boxShadow: 'var(--shadow-md)', transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-normal) var(--ease-out)', ...style
   }}>{children}</div>
 );
 
@@ -77,14 +77,14 @@ const DiffBadge = ({ level }) => {
 const PressButton = ({ children, onClick, disabled, style = {} }) => {
   const [pressed, setPressed] = useState(false);
   return (
-    <button
+    <button type="button"
       onClick={onClick} disabled={disabled}
       onMouseDown={() => setPressed(true)}
       onMouseUp={() => setPressed(false)}
       onMouseLeave={() => setPressed(false)}
       style={{
         transform: pressed && !disabled ? 'scale(0.97)' : 'scale(1)',
-        transition: 'all var(--duration-fast) var(--ease-out)',
+        transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)',
         cursor: disabled ? 'default' : 'pointer',
         fontFamily: FONT_BODY, ...style
       }}
@@ -672,7 +672,7 @@ const DigitalAnalogue = () => {
             {/* Content sections */}
             {learnSections.map((section, idx) => ({ section, idx })).filter(({ section }) => learnFilter === 'all' || section.level === learnFilter).map(({ section, idx }) => (
               <StudioCard key={idx} style={{ marginBottom: 'var(--space-4)' }}>
-                <button onClick={() => toggleSection(idx)} style={{
+                <button type="button" onClick={() => toggleSection(idx)} style={{
                   width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left'
                 }}>
@@ -733,7 +733,7 @@ const DigitalAnalogue = () => {
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sample Rate</span>
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{(sampleRate / 1000).toFixed(1)} kHz</span>
                   </div>
-                  <input type="range" min={8000} max={96000} step={1000} value={sampleRate}
+                  <input aria-label="Slider" type="range" min={8000} max={96000} step={1000} value={sampleRate}
                     onChange={e => setSampleRate(parseInt(e.target.value))}
                     style={{ width: '100%', accentColor: 'var(--accent)' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', marginTop: 'var(--space-1)' }}>
@@ -748,7 +748,7 @@ const DigitalAnalogue = () => {
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bit Depth</span>
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--canvas-highlight)', fontFamily: "'Geist Mono', monospace" }}>{bitDepth}-bit ({Math.pow(2, bitDepth).toLocaleString()} levels)</span>
                   </div>
-                  <input type="range" min={4} max={24} step={1} value={bitDepth}
+                  <input aria-label="Slider" type="range" min={4} max={24} step={1} value={bitDepth}
                     onChange={e => setBitDepth(parseInt(e.target.value))}
                     style={{ width: '100%', accentColor: 'var(--canvas-highlight)' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', marginTop: 'var(--space-1)' }}>
@@ -819,7 +819,7 @@ const DigitalAnalogue = () => {
                       <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{ctrl.label}</span>
                       <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{ctrl.display}</span>
                     </div>
-                    <input type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
+                    <input aria-label="Slider" type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
                       onChange={e => ctrl.set(parseFloat(e.target.value))}
                       style={{ width: '100%', accentColor: 'var(--accent)' }} />
                   </div>
@@ -892,7 +892,7 @@ const DigitalAnalogue = () => {
                   </div>
                   <p style={{ color: 'var(--canvas-foreground-secondary)', fontSize: 'var(--text-base)', lineHeight: '1.6', marginBottom: 'var(--space-4)' }}>{challengeParams?.description}</p>
                   <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', flexWrap: 'wrap' }}>
-                    <input type="number" step="any" value={userGuess} onChange={e => setUserGuess(e.target.value)}
+                    <input aria-label="Input" type="number" step="any" value={userGuess} onChange={e => setUserGuess(e.target.value)}
                       placeholder={`Your answer (${challengeParams?.unit})`} disabled={challengeSubmitted}
                       style={{
                         padding: 'var(--space-2) var(--space-3)', background: 'var(--canvas-surface)',
@@ -984,7 +984,7 @@ const DigitalAnalogue = () => {
                           border: `2px solid ${borderColor}`, borderRadius: 'var(--radius-md)',
                           textAlign: 'left',
                           fontSize: 'var(--text-base)', color: 'var(--foreground)',
-                          transition: 'all var(--duration-fast) var(--ease-out)'
+                          transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)'
                         }}>{opt}</PressButton>
                       );
                     })}

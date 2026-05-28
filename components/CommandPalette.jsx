@@ -185,7 +185,7 @@ export default function CommandPalette() {
     return (
         <>
             {/* Search trigger button */}
-            <button
+            <button type="button"
                 onClick={openPalette}
                 aria-label="Search resources"
                 style={{

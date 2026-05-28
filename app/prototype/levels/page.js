@@ -233,7 +233,7 @@ export default function LevelsPrototype() {
                         ...pillStyle,
                     }} />
                     {LEVELS.map((level) => (
-                        <button
+                        <button type="button"
                             key={level.key}
                             ref={(el) => { tabRefs.current[level.key] = el; }}
                             onClick={() => setActiveLevel(level.key)}

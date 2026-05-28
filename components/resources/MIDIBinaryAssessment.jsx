@@ -356,7 +356,7 @@ export default function MIDIBinaryAssessment() {
                 </ul>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                    <button
+                    <button type="button"
                         onClick={handleRestart}
                         className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
                     >
@@ -433,7 +433,7 @@ export default function MIDIBinaryAssessment() {
                                 styling = 'border-blue-500 bg-blue-50';
                             }
                             return (
-                                <button
+                                <button type="button"
                                     key={i}
                                     disabled={showFeedback}
                                     onClick={() => setMcqIndex(i)}
@@ -503,7 +503,7 @@ export default function MIDIBinaryAssessment() {
                 {/* Text / trainer input */}
                 {(current.type === 'text' || current.type === 'trainer') && (
                     <div>
-                        <input
+                        <input aria-label="Input"
                             type="text"
                             inputMode="numeric"
                             autoComplete="off"
@@ -572,7 +572,7 @@ export default function MIDIBinaryAssessment() {
                 {/* Action button */}
                 <div className="mt-6 flex justify-end">
                     {!showFeedback ? (
-                        <button
+                        <button type="button"
                             onClick={handleSubmit}
                             disabled={
                                 (current.type === 'mcq' && mcqIndex === null) ||
@@ -586,7 +586,7 @@ export default function MIDIBinaryAssessment() {
                             Check answer
                         </button>
                     ) : (
-                        <button
+                        <button type="button"
                             onClick={handleNext}
                             className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
                         >

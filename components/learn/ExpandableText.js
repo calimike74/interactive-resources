@@ -334,7 +334,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
                                                 opacity: 0,
                                                 animation: 'expandFadeIn 0.4s ease 0.4s forwards',
                                             }}>
-                                                <button
+                                                <button type="button"
                                                     onClick={() => handleConfidence(seg.id, 'got-it')}
                                                     style={{
                                                         padding: '4px 12px', borderRadius: '9999px', fontSize: '12px',
@@ -344,7 +344,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
                                                 >
                                                     &#10003; I get it
                                                 </button>
-                                                <button
+                                                <button type="button"
                                                     onClick={() => handleConfidence(seg.id, 'confused')}
                                                     style={{
                                                         padding: '4px 12px', borderRadius: '9999px', fontSize: '12px',
@@ -412,7 +412,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
 
             {hasSelection && !isExpanding && (
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px', animation: 'expandFadeIn 0.2s ease both' }}>
-                    <button
+                    <button type="button"
                         onClick={triggerExpansion}
                         style={{
                             background: topicColor, color: 'white', padding: '8px 20px',
@@ -428,7 +428,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
 
             {history.length > 0 && !isExpanding && !hasSelection && (
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px', animation: 'expandFadeIn 0.2s ease both' }}>
-                    <button
+                    <button type="button"
                         onClick={handleUndo}
                         style={{
                             background: 'transparent', color: '#9CA3AF', padding: '6px 16px',

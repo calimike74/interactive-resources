@@ -198,7 +198,7 @@ const styles = {
         color: '#999',
         cursor: 'default',
         background: '#2a2a2a',
-        transition: 'all 150ms',
+        transition: 'transform, opacity, background-color, color, border-color, box-shadow 150ms',
         userSelect: 'none',
     },
     svgOverlay: {
@@ -275,7 +275,7 @@ const styles = {
         fontSize: typography.size.xs,
         cursor: 'pointer',
         fontFamily: typography.fontFamily,
-        transition: 'all 200ms',
+        transition: 'transform, opacity, background-color, color, border-color, box-shadow 200ms',
     },
     connectionCount: {
         fontSize: typography.size.xs,
@@ -711,7 +711,7 @@ export default function PatchBaySimulator() {
                     through PB8 into the UA Volt 876 audio interfaces.
                 </p>
                 {connectionCount > 0 && (
-                    <button
+                    <button type="button"
                         onClick={handleClearAll}
                         style={{ ...styles.clearButton, marginTop: spacing[3] }}
                     >
@@ -726,7 +726,7 @@ export default function PatchBaySimulator() {
                     const isActive = tab.id === activeTab;
                     const tabColour = ROOM_COLOURS[tab.id] || '#888';
                     return (
-                        <button
+                        <button type="button"
                             key={tab.id}
                             className="pbs-tab-btn"
                             onClick={() => setActiveTab(tab.id)}
@@ -739,7 +739,7 @@ export default function PatchBaySimulator() {
                                 fontSize: typography.size.sm,
                                 fontWeight: typography.weight.semibold,
                                 cursor: 'pointer',
-                                transition: 'all 200ms',
+                                transition: 'transform, opacity, background-color, color, border-color, box-shadow 200ms',
                                 fontFamily: typography.fontFamily,
                             }}
                         >

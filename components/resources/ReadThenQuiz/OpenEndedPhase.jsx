@@ -106,7 +106,7 @@ export default function OpenEndedPhase({ openEnded, keyTerms, scaffoldLevel, onC
                 </div>
             )}
 
-            <textarea
+            <textarea aria-label="Response"
                 value={response}
                 onChange={(e) => setResponse(e.target.value)}
                 placeholder="Type your answer here..."
@@ -141,7 +141,7 @@ export default function OpenEndedPhase({ openEnded, keyTerms, scaffoldLevel, onC
                 }}>
                     {wordCount} {wordCount === 1 ? 'word' : 'words'}
                 </span>
-                <button
+                <button type="button"
                     onClick={handleSubmit}
                     disabled={wordCount === 0}
                     style={{

@@ -401,7 +401,7 @@ function PracticeTab() {
                             willChange: 'transform, width',
                         }} />
                         {LEVELS.map((level) => (
-                            <button
+                            <button type="button"
                                 key={level.key}
                                 ref={el => { levelTabBtnRefs.current[level.key] = el; }}
                                 onClick={() => setActiveLevel(level.key)}
@@ -615,7 +615,7 @@ function TestTab() {
                             <div style={{ fontSize: 12, color: C.textSecondary, fontFamily: font, textAlign: 'center', maxWidth: 200, lineHeight: 1.5 }}>
                                 Attempting from memory before checking strengthens your recall
                             </div>
-                            <button
+                            <button type="button"
                                 onClick={() => setRevealed(true)}
                                 style={{
                                     background: attempt.length > 20
@@ -651,7 +651,7 @@ function TestTab() {
 
                 {revealed && (
                     <div style={{ marginTop: 10 }}>
-                        <button
+                        <button type="button"
                             onClick={() => { setRevealed(false); setAttempt(''); }}
                             style={{
                                 background: C.surface, border: `1px solid ${C.border}`,
@@ -791,7 +791,7 @@ export default function PrototypePage() {
                         willChange: 'transform, width',
                     }} />
                     {TABS.map((tab) => (
-                        <button
+                        <button type="button"
                             key={tab.key}
                             ref={el => { tabBtnRefs.current[tab.key] = el; }}
                             onClick={() => setActiveTab(tab.key)}

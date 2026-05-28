@@ -226,7 +226,7 @@ export default function SpellDemos() {
                         </AnimatedBadge>
                     </div>
 
-                    <button style={buttonStyle} onClick={() => setBadgeKey(k => k + 1)}>
+                    <button type="button" style={buttonStyle} onClick={() => setBadgeKey(k => k + 1)}>
                         Replay
                     </button>
                 </div>
@@ -282,7 +282,7 @@ export default function SpellDemos() {
                         </div>
                     </div>
 
-                    <button style={buttonStyle} onClick={() => setCounterKey(k => k + 1)}>
+                    <button type="button" style={buttonStyle} onClick={() => setCounterKey(k => k + 1)}>
                         Replay
                     </button>
                 </div>

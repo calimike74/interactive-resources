@@ -404,7 +404,7 @@ export default function RevisePageClient({ topic }) {
 
                     {/* Next button */}
                     {showFeedback && (
-                        <button
+                        <button type="button"
                             onClick={nextQuestion}
                             style={{
                                 marginTop: spacing[5],
@@ -479,7 +479,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                         </span>
                     )}
                     {onSignOut && (
-                        <button
+                        <button type="button"
                             onClick={onSignOut}
                             style={{
                                 background: 'none',
@@ -534,7 +534,7 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                 }
 
                 return (
-                    <button
+                    <button type="button"
                         key={i}
                         onClick={() => !showFeedback && onSelect(i)}
                         disabled={showFeedback}
@@ -1096,7 +1096,7 @@ function ResultsSummary({ responses, questions, topic, token, t }) {
                 >
                     Back to Topic
                 </Link>
-                <button
+                <button type="button"
                     onClick={() => window.location.reload()}
                     style={{
                         flex: 1,

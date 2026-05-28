@@ -96,7 +96,7 @@ export default function MCQPhase({ questions, scaffoldLevel, questionOffset, onC
             </h3>
 
             {showHintButton && !submitted && !showHint && (
-                <button
+                <button type="button"
                     onClick={() => setShowHint(true)}
                     style={{
                         marginBottom: spacing[4],
@@ -146,7 +146,7 @@ export default function MCQPhase({ questions, scaffoldLevel, questionOffset, onC
                     }
 
                     return (
-                        <button
+                        <button type="button"
                             key={i}
                             onClick={() => handleSelect(i)}
                             style={{
@@ -211,7 +211,7 @@ export default function MCQPhase({ questions, scaffoldLevel, questionOffset, onC
             )}
 
             {showFeedback && !submitted && (
-                <button
+                <button type="button"
                     onClick={handleSubmit}
                     disabled={selectedIndex === null}
                     style={{
@@ -232,7 +232,7 @@ export default function MCQPhase({ questions, scaffoldLevel, questionOffset, onC
             )}
 
             {showFeedback && submitted && (
-                <button
+                <button type="button"
                     onClick={handleNext}
                     style={{
                         marginTop: spacing[4],

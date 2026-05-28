@@ -675,13 +675,13 @@ const WaveformExplorer = () => {
 
             {/* Action buttons */}
             <div style={styles.buttonRow}>
-                <button
+                <button type="button"
                     style={styles.btn}
                     onClick={clearDrawing}
                 >
                     Clear Drawing
                 </button>
-                <button
+                <button type="button"
                     style={{
                         ...styles.btn,
                         ...(showAnswer ? styles.btnSuccess : styles.btnPrimary),
@@ -691,7 +691,7 @@ const WaveformExplorer = () => {
                     {showAnswer ? 'Hide Answer' : 'Show Answer'}
                 </button>
                 <div style={{ flex: 1 }} />
-                <button
+                <button type="button"
                     style={{
                         ...styles.btn,
                         ...(currentChallenge === 0 ? styles.btnDisabled : {}),
@@ -701,7 +701,7 @@ const WaveformExplorer = () => {
                 >
                     &larr; Previous
                 </button>
-                <button
+                <button type="button"
                     style={{
                         ...styles.btn,
                         ...styles.btnPrimary,
@@ -717,7 +717,7 @@ const WaveformExplorer = () => {
             {/* Challenge navigation dots */}
             <div style={styles.dots}>
                 {challenges.map((_, i) => (
-                    <button
+                    <button type="button"
                         key={i}
                         style={{
                             ...styles.dot,

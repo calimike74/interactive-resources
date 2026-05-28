@@ -108,7 +108,7 @@ const CopyableNote = ({ title, children, color = '#DCC892', variant = 'definitio
                         {title || 'Copy to Notes'}
                     </span>
                 </div>
-                <button
+                <button type="button"
                     onClick={handleCopy}
                     style={{
                         background: copied ? '#34d399' : '#1c1f28',
@@ -288,7 +288,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                         }}>
                             {concept.term}
                         </div>
-                        <button
+                        <button type="button"
                             onClick={handleCopy}
                             style={{
                                 background: copied ? '#050507' : 'rgba(0,0,0,0.2)',
@@ -477,11 +477,11 @@ const Part1Foundations = ({ onComplete }) => {
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     {!allRevealed && (
-                        <button onClick={revealAll} style={{ padding: '0.875rem 1.5rem', background: 'transparent', border: '1px solid #ffffff15', borderRadius: '12px', color: '#8b909a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500' }}>
+                        <button type="button" onClick={revealAll} style={{ padding: '0.875rem 1.5rem', background: 'transparent', border: '1px solid #ffffff15', borderRadius: '12px', color: '#8b909a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500' }}>
                             Reveal All
                         </button>
                     )}
-                    <button onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <button type="button" onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                         Continue to Part 2 {allRevealed && '→'}
                     </button>
                 </div>
@@ -633,7 +633,7 @@ const Part2Mistake = ({ onComplete }) => {
 
             {!showCorrect && (
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <button
+                    <button type="button"
                         onClick={() => setShowCorrect(true)}
                         style={{
                             padding: '1rem 2rem',
@@ -653,7 +653,7 @@ const Part2Mistake = ({ onComplete }) => {
             )}
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
-                <button onClick={onComplete} style={{ padding: '0.875rem 1.75rem', background: showCorrect ? 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: showCorrect ? '#fff' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                <button type="button" onClick={onComplete} style={{ padding: '0.875rem 1.75rem', background: showCorrect ? 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: showCorrect ? '#fff' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                     Continue to Part 3: Interactive Examples →
                 </button>
             </div>
@@ -724,7 +724,7 @@ const Part3Explore = () => {
                         <span style={{ color: '#8b909a', fontSize: '0.9rem' }}>Original Cycles</span>
                         <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '600', fontSize: '1.25rem' }}>{originalCycles}</span>
                     </div>
-                    <input
+                    <input aria-label="Slider"
                         type="range"
                         min={2}
                         max={8}
@@ -743,7 +743,7 @@ const Part3Explore = () => {
                         <span style={{ color: '#8b909a', fontSize: '0.9rem' }}>Transposition</span>
                         <span style={{ color: currentDesc.color, fontFamily: 'monospace', fontWeight: '600', fontSize: '1rem' }}>{currentDesc.label}</span>
                     </div>
-                    <input
+                    <input aria-label="Slider"
                         type="range"
                         min={-2}
                         max={2}
@@ -926,7 +926,7 @@ export default function OctavePeriodTrainer() {
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         {[1, 2, 3].map(part => (
-                            <button
+                            <button type="button"
                                 key={part}
                                 onClick={() => goToPart(part)}
                                 style={{
@@ -957,7 +957,7 @@ export default function OctavePeriodTrainer() {
                 marginBottom: '1rem',
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop

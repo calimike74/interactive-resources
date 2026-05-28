@@ -264,7 +264,7 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                     }}
                 >
                     {panelOptions.map((option, i) => (
-                        <button
+                        <button type="button"
                             key={option.id}
                             onClick={() => handlePanelOption(openPanel, option.id)}
                             style={{
@@ -373,7 +373,7 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                                     }}
                                 />
                             )}
-                            <button
+                            <button type="button"
                                 onClick={() => handleTabChange(tab.id)}
                                 aria-label={tab.label}
                                 aria-current={isActive ? 'page' : undefined}
@@ -398,7 +398,7 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                                     cursor: 'pointer',
                                     fontFamily: typography.fontFamily,
                                     WebkitTapHighlightColor: 'transparent',
-                                    transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                                     transform: isBouncing ? 'scale(1.12)' : 'scale(1)',
                                     color: isActive ? NEU.iconActive : NEU.iconInactive,
                                     padding: 0,

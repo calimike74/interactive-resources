@@ -88,7 +88,7 @@ export default function ReadingPhase({ passage, scaffoldLevel, onComplete }) {
             </div>
 
             <div style={{ textAlign: 'center', marginTop: spacing[6] }}>
-                <button
+                <button type="button"
                     onClick={handleReady}
                     disabled={!ready}
                     style={{

@@ -162,7 +162,7 @@ function KeyConcept({ children, label }) {
                     padding: `${spacing[1]} ${spacing[3]}`,
                     borderRadius: '100px',
                     border: `1px solid ${copied ? '#059669' : COLORS.border}`,
-                    transition: 'all 0.2s ease',
+                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
                     whiteSpace: 'nowrap',
                 }}>
                     {copied ? 'Copied!' : 'Copy'}
@@ -188,7 +188,7 @@ function CopyAllNotes({ notes, title }) {
     }, [notes, title]);
 
     return (
-        <button
+        <button type="button"
             onClick={handleCopy}
             style={{
                 display: 'flex', alignItems: 'center', gap: spacing[2],
@@ -203,7 +203,7 @@ function CopyAllNotes({ notes, title }) {
                 fontWeight: typography.weight.semibold,
                 color: '#FFFFFF',
                 marginTop: spacing[4],
-                transition: 'all 0.2s ease',
+                transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
                 justifyContent: 'center',
             }}
         >
@@ -271,7 +271,7 @@ function SynthControl({ label, value, min, max, step, onChange, unit = '', color
                 <label style={{ color: COLORS.textSecondary, fontSize: typography.size.xs, fontWeight: typography.weight.medium }}>{label}</label>
                 <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamilyMono }}>{displayVal}{unit}</span>
             </div>
-            <input
+            <input aria-label="Slider"
                 type="range"
                 min={logScale ? 0 : min}
                 max={logScale ? 100 : max}
@@ -911,7 +911,7 @@ export default function SubtractiveSynthExplorer() {
                 {/* Waveform selector */}
                 <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[5], flexWrap: 'wrap', justifyContent: 'center' }}>
                     {WAVEFORMS.map(w => (
-                        <button
+                        <button type="button"
                             key={w.id}
                             onClick={() => setWaveform(w.id)}
                             style={{
@@ -931,7 +931,7 @@ export default function SubtractiveSynthExplorer() {
 
                 {/* Controls */}
                 <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', marginTop: spacing[4], flexWrap: 'wrap' }}>
-                    <button
+                    <button type="button"
                         onClick={() => isPlaying ? stopTone() : startTone(baseFreq)}
                         style={isPlaying
                             ? { ...actionBtn('#dc2626') }
@@ -944,7 +944,7 @@ export default function SubtractiveSynthExplorer() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
                         <span style={{ color: COLORS.textHint, fontSize: typography.size.xs }}>Octave</span>
                         {[-2, -1, 0, 1, 2].map(o => (
-                            <button
+                            <button type="button"
                                 key={o}
                                 onClick={() => { setOctave(o); if (isPlaying) startTone(220 * Math.pow(2, o)); }}
                                 style={pillBtn(octave === o)}
@@ -1021,7 +1021,7 @@ export default function SubtractiveSynthExplorer() {
                 {/* Filter type */}
                 <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[5], flexWrap: 'wrap' }}>
                     {FILTER_TYPES.map(f => (
-                        <button key={f.id} onClick={() => setFilterType(f.id)} style={btnStyle(filterType === f.id)}>
+                        <button type="button" key={f.id} onClick={() => setFilterType(f.id)} style={btnStyle(filterType === f.id)}>
                             {f.label}
                         </button>
                     ))}
@@ -1043,7 +1043,7 @@ export default function SubtractiveSynthExplorer() {
 
                 {/* Play */}
                 <div style={{ marginTop: spacing[4] }}>
-                    <button
+                    <button type="button"
                         onClick={() => isPlaying ? stopTone() : startTone(baseFreq)}
                         style={isPlaying ? actionBtn('#dc2626') : actionBtn(accent)}
                     >
@@ -1127,7 +1127,7 @@ export default function SubtractiveSynthExplorer() {
                 </div>
 
                 {/* Trigger */}
-                <button
+                <button type="button"
                     onClick={() => {
                         triggerNote(baseFreq);
                         setTimeout(() => releaseNote(), (attack + decay + 0.3) * 1000);
@@ -1211,7 +1211,7 @@ export default function SubtractiveSynthExplorer() {
                         </div>
                         <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap', alignItems: 'center' }}>
                             {PRESETS.map(p => (
-                                <button key={p.name} onClick={() => loadPreset(p)} style={btnStyle(false)}>
+                                <button type="button" key={p.name} onClick={() => loadPreset(p)} style={btnStyle(false)}>
                                     {p.name}
                                 </button>
                             ))}
@@ -1251,7 +1251,7 @@ export default function SubtractiveSynthExplorer() {
                             </div>
                             <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[4], flexWrap: 'wrap' }}>
                                 {WAVEFORMS.map(w => (
-                                    <button key={w.id} onClick={() => setWaveform(w.id)} style={{
+                                    <button type="button" key={w.id} onClick={() => setWaveform(w.id)} style={{
                                         ...btnStyle(waveform === w.id),
                                         padding: `${spacing[1]} ${spacing[3]}`, fontSize: typography.size.xs,
                                     }}>
@@ -1265,7 +1265,7 @@ export default function SubtractiveSynthExplorer() {
                             </div>
                             <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[3], flexWrap: 'wrap' }}>
                                 {FILTER_TYPES.map(f => (
-                                    <button key={f.id} onClick={() => setFilterType(f.id)} style={{
+                                    <button type="button" key={f.id} onClick={() => setFilterType(f.id)} style={{
                                         ...btnStyle(filterType === f.id),
                                         padding: `${spacing[1]} ${spacing[3]}`, fontSize: typography.size.xs,
                                     }}>
@@ -1316,7 +1316,7 @@ export default function SubtractiveSynthExplorer() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
                             <span style={{ color: COLORS.textHint, fontSize: typography.size.xs }}>Oct</span>
                             {[-2, -1, 0, 1, 2].map(o => (
-                                <button key={o} onClick={() => setOctave(o)} style={pillBtn(octave === o)}>
+                                <button type="button" key={o} onClick={() => setOctave(o)} style={pillBtn(octave === o)}>
                                     {o > 0 ? `+${o}` : o}
                                 </button>
                             ))}
@@ -1354,7 +1354,7 @@ export default function SubtractiveSynthExplorer() {
                                     }
 
                                     return (
-                                        <button
+                                        <button type="button"
                                             key={oi}
                                             onClick={() => { if (!quizSubmitted) setQuizAnswers(prev => ({ ...prev, [qi]: oi })); }}
                                             style={{
@@ -1390,7 +1390,7 @@ export default function SubtractiveSynthExplorer() {
                     ))}
 
                     {!quizSubmitted ? (
-                        <button
+                        <button type="button"
                             onClick={() => setQuizSubmitted(true)}
                             disabled={Object.keys(quizAnswers).length < QUIZ_QUESTIONS.length}
                             style={{
@@ -1453,7 +1453,7 @@ export default function SubtractiveSynthExplorer() {
                         { n: 3, label: 'Envelope' },
                         { n: 4, label: 'Build a Patch' },
                     ].map(s => (
-                        <button
+                        <button type="button"
                             key={s.n}
                             ref={el => { tabBtnRefs.current[s.n] = el; }}
                             onClick={() => goToSection(s.n)}
@@ -1491,7 +1491,7 @@ export default function SubtractiveSynthExplorer() {
                 marginBottom: spacing[6],
                 minHeight: '240px',
             }}>
-                <video
+                <video aria-hidden="true"
                     autoPlay
                     muted
                     loop
@@ -1554,7 +1554,7 @@ export default function SubtractiveSynthExplorer() {
                 display: 'flex', justifyContent: 'space-between',
             }}>
                 {currentSection > 1 ? (
-                    <button onClick={() => goToSection(currentSection - 1)} style={{
+                    <button type="button" onClick={() => goToSection(currentSection - 1)} style={{
                         border: 'none', cursor: 'pointer', fontFamily: typography.fontFamily,
                         background: 'transparent', color: COLORS.textHint,
                         fontSize: typography.size.sm, padding: spacing[2],
@@ -1563,7 +1563,7 @@ export default function SubtractiveSynthExplorer() {
                     </button>
                 ) : <div />}
                 {currentSection < 4 && (
-                    <button onClick={() => goToSection(currentSection + 1)} style={{
+                    <button type="button" onClick={() => goToSection(currentSection + 1)} style={{
                         border: 'none', cursor: 'pointer', fontFamily: typography.fontFamily,
                         fontWeight: typography.weight.semibold,
                         background: COLORS.surface, color: COLORS.text,

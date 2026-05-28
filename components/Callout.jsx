@@ -216,7 +216,7 @@ function CalloutOptions({ options, correctIndex, explanation }) {
                     }
 
                     return (
-                        <button
+                        <button type="button"
                             key={i}
                             onClick={() => handleSelect(i)}
                             style={{
