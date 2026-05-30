@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { getAllTopicDefs } from '@/lib/topics';
 import { hasLearnContent } from '@/lib/learn/topics';
+import { hasReviseContent } from '@/lib/questions';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import LiquidHero from '@/components/LiquidHero';
 import TopicCard from '@/components/TopicCard';
@@ -62,6 +63,7 @@ export default function ResourcesHub() {
     const getHasContent = (topic) => {
         if (activeTab === 'explore') return topic.resourceIds.length > 0;
         if (activeTab === 'learn') return hasLearnContent(topic.id);
+        if (activeTab === 'revise') return hasReviseContent(topic.id);
         return false;
     };
 
