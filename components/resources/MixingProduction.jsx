@@ -143,7 +143,7 @@ const quizQuestions = [
   { q: 'A vocalist hears the reverb disappear from their headphones every time their channel fader is pulled down. The send is set to:',
     options: ['Pre-fader', 'Post-fader', 'Pre-send', 'Mono-summed'],
     correct: 1, difficulty: 'intermediate',
-    explanation: 'A post-fader send is dependent on the channel fader — lower the fader and the send signal drops with it. For a headphone mix you want the reverb to remain audible even when the dry channel is pulled down, so a pre-fader send is the correct choice.' },
+    explanation: 'A post-fader send is dependent on the channel fader — lower the fader and the send signal drops with it, which is exactly what the vocalist is hearing. A pre-fader send is the opposite: it is independent of the fader, so the reverb would stay audible even with the dry channel pulled down (the setup you would choose for a dedicated headphone mix) — but that is not what is happening here.' },
   { q: 'You route every drum track to a single "Drums" channel and put a compressor on it. What is this called?',
     options: ['Send and return', 'Group bus / sub-mix', 'Parallel chain', 'Master strip'],
     correct: 1, difficulty: 'intermediate',
