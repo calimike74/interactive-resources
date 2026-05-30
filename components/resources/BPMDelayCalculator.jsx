@@ -1911,7 +1911,7 @@ function BPMDelayCalculator() {
         )}
 
         <div className="tl-spec-footer">
-          <span>Eduqas A-Level Music Tech · <strong>Spec 1.12</strong> Delay</span>
+          <span>Edexcel A-Level Music Tech · <strong>Spec 1.12</strong> Delay</span>
           <span>Lesson 03 · <strong>2.5 Numeracy</strong></span>
         </div>
 
