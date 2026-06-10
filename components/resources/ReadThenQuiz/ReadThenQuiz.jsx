@@ -193,7 +193,7 @@ function ReadThenQuizInner() {
                 </div>
 
                 <div style={{ textAlign: 'left', marginBottom: spacing[4] }}>
-                    <label style={{
+                    <label htmlFor="student-name" style={{
                         display: 'block',
                         color: t.text.secondary,
                         fontSize: typography.size.sm,
@@ -201,7 +201,7 @@ function ReadThenQuizInner() {
                     }}>
                         Your name
                     </label>
-                    <input aria-label="Input"
+                    <input id="student-name"
                         type="text"
                         value={studentName}
                         onChange={(e) => setStudentName(e.target.value)}

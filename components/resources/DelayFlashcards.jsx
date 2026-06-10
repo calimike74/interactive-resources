@@ -23,7 +23,7 @@ const DESIGN_TOKENS_CSS = `
     --border: #E5E7EB;
     --border-strong: #9CA3AF;
     --accent: #DCC892;
-    --accent-hover: #DCC892;
+    --accent-hover: #C8B47A;
     --accent-soft: rgba(37, 99, 235, 0.08);
     --success: #059669;
     --success-soft: rgba(5, 150, 105, 0.08);
@@ -745,7 +745,7 @@ const DelayFlashcards = () => {
   // SVG representations for delay/echo concepts
   const illustrations = {
     "delay-time": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing original signal and a delayed copy on a timeline, illustrating delay time in milliseconds">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         {/* Timeline */}
         <line x1="20" y1="70" x2="180" y2="70" stroke="#64748b" strokeWidth="1" />
@@ -766,7 +766,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "dry-signal": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Signal path diagram showing the unprocessed dry signal passing directly to the output without any delay effect">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Signal flow */}
@@ -788,7 +788,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "wet-signal": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Signal path diagram showing the processed wet signal after passing through the delay effect block">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Signal flow */}
@@ -816,7 +816,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "echo": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Timeline showing an original sound followed by one or more distinct echo repetitions at longer delay times">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Timeline */}
@@ -843,7 +843,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "feedback": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Signal flow diagram showing the delay feedback loop: delayed output fed back into the input, creating repeating echoes that decay over time">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Input and output */}
@@ -877,7 +877,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "delay-vs-echo": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Side-by-side comparison showing short delay (thickening effect) versus longer delay producing distinct echo repeats">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Timeline */}
@@ -901,7 +901,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "ping-pong": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Stereo diagram showing ping-pong delay: echoes alternating left and right between speaker channels">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Stereo field indicator */}
@@ -940,7 +940,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "wet-dry-mix": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Mixer diagram showing the blend between dry (unprocessed) and wet (delayed) signals to set the effect amount">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Mixer visualization */}
@@ -968,7 +968,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "tempo-sync": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing delay times locked to musical note values (quarter-note, eighth-note) aligned with a tempo grid">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Beat markers */}
@@ -997,7 +997,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "self-oscillation": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing delay self-oscillation: feedback above 100% causing repeats to grow indefinitely into a sustained tone">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Timeline */}
@@ -1031,7 +1031,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "multi-tap": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Timeline diagram showing multi-tap delay: several echoes at different delay times and volumes creating a rhythmic pattern">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Timeline */}
@@ -1067,7 +1067,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "modulated-delay": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing modulated delay: LFO varying the delay time to create chorus or flanger effects">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Standard delay vs modulated delay */}
@@ -1097,7 +1097,7 @@ const DelayFlashcards = () => {
       </svg>
     ),
     "pre-delay": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Signal chain diagram showing pre-delay: a short delay inserted before the reverb to separate direct sound from the reverb tail">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         
         {/* Timeline */}
@@ -1200,11 +1200,11 @@ const DelayFlashcards = () => {
     setShowSummary(false);
   }, [difficulty]);
   
-  // Calculate mastery score whenever confidence changes
+  // Calculate mastery score whenever confidence changes — filter to current tier only
   useEffect(() => {
     if (currentCards.length > 0) {
       const totalCards = currentCards.length;
-      const masteredCards = Object.values(confidence).filter(Boolean).length;
+      const masteredCards = currentCards.filter(c => confidence[c.id] === true).length;
       setMasteryScore((masteredCards / totalCards) * 100);
     }
   }, [confidence, currentCards]);
@@ -1751,7 +1751,7 @@ const DelayFlashcards = () => {
                           onClick={() => rateCard('again')}
                         >
                           Again
-                          <span className="dfc-rating-hint">1 &middot; back to box 1</span>
+                          <span className="dfc-rating-hint">see this soon</span>
                         </button>
                         <button type="button"
                           className="dfc-rating-btn"
@@ -1759,7 +1759,7 @@ const DelayFlashcards = () => {
                           onClick={() => rateCard('hard')}
                         >
                           Hard
-                          <span className="dfc-rating-hint">2 &middot; stay in box</span>
+                          <span className="dfc-rating-hint">same frequency</span>
                         </button>
                         <button type="button"
                           className="dfc-rating-btn"
@@ -1767,7 +1767,7 @@ const DelayFlashcards = () => {
                           onClick={() => rateCard('good')}
                         >
                           Good
-                          <span className="dfc-rating-hint">3 &middot; promote</span>
+                          <span className="dfc-rating-hint">see this less often</span>
                         </button>
                       </div>
                     </>

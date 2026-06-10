@@ -141,7 +141,7 @@ const AudioLeadsFlashcards = () => {
   // SVG illustrations for different connector types
   const illustrations = {
     "xlr-connector": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram of an XLR connector showing the three-pin layout for balanced audio">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* XLR Male Connector */}
@@ -176,7 +176,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "ts-trs-comparison": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Comparison diagram of TS (mono) and TRS (stereo/balanced) jack connectors, showing tip, ring, and sleeve sections">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* TS Jack */}
@@ -209,7 +209,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "balanced-signal": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing how balanced audio uses hot, cold, and ground wires to cancel noise by inverting and recombining the signal">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Signal waves */}
@@ -235,7 +235,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "rca-connectors": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram of RCA (phono) connectors showing unbalanced single-conductor coaxial construction">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Red RCA */}
@@ -258,7 +258,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "xlr-pinout": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="XLR pinout diagram: pin 1 ground, pin 2 hot (+), pin 3 cold (−)">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* XLR connector diagram */}
@@ -284,7 +284,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "cable-length-effects": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Graph showing how longer unbalanced cables increasingly attenuate high frequencies compared to balanced cables">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Short cable - clean signal */}
@@ -312,7 +312,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "mini-jack-wiring": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Wiring diagram of a 3.5 mm mini-jack connector showing tip (left), ring (right), and sleeve (ground) contacts">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* 3.5mm connector */}
@@ -340,7 +340,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "speakon-connector": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram of a Speakon connector showing twist-lock design and +1/−1 contacts for loudspeaker connections">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Speakon connector body */}
@@ -367,7 +367,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "digital-rca": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram of an S/PDIF connection using 75 Ω coaxial RCA cable for digital audio transfer">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Orange RCA for digital */}
@@ -393,7 +393,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "impedance-matching": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram illustrating impedance matching: high-impedance guitar signal converted by a DI box to low-impedance balanced output for the mixing desk">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* High impedance source */}
@@ -427,7 +427,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "signal-troubleshooting": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Flowchart for systematic audio fault-finding: check connections, test cables, verify levels, check for ground loops">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* Signal chain */}
@@ -460,7 +460,7 @@ const AudioLeadsFlashcards = () => {
       </svg>
     ),
     "digital-xlr": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram of an AES/EBU digital XLR connection highlighting the need for 110 Ω cable specification">
         <rect x="0" y="0" width="200" height="100" fill="#f8fafc" />
 
         {/* XLR connector */}
@@ -515,11 +515,11 @@ const AudioLeadsFlashcards = () => {
     setShowAnswer(false);
   }, [difficulty]);
 
-  // Calculate mastery score whenever confidence changes
+  // Calculate mastery score whenever confidence changes — filter to current tier only
   useEffect(() => {
     if (currentCards.length > 0) {
       const totalCards = currentCards.length;
-      const masteredCards = Object.values(confidence).filter(Boolean).length;
+      const masteredCards = currentCards.filter(c => confidence[c.id] === true).length;
       setMasteryScore((masteredCards / totalCards) * 100);
     }
   }, [confidence, currentCards]);
@@ -734,21 +734,11 @@ const AudioLeadsFlashcards = () => {
           onClick={() => {
             setDifficulty(difficulty === "basic" ? "intermediate" : difficulty === "intermediate" ? "advanced" : "basic");
             setShowSummary(false);
-            resetDeck();
           }}
           className="flex items-center gap-2 bg-field-100 hover:bg-field-200 text-field-800"
         >
-          {difficulty === "advanced" ? (
-            <>
-              <Star className="h-4 w-4" />
-              Try Basic Concepts
-            </>
-          ) : (
-            <>
-              <Star className="h-4 w-4" />
-              Try {difficulty === "basic" ? "Intermediate" : "Advanced"} Concepts
-            </>
-          )}
+          <Star className="h-4 w-4" />
+          Try {difficulty === "basic" ? "Intermediate" : difficulty === "intermediate" ? "Advanced" : "Basic"} Concepts
         </Button>
       </div>
     </div>
@@ -826,7 +816,11 @@ const AudioLeadsFlashcards = () => {
       )}
 
       <div className="mb-4 text-center space-y-2">
-        <div className="flex justify-center gap-1 flex-wrap">
+        <div
+          role="img"
+          aria-label={`Progress: ${currentCards.filter(c => confidence[c.id] === true).length} mastered, ${currentCards.filter(c => confidence[c.id] === false).length} needs review, card ${currentIndex + 1} current`}
+          className="flex justify-center gap-1 flex-wrap"
+        >
           {currentCards.map((card) => (
             <div
               key={card.id}
@@ -889,41 +883,36 @@ const AudioLeadsFlashcards = () => {
             </Button>
           </div>
 
-          <div
-            className={`flex flex-col justify-between transition-all duration-500 ${
-              showAnswer ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100 min-h-48'
-            }`}
-          >
-            <div
-              className="flex items-center justify-center cursor-pointer py-8"
-              onClick={toggleAnswer}
-            >
-              <p className="text-xl text-center leading-relaxed font-medium">
-                {currentCards[currentIndex].question}
-              </p>
-            </div>
-
-            {showHint && (
-              <div className="mt-4 p-2 bg-white rounded-lg border border-gray-200">
-                {illustrations[currentCards[currentIndex].image]}
-              </div>
-            )}
-
-            <div className="flex justify-center mt-4">
-              <Button
+          {!showAnswer && (
+            <div className="flex flex-col justify-between min-h-48">
+              <div
+                className="flex items-center justify-center cursor-pointer py-8"
                 onClick={toggleAnswer}
-                className="bg-blue-600 hover:bg-blue-700"
               >
-                {studyMode === "learn" ? "Show Explanation" : "Show Answer"}
-              </Button>
-            </div>
-          </div>
+                <p className="text-xl text-center leading-relaxed font-medium">
+                  {currentCards[currentIndex].question}
+                </p>
+              </div>
 
-          <div
-            className={`transition-all duration-500 ${
-              showAnswer ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'
-            }`}
-          >
+              {showHint && (
+                <div className="mt-4 p-2 bg-white rounded-lg border border-gray-200">
+                  {illustrations[currentCards[currentIndex].image]}
+                </div>
+              )}
+
+              <div className="flex justify-center mt-4">
+                <Button
+                  onClick={toggleAnswer}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  {studyMode === "learn" ? "Show Explanation" : "Show Answer"}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {showAnswer && (
+            <div>
             <div className="py-4">
               <p className="text-lg text-center leading-relaxed font-medium mb-6">
                 {currentCards[currentIndex].answer}
@@ -971,6 +960,7 @@ const AudioLeadsFlashcards = () => {
               </Button>
             </div>
           </div>
+          )}
         </CardContent>
       </Card>
 

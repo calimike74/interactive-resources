@@ -8,6 +8,8 @@ export default function HearItAccordion({ title, tracks }) {
   if (!tracks || tracks.length === 0) return null;
 
   return (
+    <>
+    <style>{`details > summary::-webkit-details-marker { display: none; }`}</style>
     <details style={{
       border: '1px solid #e5e7eb',
       borderRadius: '10px',
@@ -38,7 +40,7 @@ export default function HearItAccordion({ title, tracks }) {
         }}>
           {tracks.length} {tracks.length === 1 ? 'example' : 'examples'}
         </span>
-        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>&#9660;</span>
+        <span aria-hidden="true" style={{ fontSize: '0.75rem', color: '#6b7280' }}>&#9660;</span>
       </summary>
 
       <div style={{ padding: '4px 18px 18px', borderTop: '1px solid #e5e7eb' }}>
@@ -61,7 +63,7 @@ export default function HearItAccordion({ title, tracks }) {
               color: '#6b7280',
               marginBottom: '8px',
             }}>
-              &#9654; Listen from {track.timestamp}
+              <span aria-hidden="true">&#9654;</span> Listen from {track.timestamp}
             </div>
 
             {expandedTrack === i ? (
@@ -120,5 +122,6 @@ export default function HearItAccordion({ title, tracks }) {
         ))}
       </div>
     </details>
+    </>
   );
 }

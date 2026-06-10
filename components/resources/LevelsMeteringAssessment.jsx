@@ -132,7 +132,7 @@ const QUESTIONS = [
         // matching tick mark on the scale.
         question: 'The needle on the VU meter is pointing here. What dB value does it indicate? Click the matching tick on the scale.',
         correctDb: -3,
-        explanation: 'The needle is sitting on -3 dB. This is one of the most common VU readings to recognise — it is the doubling/halving point relative to 0 VU and is where many engineers aim their peaks.',
+        explanation: 'The needle is sitting on -3 dB. Remember: 0 VU is calibrated to around -18 dBFS, leaving headroom above it. -6 dB halves voltage (amplitude); -3 dB halves power — do not confuse them.',
     },
 ];
 

@@ -409,7 +409,7 @@ const AcousticsPsychoacoustics = () => {
 
             <div style={{ marginTop: 'var(--space-4)', display: 'flex', gap: 'var(--space-3)', alignItems: 'center' }}>
               <span style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)' }}>Listening level</span>
-              <input aria-label="Slider" type="range" min={10} max={100} step={10} value={phon} onChange={e => setPhon(Number(e.target.value))}
+              <input aria-label="Listening level (phon)" type="range" min={10} max={100} step={10} value={phon} onChange={e => setPhon(Number(e.target.value))}
                 style={{ flex: 1, accentColor: 'var(--mustard)' }} />
               <span style={{ color: 'var(--canvas-foreground)', fontFamily: FONT_MONO, fontSize: 12, minWidth: 60, textAlign: 'right' }}>{phon} phon</span>
             </div>
@@ -478,19 +478,19 @@ const AcousticsPsychoacoustics = () => {
               <div>
                 <div style={{ color: 'var(--sienna)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Masker (the loud sound)</div>
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Frequency {maskerFreq} Hz</label>
-                <input aria-label="Slider" type="range" min={50} max={10000} value={maskerFreq} onChange={e => setMaskerFreq(Number(e.target.value))}
+                <input aria-label="Masker frequency (Hz)" type="range" min={50} max={10000} value={maskerFreq} onChange={e => setMaskerFreq(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sienna)' }} />
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Level {maskerLevel} dB</label>
-                <input aria-label="Slider" type="range" min={20} max={95} value={maskerLevel} onChange={e => setMaskerLevel(Number(e.target.value))}
+                <input aria-label="Masker level (dB)" type="range" min={20} max={95} value={maskerLevel} onChange={e => setMaskerLevel(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sienna)' }} />
               </div>
               <div>
                 <div style={{ color: 'var(--mustard)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Target (the quieter sound)</div>
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Frequency {targetFreq} Hz</label>
-                <input aria-label="Slider" type="range" min={50} max={10000} value={targetFreq} onChange={e => setTargetFreq(Number(e.target.value))}
+                <input aria-label="Target frequency (Hz)" type="range" min={50} max={10000} value={targetFreq} onChange={e => setTargetFreq(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
                 <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Level {targetLevel} dB</label>
-                <input aria-label="Slider" type="range" min={0} max={95} value={targetLevel} onChange={e => setTargetLevel(Number(e.target.value))}
+                <input aria-label="Target level (dB)" type="range" min={0} max={95} value={targetLevel} onChange={e => setTargetLevel(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
               </div>
             </div>

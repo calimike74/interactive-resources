@@ -140,7 +140,7 @@ const AcousticsFlashcards = () => {
   // SVG illustrations for acoustic concepts
   const illustrations = {
     "reverb-concept": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing sound source radiating waves in a room, reaching a listener — room boundaries create reflections">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="20" y="20" width="160" height="60" stroke="#64748b" strokeWidth="2" fill="none" />
         <circle cx="50" cy="50" r="4" fill="#DCC892" />
@@ -155,7 +155,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "wave-interaction": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing incident sound wave hitting a wall, splitting into transmitted, reflected, and absorbed components">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="120" y="10" width="8" height="80" fill="#64748b" />
         <text x="130" y="55" fill="#64748b" fontSize="8">Wall</text>
@@ -169,7 +169,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "reverb-stages": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Graph showing the three stages of reverberation over time: direct sound, early reflections (5–25 ms), and late reflections (25 ms+)">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <line x1="20" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <text x="90" y="95" fill="#000" fontSize="8">Time (ms)</text>
@@ -188,7 +188,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "rt60-decay": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Graph showing RT60: SPL decay curve from an initial impulse, measuring the time for sound to fall 60 dB">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <line x1="30" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <line x1="30" y1="20" x2="30" y2="80" stroke="#000" strokeWidth="1" />
@@ -203,7 +203,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "material-properties": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram comparing three surface types: hard/reflective, soft/absorptive, and thin/transmissive">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="20" y="20" width="40" height="60" fill="#9ca3af" stroke="#64748b" strokeWidth="2" />
         <text x="25" y="15" fill="#64748b" fontSize="8">Hard Surface</text>
@@ -217,7 +217,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "room-size-effect": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram comparing a small room with quick reflections to a large room with delayed reflections">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="10" y="20" width="60" height="40" stroke="#DCC892" strokeWidth="2" fill="none" />
         <circle cx="25" cy="40" r="2" fill="#DCC892" />
@@ -231,7 +231,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "spl-graph": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Graph showing SPL decay curve over time, with initial impulse and early reflection markers">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <line x1="30" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <line x1="30" y1="20" x2="30" y2="80" stroke="#000" strokeWidth="1" />
@@ -246,7 +246,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "early-reflections": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Room diagram showing direct sound path between source and listener, plus ceiling and floor early reflections with approximate timings">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="20" y="20" width="160" height="50" stroke="#64748b" strokeWidth="2" fill="none" />
         <circle cx="60" cy="45" r="3" fill="#DCC892" />
@@ -262,7 +262,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "treated-room": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Small treated room diagram with fibreglass absorption on the walls, showing very short RT60 (~0.2 s)">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="30" y="20" width="140" height="60" stroke="#64748b" strokeWidth="2" fill="none" />
         <path d="M35,25 Q40,22 45,25 Q50,28 55,25 Q60,22 65,25" stroke="#DCC892" strokeWidth="2" fill="none" />
@@ -276,7 +276,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "frequency-response": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Graph showing frequency-dependent RT60: bass frequencies have longer decay than high frequencies">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <line x1="30" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <line x1="30" y1="20" x2="30" y2="80" stroke="#000" strokeWidth="1" />
@@ -290,7 +290,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "optimal-rt60": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Bar chart showing optimal RT60 values by application: recording studio shortest, church longest">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <line x1="30" y1="80" x2="180" y2="80" stroke="#000" strokeWidth="1" />
         <line x1="30" y1="20" x2="30" y2="80" stroke="#000" strokeWidth="1" />
@@ -309,7 +309,7 @@ const AcousticsFlashcards = () => {
       </svg>
     ),
     "reflection-control": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing an angled reflector directing sound versus a diffuser scattering energy">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <path d="M50,20 L80,40 L60,70" stroke="#DCC892" strokeWidth="3" fill="none" />
         <text x="45" y="15" fill="#DCC892" fontSize="8">Angled Reflector</text>
@@ -348,7 +348,7 @@ const AcousticsFlashcards = () => {
   useEffect(() => {
     if (currentCards.length > 0) {
       const totalCards = currentCards.length;
-      const masteredCards = Object.values(confidence).filter(Boolean).length;
+      const masteredCards = currentCards.filter(c => confidence[c.id] === true).length;
       setMasteryScore((masteredCards / totalCards) * 100);
     }
   }, [confidence, currentCards]);
@@ -358,7 +358,7 @@ const AcousticsFlashcards = () => {
       setCurrentIndex(currentIndex + 1);
       setShowAnswer(false);
       setShowHint(false);
-    } else if (Object.keys(confidence).length > 0) {
+    } else {
       setShowSummary(true);
     }
   };
@@ -409,6 +409,7 @@ const AcousticsFlashcards = () => {
             Overall Progress
           </h3>
           <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-3">
+            <div className={`h-full rounded-full transition-all ${getProgressColor(masteryScore)}`} style={{ width: `${masteryScore}%` }} />
           </div>
           <div className="grid grid-cols-3 gap-2 text-center text-sm">
             <div>
@@ -470,7 +471,6 @@ const AcousticsFlashcards = () => {
             onClick={() => {
               setDifficulty(difficulty === "basic" ? "intermediate" : difficulty === "intermediate" ? "advanced" : "basic");
               setShowSummary(false);
-              resetDeck();
             }}
             className="flex items-center gap-2 px-4 py-2 bg-field-100 hover:bg-field-200 text-field-800 rounded-lg transition-colors"
           >
@@ -492,6 +492,7 @@ const AcousticsFlashcards = () => {
         width: '100vw',
         marginLeft: 'calc(-50vw + 50%)',
         minHeight: '240px',
+        backgroundColor: '#1a1a2e',
       }}>
         <video aria-hidden="true"
           autoPlay
@@ -612,7 +613,11 @@ const AcousticsFlashcards = () => {
 
       {/* Progress Bar */}
       <div className="bg-white rounded-lg shadow p-4">
-        <div className="flex justify-center gap-1 flex-wrap mb-2">
+        <div
+          role="img"
+          aria-label={`Progress: ${currentCards.filter(c => confidence[c.id] === true).length} mastered, ${currentCards.filter(c => confidence[c.id] === false).length} needs review, card ${currentIndex + 1} current`}
+          className="flex justify-center gap-1 flex-wrap mb-2"
+        >
           {currentCards.map((card, idx) => (
             <div
               key={card.id}
@@ -636,6 +641,7 @@ const AcousticsFlashcards = () => {
           </span>
         </div>
         <div className="w-full bg-gray-200 h-1.5 rounded-full mt-2 overflow-hidden">
+          <div className={`h-full rounded-full transition-all ${getProgressColor(masteryScore)}`} style={{ width: `${masteryScore}%` }} />
         </div>
       </div>
 
