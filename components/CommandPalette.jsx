@@ -166,10 +166,26 @@ export default function CommandPalette() {
         }
     }, [closePalette, results, selectedIndex, navigateTo]);
 
-    // Focus trap
+    // Focus trap — cycle through focusable elements inside the dialog
     const handleTab = useCallback((e) => {
-        if (e.key === 'Tab') {
-            e.preventDefault(); // trap focus inside
+        if (e.key !== 'Tab') return;
+        if (!dialogRef.current) return;
+        const focusable = Array.from(
+            dialogRef.current.querySelectorAll('input, button, [tabindex]:not([tabindex="-1"])')
+        ).filter(el => !el.disabled);
+        if (focusable.length === 0) { e.preventDefault(); return; }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+            if (document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            }
+        } else {
+            if (document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
         }
     }, []);
 
@@ -280,6 +296,7 @@ export default function CommandPalette() {
                                 onChange={e => setQuery(e.target.value)}
                                 placeholder={`Search resources... ${shortcutHint}`}
                                 aria-label="Search resources"
+                                aria-activedescendant={selectedIndex >= 0 && results.length > 0 ? `result-${results[selectedIndex]?.type}-${results[selectedIndex]?.id}` : undefined}
                                 autoComplete="off"
                                 style={{
                                     flex: 1,
@@ -337,6 +354,7 @@ export default function CommandPalette() {
                             ) : (
                                 <ul
                                     ref={listRef}
+                                    id="cmd-palette-listbox"
                                     role="listbox"
                                     style={{
                                         listStyle: 'none',
@@ -348,6 +366,7 @@ export default function CommandPalette() {
                                         <ResultItem
                                             key={`${item.type}-${item.id}`}
                                             item={item}
+                                            itemId={`result-${item.type}-${item.id}`}
                                             isSelected={i === selectedIndex}
                                             onSelect={() => navigateTo(item)}
                                             onHover={() => setSelectedIndex(i)}
@@ -403,9 +422,10 @@ const kbdStyle = {
     marginRight: '2px',
 };
 
-function ResultItem({ item, isSelected, onSelect, onHover }) {
+function ResultItem({ item, itemId, isSelected, onSelect, onHover }) {
     return (
         <li
+            id={itemId}
             role="option"
             aria-selected={isSelected}
             onClick={onSelect}

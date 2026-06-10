@@ -222,6 +222,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
             {/* Hover popover — list of tools in this topic, editorial style */}
             {hasResources && isHovered && (
                 <div
+                    aria-hidden="true"
                     style={{
                         position: 'absolute',
                         bottom: '100%',

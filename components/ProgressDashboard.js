@@ -172,7 +172,7 @@ export default function ProgressDashboard() {
                         Focus Areas
                     </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
-                        {weakAreas.map(({ id, name, colour, progress }) => {
+                        {weakAreas.map(({ id, name, progress }) => {
                             const scoreColor = progress.bestScore >= 70 ? t.accent.success
                                 : progress.bestScore >= 40 ? t.accent.warning
                                 : t.accent.error;
@@ -186,7 +186,7 @@ export default function ProgressDashboard() {
                                         background: t.bg.primary,
                                         borderRadius: borderRadius.lg,
                                         border: `1px solid ${t.border.subtle}`,
-                                        borderLeft: `4px solid ${colour}`,
+                                        borderLeft: `4px solid ${scoreColor}`,
                                         transition: `all ${transitions.fast}`,
                                     }}>
                                         <span style={{

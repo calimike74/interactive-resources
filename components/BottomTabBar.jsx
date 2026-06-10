@@ -182,6 +182,13 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
         return () => document.removeEventListener('pointerdown', handleClickOutside);
     }, [openPanel]);
 
+    // Move focus to first panel button when panel opens
+    useEffect(() => {
+        if (!openPanel) return;
+        const firstButton = panelRef.current?.querySelector('button');
+        if (firstButton) firstButton.focus();
+    }, [openPanel]);
+
     // Close panel when switching away from its tab
     useEffect(() => {
         if (openPanel && activeTab !== openPanel) setOpenPanel(null);
@@ -249,6 +256,7 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                 }}
             >
                 <div
+                    onKeyDown={(e) => { if (e.key === 'Escape') setOpenPanel(null); }}
                     style={{
                         background: NEU.bg,
                         borderRadius: '20px',
@@ -398,7 +406,7 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                                     cursor: 'pointer',
                                     fontFamily: typography.fontFamily,
                                     WebkitTapHighlightColor: 'transparent',
-                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                    transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                                     transform: isBouncing ? 'scale(1.12)' : 'scale(1)',
                                     color: isActive ? NEU.iconActive : NEU.iconInactive,
                                     padding: 0,

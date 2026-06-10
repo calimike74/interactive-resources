@@ -280,32 +280,54 @@ function TypewriterTeaser({ t }) {
         return () => clearTimeout(timerRef.current);
     }, [charIdx, isDeleting, questionIdx]);
 
+    const question = REVISION_QUESTIONS[questionIdx];
+    const isComplete = !isDeleting && charIdx === question.length;
+
     return (
-        <p
-            style={{
-                fontFamily: typography.fontFamilyMono,
-                color: t.text.tertiary,
-                fontSize: typography.size.sm,
-                marginTop: spacing[3],
-                minHeight: '1.5em',
-            }}
-            aria-live="polite"
-            aria-label="Sample revision question"
-        >
-            {displayed}
+        <>
+            {/* Visually-hidden live region: announces only when a full question is typed */}
             <span
+                aria-live="polite"
+                aria-atomic="true"
                 style={{
-                    display: 'inline-block',
-                    width: '2px',
-                    height: '1em',
-                    background: t.accent.primary,
-                    marginLeft: '2px',
-                    verticalAlign: 'text-bottom',
-                    animation: 'blink 1s step-end infinite',
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    padding: 0,
+                    margin: '-1px',
+                    overflow: 'hidden',
+                    clip: 'rect(0,0,0,0)',
+                    whiteSpace: 'nowrap',
+                    border: 0,
+                }}
+            >
+                {isComplete ? displayed : ''}
+            </span>
+            <p
+                style={{
+                    fontFamily: typography.fontFamilyMono,
+                    color: t.text.tertiary,
+                    fontSize: typography.size.sm,
+                    marginTop: spacing[3],
+                    minHeight: '1.5em',
                 }}
                 aria-hidden="true"
-            />
-        </p>
+            >
+                {displayed}
+                <span
+                    style={{
+                        display: 'inline-block',
+                        width: '2px',
+                        height: '1em',
+                        background: t.accent.primary,
+                        marginLeft: '2px',
+                        verticalAlign: 'text-bottom',
+                        animation: 'blink 1s step-end infinite',
+                    }}
+                    aria-hidden="true"
+                />
+            </p>
+        </>
     );
 }
 

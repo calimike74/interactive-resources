@@ -226,7 +226,9 @@ export default function ResourcePageClient() {
                     {/* Related assessment link */}
                     {resource.prepFor && resource.prepFor.length > 0 && (
                         <a
-                            href={`/${resource.prepFor[0]}`}
+                            href={`https://assess.musictechstudio.co.uk/${resource.prepFor[0]}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
