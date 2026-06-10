@@ -78,26 +78,27 @@ export default function ExamModeClient({ topic }) {
         }
     }, [questions, student, attemptNumber, topic.id]);
 
-    // Timer countdown
+    // Timer countdown — pure decrement only (no side-effects inside the updater)
     useEffect(() => {
         if (!started || finished) return;
 
         timerRef.current = setInterval(() => {
-            setTimeRemaining(prev => {
-                if (prev <= 1) {
-                    clearInterval(timerRef.current);
-                    // Auto-submit — need to finalize current question if unanswered
-                    setFinished(true);
-                    return 0;
-                }
-                return prev - 1;
-            });
+            setTimeRemaining(prev => (prev <= 1 ? 0 : prev - 1));
         }, 1000);
 
         return () => {
             if (timerRef.current) clearInterval(timerRef.current);
         };
     }, [started, finished]);
+
+    // When the clock hits zero, finalize: persist any unanswered questions as null.
+    // Runs in a watcher (not the timer's setInterval) so `responses` is the current
+    // committed value — passing a stale array here would overwrite real answers with blanks.
+    useEffect(() => {
+        if (started && !finished && timeRemaining === 0) {
+            finishQuiz(responses, questionTimes);
+        }
+    }, [started, finished, timeRemaining, responses, questionTimes, finishQuiz]);
 
     function handleStart() {
         setStarted(true);
