@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { getAllTopicIds, getTopic } from '@/lib/topics';
 import RevisePageClient from './RevisePageClient';
 
@@ -24,7 +25,7 @@ export default async function RevisePage({ params }) {
     const topic = getTopic(topicId);
 
     if (!topic) {
-        return <div>Topic not found</div>;
+        notFound();
     }
 
     return <RevisePageClient topic={topic} />;

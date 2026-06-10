@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { Timer } from 'lucide-react';
-import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
+import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED, focusRing } from '@/lib/theme';
 import { getQuestions } from '@/lib/questions';
 import { getNextAttemptNumber, saveQuizResponse } from '@/lib/quiz-persistence';
 import AuthGate from '@/app/revise/[topicId]/AuthGate';
@@ -28,6 +28,9 @@ export default function ExamModeClient({ topic }) {
     const questionStartRef = useRef(Date.now());
     const [questionTimes, setQuestionTimes] = useState([]);
     const timerRef = useRef(null);
+    const questionHeadingRef = useRef(null);
+    const [isLoadingQuestions, setIsLoadingQuestions] = useState(true);
+    const [timerAnnouncement, setTimerAnnouncement] = useState('');
 
     // Check localStorage for existing auth on mount
     useEffect(() => {
@@ -45,6 +48,7 @@ export default function ExamModeClient({ topic }) {
         if (student) {
             const qs = getQuestions(topic.id);
             setQuestions(qs);
+            setIsLoadingQuestions(false);
             const seconds = qs.length * 60; // 1 minute per question
             setTimeRemaining(seconds);
             setTotalTime(seconds);
@@ -100,6 +104,22 @@ export default function ExamModeClient({ topic }) {
         }
     }, [started, finished, timeRemaining, responses, questionTimes, finishQuiz]);
 
+    // Announce time milestones to screen readers — WCAG 1.3.1
+    useEffect(() => {
+        if (!started || finished) return;
+        if (timeRemaining === 60) setTimerAnnouncement('1 minute remaining');
+        else if (timeRemaining === 30) setTimerAnnouncement('30 seconds remaining');
+        else if (timeRemaining === 10) setTimerAnnouncement('10 seconds remaining');
+        else return;
+    }, [timeRemaining, started, finished]);
+
+    // Move focus to question heading when question advances — WCAG 2.4.3
+    useEffect(() => {
+        if (started && !finished) {
+            questionHeadingRef.current?.focus();
+        }
+    }, [questionIndex, started, finished]);
+
     function handleStart() {
         setStarted(true);
         questionStartRef.current = Date.now();
@@ -135,8 +155,16 @@ export default function ExamModeClient({ topic }) {
             <div style={{ minHeight: '100vh', background: t.bg.secondary, fontFamily: typography.fontFamily }}>
                 <ExamHeader topic={topic} t={t} />
                 <main style={{ maxWidth: '720px', margin: '0 auto', padding: spacing[8] }}>
-                    <AuthGate onAuthenticated={setStudent} />
+                    <AuthGate onAuthenticated={setStudent} submitLabel="Continue to Exam" />
                 </main>
+            </div>
+        );
+    }
+
+    if (isLoadingQuestions) {
+        return (
+            <div style={{ minHeight: '100vh', background: t.bg.secondary, fontFamily: typography.fontFamily }}>
+                <ExamHeader topic={topic} t={t} studentName={student?.studentName} onSignOut={handleSignOut} />
             </div>
         );
     }
@@ -211,8 +239,7 @@ export default function ExamModeClient({ topic }) {
                                 color: t.text.secondary,
                                 lineHeight: typography.lineHeight.relaxed,
                             }}>
-                                Once you start, the timer begins. You cannot go back to previous questions.
-                                When time runs out, unanswered questions are automatically submitted.
+                                Unanswered questions are submitted automatically when time runs out — you cannot revisit earlier questions.
                             </p>
                         </div>
                         <button type="button"
@@ -321,6 +348,9 @@ export default function ExamModeClient({ topic }) {
         }
     }
 
+    // Respect reduced-motion preference for progress bar animation
+    const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Timer colour
     const timePercent = totalTime > 0 ? timeRemaining / totalTime : 1;
     const timerColor = timePercent > 0.5 ? t.accent.success
@@ -333,6 +363,24 @@ export default function ExamModeClient({ topic }) {
 
     return (
         <div style={{ minHeight: '100vh', background: t.bg.secondary, fontFamily: typography.fontFamily }}>
+            {/* Visually-hidden live region for timer milestone announcements — WCAG 1.3.1 */}
+            <span
+                aria-live="assertive"
+                aria-atomic="true"
+                style={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    padding: 0,
+                    margin: '-1px',
+                    overflow: 'hidden',
+                    clip: 'rect(0,0,0,0)',
+                    whiteSpace: 'nowrap',
+                    border: 0,
+                }}
+            >
+                {timerAnnouncement}
+            </span>
             <ExamHeader
                 topic={topic}
                 t={t}
@@ -340,6 +388,9 @@ export default function ExamModeClient({ topic }) {
                 onSignOut={handleSignOut}
                 timerDisplay={timerDisplay}
                 timerColor={timerColor}
+                timerLabel={`Time remaining: ${timerDisplay}`}
+                timerLow={timePercent <= 0.25}
+                examActive={true}
             />
 
             <main style={{ maxWidth: '720px', margin: '0 auto', padding: spacing[8] }}>
@@ -368,7 +419,7 @@ export default function ExamModeClient({ topic }) {
                     </div>
                     <div style={{
                         height: '6px',
-                        background: 'rgba(255, 255, 255, 0.4)',
+                        background: t.border.subtle,
                         border: '1px solid ' + glass.border,
                         borderRadius: borderRadius.full,
                         overflow: 'hidden',
@@ -378,7 +429,7 @@ export default function ExamModeClient({ topic }) {
                             width: `${(progress / total) * 100}%`,
                             background: ED.accent,
                             borderRadius: borderRadius.full,
-                            transition: `width ${transitions.normal} ${transitions.easing}`,
+                            transition: reducedMotion ? 'none' : `width ${transitions.normal} ${transitions.easing}`,
                         }} />
                     </div>
                 </div>
@@ -393,13 +444,19 @@ export default function ExamModeClient({ topic }) {
                     boxShadow: glass.shadow,
                     padding: spacing[8],
                 }}>
-                    <h2 style={{
-                        fontSize: typography.size.xl,
-                        fontWeight: typography.weight.semibold,
-                        color: t.text.primary,
-                        lineHeight: typography.lineHeight.snug,
-                        marginBottom: spacing[6],
-                    }}>
+                    <h2
+                        id="question-heading"
+                        ref={questionHeadingRef}
+                        tabIndex={-1}
+                        style={{
+                            fontSize: typography.size.xl,
+                            fontWeight: typography.weight.semibold,
+                            color: t.text.primary,
+                            lineHeight: typography.lineHeight.snug,
+                            marginBottom: spacing[6],
+                            outline: 'none',
+                        }}
+                    >
                         {current.question}
                     </h2>
 
@@ -463,7 +520,7 @@ export default function ExamModeClient({ topic }) {
                                 fontSize: typography.size.base,
                                 color: t.accent.info,
                             }}>
-                                Answer recorded
+                                Your answer is saved — compare it with the sample answer in your results.
                             </p>
                         </div>
                     )}
@@ -500,7 +557,7 @@ export default function ExamModeClient({ topic }) {
     );
 }
 
-function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor }) {
+function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor, timerLabel, timerLow, examActive }) {
     return (
         <header style={{
             background: glass.bg,
@@ -512,26 +569,28 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
         }}>
             <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
-                    <Link
-                        href={`/topic/${topic.id}`}
-                        style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: spacing[2],
-                            color: t.text.secondary,
-                            textDecoration: 'none',
-                            fontSize: typography.size.sm,
-                            padding: `${spacing[1]} ${spacing[3]}`,
-                            borderRadius: borderRadius.md,
-                            background: glass.bg,
-                            border: '1px solid ' + glass.border,
-                            boxShadow: glass.iconShadow,
-                            backdropFilter: 'blur(8px)',
-                            transition: `all ${transitions.fast}`,
-                        }}
-                    >
-                        ← Back
-                    </Link>
+                    {!examActive && (
+                        <Link
+                            href={`/topic/${topic.id}`}
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: spacing[2],
+                                color: t.text.secondary,
+                                textDecoration: 'none',
+                                fontSize: typography.size.sm,
+                                padding: `${spacing[1]} ${spacing[3]}`,
+                                borderRadius: borderRadius.md,
+                                background: glass.bg,
+                                border: '1px solid ' + glass.border,
+                                boxShadow: glass.iconShadow,
+                                backdropFilter: 'blur(8px)',
+                                transition: `all ${transitions.fast}`,
+                            }}
+                        >
+                            ← Back
+                        </Link>
+                    )}
                     <h1 style={{
                         fontSize: typography.size.lg,
                         fontWeight: typography.weight.semibold,
@@ -542,20 +601,33 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
                     {timerDisplay && (
-                        <span style={{
-                            fontFamily: typography.fontFamilyMono,
-                            fontSize: typography.size.lg,
-                            fontWeight: typography.weight.bold,
-                            color: timerColor,
-                            background: timerColor + '15',
-                            padding: `${spacing[1]} ${spacing[3]}`,
-                            borderRadius: borderRadius.md,
-                            backdropFilter: 'blur(8px)',
-                            border: '1px solid ' + glass.border,
-                            minWidth: '70px',
-                            textAlign: 'center',
-                        }}>
+                        <span
+                            aria-label={timerLabel}
+                            style={{
+                                fontFamily: typography.fontFamilyMono,
+                                fontSize: typography.size.lg,
+                                fontWeight: typography.weight.bold,
+                                color: timerColor,
+                                background: timerColor + '15',
+                                padding: `${spacing[1]} ${spacing[3]}`,
+                                borderRadius: borderRadius.md,
+                                backdropFilter: 'blur(8px)',
+                                border: '1px solid ' + glass.border,
+                                minWidth: '70px',
+                                textAlign: 'center',
+                            }}
+                        >
                             {timerDisplay}
+                            {timerLow && (
+                                <span style={{
+                                    fontSize: typography.size.xs,
+                                    fontWeight: typography.weight.normal,
+                                    marginLeft: spacing[1],
+                                    fontFamily: 'inherit',
+                                }}>
+                                    (low time)
+                                </span>
+                            )}
                         </span>
                     )}
                     {studentName && (
@@ -593,7 +665,7 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
 
 function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSelect, t }) {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
+        <div role="radiogroup" aria-labelledby="question-heading" style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
             {options.map((option, i) => {
                 let bg = glass.bg;
                 let borderColor = t.border.subtle;
@@ -611,9 +683,16 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                     borderColor = ED.accent;
                 }
 
+                const feedbackLabel = showFeedback && i === correctIndex ? ' — Correct answer'
+                    : showFeedback && i === selectedIndex && i !== correctIndex ? ' — Your answer (incorrect)'
+                    : '';
+
                 return (
                     <button type="button"
                         key={i}
+                        role="radio"
+                        aria-checked={i === selectedIndex}
+                        aria-describedby={showFeedback && feedbackLabel ? `mcq-feedback-${i}` : undefined}
                         onClick={() => !showFeedback && onSelect(i)}
                         disabled={showFeedback}
                         style={{
@@ -629,6 +708,7 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                             backdropFilter: 'blur(8px)',
                             transition: `all ${transitions.fast}`,
                             fontFamily: 'inherit',
+                            position: 'relative',
                         }}
                     >
                         <span style={{
@@ -650,6 +730,21 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                             {String.fromCharCode(65 + i)}
                         </span>
                         {option}
+                        {showFeedback && feedbackLabel && (
+                            <span id={`mcq-feedback-${i}`} style={{
+                                position: 'absolute',
+                                width: '1px',
+                                height: '1px',
+                                padding: 0,
+                                margin: '-1px',
+                                overflow: 'hidden',
+                                clip: 'rect(0,0,0,0)',
+                                whiteSpace: 'nowrap',
+                                border: 0,
+                            }}>
+                                {feedbackLabel}
+                            </span>
+                        )}
                     </button>
                 );
             })}
@@ -688,6 +783,8 @@ function NumericInput({ unit, showFeedback, onSubmit, t }) {
                     backdropFilter: 'blur(8px)',
                     outline: 'none',
                 }}
+                onFocus={e => { Object.assign(e.currentTarget.style, focusRing('light')); }}
+                onBlur={e => { e.currentTarget.style.boxShadow = ''; }}
             />
             {unit && (
                 <span style={{
@@ -757,6 +854,8 @@ function ShortAnswer({ showFeedback, onSubmit, t }) {
                     outline: 'none',
                     boxSizing: 'border-box',
                 }}
+                onFocus={e => { Object.assign(e.currentTarget.style, focusRing('light')); }}
+                onBlur={e => { e.currentTarget.style.boxShadow = ''; }}
             />
             {!showFeedback && (
                 <button
@@ -838,7 +937,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                     <span style={{
                         fontSize: typography.size['3xl'],
                         fontWeight: typography.weight.bold,
-                        color: scoreColor,
+                        color: t.text.primary,
                     }}>
                         {percentage}%
                     </span>
@@ -949,7 +1048,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                                     fontWeight: isSlow ? typography.weight.semibold : typography.weight.normal,
                                     whiteSpace: 'nowrap',
                                 }}>
-                                    {timeStr}{isSlow ? ' ' : ''}
+                                    {timeStr}{isSlow && <span aria-label="slow"> (slow)</span>}
                                 </span>
                             </div>
                         );

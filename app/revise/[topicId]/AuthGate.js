@@ -5,7 +5,7 @@ import { KeyRound } from 'lucide-react';
 import { theme, typography, borderRadius, spacing, transitions, editorial as ED } from '@/lib/theme';
 import { supabase } from '@/lib/supabase';
 
-export default function AuthGate({ onAuthenticated }) {
+export default function AuthGate({ onAuthenticated, submitLabel = 'Start Quiz' }) {
     const t = theme.light;
     const [token, setToken] = useState('');
     const [loading, setLoading] = useState(false);
@@ -71,7 +71,7 @@ export default function AuthGate({ onAuthenticated }) {
                 }}>
                     <KeyRound size={22} strokeWidth={1.5} color={ED.accent} aria-hidden="true" />
                 </div>
-                <h2 style={{
+                <h2 id="student-token-label" style={{
                     fontSize: typography.size.xl,
                     fontWeight: typography.weight.bold,
                     color: t.text.primary,
@@ -84,16 +84,18 @@ export default function AuthGate({ onAuthenticated }) {
                     color: t.text.tertiary,
                     lineHeight: typography.lineHeight.relaxed,
                 }}>
-                    Use the same token from your grades dashboard link.
+                    Open your grades link, copy the code after the last slash, and paste it here. Ask your teacher if you don&apos;t have a link.
                 </p>
             </div>
 
             <form onSubmit={handleSubmit}>
                 <input
+                    id="student-token"
                     type="text"
                     value={token}
                     onChange={e => setToken(e.target.value)}
                     placeholder="Paste your token here"
+                    aria-labelledby="student-token-label"
                     autoFocus
                     style={{
                         width: '100%',
@@ -144,7 +146,7 @@ export default function AuthGate({ onAuthenticated }) {
                         transition: `all ${transitions.fast}`,
                     }}
                 >
-                    {loading ? 'Verifying...' : 'Start Quiz'}
+                    {loading ? 'Verifying...' : submitLabel}
                 </button>
             </form>
         </div>

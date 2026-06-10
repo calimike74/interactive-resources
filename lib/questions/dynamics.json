@@ -94,7 +94,7 @@
       "answer": 12,
       "tolerance": 0,
       "unit": "dB",
-      "explanation": "With a 4:1 ratio, the output excess above threshold is one quarter of the input excess. If 9 dB of gain reduction was applied, the input was 9 dB × (4/3) — more directly: if the output exceeds the threshold by (input excess / ratio), then gain reduction = input excess − (input excess / ratio) = input excess × (1 − 1/4) = input excess × 0.75. So 9 = input excess × 0.75, giving input excess = 12 dB."
+      "explanation": "Gain reduction equals input excess × (1 − 1/ratio). So 9 = input excess × (1 − 1/4) = input excess × 0.75, giving input excess = 9 ÷ 0.75 = 12 dB."
     },
     {
       "id": "dynamics-short-01",

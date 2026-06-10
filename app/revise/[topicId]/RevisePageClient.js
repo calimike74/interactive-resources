@@ -113,7 +113,10 @@ export default function RevisePageClient({ topic }) {
     }
 
     const current = questions[questionIndex];
-    const progress = questionIndex + 1;
+    // Clamp progress so the bar doesn't show 100% while feedback is still visible.
+    const progress = showFeedback
+        ? Math.min(questionIndex + 1, questions.length - 1)
+        : questionIndex + 1;
     const total = questions.length;
 
     function submitAnswer(answer) {
@@ -161,10 +164,15 @@ export default function RevisePageClient({ topic }) {
 
             // Fire-and-forget: write attempt summary + trigger signal processing
             if (student) {
-                const scored = [...responses, {
+                // Build the complete responses array locally — React state (`responses`)
+                // has not yet updated with the final question's entry at this point.
+                const finalResponses = [...responses, {
                     questionId: current.id,
+                    type: current.type,
+                    answer: currentAnswer,
                     correct: current.type === 'short' ? null : isCorrect,
-                }].filter(r => r.correct !== null);
+                }];
+                const scored = finalResponses.filter(r => r.correct !== null);
                 const correctCount = scored.filter(r => r.correct).length;
                 const totalScored = scored.length;
 
@@ -176,7 +184,7 @@ export default function RevisePageClient({ topic }) {
                         token: student.token,
                         topicKey: topic.id,
                         quizType: 'quick_recall',
-                        responses,
+                        responses: finalResponses,
                         score: correctCount,
                         total: totalScored,
                     }),
@@ -248,13 +256,19 @@ export default function RevisePageClient({ topic }) {
                              current.type === 'numeric' ? 'Calculation' : 'Short Answer'}
                         </span>
                     </div>
-                    <div style={{
-                        height: '6px',
-                        background: 'rgba(255, 255, 255, 0.4)',
-                        border: '1px solid ' + glass.border,
-                        borderRadius: borderRadius.full,
-                        overflow: 'hidden',
-                    }}>
+                    <div
+                        role="progressbar"
+                        aria-valuenow={progress}
+                        aria-valuemin={1}
+                        aria-valuemax={total}
+                        aria-label="Quiz progress"
+                        style={{
+                            height: '6px',
+                            background: 'rgba(255, 255, 255, 0.4)',
+                            border: '1px solid ' + glass.border,
+                            borderRadius: borderRadius.full,
+                            overflow: 'hidden',
+                        }}>
                         <div style={{
                             height: '100%',
                             width: `${(progress / total) * 100}%`,
@@ -274,7 +288,7 @@ export default function RevisePageClient({ topic }) {
                         marginBottom: spacing[4],
                         marginTop: `-${spacing[3]}`,
                     }}>
-                        Questions ordered by your past performance
+                        Weaker areas come first so you spend time on what needs it most.
                     </p>
                 )}
 
@@ -395,7 +409,10 @@ export default function RevisePageClient({ topic }) {
                                         color: t.text.secondary,
                                         lineHeight: typography.lineHeight.relaxed,
                                     }}>
-                                        {getHintsForTopic(topic.specRef)[0].hint}
+                                        {(() => {
+                                            const hints = getHintsForTopic(topic.specRef);
+                                            return hints[questionIndex % hints.length]?.hint;
+                                        })()}
                                     </p>
                                 </div>
                             )}
@@ -484,13 +501,15 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                             style={{
                                 background: 'none',
                                 border: 'none',
-                                color: t.text.tertiary,
+                                color: t.text.secondary,
                                 fontSize: typography.size.xs,
                                 cursor: 'pointer',
                                 textDecoration: 'underline',
                                 fontFamily: 'inherit',
-                                padding: 0,
+                                padding: '4px 8px',
                             }}
+                            onFocus={e => { e.currentTarget.style.outline = `2px solid ${ED.accent}`; }}
+                            onBlur={e => { e.currentTarget.style.outline = 'none'; }}
                         >
                             sign out
                         </button>
@@ -538,6 +557,8 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                         key={i}
                         onClick={() => !showFeedback && onSelect(i)}
                         disabled={showFeedback}
+                        onFocus={e => { if (!showFeedback) e.currentTarget.style.outline = `2px solid ${ED.accent}`; }}
+                        onBlur={e => { e.currentTarget.style.outline = 'none'; }}
                         style={{
                             textAlign: 'left',
                             padding: `${spacing[4]} ${spacing[5]}`,
@@ -569,7 +590,9 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                             marginRight: spacing[3],
                             flexShrink: 0,
                         }}>
-                            {String.fromCharCode(65 + i)}
+                            {showFeedback && i === correctIndex ? '✓'
+                                : showFeedback && i === selectedIndex ? '✗'
+                                : String.fromCharCode(65 + i)}
                         </span>
                         {option}
                     </button>
@@ -778,7 +801,8 @@ function TrajectoryChart({ history, t }) {
             borderRadius: borderRadius.lg,
             padding: spacing[4],
         }}>
-            <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto' }}>
+            <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto' }} role="img" aria-labelledby="trajectory-chart-title">
+                <title id="trajectory-chart-title">Your quiz score over attempts</title>
                 {/* Grid lines at 25%, 50%, 75% */}
                 {[25, 50, 75].map(pct => {
                     const y = padTop + chartH - (pct / 100) * chartH;
@@ -827,6 +851,14 @@ function TrajectoryChart({ history, t }) {
                     </text>
                 )}
             </svg>
+            <p style={{
+                fontSize: typography.size.xs,
+                color: t.text.tertiary,
+                marginTop: spacing[2],
+                textAlign: 'center',
+            }}>
+                Dot = attempt score · shaded area shows trajectory
+            </p>
         </div>
     );
 }

@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { getAllTopicIds, getTopic } from '@/lib/topics';
 import { getResource, resourceExists } from '@/lib/resources';
 import TopicPageClient from './TopicPageClient';
@@ -25,7 +26,7 @@ export default async function TopicPage({ params }) {
     const topic = getTopic(topicId);
 
     if (!topic) {
-        return <div>Topic not found</div>;
+        notFound();
     }
 
     // Resolve resource metadata for this topic

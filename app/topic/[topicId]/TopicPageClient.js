@@ -59,7 +59,6 @@ export default function TopicPageClient({ topic, resources }) {
                     <video
                         autoPlay
                         muted
-                        loop
                         playsInline
                         onLoadedData={(e) => { e.target.style.opacity = 1; }}
                         style={{
@@ -474,7 +473,7 @@ export default function TopicPageClient({ topic, resources }) {
                                                 fontSize: typography.size.xs,
                                                 color: t.text.tertiary,
                                             }}>
-                                                Timed, no going back
+                                                Answer every question once under timed conditions — you can&apos;t return to change answers.
                                             </p>
                                         </div>
                                     </div>
@@ -601,7 +600,9 @@ function ResourceCard({ resource, theme: t, animationDelay = 0 }) {
 }
 
 function ProgressCard({ progress, t }) {
-    const scoreColor = progress.bestScore >= 70 ? t.accent.success
+    const hasBestScore = progress.bestScore !== null && progress.bestScore !== undefined;
+    const scoreColor = !hasBestScore ? t.accent.info
+        : progress.bestScore >= 70 ? t.accent.success
         : progress.bestScore >= 40 ? t.accent.warning
         : t.accent.error;
 
@@ -634,7 +635,7 @@ function ProgressCard({ progress, t }) {
                         lineHeight: 1,
                         marginBottom: spacing[1],
                     }}>
-                        {progress.bestScore}%
+                        {hasBestScore ? `${progress.bestScore}%` : '—'}
                     </p>
                     <p style={{
                         fontSize: typography.size.xs,
@@ -691,7 +692,7 @@ function ProgressCard({ progress, t }) {
                         lineHeight: 1,
                         marginBottom: spacing[1],
                     }}>
-                        {progress.lastScore}%
+                        {progress.lastScore !== null && progress.lastScore !== undefined ? `${progress.lastScore}%` : '—'}
                     </p>
                     <p style={{
                         fontSize: typography.size.xs,
