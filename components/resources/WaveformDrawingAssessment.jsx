@@ -51,12 +51,13 @@ const QUESTIONS = [
         id: 'wd-q5-polarity-scenario',
         type: 'short',
         prompt: 'Name one situation in a recording session where you must check the polarity of signals. Give a specific example.',
-        // Keywords the answer should contain (any one is enough for a positive match)
+        // Compound check: answer must contain at least one scenario keyword AND one explanation keyword.
         keywords: [
             'snare', 'kick', 'overhead', 'overheads', 'DI', 'amp', 'mic\'d', 'micd',
             'multi-mic', 'multi mic', 'two mics', 'top and bottom', 'in and out',
             'stereo room', 'room mic',
         ],
+        explanationKeywords: ['cancel', 'cancellation', 'phase', 'polarity', 'out of phase', 'thin', 'comb'],
         sampleAnswer: 'Multi-mic recording of one source — e.g. a snare drum captured with a top mic and a bottom mic. The two mics see the drumhead moving in opposite directions, so the bottom mic must be polarity-flipped or the low end cancels out.',
         explanation: 'Accept any multi-mic scenario: snare top + bottom, kick in + out, DI + mic\'d amp, drum overheads, stereo room mics. The mark is for naming a realistic scenario AND explaining that the signals can cancel low-end if polarity is wrong.',
     },
@@ -159,7 +160,12 @@ export default function WaveformDrawingAssessment() {
         }
         if (current.type === 'short') {
             const lower = String(answer).toLowerCase();
-            return current.keywords.some(kw => lower.includes(String(kw).toLowerCase()));
+            const hasScenario = current.keywords.some(kw => lower.includes(String(kw).toLowerCase()));
+            if (current.explanationKeywords) {
+                const hasExplanation = current.explanationKeywords.some(kw => lower.includes(String(kw).toLowerCase()));
+                return hasScenario && hasExplanation;
+            }
+            return hasScenario;
         }
         return false;
     }
@@ -489,8 +495,16 @@ function WaveformOptionDiagram({ kind }) {
         path = pts.join(' ');
     }
 
+    const titleMap = {
+        'square-1ms': 'Square wave, period 1 ms (5 cycles in 5 ms window)',
+        'square-2ms': 'Square wave, period 2 ms (2.5 cycles in 5 ms window)',
+        'saw-2ms': 'Sawtooth wave, period 2 ms (2.5 cycles in 5 ms window)',
+        'sine-1ms': 'Sine wave, period 1 ms (5 cycles in 5 ms window)',
+    };
+
     return (
-        <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-20" aria-hidden="true">
+        <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-20" role="img" aria-label={titleMap[kind] || kind}>
+            <title>{titleMap[kind] || kind}</title>
             {/* Gridlines every 1 ms (5 divisions) */}
             {[1, 2, 3, 4].map(i => {
                 const x = padX + (innerW / 5) * i;
@@ -522,7 +536,7 @@ function NumericInput({ unit, showFeedback, onSubmit }) {
 
     return (
         <form onSubmit={handleSubmit} className="flex items-center gap-3">
-            <input aria-label="Input"
+            <input aria-label={`Your answer in ${unit || 'the required unit'}`}
                 ref={inputRef}
                 type="text"
                 inputMode="decimal"
@@ -561,7 +575,7 @@ function ShortAnswer({ showFeedback, onSubmit }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <textarea aria-label="Response"
+            <textarea aria-label="Your short answer"
                 value={value}
                 onChange={e => setValue(e.target.value)}
                 disabled={showFeedback}
@@ -590,9 +604,9 @@ function FeedbackPanel({ correct, type, explanation, sampleAnswer }) {
         ? 'border-emerald-300 bg-emerald-50'
         : 'border-rose-300 bg-rose-50';
     const headingTone = correct ? 'text-emerald-800' : 'text-rose-800';
-    const heading = correct
-        ? 'Correct'
-        : type === 'short' ? 'Review your answer against the sample below' : 'Not quite';
+    const heading = type === 'short'
+        ? 'Keywords matched — compare with the sample answer below'
+        : correct ? 'Correct' : 'Not quite';
 
     return (
         <div className={`mt-6 border rounded-lg p-4 ${tone}`}>

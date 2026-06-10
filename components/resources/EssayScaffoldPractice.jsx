@@ -12,7 +12,7 @@ const C = {
     surfaceHover: '#252540',
     text: '#e8e8f0',
     textSecondary: '#8888a0',
-    textMuted: '#555568',
+    textMuted: '#70708a',
     accent: '#5b8def',
     accentSoft: 'rgba(91, 141, 239, 0.12)',
     green: '#34d399',
@@ -492,7 +492,7 @@ function PracticeTab({ topic }) {
                                     WebkitTapHighlightColor: 'transparent',
                                 }}
                             >
-                                <span style={{ fontSize: 14 }}>{level.icon}</span>
+                                {level.icon && <span style={{ fontSize: 14 }}>{level.icon}</span>}
                                 {level.label}
                             </button>
                         ))}
@@ -838,7 +838,13 @@ export default function EssayScaffoldPractice() {
                         muted
                         loop
                         playsInline
-                        onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                        onLoadedData={(e) => {
+                            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                                e.target.pause();
+                            } else {
+                                e.target.style.opacity = 1;
+                            }
+                        }}
                         style={{
                             position: 'absolute',
                             inset: 0,
@@ -908,7 +914,7 @@ export default function EssayScaffoldPractice() {
                                     whiteSpace: 'nowrap',
                                 }}
                             >
-                                <span style={{ fontSize: 15 }}>{topic.icon}</span>
+                                {topic.icon && <span style={{ fontSize: 15 }}>{topic.icon}</span>}
                                 {topic.label}
                             </button>
                         );
@@ -956,7 +962,7 @@ export default function EssayScaffoldPractice() {
                                 WebkitTapHighlightColor: 'transparent',
                             }}
                         >
-                            <span style={{ fontSize: 16 }}>{tab.icon}</span>
+                            {tab.icon && <span style={{ fontSize: 16 }}>{tab.icon}</span>}
                             {tab.label}
                         </button>
                     ))}

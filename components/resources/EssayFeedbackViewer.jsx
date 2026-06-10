@@ -126,6 +126,7 @@ function LevelStrip({ currentLevel, levels }) {
                             onMouseLeave={() => setHoveredLevel(null)}
                             onClick={() => setHoveredLevel(prev => prev === levelNum ? null : levelNum)}
                             aria-label={`${ld.level}: ${ld.marks} marks`}
+                            className="level-strip-btn"
                             style={{
                                 flex: 1,
                                 padding: '8px 4px',
@@ -134,6 +135,7 @@ function LevelStrip({ currentLevel, levels }) {
                                 textAlign: 'center',
                                 cursor: 'pointer',
                                 border: 'none',
+                                outline: 'none',
                                 backgroundColor: isActive ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.06)',
                                 boxShadow: isActive
                                     ? 'inset 0 0 0 1.5px rgba(255,255,255,0.5)'
@@ -454,7 +456,20 @@ export default function EssayFeedbackViewer({ feedbackData }) {
     const [bgTint, setBgTint] = useState('white');
     const [lineSpacing, setLineSpacing] = useState('normal');
     const [copyState, setCopyState] = useState('idle');
+    const [topBarHeight, setTopBarHeight] = useState(160);
+    const topBarRef = useRef(null);
     const essayRef = useRef(null);
+
+    // Keep toolbar below the top bar even when score badges / buttons wrap
+    React.useEffect(() => {
+        if (!topBarRef.current) return;
+        const obs = new ResizeObserver(entries => {
+            const h = entries[0]?.contentRect?.height;
+            if (h) setTopBarHeight(h);
+        });
+        obs.observe(topBarRef.current);
+        return () => obs.disconnect();
+    }, []);
 
     const { essayText, annotations, summary, essayTitle, topic, markScheme } = feedbackData;
 
@@ -529,10 +544,14 @@ export default function EssayFeedbackViewer({ feedbackData }) {
                 .toolbar-btn:active {
                     transform: scale(0.95);
                 }
+                .level-strip-btn:focus-visible {
+                    outline: 2px solid rgba(255, 255, 255, 0.6);
+                    outline-offset: 2px;
+                }
             `}</style>
 
             {/* Top Bar */}
-            <div style={{
+            <div ref={topBarRef} style={{
                 position: 'sticky',
                 top: 0,
                 zIndex: 100,
@@ -623,7 +642,7 @@ export default function EssayFeedbackViewer({ feedbackData }) {
             {/* Accessibility Toolbar */}
             <div style={{
                 position: 'sticky',
-                top: '160px',
+                top: `${topBarHeight}px`,
                 zIndex: 99,
                 backgroundColor: bgTint === 'white'
                     ? 'rgba(255, 255, 255, 0.85)'

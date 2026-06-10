@@ -215,7 +215,13 @@ export default function StereoRecordingEssay() {
                     muted
                     loop
                     playsInline
-                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                    onLoadedData={(e) => {
+                        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                            e.target.pause();
+                        } else {
+                            e.target.style.opacity = 1;
+                        }
+                    }}
                     style={{
                         position: 'absolute',
                         inset: 0,
@@ -514,7 +520,7 @@ export default function StereoRecordingEssay() {
                                         {section.guidance}
                                     </p>
                                 )}
-                                <textarea aria-label="Response"
+                                <textarea aria-label={`Your essay response — ${section.label}`}
                                     value={essayContent[section.id] || ''}
                                     onChange={(e) => updateSection(section.id, e.target.value)}
                                     placeholder={section.placeholder}
@@ -602,7 +608,7 @@ export default function StereoRecordingEssay() {
                         gap: spacing[4],
                         flexWrap: 'wrap',
                     }}>
-                        <input aria-label="Input"
+                        <input aria-label="Your name"
                             type="text"
                             value={studentName}
                             onChange={(e) => setStudentName(e.target.value)}
@@ -618,28 +624,40 @@ export default function StereoRecordingEssay() {
                                 color: t.text.primary,
                             }}
                         />
-                        <button type="button"
-                            onClick={handleSubmit}
-                            disabled={submitting || !studentName.trim() || wordCount < 20}
-                            style={{
-                                padding: `${spacing[3]} ${spacing[6]}`,
-                                borderRadius: borderRadius.lg,
-                                border: 'none',
-                                cursor: submitting || !studentName.trim() || wordCount < 20 ? 'not-allowed' : 'pointer',
-                                fontSize: typography.size.base,
-                                fontWeight: typography.weight.semibold,
-                                fontFamily: typography.fontFamily,
-                                background: submitting || !studentName.trim() || wordCount < 20
-                                    ? t.bg.tertiary
-                                    : t.accent.primary,
-                                color: submitting || !studentName.trim() || wordCount < 20
-                                    ? t.text.tertiary
-                                    : t.text.inverse,
-                                transition: `all ${transitions.fast}`,
-                            }}
-                        >
-                            {submitting ? 'Submitting...' : 'Submit Essay'}
-                        </button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1], flex: '0 0 auto' }}>
+                            <button type="button"
+                                onClick={handleSubmit}
+                                disabled={submitting || !studentName.trim() || wordCount < 20}
+                                style={{
+                                    padding: `${spacing[3]} ${spacing[6]}`,
+                                    borderRadius: borderRadius.lg,
+                                    border: 'none',
+                                    cursor: submitting || !studentName.trim() || wordCount < 20 ? 'not-allowed' : 'pointer',
+                                    fontSize: typography.size.base,
+                                    fontWeight: typography.weight.semibold,
+                                    fontFamily: typography.fontFamily,
+                                    background: submitting || !studentName.trim() || wordCount < 20
+                                        ? t.bg.tertiary
+                                        : t.accent.primary,
+                                    color: submitting || !studentName.trim() || wordCount < 20
+                                        ? t.text.tertiary
+                                        : t.text.inverse,
+                                    transition: `all ${transitions.fast}`,
+                                }}
+                            >
+                                {submitting ? 'Submitting...' : 'Submit Essay'}
+                            </button>
+                            {wordCount < 20 && (
+                                <span style={{
+                                    fontSize: typography.size.xs,
+                                    color: t.text.tertiary,
+                                    fontFamily: typography.fontFamily,
+                                    textAlign: 'center',
+                                }}>
+                                    Write at least 20 words to submit
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

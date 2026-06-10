@@ -355,6 +355,8 @@ function DrawTab() {
                     ref={canvasRef}
                     width={CANVAS_SIZE}
                     height={CANVAS_SIZE}
+                    role="img"
+                    aria-label={`Compressor transfer curve drawing area. Threshold ${settings.threshold} dB, ratio ${settings.ratio}:1, makeup gain ${settings.makeupGain} dB.`}
                     onMouseDown={onDown}
                     onMouseMove={onMove}
                     onMouseUp={onUp}
@@ -516,6 +518,8 @@ function AnalyseTab() {
                         ref={canvasRef}
                         width={CANVAS_SIZE}
                         height={CANVAS_SIZE}
+                        role="img"
+                        aria-label="Compressor transfer curve to analyse. Identify the threshold, ratio, and makeup gain from the curve shape."
                         style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                 </div>
@@ -540,21 +544,21 @@ function AnalyseTab() {
                         <label style={{ display: 'block', fontSize: typography.size.sm, fontWeight: typography.weight.medium, color: t.text.secondary, marginBottom: spacing[1] }}>
                             Threshold (dB)
                         </label>
-                        <input aria-label="Input" type="text" value={userThreshold} onChange={e => setUserThreshold(e.target.value)} placeholder="e.g. -20"
+                        <input aria-label="Threshold in dB" type="text" value={userThreshold} onChange={e => setUserThreshold(e.target.value)} placeholder="e.g. -20"
                             style={inputStyle(result?.thOk)} />
                     </div>
                     <div>
                         <label style={{ display: 'block', fontSize: typography.size.sm, fontWeight: typography.weight.medium, color: t.text.secondary, marginBottom: spacing[1] }}>
-                            Ratio (X:1)
+                            Ratio
                         </label>
-                        <input aria-label="Input" type="text" value={userRatio} onChange={e => setUserRatio(e.target.value)} placeholder="e.g. 4"
+                        <input aria-label="Ratio (number only, e.g. 4)" type="text" value={userRatio} onChange={e => setUserRatio(e.target.value)} placeholder="e.g. 4 (number only)"
                             style={inputStyle(result?.rOk)} />
                     </div>
                     <div>
                         <label style={{ display: 'block', fontSize: typography.size.sm, fontWeight: typography.weight.medium, color: t.text.secondary, marginBottom: spacing[1] }}>
                             Makeup Gain (dB)
                         </label>
-                        <input aria-label="Input" type="text" value={userMakeup} onChange={e => setUserMakeup(e.target.value)} placeholder="e.g. 5"
+                        <input aria-label="Makeup gain in dB" type="text" value={userMakeup} onChange={e => setUserMakeup(e.target.value)} placeholder="e.g. 5"
                             style={inputStyle(result?.mgOk)} />
                     </div>
 
@@ -673,7 +677,13 @@ export default function CompressorCurvePractice() {
                     muted
                     loop
                     playsInline
-                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                    onLoadedData={(e) => {
+                        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                            e.target.pause();
+                        } else {
+                            e.target.style.opacity = 1;
+                        }
+                    }}
                     style={{
                         position: 'absolute',
                         inset: 0,
@@ -723,21 +733,31 @@ export default function CompressorCurvePractice() {
             {/* Content */}
             <div style={{ maxWidth: '900px', margin: '0 auto', padding: `${spacing[6]} ${spacing[4]}` }}>
                 {/* Tab bar */}
-                <div style={{
-                    display: 'flex',
-                    borderBottom: `1px solid ${t.border.subtle}`,
-                    marginBottom: spacing[6],
-                    gap: spacing[1],
-                }}>
-                    <button type="button" onClick={() => setActiveTab('draw')} style={tabStyle(activeTab === 'draw')}>
+                <div
+                    role="tablist"
+                    aria-label="Compressor curve practice tabs"
+                    style={{
+                        display: 'flex',
+                        borderBottom: `1px solid ${t.border.subtle}`,
+                        marginBottom: spacing[6],
+                        gap: spacing[1],
+                    }}
+                >
+                    <button type="button" role="tab" aria-selected={activeTab === 'draw'} aria-controls="tab-panel-draw" id="tab-draw" onClick={() => setActiveTab('draw')} style={tabStyle(activeTab === 'draw')}>
                         Draw Compressor Curve
                     </button>
-                    <button type="button" onClick={() => setActiveTab('analyse')} style={tabStyle(activeTab === 'analyse')}>
+                    <button type="button" role="tab" aria-selected={activeTab === 'analyse'} aria-controls="tab-panel-analyse" id="tab-analyse" onClick={() => setActiveTab('analyse')} style={tabStyle(activeTab === 'analyse')}>
                         Analyse Compressor Curve
                     </button>
                 </div>
 
-                {activeTab === 'draw' ? <DrawTab /> : <AnalyseTab />}
+                <div
+                    role="tabpanel"
+                    id={activeTab === 'draw' ? 'tab-panel-draw' : 'tab-panel-analyse'}
+                    aria-labelledby={activeTab === 'draw' ? 'tab-draw' : 'tab-analyse'}
+                >
+                    {activeTab === 'draw' ? <DrawTab /> : <AnalyseTab />}
+                </div>
             </div>
         </div>
     );

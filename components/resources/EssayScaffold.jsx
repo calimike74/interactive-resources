@@ -20,6 +20,7 @@ export default function EssayScaffold() {
     const [activeZone, setActiveZone] = useState(null);
     const [essayContent, setEssayContent] = useState({});
     const [checkedItems, setCheckedItems] = useState({});
+    const isTouch = typeof window !== 'undefined' && 'ontouchstart' in window;
 
     const {
         canvasRef,
@@ -105,7 +106,13 @@ export default function EssayScaffold() {
                     muted
                     loop
                     playsInline
-                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                    onLoadedData={(e) => {
+                        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                            e.target.pause();
+                        } else {
+                            e.target.style.opacity = 1;
+                        }
+                    }}
                     style={{
                         position: 'absolute',
                         inset: 0,
@@ -193,7 +200,7 @@ export default function EssayScaffold() {
             {/* Main layout: Image + Sidebar */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 360px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                 gap: spacing[6],
                 marginBottom: spacing[6],
             }}>
@@ -234,20 +241,27 @@ export default function EssayScaffold() {
                         </div>
                     )}
                     {imagesLoaded && !activeZone && (
-                        <div style={{
-                            position: 'absolute',
-                            bottom: spacing[4],
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            background: 'rgba(0,0,0,0.7)',
-                            color: '#fff',
-                            padding: `${spacing[2]} ${spacing[4]}`,
-                            borderRadius: borderRadius.full,
-                            fontSize: typography.size.sm,
-                            pointerEvents: 'none',
-                            whiteSpace: 'nowrap',
-                        }}>
-                            Hover over the EQ to explore frequency bands
+                        <div
+                            onClick={isTouch ? () => {
+                                const firstZone = exercise.zones[0];
+                                if (firstZone) setActiveZone(firstZone);
+                            } : undefined}
+                            style={{
+                                position: 'absolute',
+                                bottom: spacing[4],
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                background: 'rgba(0,0,0,0.7)',
+                                color: '#fff',
+                                padding: `${spacing[2]} ${spacing[4]}`,
+                                borderRadius: borderRadius.full,
+                                fontSize: typography.size.sm,
+                                pointerEvents: isTouch ? 'auto' : 'none',
+                                whiteSpace: 'nowrap',
+                                cursor: isTouch ? 'pointer' : 'default',
+                            }}
+                        >
+                            {isTouch ? 'Tap a frequency band to explore' : 'Hover over the EQ to explore frequency bands'}
                         </div>
                     )}
                 </div>
@@ -330,7 +344,7 @@ export default function EssayScaffold() {
                                     {section.guidance}
                                 </p>
                             )}
-                            <textarea aria-label="Response"
+                            <textarea aria-label={`Your essay response — ${section.label} section`}
                                 value={essayContent[section.id] || ''}
                                 onChange={(e) => updateSection(section.id, e.target.value)}
                                 placeholder={section.placeholder}

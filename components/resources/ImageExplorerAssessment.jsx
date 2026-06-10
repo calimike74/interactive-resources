@@ -34,6 +34,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
     const [submitted, setSubmitted] = useState(false);
     const [dragItem, setDragItem] = useState(null);
     const [dragOverZone, setDragOverZone] = useState(null);
+    const [kbSelected, setKbSelected] = useState(null); // item id selected via keyboard/click-to-select
     const [shuffledNames] = useState(() => shuffle(hotspots.map(h => ({ id: h.id, label: h.label, name: h.name }))));
     const [shuffledDescs] = useState(() => shuffle(hotspots.map(h => ({ id: h.id, label: h.label, clue: h.matchClue || stripRefs(h.description) }))));
 
@@ -107,6 +108,63 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
 
         setDragItem(null);
     }, [dragItem, feedback, stage]);
+
+    // Shared placement logic used by both drag-drop and click-to-select
+    const placeItem = useCallback((itemId, hotspotId) => {
+        if (feedback[hotspotId] === 'correct') return;
+        setPlacements(prev => {
+            const cleaned = {};
+            for (const [k, v] of Object.entries(prev)) {
+                if (v !== itemId) cleaned[k] = v;
+            }
+            cleaned[hotspotId] = itemId;
+            return cleaned;
+        });
+        if (stage === 1) {
+            const isCorrect = itemId === hotspotId;
+            setFeedback(prev => ({ ...prev, [hotspotId]: isCorrect ? 'correct' : 'incorrect' }));
+            if (!isCorrect) {
+                setTimeout(() => {
+                    setPlacements(prev => {
+                        const cleaned = { ...prev };
+                        if (cleaned[hotspotId] === itemId) delete cleaned[hotspotId];
+                        return cleaned;
+                    });
+                    setFeedback(prev => {
+                        const cleaned = { ...prev };
+                        if (cleaned[hotspotId] === 'incorrect') delete cleaned[hotspotId];
+                        return cleaned;
+                    });
+                }, 800);
+            }
+        }
+    }, [feedback, stage]);
+
+    // Click-to-select: clicking an item selects it; clicking a zone places the selected item
+    const handleItemClick = useCallback((itemId) => {
+        setKbSelected(prev => prev === itemId ? null : itemId);
+    }, []);
+
+    const handleZoneClick = useCallback((hotspotId) => {
+        if (!kbSelected) return;
+        placeItem(kbSelected, hotspotId);
+        setKbSelected(null);
+    }, [kbSelected, placeItem]);
+
+    const handleItemKeyDown = useCallback((e, itemId) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setKbSelected(prev => prev === itemId ? null : itemId);
+        }
+    }, []);
+
+    const handleZoneKeyDown = useCallback((e, hotspotId) => {
+        if ((e.key === 'Enter' || e.key === ' ') && kbSelected) {
+            e.preventDefault();
+            placeItem(kbSelected, hotspotId);
+            setKbSelected(null);
+        }
+    }, [kbSelected, placeItem]);
 
     const handleSubmitStage2 = () => {
         const newFeedback = {};
@@ -200,7 +258,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
             }}>
                 {stage === 1
                     ? 'Drag each control name from the bank below and drop it onto the matching coloured zone. You\'ll get immediate feedback — use hints if you\'re stuck.'
-                    : 'Now match each description to the correct control. Drop descriptions onto the named zones, then submit to check your answers.'}
+                    : 'Now match each description to the correct control. Drop descriptions onto the named zones — the Submit button will appear once you start placing.'}
             </p>
 
             {/* Image with zones */}
@@ -270,12 +328,18 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                         const placedItem = dragItems.find(item => item.id === placed);
                         const hasHint = hintsUsed.has(hotspot.id);
 
+                        const isKbTarget = kbSelected && isActive && fb !== 'correct';
                         return (
                             <div
                                 key={hotspot.id}
+                                tabIndex={isKbTarget ? 0 : undefined}
+                                role={isKbTarget ? 'button' : undefined}
+                                aria-label={isKbTarget ? `Place selected item in ${hotspot.name}` : hotspot.name}
                                 onDragOver={isActive && fb !== 'correct' ? (e) => handleDragOver(e, hotspot.id) : undefined}
                                 onDragLeave={isActive ? handleDragLeave : undefined}
                                 onDrop={isActive ? (e) => handleDrop(e, hotspot.id) : undefined}
+                                onClick={isKbTarget ? () => handleZoneClick(hotspot.id) : undefined}
+                                onKeyDown={isKbTarget ? (e) => handleZoneKeyDown(e, hotspot.id) : undefined}
                                 style={{
                                     flex: hotspot.zone.width,
                                     height: stage === 2 ? 72 : 52,
@@ -291,10 +355,11 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                     gap: 2,
                                     padding: '4px 6px',
                                     transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
-                                    cursor: isActive && fb !== 'correct' ? 'default' : 'not-allowed',
+                                    cursor: isKbTarget ? 'pointer' : isActive && fb !== 'correct' ? 'default' : 'not-allowed',
                                     borderRight: i < hotspots.length - 1 ? '2px solid rgba(255,255,255,0.4)' : 'none',
                                     animation: fb === 'incorrect' ? 'shake 0.3s ease' : fb === 'correct' ? 'correctPop 0.3s ease' : 'none',
                                     position: 'relative',
+                                    outline: isKbTarget ? `2px solid ${hotspot.color}` : 'none',
                                 }}
                             >
                                 {/* Stage 2: show the name always */}
@@ -409,16 +474,22 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                     gap: spacing[2],
                 }}>
                     {availableItems.map(item => {
-                        const hotspot = hotspots.find(h => h.id === item.id);
+                        const isKbSelected = kbSelected === item.id;
                         return (
                             <div
                                 key={item.id}
                                 draggable
+                                tabIndex={0}
+                                role="button"
+                                aria-pressed={isKbSelected}
+                                aria-label={stage === 1 ? item.name : item.clue}
                                 onDragStart={(e) => handleDragStart(e, item.id)}
+                                onClick={() => handleItemClick(item.id)}
+                                onKeyDown={(e) => handleItemKeyDown(e, item.id)}
                                 style={{
                                     padding: stage === 1 ? `${spacing[2]} ${spacing[3]}` : `${spacing[2]} ${spacing[3]}`,
-                                    background: '#F8F9FA',
-                                    border: '1.5px solid rgba(0,0,0,0.08)',
+                                    background: isKbSelected ? '#DBEAFE' : '#F8F9FA',
+                                    border: isKbSelected ? '1.5px solid #3B82F6' : '1.5px solid rgba(0,0,0,0.08)',
                                     borderRadius: borderRadius.lg,
                                     cursor: 'grab',
                                     fontSize: stage === 1 ? typography.size.sm : '12px',
@@ -429,6 +500,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                     maxWidth: stage === 2 ? '280px' : 'auto',
                                     userSelect: 'none',
                                     transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.15s ease',
+                                    outline: 'none',
                                 }}
                             >
                                 {stage === 1 ? item.name : item.clue}

@@ -60,6 +60,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
     const [boxDragging, setBoxDragging] = useState(null);
     const [expandedQ, setExpandedQ] = useState({}); // { hotspotId: questionIndex }
     const [selectedId, setSelectedId] = useState(null); // hotspot id for detail panel
+    const [kbSelectMode, setKbSelectMode] = useState(false); // keyboard selection mode
 
     const pageRef = useRef(null);
     const imageContainerRef = useRef(null);
@@ -78,7 +79,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
             const rect = imageContainerRef.current.getBoundingClientRect();
             setBoxPos({
                 x: rect.right + 20,
-                y: rect.top + 20,
+                y: Math.min(Math.max(rect.top + 20, 20), window.innerHeight - 200),
             });
         }
     }, [imageLoaded, boxPos]);
@@ -190,6 +191,28 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
         setSelectedId(prev => prev === hotspotId ? null : prev);
         animationKeyRef.current += 1;
     }, []);
+
+    // Keyboard: Enter/Space on plug enters selection mode; Enter/Space on a zone connects it
+    const handlePlugKeyDown = useCallback((e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setKbSelectMode(prev => !prev);
+        }
+    }, []);
+
+    const handleZoneKeyDown = useCallback((e, hotspotId) => {
+        if (!kbSelectMode) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setConnections(prev => {
+                if (prev.some(c => c.hotspotId === hotspotId)) return prev;
+                animationKeyRef.current += 1;
+                return [...prev, { id: Date.now(), hotspotId }];
+            });
+            setSelectedId(hotspotId);
+            setKbSelectMode(false);
+        }
+    }, [kbSelectMode]);
 
     // Calculate SVG paths between zones and their matching explanation cards
     const recalcPaths = useCallback(() => {
@@ -352,7 +375,10 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                             <div
                                 key={hotspot.id}
                                 ref={el => { zoneRefs.current[hotspot.id] = el; }}
+                                role={kbSelectMode && !isConnected ? 'button' : undefined}
+                                tabIndex={kbSelectMode && !isConnected ? 0 : undefined}
                                 aria-label={hotspot.name}
+                                onKeyDown={(e) => handleZoneKeyDown(e, hotspot.id)}
                                 style={{
                                     flex: hotspot.zone.width,
                                     height: '100%',
@@ -365,9 +391,10 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                     padding: '0 4px',
                                     animation: (!isConnected && !isHovered) ? 'zonePulse 2.5s ease-in-out infinite' : 'none',
                                     transition: 'opacity 0.2s ease',
-                                    cursor: 'default',
+                                    cursor: kbSelectMode && !isConnected ? 'pointer' : 'default',
                                     borderRight: i < hotspots.length - 1 ? '2px solid rgba(255,255,255,0.4)' : 'none',
                                     overflow: 'hidden',
+                                    outline: kbSelectMode && !isConnected ? '2px solid rgba(255,255,255,0.7)' : 'none',
                                 }}
                             >
                                 <span style={{
@@ -728,20 +755,25 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                         <div
                             ref={plugRef}
                             data-plug="true"
+                            tabIndex={0}
+                            role="button"
+                            aria-label={kbSelectMode ? 'Selection mode active — press Enter or Space on a zone to connect' : 'Connect cable — drag to a zone, or press Enter to enter keyboard selection mode'}
                             onMouseDown={handlePlugMouseDown}
                             onTouchStart={handlePlugMouseDown}
+                            onKeyDown={handlePlugKeyDown}
                             style={{
                                 width: 28,
                                 height: 28,
                                 borderRadius: '50%',
-                                background: t.text.secondary,
+                                background: kbSelectMode ? '#2563EB' : t.text.secondary,
                                 border: '3px solid rgba(255,255,255,0.8)',
                                 cursor: 'crosshair',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flexShrink: 0,
-                                animation: connections.length === 0 ? 'plugGlow 2s ease-in-out infinite' : 'none',
+                                animation: connections.length === 0 && !kbSelectMode ? 'plugGlow 2s ease-in-out infinite' : 'none',
+                                outline: 'none',
                             }}
                         >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round">
