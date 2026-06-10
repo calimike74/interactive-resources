@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 
 // Botanical Press palette — matches globals.css tokens
 const C = {
@@ -63,7 +63,7 @@ const DELAY_TYPES = [
     n: '03', name: 'Slapback',
     bg: C.sienna500, fg: C.paper, accent: C.paper,
     title: 'Slapback',
-    desc: 'One short repeat, 10–120 ms, no feedback. The Elvis sound.',
+    desc: 'One short repeat, 50–120 ms, no feedback. The Elvis sound.',
     diagram: 'slapback',
     details: {
       listenFor: 'A single short echo close behind the original. The recording feels "doubled" rather than echoing into space.',
@@ -138,6 +138,7 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
   const [openIndex, setOpenIndex] = useState(null);
   const total = types.length;
   const theta = 360 / total;
+  const carouselRef = useRef(null);
 
   const next = useCallback(() => setIndex(i => i + 1), []);
   const prev = useCallback(() => setIndex(i => i - 1), []);
@@ -146,6 +147,8 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
 
   useEffect(() => {
     function onKey(e) {
+      // Only handle keys when the overlay is open, or when focus is within this carousel
+      if (!isOpen && !carouselRef.current?.contains(document.activeElement)) return;
       if (isOpen) {
         if (e.key === 'Escape')     { setOpenIndex(null); }
         if (e.key === 'ArrowRight') { setIndex(i => i + 1); setOpenIndex(i => (i + 1) % total); }
@@ -180,7 +183,8 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
   };
 
   return (
-    <div style={{ fontFamily: sans, color: C.ink, position: 'relative' }}>
+    <MotionConfig reducedMotion="user">
+    <div ref={carouselRef} style={{ fontFamily: sans, color: C.ink, position: 'relative' }}>
       {/* 3D scene */}
       <div style={{
         perspective: 1500,
@@ -254,6 +258,7 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
         )}
       </AnimatePresence>
     </div>
+    </MotionConfig>
   );
 }
 
@@ -550,7 +555,7 @@ function DiagramTape({ fg, accent }) {
   const gap = 22;
   const axisY = 112;
   return (
-    <svg viewBox="0 0 252 140" width="100%" style={{ display: 'block' }}>
+    <svg viewBox="0 0 252 160" width="100%" style={{ display: 'block' }}>
       <line x1="10" y1={axisY} x2="245" y2={axisY} stroke={fg} strokeOpacity="0.35" />
 
       <text x="220" y="24" fontSize="10" fontFamily={mono} fill={fg} fillOpacity="0.75" textAnchor="middle" letterSpacing="0.04em" fontStyle="italic">darker →</text>
@@ -573,6 +578,12 @@ function DiagramTape({ fg, accent }) {
           </g>
         );
       })}
+
+      {/* Legend */}
+      <rect x="10" y="132" width="8" height="8" fill={fg} />
+      <text x="22" y="140" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dry signal</text>
+      <rect x="90" y="132" width="8" height="8" fill={accent} />
+      <text x="102" y="140" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Delayed repeats (each pass loses high frequencies)</text>
     </svg>
   );
 }
@@ -584,7 +595,7 @@ function DiagramPingPong({ fg, accent }) {
     { cx: 202, frac: 0.55,  value: '55%', label: 'FEEDBACK' },
   ];
   return (
-    <svg viewBox="0 0 252 220" width="100%" style={{ display: 'block' }}>
+    <svg viewBox="0 0 252 240" width="100%" style={{ display: 'block' }}>
       {dials.map(d => (
         <Dial key={d.label} cx={d.cx} cy={42} r={24} frac={d.frac} value={d.value} label={d.label} fg={fg} accent={accent} />
       ))}
@@ -606,6 +617,10 @@ function DiagramPingPong({ fg, accent }) {
       ].map((d, i) => (
         <circle key={i} cx={d.x} cy={d.y} r={d.r} fill={accent} opacity={d.op} />
       ))}
+
+      {/* Legend */}
+      <text x="10" y="212" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Zigzag = repeats alternating L/R channel</text>
+      <text x="10" y="228" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dot size = amplitude decay</text>
     </svg>
   );
 }
@@ -634,9 +649,17 @@ function DiagramClean({ fg, accent }) {
     { x: 160, h: 30, label: '¾' },
     { x: 206, h: 20, label: '1' },
   ];
-  const axisY = 112;
+  const axisY = 100;
   return (
-    <svg viewBox="0 0 252 140" width="100%" style={{ display: 'block' }}>
+    <svg viewBox="0 0 252 160" width="100%" style={{ display: 'block' }}>
+      {/* Y-axis label */}
+      <text
+        x="8" y="70"
+        fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.65"
+        textAnchor="middle" letterSpacing="0.08em"
+        transform="rotate(-90, 8, 70)"
+      >AMPLITUDE</text>
+
       <line x1="14" y1={axisY} x2="245" y2={axisY} stroke={fg} strokeOpacity="0.35" />
 
       <path
@@ -655,7 +678,13 @@ function DiagramClean({ fg, accent }) {
         </g>
       ))}
 
-      <text x="245" y="135" fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.7" textAnchor="end" letterSpacing="0.16em">BEATS →</text>
+      <text x="245" y={axisY + 25} fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.7" textAnchor="end" letterSpacing="0.16em">BEATS AFTER DRY →</text>
+
+      {/* Legend */}
+      <rect x="10" y="134" width="8" height="8" fill={fg} />
+      <text x="22" y="142" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dry signal</text>
+      <rect x="86" y="134" width="8" height="8" fill={accent} />
+      <text x="98" y="142" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Delayed repeats (equal amplitude each beat)</text>
     </svg>
   );
 }
@@ -696,7 +725,7 @@ function DiagramModulated({ fg, accent }) {
   }
   const dots = [0.12, 0.27, 0.42, 0.57, 0.72, 0.87];
   return (
-    <svg viewBox="0 0 252 140" width="100%" style={{ display: 'block' }}>
+    <svg viewBox="0 0 252 165" width="100%" style={{ display: 'block' }}>
       <line x1="14" y1="70" x2="244" y2="70" stroke={fg} strokeOpacity="0.25" strokeDasharray="2,4" />
       <path d={pts.join(' ')} fill="none" stroke={accent} strokeWidth="1.5" />
 
@@ -707,7 +736,13 @@ function DiagramModulated({ fg, accent }) {
       })}
 
       <text x="14"  y="24"  fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.75" letterSpacing="0.14em">LFO RATE</text>
-      <text x="244" y="135" fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.65" textAnchor="end" letterSpacing="0.16em">TIME →</text>
+      <text x="244" y="108" fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.65" textAnchor="end" letterSpacing="0.16em">TIME →</text>
+
+      {/* Legend */}
+      <line x1="10" y1="124" x2="20" y2="124" stroke={accent} strokeWidth="1.5" />
+      <text x="24" y="128" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Sine curve = LFO modulation of delay time</text>
+      <circle cx="14" cy="141" r="4" fill={accent} opacity="0.8" />
+      <text x="24" y="145" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dots = successive delayed repeats (opacity = amplitude decay)</text>
     </svg>
   );
 }

@@ -9,6 +9,7 @@ import { editorial as ED } from '@/lib/theme';
 export default function LearnSpineLayout({ topic, token, answeredSections }) {
     const topicColor = ED.accent;
     const [assessmentState, setAssessmentState] = useState({});
+    const closeTimerRef = useRef(null);
     const spineTrackRef = useRef(null);
     const spineFillRef = useRef(null);
     const containerRef = useRef(null);
@@ -17,6 +18,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
     const [hasBeenVisible, setHasBeenVisible] = useState(new Set());
     const [rippleFired, setRippleFired] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
     const rafRef = useRef(null);
     const rippleZoneRef = useRef(null);
 
@@ -25,6 +27,15 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
         const mq = window.matchMedia('(max-width: 768px)');
         setIsMobile(mq.matches);
         const handler = (e) => setIsMobile(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
+
+    // Reduced-motion detection
+    useEffect(() => {
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setPrefersReducedMotion(mq.matches);
+        const handler = (e) => setPrefersReducedMotion(e.matches);
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
@@ -80,9 +91,12 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 const dotY = rippleZone
                     ? rippleZone.getBoundingClientRect().top - rect.top + rippleZone.offsetHeight / 2
                     : rect.height;
-                // Page-level scroll progress: 0 at top, 1 at bottom
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+                // Container-anchored scroll progress: 0 when top of container enters viewport, 1 at bottom
+                const containerTop = rect.top + window.scrollY;
+                const containerHeight = container.offsetHeight;
+                const scrolled = window.scrollY - containerTop;
+                const scrollable = containerHeight - window.innerHeight;
+                const progress = scrollable > 0 ? Math.max(0, Math.min(1, scrolled / scrollable)) : 0;
                 fill.style.height = (Math.min(1, progress) * dotY) + 'px';
             });
         };
@@ -111,6 +125,11 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
         return () => window.removeEventListener('scroll', checkRipple);
     }, []);
 
+    // Cleanup the close timer on unmount to avoid state updates on an unmounted component
+    useEffect(() => {
+        return () => { if (closeTimerRef.current) clearTimeout(closeTimerRef.current); };
+    }, []);
+
     const handleToggleAssessment = (i) => {
         const current = assessmentState[i] || { show: false, animating: false };
         if (!current.show) {
@@ -129,7 +148,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                 ...prev,
                 [i]: { show: true, animating: false },
             }));
-            setTimeout(() => {
+            closeTimerRef.current = setTimeout(() => {
                 setAssessmentState((prev) => ({
                     ...prev,
                     [i]: { show: false, animating: false },
@@ -180,23 +199,24 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
 
             {/* Sections */}
             {topic.rows.map((row, i) => {
-                const isOdd = i % 2 === 0;
+                const isLeft = i % 2 === 0;
                 const DiagramComponent = diagrams[row.animation];
-                const alreadyAnswered = answeredSections?.includes(row.id);
+                const priorResponse = answeredSections?.find(s => s.id === row.id);
+                const alreadyAnswered = !!priorResponse;
                 const state = assessmentState[i] || { show: false, animating: false };
                 const isActive = activeIndexes.has(i);
 
                 const textBlock = (
                     <div key={`text-${i}`} style={{
-                        opacity: isActive ? 1 : 0.25,
-                        transform: isActive ? 'translateY(0)' : 'translateY(24px)',
-                        transition: 'opacity 0.5s ease, transform 0.5s ease',
+                        opacity: isActive ? 1 : 0.6,
+                        transform: (isActive || prefersReducedMotion) ? 'translateY(0)' : 'translateY(24px)',
+                        transition: prefersReducedMotion ? 'opacity 0.5s ease' : 'opacity 0.5s ease, transform 0.5s ease',
                     }}>
                         <div style={{ position: 'relative', minHeight: state.show ? '200px' : 'auto' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                                 <div style={{
                                     display: 'inline-block', padding: '0.2rem 0.6rem', borderRadius: '9999px',
-                                    background: topicColor + '12', color: topicColor, fontSize: '0.7rem',
+                                    background: topicColor + '20', color: topicColor, fontSize: '0.7rem',
                                     fontWeight: 600, letterSpacing: '0.025em', textTransform: 'uppercase',
                                 }}>
                                     {String(i + 1).padStart(2, '0')}
@@ -233,7 +253,8 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                                     transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease',
                                 }}>
                                     <SectionAssessment assessment={row.assessment} topicId={topic.id} sectionId={row.id}
-                                        topicColor={topicColor} studentToken={token} alreadyAnswered={alreadyAnswered} onComplete={() => {}} />
+                                        topicColor={topicColor} studentToken={token} alreadyAnswered={alreadyAnswered}
+                                        priorCorrect={priorResponse?.correct} onComplete={() => {}} />
                                 </div>
                             )}
                         </div>
@@ -242,9 +263,9 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
 
                 const diagramBlock = (
                     <div key={`diagram-${i}`} style={{
-                        opacity: isActive ? 1 : 0.25,
-                        transform: isActive ? 'translateY(0)' : 'translateY(24px)',
-                        transition: 'opacity 0.5s ease, transform 0.5s ease',
+                        opacity: isActive ? 1 : 0.6,
+                        transform: (isActive || prefersReducedMotion) ? 'translateY(0)' : 'translateY(24px)',
+                        transition: prefersReducedMotion ? 'opacity 0.5s ease' : 'opacity 0.5s ease, transform 0.5s ease',
                         ...(isMobile ? { marginTop: '16px' } : {}),
                     }}>
                         <div style={{
@@ -294,9 +315,9 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                             marginBottom: '100px', position: 'relative', zIndex: 3,
                             minHeight: '200px', alignItems: 'center',
                         }}>
-                        {isOdd ? textBlock : diagramBlock}
+                        {isLeft ? textBlock : diagramBlock}
                         {nodeBlock}
-                        {isOdd ? diagramBlock : textBlock}
+                        {isLeft ? diagramBlock : textBlock}
                     </div>
                 );
             })}
@@ -380,14 +401,16 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                     color: '#1A1A2E',
                     marginBottom: '0.5rem',
                 }}>
-                    Topic complete
+                    You've reached the end of the lesson
                 </h3>
-                <p style={{
-                    fontSize: '0.95rem',
-                    color: '#6B7280',
-                }}>
-                    {topic.rows.length} of {topic.rows.length} sections covered
-                </p>
+                {answeredSections?.length > 0 && (
+                    <p style={{
+                        fontSize: '0.95rem',
+                        color: '#6B7280',
+                    }}>
+                        {answeredSections.length} of {topic.rows.filter(r => r.assessment).length} questions answered
+                    </p>
+                )}
             </div>
 
             {/* Keyframes for bowl wave ripple */}

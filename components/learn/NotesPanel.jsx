@@ -66,10 +66,10 @@ export default function NotesPanel({ storageKey }) {
                     </span>
                 )}
             </div>
-            <textarea aria-label="Response"
+            <textarea aria-label="My notes for this lesson"
                 value={notes}
                 onChange={(e) => handleChange(e.target.value)}
-                placeholder="Write your observations and key takeaways as you watch..."
+                placeholder="Write your notes and key ideas as you work through the lesson…"
                 style={{
                     width: '100%',
                     background: 'transparent',

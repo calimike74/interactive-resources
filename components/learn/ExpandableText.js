@@ -133,6 +133,46 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
         return 0;
     };
 
+    const triggerExpansionForWord = async (wordIndex) => {
+        if (isExpanding) return;
+        setIsExpanding(true);
+        setHistory((prev) => [...prev, segments]);
+        const seg = segments[wordIndex];
+        const selectedText = seg.text;
+        const id = `exp-${++expandIdRef.current}`;
+        const depth = getDepthAtIndex(wordIndex);
+        const newSegments = [
+            ...segments.slice(0, wordIndex),
+            { type: 'expanded', text: '', originalText: selectedText, id, depth, confidence: 'none' },
+            ...segments.slice(wordIndex + 1),
+        ];
+        setSegments(newSegments);
+        setExpandingId(id);
+        setSelStart(null);
+        setSelEnd(null);
+        setOpenExpansions((prev) => new Set(prev).add(id));
+        setExploredTerms((prev) => new Set(prev).add(selectedText.toLowerCase()));
+        const preGenerated = findExpansion(selectedText);
+        if (preGenerated) {
+            await new Promise((r) => setTimeout(r, 300));
+            setSegments((prev) =>
+                prev.map((s) =>
+                    s.type === 'expanded' && s.id === id ? { ...s, text: preGenerated } : s
+                )
+            );
+        } else {
+            setSegments((prev) =>
+                prev.map((s) =>
+                    s.type === 'expanded' && s.id === id
+                        ? { ...s, text: 'No additional detail available for this selection. Try highlighting one of the underlined key terms.' }
+                        : s
+                )
+            );
+        }
+        setIsExpanding(false);
+        setExpandingId(null);
+    };
+
     const triggerExpansion = async () => {
         if (selMin === null || selMax === null || isExpanding) return;
         setIsExpanding(true);
@@ -259,7 +299,12 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
                                 {/* Pill */}
                                 <span
                                     data-idx={index}
+                                    role="button"
+                                    tabIndex={0}
                                     onClick={() => !isExpanding && toggleExpansion(seg.id)}
+                                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && !isExpanding && toggleExpansion(seg.id)}
+                                    aria-expanded={isOpen}
+                                    aria-label={`${seg.originalText} — ${isOpen ? 'collapse' : 'expand'} explanation`}
                                     style={{
                                         padding: '1px 6px',
                                         borderRadius: '4px',
@@ -393,9 +438,18 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
                         <span
                             key={`o-${index}-${seg.text}`}
                             data-idx={index}
+                            role={isExpandable ? 'button' : undefined}
+                            tabIndex={isExpandable ? 0 : undefined}
+                            aria-label={isExpandable ? `Expand ${seg.text}` : undefined}
+                            onKeyDown={isExpandable ? (e) => {
+                                if ((e.key === 'Enter' || e.key === ' ') && !isExpanding) {
+                                    e.preventDefault();
+                                    triggerExpansionForWord(index);
+                                }
+                            } : undefined}
                             style={{
                                 display: 'inline',
-                                cursor: 'pointer',
+                                cursor: isExpandable ? 'pointer' : 'default',
                                 padding: '1px 1px',
                                 borderRadius: '2px',
                                 backgroundColor: selected ? 'rgba(255, 180, 140, 0.45)' : 'transparent',

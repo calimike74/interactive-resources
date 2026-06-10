@@ -9,13 +9,19 @@ import { editorial as ED } from '@/lib/theme';
 
 export default function LearnTopicPage({ topic, parentTopicId }) {
     const searchParams = useSearchParams();
-    const token = searchParams.get('token');
+    const rawToken = searchParams.get('token');
+    // Reject tokens that don't look like a UUID — server validates further, but this
+    // prevents obviously malformed strings reaching downstream calls at all.
+    const token = rawToken && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawToken)
+        ? rawToken
+        : null;
     const [answeredSections, setAnsweredSections] = useState([]);
 
     useEffect(() => {
         if (!token) return;
         getTopicResponses(token, topic.id).then((responses) => {
-            setAnsweredSections(responses.map(r => r.section_id));
+            // Store id + correct so SectionAssessment can surface the prior result
+            setAnsweredSections(responses.map(r => ({ id: r.section_id, correct: r.correct })));
         });
     }, [token, topic.id]);
 
@@ -34,7 +40,7 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
                 <div style={{ maxWidth: '960px', margin: '0 auto' }}>
                     <Link href={`/learn/${parentTopicId}`} style={{
                         fontSize: '0.8125rem',
-                        color: '#6B7280',
+                        color: '#4B5563',
                         textDecoration: 'none',
                     }}>
                         &larr; Back to lessons
@@ -109,6 +115,13 @@ function ExpandableHint({ color }) {
     const timerRef = useRef(null);
 
     useEffect(() => {
+        // Respect reduced-motion: skip animation, show full text immediately
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setCharIdx(fullText.length);
+            setTimeout(() => setVisible(false), 5000);
+            return;
+        }
+
         // Start typing after a short delay
         const startDelay = setTimeout(() => {
             timerRef.current = setInterval(() => {
@@ -130,6 +143,8 @@ function ExpandableHint({ color }) {
         };
     }, []);
 
+    const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     return (
         <span style={{
             fontSize: '0.75rem',
@@ -142,7 +157,7 @@ function ExpandableHint({ color }) {
             transition: 'opacity 1s ease',
         }}>
             {fullText.slice(0, charIdx)}
-            {charIdx < fullText.length && (
+            {charIdx < fullText.length && !reducedMotion && (
                 <span style={{
                     display: 'inline-block',
                     width: '1.5px',

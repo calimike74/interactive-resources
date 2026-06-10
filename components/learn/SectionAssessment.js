@@ -14,6 +14,7 @@ export default function SectionAssessment({
   topicColor,
   studentToken,
   alreadyAnswered,
+  priorCorrect,
   onComplete,
 }) {
   const [completed, setCompleted] = useState(false);
@@ -42,17 +43,20 @@ export default function SectionAssessment({
   }, [assessment.id, topicId, sectionId, studentToken, onComplete]);
 
   if (alreadyAnswered && !completed) {
+    const correct = priorCorrect;
     return (
       <div style={{
         padding: `${spacing[3]} ${spacing[4]}`,
         borderRadius: borderRadius.lg,
-        background: t.accent.successLight,
-        borderLeft: `4px solid ${t.accent.success}`,
+        background: correct ? t.accent.successLight : t.accent.errorLight,
+        borderLeft: `4px solid ${correct ? t.accent.success : t.accent.error}`,
         fontSize: typography.size.sm,
-        color: t.accent.success,
+        color: correct ? t.accent.success : t.accent.error,
         fontWeight: typography.weight.medium,
       }}>
-        You've already answered this section's question.
+        {correct
+          ? 'You answered this correctly on a previous visit.'
+          : 'You answered this incorrectly on a previous visit — re-read the section above.'}
       </div>
     );
   }
@@ -68,7 +72,7 @@ export default function SectionAssessment({
         color: result.correct ? t.accent.success : t.accent.error,
         fontWeight: typography.weight.medium,
       }}>
-        {result.correct ? 'Well done — you applied that concept correctly.' : 'Good attempt — review the explanation above and try the next section.'}
+        {result.correct ? 'Well done — you applied that concept correctly.' : 'Not quite — re-read the explanation above, then move on; the question stays open for another try.'}
       </div>
     );
   }

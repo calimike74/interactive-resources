@@ -43,6 +43,8 @@ export default function VideoCheckpointPlayer({
     const checkpointsRef = useRef(checkpoints);
     const answeredIdsRef = useRef(null);
     const fadeRef = useRef(null);
+    const dialogRef = useRef(null);
+    const lastTimeRef = useRef(0);
 
     const [activeCheckpoint, setActiveCheckpoint] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -87,6 +89,18 @@ export default function VideoCheckpointPlayer({
                 const time = player.getCurrentTime();
                 const cps = checkpointsRef.current || [];
                 const answered = answeredIdsRef.current || new Set();
+
+                // If the user seeked backward, un-trigger any checkpoint that is now
+                // ahead of the current position so it can re-fire on the rewind.
+                // A jump of more than 1 s backward counts as a deliberate seek.
+                if (time < lastTimeRef.current - 1) {
+                    for (const cp of cps) {
+                        if (triggeredRef.current.has(cp.id) && !answered.has(cp.id) && cp.timestamp > time) {
+                            triggeredRef.current.delete(cp.id);
+                        }
+                    }
+                }
+                lastTimeRef.current = time;
 
                 for (const cp of cps) {
                     if (triggeredRef.current.has(cp.id)) continue;
@@ -225,6 +239,18 @@ export default function VideoCheckpointPlayer({
     const totalCount = checkpoints.length;
     const isCorrect = activeCheckpoint && selectedIndex === activeCheckpoint.correctIndex;
 
+    // Escape key closes modal; move focus into dialog on open
+    useEffect(() => {
+        if (!activeCheckpoint) return;
+        function onKeyDown(e) {
+            if (e.key === 'Escape') continueVideo();
+        }
+        window.addEventListener('keydown', onKeyDown);
+        // Move focus into the dialog so screen readers announce it
+        if (dialogRef.current) dialogRef.current.focus();
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [activeCheckpoint, continueVideo]);
+
     return (
         <div style={{ position: 'relative' }}>
             {/* Player frame */}
@@ -260,25 +286,27 @@ export default function VideoCheckpointPlayer({
                 background: 'white',
                 border: `1px solid ${t.border.subtle}`,
                 borderRadius: borderRadius.lg,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
                 fontSize: typography.size.sm,
                 color: t.text.secondary,
             }}>
-                <span>
-                    Checkpoints answered: <strong style={{ color: accentColor }}>{completedCount}</strong> / {totalCount}
-                </span>
-                <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
-                    Video pauses for a quick question — answer and play continues.
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span>
+                        Checkpoints answered: <strong style={{ color: accentColor }}>{completedCount}</strong> / {totalCount}
+                    </span>
+                </div>
+                <div style={{ fontSize: typography.size.xs, color: t.text.tertiary, marginTop: spacing[1] }}>
+                    Pauses for a question — answer to continue.
+                </div>
             </div>
 
             {/* Question modal */}
             {activeCheckpoint && (
                 <div
+                    ref={dialogRef}
                     role="dialog"
                     aria-modal="true"
+                    aria-labelledby="cp-question"
+                    tabIndex={-1}
                     style={{
                         position: 'fixed',
                         inset: 0,
@@ -309,7 +337,7 @@ export default function VideoCheckpointPlayer({
                         }}>
                             Checkpoint at {formatTimestamp(activeCheckpoint.timestamp)}
                         </div>
-                        <h3 style={{
+                        <h3 id="cp-question" style={{
                             fontSize: typography.size.lg,
                             fontWeight: typography.weight.semibold,
                             color: t.text.primary,

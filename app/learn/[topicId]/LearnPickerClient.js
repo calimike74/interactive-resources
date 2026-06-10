@@ -76,7 +76,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                         lineHeight: 1.55,
                         maxWidth: '560px',
                     }}>
-                        Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks.
+                        Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks. Each lesson takes about 10–15 minutes and ends with a quick knowledge check.
                     </p>
 
                     <div style={{
@@ -149,6 +149,16 @@ function CardShell({ href, children }) {
                     e.currentTarget.style.boxShadow = glass.shadow;
                     e.currentTarget.style.transform = 'none';
                 }}
+                onFocus={e => {
+                    e.currentTarget.style.borderColor = ED.accent;
+                    e.currentTarget.style.boxShadow = glass.shadowHover;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onBlur={e => {
+                    e.currentTarget.style.borderColor = ED.accentFaint;
+                    e.currentTarget.style.boxShadow = glass.shadow;
+                    e.currentTarget.style.transform = 'none';
+                }}
             >
                 {children}
             </div>
@@ -199,7 +209,7 @@ function LessonCard({ lesson, topicId, t }) {
                 <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
                     {lesson.rows.length} sections
                 </span>
-                <span style={{ color: ED.accent, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
+                <span aria-hidden="true" style={{ color: ED.accent, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
                     &rarr;
                 </span>
             </div>
@@ -250,7 +260,7 @@ function ResourceCard({ resource, t }) {
                 <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
                     {resource.estimatedTime}
                 </span>
-                <span style={{ color: ED.accent, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
+                <span aria-hidden="true" style={{ color: ED.accent, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
                     &rarr;
                 </span>
             </div>
