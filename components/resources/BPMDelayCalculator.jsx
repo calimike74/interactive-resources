@@ -1251,7 +1251,7 @@ BPM is beats per minute. One minute is 60,000 milliseconds. Divide and you get t
 
 DELAY (ms) = 60,000 / BPM x NOTE
 
-Multiply by a note value to scale up or down. Quarter = 1, eighth = 0.5 (twice as fast), half = 2 (twice as slow). Dotted notes multiply by 1.5; triplets multiply by 2/3.
+Multiply by a note value to scale up or down. Quarter = 1, eighth = 0.5 (twice as fast), half = 2 (twice as slow). A dotted note = its undotted base note × 1.5 (e.g., dotted-eighth = eighth × 1.5). An eighth triplet = quarter ÷ 3 (multiplier 0.333). Three eighth-triplets fill one beat.
 
 THE TAPE CONNECTION
 On a real Echoplex or Roland Space Echo, the formula isn't an abstraction — it's a piece of tape moving past two heads. The physical gap between the record head and the playback head, divided by the tape speed, IS the delay time.
@@ -1284,8 +1284,8 @@ Multiply by a note value to scale up or down:
 - Quarter = 1
 - Eighth = 0.5 (twice as fast)
 - Half = 2 (twice as slow)
-- Dotted notes multiply by 1.5
-- Triplets multiply by 2/3
+- A dotted note = its undotted base note × 1.5 (e.g., dotted-eighth = eighth × 1.5)
+- An eighth triplet = quarter ÷ 3 (multiplier 0.333). Three eighth-triplets fill one beat.
 
 ## The tape connection
 
@@ -1477,6 +1477,7 @@ function BPMDelayCalculator() {
   const ms = calcMs(bpm, note.multiplier);
   const playbackPct = playbackPctFor(ms);
   const labelsCrowded = (playbackPct - RECORD_LEFT_PCT) < 14;
+  const railOverflow = playbackPct >= RAIL_LEFT_LIMIT;
 
   // Lazy-init audio
   const ensureAudio = useCallback(() => {
@@ -1673,7 +1674,7 @@ function BPMDelayCalculator() {
           </p>
         </header>
 
-        <nav className="tl-tabs" aria-label="Lesson sections">
+        <nav className="tl-tabs" role="tablist" aria-label="Lesson sections">
           {[
             { id: 'lesson',    label: 'Lesson',    n: '01' },
             { id: 'visualise', label: 'Visualise', n: '02' },
@@ -1682,9 +1683,13 @@ function BPMDelayCalculator() {
             <button
               key={t.id}
               type="button"
+              id={`tl-tab-${t.id}`}
+              role="tab"
+              aria-selected={tab === t.id}
+              aria-controls={`tl-panel-${t.id}`}
               className={'tl-tab-btn' + (tab === t.id ? ' active' : '')}
               onClick={() => setTab(t.id)}
-              aria-pressed={tab === t.id}
+              tabIndex={tab === t.id ? 0 : -1}
             >
               <span className="tl-tab-num">{t.n}</span>{t.label}
             </button>
@@ -1692,6 +1697,7 @@ function BPMDelayCalculator() {
         </nav>
 
         {tab === 'lesson' && (
+        <div id="tl-panel-lesson" role="tabpanel" aria-labelledby="tl-tab-lesson">
         <div className="tl-stage">
           <aside className="tl-stage-side">
             {/* VIDEO HERO */}
@@ -1719,7 +1725,7 @@ function BPMDelayCalculator() {
               </div>
               <div className="tl-margin-note">
                 <span className="tl-margin-term">IPS</span>
-                Inches per second — how fast the tape moves. 7½ IPS is studio-standard.
+                Inches per second — how fast the tape moves. 7½ IPS is common on tape echo units (Echoplex, Space Echo); professional multi-track recorders typically ran at 15 or 30 IPS.
               </div>
               <div className="tl-margin-note">
                 <span className="tl-margin-term">Wow &amp; flutter</span>
@@ -1754,7 +1760,7 @@ function BPMDelayCalculator() {
               className="tl-bracket-label"
               style={{ left: ((RECORD_LEFT_PCT + playbackPct) / 2) + '%' }}
             >
-              {Math.round(ms)} ms
+              {railOverflow ? '>' : ''}{Math.round(ms)} ms{railOverflow ? ' (off scale)' : ''}
             </div>
           </div>
           <div style={{ position: 'relative', margin: '4px 12px 0', height: 16 }}>
@@ -1844,7 +1850,7 @@ function BPMDelayCalculator() {
         {/* PADS */}
         <div className="tl-pads">
           {SOURCES.map(s => (
-            <div key={s.id} className="tl-pad" onClick={() => trigger(s.id)} role="button" tabIndex={0}>
+            <div key={s.id} className="tl-pad" onClick={() => trigger(s.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger(s.id); } }} role="button" tabIndex={0}>
               <span className="tl-pad-key">{s.key}</span>{s.label}
             </div>
           ))}
@@ -1858,7 +1864,8 @@ function BPMDelayCalculator() {
               <div className="tl-bpm-display">
                 {bpm}<span className="small">BPM</span>
               </div>
-              <input aria-label="Slider"
+              <input aria-label="Beats per minute (BPM)"
+                aria-valuetext={`${bpm} beats per minute`}
                 className="tl-bpm-slider" type="range" min="60" max="180"
                 value={bpm}
                 onChange={e => setBpm(parseInt(e.target.value, 10))}
@@ -1882,6 +1889,7 @@ function BPMDelayCalculator() {
                   key={n.id}
                   className={'tl-note-btn' + (n.id === noteId ? ' active' : '')}
                   onClick={() => setNoteId(n.id)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setNoteId(n.id); } }}
                   role="button" tabIndex={0}
                 >
                   <div className="tl-note-symbol"><NoteIcon id={n.id} size={22} /></div>
@@ -1895,19 +1903,24 @@ function BPMDelayCalculator() {
 
         <p className="tl-aside">
           <span className="tl-tag">Try this</span>
-          Hit the <em>snare</em> pad and watch a glowing flux mark fly across the rail from <em>record</em> to <em>playback</em>. Drag BPM down — playback slides right, the bracket widens, the wet hit arrives later. Pick an eighth — the head jumps left, the gap halves. The maths and the geometry are the same idea.
+          Hit the <em>snare</em> pad and watch a glowing flux mark fly across the rail from <em>record</em> to <em>playback</em>. Lower the BPM — playback slides right, the bracket widens, the wet hit arrives later. Pick an eighth — the head jumps left, the gap halves. The maths and the geometry are the same idea.
         </p>
 
           </div>
         </div>
+        </div>
         )}
 
         {tab === 'visualise' && (
-          <VisualiseTab bpm={bpm} setBpm={setBpm} />
+          <div id="tl-panel-visualise" role="tabpanel" aria-labelledby="tl-tab-visualise">
+            <VisualiseTab bpm={bpm} setBpm={setBpm} />
+          </div>
         )}
 
         {tab === 'practice' && (
-          <PracticeTab />
+          <div id="tl-panel-practice" role="tabpanel" aria-labelledby="tl-tab-practice">
+            <PracticeTab />
+          </div>
         )}
 
         <div className="tl-spec-footer">
@@ -1928,7 +1941,7 @@ function BPMDelayCalculator() {
         <>
           <div className="tl-drawer-overlay" onClick={() => setDrawer(null)} />
           <div className="tl-drawer">
-            <button type="button" className="tl-drawer-close" onClick={() => setDrawer(null)}>×</button>
+            <button type="button" className="tl-drawer-close" aria-label="Close drawer" onClick={() => setDrawer(null)}>×</button>
             {drawer === 'theory' && (
               <TheoryPanel onCopy={handleCopy} />
             )}
@@ -1964,7 +1977,7 @@ function TheoryPanel({ onCopy }) {
       <h2>The maths</h2>
       <p>BPM is <em>beats per minute</em>. One minute is 60,000 milliseconds. Divide and you get the duration of one beat — one quarter note in 4/4 time.</p>
       <div className="tl-formula-block">DELAY (ms) = 60,000 ÷ BPM × NOTE</div>
-      <p>Multiply by a note value to scale up or down. Quarter = 1, eighth = 0.5 (twice as fast), half = 2 (twice as slow). Dotted notes multiply by 1.5; triplets multiply by 2/3.</p>
+      <p>Multiply by a note value to scale up or down. Quarter = 1, eighth = 0.5 (twice as fast), half = 2 (twice as slow). A dotted note = its undotted base note × 1.5 (e.g., dotted-eighth = eighth × 1.5). An eighth triplet = quarter ÷ 3 (multiplier 0.333).</p>
 
       <h3>The tape connection</h3>
       <p>On a real Echoplex or Roland Space Echo, the formula isn't an abstraction — it's a piece of tape moving past two heads. The <em>physical gap</em> between the record head and the playback head, divided by the tape speed, IS the delay time. That's why the head distance meter slides as you change BPM. The maths and the geometry are one idea.</p>
@@ -2000,10 +2013,12 @@ const REF_BPMS = [
   { bpm: 140, genre: 'Drum & bass' },
 ];
 const REF_MULTS = [
-  { id: 'half',      m: 2    },
-  { id: 'quarter',   m: 1    },
-  { id: 'eighth',    m: 0.5  },
-  { id: 'sixteenth', m: 0.25 },
+  { id: 'half',           m: 2    },
+  { id: 'quarter',        m: 1    },
+  { id: 'dotted-eighth',  m: 0.75 },
+  { id: 'eighth',         m: 0.5  },
+  { id: 'eighth-triplet', m: 1/3  },
+  { id: 'sixteenth',      m: 0.25 },
 ];
 
 function ReferencePanel({ onCopy, onPickBpm }) {
@@ -2169,10 +2184,10 @@ function VisualiseTab({ bpm, setBpm }) {
   const closestNote =
     Math.abs(headMs - 60000 / bpm) < 8 ? 'Quarter' :
     Math.abs(headMs - 30000 / bpm) < 6 ? 'Eighth' :
-    Math.abs(headMs - 90000 / bpm) < 8 ? 'Dotted ⅛' :
+    Math.abs(headMs - 45000 / bpm) < 8 ? 'Dotted ⅛' :
     Math.abs(headMs - 15000 / bpm) < 6 ? 'Sixteenth' :
     Math.abs(headMs - 20000 / bpm) < 6 ? 'Eighth Triplet' :
-    Math.abs(headMs - 90000 / bpm * 1) < 10 ? 'Dotted ¼' :
+    Math.abs(headMs - 90000 / bpm) < 10 ? 'Dotted ¼' :
     '—';
 
   // ─── C: Beat grid ──────────────────────────────────────────────────
@@ -2463,11 +2478,13 @@ function Oscilloscope({ barMs, delayMs, color }) {
   };
 
   return (
+    <>
     <svg
       viewBox={`0 0 ${W} ${H}`}
       style={{ width: '100%', height: H, display: 'block' }}
       preserveAspectRatio="none"
-      aria-hidden="true"
+      role="img"
+      aria-label="Oscilloscope showing dry signal (grey) and wet delayed signal (coloured) over one bar"
     >
       {[0, 1, 2, 3, 4].map(i => (
         <line
@@ -2500,6 +2517,11 @@ function Oscilloscope({ barMs, delayMs, color }) {
         );
       })}
     </svg>
+    <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', opacity: 0.7, marginTop: '0.25rem' }}>
+      <span><span style={{ display: 'inline-block', width: 20, height: 3, background: '#c8b89a', verticalAlign: 'middle', marginRight: 4 }} />Dry</span>
+      <span><span style={{ display: 'inline-block', width: 20, height: 3, background: color, verticalAlign: 'middle', marginRight: 4 }} />Wet (delayed)</span>
+    </div>
+    </>
   );
 }
 
@@ -2657,7 +2679,11 @@ function SolveForX() {
       )}
       <div className="tl-bd-try">
         <div className="tl-bd-try-tag">Try this</div>
-        <p>Now solve in reverse: the song is at <strong>92 BPM</strong>. What&rsquo;s the quarter-note delay? (Within ±5 ms is fine.)</p>
+        <p>Now solve in reverse: the song is at <strong>92 BPM</strong>. What&rsquo;s the quarter-note delay? Work it out using the formula above, then check your answer.</p>
+        <details style={{ marginTop: '0.5rem' }}>
+          <summary style={{ cursor: 'pointer', fontSize: '0.85em', opacity: 0.75 }}>Show answer</summary>
+          <p style={{ margin: '0.5rem 0 0' }}>60,000 ÷ 92 = <strong>652 ms</strong></p>
+        </details>
       </div>
     </div>
   );

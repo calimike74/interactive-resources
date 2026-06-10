@@ -7,6 +7,7 @@ export function Slider({
     step = 1,
     value = [50],
     onValueChange,
+    'aria-label': ariaLabel,
     ...props
 }) {
     const currentValue = Array.isArray(value) ? value[0] : value;
@@ -14,7 +15,7 @@ export function Slider({
 
     return (
         <div className={`relative flex w-full touch-none select-none items-center py-2 ${className}`} {...props}>
-            <input aria-label="Slider"
+            <input aria-label={ariaLabel || 'Slider'}
                 type="range"
                 min={min}
                 max={max}

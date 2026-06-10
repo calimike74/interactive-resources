@@ -83,7 +83,10 @@ export default function MIDIPitchBendController() {
             muted
             loop
             playsInline
-            onLoadedData={(e) => { e.target.style.opacity = 1; }}
+            onLoadedData={(e) => {
+              e.target.style.opacity = 1;
+              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) e.target.pause();
+            }}
             style={{
               position: 'absolute',
               inset: 0,
@@ -171,7 +174,7 @@ export default function MIDIPitchBendController() {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Move the Pitch Bend Wheel
                     </label>
-                    <input aria-label="Slider"
+                    <input aria-label="Pitch Bend Wheel"
                       type="range"
                       min="0"
                       max="16383"
@@ -208,7 +211,7 @@ export default function MIDIPitchBendController() {
                     <p className="text-xs text-gray-600 mb-3">
                       This is the setting you'd change in Operator's "Global" tab
                     </p>
-                    <input aria-label="Slider"
+                    <input aria-label="Pitch Bend Range"
                       type="range"
                       min="1"
                       max="24"
@@ -533,7 +536,7 @@ export default function MIDIPitchBendController() {
                   </div>
                   <p className="text-gray-700 text-sm">
                     Use the interactive simulator above to experiment with different pitch bend ranges.
-                    Try setting it to 7 or 12 semitones and move the slider to hear (in your mind) how far the pitch would bend!
+                    The simulator shows the data — listen in Ableton to hear how the bend actually sounds.
                   </p>
                 </div>
               </div>

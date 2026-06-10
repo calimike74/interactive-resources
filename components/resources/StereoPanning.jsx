@@ -18,6 +18,7 @@ const DESIGN_TOKENS_CSS = `
     --foreground-secondary: #4A4F5A;
     --foreground-tertiary: #8B909A;
     --border: #E5E7EB;
+    --border-strong: #9CA3AF;
     --canvas-background: #0A0F1A;
     --canvas-surface: #111827;
     --canvas-foreground: #E8E4DF;
@@ -133,7 +134,7 @@ const learnSections = [
   { level: 'intermediate', title: 'Stereo Microphone Techniques', content: 'X-Y (coincident pair): Two directional mics angled at 90\u2013135\u00B0, capsules at the same point. Excellent mono compatibility, moderate width. A-B (spaced pair): Two mics spaced 30\u2013300 cm apart. Wider, more natural image but potential phase issues in mono. Both techniques are fundamental to capturing acoustic instruments and ensembles in stereo.' },
   { level: 'intermediate', title: 'Stereo and the Perception of Space', content: 'Stereo panning affects perceived depth and width. Wider-panned instruments feel further to the side; centre-panned elements feel closer and more intimate. Reverb and delay further enhance spatial perception \u2014 a dry, centre-panned vocal feels intimate, whilst a reverb-heavy, wide-panned pad feels distant. The interaction of panning, level, and effects creates the three-dimensional soundstage.' },
   { level: 'intermediate', title: 'Mid-Side Concept', content: 'Mid-Side (M-S) separates a stereo signal into Mid (centre/mono content, L+R) and Side (stereo width content, L\u2013R). By adjusting the balance between Mid and Side, you can control stereo width independently. Boosting Side increases width; reducing Side narrows the image towards mono. M-S is used in both recording (with dedicated M-S mic setups) and mixing/mastering.' },
-  { level: 'advanced', title: 'Phase Issues with Stereo Techniques', content: 'Spaced microphone techniques (A-B) introduce time-of-arrival differences that create phase cancellation at specific frequencies when summed to mono. The affected frequencies depend on the spacing: f = speed of sound / (2 \u00D7 distance). Coincident techniques (X-Y) avoid this because both capsules are at the same point. Always check stereo recordings in mono to identify phase problems.' },
+  { level: 'advanced', title: 'Phase Issues with Stereo Techniques', content: 'Spaced microphone techniques (A-B) introduce time-of-arrival differences that create phase cancellation at specific frequencies when summed to mono. The affected frequencies depend on the spacing: f = speed of sound / (2 \u00D7 distance). This gives the lowest affected frequency; comb filtering then repeats at every integer multiple, creating a series of peaks and dips across the spectrum. Coincident techniques (X-Y) avoid this because both capsules are at the same point. Always check stereo recordings in mono to identify phase problems.' },
   { level: 'advanced', title: 'Mono Compatibility', content: 'Many real-world playback systems are mono or near-mono: phone speakers, Bluetooth speakers, club PA systems, and AM radio. When stereo is collapsed to mono, any out-of-phase content cancels. Mix engineers must regularly check mixes in mono. Instruments that disappear or become thin in mono indicate phase issues that need addressing \u2014 often by narrowing the stereo width or adjusting timing.' },
   { level: 'advanced', title: 'Stereo Automation and Movement', content: 'Pan automation moves instruments across the stereo field over time, creating dynamic spatial interest. Examples include auto-panning effects on guitars, gradual widening during a chorus, or dramatic left-to-right sweeps. Automation must be purposeful \u2014 excessive movement is distracting. Subtle automation (e.g., slightly widening backing vocals in the chorus) is more effective than extreme panning changes.' },
   { level: 'advanced', title: 'Haas Effect for Stereo Widening', content: 'The Haas effect (precedence effect) uses a short delay (1\u201335 ms) on one channel of a duplicated mono signal. The brain perceives the sound as coming from the undelayed side, creating apparent stereo width without an obvious echo. This widens mono sources effectively but requires careful mono compatibility checking, as the delayed signal will partially cancel when summed.' }
@@ -667,19 +668,54 @@ const StereoPanning = () => {
                   background: monoCheck ? 'rgba(239, 68, 68, 0.15)' : 'var(--canvas-surface)',
                   color: monoCheck ? '#EF4444' : 'var(--canvas-foreground-tertiary)',
                   cursor: 'pointer', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY, fontWeight: '600'
-                }}>{monoCheck ? '\u{1F50A} Mono ON' : '\u{1F50A} Mono Check'}</button>
+                }} title="Simulates how your mix sounds when collapsed to mono — your pan positions are not changed.">{monoCheck ? '\u{1F50A} Mono Check: ON' : '\u{1F50A} Mono Check: OFF'}</button>
               </div>
               <canvas
                 ref={stageRef}
+                role="img"
+                aria-label={`Stereo field showing ${(challengeActive ? challengeInstruments : instruments).map(i => `${i.label} at ${i.pan === 0 ? 'centre' : (i.pan < 0 ? `L${Math.abs(i.pan)}` : `R${i.pan}`)}`).join(', ')}`}
                 style={{ display: 'block', borderRadius: 'var(--radius-lg)', cursor: dragging !== null ? 'grabbing' : 'grab', width: '100%', maxWidth: '500px', margin: '0 auto' }}
                 onMouseDown={handleStageMouseDown}
                 onMouseMove={handleStageMouseMove}
                 onMouseUp={handleStageMouseUp}
                 onMouseLeave={handleStageMouseUp}
               />
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', marginTop: 'var(--space-2)', marginBottom: 0 }}>
+              {/* Keyboard fallback sliders — visible in challenge mode for accessible pan control */}
+              {challengeActive && !challengeSubmitted && (
+                <div style={{ marginTop: 'var(--space-3)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--space-2)' }}>
+                  {challengeInstruments.map((inst, i) => (
+                    <div key={inst.id}>
+                      <label style={{ display: 'block', fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_BODY, marginBottom: 2 }}>
+                        {inst.emoji} {inst.label}: {inst.pan === 0 ? 'C' : (inst.pan < 0 ? `L${Math.abs(inst.pan)}` : `R${inst.pan}`)}
+                      </label>
+                      <input
+                        type="range" min={-100} max={100} value={inst.pan}
+                        aria-label={`${inst.label} pan position`}
+                        onChange={e => setChallengeInstruments(prev => prev.map((ci, idx) => idx === i ? { ...ci, pan: Number(e.target.value) } : ci))}
+                        style={{ width: '100%', accentColor: '#FF6B35' }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', marginTop: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
                 Drag instruments left/right to change pan position
               </p>
+              {/* Canvas colour legend */}
+              <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                  <div style={{ width: 14, height: 14, borderRadius: '50%', background: 'rgba(74, 127, 212, 0.25)', border: '1.5px solid rgba(201, 184, 122, 0.4)', flexShrink: 0 }} />
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_BODY }}>Instrument at rest</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                  <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#FF6B35', border: '1.5px solid #FF6B35', flexShrink: 0 }} />
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_BODY }}>Currently dragging</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(201, 184, 122, 0.9)', fontFamily: "'Geist Mono', monospace", fontWeight: 600 }}>R35</span>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_BODY }}>Pan position value</span>
+                </div>
+              </div>
             </div>
 
             {/* Mic Technique Comparison */}
@@ -709,7 +745,7 @@ const StereoPanning = () => {
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)' }}>Angle</span>
                       <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{micAngle}&deg;</span>
                     </div>
-                    <input aria-label="Slider" type="range" min={60} max={180} value={micAngle} onChange={e => setMicAngle(parseInt(e.target.value))}
+                    <input aria-label={`X-Y microphone angle, ${micAngle} degrees`} type="range" min={60} max={180} value={micAngle} onChange={e => setMicAngle(parseInt(e.target.value))}
                       style={{ width: '100%', accentColor: '#FF6B35' }} />
                   </div>
                 ) : (
@@ -718,7 +754,7 @@ const StereoPanning = () => {
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)' }}>Spacing</span>
                       <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{micSpacing} cm</span>
                     </div>
-                    <input aria-label="Slider" type="range" min={30} max={300} step={5} value={micSpacing} onChange={e => setMicSpacing(parseInt(e.target.value))}
+                    <input aria-label={`A-B microphone spacing, ${micSpacing} centimetres`} type="range" min={30} max={300} step={5} value={micSpacing} onChange={e => setMicSpacing(parseInt(e.target.value))}
                       style={{ width: '100%', accentColor: '#FF6B35' }} />
                   </div>
                 )}
@@ -750,7 +786,7 @@ const StereoPanning = () => {
               <div style={{ fontSize: 'var(--text-xs)', fontWeight: '300', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--canvas-highlight)', marginBottom: 'var(--space-2)' }}>Challenge Mode</div>
               <h3 style={{ fontFamily: FONT_HEADING, fontWeight: 700, fontSize: 'var(--text-xl)', margin: '0 0 var(--space-4)', color: 'var(--canvas-foreground)' }}>Place the Instruments</h3>
               <p style={{ color: 'var(--canvas-foreground-secondary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-4)', lineHeight: '1.5' }}>
-                Drag each instrument to its correct pan position in a standard rock mix. Kick, bass, and lead vocal should be centre; hi-hat off-centre; guitars panned wide.
+                Drag each instrument to its correct pan position in a standard rock mix. Kick, bass, and lead vocal should be centre; hi-hat off-centre to the right (audience perspective); guitars panned wide.
               </p>
               {!challengeActive ? (
                 <button type="button" data-press onClick={startChallenge} style={{
@@ -778,9 +814,12 @@ const StereoPanning = () => {
                       {challengeInstruments.map((inst, i) => {
                         const target = challengeTargets[i];
                         const isCorrect = Math.abs(inst.pan - target.correctPan) <= target.tolerance;
+                        const reason = target.id === 'hihat' && !isCorrect
+                          ? ' \u2014 Hi-hat is conventionally placed right from the audience\'s perspective, mirroring the drummer\'s right hand.'
+                          : '';
                         return (
                           <div key={i} style={{ fontSize: 'var(--text-xs)', color: isCorrect ? 'var(--success)' : '#EF4444', marginTop: 'var(--space-1)' }}>
-                            {isCorrect ? '\u2713' : '\u2717'} {target.label}: you placed {inst.pan === 0 ? 'C' : (inst.pan < 0 ? `L${Math.abs(inst.pan)}` : `R${inst.pan}`)} (target: {target.correctPan === 0 ? 'C' : (target.correctPan < 0 ? `L${Math.abs(target.correctPan)}` : `R${target.correctPan}`)})
+                            {isCorrect ? '\u2713' : '\u2717'} {target.label}: you placed {inst.pan === 0 ? 'C' : (inst.pan < 0 ? `L${Math.abs(inst.pan)}` : `R${inst.pan}`)} (target: {target.correctPan === 0 ? 'C' : (target.correctPan < 0 ? `L${Math.abs(target.correctPan)}` : `R${target.correctPan}`)}){reason}
                           </div>
                         );
                       })}
@@ -832,6 +871,7 @@ const StereoPanning = () => {
                       else if (showFeedback && isSelected && !isCorrect) { bg = 'var(--error-soft)'; borderColor = 'var(--error)'; }
                       else if (showFeedback && isCorrect) { bg = 'var(--success-soft)'; borderColor = 'var(--success)'; }
 
+                      const prefix = showFeedback && isCorrect ? '✓ ' : showFeedback && isSelected && !isCorrect ? '✗ ' : '';
                       return (
                         <button type="button" data-press key={i} onClick={() => handleAnswer(i)} style={{
                           padding: 'var(--space-3) var(--space-4)', background: bg,
@@ -839,7 +879,7 @@ const StereoPanning = () => {
                           cursor: showFeedback ? 'default' : 'pointer', textAlign: 'left',
                           fontSize: 'var(--text-base)', fontFamily: FONT_BODY, color: 'var(--foreground)',
                           transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)'
-                        }}>{opt}</button>
+                        }}>{prefix}{opt}</button>
                       );
                     })}
                   </div>

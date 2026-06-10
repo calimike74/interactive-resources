@@ -300,7 +300,7 @@ const WaveformExplorer = () => {
         ctx.rotate(-Math.PI / 2);
         ctx.textAlign = 'center';
         ctx.font = '13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-        ctx.fillText('Displacement', 0, 0);
+        ctx.fillText('Amplitude', 0, 0);
         ctx.restore();
 
         // Draw ORIGINAL waveform as dashed reference
@@ -495,6 +495,7 @@ const WaveformExplorer = () => {
 
     // Touch event handlers
     const getTouchPos = (e) => {
+        if (!e.touches || e.touches.length === 0) return null;
         const touch = e.touches[0];
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
@@ -509,6 +510,7 @@ const WaveformExplorer = () => {
     const handleTouchStart = (e) => {
         e.preventDefault();
         const pos = getTouchPos(e);
+        if (!pos) return;
         if (isInBounds(pos)) {
             setIsDrawing(true);
             setUserPoints([pos]);
@@ -519,6 +521,7 @@ const WaveformExplorer = () => {
         e.preventDefault();
         if (!isDrawing) return;
         const pos = getTouchPos(e);
+        if (!pos) return;
         if (isInBounds(pos)) {
             setUserPoints((prev) => [...prev, pos]);
         }
@@ -660,6 +663,8 @@ const WaveformExplorer = () => {
                     width={canvasWidth}
                     height={canvasHeight}
                     style={styles.canvas}
+                    aria-label="Drawing canvas — use mouse or touch to draw your waveform answer"
+                    role="img"
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
@@ -669,6 +674,9 @@ const WaveformExplorer = () => {
                     onTouchEnd={handleTouchEnd}
                 />
             </div>
+            <p style={{ ...styles.hint, marginTop: 4, marginBottom: 0, color: '#888' }}>
+                Keyboard users: press Show Answer to see the correct waveform.
+            </p>
 
             {/* Hint */}
             <p style={styles.hint}>{currentChallengeData.hint}</p>

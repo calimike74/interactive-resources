@@ -74,11 +74,12 @@ const DiffBadge = ({ level }) => {
 // ============================================
 // PRESS BUTTON (with scale feedback)
 // ============================================
-const PressButton = ({ children, onClick, disabled, style = {} }) => {
+const PressButton = ({ children, onClick, disabled, style = {}, 'aria-pressed': ariaPressed }) => {
   const [pressed, setPressed] = useState(false);
   return (
     <button type="button"
       onClick={onClick} disabled={disabled}
+      aria-pressed={ariaPressed}
       onMouseDown={() => setPressed(true)}
       onMouseUp={() => setPressed(false)}
       onMouseLeave={() => setPressed(false)}
@@ -436,7 +437,7 @@ const DigitalAnalogue = () => {
     ctx.fillStyle = 'rgba(255, 107, 53, 0.6)';
     ctx.font = "10px 'Inter', system-ui, sans-serif";
     ctx.textAlign = 'right';
-    ctx.fillText(`${(sampleRate / 1000).toFixed(1)} kHz \u2022 ${clampedSamples} samples shown`, w - padding.right, padding.top + 14);
+    ctx.fillText(`${(sampleRate / 1000).toFixed(1)} kHz \u2014 ${clampedSamples} steps shown across 3 cycles`, w - padding.right, padding.top + 14);
 
   }, [sampleRate, bitDepth]);
 
@@ -733,7 +734,7 @@ const DigitalAnalogue = () => {
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sample Rate</span>
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{(sampleRate / 1000).toFixed(1)} kHz</span>
                   </div>
-                  <input aria-label="Slider" type="range" min={8000} max={96000} step={1000} value={sampleRate}
+                  <input aria-label="Sample Rate" type="range" min={8000} max={96000} step={1000} value={sampleRate}
                     onChange={e => setSampleRate(parseInt(e.target.value))}
                     style={{ width: '100%', accentColor: 'var(--accent)' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', marginTop: 'var(--space-1)' }}>
@@ -748,7 +749,7 @@ const DigitalAnalogue = () => {
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bit Depth</span>
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--canvas-highlight)', fontFamily: "'Geist Mono', monospace" }}>{bitDepth}-bit ({Math.pow(2, bitDepth).toLocaleString()} levels)</span>
                   </div>
-                  <input aria-label="Slider" type="range" min={4} max={24} step={1} value={bitDepth}
+                  <input aria-label="Bit Depth" type="range" min={4} max={24} step={1} value={bitDepth}
                     onChange={e => setBitDepth(parseInt(e.target.value))}
                     style={{ width: '100%', accentColor: 'var(--canvas-highlight)' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', marginTop: 'var(--space-1)' }}>
@@ -763,7 +764,7 @@ const DigitalAnalogue = () => {
                 {[
                   { label: 'Bit Rate (kbps)', value: `${((sampleRate * bitDepth * 2) / 1000).toFixed(0)} kbps` },
                   { label: 'Dynamic Range', value: `~${(bitDepth * 6.02).toFixed(0)} dB` },
-                  { label: 'Covers Human Hearing', value: sampleRate >= 40000 ? '\u2705 Yes' : '\u274C No' }
+                  { label: 'Covers Human Hearing', value: sampleRate >= 44100 ? '\u2705 Yes' : '\u274C No' }
                 ].map((info, i) => (
                   <div key={i} style={{ flex: '1 1 140px', background: 'var(--canvas-surface)', borderRadius: 'var(--radius-md)', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--canvas-border)', textAlign: 'center' }}>
                     <div style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{info.label}</div>
@@ -819,7 +820,7 @@ const DigitalAnalogue = () => {
                       <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{ctrl.label}</span>
                       <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{ctrl.display}</span>
                     </div>
-                    <input aria-label="Slider" type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
+                    <input aria-label={ctrl.label} type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
                       onChange={e => ctrl.set(parseFloat(e.target.value))}
                       style={{ width: '100%', accentColor: 'var(--accent)' }} />
                   </div>
@@ -979,13 +980,15 @@ const DigitalAnalogue = () => {
                       else if (showFeedback && isCorrect) { bg = 'var(--success-soft)'; borderColor = 'var(--success)'; }
 
                       return (
-                        <PressButton key={i} onClick={() => handleAnswer(i)} disabled={showFeedback} style={{
-                          padding: 'var(--space-3) var(--space-4)', background: bg,
-                          border: `2px solid ${borderColor}`, borderRadius: 'var(--radius-md)',
-                          textAlign: 'left',
-                          fontSize: 'var(--text-base)', color: 'var(--foreground)',
-                          transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)'
-                        }}>{opt}</PressButton>
+                        <PressButton key={i} onClick={() => handleAnswer(i)} disabled={showFeedback}
+                          aria-pressed={isSelected}
+                          style={{
+                            padding: 'var(--space-3) var(--space-4)', background: bg,
+                            border: `2px solid ${borderColor}`, borderRadius: 'var(--radius-md)',
+                            textAlign: 'left',
+                            fontSize: 'var(--text-base)', color: 'var(--foreground)',
+                            transition: 'transform, opacity, background-color, color, border-color, box-shadow var(--duration-fast) var(--ease-out)'
+                          }}>{opt}</PressButton>
                       );
                     })}
                   </div>

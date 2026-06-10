@@ -45,22 +45,27 @@ const sections = [
 
 function SectionNav({ active, onNavigate }) {
   return (
-    <div style={{
-      display: 'flex',
-      gap: '4px',
-      background: T.surface,
-      borderRadius: '12px',
-      padding: '4px',
-      marginBottom: '32px',
-      position: 'sticky',
-      top: '12px',
-      zIndex: 10,
-      backdropFilter: 'blur(12px)',
-      border: `1px solid ${T.border}`,
-    }}>
+    <div
+      role="tablist"
+      aria-label="Section navigation"
+      style={{
+        display: 'flex',
+        gap: '4px',
+        background: T.surface,
+        borderRadius: '12px',
+        padding: '4px',
+        marginBottom: '32px',
+        position: 'sticky',
+        top: '12px',
+        zIndex: 10,
+        backdropFilter: 'blur(12px)',
+        border: `1px solid ${T.border}`,
+      }}>
       {sections.map(s => (
         <button type="button"
           key={s.id}
+          role="tab"
+          aria-selected={active === s.id}
           onClick={() => onNavigate(s.id)}
           style={{
             flex: 1,
@@ -70,7 +75,7 @@ function SectionNav({ active, onNavigate }) {
             fontFamily: FONT_BODY,
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
-            color: active === s.id ? T.accent : T.textTertiary,
+            color: active === s.id ? T.accent : T.textSecondary,
             background: active === s.id ? T.accentSoft : 'transparent',
             borderRadius: '8px',
             border: 'none',
@@ -221,7 +226,7 @@ function SamplingExplorer() {
   return (
     <div>
       <SectionHeader label="Sample Rate Explorer" title="How Sampling Captures Sound"
-        description="Adjust the sample rate and wave frequency to see how digital sampling captures an analogue signal. Watch what happens when you drop below the Nyquist threshold." />
+        description="Drop the sample rate below the Nyquist threshold to hear aliasing occur." />
 
       <div style={{
         borderRadius: '12px', overflow: 'hidden', marginBottom: '24px',
@@ -229,7 +234,9 @@ function SamplingExplorer() {
         boxShadow: isAliasing ? '0 0 30px rgba(239,68,68,0.12)' : '0 0 40px rgba(74,127,212,0.12)',
         transition: 'border-color 0.3s, box-shadow 0.3s',
       }}>
-        <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '220px' }} />
+        <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '220px' }}
+          role="img"
+          aria-label={`Waveform showing ${sampleCount} samples at frequency ${waveFrequency}×; status: ${isAliasing ? 'aliasing' : 'good capture'}`} />
       </div>
 
       {/* Status pills */}
@@ -268,7 +275,7 @@ function SamplingExplorer() {
               width: '16px', height: '16px', borderRadius: '50%', background: T.text, transition: 'left 0.2s', display: 'block',
             }} />
           </button>
-          <span style={{ fontSize: '12px', color: 'rgba(232, 228, 223, 0.6)' }}>Show reconstructed signal</span>
+          <span style={{ fontSize: '12px', color: 'rgba(232, 228, 223, 0.6)' }}>Show reconstructed signal <span style={{ color: T.textTertiary, fontSize: '11px' }}>(linear interpolation — real reconstruction is smoother)</span></span>
         </div>
       </div>
 
@@ -279,7 +286,7 @@ function SamplingExplorer() {
           fontSize: '13px', color: T.textSecondary, lineHeight: 1.55,
         }}>
           <span style={{ color: T.error, fontWeight: 700 }}>Aliasing territory. </span>
-          The sample rate ({sampleCount}) is below the Nyquist minimum ({NYQUIST_THRESHOLD} samples for this frequency).
+          Only {samplesPerCycle} sample{samplesPerCycle !== 1 ? 's' : ''} per cycle — below the Nyquist minimum of {waveFrequency * 2} per cycle.
           The reconstructed signal no longer matches the original.
         </div>
       )}
@@ -542,7 +549,7 @@ function FileSizeChallenge() {
         borderRadius: '10px', padding: '10px 14px', marginBottom: '20px',
         fontSize: '12px', color: 'rgba(232,228,223,0.7)', fontFamily: 'monospace', letterSpacing: '0.03em',
       }}>
-        Formula: Sample Rate × (Bit Depth ÷ 8) × Channels × Duration ÷ 1,048,576 = MB
+        Formula: Sample Rate × (Bit Depth ÷ 8) × Channels × Duration ÷ 1,048,576 (= 1,024²: bytes → KB → MB)
       </div>
 
       {/* Scenario card */}
@@ -655,7 +662,7 @@ const CHECKLIST_ITEMS = [
   'I used correct technical vocabulary (e.g., Nyquist, quantisation, dynamic range)',
 ];
 
-const MODEL_ANSWER = 'For a podcast, I would recommend recording at 24-bit/48kHz. The 48kHz sample rate captures frequencies up to 24kHz (Nyquist frequency), which exceeds the range of human hearing at approximately 20kHz. This is appropriate for speech-based content where the fundamental frequencies are typically between 85Hz and 300Hz, with harmonics extending higher. The 24-bit depth provides approximately 144dB of dynamic range (24 × 6dB), giving substantial headroom for recording without risk of clipping, while keeping the noise floor well below audible levels. For streaming distribution, the final file would typically be converted to a compressed format such as MP3 or AAC, reducing the file size significantly from the uncompressed original. Recording at higher quality than the delivery format preserves detail during editing and processing — this is standard professional practice.';
+const MODEL_ANSWER = 'For a podcast, I would recommend recording at 24-bit/48kHz. The 48kHz sample rate captures frequencies up to 24kHz (Nyquist frequency), which exceeds the range of human hearing at approximately 20kHz. This is appropriate for speech-based content where the fundamental frequencies are typically between 85Hz and 300Hz, with harmonics extending higher. The 24-bit depth provides a dynamic range of approximately 144dB (24 × 6), meaning the noise floor sits far below any audible signal — significantly reducing the risk of quantisation noise during quiet passages. Note: the file size calculation in Section 3 uses 16-bit/44.1kHz — that represents a typical distribution format. Professional recording at 24-bit/48kHz is then converted down for delivery. For streaming distribution, the final file would typically be converted to a compressed format such as MP3 or AAC, reducing the file size significantly from the uncompressed original. Recording at higher quality than the delivery format preserves detail during editing and processing — this is standard professional practice.';
 
 function EvaluateResponse() {
   const [response, setResponse] = useState('');
@@ -801,7 +808,8 @@ function SliderControl({ label, value, min, max, accent, displayValue, onChange,
         <label style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: T.textTertiary }}>{label}</label>
         <span style={{ fontSize: '15px', fontWeight: 700, color: accent }}>{displayValue}</span>
       </div>
-      <input aria-label="Slider" type="range" min={min} max={max} step={1} value={value} onChange={e => onChange(Number(e.target.value))}
+      <input aria-label={label} type="range" min={min} max={max} step={1} value={value} onChange={e => onChange(Number(e.target.value))}
+        aria-valuemin={min} aria-valuemax={max} aria-valuenow={value}
         style={{
           width: '100%', appearance: 'none', WebkitAppearance: 'none', height: '4px', borderRadius: '2px',
           background: `linear-gradient(to right, ${accent} 0%, ${accent} ${pct}%, rgba(74,127,212,0.2) ${pct}%)`,
@@ -942,7 +950,7 @@ export default function SamplingPlayground() {
         {/* Footer */}
         <div style={{ textAlign: 'center', padding: '24px 0 32px', borderTop: `1px solid ${T.border}` }}>
           <p style={{ color: T.textTertiary, fontSize: '12px', margin: 0 }}>
-            A-Level Music Technology — Component 4: Producing and Analysing
+            A-Level Music Technology — Component 4: Producing and Analysing — Section 2.4: Digital Audio
           </p>
         </div>
       </div>

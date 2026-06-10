@@ -63,17 +63,24 @@ export default function ADCExplorer() {
             fontFamily: typography.fontFamily,
         }}>
             {/* Tab navigation */}
-            <div style={{
-                display: 'flex',
-                gap: spacing[1],
-                marginBottom: spacing[6],
-                background: t.bg.secondary,
-                borderRadius: borderRadius.lg,
-                padding: spacing[1],
-            }}>
+            <div
+                role="tablist"
+                aria-label="ADC Explorer sections"
+                style={{
+                    display: 'flex',
+                    gap: spacing[1],
+                    marginBottom: spacing[6],
+                    background: t.bg.secondary,
+                    borderRadius: borderRadius.lg,
+                    padding: spacing[1],
+                }}>
                 {TABS.map(tab => (
                     <button type="button"
                         key={tab.id}
+                        role="tab"
+                        aria-selected={activeTab === tab.id}
+                        aria-controls={`tabpanel-${tab.id}`}
+                        id={`tab-${tab.id}`}
                         onClick={() => setActiveTab(tab.id)}
                         style={{
                             flex: 1,
@@ -96,8 +103,16 @@ export default function ADCExplorer() {
             </div>
 
             {/* Tab content */}
-            {activeTab === 'sampling' && <SamplingTab />}
-            {activeTab === 'bitdepth' && <BitDepthTab />}
+            {activeTab === 'sampling' && (
+                <div role="tabpanel" id="tabpanel-sampling" aria-labelledby="tab-sampling">
+                    <SamplingTab />
+                </div>
+            )}
+            {activeTab === 'bitdepth' && (
+                <div role="tabpanel" id="tabpanel-bitdepth" aria-labelledby="tab-bitdepth">
+                    <BitDepthTab />
+                </div>
+            )}
         </div>
     );
 }
@@ -153,10 +168,10 @@ function SamplingTab() {
                 <p style={bodyText}>
                     The ADC is taking <strong style={strongText}>{sampleRate} samples</strong> across
                     this wave, giving <strong style={strongText}>{samplesPerCycle} samples per cycle</strong>.
-                    {Number(samplesPerCycle) < 3
-                        ? ' That\'s very few — the shape of the wave is barely captured. The digital version would sound nothing like the original.'
-                        : Number(samplesPerCycle) < 8
-                            ? ' The basic shape is captured, but the curves aren\'t smooth. Some detail is lost between samples.'
+                    {Number(samplesPerCycle) < 2
+                        ? ' Below the Nyquist minimum — aliasing occurs and the original signal cannot be recovered.'
+                        : Number(samplesPerCycle) < 4
+                            ? ' Borderline — some detail is lost between samples. The Nyquist theorem requires at least 2 samples per cycle.'
                             : ' The wave shape is captured well. More samples means a more accurate digital copy of the original sound.'
                     }
                 </p>
@@ -185,7 +200,7 @@ function SamplingTab() {
 
 
 
-// ─── Tab 3: Bit Depth ───────────────────────────────────────────
+// ─── Tab 2: Bit Depth ───────────────────────────────────────────
 function BitDepthTab() {
     const [bitDepth, setBitDepth] = useState(3);
     const sampleRate = 30;
@@ -316,6 +331,7 @@ function BitDepthTab() {
 const SAMPLING_DEFINITIONS = [
     { label: 'Sampling', text: 'The process of measuring the amplitude of an analogue signal at regular intervals in time. Each measurement is called a sample.' },
     { label: 'Sample Rate', text: 'The number of samples taken per second, measured in Hertz (Hz). CD quality = 44,100 Hz. Professional = 48,000 Hz or 96,000 Hz.' },
+    { label: 'Nyquist Theorem', text: 'The sample rate must be at least twice the highest frequency to be captured. Below this limit, aliasing occurs and the original signal cannot be recovered. This is why CD quality (44,100 Hz) can capture frequencies up to approximately 20,000 Hz — the limit of human hearing.' },
     { label: 'ADC (Analogue-to-Digital Converter)', text: 'A device that converts a continuously varying analogue electrical signal into a stream of binary numerical data by sampling the signal at regular intervals.' },
     { label: 'Analogue Signal', text: 'A continuously varying electrical signal whose voltage is proportional to the original sound wave. Produced by microphones.' },
     { label: 'Digital Signal', text: 'A signal represented as a series of discrete binary numbers, each encoding the amplitude of the sound at a specific moment in time.' },
@@ -534,6 +550,8 @@ function WaveformVisualiser({ frequency, sampleRate, bitDepth, showStaircase, sh
                 height={svgHeight}
                 viewBox={`0 0 ${svgWidth} ${svgHeight}`}
                 style={{ display: 'block', width: '100%', height: 'auto' }}
+                role="img"
+                aria-label={showStaircase ? `Quantisation staircase at ${bitDepth}-bit depth` : `Waveform sampled at ${sampleRate} samples per second`}
             >
                 {/* Quantisation level lines */}
                 {qLines.map((y, i) => (
@@ -607,10 +625,11 @@ function Slider({ label, value, min, max, step, setter, colour, unit }) {
             }}>
                 {label}: {value}{unit}
             </label>
-            <input aria-label="Slider"
+            <input aria-label={label}
                 type="range"
                 min={min} max={max} step={step}
                 value={value}
+                aria-valuemin={min} aria-valuemax={max} aria-valuenow={value}
                 onChange={e => setter(Number(e.target.value))}
                 style={{ width: '100%', accentColor: colour }}
             />

@@ -262,14 +262,17 @@ const MixingProduction = () => {
       if (!audible) return;
       const g = t.gain * masterFader;
       sumSq += g * g;
-      // Add reverb contribution per send
-      const rev = t.send * reverbReturn * masterFader * 0.6;
+      // Add reverb contribution per send (pre-fader: independent of masterFader and mute; post-fader: follows masterFader)
+      const rev = reverbPreFader
+        ? t.send * reverbReturn * 0.6
+        : (audible ? t.send * reverbReturn * masterFader * 0.6 : 0);
       sumSq += rev * rev;
     });
-    const peak = Math.sqrt(sumSq);
+    // Normalise: all tracks at unity gain sum to 0 dBFS, making the Healthy zone reachable
+    const peak = Math.sqrt(sumSq) / Math.sqrt(TRACKS.length);
     const db = peak > 0.0001 ? 20 * Math.log10(peak) : -60;
     return Math.min(db, 6);
-  }, [trackState, masterFader, reverbReturn, soloed]);
+  }, [trackState, masterFader, reverbReturn, reverbPreFader, soloed]);
 
   const masterPeakColor = masterPeakDb > -1 ? '#DC2626' : masterPeakDb > -6 ? '#D97706' : '#059669';
   const masterPeakLabel = masterPeakDb > -1 ? 'CLIPPING — pull master down' : masterPeakDb > -6 ? 'Hot — leave headroom' : 'Healthy headroom';
@@ -374,7 +377,7 @@ const MixingProduction = () => {
           <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: FONT_MONO, marginBottom: 2 }}>
             PAN {t.pan === 0 ? 'C' : (t.pan < 0 ? `L${Math.abs(t.pan)}` : `R${t.pan}`)}
           </div>
-          <input aria-label="Slider" type="range" min={-100} max={100} value={t.pan}
+          <input aria-label={`${t.label} pan, ${t.pan === 0 ? 'centre' : (t.pan < 0 ? `L${Math.abs(t.pan)}` : `R${t.pan}`)}`} type="range" min={-100} max={100} value={t.pan}
             onChange={e => setProp(id, 'pan', Number(e.target.value))}
             style={{ width: '100%', accentColor: t.color }} />
         </div>
@@ -383,17 +386,19 @@ const MixingProduction = () => {
           <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: FONT_MONO, marginBottom: 2 }}>
             SEND {Math.round(t.send * 100)}
           </div>
-          <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(t.send * 100)}
+          <input aria-label={`${t.label} reverb send, ${Math.round(t.send * 100)}`} type="range" min={0} max={100} value={Math.round(t.send * 100)}
             onChange={e => setProp(id, 'send', Number(e.target.value) / 100)}
             style={{ width: '100%', accentColor: 'var(--moss)' }} />
         </div>
-        {/* Fader */}
-        <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--space-2) 0' }}>
-          <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(t.gain * 100)}
+        {/* Fader — rotated range input (cross-browser vertical, Chrome 121+ compatible) */}
+        <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--space-2) 0', height: 120, alignItems: 'center' }}>
+          <input aria-label={`${t.label} fader, ${Math.round(t.gain * 100)}`} type="range" min={0} max={100} value={Math.round(t.gain * 100)}
             onChange={e => setProp(id, 'gain', Number(e.target.value) / 100)}
             style={{
-              writingMode: 'vertical-lr', WebkitAppearance: 'slider-vertical',
-              width: 24, height: 110, accentColor: t.color
+              width: 110, height: 24,
+              transform: 'rotate(-90deg)',
+              accentColor: t.color,
+              cursor: 'pointer',
             }} />
         </div>
         <div style={{ fontSize: 10, color: 'var(--canvas-foreground)', textAlign: 'center', fontFamily: FONT_MONO }}>
@@ -531,6 +536,17 @@ const MixingProduction = () => {
                 }}>Reset to defaults</button>
             </div>
 
+            {/* Scenario 3 task instruction */}
+            {scenarioStep === 3 && (
+              <div style={{
+                background: 'rgba(220, 38, 38, 0.08)', border: '1px solid var(--error)',
+                borderRadius: 'var(--radius-md)', padding: 'var(--space-3)', marginBottom: 'var(--space-4)',
+                color: 'var(--canvas-foreground)', fontSize: 'var(--text-sm)', fontFamily: FONT_BODY, lineHeight: 1.5
+              }}>
+                <strong style={{ color: 'var(--error)' }}>Task:</strong> Your session is too loud for mixdown. Pull the master fader down until the meter reads &ldquo;Healthy headroom&rdquo; (aim for around &minus;6 dBFS). Watch the peak meter &mdash; avoid the red.
+              </div>
+            )}
+
             {/* Channel strips */}
             <div style={{
               display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(84px, 1fr))',
@@ -552,7 +568,7 @@ const MixingProduction = () => {
                     pre-fader
                   </label>
                 </div>
-                <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(reverbReturn * 100)}
+                <input aria-label={`Reverb return level, ${Math.round(reverbReturn * 100)}`} type="range" min={0} max={100} value={Math.round(reverbReturn * 100)}
                   onChange={e => setReverbReturn(Number(e.target.value) / 100)}
                   style={{ width: '100%', accentColor: 'var(--moss)' }} />
                 <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_MONO, textAlign: 'center', marginTop: 4 }}>
@@ -570,7 +586,7 @@ const MixingProduction = () => {
                     glue comp on
                   </label>
                 </div>
-                <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(drumBusComp * 100)}
+                <input aria-label={`Drums glue compression amount, ${Math.round(drumBusComp * 100)}`} type="range" min={0} max={100} value={Math.round(drumBusComp * 100)}
                   onChange={e => setDrumBusComp(Number(e.target.value) / 100)}
                   disabled={!drumBusEnabled}
                   style={{ width: '100%', accentColor: 'var(--sienna)', opacity: drumBusEnabled ? 1 : 0.4 }} />
@@ -588,7 +604,7 @@ const MixingProduction = () => {
             }}>
               <div>
                 <div style={{ color: 'var(--mustard)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Master fader</div>
-                <input aria-label="Slider" type="range" min={0} max={100} value={Math.round(masterFader * 100)}
+                <input aria-label={`Master fader, ${Math.round(masterFader * 100)}`} type="range" min={0} max={100} value={Math.round(masterFader * 100)}
                   onChange={e => setMasterFader(Number(e.target.value) / 100)}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
                 <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_MONO, textAlign: 'center', marginTop: 4 }}>

@@ -148,7 +148,7 @@ const learnSections = [
   { level: 'intermediate', title: 'Delay Types', content: 'Single tap delay produces one repeat at a set time. Multi-tap delay creates multiple repeats at different time intervals, each with independent level and pan. Slapback delay uses short times (40\u2013120 ms) with no feedback for a rockabilly/vocal thickening effect. Timed (sync) delay locks the delay time to the song tempo using note values. Ping-pong delay alternates repeats between left and right channels. Each type serves different musical purposes.' },
   { level: 'intermediate', title: 'Delay Parameters', content: 'Delay time (1\u20132000+ ms) sets the interval between repeats \u2014 often synced to tempo in note values (1/4, 1/8, dotted, triplet). Feedback (0\u2013100%) controls how many times the signal repeats by routing output back to input. Pan positions the delay in the stereo field. EQ on the delay allows filtering of repeats (e.g., rolling off high frequencies for a darker, more natural decay). The wet/dry mix balances the delayed signal against the original.' },
   { level: 'intermediate', title: 'Automatic Double Tracking (ADT)', content: 'ADT was developed at Abbey Road Studios in the 1960s to save artists from having to manually double-track vocal performances. It uses a very short delay (15\u201340 ms) with subtle modulation of the timing and pitch to simulate a second performance. The delay is too short to hear as a distinct echo but creates a thicker, wider vocal sound. John Lennon was famously enthusiastic about ADT and used it extensively.' },
-  { level: 'intermediate', title: 'Calculating Delay from Tempo', content: 'The fundamental formula is: 60,000 \u00F7 BPM = quarter note delay in ms. From this you can derive all note values: half note = quarter \u00D7 2, eighth note = quarter \u00F7 2, sixteenth = quarter \u00F7 4. For dotted values, multiply the note value by 1.5. For triplets, multiply by 2/3. Example: at 120 BPM, quarter = 500 ms, dotted eighth = 375 ms, eighth triplet = 166.7 ms.' },
+  { level: 'intermediate', title: 'Calculating Delay from Tempo', content: 'The fundamental formula is: 60,000 \u00F7 BPM = quarter note delay in ms. From this you can derive all note values: half note = quarter \u00D7 2, eighth note = quarter \u00F7 2, sixteenth = quarter \u00F7 4. For dotted values, multiply the undotted base note by 1.5 (e.g., dotted-eighth = eighth × 1.5). For an eighth triplet, divide the quarter note by 3 (multiplier 0.333). Three eighth-triplets fill exactly one beat. Example: at 120 BPM, quarter = 500 ms, dotted eighth = 375 ms, eighth triplet = 166.7 ms.' },
   { level: 'advanced', title: 'Modulated Delays: Flanger, Chorus, Phaser', content: 'Flanging uses very short delay times (1\u20135 ms) modulated by an LFO, with feedback creating comb filtering \u2014 the result is a metallic, sweeping, jet-like sound. Chorus uses longer modulated delays (20\u201350 ms) without feedback to create a thicker, shimmering, detuned effect. A phaser is technically different \u2014 it uses all-pass filters rather than a delay line, creating notches that sweep through the spectrum. However, the perceptual result is similar to flanging.' },
   { level: 'advanced', title: 'LFO Parameters for Modulated Delays', content: 'The Low Frequency Oscillator (LFO) controls the modulation of the delay time. Rate (0.1\u201310 Hz) sets how quickly the delay time sweeps. Depth controls how far the delay time deviates from its centre point. Feedback routes the output back to the input, intensifying the comb-filtering effect in flangers. The LFO waveform shape (sine, triangle) affects the character of the modulation sweep.' },
   { level: 'advanced', title: 'Comb Filtering and Flanging', content: 'When a signal is mixed with a very short delayed copy, constructive and destructive interference creates a series of peaks and nulls at regular frequency intervals \u2014 this pattern resembles a comb, hence "comb filtering". In a flanger, the LFO continuously varies the delay time, causing the comb filter\'s peaks and nulls to sweep up and down through the frequency spectrum. This creates the characteristic whooshing, jet-engine sound. The feedback parameter intensifies the peaks and nulls.' },
@@ -589,6 +589,9 @@ const DelayEffects = () => {
                 Delay Line Visualisation
               </div>
               <canvas ref={canvasRef} style={{ display: 'block', borderRadius: 'var(--radius-lg)', margin: '0 auto' }} />
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', marginTop: 'var(--space-2)', textAlign: 'center' }}>
+                Y-axis: <strong>L</strong> = left channel · <strong>C</strong> = centre · <strong>R</strong> = right channel (active in Ping-Pong mode). X-axis: time (ms).
+              </div>
             </div>
 
             {/* Controls */}
@@ -603,12 +606,19 @@ const DelayEffects = () => {
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{ctrl.label}</span>
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{ctrl.value}{ctrl.unit}</span>
                   </div>
-                  <input aria-label="Slider" type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
+                  <input aria-label={ctrl.label} type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
                     onChange={e => ctrl.set(parseFloat(e.target.value))}
                     style={{ width: '100%', accentColor: '#FF6B35' }} />
                 </div>
               ))}
             </div>
+
+            {/* Slapback out-of-range warning */}
+            {delayType === 'slapback' && delayTime > 120 && (
+              <div role="status" style={{ marginTop: 'var(--space-3)', padding: 'var(--space-2) var(--space-4)', background: 'var(--warning)', color: '#fff', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)' }}>
+                Slapback delay is typically 40–120 ms. The visualisation is shown at 120 ms — set Delay Time to 120 ms or below to match.
+              </div>
+            )}
 
             {/* BPM Calculator */}
             <div style={{ marginTop: 'var(--space-6)', background: 'var(--canvas-surface)', borderRadius: 'var(--radius-xl)', padding: 'var(--space-6)', border: '1px solid var(--canvas-border)' }}>
@@ -617,7 +627,7 @@ const DelayEffects = () => {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-4)', flexWrap: 'wrap' }}>
                 <label style={{ fontSize: 'var(--text-sm)', color: 'var(--canvas-foreground-secondary)' }}>BPM:</label>
-                <input aria-label="Input" type="number" min="20" max="300" value={bpmInput} onChange={e => setBpmInput(Math.max(20, Math.min(300, parseInt(e.target.value) || 120)))}
+                <input aria-label="BPM value" type="number" min="20" max="300" value={bpmInput} onChange={e => setBpmInput(Math.max(20, Math.min(300, parseInt(e.target.value) || 120)))}
                   style={{
                     padding: 'var(--space-2) var(--space-3)', background: 'var(--canvas-surface)',
                     border: '1px solid var(--canvas-border-hover)', borderRadius: 'var(--radius-md)',
@@ -664,7 +674,7 @@ const DelayEffects = () => {
                     At <strong style={{ color: 'var(--accent)' }}>{challengeData?.bpm} BPM</strong>, what is the delay time for a <strong style={{ color: 'var(--accent)' }}>{challengeData?.noteValue}</strong>?
                   </p>
                   <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center', flexWrap: 'wrap' }}>
-                    <input aria-label="Input" type="number" step="1" value={userGuess} onChange={e => setUserGuess(e.target.value)}
+                    <input aria-label="Your answer in milliseconds" type="number" step="1" value={userGuess} onChange={e => setUserGuess(e.target.value)}
                       placeholder="Your answer (ms)" disabled={challengeSubmitted}
                       style={{
                         padding: 'var(--space-2) var(--space-3)', background: 'var(--canvas-surface)',
@@ -870,12 +880,12 @@ const DelayEffects = () => {
                   <div><strong>Half note</strong> = Quarter &times; 2</div>
                   <div><strong>Eighth note</strong> = Quarter &divide; 2</div>
                   <div><strong>Sixteenth note</strong> = Quarter &divide; 4</div>
-                  <div><strong>Dotted value</strong> = Note value &times; 1.5</div>
-                  <div><strong>Triplet value</strong> = Note value &times; 2/3</div>
+                  <div><strong>Dotted value</strong> = Undotted base note &times; 1.5</div>
+                  <div><strong>Eighth triplet</strong> = Quarter &divide; 3 (multiplier 0.333)</div>
                 </div>
               </CopyableNote>
               <CopyableNote title="Worked Example" color="var(--secondary)" variant="exam">
-                At 140 BPM: Quarter = 60,000 &divide; 140 = 428.6 ms. Dotted eighth = (428.6 &divide; 2) &times; 1.5 = 321.4 ms. This is the delay time The Edge uses for rhythmic guitar patterns.
+                At 110 BPM: Quarter = 60,000 &divide; 110 = 545.5 ms. Dotted eighth = (545.5 &divide; 2) &times; 1.5 = 409.1 ms. This is the delay time The Edge uses for rhythmic guitar patterns (e.g., &ldquo;Where the Streets Have No Name&rdquo;, approx. 110 BPM).
               </CopyableNote>
             </StudioCard>
 

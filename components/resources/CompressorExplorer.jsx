@@ -18,7 +18,7 @@ const COLORS = {
     // section accent colors — tiered by complexity
     easy: '#059669',      // green  — Threshold, Ratio
     medium: '#d97706',    // amber  — Attack, Release
-    advanced: '#9B7530',  // purple — Makeup Gain, Knee
+    advanced: '#7c3aed',  // purple — Makeup Gain, Knee
     mastery: '#0891b2',   // teal   — Full Compressor (section 4)
 };
 
@@ -228,13 +228,14 @@ function DescriptionStrip({ threshold, ratio, attack, release, knee, makeupGain,
         else if (ratio <= 4) parts.push({ text: `Moderate ratio (${ratio}:1)`, detail: 'standard for vocals/mix bus.', type: 'normal' });
         else if (ratio <= 8) parts.push({ text: `Heavy ratio (${ratio}:1)`, detail: 'significant squashing.', type: 'warn' });
         else if (ratio <= 12) parts.push({ text: `Very heavy (${ratio}:1)`, detail: 'approaching limiting.', type: 'warn' });
-        else parts.push({ text: `Brick-wall limiting (${ratio}:1)`, detail: 'peaks are flattened.', type: 'warn' });
+        else parts.push({ text: `Near-limiting (${ratio}:1)`, detail: 'approaching but not reaching brick-wall (∞:1).', type: 'warn' });
     }
 
     // Attack feedback (sections 2, 4)
     if (section === 'all' || section === 2) {
         if (attack < 2) parts.push({ text: 'Ultra-fast attack', detail: 'kills transients, drums lose punch.', type: 'warn' });
-        else if (attack <= 30) parts.push({ text: 'Medium attack', detail: 'transients punch through.', type: 'good' });
+        else if (attack < 10) parts.push({ text: 'Fast attack', detail: 'transients punch through.', type: 'good' });
+        else if (attack <= 30) parts.push({ text: 'Medium attack', detail: 'some transients preserved.', type: 'good' });
         else parts.push({ text: 'Slow attack', detail: 'transients pass, only sustained sound compressed.', type: 'normal' });
     }
 
@@ -308,7 +309,7 @@ function CompressorControl({ label, value, min, max, step, onChange, unit = '', 
                 </label>
                 <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamilyMono }}>{displayVal}{unit}</span>
             </div>
-            <input aria-label="Slider"
+            <input aria-label={label}
                 type="range"
                 min={min}
                 max={max}
@@ -345,7 +346,7 @@ function CompactParam({ label, value, min, max, step, onChange, unit = '' }) {
                 </span>
                 <span style={{ fontSize: '0.55rem', color: '#ccc', fontWeight: 500 }}>{unit}</span>
             </div>
-            <input aria-label="Slider"
+            <input aria-label={label}
                 type="range"
                 min={min}
                 max={max}
@@ -662,21 +663,21 @@ function TimingDiagramSVG({ attack, release, width = 500, height = 240, accentCo
 
             {/* Attack label */}
             <line x1={xStart} y1={yBot + 5} x2={xStart + attackFraction * innerW * 0.8} y2={yBot + 5} stroke={accentColor} strokeWidth={1.5} />
-            <text x={(xStart + xStart + attackFraction * innerW * 0.8) / 2} y={height - 5} fill={accentColor} fontSize={9} textAnchor="middle" fontFamily={typography.fontFamilyMono}>
+            <text x={(xStart + xStart + attackFraction * innerW * 0.8) / 2} y={height - 5} fill={accentColor} fontSize={11} textAnchor="middle" fontFamily={typography.fontFamilyMono}>
                 Attack: {Math.round(attack)} ms
             </text>
 
             {/* Release label */}
             <line x1={xReleaseStart} y1={yBot + 5} x2={xReleaseEnd} y2={yBot + 5} stroke={accentColor} strokeWidth={1.5} strokeOpacity={0.7} />
-            <text x={(xReleaseStart + xReleaseEnd) / 2} y={height - 5} fill={accentColor} fontSize={9} textAnchor="middle" fontFamily={typography.fontFamilyMono} fillOpacity={0.7}>
+            <text x={(xReleaseStart + xReleaseEnd) / 2} y={height - 5} fill={accentColor} fontSize={11} textAnchor="middle" fontFamily={typography.fontFamilyMono} fillOpacity={0.7}>
                 Release: {Math.round(release)} ms
             </text>
 
             {/* Labels */}
-            <text x={pad.left + 4} y={yTop + 12} fill="#aaa" fontSize={9} fontFamily={typography.fontFamily}>
+            <text x={pad.left + 4} y={yTop + 12} fill="#aaa" fontSize={11} fontFamily={typography.fontFamily}>
                 Input Signal
             </text>
-            <text x={pad.left + 4} y={yBot - 4} fill={accentColor} fontSize={9} fontFamily={typography.fontFamily} fillOpacity={0.7}>
+            <text x={pad.left + 4} y={yBot - 4} fill={accentColor} fontSize={11} fontFamily={typography.fontFamily} fillOpacity={0.7}>
                 Gain Reduction
             </text>
         </svg>
@@ -797,6 +798,7 @@ function GainReductionMeter({ reductionDb, width = 32, height = 200 }) {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: spacing[1] }}>
             <div style={{ color: COLORS.textHint, fontSize: '9px', fontFamily: typography.fontFamilyMono, letterSpacing: '0.05em' }}>GR</div>
+            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamilyMono }}>0 dB</div>
             <svg width={width} height={height} style={{ display: 'block' }}>
                 <rect width={width} height={height} fill="#fcfcfb" rx={4} stroke="#eae8e4" strokeWidth={1} />
                 {/* Fill from top */}
@@ -814,9 +816,11 @@ function GainReductionMeter({ reductionDb, width = 32, height = 200 }) {
                     );
                 })}
             </svg>
+            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamilyMono }}>30 dB</div>
             <div style={{ color: COLORS.text, fontSize: '10px', fontFamily: typography.fontFamilyMono, fontWeight: typography.weight.semibold }}>
                 {clampedGR > 0 ? `-${clampedGR.toFixed(1)}` : '0.0'}
             </div>
+            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamilyMono, textAlign: 'center', maxWidth: '60px' }}>Fill ↓ = more gain reduction</div>
         </div>
     );
 }
@@ -1387,7 +1391,7 @@ export default function CompressorExplorer() {
     };
 
     const renderSection4 = () => {
-        const quizScore = Object.values(quizAnswers).filter((a, i) => a === QUIZ_QUESTIONS[i]?.correct).length;
+        const quizScore = Object.entries(quizAnswers).filter(([qi, a]) => a === QUIZ_QUESTIONS[Number(qi)]?.correct).length;
 
         return (
             <div style={{ ...contentCol, maxWidth: '1040px' }}>
@@ -1565,6 +1569,8 @@ export default function CompressorExplorer() {
             }}>
                 <div
                     ref={tabListRef}
+                    role="tablist"
+                    aria-label="Compressor sections"
                     style={{
                         maxWidth: '520px', margin: '0 auto',
                         display: 'flex', position: 'relative',
@@ -1596,6 +1602,10 @@ export default function CompressorExplorer() {
                     ].map(s => (
                         <button type="button"
                             key={s.n}
+                            role="tab"
+                            aria-selected={currentSection === s.n}
+                            aria-controls={`compressor-panel-${s.n}`}
+                            id={`compressor-tab-${s.n}`}
                             ref={el => { tabBtnRefs.current[s.n] = el; }}
                             onClick={() => goToSection(s.n)}
                             style={{
@@ -1683,10 +1693,16 @@ export default function CompressorExplorer() {
             </div>
 
             {/* Current section */}
-            {currentSection === 1 && renderSection1()}
-            {currentSection === 2 && renderSection2()}
-            {currentSection === 3 && renderSection3()}
-            {currentSection === 4 && renderSection4()}
+            <div
+                role="tabpanel"
+                id={`compressor-panel-${currentSection}`}
+                aria-labelledby={`compressor-tab-${currentSection}`}
+            >
+                {currentSection === 1 && renderSection1()}
+                {currentSection === 2 && renderSection2()}
+                {currentSection === 3 && renderSection3()}
+                {currentSection === 4 && renderSection4()}
+            </div>
 
             {/* Bottom navigation */}
             <div style={{

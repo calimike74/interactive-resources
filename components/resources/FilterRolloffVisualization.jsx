@@ -40,13 +40,14 @@ const InfoTooltip = ({ tooltipKey }) => {
     <div className="relative inline-block ml-2">
       <button type="button"
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => e.key === 'Escape' && setIsOpen(false)}
         className="text-gray-400 hover:text-gray-600 transition-colors"
         aria-label={`Info about ${info.title}`}
       >
         <Info size={16} />
       </button>
       {isOpen && (
-        <div className="absolute z-50 w-72 p-3 bg-white border rounded-lg shadow-lg left-6 top-0">
+        <div role="tooltip" className="absolute z-50 w-72 p-3 bg-white border rounded-lg shadow-lg left-6 top-0">
           <h4 className="font-semibold text-sm mb-1">{info.title}</h4>
           <p className="text-xs text-gray-600 mb-2">{info.description}</p>
           {info.examTip && (
@@ -86,7 +87,7 @@ const FrequencySlider = ({ value, onChange }) => {
 
   return (
     <div className="space-y-2">
-      <input aria-label="Slider"
+      <input aria-label="Cutoff frequency"
         type="range"
         min={0}
         max={1000}
@@ -109,8 +110,8 @@ const FrequencySlider = ({ value, onChange }) => {
 };
 
 // Linear slider for resonance
-const Slider = ({ value, onChange, min, max, step }) => (
-  <input aria-label="Slider"
+const Slider = ({ value, onChange, min, max, step, ariaLabel = 'Slider' }) => (
+  <input aria-label={ariaLabel}
     type="range"
     min={min}
     max={max}
@@ -171,16 +172,15 @@ const FilterRolloffVisualization = () => {
         }
       }
 
+      const n = rolloff / 6; // number of poles
       switch (type) {
         case 'lowpass':
-          if (freq > cutoff) {
-            attenuation = -rolloff * Math.abs(octavesFromCutoff);
-          }
+          // nth-order Butterworth: smooth -3 dB at cutoff, no hard corner
+          attenuation = -10 * Math.log10(1 + Math.pow(freq / cutoff, 2 * n));
           break;
         case 'highpass':
-          if (freq < cutoff) {
-            attenuation = -rolloff * Math.abs(octavesFromCutoff);
-          }
+          // nth-order Butterworth: smooth -3 dB at cutoff, no hard corner
+          attenuation = -10 * Math.log10(1 + Math.pow(cutoff / freq, 2 * n));
           break;
         case 'bandpass':
           if (Math.abs(octavesFromCutoff) > bandwidth / 2) {
@@ -318,7 +318,7 @@ const FilterRolloffVisualization = () => {
       {/* Resonance */}
       <div className="space-y-2">
         <div className="flex items-center">
-          <label className="text-sm font-medium">Resonance (Q): {resonance} dB</label>
+          <label className="text-sm font-medium">Resonance (Q): {resonance}</label>
           <InfoTooltip tooltipKey="resonance" />
         </div>
         <Slider
@@ -327,6 +327,7 @@ const FilterRolloffVisualization = () => {
           step={1}
           value={resonance}
           onChange={setResonance}
+          ariaLabel="Resonance (Q)"
         />
         <div className="flex justify-between text-xs text-gray-500">
           <span>None</span>

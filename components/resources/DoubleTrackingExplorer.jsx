@@ -386,8 +386,8 @@ const MistakeSection = ({ onComplete }) => {
                 padding: '2rem',
                 marginBottom: '2rem',
                 border: '2px solid #22c55e',
-                opacity: showCorrect ? 1 : 0.4,
-                transition: 'opacity 0.5s'
+                filter: showCorrect ? 'none' : 'blur(6px)',
+                transition: 'filter 0.5s'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                     <span style={{ fontSize: '2.5rem' }}>✓</span>
@@ -508,6 +508,11 @@ const ExploreSection = () => {
     const animationRef = useRef(null);
     const phaseRef = useRef(0);
 
+    // Respect prefers-reduced-motion on first mount
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setIsAnimating(false);
+    }, []);
+
     const width = 550;
     const height = 220;
     const padding = 40;
@@ -532,7 +537,7 @@ const ExploreSection = () => {
         ctx.lineTo(width - padding, midY);
         ctx.stroke();
 
-        const timingOffset = ((delayMs - 10) / 30) * 0.15 + 0.02;
+        const timingOffset = Math.max(0, ((delayMs - 10) / 30) * 0.15 + 0.02);
         const freqMod = ((pitchCents - 5) / 15) * 0.03 + 0.01;
 
         // Original waveform
@@ -553,9 +558,9 @@ const ExploreSection = () => {
         ctx.shadowBlur = 0;
 
         // ADT processed waveform
-        ctx.strokeStyle = '#DCC892';
+        ctx.strokeStyle = '#22c55e';
         ctx.lineWidth = 2.5;
-        ctx.shadowColor = '#DCC892';
+        ctx.shadowColor = '#22c55e';
         ctx.shadowBlur = 6;
         ctx.beginPath();
 
@@ -574,7 +579,7 @@ const ExploreSection = () => {
         ctx.fillStyle = '#DCC892';
         ctx.textAlign = 'left';
         ctx.fillText('Original', padding, 25);
-        ctx.fillStyle = '#DCC892';
+        ctx.fillStyle = '#22c55e';
         ctx.fillText('ADT Processed', padding + 80, 25);
 
     }, [delayMs, pitchCents]);
@@ -626,6 +631,8 @@ const ExploreSection = () => {
                         ref={canvasRef}
                         width={width}
                         height={height}
+                        role="img"
+                        aria-label="Animated waveform comparison: Original signal (gold) and ADT-processed signal (green) showing adjustable delay and pitch modulation."
                         style={{
                             maxWidth: '100%',
                             height: 'auto',
@@ -642,7 +649,7 @@ const ExploreSection = () => {
                             <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Delay Time</span>
                             <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>{delayMs}ms</span>
                         </div>
-                        <input aria-label="Slider"
+                        <input aria-label="Delay Time in milliseconds"
                             type="range"
                             min="5"
                             max="80"
@@ -664,7 +671,7 @@ const ExploreSection = () => {
                             <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Pitch Modulation</span>
                             <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>+/-{pitchCents}c</span>
                         </div>
-                        <input aria-label="Slider"
+                        <input aria-label="Pitch Modulation in cents"
                             type="range"
                             min="0"
                             max="30"
@@ -1242,7 +1249,7 @@ export default function DoubleTrackingExplorer() {
                         maxWidth: '480px', margin: '0 auto',
                         textShadow: '0 1px 4px rgba(0,0,0,0.2)',
                     }}>
-                        Understand why copying a track just makes it louder, and how ADT creates real stereo width.
+                        Understand why copying a track just makes it louder, and how ADT simulates the thickness and density of a second vocal performance.
                     </p>
                 </div>
             </div>

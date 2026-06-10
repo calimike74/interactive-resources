@@ -89,12 +89,11 @@ const DistortionLab = () => {
       shortName: 'Soft',
       color: '#EA580C',
       description: 'Gradual saturation with smoother harmonic content. The signal is progressively compressed as it approaches the threshold.',
-      characteristics: ['Overdrive pedals', 'Analog tape', 'Warm compression', 'Smoother harmonics'],
+      characteristics: ['Overdrive pedals', 'Analog tape', 'Warm compression', 'Odd harmonics with faster decay — softer tone than hard clip'],
       technicalDetail: 'Uses a hyperbolic tangent or similar curve to gradually reduce gain as signal increases. Preserves more of the original dynamics.',
       apply: (x, d = DRIVE_THRESHOLD) => {
         const normalized = x / d;
-        if (Math.abs(normalized) < 1) return x;
-        return d * Math.sign(x) * (1 - Math.exp(-Math.abs(normalized)));
+        return d * Math.tanh(normalized * 1.5) / Math.tanh(1.5);
       },
       genres: ['Blues', 'Classic Rock', 'Jazz Fusion', 'Country'],
       plugins: ['Waves Abbey Road Saturator', 'UAD Studer', 'Soundtoys Decapitator'],
@@ -198,6 +197,11 @@ const DistortionLab = () => {
 
     return { original, distorted };
   };
+
+  // Respect prefers-reduced-motion on first mount
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setIsAnimating(false);
+  }, []);
 
   // Animation loop
   useEffect(() => {
@@ -715,6 +719,7 @@ const DistortionLab = () => {
                     Input Gain: {inputGain.toFixed(2)}x
                   </label>
                   <Slider
+                    aria-label="Input Gain"
                     value={[inputGain]}
                     onValueChange={([val]) => setInputGain(val)}
                     min={0.1}
@@ -822,14 +827,17 @@ const DistortionLab = () => {
                 <div className="flex justify-center gap-4 mt-2 text-xs">
                   {showOriginal && (
                     <span className="flex items-center gap-2">
+                      <span style={{ display: 'inline-block', width: '16px', height: '2px', background: '#94A3B8', borderRadius: '1px' }} />
                       Original
                     </span>
                   )}
                   <span className="flex items-center gap-2">
+                    <span style={{ display: 'inline-block', width: '16px', height: '2px', background: activeColor, borderRadius: '1px' }} />
                     Distorted
                   </span>
                   {showThreshold && (
                     <span className="flex items-center gap-2">
+                      <span style={{ display: 'inline-block', width: '16px', height: '2px', background: '#EF4444', borderRadius: '1px', borderTop: '2px dashed #EF4444' }} />
                       Threshold
                     </span>
                   )}
@@ -1113,6 +1121,7 @@ const DistortionLab = () => {
                     Pre-Gain: {chainGain.toFixed(2)}x
                   </label>
                   <Slider
+                    aria-label="Signal Chain Pre-Gain"
                     value={[chainGain]}
                     onValueChange={([val]) => setChainGain(val)}
                     min={0.5}
@@ -1139,6 +1148,7 @@ const DistortionLab = () => {
                     Low-Pass Filter: {chainFilterFreq}Hz
                   </label>
                   <Slider
+                    aria-label="Low-Pass Filter Frequency in Hz"
                     value={[chainFilterFreq]}
                     onValueChange={([val]) => setChainFilterFreq(val)}
                     min={500}

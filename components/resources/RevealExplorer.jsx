@@ -50,6 +50,7 @@ const useHandTracking = (enabled, canvasWidth, canvasHeight) => {
                 if (!videoRef.current) {
                     videoRef.current = document.createElement('video');
                     videoRef.current.style.display = 'none';
+                    videoRef.current.setAttribute('aria-hidden', 'true');
                     document.body.appendChild(videoRef.current);
                 }
 
@@ -323,14 +324,22 @@ const SpotlightRevealCanvas = ({
     useEffect(() => {
         if (!imagesLoaded) return;
 
+        const reducedMotion = typeof window !== 'undefined' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         const animate = () => {
             // Determine current position source: hand tracking or mouse
             const useHand = handEnabled && isHandTracking && handPosition;
             const targetPos = useHand ? handPosition : mousePos;
 
-            // Lerp for smooth following
-            smoothPos.current.x += (targetPos.x - smoothPos.current.x) * 0.15;
-            smoothPos.current.y += (targetPos.y - smoothPos.current.y) * 0.15;
+            // Lerp for smooth following (disabled when prefers-reduced-motion)
+            if (reducedMotion) {
+                smoothPos.current.x = targetPos.x;
+                smoothPos.current.y = targetPos.y;
+            } else {
+                smoothPos.current.x += (targetPos.x - smoothPos.current.x) * 0.15;
+                smoothPos.current.y += (targetPos.y - smoothPos.current.y) * 0.15;
+            }
 
             const canvas = canvasRef.current;
             if (!canvas || !baseImgRef.current || !revealImgRef.current) {
@@ -417,8 +426,10 @@ const SpotlightRevealCanvas = ({
 
         setMousePos({ x: newX, y: newY });
 
-        // Calculate parallax offset based on cursor position
-        if (enableParallax) {
+        // Calculate parallax offset based on cursor position (disabled when prefers-reduced-motion)
+        const prefersReducedMotion = typeof window !== 'undefined' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (enableParallax && !prefersReducedMotion) {
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const parallaxStrength = 12; // Max pixels of shift
@@ -436,6 +447,40 @@ const SpotlightRevealCanvas = ({
             setParallaxOffset({ x: 0, y: 0 });
         }
     }, [enableParallax]);
+
+    const handleTouchMove = useCallback((e) => {
+        e.preventDefault();
+        if (!containerRef.current || !e.touches[0]) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const newX = (e.touches[0].clientX - rect.left) * scaleX;
+        const newY = (e.touches[0].clientY - rect.top) * scaleY;
+        if (!isMouseInside) {
+            smoothPos.current = { x: newX, y: newY };
+            setIsMouseInside(true);
+        }
+        setMousePos({ x: newX, y: newY });
+    }, [isMouseInside]);
+
+    const handleKeyDown = useCallback((e) => {
+        const step = 20;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const current = { ...mousePos };
+        if (!isMouseInside) {
+            smoothPos.current = { x: canvas.width / 2, y: canvas.height / 2 };
+            setIsMouseInside(true);
+            setMousePos({ x: canvas.width / 2, y: canvas.height / 2 });
+            return;
+        }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); setMousePos(p => ({ ...p, x: Math.max(0, p.x - step) })); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); setMousePos(p => ({ ...p, x: Math.min(canvas.width, p.x + step) })); }
+        if (e.key === 'ArrowUp')    { e.preventDefault(); setMousePos(p => ({ ...p, y: Math.max(0, p.y - step) })); }
+        if (e.key === 'ArrowDown')  { e.preventDefault(); setMousePos(p => ({ ...p, y: Math.min(canvas.height, p.y + step) })); }
+    }, [isMouseInside, mousePos]);
 
     if (!baseImage || !revealImage) {
         return (
@@ -456,11 +501,18 @@ const SpotlightRevealCanvas = ({
             ref={containerRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={() => setIsMouseInside(false)}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
+            role="img"
+            aria-label="Spotlight reveal — hover, touch, or use arrow keys to reveal the hidden layer"
             style={{
                 position: 'relative',
                 cursor: 'none',
                 borderRadius: borderRadius.xl,
                 overflow: 'hidden',
+                outline: 'none',
             }}
         >
             <canvas
@@ -1197,7 +1249,10 @@ const GalleryView = ({ onSelectExample }) => {
                         }}
                     >
                         {/* Preview - image or placeholder */}
-                        <div style={{
+                        <div
+                            role="img"
+                            aria-label={example.title ? `Preview image for ${example.title}` : 'Example preview'}
+                            style={{
                             background: example.baseImage
                                 ? `url(${example.baseImage}) center/cover no-repeat`
                                 : 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
@@ -1260,7 +1315,8 @@ const ExplorerView = ({ example, onBack }) => {
         setDiscoveredHotspots(prev => new Set([...prev, hotspot.id]));
     };
 
-    const progress = (discoveredHotspots.size / example.hotspots.length) * 100;
+    const hotspots = example.hotspots ?? [];
+    const progress = hotspots.length ? (discoveredHotspots.size / hotspots.length) * 100 : 0;
 
     return (
         <div style={{ padding: spacing[6] }}>
@@ -1342,7 +1398,7 @@ const ExplorerView = ({ example, onBack }) => {
                     }}>
                         <span style={{ fontWeight: typography.weight.semibold, color: t.accent.success }}>
                             {discoveredHotspots.size}
-                        </span> / {example.hotspots.length} discovered
+                        </span> / {hotspots.length} discovered
                     </div>
                 </div>
             </div>
@@ -1363,7 +1419,7 @@ const ExplorerView = ({ example, onBack }) => {
                         width={800}
                         height={500}
                         title={example.title}
-                        hotspots={example.hotspots}
+                        hotspots={hotspots}
                         activeHotspot={activeHotspot}
                         onHotspotClick={handleHotspotClick}
                         onHotspotHover={(h) => h && handleHotspotClick(h)}
@@ -1386,7 +1442,7 @@ const ExplorerView = ({ example, onBack }) => {
                 flexWrap: 'wrap',
                 gap: spacing[2],
             }}>
-                {example.hotspots.map((hotspot, idx) => (
+                {hotspots.map((hotspot, idx) => (
                     <button type="button"
                         key={hotspot.id}
                         onClick={() => handleHotspotClick(hotspot)}
@@ -1813,6 +1869,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
                         ref={previewCanvasRef}
                         width={320}
                         height={240}
+                        aria-label="Hand tracking camera preview"
                         style={{
                             width: '100%',
                             height: '100%',

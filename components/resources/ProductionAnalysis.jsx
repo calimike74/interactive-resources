@@ -449,8 +449,8 @@ const ProductionAnalysis = () => {
 
               <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
                 <div>
-                  <label style={{ display: 'block', fontWeight: 700, color: 'var(--accent)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>1. Evidence — what you can hear, with a section or timestamp</label>
-                  <textarea aria-label="Response" value={practiceEvidence} onChange={e => setPracticeEvidence(e.target.value)}
+                  <label htmlFor="practice-evidence" style={{ display: 'block', fontWeight: 700, color: 'var(--accent)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>1. Evidence — what you can hear, with a section or timestamp</label>
+                  <textarea id="practice-evidence" value={practiceEvidence} onChange={e => setPracticeEvidence(e.target.value)}
                     placeholder="e.g. In the chorus from 0:48, the lead vocal sits in a wider, more reverberant space than in the verse…"
                     style={{
                       width: '100%', minHeight: 80, padding: 'var(--space-3)',
@@ -478,8 +478,8 @@ const ProductionAnalysis = () => {
                   </div>
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontWeight: 700, color: 'var(--moss)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>3. Effect — what the technique does for the music</label>
-                  <textarea aria-label="Response" value={practiceEffect} onChange={e => setPracticeEffect(e.target.value)}
+                  <label htmlFor="practice-effect" style={{ display: 'block', fontWeight: 700, color: 'var(--moss)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>3. Effect — what the technique does for the music</label>
+                  <textarea id="practice-effect" value={practiceEffect} onChange={e => setPracticeEffect(e.target.value)}
                     placeholder="e.g. it pushes the vocal into a shared space with the rest of the band, signalling the chorus arrival without losing intelligibility…"
                     style={{
                       width: '100%', minHeight: 80, padding: 'var(--space-3)',

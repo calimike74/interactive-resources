@@ -28,7 +28,7 @@ const SYNTHESIS_CONCEPTS = [
         id: 'bpf',
         term: 'BPF (Band-Pass Filter)',
         definition: 'Allows only frequencies AROUND the cutoff to pass. Removes both highs and lows.',
-        synthContext: 'Creates telephone/radio effect. Focused, nasal sound.',
+        synthContext: 'Creates telephone/radio effect. Focused, nasal sound. Passes a band centred on the cutoff; bandwidth is set by Q.',
         svgType: 'bpf',
         color: '#ff6b00',
         glowColor: 'rgba(255, 107, 0, 0.4)'
@@ -45,7 +45,7 @@ const SYNTHESIS_CONCEPTS = [
     {
         id: 'cutoff',
         term: 'Cutoff Frequency',
-        definition: 'The frequency point where the filter begins to take effect.',
+        definition: 'The frequency at which the signal is reduced by 3 dB (half power). Above or below this point, attenuation increases.',
         synthContext: 'Sweep the cutoff for classic "wah" sounds. The heart of filter control.',
         svgType: 'cutoff',
         color: '#ffd700',
@@ -224,7 +224,12 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
 
     return (
         <div
+            role="button"
+            tabIndex={0}
+            aria-label={`${concept.term} — press to reveal definition`}
+            aria-pressed={isFlipped}
             onClick={onFlip}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onFlip()}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{ perspective: '1000px', cursor: 'pointer', width: '100%', height: '220px' }}
@@ -259,7 +264,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                     <div style={{ fontSize: '0.9rem', fontWeight: '600', color: isHovered ? concept.color : '#f8f9fa', textAlign: 'center' }}>
                         {concept.term}
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: '#4a4f5a', marginTop: '0.75rem', fontFamily: 'monospace', padding: '0.4rem 0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '6px' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#767b88', marginTop: '0.75rem', fontFamily: 'monospace', padding: '0.4rem 0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '6px' }}>
                         Click to reveal →
                     </div>
                 </div>
@@ -358,14 +363,12 @@ const FrequencyResponseGraph = ({ filterType, frequency, gain, q }) => {
 
     const calculateResponse = useCallback((freq, ft, fc, g, qVal) => {
         if (ft === 'highpass') {
-            if (freq >= fc) return 0;
-            const octavesBelow = Math.log2(fc / freq);
-            return -12 * octavesBelow;
+            // 2-pole Butterworth: smooth -3 dB at fc, no hard corner
+            return -10 * Math.log10(1 + Math.pow(fc / freq, 4));
         }
         if (ft === 'lowpass') {
-            if (freq <= fc) return 0;
-            const octavesAbove = Math.log2(freq / fc);
-            return -12 * octavesAbove;
+            // 2-pole Butterworth: smooth -3 dB at fc, no hard corner
+            return -10 * Math.log10(1 + Math.pow(freq / fc, 4));
         }
         if (ft === 'lowshelf') {
             const ratio = freq / fc;
@@ -402,10 +405,10 @@ const FrequencyResponseGraph = ({ filterType, frequency, gain, q }) => {
             const logFreq = Math.log10(20) + (Math.log10(20000) - Math.log10(20)) * (i / numPoints);
             const freq = Math.pow(10, logFreq);
             let response = calculateResponse(freq, filterType, frequency, gain, q);
-            response = Math.max(-48, Math.min(24, response));
+            response = Math.max(-24, Math.min(24, response));
 
             const x = padding.left + ((logFreq - Math.log10(20)) / (Math.log10(20000) - Math.log10(20))) * innerWidth;
-            const y = padding.top + innerHeight / 2 - (response / 48) * (innerHeight / 2);
+            const y = padding.top + innerHeight / 2 - (response / 24) * (innerHeight / 2);
 
             points.push({ x, y, freq, response });
         }
@@ -453,7 +456,7 @@ const FrequencyResponseGraph = ({ filterType, frequency, gain, q }) => {
                     return <line key={`v-${freq}`} x1={x} y1={padding.top} x2={x} y2={padding.top + innerHeight} stroke="rgba(255,255,255,0.05)" />;
                 })}
                 {dbLabels.map((db) => {
-                    const y = padding.top + innerHeight / 2 - (db / 48) * (innerHeight / 2);
+                    const y = padding.top + innerHeight / 2 - (db / 24) * (innerHeight / 2);
                     return <line key={`h-${db}`} x1={padding.left} y1={y} x2={padding.left + innerWidth} y2={y} stroke={db === 0 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.04)'} />;
                 })}
 
@@ -467,7 +470,7 @@ const FrequencyResponseGraph = ({ filterType, frequency, gain, q }) => {
                     return <text key={`fl-${freq}`} x={x} y={height - 15} fill="#8b909a" fontSize="11" textAnchor="middle" fontFamily="monospace">{label}</text>;
                 })}
                 {dbLabels.map((db) => {
-                    const y = padding.top + innerHeight / 2 - (db / 48) * (innerHeight / 2);
+                    const y = padding.top + innerHeight / 2 - (db / 24) * (innerHeight / 2);
                     return <text key={`dl-${db}`} x={padding.left - 10} y={y + 4} fill="#8b909a" fontSize="11" textAnchor="end" fontFamily="monospace">{db > 0 ? '+' : ''}{db}</text>;
                 })}
                 <text x={width / 2} y={height - 2} fill="#c9cdd4" fontSize="12" textAnchor="middle">Frequency (Hz)</text>
@@ -519,16 +522,16 @@ const Part1Review = ({ onComplete }) => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
                 <div>
-                    <div style={{ fontSize: '0.7rem', color: '#4a4f5a', marginBottom: '0.25rem', fontFamily: 'monospace', textTransform: 'uppercase' }}>Cards Revealed</div>
+                    <div style={{ fontSize: '0.7rem', color: '#767b88', marginBottom: '0.25rem', fontFamily: 'monospace', textTransform: 'uppercase' }}>Cards Revealed</div>
                     <div style={{ fontSize: '2rem', fontWeight: '700', color: '#DCC892' }}>{flippedCards.size} / {SYNTHESIS_CONCEPTS.length}</div>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     {!allRevealed && (
                         <button type="button" onClick={revealAll} style={{ padding: '0.875rem 1.5rem', background: 'transparent', border: '1px solid #ffffff15', borderRadius: '12px', color: '#8b909a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500' }}>
-                            Reveal All
+                            Flip all cards to show definitions
                         </button>
                     )}
-                    <button type="button" onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <button type="button" onClick={onComplete} disabled={!allRevealed} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#767b88', cursor: allRevealed ? 'pointer' : 'default', fontSize: '0.9rem', fontWeight: '600' }}>
                         Continue to Part 2 {allRevealed && '→'}
                     </button>
                 </div>
@@ -544,7 +547,7 @@ const Part1Review = ({ onComplete }) => {
 
             <CopyableNote title="Filter Parameters - Key Definitions" color="#ffd700" variant="key">
                 <strong>FILTER PARAMETERS:</strong><br/><br/>
-                • <strong>Cutoff Frequency:</strong> The frequency point where the filter begins to take effect. Sweeping this creates the classic "wah" sound.<br/><br/>
+                • <strong>Cutoff Frequency:</strong> The frequency at which the signal is reduced by 3 dB (half power). Sweeping this creates the classic "wah" sound.<br/><br/>
                 • <strong>Q / Resonance:</strong> Boosts frequencies at the cutoff point. Higher Q = more emphasis. Can create squelchy, acidic sounds and even self-oscillate.<br/><br/>
                 • <strong>Slope (dB/octave):</strong> How steeply the filter attenuates. 24dB/oct (4-pole) = aggressive. 12dB/oct (2-pole) = gentle, musical.
             </CopyableNote>
@@ -560,7 +563,7 @@ const Part2Bridge = ({ onComplete }) => {
         { aspect: 'Primary Purpose', synthesis: { text: 'Creative sound design', icon: '' }, eq: { text: 'Corrective mixing', icon: '' } },
         { aspect: 'What It Affects', synthesis: { text: 'Raw synthesized waveforms', icon: '〜' }, eq: { text: 'Recorded audio', icon: '' } },
         { aspect: 'How It\'s Used', synthesis: { text: 'Dynamic - sweeps, modulation, LFO', icon: '↗' }, eq: { text: 'Static - set and forget', icon: '▬' } },
-        { aspect: 'Resonance Use', synthesis: { text: 'Extreme - self-oscillation, acid', icon: '' }, eq: { text: 'Subtle - narrow surgical cuts', icon: '' } },
+        { aspect: 'Resonance Use', synthesis: { text: 'Extreme - self-oscillation, acid', icon: '' }, eq: { text: 'Gentle peak at centre frequency; rarely pushed to extremes', icon: '' } },
         { aspect: 'Typical Settings', synthesis: { text: 'Wide sweeps, high resonance', icon: '' }, eq: { text: 'Precise frequencies, 3-6dB', icon: '' } }
     ];
 
@@ -569,7 +572,7 @@ const Part2Bridge = ({ onComplete }) => {
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                     <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #34d399 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 2</div>
-                    <div style={{ fontSize: '0.7rem', color: '#4a4f5a', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>The Connection</div>
+                    <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>The Connection</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Same Tools, Different Job</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -596,7 +599,7 @@ const Part2Bridge = ({ onComplete }) => {
                     <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#f8f9fa' }}>Creative Filtering</h3>
                     {comparisons.map((item, idx) => (
                         <div key={idx} style={{ padding: '0.75rem', background: '#16181f', borderRadius: '10px', marginBottom: idx < comparisons.length - 1 ? '0.5rem' : 0 }}>
-                            <div style={{ fontSize: '0.65rem', color: '#4a4f5a', marginBottom: '0.25rem' }}>{item.aspect}</div>
+                            <div style={{ fontSize: '0.65rem', color: '#767b88', marginBottom: '0.25rem' }}>{item.aspect}</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <span>{item.synthesis.icon}</span>
                                 <span style={{ color: '#c9cdd4', fontSize: '0.85rem' }}>{item.synthesis.text}</span>
@@ -614,7 +617,7 @@ const Part2Bridge = ({ onComplete }) => {
                     <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#f8f9fa' }}>Corrective Mixing</h3>
                     {comparisons.map((item, idx) => (
                         <div key={idx} style={{ padding: '0.75rem', background: '#16181f', borderRadius: '10px', marginBottom: idx < comparisons.length - 1 ? '0.5rem' : 0 }}>
-                            <div style={{ fontSize: '0.65rem', color: '#4a4f5a', marginBottom: '0.25rem' }}>{item.aspect}</div>
+                            <div style={{ fontSize: '0.65rem', color: '#767b88', marginBottom: '0.25rem' }}>{item.aspect}</div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <span>{item.eq.icon}</span>
                                 <span style={{ color: '#c9cdd4', fontSize: '0.85rem' }}>{item.eq.text}</span>
@@ -826,7 +829,7 @@ const AudioEngine = ({ filterType, frequency, gain, q, categoryColor }) => {
                     <div style={{ fontSize: '0.9rem', fontWeight: '600', color: '#f8f9fa' }}>
                         {isPlaying ? 'Playing White Noise...' : 'Hear the Filter'}
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: '#4a4f5a' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#767b88' }}>
                         {isPlaying ? 'Adjust the sliders to hear the filter change' : 'White noise contains all frequencies equally'}
                     </div>
                 </div>
@@ -994,22 +997,22 @@ const Part3NewConcepts = ({ onComplete }) => {
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Frequency</span>
                         <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{formatFreq(frequency)} Hz</span>
                     </div>
-                    <input aria-label="Slider" type="range" min={20} max={20000} value={frequency} onChange={(e) => setFrequency(Number(e.target.value))} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
+                    <input aria-label="Cutoff frequency" type="range" min={0} max={1000} value={Math.round(((Math.log10(frequency) - Math.log10(20)) / (Math.log10(20000) - Math.log10(20))) * 1000)} onChange={(e) => { const minLog = Math.log10(20); const maxLog = Math.log10(20000); setFrequency(Math.round(Math.pow(10, minLog + (Number(e.target.value) / 1000) * (maxLog - minLog)))); }} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                 </div>
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.25rem', opacity: filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch' ? 0.4 : 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Gain</span>
                         <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{gain > 0 ? '+' : ''}{gain} dB</span>
                     </div>
-                    <input aria-label="Slider" type="range" min={-18} max={18} value={gain} onChange={(e) => setGain(Number(e.target.value))} disabled={filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
+                    <input aria-label={`Gain, ${gain} dB`} type="range" min={-18} max={18} value={gain} onChange={(e) => setGain(Number(e.target.value))} disabled={filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                 </div>
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.25rem', opacity: filterType === 'bell' || filterType === 'notch' ? 1 : 0.4 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                        <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Q (Bandwidth)</span>
+                        <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Q / Bandwidth (higher Q = narrower)</span>
                         <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{q.toFixed(1)}</span>
                     </div>
-                    <input aria-label="Slider" type="range" min={0.3} max={18} step={0.1} value={q} onChange={(e) => setQ(Number(e.target.value))} disabled={filterType !== 'bell' && filterType !== 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.65rem', color: '#4a4f5a' }}>
+                    <input aria-label="Q bandwidth" type="range" min={0.3} max={18} step={0.1} value={q} onChange={(e) => setQ(Number(e.target.value))} disabled={filterType !== 'bell' && filterType !== 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.65rem', color: '#767b88' }}>
                         <span>Wide (musical)</span>
                         <span>Narrow (surgical)</span>
                     </div>
@@ -1110,12 +1113,12 @@ const Part4Practice = () => {
 
     const dbToY = useCallback((db) => {
         const innerHeight = canvasHeight - padding.top - padding.bottom;
-        return padding.top + innerHeight / 2 - (db / 48) * (innerHeight / 2);
+        return padding.top + innerHeight / 2 - (db / 24) * (innerHeight / 2);
     }, []);
 
     const yToDb = useCallback((y) => {
         const innerHeight = canvasHeight - padding.top - padding.bottom;
-        return ((padding.top + innerHeight / 2 - y) / (innerHeight / 2)) * 48;
+        return ((padding.top + innerHeight / 2 - y) / (innerHeight / 2)) * 24;
     }, []);
 
     const calculateResponse = useCallback((freq, ch) => {
@@ -1123,14 +1126,12 @@ const Part4Practice = () => {
         const { type, frequency: fc, gain: g, q: qVal } = ch;
         
         if (type === 'highpass') {
-            if (freq >= fc) return 0;
-            const octavesBelow = Math.log2(fc / freq);
-            return Math.max(-48, -12 * octavesBelow);
+            // 2-pole Butterworth: smooth -3 dB at fc, no hard corner
+            return Math.max(-48, -10 * Math.log10(1 + Math.pow(fc / freq, 4)));
         }
         if (type === 'lowpass') {
-            if (freq <= fc) return 0;
-            const octavesAbove = Math.log2(freq / fc);
-            return Math.max(-48, -12 * octavesAbove);
+            // 2-pole Butterworth: smooth -3 dB at fc, no hard corner
+            return Math.max(-48, -10 * Math.log10(1 + Math.pow(freq / fc, 4)));
         }
         if (type === 'lowshelf') {
             const ratio = freq / fc;
@@ -1185,16 +1186,34 @@ const Part4Practice = () => {
         let totalError = 0;
         let pointsChecked = 0;
 
-        // Sample user drawing and compare to correct response
-        for (let i = 0; i < userPoints.length; i += 3) {
-            const point = userPoints[i];
-            const userDb = yToDb(point.y);
-            const freq = xToFreq(point.x);
-            const correctDb = calculateResponse(freq, challenge);
-            
-            const error = Math.abs(userDb - correctDb);
-            totalError += error;
-            pointsChecked++;
+        // Sample at 50 fixed log-spaced frequencies so score is independent of drawing speed
+        const sampleFreqs = Array.from({ length: 50 }, (_, k) => {
+            const minLog = Math.log10(20);
+            const maxLog = Math.log10(20000);
+            return Math.pow(10, minLog + (k / 49) * (maxLog - minLog));
+        });
+
+        sampleFreqs.forEach((sampleFreq) => {
+            const correctDb = calculateResponse(sampleFreq, challenge);
+            const sampleX = freqToX(sampleFreq);
+            // Find closest drawn point within a 20px tolerance window
+            let closestError = null;
+            userPoints.forEach((pt) => {
+                if (Math.abs(pt.x - sampleX) <= 20) {
+                    const userDb = yToDb(pt.y);
+                    const err = Math.abs(userDb - correctDb);
+                    if (closestError === null || err < closestError) closestError = err;
+                }
+            });
+            if (closestError !== null) {
+                totalError += closestError;
+                pointsChecked++;
+            }
+        });
+
+        if (pointsChecked === 0) {
+            setFeedback("Draw more of the curve to get feedback!");
+            return;
         }
 
         const avgError = totalError / pointsChecked;
@@ -1205,7 +1224,11 @@ const Part4Practice = () => {
         if (accuracy >= 85) {
             setFeedback("Excellent! Your curve shape is very accurate. You clearly understand this filter type.");
         } else if (accuracy >= 70) {
-            setFeedback("Good work! The overall shape is right. Check the steepness of the slope or the width of your curve.");
+            if (challenge.type === 'bell' || challenge.type === 'notch') {
+                setFeedback(`Good work! The overall shape is right. Check how wide your curve is — Q = ${challenge.q} means a ${challenge.q > 2 ? 'narrow' : 'wide'} peak.`);
+            } else {
+                setFeedback("Good work! The overall shape is right. Check the steepness of the slope.");
+            }
         } else if (accuracy >= 50) {
             setFeedback("Getting there! You've got the basic idea, but review the curve direction and where it starts changing.");
         } else {
@@ -1222,7 +1245,7 @@ const Part4Practice = () => {
                 setFeedback("Notch filters have a very narrow, deep cut. It should look like a sharp spike downward.");
             }
         }
-    }, [challenge, userPoints, yToDb, xToFreq, calculateResponse]);
+    }, [challenge, userPoints, yToDb, freqToX, calculateResponse]);
 
     const drawGrid = useCallback((ctx) => {
         const innerWidth = canvasWidth - padding.left - padding.right;
@@ -1544,7 +1567,7 @@ const Part4Practice = () => {
                 <div style={{ background: '#101218', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem', border: `1px solid ${challenge.color}50` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: '#4a4f5a', fontFamily: 'monospace', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Current Challenge</div>
+                            <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'monospace', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Current Challenge</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: '700', color: challenge.color }}>{challenge.name}</div>
                             {drawingMode === 'guided' && (
                                 <div style={{ fontSize: '0.85rem', color: '#8b909a', marginTop: '0.5rem', fontStyle: 'italic' }}>
@@ -1554,18 +1577,18 @@ const Part4Practice = () => {
                         </div>
                         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.65rem', color: '#4a4f5a', textTransform: 'uppercase' }}>Frequency</div>
+                                <div style={{ fontSize: '0.65rem', color: '#767b88', textTransform: 'uppercase' }}>Frequency</div>
                                 <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#ffd700', fontFamily: 'monospace' }}>{formatFreq(challenge.frequency)} Hz</div>
                             </div>
                             {(challenge.type === 'lowshelf' || challenge.type === 'highshelf' || challenge.type === 'bell') && (
                                 <div style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '0.65rem', color: '#4a4f5a', textTransform: 'uppercase' }}>Gain</div>
+                                    <div style={{ fontSize: '0.65rem', color: '#767b88', textTransform: 'uppercase' }}>Gain</div>
                                     <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#C99F44', fontFamily: 'monospace' }}>{challenge.gain > 0 ? '+' : ''}{challenge.gain} dB</div>
                                 </div>
                             )}
                             {(challenge.type === 'bell' || challenge.type === 'notch') && (
                                 <div style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '0.65rem', color: '#4a4f5a', textTransform: 'uppercase' }}>Q</div>
+                                    <div style={{ fontSize: '0.65rem', color: '#767b88', textTransform: 'uppercase' }}>Q</div>
                                     <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#14b8a6', fontFamily: 'monospace' }}>{challenge.q}</div>
                                 </div>
                             )}
@@ -1627,7 +1650,7 @@ const Part4Practice = () => {
 
                     {/* Legend */}
                     <div style={{ background: '#16181f', borderRadius: '8px', padding: '0.75rem 1rem' }}>
-                        <div style={{ fontSize: '0.65rem', color: '#4a4f5a', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Legend</div>
+                        <div style={{ fontSize: '0.65rem', color: '#767b88', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Legend</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.75rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <div style={{ width: '20px', height: '3px', background: '#3b82f6', borderRadius: '2px' }} />
@@ -1647,10 +1670,10 @@ const Part4Practice = () => {
                         ref={canvasRef}
                         width={canvasWidth}
                         height={canvasHeight}
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseLeave}
+                        onPointerDown={handleMouseDown}
+                        onPointerMove={handleMouseMove}
+                        onPointerUp={handleMouseUp}
+                        onPointerLeave={handleMouseLeave}
                         style={{
                             borderRadius: '12px',
                             cursor: 'crosshair',
@@ -1818,7 +1841,7 @@ export default function EQFilterBridge() {
                         <h1 style={{ fontSize: '0.9rem', fontWeight: '400', letterSpacing: '0.15em', color: '#8b909a', textTransform: 'uppercase', margin: 0 }}>
                             From <span style={{ color: '#DCC892', fontWeight: '600' }}>Synthesis</span> to <span style={{ color: '#34d399', fontWeight: '600' }}>EQ</span>
                         </h1>
-                        <div style={{ fontSize: '0.65rem', color: '#4a4f5a', fontFamily: 'monospace', marginTop: '0.25rem' }}>
+                        <div style={{ fontSize: '0.65rem', color: '#767b88', fontFamily: 'monospace', marginTop: '0.25rem' }}>
                             A-Level Music Technology | 1.3 → 1.11 Bridge
                         </div>
                     </div>
@@ -1832,7 +1855,7 @@ export default function EQFilterBridge() {
                                     background: currentPart === part ? partColors[part] : 'transparent',
                                     border: `1px solid ${currentPart === part ? 'transparent' : visitedParts.has(part) ? 'rgba(255,200,100,0.15)' : '#ffffff10'}`,
                                     borderRadius: '8px',
-                                    color: currentPart === part ? '#050507' : visitedParts.has(part) ? '#c9cdd4' : '#4a4f5a',
+                                    color: currentPart === part ? '#050507' : visitedParts.has(part) ? '#c9cdd4' : '#767b88',
                                     cursor: 'pointer',
                                     fontFamily: 'monospace',
                                     fontSize: '0.75rem',
@@ -1846,53 +1869,6 @@ export default function EQFilterBridge() {
                 </div>
             </header>
 
-            {/* Hero with video background */}
-            <div style={{
-                position: 'relative',
-                overflow: 'hidden',
-                width: '100vw',
-                marginLeft: 'calc(-50vw + 50%)',
-                marginBottom: '1.5rem',
-                minHeight: '240px',
-            }}>
-                <video aria-hidden="true"
-                    autoPlay muted loop playsInline
-                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
-                    style={{
-                        position: 'absolute', inset: 0,
-                        width: '100%', height: '100%',
-                        objectFit: 'cover',
-                        opacity: 0, transition: 'opacity 0.8s ease-out',
-                    }}
-                    src="/eq-hero.mp4"
-                />
-                <div style={{
-                    position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
-                }} />
-                <div style={{
-                    position: 'relative',
-                    maxWidth: '640px', margin: '0 auto',
-                    padding: '3rem 1.5rem 2.5rem',
-                    textAlign: 'center',
-                }}>
-                    <h1 style={{
-                        fontSize: '2.25rem',
-                        fontWeight: 700,
-                        color: '#ffffff',
-                        lineHeight: 1.25,
-                        marginBottom: '1rem',
-                        textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                    }}>EQ Filter Bridge</h1>
-                    <p style={{
-                        color: 'rgba(255,255,255,0.85)',
-                        fontSize: '1.125rem',
-                        lineHeight: 1.625,
-                        maxWidth: '480px', margin: '0 auto',
-                    }}>Connect synthesis filter concepts to EQ applications through interactive exploration</p>
-                </div>
-            </div>
-
             {/* Content */}
             <main style={{ maxWidth: '1100px', margin: '0 auto' }}>
                 {currentPart === 1 && <Part1Review onComplete={() => goToPart(2)} />}
@@ -1903,10 +1879,10 @@ export default function EQFilterBridge() {
 
             {/* Footer */}
             <footer style={{ background: '#101218', borderTop: '1px solid #ffffff10', padding: '2rem', marginTop: '3rem', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.7rem', color: '#4a4f5a', fontFamily: 'monospace', letterSpacing: '0.1em' }}>
+                <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'monospace', letterSpacing: '0.1em' }}>
                     A-Level Music Technology | Component 4: Producing and Analysing
                 </div>
-                <div style={{ fontSize: '0.65rem', color: '#4a4f5a', marginTop: '0.5rem' }}>
+                <div style={{ fontSize: '0.65rem', color: '#767b88', marginTop: '0.5rem' }}>
                     Topic 1.11 EQ | Bridging from 1.3 Synthesis
                 </div>
             </footer>

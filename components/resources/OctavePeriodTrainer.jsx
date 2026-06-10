@@ -219,8 +219,12 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
     return (
         <div
             onClick={onFlip}
+            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onFlip()}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            tabIndex={0}
+            role="button"
+            aria-label={`${concept.term} flashcard — ${isFlipped ? 'click to hide' : 'click to reveal'}`}
             style={{ perspective: '1000px', cursor: 'pointer', width: '100%', height: '200px' }}
         >
             <div style={{
@@ -442,7 +446,7 @@ const Part1Foundations = ({ onComplete }) => {
         if (newFlipped.has(id)) newFlipped.delete(id);
         else newFlipped.add(id);
         setFlippedCards(newFlipped);
-        if (newFlipped.size === WAVEFORM_CONCEPTS.length) setAllRevealed(true);
+        setAllRevealed(newFlipped.size === WAVEFORM_CONCEPTS.length);
     };
 
     const revealAll = () => {
@@ -481,7 +485,7 @@ const Part1Foundations = ({ onComplete }) => {
                             Reveal All
                         </button>
                     )}
-                    <button type="button" onClick={onComplete} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <button type="button" onClick={onComplete} disabled={!allRevealed} aria-disabled={!allRevealed} style={{ padding: '0.875rem 1.5rem', background: allRevealed ? 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)' : '#16181f', border: 'none', borderRadius: '12px', color: allRevealed ? '#050507' : '#4a4f5a', cursor: allRevealed ? 'pointer' : 'not-allowed', fontSize: '0.9rem', fontWeight: '600' }}>
                         Continue to Part 2 {allRevealed && '→'}
                     </button>
                 </div>
@@ -724,11 +728,13 @@ const Part3Explore = () => {
                         <span style={{ color: '#8b909a', fontSize: '0.9rem' }}>Original Cycles</span>
                         <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '600', fontSize: '1.25rem' }}>{originalCycles}</span>
                     </div>
-                    <input aria-label="Slider"
+                    <input aria-label="Original Cycles"
                         type="range"
                         min={2}
                         max={8}
+                        step={2}
                         value={originalCycles}
+                        aria-valuemin={2} aria-valuemax={8} aria-valuenow={originalCycles}
                         onChange={(e) => setOriginalCycles(Number(e.target.value))}
                         style={{ width: '100%', accentColor: '#DCC892' }}
                     />
@@ -743,11 +749,12 @@ const Part3Explore = () => {
                         <span style={{ color: '#8b909a', fontSize: '0.9rem' }}>Transposition</span>
                         <span style={{ color: currentDesc.color, fontFamily: 'monospace', fontWeight: '600', fontSize: '1rem' }}>{currentDesc.label}</span>
                     </div>
-                    <input aria-label="Slider"
+                    <input aria-label="Octave Transposition"
                         type="range"
                         min={-2}
                         max={2}
                         value={octaveShift}
+                        aria-valuemin={-2} aria-valuemax={2} aria-valuenow={octaveShift}
                         onChange={(e) => setOctaveShift(Number(e.target.value))}
                         style={{ width: '100%', accentColor: currentDesc.color }}
                     />
@@ -902,6 +909,17 @@ const Part3Explore = () => {
 export default function OctavePeriodTrainer() {
     const [currentPart, setCurrentPart] = useState(1);
     const [visitedParts, setVisitedParts] = useState(new Set([1]));
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+        }
+    }, []);
 
     const goToPart = (part) => {
         setCurrentPart(part);
@@ -958,6 +976,7 @@ export default function OctavePeriodTrainer() {
                 minHeight: '240px',
             }}>
                 <video aria-hidden="true"
+                    ref={videoRef}
                     autoPlay
                     muted
                     loop

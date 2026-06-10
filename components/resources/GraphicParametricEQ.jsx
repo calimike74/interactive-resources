@@ -44,7 +44,7 @@ const QUIZ_QUESTIONS = [
         question: 'In a 10-band graphic EQ, what interval separates each band?',
         options: ['Half octave', 'Third octave', 'One octave', 'Two octaves'],
         correct: 2,
-        explanation: 'Each frequency is double the previous one (31 → 63 → 125...), which is the definition of an octave.',
+        explanation: 'Bands are separated by approximately one octave — each band is roughly double the previous one (31 → 63 → 125 Hz uses ISO standard centre frequencies).',
     },
     {
         question: 'What can you adjust on each band of a graphic EQ?',
@@ -225,6 +225,7 @@ const SignalFlowDiagram = ({ type, isActive }) => {
 
     useEffect(() => {
         if (!isActive) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         const interval = setInterval(() => {
             setAnimationOffset((prev) => (prev + 2) % 100);
         }, 50);
@@ -235,9 +236,16 @@ const SignalFlowDiagram = ({ type, isActive }) => {
     const width = 300;
     const height = type === 'parallel' ? 180 : 100;
 
+    const legend = (
+        <p style={{ fontSize: '10px', color: t.text.tertiary, marginTop: '4px', textAlign: 'center' }}>
+            Moving dots represent audio signal travelling through each filter band.
+        </p>
+    );
+
     if (type === 'parallel') {
         // Parallel routing - all bands process simultaneously
         return (
+            <div>
             <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
                 {/* Input */}
                 <rect x={10} y={75} width={40} height={30} fill={t.bg.tertiary} stroke={t.border.medium} rx={4} />
@@ -276,11 +284,14 @@ const SignalFlowDiagram = ({ type, isActive }) => {
                 <rect x={250} y={75} width={40} height={30} fill={t.bg.tertiary} stroke={t.border.medium} rx={4} />
                 <text x={270} y={95} textAnchor="middle" fontSize="10" fill={t.text.secondary}>OUT</text>
             </svg>
+            {legend}
+            </div>
         );
     }
 
     // Series routing - cascaded filters
     return (
+        <div>
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
             {/* Input */}
             <rect x={10} y={35} width={35} height={30} fill={t.bg.tertiary} stroke={t.border.medium} rx={4} />
@@ -314,6 +325,8 @@ const SignalFlowDiagram = ({ type, isActive }) => {
             <rect x={265} y={35} width={35} height={30} fill={t.bg.tertiary} stroke={t.border.medium} rx={4} />
             <text x={282} y={55} textAnchor="middle" fontSize="10" fill={t.text.secondary}>OUT</text>
         </svg>
+        {legend}
+        </div>
     );
 };
 
@@ -509,7 +522,7 @@ const GraphicEQSlider = ({ band, gain, onChange }) => {
                     }}
                 />
                 {/* Slider input */}
-                <input aria-label="Slider"
+                <input aria-label={`${band.label} Hz gain, ${gain} dB`}
                     type="range"
                     min={-12}
                     max={12}
@@ -581,7 +594,7 @@ const ParametricEQBand = ({ band, index, onChange }) => {
                         {formatFreq(band.freq)}
                     </span>
                 </div>
-                <input aria-label="Slider"
+                <input aria-label="Centre frequency"
                     type="range"
                     min={0}
                     max={1000}
@@ -604,7 +617,7 @@ const ParametricEQBand = ({ band, index, onChange }) => {
                         {band.gain > 0 ? '+' : ''}{band.gain}dB
                     </span>
                 </div>
-                <input aria-label="Slider"
+                <input aria-label={`Gain, ${band.gain} dB`}
                     type="range"
                     min={-12}
                     max={12}
@@ -618,12 +631,12 @@ const ParametricEQBand = ({ band, index, onChange }) => {
             {/* Q */}
             <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: spacing[1] }}>
-                    <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>Q (Bandwidth)</span>
+                    <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>Q / Bandwidth (higher Q = narrower)</span>
                     <span style={{ fontSize: typography.size.xs, color: t.text.secondary, fontWeight: typography.weight.medium }}>
                         {band.q.toFixed(1)}
                     </span>
                 </div>
-                <input aria-label="Slider"
+                <input aria-label="Q bandwidth"
                     type="range"
                     min={0.5}
                     max={10}
@@ -1260,18 +1273,11 @@ export default function GraphicParametricEQ() {
                                                 const matchedPreset = Object.values(GRAPHIC_PRESETS).find(p =>
                                                     p.gains.every((g, i) => g === graphicGains[i])
                                                 );
-                                                const quizResults = showResults ? QUIZ_QUESTIONS.map((q, i) => ({
-                                                    question: q.question,
-                                                    studentAnswer: q.options[answers[i]] || '(none)',
-                                                    correctAnswer: q.options[q.correct],
-                                                    correct: answers[i] === q.correct,
-                                                    explanation: q.explanation,
-                                                })) : null;
                                                 return buildEQCopyMarkdown({
                                                     bands: GRAPHIC_EQ_BANDS,
                                                     gains: graphicGains,
                                                     presetName: matchedPreset?.name,
-                                                    quizResults,
+                                                    quizResults: null,
                                                     mode, learnMode,
                                                 });
                                             }}

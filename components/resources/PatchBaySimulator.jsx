@@ -26,7 +26,7 @@ const PATCH_BAYS = {
 };
 
 const TABS = [
-    { id: 'studio-1', label: 'RocSoc Room', bays: ['PB1', 'PB1-lobby'] },
+    { id: 'studio-1', label: 'RocSoc Room', bays: ['PB1'] }, // PB1-lobby physically adjacent but belongs to Lobby tab
     { id: 'studio-2', label: 'Patrick Shelley', bays: ['PB2', 'PB3'] },
     { id: 'recital', label: 'Recital Hall', bays: ['PB4', 'PB5'] },
     { id: 'lobby', label: 'Lobby', bays: ['PB1-lobby'] },
@@ -338,6 +338,7 @@ export default function PatchBaySimulator() {
     const [cablePositions, setCablePositions] = useState([]); // cached cable coords
     const [pulsingConnector, setPulsingConnector] = useState(null); // PB8 input id for pulse
     const [deletedCable, setDeletedCable] = useState(null); // brief flash on delete
+    const [pendingSource, setPendingSource] = useState(null); // { id, room } — keyboard two-click flow
 
     const connectorRefs = useRef(new Map());
     const columnsRef = useRef(null);
@@ -450,6 +451,25 @@ export default function PatchBaySimulator() {
         };
     }, [dragging]);
 
+    // ── Keyboard two-click connection flow ─────────────────────────
+    const handleConnectorKeyDown = useCallback((e, id, room, isSource, isTarget) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        if (isSource) {
+            // First click: select as pending source, or deselect if already selected
+            setPendingSource(prev => (prev && prev.id === id) ? null : { id, room });
+        } else if (isTarget && pendingSource) {
+            // Second click: complete the patch
+            setConnections(prev => {
+                const filtered = prev.filter(c => c.to !== id);
+                return [...filtered, { from: pendingSource.id, to: id, room: pendingSource.room }];
+            });
+            setPulsingConnector(id);
+            setTimeout(() => setPulsingConnector(null), 600);
+            setPendingSource(null);
+        }
+    }, [pendingSource]);
+
     // ── Delete cable on right-click ────────────────────────────────
     const handleCableRightClick = useCallback((e, idx) => {
         e.preventDefault();
@@ -540,11 +560,28 @@ export default function PatchBaySimulator() {
                 const room = connectorRoom(id) || 'studio-1';
                 handlers.onMouseDown = (e) => handleDragStart(id, room, e);
                 handlers.onTouchStart = (e) => handleDragStart(id, room, e);
+                handlers.onKeyDown = (e) => handleConnectorKeyDown(e, id, room, true, false);
             }
+            if (isTarget) {
+                handlers.onKeyDown = (e) => handleConnectorKeyDown(e, id, null, false, true);
+            }
+
+            const isPending = pendingSource && pendingSource.id === id;
+            if (isPending) {
+                connStyle.boxShadow = '0 0 0 3px #fff';
+                connStyle.borderColor = '#fff';
+            }
+
+            const ariaLabel = isSource
+                ? `${connectorLabel(id)}${isConnectedSource ? ', connected' : ''}${isPending ? ', selected — press Enter on a PB8 input to complete patch' : ', press Enter to select'}`
+                : `PB8 input ${i}${targetColour ? ', connected' : ''}${pendingSource ? ', press Enter to patch here' : ''}`;
 
             items.push(
                 <div
                     key={id}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={ariaLabel}
                     data-connector-id={id}
                     ref={(el) => setConnectorRef(id, el)}
                     style={connStyle}
@@ -573,10 +610,19 @@ export default function PatchBaySimulator() {
                 if (type === 'room') {
                     handlers.onMouseDown = (e) => handleDragStart(id, extra.room, e);
                     handlers.onTouchStart = (e) => handleDragStart(id, extra.room, e);
+                    handlers.onKeyDown = (e) => handleConnectorKeyDown(e, id, extra.room, true, false);
+                }
+                const isPending = pendingSource && pendingSource.id === id;
+                if (isPending) {
+                    extraStyle.boxShadow = '0 0 0 3px #fff';
+                    extraStyle.borderColor = '#fff';
                 }
                 items.push(
                     <div
                         key={id}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`${extra.label}${isConnectedSource ? ', connected' : ''}${isPending ? ', selected — press Enter on a PB8 input to complete patch' : ', press Enter to select'}`}
                         data-connector-id={id}
                         ref={(el) => setConnectorRef(id, el)}
                         style={extraStyle}
@@ -598,7 +644,13 @@ export default function PatchBaySimulator() {
             : null;
 
         return (
-            <svg style={styles.svgOverlay}>
+            <svg
+                style={styles.svgOverlay}
+                role="img"
+                aria-label={connections.length === 0
+                    ? 'No patch cables connected'
+                    : `${connections.length} cable${connections.length !== 1 ? 's' : ''}: ${connections.map(c => connectorLabel(c.from) + ' to ' + connectorLabel(c.to)).join('; ')}`}
+            >
                 {/* Existing connections */}
                 {cablePositions.map((pos, idx) => {
                     if (!pos) return null;
@@ -710,6 +762,9 @@ export default function PatchBaySimulator() {
                     Explore how our studio patch bays route microphone signals from different rooms
                     through PB8 into the UA Volt 876 audio interfaces.
                 </p>
+                <p style={{ ...styles.subtitle, fontSize: typography.size.xs, marginTop: spacing[2], color: t.text.tertiary }}>
+                    Drag (or Tab + Enter) a room connector to a PB8 input to patch it. Right-click a cable to remove it.
+                </p>
                 {connectionCount > 0 && (
                     <button type="button"
                         onClick={handleClearAll}
@@ -817,6 +872,15 @@ export default function PatchBaySimulator() {
                 )}
             </div>
 
+            {/* Visually-hidden connections list for screen readers */}
+            {connections.length > 0 && (
+                <ul aria-label="Current patch connections" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
+                    {connections.map((c, i) => (
+                        <li key={i}>{connectorLabel(c.from)} patched to {connectorLabel(c.to)}</li>
+                    ))}
+                </ul>
+            )}
+
             {/* Volt 876 Section - Two stacked units */}
             <div style={styles.voltWrapper}>
                 {/* Unit 1 */}
@@ -858,6 +922,26 @@ export default function PatchBaySimulator() {
                     <div style={{ fontSize: typography.size.sm, color: '#3B82F6' }}>
                         IN 3-8: From PB8 (patched from rooms)
                     </div>
+                    <div style={{ fontSize: typography.size.xs, color: t.text.tertiary, marginTop: spacing[1] }}>
+                        DAW channel numbers reflect this school&rsquo;s Volt 876 wiring. IN 1&ndash;2 are permanently connected to studio interior mics; PB8 inputs route to IN 3&ndash;8 on each unit.
+                    </div>
+                </div>
+                {/* Room colour key */}
+                <div style={{ ...styles.voltLegend, marginTop: spacing[3] }}>
+                    <div style={styles.voltLegendTitle}>Room Colours</div>
+                    {[
+                        ['studio-1', 'RocSoc Room'],
+                        ['studio-2', 'Patrick Shelley'],
+                        ['recital',  'Recital Hall'],
+                        ['lobby',    'Lobby'],
+                        ['console',  'Console'],
+                        ['tla-red7', 'TLA Red7'],
+                    ].map(([key, label]) => (
+                        <div key={key} style={{ display: 'flex', alignItems: 'center', gap: spacing[2], marginBottom: spacing[1] }}>
+                            <div style={{ width: 12, height: 12, borderRadius: '50%', background: ROOM_COLOURS[key], flexShrink: 0 }} />
+                            <span style={{ fontSize: typography.size.xs, color: t.text.secondary }}>{label}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
 

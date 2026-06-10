@@ -271,7 +271,7 @@ function SynthControl({ label, value, min, max, step, onChange, unit = '', color
                 <label style={{ color: COLORS.textSecondary, fontSize: typography.size.xs, fontWeight: typography.weight.medium }}>{label}</label>
                 <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamilyMono }}>{displayVal}{unit}</span>
             </div>
-            <input aria-label="Slider"
+            <input aria-label={label}
                 type="range"
                 min={logScale ? 0 : min}
                 max={logScale ? 100 : max}
@@ -297,7 +297,10 @@ function WaveformCanvas({ analyserRef, width = 500, height = 160, color = COLORS
         const bufferLength = analyser.fftSize;
         const dataArray = new Float32Array(bufferLength);
 
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         const draw = () => {
+            if (reduceMotion) return;
             animFrameRef.current = requestAnimationFrame(draw);
             analyser.getFloatTimeDomainData(dataArray);
 
@@ -327,7 +330,19 @@ function WaveformCanvas({ analyserRef, width = 500, height = 160, color = COLORS
             ctx.stroke();
         };
 
-        draw();
+        // Static frame for reduced-motion users
+        if (reduceMotion) {
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, width, height);
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+        } else {
+            draw();
+        }
         return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
     }, [analyserRef, width, height, color]);
 
@@ -423,6 +438,27 @@ function FilterResponseSVG({ type, cutoff, resonance, width = 500, height = 160,
             <path d={fillD} fill={accentColor} fillOpacity={0.15} />
             <path d={pathD} fill="none" stroke={accentColor} strokeWidth={2.5} />
             <line x1={freqToX(cutoff)} y1={padding.top} x2={freqToX(cutoff)} y2={height - padding.bottom} stroke="rgba(255,255,255,0.3)" strokeWidth={1} strokeDasharray="4,3" />
+            {/* −12 dB/oct slope label */}
+            {type !== 'bandpass' && (
+                <text
+                    x={type === 'highpass' ? freqToX(cutoff) - 8 : freqToX(cutoff) + 8}
+                    y={padding.top + innerH * 0.55}
+                    fill={accentColor}
+                    fillOpacity={0.75}
+                    fontSize={9}
+                    textAnchor={type === 'highpass' ? 'end' : 'start'}
+                    fontFamily={typography.fontFamilyMono}
+                >
+                    −12 dB/oct
+                </text>
+            )}
+            {/* Legend */}
+            <g transform={`translate(${padding.left + 4}, ${padding.top + innerH - 22})`}>
+                <line x1={0} y1={4} x2={14} y2={4} stroke="rgba(255,255,255,0.3)" strokeWidth={1} strokeDasharray="4,3" />
+                <text x={18} y={8} fill="rgba(255,255,255,0.5)" fontSize={9} fontFamily={typography.fontFamilyMono}>Cutoff</text>
+                <rect x={0} y={14} width={14} height={6} fill={accentColor} fillOpacity={0.4} />
+                <text x={18} y={21} fill="rgba(255,255,255,0.5)" fontSize={9} fontFamily={typography.fontFamilyMono}>Filter response</text>
+            </g>
         </svg>
     );
 }
@@ -450,10 +486,10 @@ function EnvelopeShapeSVG({ attack, decay, sustain, release, width = 400, height
     const fillD = pathD + ` L${x0},${y0} Z`;
 
     const stages = [
-        { label: 'A', x: (x0 + xAttack) / 2 },
-        { label: 'D', x: (xAttack + xDecay) / 2 },
-        { label: 'S', x: (xDecay + xSustainEnd) / 2 },
-        { label: 'R', x: (xSustainEnd + xRelease) / 2 },
+        { label: 'Atk', x: (x0 + xAttack) / 2 },
+        { label: 'Dec', x: (xAttack + xDecay) / 2 },
+        { label: 'Sus', x: (xDecay + xSustainEnd) / 2 },
+        { label: 'Rel', x: (xSustainEnd + xRelease) / 2 },
     ];
 
     return (
@@ -507,14 +543,34 @@ function MiniKeyboard({ onNoteOn, onNoteOff, activeNote }) {
         onNoteOff(note);
     }, [onNoteOff]);
 
+    const handleKeyDown = useCallback((note) => (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onNoteOn(note);
+        }
+    }, [onNoteOn]);
+
+    const handleKeyUp = useCallback((note) => (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onNoteOff(note);
+        }
+    }, [onNoteOff]);
+
     return (
         <div style={{ position: 'relative', width: totalW, height: whiteH, userSelect: 'none', touchAction: 'none' }}>
             {whiteKeys.map((k, i) => (
                 <div
                     key={k.note}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={k.note}
+                    aria-pressed={activeNote === k.note}
                     onPointerDown={handlePointerDown(k.note)}
                     onPointerUp={handlePointerUp(k.note)}
                     onPointerLeave={handlePointerUp(k.note)}
+                    onKeyDown={handleKeyDown(k.note)}
+                    onKeyUp={handleKeyUp(k.note)}
                     style={{
                         position: 'absolute', left: i * whiteW, top: 0,
                         width: whiteW - 2, height: whiteH,
@@ -531,9 +587,15 @@ function MiniKeyboard({ onNoteOn, onNoteOff, activeNote }) {
             {blackKeys.map(k => (
                 <div
                     key={k.note}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={k.note}
+                    aria-pressed={activeNote === k.note}
                     onPointerDown={handlePointerDown(k.note)}
                     onPointerUp={handlePointerUp(k.note)}
                     onPointerLeave={handlePointerUp(k.note)}
+                    onKeyDown={handleKeyDown(k.note)}
+                    onKeyUp={handleKeyUp(k.note)}
                     style={{
                         position: 'absolute', left: blackKeyOffsets[k.note], top: 0,
                         width: blackW, height: blackH,
@@ -940,6 +1002,9 @@ export default function SubtractiveSynthExplorer() {
                     >
                         {isPlaying ? 'Stop' : 'Play'}
                     </button>
+                    <span style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontStyle: 'italic' }}>
+                        This bypasses the envelope — use Trigger Note in Section 3 to hear the full ADSR shape.
+                    </span>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
                         <span style={{ color: COLORS.textHint, fontSize: typography.size.xs }}>Octave</span>
@@ -974,22 +1039,22 @@ export default function SubtractiveSynthExplorer() {
                     Contains only the fundamental frequency — no harmonics. Produces a pure, smooth tone. This is the simplest waveform.
                 </KeyConcept>
                 <KeyConcept label="Triangle Wave">
-                    Contains odd harmonics only (1st, 3rd, 5th...) at reduced amplitude. Sounds softer than a square wave — slightly hollow but warm.
+                    Contains odd harmonics only (1st, 3rd, 5th…), each falling as 1/n² — much faster than a square wave. This is why it sounds warmer and softer.
                 </KeyConcept>
                 <KeyConcept label="Sawtooth Wave">
                     Contains ALL harmonics (odd and even) at decreasing amplitude. Sounds bright and buzzy — the most common starting point for subtractive synthesis.
                 </KeyConcept>
                 <KeyConcept label="Square Wave">
-                    Contains only odd harmonics at higher amplitude than triangle. Sounds hollow and woody — often used for bass and pad sounds.
+                    Contains only odd harmonics (1/n amplitude law), each louder than the corresponding triangle harmonic (which fall as 1/n²). Sounds hollow and woody — often used for bass and pad sounds.
                 </KeyConcept>
 
                 <CopyAllNotes
                     title="Waveforms"
                     notes={[
                         { label: 'Sine Wave', text: 'Contains only the fundamental frequency — no harmonics. Produces a pure, smooth tone. This is the simplest waveform.' },
-                        { label: 'Triangle Wave', text: 'Contains odd harmonics only (1st, 3rd, 5th...) at reduced amplitude. Sounds softer than a square wave — slightly hollow but warm.' },
+                        { label: 'Triangle Wave', text: 'Contains odd harmonics only (1st, 3rd, 5th…), each falling as 1/n² — much faster than a square wave. This is why it sounds warmer and softer.' },
                         { label: 'Sawtooth Wave', text: 'Contains ALL harmonics (odd and even) at decreasing amplitude. Sounds bright and buzzy — the most common starting point for subtractive synthesis.' },
-                        { label: 'Square Wave', text: 'Contains only odd harmonics at higher amplitude than triangle. Sounds hollow and woody — often used for bass and pad sounds.' },
+                        { label: 'Square Wave', text: 'Contains only odd harmonics (1/n amplitude law), each louder than the corresponding triangle harmonic (which fall as 1/n²). Sounds hollow and woody — often used for bass and pad sounds.' },
                     ]}
                 />
 
@@ -1042,13 +1107,16 @@ export default function SubtractiveSynthExplorer() {
                 <WaveformCanvas analyserRef={analyserRef} color={accent} />
 
                 {/* Play */}
-                <div style={{ marginTop: spacing[4] }}>
+                <div style={{ marginTop: spacing[4], display: 'flex', gap: spacing[4], alignItems: 'center', flexWrap: 'wrap' }}>
                     <button type="button"
                         onClick={() => isPlaying ? stopTone() : startTone(baseFreq)}
                         style={isPlaying ? actionBtn('#dc2626') : actionBtn(accent)}
                     >
                         {isPlaying ? 'Stop' : 'Play'}
                     </button>
+                    <span style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontStyle: 'italic' }}>
+                        This bypasses the envelope — use Trigger Note in Section 3 to hear the full ADSR shape.
+                    </span>
                 </div>
             </InteractiveBox>
 
@@ -1066,7 +1134,7 @@ export default function SubtractiveSynthExplorer() {
                     How filters work
                 </h3>
                 <KeyConcept label="Low-Pass Filter (LPF)">
-                    Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled — the most common filter in subtractive synthesis.
+                    Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled — the most common filter in subtractive synthesis. A typical synth LPF rolls off at −12 or −24 dB per octave; steeper slopes remove harmonics faster.
                 </KeyConcept>
                 <KeyConcept label="High-Pass Filter (HPF)">
                     Passes frequencies above the cutoff and attenuates those below. Makes the sound thinner and brighter. Useful for removing low-end rumble.
@@ -1081,7 +1149,7 @@ export default function SubtractiveSynthExplorer() {
                 <CopyAllNotes
                     title="Filters"
                     notes={[
-                        { label: 'Low-Pass Filter (LPF)', text: 'Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled — the most common filter in subtractive synthesis.' },
+                        { label: 'Low-Pass Filter (LPF)', text: 'Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled — the most common filter in subtractive synthesis. A typical synth LPF rolls off at −12 or −24 dB per octave; steeper slopes remove harmonics faster.' },
                         { label: 'High-Pass Filter (HPF)', text: 'Passes frequencies above the cutoff and attenuates those below. Makes the sound thinner and brighter. Useful for removing low-end rumble.' },
                         { label: 'Band-Pass Filter (BPF)', text: 'Passes a band of frequencies around the cutoff and attenuates both sides. Creates a "nasal" or "telephone" quality at narrow bandwidth.' },
                         { label: 'Resonance (Q)', text: 'Boosts frequencies at the cutoff point, creating a peak. High resonance produces a whistling or ringing quality. At extreme values, the filter self-oscillates.' },
@@ -1496,7 +1564,10 @@ export default function SubtractiveSynthExplorer() {
                     muted
                     loop
                     playsInline
-                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
+                    onLoadedData={(e) => {
+                        e.target.style.opacity = 1;
+                        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) e.target.pause();
+                    }}
                     style={{
                         position: 'absolute',
                         inset: 0,
