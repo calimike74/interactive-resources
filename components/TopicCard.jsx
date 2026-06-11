@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import { getResource } from '@/lib/resources';
@@ -52,13 +52,26 @@ function AnimatedBadge({ children, delay = 0, style = {} }) {
 
 export default function TopicCard({ topic, animationDelay = 0, comingSoon = false }) {
     const [isHovered, setIsHovered] = useState(false);
+    const [popoverBelow, setPopoverBelow] = useState(false);
+    const cardRef = useRef(null);
 
     const hasResources = !comingSoon && topic.resourceIds.length > 0;
     const resourceCount = topic.resourceIds.length;
 
+    // The popover opens above the card by default; if the card sits too close to
+    // the top of the viewport (e.g. first grid row), flip it below to avoid clipping.
+    const handleMouseEnter = () => {
+        const POPOVER_CLEARANCE = 250; // popover maxHeight (220) + margin + buffer
+        if (cardRef.current) {
+            setPopoverBelow(cardRef.current.getBoundingClientRect().top < POPOVER_CLEARANCE);
+        }
+        setIsHovered(true);
+    };
+
     const card = (
         <article
-            onMouseEnter={() => setIsHovered(true)}
+            ref={cardRef}
+            onMouseEnter={handleMouseEnter}
             onMouseLeave={() => setIsHovered(false)}
             style={{
                 position: 'relative',
@@ -225,9 +238,10 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                     aria-hidden="true"
                     style={{
                         position: 'absolute',
-                        bottom: '100%',
                         left: 0,
-                        marginBottom: 10,
+                        ...(popoverBelow
+                            ? { top: '100%', marginTop: 10 }
+                            : { bottom: '100%', marginBottom: 10 }),
                         width: 240,
                         padding: '12px 14px',
                         borderRadius: borderRadius.lg,

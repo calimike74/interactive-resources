@@ -142,6 +142,22 @@ const quizQuestions = [
 // ============================================
 // LEARN CONTENT
 // ============================================
+// Concise, exam-ready key point per learn section. Replaces the mechanical
+// first-sentence extraction, which dropped later points in multi-part sections
+// (e.g. "Modulated Delays" lost chorus and phaser entirely).
+const SECTION_KEY_POINTS = {
+  'What Is Delay?': 'Delay records the dry signal and replays it after a set time as the wet signal; the wet/dry mix balances the two.',
+  'Sends vs Inserts': 'Put delay on a send so the dry signal stays intact and several tracks can share one delay; an insert places it directly in the channel.',
+  'Delay Types': 'Single-tap = one repeat; multi-tap = several independently-timed repeats; slapback = one short 40–120 ms repeat with no feedback; timed = tempo-synced; ping-pong = repeats alternate left–right.',
+  'Delay Parameters': 'Delay time sets the gap between repeats, feedback sets how many there are, and pan, EQ and wet/dry shape where they sit and how they decay.',
+  'Automatic Double Tracking (ADT)': 'ADT uses a very short 15–40 ms modulated delay to imitate a second take, thickening a vocal without a distinct echo — a production technique, not a delay type.',
+  'Calculating Delay from Tempo': 'Quarter-note delay in ms = 60,000 ÷ BPM; halve or double for other note values, ×1.5 for dotted, ÷3 for triplets.',
+  'Modulated Delays: Flanger, Chorus, Phaser': 'Flanger = very short 1–5 ms LFO-modulated delay with feedback (comb filtering); chorus = longer 20–50 ms modulation with no feedback; a phaser uses all-pass filters, not a delay line.',
+  'LFO Parameters for Modulated Delays': 'The LFO modulates the delay time: rate sets sweep speed, depth sets how far it deviates, feedback intensifies the effect, and the waveform shapes its character.',
+  'Comb Filtering and Flanging': 'Mixing a signal with a very short delayed copy creates regularly-spaced peaks and nulls (a comb filter); sweeping the delay with an LFO moves them, producing the flanger\'s whoosh.',
+  'Haas Effect and Stereo Widening': 'Delays of 1–40 ms (the Haas/precedence effect) are heard as one source but add width — delay one side 10–30 ms and pan the copies apart, then check mono for phase cancellation.',
+};
+
 const learnSections = [
   { level: 'foundation', title: 'What Is Delay?', content: 'A delay effect records an incoming audio signal and plays it back after a specified time interval. The original signal is called the "dry" signal, and the delayed repetition is the "wet" signal. The wet/dry mix controls the balance between the two. Delay is one of the most fundamental time-based effects in music production, used to create echoes, rhythmic patterns, and spatial depth.' },
   { level: 'foundation', title: 'Sends vs Inserts', content: 'Delay can be applied as a send (auxiliary) effect or an insert effect. As a send, the dry signal passes through unchanged whilst a copy is routed to the delay processor on a separate bus \u2014 this is the most common method, as it preserves the original signal and allows multiple tracks to share one delay. As an insert, the delay is placed directly in the channel\'s signal chain. Sends give better control over the wet/dry balance and are more CPU-efficient when multiple tracks need delay.' },
@@ -526,7 +542,7 @@ const DelayEffects = () => {
                   <div style={{ marginTop: 'var(--space-4)', color: 'var(--foreground-secondary)', fontSize: 'var(--text-base)', lineHeight: '1.7' }}>
                     <p style={{ margin: 0 }}>{section.content}</p>
                     <CopyableNote title="Key Point" color="#4A7FD4" variant="key">
-                      <strong>{section.title}</strong>: {section.content.split('.')[0]}.
+                      <strong>{section.title}</strong>: {SECTION_KEY_POINTS[section.title] || `${section.content.split('.')[0]}.`}
                     </CopyableNote>
                   </div>
                 )}

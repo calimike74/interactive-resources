@@ -945,9 +945,10 @@ export default function GraphicParametricEQ() {
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        opacity: 0,
+                        opacity: 1,
                         transition: 'opacity 0.8s ease-out',
                     }}
+                    poster="/eq-hero-poster.jpg"
                     src="/eq-hero.mp4"
                 />
                 <div style={{
