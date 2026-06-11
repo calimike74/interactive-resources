@@ -663,7 +663,7 @@ const Part2Mistake = ({ onComplete }) => {
             </div>
 
             <CopyableNote title="The Common Mistake - Examiner Insight" color="#ef4444" variant="warning">
-                <strong>EXAMINER REPORT (2023):</strong><br/><br/>
+                <strong>EXAMINER REPORT (2023, paraphrased):</strong><br/><br/>
                 "Very few candidates understood that when asked to draw a waveform one octave lower, the correct response is to double the period (stretch horizontally) while maintaining the same amplitude."<br/><br/>
                 <strong>COMMON ERROR:</strong> Students shift the waveform DOWN on the Y-axis, thinking "lower pitch = lower position". This is WRONG.<br/><br/>
                 <strong>CORRECT APPROACH:</strong> Lower pitch = lower frequency = longer period = WIDER cycles (horizontal stretch). The amplitude (height) stays the same.
