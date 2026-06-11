@@ -69,17 +69,6 @@ const QUIZ_QUESTIONS = [
         explanation: 'Parametric EQ allows control of center frequency, gain, AND Q for each band - multiple parameters.',
     },
     {
-        question: 'Which routing is used: graphic EQ uses ___, parametric uses ___?',
-        options: [
-            'Series, parallel',
-            'Parallel, series',
-            'Digital, analog',
-            'Mono, stereo',
-        ],
-        correct: 1,
-        explanation: 'Graphic EQ uses parallel routing (all bands process simultaneously). Parametric uses series routing (cascaded filters).',
-    },
-    {
         question: 'A mixing engineer needs to remove a specific resonant frequency at 847Hz. Which EQ type offers better precision?',
         options: [
             'Graphic EQ - more bands means more precision',

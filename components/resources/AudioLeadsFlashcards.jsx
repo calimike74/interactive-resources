@@ -128,7 +128,7 @@ const AudioLeadsFlashcards = () => {
       {
         id: "a4",
         question: "What are the considerations when using XLR for digital audio protocols?",
-        answer: "XLR can carry digital protocols like AES/EBU, but requires 110\u03A9 impedance cables rather than standard 75\u03A9 analog XLR cables. Digital signals are more sensitive to cable quality and length.",
+        answer: "XLR can carry digital protocols like AES/EBU, but this requires dedicated 110\u03A9 impedance cables. Standard analogue microphone XLR cables have no specified characteristic impedance, so they are not guaranteed to perform reliably for digital AES/EBU runs. Digital signals are more sensitive to cable quality and length.",
         furtherLearning: "Research the differences between analog and digital XLR cables, particularly impedance specifications and maximum cable lengths.",
         practicalExample: "Professional digital mixing consoles often use AES/EBU connections over XLR, requiring specific digital audio cables rather than standard microphone cables.",
         difficulty: 3,
@@ -482,7 +482,7 @@ const AudioLeadsFlashcards = () => {
         {/* Specifications */}
         <text x="145" y="30" fill="#2d3748" fontSize="8">110&#937; Impedance</text>
         <text x="145" y="40" fill="#2d3748" fontSize="7">Different from analog</text>
-        <text x="145" y="50" fill="#2d3748" fontSize="7">XLR cables (75&#937;)</text>
+        <text x="145" y="50" fill="#2d3748" fontSize="7">analogue XLR (no fixed Z)</text>
 
         <text x="145" y="70" fill="#e53e3e" fontSize="7">Requires proper</text>
         <text x="145" y="80" fill="#e53e3e" fontSize="7">digital audio cable</text>

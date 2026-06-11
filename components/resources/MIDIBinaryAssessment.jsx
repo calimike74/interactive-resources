@@ -108,7 +108,7 @@ const QUESTIONS = [
             { id: 'note-on', label: 'Note On', valid: false },
         ],
         requiredCount: 3,
-        explanation: 'Velocity and Note On are traps — velocity is a parameter inside Note On, and the question excludes Note On / Note Off. Any three of: Pitch Bend, CC1, CC64, Program Change, Aftertouch, Tempo, Time Signature, Key Signature, Track Name, SysEx.',
+        explanation: 'Velocity and Note On are traps — velocity is a parameter inside Note On, and the question excludes Note On / Note Off. Any three of: Pitch Bend, CC1, CC64, Program Change, Aftertouch (channel-voice messages sent live over the MIDI cable) — or Tempo, Time Signature, Key Signature, Track Name (meta-events stored inside a Standard MIDI File rather than transmitted live). At A-Level all count as MIDI data, but it is worth knowing that the meta-events live in the file, not on the wire.',
     },
     {
         id: 'q10-drum-note-length',

@@ -732,7 +732,7 @@ const DelayFlashcards = () => {
       {
         id: "a7",
         question: "How does the Haas Effect relate to slapback delay in A-Level production work?",
-        answer: "Haas Effect: Sounds within 20-40ms are perceived as one thicker sound, not separate echoes. A-Level application: Slapback delays (40-120ms) exploit this boundary - short enough to thicken, long enough to add space.",
+        answer: "Haas Effect: Sounds within 20-40ms are perceived as one thicker sound, not separate echoes. A-Level application: Slapback delays (40-120ms) sit just above this fusion zone - heard as a distinct, tight echo that adds space, rather than fusing into one sound.",
         furtherLearning: "Test the boundary: Record vocals, apply delays from 20ms to 80ms. Note when it transitions from thickening to distinct echo - critical for Component 4 understanding.",
         practicalExample: "Assessment Essential: Demonstrates psychoacoustic knowledge. Used correctively to enhance vocals without obvious delay artifacts. Shows advanced understanding of perception vs. technical parameters.",
         difficulty: 3,
@@ -1472,13 +1472,13 @@ const DelayFlashcards = () => {
           <>
             <h2 className="dfc-summary-title">Delay &amp; Echo — Summary</h2>
 
-            <div className="dfc-meter" aria-label={`${Math.round(masteryScore)}% mastered`}>
+            <div className="dfc-meter" aria-label={`${Math.round(masteryScore)}% ready`}>
               <div className="dfc-meter-fill" style={{ width: `${masteryScore}%` }} />
             </div>
 
             <div className="dfc-stat-grid">
               <div className="dfc-stat">
-                <div className="dfc-stat-label">Mastered</div>
+                <div className="dfc-stat-label">Ready</div>
                 <div className="dfc-stat-value" data-tone="success">{mastered.length}</div>
               </div>
               <div className="dfc-stat">
@@ -1518,7 +1518,7 @@ const DelayFlashcards = () => {
 
             {Object.keys(masteredByCategory).length > 0 && (
               <section className="dfc-summary-section">
-                <h3>Mastered</h3>
+                <h3>Ready</h3>
                 {Object.entries(masteredByCategory).map(([category, cards], idx) => (
                   <div key={idx} className="dfc-summary-subgroup">
                     <div className="dfc-control-label" style={{ marginBottom: '0.45rem' }}>

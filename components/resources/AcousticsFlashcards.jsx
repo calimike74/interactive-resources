@@ -13,7 +13,7 @@ const AcousticsFlashcards = () => {
       {
         id: "b1",
         question: "What are reverberations and how do they help us understand our environment?",
-        answer: "Reverberations tell us what type of room we're occupying through waveforms bouncing off surrounding objects like floors, walls, and computers. They provide our brain with spatial information about the environment.",
+        answer: "Reverberations tell us what type of room we're occupying through waveforms bouncing off surrounding objects like floors, walls, and ceilings. They provide our brain with spatial information about the environment.",
         furtherLearning: "Try clapping your hands in different rooms - a bathroom, bedroom, and outside. Notice how the sound character changes.",
         practicalExample: "In a large cathedral, you hear long, sustained reverberations, while in a small, carpeted room, the sound dies quickly.",
         difficulty: 1,
@@ -33,7 +33,7 @@ const AcousticsFlashcards = () => {
       {
         id: "b3",
         question: "What are the three stages of reverberations?",
-        answer: "Reverberations are divided into three stages: Direct Sound (original sound reaching ears, ~3.5ms), Early Reflections (provide room dimension info, ~5-25ms), and Late Reflections (early reflections bouncing off each other until below hearing threshold).",
+        answer: "Reverberations are divided into three stages: Direct Sound (original sound reaching the ears first; the ~3.5ms figure is for a source about 1.2m away and scales with distance), Early Reflections (provide room dimension info, ~5-25ms), and Late Reflections (early reflections bouncing off each other until below hearing threshold).",
         furtherLearning: "In a DAW, look at an impulse response to visually identify these three distinct stages.",
         practicalExample: "When you speak in a large hall, you hear your voice directly first, then early reflections from nearby walls, then a wash of late reflections creating the reverb tail.",
         difficulty: 1,
@@ -175,7 +175,7 @@ const AcousticsFlashcards = () => {
         <text x="90" y="95" fill="#000" fontSize="8">Time (ms)</text>
         <line x1="30" y1="20" x2="30" y2="80" stroke="#DCC892" strokeWidth="3" />
         <text x="15" y="15" fill="#DCC892" fontSize="7">Direct</text>
-        <text x="15" y="90" fill="#DCC892" fontSize="6">~3.5ms</text>
+        <text x="15" y="90" fill="#DCC892" fontSize="6">~3.5ms @1.2m</text>
         <line x1="50" y1="30" x2="50" y2="80" stroke="#10b981" strokeWidth="2" />
         <line x1="60" y1="35" x2="60" y2="80" stroke="#10b981" strokeWidth="2" />
         <line x1="75" y1="25" x2="75" y2="80" stroke="#10b981" strokeWidth="2" />
@@ -254,7 +254,7 @@ const AcousticsFlashcards = () => {
         <circle cx="140" cy="45" r="3" fill="#10b981" />
         <text x="125" y="35" fill="#10b981" fontSize="8">Listener</text>
         <line x1="63" y1="45" x2="137" y2="45" stroke="#DCC892" strokeWidth="2" />
-        <text x="95" y="40" fill="#DCC892" fontSize="7">Direct (~3.5ms)</text>
+        <text x="95" y="40" fill="#DCC892" fontSize="7">Direct (~3.5ms @1.2m)</text>
         <path d="M60,45 L25,25 L140,45" stroke="#ef4444" strokeWidth="2" fill="none" />
         <text x="30" y="20" fill="#ef4444" fontSize="7">Ceiling (~8ms)</text>
         <path d="M60,45 L25,65 L140,45" stroke="#DCC892" strokeWidth="2" fill="none" />

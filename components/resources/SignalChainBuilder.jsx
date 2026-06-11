@@ -373,9 +373,9 @@ export default function SignalChainBuilder() {
                     lineHeight: typography.lineHeight.relaxed,
                 }}>
                     Signal chain ordering questions appear regularly in Edexcel papers. You need to know
-                    the <strong style={{ color: t.text.primary }}>seven-stage sequence</strong> and understand
-                    that both filters are analogue and sit immediately either side of their
-                    respective converter. Remember: a digital signal <strong style={{ color: t.text.primary }}>must
+                    the <strong style={{ color: t.text.primary }}>six-stage sequence</strong> — acoustic sound,
+                    microphone, ADC, digital processing, DAC, amplifier and speakers — and understand where
+                    each conversion happens. Remember: a digital signal <strong style={{ color: t.text.primary }}>must
                     always</strong> be converted back to analogue before you can hear it.
                 </p>
             </div>
@@ -387,7 +387,7 @@ export default function SignalChainBuilder() {
 const SIGNAL_CHAIN_DEFINITIONS = [
     { label: 'Transducer', text: 'A device that converts energy from one form to another. A microphone converts acoustic energy to electrical energy. A speaker does the reverse.' },
     { label: 'ADC (Analogue-to-Digital Converter)', text: 'Converts the analogue electrical signal into digital binary data by sampling at regular intervals. Found in audio interfaces.' },
-    { label: 'DAC (Digital-to-Analogue Converter)', text: 'Converts digital binary data back into a continuously varying analogue electrical signal for playback. Produces a stepped output that needs filtering.' },
+    { label: 'DAC (Digital-to-Analogue Converter)', text: 'Converts digital binary data back into a continuously varying analogue electrical signal for playback. Found in audio interfaces.' },
     { label: 'Signal Chain', text: 'The complete path audio travels: Acoustic sound > Microphone > ADC > Digital processing > DAC > Amplifier & Speakers > Acoustic sound.' },
 ];
 

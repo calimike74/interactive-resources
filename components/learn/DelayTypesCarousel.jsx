@@ -56,7 +56,7 @@ const DELAY_TYPES = [
         'Ableton Echo / Logic Tape Delay — multi-tap modes built into modern DAWs',
       ],
       settings: 'Tap 1: ⅛ note · Tap 2: dotted ⅛ · Tap 3: ¼ · per-tap pan + level',
-      examPointer: 'Each tap has its own time, level and pan. There is no feedback loop — this is what separates multi-tap from a feedback delay.',
+      examPointer: 'Each tap has its own time, level and pan — that independent control of several taps is what defines a multi-tap delay, rather than the single regenerating repeat of a basic feedback delay.',
     },
   },
   {
