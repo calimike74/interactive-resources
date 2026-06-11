@@ -45,6 +45,7 @@ export default function VideoCheckpointPlayer({
     const fadeRef = useRef(null);
     const dialogRef = useRef(null);
     const lastTimeRef = useRef(0);
+    const preFocusRef = useRef(null);
 
     const [activeCheckpoint, setActiveCheckpoint] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -113,6 +114,10 @@ export default function VideoCheckpointPlayer({
                         if (fadeRef.current) {
                             clearInterval(fadeRef.current);
                             fadeRef.current = null;
+                        }
+                        // Capture focus target before pausing so we can restore it on close
+                        if (typeof document !== 'undefined') {
+                            preFocusRef.current = document.activeElement;
                         }
                         player.pauseVideo();
                         setActiveCheckpoint(cp);
@@ -197,6 +202,13 @@ export default function VideoCheckpointPlayer({
         setActiveCheckpoint(null);
         setSelectedIndex(null);
         setSubmitted(false);
+
+        // Restore focus to whatever held it before the modal opened (WCAG 2.4.3)
+        const restored = preFocusRef.current;
+        preFocusRef.current = null;
+        if (restored && typeof restored.focus === 'function') {
+            restored.focus();
+        }
 
         const player = playerRef.current;
         if (!player || typeof player.playVideo !== 'function' || !cp) return;

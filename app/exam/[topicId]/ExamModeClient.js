@@ -664,8 +664,37 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
 // Reused question type components — simplified for exam mode
 
 function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSelect, t }) {
+    // Roving tabindex: focused option index (separate from selected — starts at selected or 0)
+    const [focusedIndex, setFocusedIndex] = useState(selectedIndex !== null ? selectedIndex : 0);
+    const optionRefs = useRef([]);
+
+    // When a new question loads (selectedIndex resets to null), reset focused index to 0
+    useEffect(() => {
+        setFocusedIndex(selectedIndex !== null ? selectedIndex : 0);
+    }, [selectedIndex]);
+
+    function handleKeyDown(e) {
+        if (showFeedback) return;
+        let nextIdx = focusedIndex;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+            nextIdx = (focusedIndex + 1) % options.length;
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            nextIdx = (focusedIndex - 1 + options.length) % options.length;
+        } else if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            onSelect(focusedIndex);
+            return;
+        } else {
+            return;
+        }
+        e.preventDefault();
+        setFocusedIndex(nextIdx);
+        onSelect(nextIdx);
+        optionRefs.current[nextIdx]?.focus();
+    }
+
     return (
-        <div role="radiogroup" aria-labelledby="question-heading" style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
+        <div role="radiogroup" aria-labelledby="question-heading" onKeyDown={handleKeyDown} style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
             {options.map((option, i) => {
                 let bg = glass.bg;
                 let borderColor = t.border.subtle;
@@ -687,13 +716,20 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                     : showFeedback && i === selectedIndex && i !== correctIndex ? ' — Your answer (incorrect)'
                     : '';
 
+                // Roving tabindex: only the focused option (or selected, or first) is in tab order
+                const tabIdx = showFeedback
+                    ? (i === selectedIndex ? 0 : -1)
+                    : (i === focusedIndex ? 0 : -1);
+
                 return (
                     <button type="button"
                         key={i}
+                        ref={el => { optionRefs.current[i] = el; }}
                         role="radio"
                         aria-checked={i === selectedIndex}
                         aria-describedby={showFeedback && feedbackLabel ? `mcq-feedback-${i}` : undefined}
-                        onClick={() => !showFeedback && onSelect(i)}
+                        tabIndex={tabIdx}
+                        onClick={() => { if (!showFeedback) { setFocusedIndex(i); onSelect(i); } }}
                         disabled={showFeedback}
                         style={{
                             textAlign: 'left',

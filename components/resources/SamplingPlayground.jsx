@@ -44,10 +44,34 @@ const sections = [
 ];
 
 function SectionNav({ active, onNavigate }) {
+  function handleKeyDown(e) {
+    const ids = sections.map(s => s.id);
+    const currentIdx = ids.indexOf(active);
+    let nextIdx = currentIdx;
+    if (e.key === 'ArrowRight') {
+      nextIdx = (currentIdx + 1) % ids.length;
+    } else if (e.key === 'ArrowLeft') {
+      nextIdx = (currentIdx - 1 + ids.length) % ids.length;
+    } else if (e.key === 'Home') {
+      nextIdx = 0;
+    } else if (e.key === 'End') {
+      nextIdx = ids.length - 1;
+    } else {
+      return;
+    }
+    e.preventDefault();
+    onNavigate(ids[nextIdx]);
+    // Move DOM focus to the newly selected tab
+    const tablist = e.currentTarget;
+    const tabs = tablist.querySelectorAll('[role="tab"]');
+    if (tabs[nextIdx]) tabs[nextIdx].focus();
+  }
+
   return (
     <div
       role="tablist"
       aria-label="Section navigation"
+      onKeyDown={handleKeyDown}
       style={{
         display: 'flex',
         gap: '4px',
@@ -66,6 +90,7 @@ function SectionNav({ active, onNavigate }) {
           key={s.id}
           role="tab"
           aria-selected={active === s.id}
+          tabIndex={active === s.id ? 0 : -1}
           onClick={() => onNavigate(s.id)}
           style={{
             flex: 1,

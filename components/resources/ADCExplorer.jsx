@@ -55,6 +55,29 @@ const strongText = {
 export default function ADCExplorer() {
     const [activeTab, setActiveTab] = useState('sampling');
 
+    function handleTabKeyDown(e) {
+        const ids = TABS.map(tab => tab.id);
+        const currentIdx = ids.indexOf(activeTab);
+        let nextIdx = currentIdx;
+        if (e.key === 'ArrowRight') {
+            nextIdx = (currentIdx + 1) % ids.length;
+        } else if (e.key === 'ArrowLeft') {
+            nextIdx = (currentIdx - 1 + ids.length) % ids.length;
+        } else if (e.key === 'Home') {
+            nextIdx = 0;
+        } else if (e.key === 'End') {
+            nextIdx = ids.length - 1;
+        } else {
+            return;
+        }
+        e.preventDefault();
+        setActiveTab(ids[nextIdx]);
+        // Move DOM focus to the newly selected tab
+        const tablist = e.currentTarget;
+        const tabs = tablist.querySelectorAll('[role="tab"]');
+        if (tabs[nextIdx]) tabs[nextIdx].focus();
+    }
+
     return (
         <div style={{
             maxWidth: '64rem',
@@ -66,6 +89,7 @@ export default function ADCExplorer() {
             <div
                 role="tablist"
                 aria-label="ADC Explorer sections"
+                onKeyDown={handleTabKeyDown}
                 style={{
                     display: 'flex',
                     gap: spacing[1],
@@ -81,6 +105,7 @@ export default function ADCExplorer() {
                         aria-selected={activeTab === tab.id}
                         aria-controls={`tabpanel-${tab.id}`}
                         id={`tab-${tab.id}`}
+                        tabIndex={activeTab === tab.id ? 0 : -1}
                         onClick={() => setActiveTab(tab.id)}
                         style={{
                             flex: 1,
