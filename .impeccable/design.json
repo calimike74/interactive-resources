@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-17T00:00:00Z",
+  "title": "Design System: Music Tech Studio — Interactive Resources",
+  "extensions": {
+    "colorMeta": {
+      "field": {
+        "role": "primary",
+        "displayName": "Field Moss",
+        "canonical": "#3A4A35",
+        "tonalRamp": ["#1F2A1C", "#2D3A2A", "#3A4A35", "#5F7058", "#7E8C77", "#BCC9B0", "#DDE3D7", "#EFF2EC"]
+      },
+      "sienna": {
+        "role": "secondary",
+        "displayName": "Burnt Sienna",
+        "canonical": "#B85A3F",
+        "tonalRamp": ["#6E2F12", "#95421F", "#B85A3F", "#D4724F", "#E5B097", "#F2D5C5", "#FBF1EB", "#FEF8F4"]
+      },
+      "mustard": {
+        "role": "tertiary",
+        "displayName": "Mustard Ochre",
+        "canonical": "#C99F44",
+        "tonalRamp": ["#6F541E", "#9B7530", "#C99F44", "#DCC892", "#EBE0BE", "#FAF6E8", "#FCF9F0", "#FEFCF7"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Forest Ink",
+        "canonical": "#1F2A1C",
+        "tonalRamp": ["#1F2A1C", "#2D3A2A", "#3A4A35", "#6B6F5C", "#A8A696", "#D4C9B4", "#F2EBE0", "#F8F2E8"]
+      },
+      "cream-bg": {
+        "role": "neutral",
+        "displayName": "Cream Ground",
+        "canonical": "#F2EBE0",
+        "tonalRamp": ["#1F2A1C", "#6B6F5C", "#A8A696", "#D4C9B4", "#E8DECB", "#F2EBE0", "#F8F2E8", "#FDFBF6"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#F8F2E8"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted Sage",
+        "canonical": "#6B6F5C"
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Warm Line",
+        "canonical": "#D4C9B4"
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero and page titles; Fraunces, one italic word allowed for emphasis." },
+      "headline": { "displayName": "Headline", "purpose": "Major section titles; Fraunces roman." },
+      "title": { "displayName": "Title", "purpose": "Card and subsection titles; Fraunces 500 italic." },
+      "lede": { "displayName": "Lede", "purpose": "Standfirst / intro paragraph beneath a headline; Fraunces italic." },
+      "body": { "displayName": "Body", "purpose": "Running text; Geist, 65–75ch measure." },
+      "caption": { "displayName": "Caption", "purpose": "Metadata, helper text, micro-trends; Geist." },
+      "label": { "displayName": "Label / Eyebrow", "purpose": "Section markers, field labels, table headers; Geist 600, uppercase, 0.14em tracking." },
+      "mono": { "displayName": "Mono", "purpose": "Data readouts (Hz, ms, BPM), shortcuts, numerical positions; Geist Mono, sparingly." }
+    },
+    "shadows": [
+      { "name": "light", "value": "0 1px 0 rgba(43,36,24,0.06), 0 8px 24px -16px rgba(43,36,24,0.18)", "purpose": "Default raised surface — hovers, popovers, small panels. Paper-on-paper, never floating." },
+      { "name": "card", "value": "0 1px 0 rgba(43,36,24,0.04), 0 18px 40px -24px rgba(43,36,24,0.22)", "purpose": "Standard content card. A faint contact line plus a soft ambient spread; if it looks dark, it is wrong." }
+    ],
+    "motion": [
+      { "name": "ease-smooth", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default easing for almost everything — transitions, entrances, hovers." },
+      { "name": "ease-out", "value": "cubic-bezier(0.17, 1, 0.32, 1)", "purpose": "Decorative entrances that need a softer landing." },
+      { "name": "ease-spring", "value": "cubic-bezier(0.35, 1.55, 0.65, 1)", "purpose": "Slight overshoot for things that pop in (badges, counters). Use sparingly — this brand prefers stillness." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.66, 0, 0.34, 1)", "purpose": "Symmetric moves where in and out should mirror." },
+      { "name": "duration-fast", "value": "150ms", "purpose": "Press feedback, hover colour shifts." },
+      { "name": "duration-normal", "value": "200ms", "purpose": "Default state transitions, page fades." },
+      { "name": "duration-slow", "value": "280ms", "purpose": "Entrances and reveals." },
+      { "name": "entrance-focus-in", "value": "opacity 0→1, translateY 6px→0, filter blur(2px)→blur(0); ~300ms var(--ease-smooth)", "purpose": "The house entrance. Content focuses into place; never a plain fade or a flick-on." },
+      { "name": "press", "value": "transform: scale(0.97); var(--duration-fast)", "purpose": "Tactile press on every interactive element — a firm press, not a collapse." },
+      { "name": "reveal-height", "value": "grid-template-rows 0fr→1fr; var(--duration-slow) var(--ease-smooth)", "purpose": "Expand/collapse to real content height. Never a max-height hack." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "content-max", "value": "1080px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action. Field background, cream text, pill shape; deepens and lifts on hover, presses on click. Never shadowed, never gradient.",
+      "html": "<button class=\"ds-btn-primary\">Start revising</button>",
+      "css": ".ds-btn-primary { background: #3A4A35; color: #F2EBE0; font-family: Geist, system-ui, sans-serif; font-weight: 600; font-size: 0.9375rem; border: none; border-radius: 999px; padding: 0.8rem 1.4rem; cursor: pointer; transition: background 150ms cubic-bezier(0.22,1,0.36,1), transform 150ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-primary:hover { background: #2D3A2A; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #3A4A35; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Tertiary / cancel action. Transparent with a 1px Field border and Field text; subtle Field tint on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Cancel</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #3A4A35; font-family: Geist, system-ui, sans-serif; font-weight: 600; font-size: 0.9375rem; border: 1px solid #3A4A35; border-radius: 999px; padding: calc(0.8rem - 1px) calc(1.4rem - 1px); cursor: pointer; transition: background 150ms cubic-bezier(0.22,1,0.36,1), transform 150ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-ghost:hover { background: rgba(58,74,53,0.08); } .ds-btn-ghost:focus-visible { outline: 2px solid #3A4A35; outline-offset: 2px; } .ds-btn-ghost:active { transform: scale(0.97); }"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Paper card on the cream ground. 16px radius, a single 1px warm line, paper-on-paper shadow, optional 3px accent top stripe for category coding.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card-eyebrow\">1.9 Dynamic Processing</span><h3 class=\"ds-card-title\">Compression basics</h3><p class=\"ds-card-body\">Threshold, ratio, attack, release — the four controls that shape every compressor.</p></article>",
+      "css": ".ds-card { background: #F8F2E8; color: #1F2A1C; border: 1px solid #D4C9B4; border-top: 3px solid #3A4A35; border-radius: 16px; padding: 24px; box-shadow: 0 1px 0 rgba(43,36,24,0.04), 0 18px 40px -24px rgba(43,36,24,0.22); transition: transform 200ms cubic-bezier(0.22,1,0.36,1); } .ds-card:hover { transform: translateY(-2px); } .ds-card-eyebrow { font-family: Geist, system-ui, sans-serif; font-weight: 600; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.14em; color: #6B6F5C; } .ds-card-title { font-family: Fraunces, Georgia, serif; font-weight: 500; font-style: italic; font-size: 1.375rem; margin: 6px 0 8px; } .ds-card-body { font-family: Geist, system-ui, sans-serif; font-size: 1rem; line-height: 1.6; color: #1F2A1C; margin: 0; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Paper background lifted from the page, 1px warm line, 12px radius. On focus the border becomes Field with a soft Field-at-18% ring. Placeholder is muted italic Fraunces.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search a topic…\" />",
+      "css": ".ds-input { background: #F8F2E8; color: #1F2A1C; font-family: Geist, system-ui, sans-serif; font-size: 1rem; border: 1px solid #D4C9B4; border-radius: 12px; padding: 12px 14px; transition: border-color 150ms cubic-bezier(0.22,1,0.36,1), box-shadow 150ms cubic-bezier(0.22,1,0.36,1); } .ds-input::placeholder { color: #6B6F5C; font-family: Fraunces, Georgia, serif; font-style: italic; } .ds-input:focus { outline: none; border-color: #3A4A35; box-shadow: 0 0 0 3px rgba(58,74,53,0.18); }"
+    },
+    {
+      "name": "Tag Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Pill tag with a subtle tinted background (mustard ~14%) and text in the deepened accent. No border for tags; a 1px line only for filter chips.",
+      "html": "<span class=\"ds-badge\">In progress</span>",
+      "css": ".ds-badge { display: inline-block; background: rgba(201,159,68,0.14); color: #9B7530; font-family: Geist, system-ui, sans-serif; font-weight: 600; font-size: 0.75rem; border-radius: 999px; padding: 2px 10px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Independent Press",
+    "overview": "This is what a serious independent textbook publisher would look like if it had a software studio. Warm earthen colour, editorial typography in a real serif, and the quiet confidence of something that has been thought about for longer than a sprint. It is a learning instrument first: a student should trust it the way they trust a well-made tool. The surface is never flat and never cold — a warm cream ground carries a faint paper noise and two off-page radial washes, so the page feels lit from somewhere without ever resorting to a glow or a gradient on a component. Depth is paper-on-paper: a hairline warm line and a soft, low-opacity shadow, never a UI element floating above a synthwave horizon. It explicitly rejects generic AI-template / neobrutalist work and childish edtech; the register is credibly A-Level and credibly editorial, not SaaS.",
+    "keyCharacteristics": [
+      "Warm cream ground, layered (noise + radial washes), never flat or pure-white or plain-dark.",
+      "One accent per surface, drawn from a strict three-tier hierarchy.",
+      "Editorial serif display (Fraunces) over a clean sans body (Geist).",
+      "Paper-on-paper depth: a 1px warm line plus a faint layered shadow, never a floating drop shadow.",
+      "Motion that focuses in rather than flicks on, and that always honours reduced-motion."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "A surface uses exactly one accent. A button is Field, OR Sienna, OR Mustard — never a gradient between them. Gradients are reserved for atmospheric backgrounds, never components.", "section": "colors" },
+      { "name": "The Hierarchy-Never-Reverses Rule", "body": "Field is the brand, Sienna is the data, Mustard is the texture. The tiers do not swap roles.", "section": "colors" },
+      { "name": "The Fraunces-Carries-It Rule", "body": "Headings are always Fraunces; body is always Geist. Strong is Geist 600 — never 700 black against the cream.", "section": "typography" },
+      { "name": "The Mono-Is-For-Numbers Rule", "body": "Geist Mono is reserved for data readouts, shortcuts, and numerical positions. Never headlines or body.", "section": "typography" },
+      { "name": "The Paper-On-Paper Rule", "body": "Depth is a faint contact line plus a soft ambient spread at very low opacity. If a shadow looks dark, it is wrong. Never Material elevation, never glow shadows, never a drop shadow under a button.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do default to Field, and use exactly one accent per surface (Field > Sienna > Mustard) — never a gradient between accents.",
+      "Do keep the background a warm cream (#F2EBE0), layered with subtle noise and two off-page radial washes — never flat, never pure-white, never plain-dark.",
+      "Do set display type in Fraunces and body in Geist; reserve Geist Mono for data readouts (Hz, ms, BPM).",
+      "Do convey depth with a 1px warm Line (#D4C9B4) plus a faint layered shadow (paper-on-paper).",
+      "Do make entrances focus in (opacity + 6px rise + 2px blur clear, ~300ms on --ease-smooth) and give every interactive element a press (scale(0.97)).",
+      "Do animate expand/collapse with grid-template-rows: 0fr → 1fr.",
+      "Do honour prefers-reduced-motion (already enforced) and favour transform/opacity on long lists and large surfaces."
+    ],
+    "donts": [
+      "Don't use the browser default ease / ease-in-out, or the Material curve cubic-bezier(0.4, 0, 0.2, 1) — use the house easing tokens. The default curve is the clearest 'an LLM built this' tell.",
+      "Don't put a drop shadow under a button, use Material elevation-tier shadows, or glow-coloured shadows.",
+      "Don't use indigo, purple, or violet anywhere; no indigo→purple gradients; no gradient text on headings.",
+      "Don't use glassmorphism (frosted, blurred overlays) in the product UI (learn / revise / exam / topic / teacher). Glass is permitted only on brand-register marketing/home surfaces.",
+      "Don't use plain-dark backgrounds (#0a0a14, pure #000) or flat single-colour surfaces.",
+      "Don't use left-border colour stripes as decoration, or italicised serif 'highlight' words mid-sentence.",
+      "Don't put Lucide icons on visible surfaces (nav, CTAs, hero) — use Phosphor or hand-drawn there; keep Lucide for invisible utility/admin only.",
+      "Don't ship the generic AI-template / neobrutalism look (harsh borders, clashing brights, sticker shadows, default fonts) or childish edtech (cartoon mascots, primary-colour blocks, gamified-badge clutter).",
+      "Don't write asyndetic tricolon CTAs ('Fast. Simple. Powerful.') or stock CTA verbs ('Get started', 'Learn more', 'Discover')."
+    ]
+  }
+}

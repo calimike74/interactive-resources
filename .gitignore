@@ -43,3 +43,6 @@ next-env.d.ts
 
 # superpowers brainstorm scratch
 .superpowers/
+
+# Claude Code — per-machine local settings (shared settings live in .claude/settings.json)
+.claude/settings.local.json

@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "borderleft: '7px solid",
+        "files": [
+          "**/TopicCard.jsx"
+        ],
+        "reason": "CSS-triangle arrow tail (transparent borders), not a card stripe. Known benign; ignore not yet honoured — upstream case bug pbakaus/impeccable#296",
+        "createdAt": "2026-06-24T15:25:32.407Z"
+      },
+      {
+        "rule": "side-tab",
+        "value": "borderright: '7px solid",
+        "files": [
+          "**/TopicCard.jsx"
+        ],
+        "reason": "CSS-triangle arrow tail (transparent borders), not a card stripe. Known benign; ignore not yet honoured — upstream case bug pbakaus/impeccable#296",
+        "createdAt": "2026-06-24T15:25:32.445Z"
+      }
+    ]
+  }
+}
