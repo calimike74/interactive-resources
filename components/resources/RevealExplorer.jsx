@@ -1537,7 +1537,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
             <div style={{ marginBottom: spacing[5] }}>
                 {example.topic && (
                     <div style={{
-                        fontFamily: '"Playfair Display", Georgia, serif',
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size.sm,
                         color: t.text.tertiary,
                         letterSpacing: '0.15em',
@@ -1548,7 +1548,7 @@ const SpotlightExplorerView = ({ example, onBack }) => {
                     </div>
                 )}
                 <h1 style={{
-                    fontFamily: '"Playfair Display", Georgia, serif',
+                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                     fontSize: '2.75rem',
                     fontWeight: 700,
                     color: t.text.primary,

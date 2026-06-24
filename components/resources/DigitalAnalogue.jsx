@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 // Revelation Design System (Canvas + Studio)
 // ============================================
 
-const FONT_HEADING = "'Playfair Display', Georgia, serif";
+const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
 
 // ============================================

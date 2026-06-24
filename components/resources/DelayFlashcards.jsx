@@ -59,7 +59,7 @@ const DESIGN_TOKENS_CSS = `
     margin-bottom: 0.5rem;
   }
   .dfc-title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: var(--font-fraunces), Georgia, serif;
     font-size: 2.1rem;
     font-weight: 600;
     color: var(--fg);
@@ -151,7 +151,7 @@ const DESIGN_TOKENS_CSS = `
     margin-bottom: 1.5rem;
   }
   .dfc-instructions h3 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: var(--font-fraunces), Georgia, serif;
     font-size: 1.25rem;
     margin: 0 0 0.75rem 0;
     color: var(--fg);
@@ -494,7 +494,7 @@ const DESIGN_TOKENS_CSS = `
 
   /* Summary */
   .dfc-summary-title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: var(--font-fraunces), Georgia, serif;
     font-size: 1.75rem;
     margin: 0 0 1.5rem 0;
     text-align: center;
@@ -535,7 +535,7 @@ const DESIGN_TOKENS_CSS = `
 
   .dfc-summary-section { margin-bottom: 1.75rem; }
   .dfc-summary-section h3 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: var(--font-fraunces), Georgia, serif;
     font-size: 1.2rem;
     margin: 0 0 0.75rem 0;
     font-weight: 600;

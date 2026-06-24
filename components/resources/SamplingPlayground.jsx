@@ -9,7 +9,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 // Dials: CANVAS_INTENSITY 7 / MOTION_INTENSITY 6 / CONTENT_DENSITY 3
 // ============================================
 
-const FONT_HEADING = "'Playfair Display', Georgia, serif";
+const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
 
 // Design tokens
@@ -924,7 +924,7 @@ export default function SamplingPlayground() {
       padding: '32px 24px',
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         * { box-sizing: border-box; }
         input[type="range"]::-webkit-slider-thumb {
           -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;

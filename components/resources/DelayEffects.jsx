@@ -60,7 +60,7 @@ const DESIGN_TOKENS_CSS = `
   }
 `;
 
-const FONT_HEADING = "'Playfair Display', Georgia, serif";
+const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
 
 // ============================================
