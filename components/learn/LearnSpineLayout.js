@@ -129,7 +129,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections, paren
         };
         window.addEventListener('scroll', checkRipple, { passive: true });
         return () => window.removeEventListener('scroll', checkRipple);
-    }, []);
+    }, [parentTopicId, topic.id]);
 
     // Cleanup the close timer on unmount to avoid state updates on an unmounted component
     useEffect(() => {
