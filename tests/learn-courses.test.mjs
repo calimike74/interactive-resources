@@ -18,3 +18,21 @@ test('every learn topic is a well-formed course', () => {
         });
     }
 });
+
+test('every chapter of a multi-chapter learn topic has an exam anchor', () => {
+    for (const topicId of getLearnTopicIds()) {
+        const chapters = getLearnLessons(topicId);
+        if (chapters.length <= 1) continue; // single-chapter legacy topics (eq/dynamics/delay) are exempt
+        for (const c of chapters) {
+            assert.ok(c.examAnchor, `${topicId}/${c.id}: missing examAnchor`);
+            assert.ok(
+                typeof c.examAnchor.question === 'string' && c.examAnchor.question.trim().length > 0,
+                `${topicId}/${c.id}: examAnchor.question is empty`
+            );
+            assert.ok(
+                Array.isArray(c.examAnchor.modelPoints) && c.examAnchor.modelPoints.length > 0,
+                `${topicId}/${c.id}: examAnchor.modelPoints is empty`
+            );
+        }
+    }
+});
