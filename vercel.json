@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/learn/synthesis/synthesis", "destination": "/learn/synthesis/subtractive", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
