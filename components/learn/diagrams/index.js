@@ -37,6 +37,10 @@ import Slapback from './Slapback';
 import TimedDelay from './TimedDelay';
 import PingPong from './PingPong';
 import ADT from './ADT';
+import FmConcept from './FmConcept';
+import FmOperators from './FmOperators';
+import FmRatios from './FmRatios';
+import FmInPractice from './FmInPractice';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -81,6 +85,10 @@ const diagrams = {
     'timed-delay': TimedDelay,
     'ping-pong': PingPong,
     'adt': ADT,
+    'fm-concept': FmConcept,
+    'fm-operators': FmOperators,
+    'fm-ratios': FmRatios,
+    'fm-in-practice': FmInPractice,
 };
 
 export default diagrams;
