@@ -28,7 +28,7 @@ const typeIcons = {
     assessment: ClipboardCheck,
 };
 
-export default function TopicPageClient({ topic, resources }) {
+export default function TopicPageClient({ topic, resources, reviseResources = [] }) {
     const t = theme.light;
     const [progress, setProgress] = useState(null);
 
@@ -317,7 +317,7 @@ export default function TopicPageClient({ topic, resources }) {
                 </section>
 
                 {/* Explore Section — Interactive Tools */}
-                <section style={{ marginBottom: spacing[10] }}>
+                <section id="explore" style={{ marginBottom: spacing[10], scrollMarginTop: '16px' }}>
                     <h2
                         style={{
                             fontSize: typography.size['2xl'],
@@ -352,7 +352,7 @@ export default function TopicPageClient({ topic, resources }) {
                 </section>
 
                 {/* Revise Section */}
-                <section style={{ marginBottom: spacing[10] }}>
+                <section id="revise" style={{ marginBottom: spacing[10], scrollMarginTop: '16px' }}>
                     <h2
                         style={{
                             fontSize: typography.size['2xl'],
@@ -363,128 +363,153 @@ export default function TopicPageClient({ topic, resources }) {
                     >
                         Revise
                     </h2>
-                    {getAvailableTopics().includes(topic.id) ? (
+                    {getAvailableTopics().includes(topic.id) || reviseResources.length > 0 ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[4] }}>
-                            {/* Progress card — shown when student has history */}
-                            {progress && (
-                                <ProgressCard progress={progress} t={t} />
-                            )}
+                            {getAvailableTopics().includes(topic.id) && (
+                                <>
+                                    {/* Progress card — shown when student has history */}
+                                    {progress && (
+                                        <ProgressCard progress={progress} t={t} />
+                                    )}
 
-                            {/* Start Revision link */}
-                            <Link
-                                href={`/revise/${topic.id}`}
-                                style={{ textDecoration: 'none' }}
-                            >
-                                <div
-                                    style={{
-                                        background: glass.bg,
-                                        backdropFilter: 'blur(' + glass.blur + ')',
-                                        WebkitBackdropFilter: 'blur(' + glass.blur + ')',
-                                        borderRadius: borderRadius.xl,
-                                        border: `1px solid ${ED.accentFaint}`,
-                                        padding: `${spacing[6]} ${spacing[6]}`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        cursor: 'pointer',
-                                        transition: `all ${transitions.normal} ${transitions.easing}`,
-                                        boxShadow: glass.shadow,
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.borderColor = ED.accent;
-                                        e.currentTarget.style.boxShadow = glass.shadowHover;
-                                        e.currentTarget.style.transform = 'translateY(-1px)';
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.borderColor = ED.accentFaint;
-                                        e.currentTarget.style.boxShadow = glass.shadow;
-                                        e.currentTarget.style.transform = 'none';
-                                    }}
-                                >
-                                    <div>
-                                        <h3 style={{
-                                            fontSize: typography.size.lg,
-                                            fontWeight: typography.weight.semibold,
-                                            color: t.text.primary,
-                                            marginBottom: spacing[1],
-                                        }}>
-                                            {progress ? 'Continue Revision' : 'Start Revision'}
-                                        </h3>
-                                        <p style={{
-                                            fontSize: typography.size.sm,
-                                            color: t.text.secondary,
-                                        }}>
-                                            Test your knowledge with multiple choice, calculation, and short answer questions
-                                        </p>
-                                    </div>
-                                    <span style={{
-                                        color: ED.accent,
-                                        fontSize: typography.size.xl,
-                                        fontWeight: typography.weight.semibold,
-                                    }}>
-                                        →
-                                    </span>
-                                </div>
-                            </Link>
-
-                            {/* Exam Mode link */}
-                            <Link
-                                href={`/exam/${topic.id}`}
-                                style={{ textDecoration: 'none' }}
-                            >
-                                <div
-                                    style={{
-                                        background: glass.bg,
-                                        backdropFilter: 'blur(' + glass.blur + ')',
-                                        WebkitBackdropFilter: 'blur(' + glass.blur + ')',
-                                        borderRadius: borderRadius.xl,
-                                        border: `1px solid ${t.border.subtle}`,
-                                        padding: `${spacing[5]} ${spacing[6]}`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        cursor: 'pointer',
-                                        transition: `all ${transitions.normal} ${transitions.easing}`,
-                                        boxShadow: glass.shadow,
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.borderColor = t.border.medium;
-                                        e.currentTarget.style.boxShadow = glass.shadowHover;
-                                        e.currentTarget.style.transform = 'translateY(-1px)';
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.borderColor = t.border.subtle;
-                                        e.currentTarget.style.boxShadow = glass.shadow;
-                                        e.currentTarget.style.transform = 'none';
-                                    }}
-                                >
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
-                                        <Timer size={20} strokeWidth={1.5} color={ED.inkSoft} aria-hidden="true" />
-                                        <div>
-                                            <h3 style={{
-                                                fontSize: typography.size.base,
+                                    {/* Start Revision link */}
+                                    <Link
+                                        href={`/revise/${topic.id}`}
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        <div
+                                            style={{
+                                                background: glass.bg,
+                                                backdropFilter: 'blur(' + glass.blur + ')',
+                                                WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                                                borderRadius: borderRadius.xl,
+                                                border: `1px solid ${ED.accentFaint}`,
+                                                padding: `${spacing[6]} ${spacing[6]}`,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between',
+                                                cursor: 'pointer',
+                                                transition: `all ${transitions.normal} ${transitions.easing}`,
+                                                boxShadow: glass.shadow,
+                                            }}
+                                            onMouseEnter={e => {
+                                                e.currentTarget.style.borderColor = ED.accent;
+                                                e.currentTarget.style.boxShadow = glass.shadowHover;
+                                                e.currentTarget.style.transform = 'translateY(-1px)';
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.borderColor = ED.accentFaint;
+                                                e.currentTarget.style.boxShadow = glass.shadow;
+                                                e.currentTarget.style.transform = 'none';
+                                            }}
+                                        >
+                                            <div>
+                                                <h3 style={{
+                                                    fontSize: typography.size.lg,
+                                                    fontWeight: typography.weight.semibold,
+                                                    color: t.text.primary,
+                                                    marginBottom: spacing[1],
+                                                }}>
+                                                    {progress ? 'Continue Revision' : 'Start Revision'}
+                                                </h3>
+                                                <p style={{
+                                                    fontSize: typography.size.sm,
+                                                    color: t.text.secondary,
+                                                }}>
+                                                    Test your knowledge with multiple choice, calculation, and short answer questions
+                                                </p>
+                                            </div>
+                                            <span style={{
+                                                color: ED.accent,
+                                                fontSize: typography.size.xl,
                                                 fontWeight: typography.weight.semibold,
-                                                color: t.text.secondary,
-                                                marginBottom: spacing[0.5],
                                             }}>
-                                                Exam Mode
-                                            </h3>
-                                            <p style={{
-                                                fontSize: typography.size.xs,
-                                                color: t.text.tertiary,
-                                            }}>
-                                                Answer every question once under timed conditions — you can&apos;t return to change answers.
-                                            </p>
+                                                →
+                                            </span>
                                         </div>
-                                    </div>
-                                    <span style={{
-                                        color: t.text.tertiary,
+                                    </Link>
+
+                                    {/* Exam Mode link */}
+                                    <Link
+                                        href={`/exam/${topic.id}`}
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                        <div
+                                            style={{
+                                                background: glass.bg,
+                                                backdropFilter: 'blur(' + glass.blur + ')',
+                                                WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                                                borderRadius: borderRadius.xl,
+                                                border: `1px solid ${t.border.subtle}`,
+                                                padding: `${spacing[5]} ${spacing[6]}`,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between',
+                                                cursor: 'pointer',
+                                                transition: `all ${transitions.normal} ${transitions.easing}`,
+                                                boxShadow: glass.shadow,
+                                            }}
+                                            onMouseEnter={e => {
+                                                e.currentTarget.style.borderColor = t.border.medium;
+                                                e.currentTarget.style.boxShadow = glass.shadowHover;
+                                                e.currentTarget.style.transform = 'translateY(-1px)';
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.borderColor = t.border.subtle;
+                                                e.currentTarget.style.boxShadow = glass.shadow;
+                                                e.currentTarget.style.transform = 'none';
+                                            }}
+                                        >
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
+                                                <Timer size={20} strokeWidth={1.5} color={ED.inkSoft} aria-hidden="true" />
+                                                <div>
+                                                    <h3 style={{
+                                                        fontSize: typography.size.base,
+                                                        fontWeight: typography.weight.semibold,
+                                                        color: t.text.secondary,
+                                                        marginBottom: spacing[0.5],
+                                                    }}>
+                                                        Exam Mode
+                                                    </h3>
+                                                    <p style={{
+                                                        fontSize: typography.size.xs,
+                                                        color: t.text.tertiary,
+                                                    }}>
+                                                        Answer every question once under timed conditions — you can&apos;t return to change answers.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <span style={{
+                                                color: t.text.tertiary,
+                                                fontSize: typography.size.lg,
+                                            }}>
+                                                →
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </>
+                            )}
+                            {reviseResources.length > 0 && (
+                                <div>
+                                    <h3 style={{
                                         fontSize: typography.size.lg,
+                                        fontWeight: typography.weight.semibold,
+                                        color: t.text.primary,
+                                        margin: `${spacing[2]} 0 ${spacing[3]}`,
                                     }}>
-                                        →
-                                    </span>
+                                        Practice materials
+                                    </h3>
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                                        gap: spacing[4],
+                                    }}>
+                                        {reviseResources.map((resource, i) => (
+                                            <ResourceCard key={resource.id} resource={resource} theme={t} animationDelay={i * 80} />
+                                        ))}
+                                    </div>
                                 </div>
-                            </Link>
+                            )}
                         </div>
                     ) : (
                         <ComingSoonPlaceholder label="Revision quizzes and flashcards coming soon" theme={t} />

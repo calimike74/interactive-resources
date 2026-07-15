@@ -29,10 +29,12 @@ export default async function TopicPage({ params }) {
         notFound();
     }
 
-    // Resolve resource metadata for this topic
-    const resources = topic.resourceIds
+    // Resolve resource metadata for this topic, split by door
+    const all = topic.resourceIds
         .filter(id => resourceExists(id))
         .map(id => getResource(id));
+    const exploreResources = all.filter(r => r.kind === 'sandbox' || r.kind === 'interface');
+    const reviseResources = all.filter(r => r.kind === 'retrieval' || r.kind === 'practice');
 
-    return <TopicPageClient topic={topic} resources={resources} />;
+    return <TopicPageClient topic={topic} resources={exploreResources} reviseResources={reviseResources} />;
 }
