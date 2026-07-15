@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import diagrams from './diagrams';
+import interactives from './interactives';
 import ExpandableText from './ExpandableText';
 import AudioBlock from './AudioBlock';
 import SectionAssessment from './SectionAssessment';
@@ -249,6 +250,10 @@ export default function LearnSpineLayout({ topic, token, answeredSections, paren
                                 </h3>
                                 <ExpandableText text={row.description} topicColor={topicColor} topicId={topic.id} studentToken={token} />
                                 {row.audio && <AudioBlock preset={row.audio.preset} params={row.audio.params} label={row.audio.label} />}
+                                {row.interactive && interactives[row.interactive] && (() => {
+                                    const Interactive = interactives[row.interactive];
+                                    return <Interactive />;
+                                })()}
                             </div>
                             {row.assessment && state.show && (
                                 <div style={{
