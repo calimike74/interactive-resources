@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import diagrams from './diagrams';
 import ExpandableText from './ExpandableText';
+import AudioBlock from './AudioBlock';
 import SectionAssessment from './SectionAssessment';
 import ChapterOutro from './ChapterOutro';
 import { markChapterComplete } from '@/lib/learn/course-progress';
@@ -247,6 +248,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections, paren
                                     {row.heading}
                                 </h3>
                                 <ExpandableText text={row.description} topicColor={topicColor} topicId={topic.id} studentToken={token} />
+                                {row.audio && <AudioBlock preset={row.audio.preset} params={row.audio.params} label={row.audio.label} />}
                             </div>
                             {row.assessment && state.show && (
                                 <div style={{
