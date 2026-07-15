@@ -15,6 +15,8 @@ import FilterTypes from './FilterTypes';
 import Resonance from './Resonance';
 import FilterEnvelope from './FilterEnvelope';
 import AmpEnvelope from './AmpEnvelope';
+import EnvelopeConcept from './EnvelopeConcept';
+import EnvelopeRecipes from './EnvelopeRecipes';
 import SynthSignalFlow from './SynthSignalFlow';
 import DynamicRange from './DynamicRange';
 import ThresholdRatio from './ThresholdRatio';
@@ -48,6 +50,8 @@ const diagrams = {
     'resonance': Resonance,
     'filter-envelope': FilterEnvelope,
     'amp-envelope': AmpEnvelope,
+    'envelope-concept': EnvelopeConcept,
+    'envelope-recipes': EnvelopeRecipes,
     'synth-signal-flow': SynthSignalFlow,
     'dynamic-range': DynamicRange,
     'threshold-ratio': ThresholdRatio,
