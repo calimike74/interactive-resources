@@ -7,7 +7,7 @@ import LearnSpineLayout from './LearnSpineLayout';
 import { getTopicResponses } from '@/lib/learn/section-persistence';
 import { editorial as ED } from '@/lib/theme';
 
-export default function LearnTopicPage({ topic, parentTopicId }) {
+export default function LearnTopicPage({ topic, parentTopicId, outro }) {
     const searchParams = useSearchParams();
     const rawToken = searchParams.get('token');
     // Reject tokens that don't look like a UUID — server validates further, but this
@@ -103,6 +103,8 @@ export default function LearnTopicPage({ topic, parentTopicId }) {
                 topic={topic}
                 token={token}
                 answeredSections={answeredSections}
+                parentTopicId={parentTopicId}
+                outro={outro}
             />
         </div>
     );

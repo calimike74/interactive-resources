@@ -4,9 +4,11 @@ import { useState, useRef, useEffect } from 'react';
 import diagrams from './diagrams';
 import ExpandableText from './ExpandableText';
 import SectionAssessment from './SectionAssessment';
+import ChapterOutro from './ChapterOutro';
+import { markChapterComplete } from '@/lib/learn/course-progress';
 import { editorial as ED } from '@/lib/theme';
 
-export default function LearnSpineLayout({ topic, token, answeredSections }) {
+export default function LearnSpineLayout({ topic, token, answeredSections, parentTopicId, outro }) {
     const topicColor = ED.accent;
     const [assessmentState, setAssessmentState] = useState({});
     const closeTimerRef = useRef(null);
@@ -119,6 +121,7 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
             if (maxScroll > 0 && window.scrollY / maxScroll >= 0.92) {
                 rippleFiredRef.current = true;
                 setRippleFired(true);
+                markChapterComplete(parentTopicId, topic.id);
             }
         };
         window.addEventListener('scroll', checkRipple, { passive: true });
@@ -411,6 +414,15 @@ export default function LearnSpineLayout({ topic, token, answeredSections }) {
                         {answeredSections.length} of {topic.rows.filter(r => r.assessment).length} questions answered
                     </p>
                 )}
+            </div>
+
+            {/* Chapter outro — next chapter or explore/revise, fades in with the ripple */}
+            <div style={{
+                opacity: rippleFired ? 1 : 0,
+                transform: rippleFired ? 'translateY(0)' : 'translateY(10px)',
+                transition: 'opacity 0.6s ease 1.2s, transform 0.6s ease 1.2s',
+            }}>
+                <ChapterOutro outro={outro} />
             </div>
 
             {/* Keyframes for bowl wave ripple */}
