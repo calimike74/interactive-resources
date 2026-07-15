@@ -7,6 +7,7 @@ import ExpandableText from './ExpandableText';
 import AudioBlock from './AudioBlock';
 import SectionAssessment from './SectionAssessment';
 import ChapterOutro from './ChapterOutro';
+import ExamAnchor from './ExamAnchor';
 import { markChapterComplete } from '@/lib/learn/course-progress';
 import { editorial as ED } from '@/lib/theme';
 
@@ -331,6 +332,8 @@ export default function LearnSpineLayout({ topic, token, answeredSections, paren
                     </div>
                 );
             })}
+
+            {topic.examAnchor && <ExamAnchor anchor={topic.examAnchor} />}
 
             {/* Ripple zone — full-width bowl wave effect */}
             <div ref={rippleZoneRef} style={{
