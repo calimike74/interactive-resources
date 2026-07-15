@@ -12,6 +12,7 @@ import HarmonicSeries from './HarmonicSeries';
 import TimbreComparison from './TimbreComparison';
 import OscillatorWaveforms from './OscillatorWaveforms';
 import FilterTypes from './FilterTypes';
+import Resonance from './Resonance';
 import FilterEnvelope from './FilterEnvelope';
 import AmpEnvelope from './AmpEnvelope';
 import SynthSignalFlow from './SynthSignalFlow';
@@ -44,6 +45,7 @@ const diagrams = {
     'timbre-comparison': TimbreComparison,
     'oscillator-waveforms': OscillatorWaveforms,
     'filter-types': FilterTypes,
+    'resonance': Resonance,
     'filter-envelope': FilterEnvelope,
     'amp-envelope': AmpEnvelope,
     'synth-signal-flow': SynthSignalFlow,
