@@ -1,3 +1,5 @@
+'use client';
+
 // Diagram component registry — maps animation IDs from topic data to React components
 import FrequencySpectrum from './FrequencySpectrum';
 import GraphicEQ from './GraphicEQ';
@@ -18,6 +20,9 @@ import AmpEnvelope from './AmpEnvelope';
 import EnvelopeConcept from './EnvelopeConcept';
 import EnvelopeRecipes from './EnvelopeRecipes';
 import SynthSignalFlow from './SynthSignalFlow';
+import LfoBasics from './LfoBasics';
+import LfoTargets from './LfoTargets';
+import LfoVsEnvelope from './LfoVsEnvelope';
 import DynamicRange from './DynamicRange';
 import ThresholdRatio from './ThresholdRatio';
 import AttackRelease from './AttackRelease';
@@ -32,6 +37,11 @@ import Slapback from './Slapback';
 import TimedDelay from './TimedDelay';
 import PingPong from './PingPong';
 import ADT from './ADT';
+
+// Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
+// "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
+// mislabelled copy of the "What Is an LFO?" diagram.
+const LfoRateDepth = () => <LfoBasics title="Rate and Depth" cycles={5} lfoAmp={0.44} />;
 
 const diagrams = {
     'frequency-spectrum': FrequencySpectrum,
@@ -53,6 +63,10 @@ const diagrams = {
     'envelope-concept': EnvelopeConcept,
     'envelope-recipes': EnvelopeRecipes,
     'synth-signal-flow': SynthSignalFlow,
+    'lfo-basics': LfoBasics,
+    'lfo-rate-depth': LfoRateDepth,
+    'lfo-targets': LfoTargets,
+    'lfo-vs-envelope': LfoVsEnvelope,
     'dynamic-range': DynamicRange,
     'threshold-ratio': ThresholdRatio,
     'attack-release': AttackRelease,
