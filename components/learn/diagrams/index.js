@@ -7,6 +7,9 @@ import QFactor from './QFactor';
 import Routing from './Routing';
 import Comparison from './Comparison';
 import SubtractiveConcept from './SubtractiveConcept';
+import WhatIsSound from './WhatIsSound';
+import HarmonicSeries from './HarmonicSeries';
+import TimbreComparison from './TimbreComparison';
 import OscillatorWaveforms from './OscillatorWaveforms';
 import FilterTypes from './FilterTypes';
 import FilterEnvelope from './FilterEnvelope';
@@ -36,6 +39,9 @@ const diagrams = {
     'routing': Routing,
     'comparison': Comparison,
     'subtractive-concept': SubtractiveConcept,
+    'what-is-sound': WhatIsSound,
+    'harmonic-series': HarmonicSeries,
+    'timbre-comparison': TimbreComparison,
     'oscillator-waveforms': OscillatorWaveforms,
     'filter-types': FilterTypes,
     'filter-envelope': FilterEnvelope,
