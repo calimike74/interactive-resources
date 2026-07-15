@@ -1,12 +1,44 @@
 'use client';
 
+import { useRef, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import GlassMorphismGrid from '@/components/GlassMorphismGrid';
+import { getProgress } from '@/lib/learn/course-progress';
+
+const EMPTY_PROGRESS = {};
+// No storage-event subscription: we don't need live cross-tab updates, and a
+// fresh useSyncExternalStore snapshot is read on every mount anyway (which
+// covers same-tab navigation back to this page after completing a chapter).
+function noopSubscribe() { return () => {}; }
+function getServerProgressSnapshot() { return EMPTY_PROGRESS; }
 
 export default function LearnPickerClient({ topic, lessons, resources = [] }) {
     const t = theme.light;
+    const isCourse = lessons.length > 1;
+
+    // SSR-safe external-store read: server always sees EMPTY_PROGRESS; client
+    // reads localStorage once per mount and caches the reference so
+    // useSyncExternalStore's snapshot stays stable across re-renders
+    // (getProgress() would otherwise return a new object every call).
+    const progressCache = useRef(null);
+    if (!progressCache.current || progressCache.current.topicId !== topic.id) {
+        progressCache.current = { topicId: topic.id, value: null };
+    }
+    const cache = progressCache.current;
+    const progress = useSyncExternalStore(
+        noopSubscribe,
+        () => (cache.value ??= getProgress(topic.id)),
+        getServerProgressSnapshot
+    );
+    const chapterIds = lessons.map(l => l.id);
+    // Derived from the already-synced `progress` snapshot above — never read
+    // storage directly here, or the first client render (before hydration
+    // sync) would diverge from the server's empty-progress render.
+    const continueId = chapterIds.find(id => progress[id] !== 'completed') ?? chapterIds[0];
+    const continueLesson = lessons.find(l => l.id === continueId);
+    const allComplete = chapterIds.length > 0 && chapterIds.every(id => progress[id] === 'completed');
 
     return (
         <div style={{
@@ -76,7 +108,9 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                         lineHeight: 1.55,
                         maxWidth: '560px',
                     }}>
-                        Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks. Each lesson takes about 10–15 minutes and ends with a quick knowledge check.
+                        {isCourse
+                            ? 'Work through the chapters in order — each builds on the last.'
+                            : 'Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks. Each lesson takes about 10–15 minutes and ends with a quick knowledge check.'}
                     </p>
 
                     <div style={{
@@ -95,17 +129,77 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                 margin: '0 auto',
                 padding: `${spacing[8]} 1.5rem 4rem`,
             }}>
+                {isCourse && continueLesson && (
+                    <Link
+                        href={`/learn/${topic.id}/${continueId}`}
+                        style={{ textDecoration: 'none', display: 'block', marginBottom: spacing[6] }}
+                    >
+                        <div
+                            style={{
+                                background: glass.bg,
+                                backdropFilter: 'blur(' + glass.blur + ')',
+                                WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                                borderRadius: borderRadius.xl,
+                                border: `1px solid ${ED.accentFaint}`,
+                                padding: `${spacing[6]} ${spacing[6]}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                cursor: 'pointer',
+                                transition: `all ${transitions.normal} ${transitions.easing}`,
+                                boxShadow: glass.shadow,
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.borderColor = ED.accent;
+                                e.currentTarget.style.boxShadow = glass.shadowHover;
+                                e.currentTarget.style.transform = 'translateY(-1px)';
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.borderColor = ED.accentFaint;
+                                e.currentTarget.style.boxShadow = glass.shadow;
+                                e.currentTarget.style.transform = 'none';
+                            }}
+                        >
+                            <div>
+                                <h3 style={{
+                                    fontSize: typography.size.lg,
+                                    fontWeight: typography.weight.semibold,
+                                    color: t.text.primary,
+                                    marginBottom: spacing[1],
+                                }}>
+                                    {allComplete ? 'Start again' : 'Continue'} — Chapter {continueLesson.chapterNumber ?? chapterIds.indexOf(continueId) + 1}: {continueLesson.title}
+                                </h3>
+                                <p style={{
+                                    fontSize: typography.size.sm,
+                                    color: t.text.secondary,
+                                }}>
+                                    {allComplete ? 'You\'ve completed every chapter — revisit from the start.' : 'Pick up where you left off.'}
+                                </p>
+                            </div>
+                            <span style={{
+                                color: ED.accent,
+                                fontSize: typography.size.xl,
+                                fontWeight: typography.weight.semibold,
+                            }}>
+                                &rarr;
+                            </span>
+                        </div>
+                    </Link>
+                )}
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
                     gap: spacing[5],
                 }}>
-                    {lessons.map(lesson => (
+                    {lessons.map((lesson, index) => (
                         <LessonCard
                             key={lesson.id}
                             lesson={lesson}
                             topicId={topic.id}
                             t={t}
+                            isCourse={isCourse}
+                            index={index}
+                            completed={isCourse && progress[lesson.id] === 'completed'}
                         />
                     ))}
                     {resources.map(resource => (
@@ -166,7 +260,7 @@ function CardShell({ href, children }) {
     );
 }
 
-function LessonCard({ lesson, topicId, t }) {
+function LessonCard({ lesson, topicId, t, isCourse = false, index = 0, completed = false }) {
     return (
         <CardShell href={`/learn/${topicId}/${lesson.id}`}>
             <div style={{
@@ -178,7 +272,7 @@ function LessonCard({ lesson, topicId, t }) {
                 color: ED.inkFade,
                 marginBottom: spacing[3],
             }}>
-                {lesson.subtitle}
+                {isCourse ? `CHAPTER ${lesson.chapterNumber ?? index + 1}` : lesson.subtitle}
             </div>
 
             <h2 style={{
@@ -208,6 +302,7 @@ function LessonCard({ lesson, topicId, t }) {
             }}>
                 <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>
                     {lesson.rows.length} sections
+                    {isCourse && completed && <span style={{ color: '#059669' }}> &middot; &#10003; completed</span>}
                 </span>
                 <span aria-hidden="true" style={{ color: ED.accent, fontSize: typography.size.lg, fontWeight: typography.weight.semibold }}>
                     &rarr;
