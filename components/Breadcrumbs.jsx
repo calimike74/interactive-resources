@@ -51,7 +51,7 @@ export default function Breadcrumbs() {
                     const isLast = index === crumbs.length - 1;
                     return (
                         <li
-                            key={crumb.href || index}
+                            key={`${index}-${crumb.label}`}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',

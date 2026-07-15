@@ -48,7 +48,7 @@ export default function ADSRShaper() {
                     Try it — envelope shape
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
-                    plucky ↔ swelling
+                    plucky ⇄ swelling
                 </span>
             </div>
             <input
