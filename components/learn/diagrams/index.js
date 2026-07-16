@@ -58,6 +58,10 @@ import LimiterCeiling from './LimiterCeiling';
 import GateExpanderFamily from './GateExpanderFamily';
 import SidechainTriggerTarget from './SidechainTriggerTarget';
 import SidechainPumpingRelease from './SidechainPumpingRelease';
+import TapeEchoDarkening from './TapeEchoDarkening';
+import BpmToMsFamily from './BpmToMsFamily';
+import DottedTripletMultipliers from './DottedTripletMultipliers';
+import PingPongCrossedFeedback from './PingPongCrossedFeedback';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -123,6 +127,10 @@ const diagrams = {
     'gate-expander-family': GateExpanderFamily,
     'sidechain-trigger-target': SidechainTriggerTarget,
     'sidechain-pumping-release': SidechainPumpingRelease,
+    'tape-echo-darkening': TapeEchoDarkening,
+    'bpm-to-ms-family': BpmToMsFamily,
+    'dotted-triplet-multipliers': DottedTripletMultipliers,
+    'pingpong-crossed-feedback': PingPongCrossedFeedback,
 };
 
 export default diagrams;
