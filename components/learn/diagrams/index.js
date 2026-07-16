@@ -41,6 +41,15 @@ import FmConcept from './FmConcept';
 import FmOperators from './FmOperators';
 import FmRatios from './FmRatios';
 import FmInPractice from './FmInPractice';
+import LogFrequencyAxis from './LogFrequencyAxis';
+import FrequencyMapZones from './FrequencyMapZones';
+import BoostVsCutPhilosophy from './BoostVsCutPhilosophy';
+import HighPassLowPassFilters from './HighPassLowPassFilters';
+import FilterSlopeDbOctave from './FilterSlopeDbOctave';
+import ShelvingFilters from './ShelvingFilters';
+import PracticalFilterUses from './PracticalFilterUses';
+import SweepAndCutTechnique from './SweepAndCutTechnique';
+import EqMixContextDecisions from './EqMixContextDecisions';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -89,6 +98,15 @@ const diagrams = {
     'fm-operators': FmOperators,
     'fm-ratios': FmRatios,
     'fm-in-practice': FmInPractice,
+    'log-frequency-axis': LogFrequencyAxis,
+    'frequency-map-zones': FrequencyMapZones,
+    'boost-vs-cut-philosophy': BoostVsCutPhilosophy,
+    'high-pass-low-pass-filters': HighPassLowPassFilters,
+    'filter-slope-db-octave': FilterSlopeDbOctave,
+    'shelving-filters': ShelvingFilters,
+    'practical-filter-uses': PracticalFilterUses,
+    'sweep-and-cut-technique': SweepAndCutTechnique,
+    'eq-mix-context-decisions': EqMixContextDecisions,
 };
 
 export default diagrams;
