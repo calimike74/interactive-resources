@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-// Progressive disclosure: ticks placed at linear positions (six of ten octave-doublings crammed
+// Progressive disclosure: ticks placed at linear positions (five of ten octave-doublings crammed
 // into the first 3% of the axis) → the same ticks tween across to their log positions → labels
 // fade in now that they have room → two equal-width octave brackets (one low, one high) show that
 // the same musical step always earns the same physical distance on a log axis.
@@ -120,7 +120,7 @@ export default function LogFrequencyAxis() {
                 ctx.fillStyle = '#DC2626';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('6 of 10 doublings inside 3% of the axis', bx2 + 8, axisY - 14);
+                ctx.fillText('5 of 10 doublings inside 3% of the axis', bx2 + 8, axisY - 14);
                 ctx.globalAlpha = 1;
             }
 

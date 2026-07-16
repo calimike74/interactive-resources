@@ -36,9 +36,14 @@ export default function HighPassLowPassFilters() {
             { x: 20, y: topY + panelH + gap, w: panelW, h: panelH, type: 'lp', color: '#1a1a6e', label: 'Low-Pass Filter', start: 190 },
         ];
 
+        // `diff` is signed distance from the cut-off: positive toward the stop band, negative
+        // toward the pass band, zero exactly at cut-off. The logistic roll-off below is exactly
+        // 0.5 (the true half-power / -3 dB point) at diff = 0, easing smoothly up toward 1 deep
+        // in the pass band and down toward 0 deep in the stop band — so the curve is already down
+        // at the marked level right at cut-off, which is the teaching point of this diagram.
         const gainAt = (nx, cutNorm, type) => {
             const diff = type === 'lp' ? (nx - cutNorm) * 9 : (cutNorm - nx) * 9;
-            return diff <= 0 ? 1 : 1 / (1 + diff * diff);
+            return 1 / (1 + Math.exp(2 * diff));
         };
 
         const drawPanel = (panel, appear) => {
@@ -111,9 +116,9 @@ export default function HighPassLowPassFilters() {
             ctx.textAlign = 'center';
             ctx.fillText('Cut-off', cutoffX, plotY + plotH + 11);
 
-            // -3 dB point marked exactly on the curve at the cut-off — the transition shoulder's
-            // midpoint stands in for the true -3 dB level of this schematic curve
-            const gainAtCutoff = 0.5;
+            // -3 dB point marked exactly on the curve at the cut-off — computed from gainAt()
+            // itself (not a hardcoded constant) so the dot can never drift off the drawn curve
+            const gainAtCutoff = gainAt(cutNorm, cutNorm, type);
             const markerY = plotY + (1 - gainAtCutoff) * plotH;
             ctx.beginPath();
             ctx.arc(cutoffX, markerY, 3, 0, Math.PI * 2);

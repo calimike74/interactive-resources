@@ -4,8 +4,10 @@ import { useEffect, useRef } from 'react';
 
 // Progressive disclosure: two instrument spectral silhouettes appear, overlapping heavily in the
 // low end → the clash zone is highlighted ("fighting for the same space") → a high-pass filter
-// clears rumble below the bass part's own range (the row's named example) → the two shapes settle
-// into mostly separate territory, each with room of its own.
+// clears rumble below the bass part's own range (an illustrative kick/bass example — the row
+// itself only says "clearing rumble below an instrument's range with a high-pass filter", it does
+// not name kick/bass or 90 Hz) → the two shapes settle into mostly separate territory, each with
+// room of its own.
 export default function EqMixContextDecisions() {
     const canvasRef = useRef(null);
     const frameRef = useRef(0);
@@ -39,7 +41,8 @@ export default function EqMixContextDecisions() {
             margin.left + (Math.log10(freq / FREQ_MIN) / Math.log10(FREQ_MAX / FREQ_MIN)) * plotW;
 
         // Kick: sub-focused hill. Bass: wider hill that originally overlaps the kick's territory
-        // until the high-pass filter clears its own rumble, per the row's named example.
+        // until the high-pass filter clears its own rumble — kick/bass is an illustrative example
+        // of the row's general statement, not a detail the row itself names.
         const kick = { center: freqToX(70), width: plotW * 0.12, peak: plotH * 0.62, color: '#1a1a6e', name: 'Kick' };
         const bassFull = { center: freqToX(180), width: plotW * 0.34, peak: plotH * 0.5, color: '#9B7530', name: 'Bass' };
 
