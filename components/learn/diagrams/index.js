@@ -50,6 +50,14 @@ import ShelvingFilters from './ShelvingFilters';
 import PracticalFilterUses from './PracticalFilterUses';
 import SweepAndCutTechnique from './SweepAndCutTechnique';
 import EqMixContextDecisions from './EqMixContextDecisions';
+import DynamicRangeGap from './DynamicRangeGap';
+import AutomaticFaderConcept from './AutomaticFaderConcept';
+import CompressorTransferCurve from './CompressorTransferCurve';
+import PumpingEnvelope from './PumpingEnvelope';
+import LimiterCeiling from './LimiterCeiling';
+import GateExpanderFamily from './GateExpanderFamily';
+import SidechainTriggerTarget from './SidechainTriggerTarget';
+import SidechainPumpingRelease from './SidechainPumpingRelease';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -107,6 +115,14 @@ const diagrams = {
     'practical-filter-uses': PracticalFilterUses,
     'sweep-and-cut-technique': SweepAndCutTechnique,
     'eq-mix-context-decisions': EqMixContextDecisions,
+    'dynamic-range-gap': DynamicRangeGap,
+    'automatic-fader-concept': AutomaticFaderConcept,
+    'compressor-transfer-curve': CompressorTransferCurve,
+    'pumping-envelope': PumpingEnvelope,
+    'limiter-ceiling': LimiterCeiling,
+    'gate-expander-family': GateExpanderFamily,
+    'sidechain-trigger-target': SidechainTriggerTarget,
+    'sidechain-pumping-release': SidechainPumpingRelease,
 };
 
 export default diagrams;
