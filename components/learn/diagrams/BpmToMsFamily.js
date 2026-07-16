@@ -45,7 +45,7 @@ export default function BpmToMsFamily() {
         const PHASE_CLOSE = 380;
 
         const draw = () => {
-            frameRef.current = (frameRef.current + 1) % CYCLE;
+            frameRef.current = (frameRef.current + 0.6) % CYCLE;
             const f = frameRef.current;
             ctx.clearRect(0, 0, W, H);
             ctx.fillStyle = '#fafafa';

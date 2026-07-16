@@ -78,7 +78,7 @@ export default function TapeEchoDarkening() {
         const PHASE_CLOSE = PHASE_SPECTRUM + (REPEATS + 1) * SPEC_STEP + 30;
 
         const draw = () => {
-            frameRef.current = (frameRef.current + 1) % CYCLE;
+            frameRef.current = (frameRef.current + 0.6) % CYCLE;
             const f = frameRef.current;
             ctx.clearRect(0, 0, W, H);
             ctx.fillStyle = '#fafafa';
@@ -206,13 +206,18 @@ export default function TapeEchoDarkening() {
                 });
                 ctx.globalAlpha = 1;
             }
+            // Sits above the bars (baseline 188), not below them, so it never shares
+            // a text row with the rotating caption slot at y=252 — 40px of clean
+            // vertical band between the numbers row (baseline 160) and the bar tops
+            // (y=200) fits this with room either side. See task-10-report.md fix
+            // section for the bounding-box check against the caption.
             const specLabelP = progress(f, PHASE_SPECTRUM, 20);
             if (specLabelP > 0) {
                 ctx.globalAlpha = specLabelP;
                 ctx.fillStyle = '#9ca3af';
                 ctx.font = 'italic 8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('mini spectrum: low → high', margin.left, specBaseY + 16);
+                ctx.fillText('mini spectrum: low → high', margin.left, specBaseY - 42);
                 ctx.globalAlpha = 1;
             }
 
