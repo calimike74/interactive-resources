@@ -1,7 +1,8 @@
 {
   "redirects": [
     { "source": "/learn/synthesis/synthesis", "destination": "/learn/synthesis/subtractive", "permanent": true },
-    { "source": "/learn/eq/eq", "destination": "/learn/eq", "permanent": true }
+    { "source": "/learn/eq/eq", "destination": "/learn/eq", "permanent": true },
+    { "source": "/learn/dynamics/compression", "destination": "/learn/dynamics", "permanent": true }
   ],
   "headers": [
     {
