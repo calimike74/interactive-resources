@@ -7,7 +7,7 @@ import { editorial as ED } from '@/lib/theme';
 function spaceWord(s) {
     if (s < 0.6) return 'small room';
     if (s < 1.2) return 'live room';
-    if (s < 2.2) return 'hall';
+    if (s <= 2.2) return 'hall';
     return 'cathedral';
 }
 
