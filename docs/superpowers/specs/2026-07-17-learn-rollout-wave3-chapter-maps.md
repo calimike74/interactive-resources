@@ -113,7 +113,7 @@ Outro → `adc-explorer`.
 Chapter `the-numbers` — **"The Numbers That Come Up"** — subtitle "Topic 2.5 — Component 4". 4 rows. ⚑ Non-calculator law: every value mentally tractable.
 
 1. **`pitch-numbers`** — A4 = 440 Hz; octave = doubling; period = 1/frequency (1 kHz ⇄ 1 ms family). Diagram REUSE **`log-frequency-axis`**. *(Amended 2026-07-17: the original map text used ↔, which is banned in A-level student-facing content — ⇄ is the house bidirectional glyph. Source quotes containing ↔ may be cited in code comments but never rendered.)*
-2. **`level-numbers`** — dB is logarithmic; −6 dB ≈ half the voltage; dynamic range as the gap between noise floor and ceiling. Diagram REUSE **`dynamic-range-gap`**.
+2. **`level-numbers`** — dB is logarithmic; −6 dB ≈ half the voltage; dynamic range as the dB gap between the quietest and loudest parts. Diagram REUSE **`dynamic-range-gap`**. *(Amended 2026-07-17 after task-7 review: the original line defined dynamic range as noise-floor-to-ceiling, but the mandated reused diagram — and the deployed dynamics course it belongs to — teach the programme sense (gap between quietest and loudest). Row aligns with the diagram and the site's deployed definition; the noise-floor sense lives in digital-analogue's deep-enough row.)*
 3. **`tempo-numbers`** — 60,000 ÷ BPM = one beat in ms; the 120 BPM → 500 ms family; dotted = ×1.5, triplet = ×⅔. Diagram REUSE **`bpm-to-ms-family`**. Expansion points at the delay course's Timed Delay chapter.
 4. **`size-numbers`** — file size = rate × depth × channels × time; work in the exam's units (mine LevelsMeteringAssessment / DigitalAudioAssessment for the asked shapes; keep the worked example tractable). Diagram NEW **`file-size-arithmetic`**.
 
