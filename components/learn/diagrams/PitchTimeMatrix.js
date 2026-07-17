@@ -14,10 +14,13 @@ import { useEffect, useRef } from 'react';
 //
 // Label-clearance (AABB check): the whole table frame is confined to [70,410]×[54,204].
 // Row labels sit centred in their own 140px-wide label column with >=43px clearance from
-// either border; column headers sit at y=69 (inside the header row, y=[54,84], nowhere
-// near the vertical column-divider lines which only run y=[84,204]). The closing caption
-// sits at y=222 (18px below the table's bottom edge, y>204). No table-frame line is drawn
-// outside [70,410]×[54,204], so none can reach the caption or the phase indicator.
+// either border. The vertical column-divider lines run the FULL table height, y=[54,204]
+// (TABLE_Y0 to TABLE_Y1) — including the header row — so headers aren't missed by the
+// dividers running short, they're missed on the x-axis: "Pitch" (centred x=260) sits
+// >=38.75px clear of its column's dividers, and "Duration" (centred x=360, the tighter of
+// the two) sits >=32px clear of its own. The closing caption sits at y=222 (18px below the
+// table's bottom edge, y>204). No table-frame line is drawn outside [70,410]×[54,204], so
+// none can reach the caption or the phase indicator.
 export default function PitchTimeMatrix() {
     const canvasRef = useRef(null);
     const frameRef = useRef(0);
