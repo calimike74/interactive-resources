@@ -13,6 +13,22 @@ const KNOWN_ORPHANS = [
     // content drift from wave 1, not introduced by this task; not fixed here
     // per the brief ("do not fix content in this task").
     'classic wah of analogue synths',
+
+    // 2026-07-17 (wave-2 Task 4): reverb course content adds these six
+    // expansion triggers, each verbatim in a REVERB_CHAPTERS row description
+    // (lib/learn/topics/reverb.js) — but the reverb topic is not wired into
+    // lib/learn/topics/index.js yet (wiring is Task 7), so the guard's
+    // corpus does not include reverb rows and these read as orphans until
+    // then. REMOVE these six entries from KNOWN_ORPHANS as part of wiring
+    // reverb (Task 7) — at that point they become genuinely reachable and
+    // must no longer be allowlisted, or this guard will fail the other way
+    // (KNOWN_ORPHANS containing entries that are no longer orphaned).
+    'EMT 140',
+    'comb filter',
+    'allpass filter',
+    'impulse response',
+    'standing waves',
+    'highs die first',
 ];
 
 // One text unit per row's `description` ONLY — this mirrors ExpandableText's
