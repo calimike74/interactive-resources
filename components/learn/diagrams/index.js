@@ -62,6 +62,12 @@ import TapeEchoDarkening from './TapeEchoDarkening';
 import BpmToMsFamily from './BpmToMsFamily';
 import DottedTripletMultipliers from './DottedTripletMultipliers';
 import PingPongCrossedFeedback from './PingPongCrossedFeedback';
+import ClapTimeline from './ClapTimeline';
+import PreDelayGap from './PreDelayGap';
+import DistanceRdRatio from './DistanceRdRatio';
+import Rt60DecayCurve from './Rt60DecayCurve';
+import DampingDarkensTail from './DampingDarkensTail';
+import AbsorbVsDiffuse from './AbsorbVsDiffuse';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -131,6 +137,12 @@ const diagrams = {
     'bpm-to-ms-family': BpmToMsFamily,
     'dotted-triplet-multipliers': DottedTripletMultipliers,
     'pingpong-crossed-feedback': PingPongCrossedFeedback,
+    'clap-timeline': ClapTimeline,
+    'pre-delay-gap': PreDelayGap,
+    'distance-rd-ratio': DistanceRdRatio,
+    'rt60-decay-curve': Rt60DecayCurve,
+    'damping-darkens-tail': DampingDarkensTail,
+    'absorb-vs-diffuse': AbsorbVsDiffuse,
 };
 
 export default diagrams;
