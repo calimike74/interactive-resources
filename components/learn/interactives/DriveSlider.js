@@ -5,10 +5,21 @@ import { startPreset } from '@/lib/learn/audio-presets';
 import { editorial as ED } from '@/lib/theme';
 
 function driveZone(drive) {
-    if (drive <= 1) return 'clean — no clipping';
-    if (drive <= 4) return 'warm — soft clipping';
-    if (drive <= 7) return 'driven — audibly distorted';
-    return 'fuzz — heavily clipped';
+    if (drive <= 1) return 'clean';
+    if (drive <= 4) return 'warm';
+    if (drive <= 7) return 'driven';
+    return 'fuzz';
+}
+
+function driveDetail(drive) {
+    if (drive <= 1) return 'no clipping';
+    if (drive <= 4) return 'soft clipping';
+    if (drive <= 7) return 'audibly distorted';
+    return 'heavily clipped';
+}
+
+function driveReadout(drive) {
+    return `drive ${drive} — ${driveZone(drive)} (${driveDetail(drive)})`;
 }
 
 export default function DriveSlider() {
@@ -44,7 +55,7 @@ export default function DriveSlider() {
                     Try it — drive
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
-                    {drive} — {driveZone(drive)}
+                    {driveReadout(drive)}
                 </span>
             </div>
             <input

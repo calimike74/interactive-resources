@@ -50,7 +50,7 @@ Reuse registered diagrams where the concept is identical (they are shared compon
 One new preset family + one new interactive, both for distortion (its core parameter deserves the knob):
 
 - `dist-drive` preset — the house pluck/tone through a `WaveShaperNode` soft-clip curve at a fixed musical drive; `ctl-drive` controllable variant (curve amount 0–10, clamped, k-curve `y = (1+k)x / (1+k|x|)` or equivalent soft-clip documented in-file; level conservative 0.15; standard teardown).
-- **DriveSlider** interactive — byte-faithful to `DelayTimeSlider` anatomy, `ctl-drive`, readout zones: 0–1 "clean — no clipping", 2–4 "warm — soft clipping", 5–7 "driven — audibly distorted", 8–10 "fuzz — heavily clipped" (em-dash signature convention).
+- **DriveSlider** interactive — byte-faithful to `DelayTimeSlider` anatomy, `ctl-drive`. Readout = value-led, single em-dash, parenthesised detail (the `BitDepthSlider` pattern): `drive 0 — clean (no clipping)` for 0–1, `drive 3 — warm (soft clipping)` for 2–4, `drive 6 — driven (audibly distorted)` for 5–7, `drive 9 — fuzz (heavily clipped)` for 8–10 (numeral = live slider value; zone/detail words fixed per band). *(Amended 2026-07-17 after task-2 review: the original table's zone strings carried an internal em-dash, which composed with the value prefix into a double-dash readout — off-anatomy. Single em-dash signature is law.)*
 
 **Reused:** `ctl-bit-depth` + `BitDepthSlider` on the digital-analogue bit-depth row (already registered; zero new code). `smp-crushed`/`smp-full-depth` presets are NOT re-placed (the slider covers the continuum).
 
