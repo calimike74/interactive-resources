@@ -15,19 +15,20 @@ const KNOWN_ORPHANS = [
     'classic wah of analogue synths',
 ];
 
-// One text unit per chapter description, and one per row (heading + description
-// combined, matching the brief's "row's visible text" definition). Global across
-// all wired topics: ALL_EXPANSIONS carries no per-entry topic field and
-// components/learn/LearnSpineLayout.js:252 applies it uniformly to every row
-// regardless of which topic that row belongs to, so a trigger only needs to be
-// reachable somewhere in the wired corpus, not necessarily its "home" topic.
+// One text unit per row's `description` ONLY — this mirrors ExpandableText's
+// actual runtime input exactly (components/learn/LearnSpineLayout.js:252 passes
+// `text={row.description}`; row.heading renders as a plain <h3> outside the
+// component and chapter.description is never passed to it at all, so neither
+// is ever scanned for expansions at runtime). Global across all wired topics:
+// ALL_EXPANSIONS carries no per-entry topic field and is applied uniformly to
+// every row regardless of topic, so a trigger only needs to be reachable
+// somewhere in the wired corpus, not necessarily its "home" topic.
 function buildCorpus() {
     const units = [];
     for (const topicId of getLearnTopicIds()) {
         for (const chapter of getLearnLessons(topicId)) {
-            units.push({ scope: `${topicId}/${chapter.id} (chapter description)`, text: chapter.description || '' });
             for (const row of chapter.rows) {
-                units.push({ scope: `${topicId}/${chapter.id}/${row.id}`, text: `${row.heading} ${row.description}` });
+                units.push({ scope: `${topicId}/${chapter.id}/${row.id}`, text: row.description });
             }
         }
     }
@@ -59,7 +60,7 @@ function hasFreeOccurrence(shorter, longer, text) {
     return false;
 }
 
-test('every expansion trigger is reachable in at least one wired row or chapter description', () => {
+test('every expansion trigger is reachable in at least one wired row description', () => {
     const corpus = buildCorpus();
     const orphans = [];
     for (const exp of ALL_EXPANSIONS) {
