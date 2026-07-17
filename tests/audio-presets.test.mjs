@@ -54,6 +54,7 @@ function installAudioMock() {
             }),
             createDelay: () => makeNode({ delayTime: makeParam(0) }),
             createStereoPanner: () => makeNode({ pan: makeParam(0) }),
+            createConvolver: () => makeNode({ buffer: null, normalize: true }),
             createBuffer: (channels, length) => ({
                 length, numberOfChannels: channels,
                 getChannelData: () => new Float32Array(length),
@@ -81,6 +82,8 @@ test('all planned presets are registered and describable', () => {
         'comp-drums-raw', 'comp-drums-squashed',
         'delay-single', 'delay-pingpong',
         'ctl-eq-sweep', 'ctl-threshold', 'ctl-delay-time', 'ctl-feedback',
+        'verb-dry', 'verb-room', 'verb-hall', 'verb-predelay',
+        'ctl-reverb-mix', 'ctl-reverb-decay',
     ];
     for (const id of required) {
         assert.ok(PRESET_IDS.includes(id), `missing preset ${id}`);
@@ -90,8 +93,8 @@ test('all planned presets are registered and describable', () => {
 
 test('every ctl- preset in the registry returns both stop and set (registry-wide shape guard)', () => {
     const ctlIds = PRESET_IDS.filter((id) => id.startsWith('ctl-'));
-    // 5 pre-existing synthesis controls + 4 new EQ/dynamics/delay controls.
-    assert.equal(ctlIds.length, 9, `expected 9 ctl- presets, found ${ctlIds.length}: ${ctlIds.join(', ')}`);
+    // 5 pre-existing synthesis controls + 4 EQ/dynamics/delay controls + 2 new reverb controls.
+    assert.equal(ctlIds.length, 11, `expected 11 ctl- presets, found ${ctlIds.length}: ${ctlIds.join(', ')}`);
     for (const id of ctlIds) {
         const controls = startPreset(id);
         assert.equal(typeof controls.stop, 'function', `${id} must return a stop function`);
@@ -104,6 +107,7 @@ test('new static EQ/dynamics/delay presets build without throwing', () => {
     const staticIds = [
         'eq-tone-flat', 'eq-low-shelf-boost', 'eq-presence-boost', 'eq-highpass',
         'comp-drums-raw', 'comp-drums-squashed', 'delay-single', 'delay-pingpong',
+        'verb-dry', 'verb-room', 'verb-hall', 'verb-predelay',
     ];
     for (const id of staticIds) {
         const controls = startPreset(id);
@@ -157,6 +161,29 @@ test('ctl-feedback clamps set({ feedback }) to 0-0.85', () => {
     controls.set({ feedback: 0.5 });
     assert.equal(mock.paramCalls.at(-1).value, 0.5, 'feedback within range should pass through unclamped');
 
+    stopSafely(controls);
+});
+
+test('ctl-reverb-mix applies equal-power crossfade: wet = sin(mix*pi/2)', () => {
+    const controls = startPreset('ctl-reverb-mix');
+    const mock = globalThis.__mockAudioContext;
+
+    controls.set({ mix: 1 });
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 1) < 1e-9, 'fully wet should drive wet gain to 1');
+
+    controls.set({ mix: 0 });
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 0) < 1e-9, 'fully dry should drive wet gain to 0');
+
+    controls.set({ mix: 1.5 }); // out of range, should clamp to 1 -> wet gain 1
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 1) < 1e-9, 'mix above range should clamp to 1');
+
+    stopSafely(controls);
+});
+
+test('ctl-reverb-decay regenerates the IR on set({ decay }) without throwing, clamped to 0.3-3.0', () => {
+    const controls = startPreset('ctl-reverb-decay');
+    assert.doesNotThrow(() => controls.set({ decay: 10 })); // clamps to 3.0
+    assert.doesNotThrow(() => controls.set({ decay: -5 })); // clamps to 0.3
     stopSafely(controls);
 });
 
