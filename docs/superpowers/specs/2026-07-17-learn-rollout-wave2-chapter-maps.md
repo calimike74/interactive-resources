@@ -81,18 +81,18 @@ Follows the reference's journey: the instrument → the numbers → the edit →
 ### Ch 2 `rate-depth` — From Sound to Numbers
 | Row | Teaches | Animation |
 |---|---|---|
-| `sample-rate-nyquist` | Rate = measurements per second (44.1 kHz CD, 48 kHz production); capture reaches **half** the rate — Nyquist | `sample-rate-grid` |
+| `sample-rate-nyquist` | Rate = measurements per second (44.1 kHz CD, 48 kHz production); capture reaches **half** the rate — Nyquist | `sample-rate-grid` + audio `smp-full-depth` (the clean CD-quality reference) |
 | `aliasing-foldback` | Above Nyquist, content folds back into the audible range at a false pitch: aliasing | `aliasing-foldback` |
-| `bit-depth-staircase` | Depth = levels per measurement; ~6 dB of range per bit; 16-bit ≈ 96 dB; too few bits = staircase = quantisation noise | `bit-depth-staircase` + interactive `bit-depth` + audio `smp-full-depth`/`smp-crushed` |
+| `bit-depth-staircase` | Depth = levels per measurement; ~6 dB of range per bit; 16-bit ≈ 96 dB; too few bits = staircase = quantisation noise | `bit-depth-staircase` + interactive `bit-depth` + audio `smp-crushed` (A/B counterpart = row 1's clean reference; one preset per row) |
 
 **Exam anchor:** quiz-bank Nyquist — rate must be at least twice the highest frequency; aliasing = distortion from an insufficient rate. (File-size arithmetic → expansion: the values aren't mental-maths tractable and the reference flags it as 2.4/2.5 shared ground.)
 
 ### Ch 3 `the-edit` — The Edit: Where the Marks Live
 | Row | Teaches | Animation |
 |---|---|---|
-| `clicks-zero-crossings` | A click = an instantaneous jump in the waveform; cut where it crosses the centre line and there is no jump to hear | `zero-crossing-cut` |
+| `clicks-zero-crossings` | A click = an instantaneous jump in the waveform; cut where it crosses the centre line and there is no jump to hear | `zero-crossing-cut` + audio `smp-loop-click` (hear the phase-step tick) |
 | `truncate-crossfade` | Truncate dead air so the sample speaks on trigger; a short fade/crossfade spreads an unavoidable jump until inaudible | `truncate-and-fade` |
-| `loop-points-stutter` | Loop end must meet loop start without a step; crossfade looping blends sustained joins; stutter = copy one word, paste in rhythm | `loop-point-join` + audio `smp-loop-click`/`smp-loop-clean` |
+| `loop-points-stutter` | Loop end must meet loop start without a step; crossfade looping blends sustained joins; stutter = copy one word, paste in rhythm | `loop-point-join` + audio `smp-loop-clean` (the fixed join; click counterpart on row 1) |
 
 **Exam anchor:** 2019 A Q4(d) — starts truncated correctly (1), no clicks (1); 2022 AS Q3(b) — copied word (1), timing/no glitches (1), three repetitions (1).
 
@@ -108,8 +108,8 @@ Follows the reference's journey: the instrument → the numbers → the edit →
 ### Ch 5 `transforms` — Pitch Against Time
 | Row | Teaches | Animation |
 |---|---|---|
-| `repitch-stretch-shift` | The 2×2: repitch couples pitch and duration; time-stretch holds pitch; pitch-shift holds duration; extremes and wrong algorithms give audible artefacts | `pitch-time-matrix` |
-| `reverse-swell` | Reverse turns every decay into a swell — the reversed cymbal is the classic build into a downbeat | `reverse-envelope` + audio `smp-forward`/`smp-reversed` |
+| `repitch-stretch-shift` | The 2×2: repitch couples pitch and duration; time-stretch holds pitch; pitch-shift holds duration; extremes and wrong algorithms give audible artefacts | `pitch-time-matrix` + audio `smp-forward` (the raw strike — reference material for the transforms) |
+| `reverse-swell` | Reverse turns every decay into a swell — the reversed cymbal is the classic build into a downbeat | `reverse-envelope` + audio `smp-reversed` (counterpart = previous row's forward strike) |
 | `chop-layer-culture` | Bronx DJs extended breaks with two copies; samplers absorbed it: chop a break to pads for per-hit timing/tuning/processing; layer a punchy kick under a sub-heavy one | `chop-resequence` |
 
 **Exam anchor:** 2022 A Q4(c)(ii) — 85→75 BPM without pitch change = time stretch; 2020 A Q1(a) — the cymbal in bar 13 is reversed.
