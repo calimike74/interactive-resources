@@ -100,6 +100,8 @@ import MidiMessageAnatomy from './MidiMessageAnatomy';
 import RealtimeVsStepInput from './RealtimeVsStepInput';
 import QuantiseGridSnap from './QuantiseGridSnap';
 import PitchBendResolution from './PitchBendResolution';
+import RecordingSignalFlow from './RecordingSignalFlow';
+import BufferLatencyTradeoff from './BufferLatencyTradeoff';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -207,6 +209,8 @@ const diagrams = {
     'realtime-vs-step-input': RealtimeVsStepInput,
     'quantise-grid-snap': QuantiseGridSnap,
     'pitch-bend-resolution': PitchBendResolution,
+    'recording-signal-flow': RecordingSignalFlow,
+    'buffer-latency-tradeoff': BufferLatencyTradeoff,
 };
 
 export default diagrams;
