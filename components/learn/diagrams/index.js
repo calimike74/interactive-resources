@@ -102,6 +102,8 @@ import QuantiseGridSnap from './QuantiseGridSnap';
 import PitchBendResolution from './PitchBendResolution';
 import RecordingSignalFlow from './RecordingSignalFlow';
 import BufferLatencyTradeoff from './BufferLatencyTradeoff';
+import ContinuousVsDiscrete from './ContinuousVsDiscrete';
+import AdcDacPipeline from './AdcDacPipeline';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -211,6 +213,8 @@ const diagrams = {
     'pitch-bend-resolution': PitchBendResolution,
     'recording-signal-flow': RecordingSignalFlow,
     'buffer-latency-tradeoff': BufferLatencyTradeoff,
+    'continuous-vs-discrete': ContinuousVsDiscrete,
+    'adc-dac-pipeline': AdcDacPipeline,
 };
 
 export default diagrams;
