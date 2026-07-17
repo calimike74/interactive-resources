@@ -7,6 +7,8 @@ import EQSweepKnob from './EQSweepKnob';
 import ThresholdSlider from './ThresholdSlider';
 import DelayTimeSlider from './DelayTimeSlider';
 import FeedbackDial from './FeedbackDial';
+import ReverbMixSlider from './ReverbMixSlider';
+import ReverbDecaySlider from './ReverbDecaySlider';
 
 const interactives = {
     'cutoff-slider': CutoffSlider,
@@ -18,6 +20,8 @@ const interactives = {
     'threshold': ThresholdSlider,
     'delay-time': DelayTimeSlider,
     'feedback': FeedbackDial,
+    'reverb-mix': ReverbMixSlider,
+    'reverb-decay': ReverbDecaySlider,
 };
 
 export default interactives;
