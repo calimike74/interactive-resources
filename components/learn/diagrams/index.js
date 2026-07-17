@@ -77,6 +77,13 @@ import ParameterBridge from './ParameterBridge';
 import SendVsInsertRouting from './SendVsInsertRouting';
 import PrePostFaderTap from './PrePostFaderTap';
 import ReverbFadeAutomation from './ReverbFadeAutomation';
+import SamplerRecordStoreTrigger from './SamplerRecordStoreTrigger';
+import SamplerLineage from './SamplerLineage';
+import WhySampleDrums from './WhySampleDrums';
+import PlaybackModes from './PlaybackModes';
+import SampleRateGrid from './SampleRateGrid';
+import AliasingFoldback from './AliasingFoldback';
+import BitDepthStaircase from './BitDepthStaircase';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -161,6 +168,13 @@ const diagrams = {
     'send-vs-insert-routing': SendVsInsertRouting,
     'pre-post-fader-tap': PrePostFaderTap,
     'reverb-fade-automation': ReverbFadeAutomation,
+    'sampler-record-store-trigger': SamplerRecordStoreTrigger,
+    'sampler-lineage': SamplerLineage,
+    'why-sample-drums': WhySampleDrums,
+    'playback-modes': PlaybackModes,
+    'sample-rate-grid': SampleRateGrid,
+    'aliasing-foldback': AliasingFoldback,
+    'bit-depth-staircase': BitDepthStaircase,
 };
 
 export default diagrams;
