@@ -96,6 +96,10 @@ import ChopResequence from './ChopResequence';
 import ClippingShapes from './ClippingShapes';
 import DriveToneLevelChain from './DriveToneLevelChain';
 import OddEvenHarmonics from './OddEvenHarmonics';
+import MidiMessageAnatomy from './MidiMessageAnatomy';
+import RealtimeVsStepInput from './RealtimeVsStepInput';
+import QuantiseGridSnap from './QuantiseGridSnap';
+import PitchBendResolution from './PitchBendResolution';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -199,6 +203,10 @@ const diagrams = {
     'clipping-shapes': ClippingShapes,
     'drive-tone-level-chain': DriveToneLevelChain,
     'odd-even-harmonics': OddEvenHarmonics,
+    'midi-message-anatomy': MidiMessageAnatomy,
+    'realtime-vs-step-input': RealtimeVsStepInput,
+    'quantise-grid-snap': QuantiseGridSnap,
+    'pitch-bend-resolution': PitchBendResolution,
 };
 
 export default diagrams;
