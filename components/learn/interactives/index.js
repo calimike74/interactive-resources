@@ -11,6 +11,7 @@ import ReverbMixSlider from './ReverbMixSlider';
 import ReverbDecaySlider from './ReverbDecaySlider';
 import BitDepthSlider from './BitDepthSlider';
 import RepitchSlider from './RepitchSlider';
+import DriveSlider from './DriveSlider';
 
 const interactives = {
     'cutoff-slider': CutoffSlider,
@@ -26,6 +27,7 @@ const interactives = {
     'reverb-decay': ReverbDecaySlider,
     'bit-depth': BitDepthSlider,
     'repitch': RepitchSlider,
+    'drive': DriveSlider,
 };
 
 export default interactives;

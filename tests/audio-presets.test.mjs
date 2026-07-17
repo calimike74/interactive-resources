@@ -102,6 +102,7 @@ test('all planned presets are registered and describable', () => {
         'ctl-reverb-mix', 'ctl-reverb-decay',
         'smp-loop-click', 'smp-loop-clean', 'smp-forward', 'smp-reversed',
         'smp-full-depth', 'smp-crushed', 'ctl-bit-depth', 'ctl-repitch',
+        'dist-drive', 'ctl-drive',
     ];
     for (const id of required) {
         assert.ok(PRESET_IDS.includes(id), `missing preset ${id}`);
@@ -112,8 +113,9 @@ test('all planned presets are registered and describable', () => {
 test('every ctl- preset in the registry returns both stop and set (registry-wide shape guard)', () => {
     const ctlIds = PRESET_IDS.filter((id) => id.startsWith('ctl-'));
     // 5 pre-existing synthesis controls + 4 EQ/dynamics/delay controls + 2 reverb
-    // controls + 2 new sampling controls (bit-depth, repitch).
-    assert.equal(ctlIds.length, 13, `expected 13 ctl- presets, found ${ctlIds.length}: ${ctlIds.join(', ')}`);
+    // controls + 2 sampling controls (bit-depth, repitch) + 1 new distortion
+    // control (drive).
+    assert.equal(ctlIds.length, 14, `expected 14 ctl- presets, found ${ctlIds.length}: ${ctlIds.join(', ')}`);
     for (const id of ctlIds) {
         const controls = startPreset(id);
         assert.equal(typeof controls.stop, 'function', `${id} must return a stop function`);
@@ -291,6 +293,84 @@ test('ctl-repitch sets playbackRate = 2^(semitones/12) and clamps to -12..+12', 
     assert.ok(Math.abs(mock.paramCalls.at(-1).value - 0.5) < 1e-9, `semitones below range should clamp to -12, got ${mock.paramCalls.at(-1).value}`);
 
     stopSafely(controls);
+});
+
+test('new static distortion preset builds without throwing', () => {
+    const controls = startPreset('dist-drive');
+    assert.equal(typeof controls.stop, 'function', 'dist-drive must return a stop function');
+    stopSafely(controls);
+});
+
+test('ctl-drive clamps set({ drive }) to 0-10 and applies the soft-clip curve at the clamped value', () => {
+    const controls = startPreset('ctl-drive');
+    const mock = globalThis.__mockAudioContext;
+    const shaper = mock.createdShapers.at(-1);
+
+    // y = (1+k)x / (1+k|x|) — the formula documented next to driveCurve() in
+    // audio-presets.js. Sample the curve near x=0.5 (derived from the
+    // curve's own length so the test stays agnostic of the internal
+    // resolution constant) and compare against the closed-form value for
+    // the drive amount we expect after clamping.
+    function curveValueNear(x) {
+        const len = shaper.curve.length;
+        const i = Math.round(((x + 1) / 2) * (len - 1));
+        return shaper.curve[i];
+    }
+    function expected(k, x) {
+        return ((1 + k) * x) / (1 + k * Math.abs(x));
+    }
+
+    controls.set({ drive: 20 }); // above range, should clamp to 10
+    assert.ok(Math.abs(curveValueNear(0.5) - expected(10, 0.5)) < 1e-3, 'drive above range should clamp to 10');
+
+    controls.set({ drive: -5 }); // below range, should clamp to 0 (identity)
+    assert.ok(Math.abs(curveValueNear(0.5) - expected(0, 0.5)) < 1e-3, 'drive below range should clamp to 0 (identity curve)');
+
+    controls.set({ drive: 4 }); // within range, should pass through unclamped
+    assert.ok(Math.abs(curveValueNear(0.5) - expected(4, 0.5)) < 1e-3, 'drive within range should pass through unclamped');
+
+    stopSafely(controls);
+});
+
+test('ctl-drive curve is monotonically increasing across the [0,1] input range at every drive amount', () => {
+    const controls = startPreset('ctl-drive');
+    const mock = globalThis.__mockAudioContext;
+    const shaper = mock.createdShapers.at(-1);
+
+    for (const drive of [0, 1, 4, 7, 10]) {
+        controls.set({ drive });
+        const curve = shaper.curve;
+        const len = curve.length;
+        const iStart = Math.ceil((len - 1) / 2); // first index where x >= 0
+        let previous = curve[iStart];
+        for (let i = iStart + 1; i < len; i++) {
+            assert.ok(curve[i] > previous, `curve should be strictly increasing on [0,1] at drive ${drive} (index ${i})`);
+            previous = curve[i];
+        }
+    }
+
+    stopSafely(controls);
+});
+
+test('ctl-drive stopper disconnects the waveshaper node it created on teardown', async () => {
+    const controls = startPreset('ctl-drive');
+    const mock = globalThis.__mockAudioContext;
+    const shaper = mock.createdShapers.at(-1);
+
+    let disconnected = false;
+    let stopped = false;
+    const originalDisconnect = shaper.disconnect;
+    const originalStop = shaper.stop;
+    shaper.disconnect = (...args) => { disconnected = true; return originalDisconnect.apply(shaper, args); };
+    shaper.stop = (...args) => { stopped = true; return originalStop.apply(shaper, args); };
+
+    controls.stop();
+    // Node teardown runs inside the stopper's setTimeout after the click-free
+    // fade (RAMP*1000 + 30ms) — wait past it, same pattern as the
+    // comp-drums-raw interval-clear test above.
+    await new Promise((resolve) => setTimeout(resolve, 60));
+
+    assert.ok(stopped || disconnected, 'stop() should tear down the waveshaper node (stop or disconnect)');
 });
 
 test('smp-loop-clean buffer is an exact multiple of the period that smp-loop-click is a quarter-period off by', () => {
