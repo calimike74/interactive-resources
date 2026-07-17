@@ -104,6 +104,7 @@ import RecordingSignalFlow from './RecordingSignalFlow';
 import BufferLatencyTradeoff from './BufferLatencyTradeoff';
 import ContinuousVsDiscrete from './ContinuousVsDiscrete';
 import AdcDacPipeline from './AdcDacPipeline';
+import FileSizeArithmetic from './FileSizeArithmetic';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -215,6 +216,7 @@ const diagrams = {
     'buffer-latency-tradeoff': BufferLatencyTradeoff,
     'continuous-vs-discrete': ContinuousVsDiscrete,
     'adc-dac-pipeline': AdcDacPipeline,
+    'file-size-arithmetic': FileSizeArithmetic,
 };
 
 export default diagrams;
