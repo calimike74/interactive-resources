@@ -9,6 +9,8 @@ import DelayTimeSlider from './DelayTimeSlider';
 import FeedbackDial from './FeedbackDial';
 import ReverbMixSlider from './ReverbMixSlider';
 import ReverbDecaySlider from './ReverbDecaySlider';
+import BitDepthSlider from './BitDepthSlider';
+import RepitchSlider from './RepitchSlider';
 
 const interactives = {
     'cutoff-slider': CutoffSlider,
@@ -22,6 +24,8 @@ const interactives = {
     'feedback': FeedbackDial,
     'reverb-mix': ReverbMixSlider,
     'reverb-decay': ReverbDecaySlider,
+    'bit-depth': BitDepthSlider,
+    'repitch': RepitchSlider,
 };
 
 export default interactives;
