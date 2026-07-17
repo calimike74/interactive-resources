@@ -43,6 +43,7 @@ function installAudioMock() {
             sampleRate: 44100,
             state: 'running',
             paramCalls: [],
+            createdBuffers: [],
             destination: makeNode(),
             resume() {},
             createOscillator: () => makeNode({ type: 'sine', frequency: makeParam(440), detune: makeParam(0) }),
@@ -55,10 +56,11 @@ function installAudioMock() {
             createDelay: () => makeNode({ delayTime: makeParam(0) }),
             createStereoPanner: () => makeNode({ pan: makeParam(0) }),
             createConvolver: () => makeNode({ buffer: null, normalize: true }),
-            createBuffer: (channels, length) => ({
-                length, numberOfChannels: channels,
-                getChannelData: () => new Float32Array(length),
-            }),
+            createBuffer: (channels, length) => {
+                const buf = { length, numberOfChannels: channels, getChannelData: () => new Float32Array(length) };
+                globalThis.__mockAudioContext?.createdBuffers.push(buf);
+                return buf;
+            },
             createBufferSource: () => makeNode({ buffer: null, loop: false }),
         };
         globalThis.__mockAudioContext = instance;
@@ -164,26 +166,39 @@ test('ctl-feedback clamps set({ feedback }) to 0-0.85', () => {
     stopSafely(controls);
 });
 
-test('ctl-reverb-mix applies equal-power crossfade: wet = sin(mix*pi/2)', () => {
+test('ctl-reverb-mix applies equal-power crossfade: dry = cos(mix*pi/2), wet = sin(mix*pi/2)', () => {
     const controls = startPreset('ctl-reverb-mix');
     const mock = globalThis.__mockAudioContext;
+    // set() schedules dryGain then wetGain, in that order, so the two most
+    // recent paramCalls after each set() are [dry, wet].
 
-    controls.set({ mix: 1 });
+    controls.set({ mix: 1 }); // fully wet
+    assert.ok(Math.abs(mock.paramCalls.at(-2).value - 0) < 1e-9, 'fully wet should drive dry gain to 0');
     assert.ok(Math.abs(mock.paramCalls.at(-1).value - 1) < 1e-9, 'fully wet should drive wet gain to 1');
 
-    controls.set({ mix: 0 });
+    controls.set({ mix: 0 }); // fully dry
+    assert.ok(Math.abs(mock.paramCalls.at(-2).value - 1) < 1e-9, 'fully dry should drive dry gain to 1');
     assert.ok(Math.abs(mock.paramCalls.at(-1).value - 0) < 1e-9, 'fully dry should drive wet gain to 0');
 
-    controls.set({ mix: 1.5 }); // out of range, should clamp to 1 -> wet gain 1
-    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 1) < 1e-9, 'mix above range should clamp to 1');
+    controls.set({ mix: 1.5 }); // out of range, should clamp to 1
+    assert.ok(Math.abs(mock.paramCalls.at(-2).value - 0) < 1e-9, 'mix above range should clamp dry gain to 0');
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 1) < 1e-9, 'mix above range should clamp wet gain to 1');
 
     stopSafely(controls);
 });
 
-test('ctl-reverb-decay regenerates the IR on set({ decay }) without throwing, clamped to 0.3-3.0', () => {
+test('ctl-reverb-decay clamps set({ decay }) and regenerates the IR to the clamped length', () => {
     const controls = startPreset('ctl-reverb-decay');
-    assert.doesNotThrow(() => controls.set({ decay: 10 })); // clamps to 3.0
-    assert.doesNotThrow(() => controls.set({ decay: -5 })); // clamps to 0.3
+    const mock = globalThis.__mockAudioContext;
+
+    controls.set({ decay: 0.1 }); // below range, should clamp to 0.3
+    let ir = mock.createdBuffers.at(-1);
+    assert.equal(ir.length, Math.floor(mock.sampleRate * 0.3), 'decay below range should clamp IR length to 0.3 s');
+
+    controls.set({ decay: 99 }); // above range, should clamp to 3.0
+    ir = mock.createdBuffers.at(-1);
+    assert.equal(ir.length, Math.floor(mock.sampleRate * 3.0), 'decay above range should clamp IR length to 3.0 s');
+
     stopSafely(controls);
 });
 
