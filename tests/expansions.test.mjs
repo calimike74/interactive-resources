@@ -13,21 +13,6 @@ const KNOWN_ORPHANS = [
     // content drift from wave 1, not introduced by this task; not fixed here
     // per the brief ("do not fix content in this task").
     'classic wah of analogue synths',
-
-    // 2026-07-17 (Task 10, learn-rollout-wave2): `sampling` is not yet wired
-    // into `lib/learn/topics/index.js` (wiring is Task 13), so these 6
-    // SAMPLING_EXPANSIONS triggers — genuinely reachable in
-    // lib/learn/topics/sampling.js's row descriptions — are invisible to this
-    // test's corpus, which only walks getLearnTopicIds()/getLearnLessons().
-    // Task 13 must remove this bridge block once sampling is wired in;
-    // leaving it in place after that point would hide a real orphan.
-    'needs clearance before release',
-    "a recording's file size",
-    'reading hex numbers',
-    'wider list of playback settings',
-    'velocity layering',
-    'warp mode',
-    'Amen break',
 ];
 
 // One text unit per row's `description` ONLY — this mirrors ExpandableText's
