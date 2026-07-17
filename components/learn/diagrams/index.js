@@ -84,6 +84,15 @@ import PlaybackModes from './PlaybackModes';
 import SampleRateGrid from './SampleRateGrid';
 import AliasingFoldback from './AliasingFoldback';
 import BitDepthStaircase from './BitDepthStaircase';
+import ZeroCrossingCut from './ZeroCrossingCut';
+import TruncateAndFade from './TruncateAndFade';
+import LoopPointJoin from './LoopPointJoin';
+import RootNoteMap from './RootNoteMap';
+import SpeedPitchLink from './SpeedPitchLink';
+import KeyZonesVelocityLayers from './KeyZonesVelocityLayers';
+import PitchTimeMatrix from './PitchTimeMatrix';
+import ReverseEnvelope from './ReverseEnvelope';
+import ChopResequence from './ChopResequence';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -175,6 +184,15 @@ const diagrams = {
     'sample-rate-grid': SampleRateGrid,
     'aliasing-foldback': AliasingFoldback,
     'bit-depth-staircase': BitDepthStaircase,
+    'zero-crossing-cut': ZeroCrossingCut,
+    'truncate-and-fade': TruncateAndFade,
+    'loop-point-join': LoopPointJoin,
+    'root-note-map': RootNoteMap,
+    'speed-pitch-link': SpeedPitchLink,
+    'key-zones-velocity-layers': KeyZonesVelocityLayers,
+    'pitch-time-matrix': PitchTimeMatrix,
+    'reverse-envelope': ReverseEnvelope,
+    'chop-resequence': ChopResequence,
 };
 
 export default diagrams;
