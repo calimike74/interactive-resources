@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { getLearnTopicIds, getLearnLessons } from '../lib/learn/topics/index.js';
+import { getLearnTopicIds, getLearnLessons, getLearnRationale } from '../lib/learn/topics/index.js';
 
 test('every learn topic is a well-formed course', () => {
     for (const topicId of getLearnTopicIds()) {
@@ -19,10 +19,9 @@ test('every learn topic is a well-formed course', () => {
     }
 });
 
-test('every chapter of a multi-chapter learn topic has an exam anchor', () => {
+test('every chapter of every learn topic has an exam anchor', () => {
     for (const topicId of getLearnTopicIds()) {
         const chapters = getLearnLessons(topicId);
-        if (chapters.length <= 1) continue; // single-chapter legacy topics (eq/dynamics/delay) are exempt
         for (const c of chapters) {
             assert.ok(c.examAnchor, `${topicId}/${c.id}: missing examAnchor`);
             assert.ok(
@@ -34,5 +33,22 @@ test('every chapter of a multi-chapter learn topic has an exam anchor', () => {
                 `${topicId}/${c.id}: examAnchor.modelPoints is empty`
             );
         }
+    }
+});
+
+test('every single-chapter learn topic has a rationale of 8-20 words', () => {
+    for (const topicId of getLearnTopicIds()) {
+        const chapters = getLearnLessons(topicId);
+        if (chapters.length !== 1) continue; // rationale only applies to single-chapter (minor-topic) courses
+        const rationale = getLearnRationale(topicId);
+        assert.ok(
+            typeof rationale === 'string' && rationale.trim().length > 0,
+            `${topicId}: missing learnRationales entry`
+        );
+        const wordCount = rationale.trim().split(/\s+/).length;
+        assert.ok(
+            wordCount >= 8 && wordCount <= 20,
+            `${topicId}: rationale is ${wordCount} words, expected 8-20`
+        );
     }
 });

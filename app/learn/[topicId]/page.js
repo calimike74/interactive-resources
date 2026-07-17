@@ -1,4 +1,4 @@
-import { getLearnLessons, getLearnResources, getLearnTopicIds } from '@/lib/learn/topics';
+import { getLearnLessons, getLearnResources, getLearnRationale, getLearnTopicIds } from '@/lib/learn/topics';
 import { getTopic } from '@/lib/topics';
 import LearnPickerClient from './LearnPickerClient';
 
@@ -21,10 +21,11 @@ export default async function LearnPickerPage({ params }) {
     const topic = getTopic(topicId);
     const lessons = getLearnLessons(topicId);
     const resources = getLearnResources(topicId);
+    const rationale = getLearnRationale(topicId);
 
     if (!topic) {
         return <div>Topic not found</div>;
     }
 
-    return <LearnPickerClient topic={topic} lessons={lessons} resources={resources} />;
+    return <LearnPickerClient topic={topic} lessons={lessons} resources={resources} rationale={rationale} />;
 }

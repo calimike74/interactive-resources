@@ -14,7 +14,7 @@ const EMPTY_PROGRESS = {};
 function noopSubscribe() { return () => {}; }
 function getServerProgressSnapshot() { return EMPTY_PROGRESS; }
 
-export default function LearnPickerClient({ topic, lessons, resources = [] }) {
+export default function LearnPickerClient({ topic, lessons, resources = [], rationale = null }) {
     const t = theme.light;
     const isCourse = lessons.length > 1;
 
@@ -110,7 +110,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [] }) {
                     }}>
                         {isCourse
                             ? 'Work through the chapters in order — each builds on the last.'
-                            : 'Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks. Each lesson takes about 10–15 minutes and ends with a quick knowledge check.'}
+                            : (rationale ?? 'Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks. Each lesson takes about 10–15 minutes and ends with a quick knowledge check.')}
                     </p>
 
                     <div style={{
