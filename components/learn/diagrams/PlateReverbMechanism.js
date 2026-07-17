@@ -34,6 +34,7 @@ export default function PlateReverbMechanism() {
         const leftPickup = { x: 140, y: 120 };
         const rightPickup = { x: 340, y: 120 };
 
+        // illustrative — not a measured value (see w2-task-6-report)
         const RING_COUNT = 8;
         const RING_STAGGER = 6;
         const RING_LIFE = 60; // frames a ring takes to grow from 0 to max radius

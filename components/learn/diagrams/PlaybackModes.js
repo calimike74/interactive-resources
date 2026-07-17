@@ -154,7 +154,9 @@ export default function PlaybackModes() {
                             const segP = progress(f, playStart + r * 15, 20);
                             if (segP <= 0) continue;
                             const t1 = segStart + (segEnd - segStart) * segP;
-                            drawBar(lane.playY, segStart, t1, r % 2 === 0 ? '#DCC892' : '#c9a94e', segP);
+                            // Odd segments drawn at reduced opacity (not a new hex) so all
+                            // four repeats stay individually countable.
+                            drawBar(lane.playY, segStart, t1, '#DCC892', r % 2 === 0 ? segP : segP * 0.6);
                         }
                     } else {
                         const t1 = lane.play[0] + (lane.play[1] - lane.play[0]) * playP;

@@ -46,6 +46,7 @@ export default function PrePostFaderTap() {
         const PHASE_LEGEND = 55;
         const PHASE_METERS = 85;
         const PULL_START = 130;
+        // illustrative — not a measured value (see w2-task-6-report)
         const PULL_DUR = 180;
         const HOLD = 40;
         const RETURN_DUR = 80;

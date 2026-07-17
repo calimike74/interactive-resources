@@ -60,6 +60,7 @@ export default function SendVsInsertRouting() {
         const barA2 = { x0: 135, x1: 225 }; // under reverbA (fixed centre)
         const barB = { x0: 275, x1: 445 }; // under channelB
 
+        // illustrative — not a measured value (see w2-task-6-report)
         const PANPERIOD = 240;
         const panOffset = (f) => Math.sin((2 * Math.PI * f) / PANPERIOD);
 
@@ -145,6 +146,7 @@ export default function SendVsInsertRouting() {
             const pBarsA = progress(f, PHASE_BARS_A, 20);
             if (pBarsA > 0) {
                 const pan = f >= PHASE_PAN ? panOffset(f - PHASE_PAN) : 0;
+                // illustrative — not a measured value (see w2-task-6-report)
                 const dotAx = 80 + 40 * pan; // stays within [35,125] since |pan|<=1
                 drawBar(barA1, dotAx, '#DC2626', pBarsA);
                 drawBar(barA2, 180, '#14b8a6', pBarsA); // reverb dot fixed at centre
@@ -160,6 +162,7 @@ export default function SendVsInsertRouting() {
             const pBarB = progress(f, PHASE_BAR_B, 20);
             if (pBarB > 0) {
                 const pan = f >= PHASE_PAN ? panOffset(f - PHASE_PAN) : 0;
+                // illustrative — not a measured value (see w2-task-6-report)
                 const dotBx = 360 + 70 * pan; // stays within [275,445]
                 drawBar(barB, dotBx, '#DC2626', pBarB);
                 ctx.globalAlpha = pBarB;

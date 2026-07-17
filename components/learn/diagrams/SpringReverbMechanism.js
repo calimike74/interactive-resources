@@ -44,6 +44,7 @@ export default function SpringReverbMechanism() {
         const coilY = 64;
         const coilX0 = driver.x + driver.w; // 76
         const coilX1 = pickup.x; // 404
+        // illustrative — not a measured value (see w2-task-6-report)
         const coilAmp = 9;
         const coilPeriods = 8;
         const coilK = (Math.PI * 2 * coilPeriods) / (coilX1 - coilX0);
@@ -87,6 +88,7 @@ export default function SpringReverbMechanism() {
         const PHASE_COIL = 45;
         const COIL_DUR = 40;
         const PHASE_BOUNCE = 95;
+        // illustrative — not a measured value (see w2-task-6-report)
         const PASS_DUR = 50;
         const PASS_COUNT = 3;
         const PHASE_MECH_CAPTION = PHASE_BOUNCE + PASS_COUNT * PASS_DUR + 20;
@@ -166,6 +168,7 @@ export default function SpringReverbMechanism() {
             // bars top >=26) and clear of pickup box top (50, bars bottom <=44, 6px gap).
             for (let i = 0; i < PASS_COUNT; i++) {
                 if (i >= passesDone) continue;
+                // illustrative — not a measured value (see w2-task-6-report)
                 const h = 14 * Math.pow(0.6, i);
                 ctx.fillStyle = '#f97316';
                 ctx.fillRect(408 + i * 16, 44 - h, 10, h);
