@@ -112,7 +112,7 @@ Outro → `adc-explorer`.
 
 Chapter `the-numbers` — **"The Numbers That Come Up"** — subtitle "Topic 2.5 — Component 4". 4 rows. ⚑ Non-calculator law: every value mentally tractable.
 
-1. **`pitch-numbers`** — A4 = 440 Hz; octave = doubling; period = 1/frequency (1 kHz ↔ 1 ms family). Diagram REUSE **`log-frequency-axis`**.
+1. **`pitch-numbers`** — A4 = 440 Hz; octave = doubling; period = 1/frequency (1 kHz ⇄ 1 ms family). Diagram REUSE **`log-frequency-axis`**. *(Amended 2026-07-17: the original map text used ↔, which is banned in A-level student-facing content — ⇄ is the house bidirectional glyph. Source quotes containing ↔ may be cited in code comments but never rendered.)*
 2. **`level-numbers`** — dB is logarithmic; −6 dB ≈ half the voltage; dynamic range as the gap between noise floor and ceiling. Diagram REUSE **`dynamic-range-gap`**.
 3. **`tempo-numbers`** — 60,000 ÷ BPM = one beat in ms; the 120 BPM → 500 ms family; dotted = ×1.5, triplet = ×⅔. Diagram REUSE **`bpm-to-ms-family`**. Expansion points at the delay course's Timed Delay chapter.
 4. **`size-numbers`** — file size = rate × depth × channels × time; work in the exam's units (mine LevelsMeteringAssessment / DigitalAudioAssessment for the asked shapes; keep the worked example tractable). Diagram NEW **`file-size-arithmetic`**.
