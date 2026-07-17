@@ -68,6 +68,15 @@ import DistanceRdRatio from './DistanceRdRatio';
 import Rt60DecayCurve from './Rt60DecayCurve';
 import DampingDarkensTail from './DampingDarkensTail';
 import AbsorbVsDiffuse from './AbsorbVsDiffuse';
+import TransductionChain from './TransductionChain';
+import SpringReverbMechanism from './SpringReverbMechanism';
+import PlateReverbMechanism from './PlateReverbMechanism';
+import CombAllpassNetwork from './CombAllpassNetwork';
+import ImpulseResponseFingerprint from './ImpulseResponseFingerprint';
+import ParameterBridge from './ParameterBridge';
+import SendVsInsertRouting from './SendVsInsertRouting';
+import PrePostFaderTap from './PrePostFaderTap';
+import ReverbFadeAutomation from './ReverbFadeAutomation';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -143,6 +152,15 @@ const diagrams = {
     'rt60-decay-curve': Rt60DecayCurve,
     'damping-darkens-tail': DampingDarkensTail,
     'absorb-vs-diffuse': AbsorbVsDiffuse,
+    'transduction-chain': TransductionChain,
+    'spring-reverb-mechanism': SpringReverbMechanism,
+    'plate-reverb-mechanism': PlateReverbMechanism,
+    'comb-allpass-network': CombAllpassNetwork,
+    'impulse-response-fingerprint': ImpulseResponseFingerprint,
+    'parameter-bridge': ParameterBridge,
+    'send-vs-insert-routing': SendVsInsertRouting,
+    'pre-post-fader-tap': PrePostFaderTap,
+    'reverb-fade-automation': ReverbFadeAutomation,
 };
 
 export default diagrams;
