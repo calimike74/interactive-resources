@@ -57,11 +57,25 @@ function installAudioMock() {
             createStereoPanner: () => makeNode({ pan: makeParam(0) }),
             createConvolver: () => makeNode({ buffer: null, normalize: true }),
             createBuffer: (channels, length) => {
-                const buf = { length, numberOfChannels: channels, getChannelData: () => new Float32Array(length) };
+                // Cache one Float32Array per channel so getChannelData() returns
+                // the SAME array on every call, matching real AudioBuffer
+                // behaviour — smp-reversed reads back what smp-forward wrote.
+                const channelData = Array.from({ length: channels }, () => new Float32Array(length));
+                const buf = {
+                    length,
+                    numberOfChannels: channels,
+                    getChannelData: (channel = 0) => channelData[channel],
+                };
                 globalThis.__mockAudioContext?.createdBuffers.push(buf);
                 return buf;
             },
-            createBufferSource: () => makeNode({ buffer: null, loop: false }),
+            createBufferSource: () => makeNode({ buffer: null, loop: false, playbackRate: makeParam(1) }),
+            createWaveShaper: () => {
+                const node = makeNode({ curve: null, oversample: 'none' });
+                globalThis.__mockAudioContext?.createdShapers.push(node);
+                return node;
+            },
+            createdShapers: [],
         };
         globalThis.__mockAudioContext = instance;
         return instance;
@@ -86,6 +100,8 @@ test('all planned presets are registered and describable', () => {
         'ctl-eq-sweep', 'ctl-threshold', 'ctl-delay-time', 'ctl-feedback',
         'verb-dry', 'verb-room', 'verb-hall', 'verb-predelay',
         'ctl-reverb-mix', 'ctl-reverb-decay',
+        'smp-loop-click', 'smp-loop-clean', 'smp-forward', 'smp-reversed',
+        'smp-full-depth', 'smp-crushed', 'ctl-bit-depth', 'ctl-repitch',
     ];
     for (const id of required) {
         assert.ok(PRESET_IDS.includes(id), `missing preset ${id}`);
@@ -95,8 +111,9 @@ test('all planned presets are registered and describable', () => {
 
 test('every ctl- preset in the registry returns both stop and set (registry-wide shape guard)', () => {
     const ctlIds = PRESET_IDS.filter((id) => id.startsWith('ctl-'));
-    // 5 pre-existing synthesis controls + 4 EQ/dynamics/delay controls + 2 new reverb controls.
-    assert.equal(ctlIds.length, 11, `expected 11 ctl- presets, found ${ctlIds.length}: ${ctlIds.join(', ')}`);
+    // 5 pre-existing synthesis controls + 4 EQ/dynamics/delay controls + 2 reverb
+    // controls + 2 new sampling controls (bit-depth, repitch).
+    assert.equal(ctlIds.length, 13, `expected 13 ctl- presets, found ${ctlIds.length}: ${ctlIds.join(', ')}`);
     for (const id of ctlIds) {
         const controls = startPreset(id);
         assert.equal(typeof controls.stop, 'function', `${id} must return a stop function`);
@@ -110,6 +127,18 @@ test('new static EQ/dynamics/delay presets build without throwing', () => {
         'eq-tone-flat', 'eq-low-shelf-boost', 'eq-presence-boost', 'eq-highpass',
         'comp-drums-raw', 'comp-drums-squashed', 'delay-single', 'delay-pingpong',
         'verb-dry', 'verb-room', 'verb-hall', 'verb-predelay',
+    ];
+    for (const id of staticIds) {
+        const controls = startPreset(id);
+        assert.equal(typeof controls.stop, 'function', `${id} must return a stop function`);
+        stopSafely(controls);
+    }
+});
+
+test('new static sampling presets build without throwing', () => {
+    const staticIds = [
+        'smp-loop-click', 'smp-loop-clean', 'smp-forward', 'smp-reversed',
+        'smp-full-depth', 'smp-crushed',
     ];
     for (const id of staticIds) {
         const controls = startPreset(id);
@@ -215,4 +244,67 @@ test('ctl-threshold applies makeup gain compensation: gain = 1 + (-threshold)/60
     assert.ok(Math.abs(clampedMakeup.value - 2) < 1e-9, `expected clamped makeup gain 2, got ${clampedMakeup.value}`);
 
     stopSafely(controls);
+});
+
+test('ctl-bit-depth quantise curve step size is 1/L (L = 2^(bits-1)) and bits clamps to 2-16', () => {
+    const controls = startPreset('ctl-bit-depth');
+    const mock = globalThis.__mockAudioContext;
+    const shaper = mock.createdShapers.at(-1);
+
+    function stepSize() {
+        const levels = [...new Set(Array.from(shaper.curve))].sort((a, b) => a - b);
+        return levels[1] - levels[0];
+    }
+
+    controls.set({ bits: 3 });
+    const expected3 = 1 / Math.pow(2, 3 - 1); // L = 4
+    assert.ok(Math.abs(stepSize() - expected3) < 1e-9, `expected step size 1/4 at 3 bits, got ${stepSize()}`);
+
+    controls.set({ bits: 0 }); // below range, should clamp to 2
+    const expected2 = 1 / Math.pow(2, 2 - 1); // L = 2
+    assert.ok(Math.abs(stepSize() - expected2) < 1e-9, `bits below range should clamp to 2 (step 1/2), got ${stepSize()}`);
+
+    controls.set({ bits: 40 }); // above range, should clamp to 16
+    const expected16 = 1 / Math.pow(2, 16 - 1); // L = 32768
+    assert.ok(Math.abs(stepSize() - expected16) < 1e-9, `bits above range should clamp to 16 (step 1/32768), got ${stepSize()}`);
+
+    stopSafely(controls);
+});
+
+test('ctl-repitch sets playbackRate = 2^(semitones/12) and clamps to -12..+12', () => {
+    const controls = startPreset('ctl-repitch');
+    const mock = globalThis.__mockAudioContext;
+
+    controls.set({ semitones: 12 });
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 2) < 1e-9, `expected playbackRate 2.0 at +12 semitones, got ${mock.paramCalls.at(-1).value}`);
+
+    controls.set({ semitones: -12 });
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 0.5) < 1e-9, `expected playbackRate 0.5 at -12 semitones, got ${mock.paramCalls.at(-1).value}`);
+
+    controls.set({ semitones: 0 });
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 1) < 1e-9, `expected playbackRate 1.0 at 0 semitones, got ${mock.paramCalls.at(-1).value}`);
+
+    controls.set({ semitones: 30 }); // above range, should clamp to +12 -> 2.0
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 2) < 1e-9, `semitones above range should clamp to +12, got ${mock.paramCalls.at(-1).value}`);
+
+    controls.set({ semitones: -30 }); // below range, should clamp to -12 -> 0.5
+    assert.ok(Math.abs(mock.paramCalls.at(-1).value - 0.5) < 1e-9, `semitones below range should clamp to -12, got ${mock.paramCalls.at(-1).value}`);
+
+    stopSafely(controls);
+});
+
+test('smp-loop-clean buffer is an exact multiple of the period that smp-loop-click is a quarter-period off by', () => {
+    const clean = startPreset('smp-loop-clean');
+    const cleanLength = globalThis.__mockAudioContext.createdBuffers.at(-1).length;
+    stopSafely(clean);
+
+    const click = startPreset('smp-loop-click');
+    const clickLength = globalThis.__mockAudioContext.createdBuffers.at(-1).length;
+    stopSafely(click);
+
+    const offset = clickLength - cleanLength;
+    assert.ok(offset > 0, 'click buffer should be longer than the clean buffer');
+    const period = offset * 4; // offset is a quarter-period by construction
+    assert.equal(cleanLength % period, 0, 'clean buffer length should be an exact multiple of the wave period');
+    assert.equal(clickLength % period, offset, 'click buffer length should land exactly one quarter-period past a multiple');
 });
