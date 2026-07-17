@@ -93,6 +93,9 @@ import KeyZonesVelocityLayers from './KeyZonesVelocityLayers';
 import PitchTimeMatrix from './PitchTimeMatrix';
 import ReverseEnvelope from './ReverseEnvelope';
 import ChopResequence from './ChopResequence';
+import ClippingShapes from './ClippingShapes';
+import DriveToneLevelChain from './DriveToneLevelChain';
+import OddEvenHarmonics from './OddEvenHarmonics';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -193,6 +196,9 @@ const diagrams = {
     'pitch-time-matrix': PitchTimeMatrix,
     'reverse-envelope': ReverseEnvelope,
     'chop-resequence': ChopResequence,
+    'clipping-shapes': ClippingShapes,
+    'drive-tone-level-chain': DriveToneLevelChain,
+    'odd-even-harmonics': OddEvenHarmonics,
 };
 
 export default diagrams;
