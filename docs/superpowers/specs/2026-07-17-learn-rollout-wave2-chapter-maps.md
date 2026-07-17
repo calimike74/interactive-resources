@@ -21,16 +21,16 @@ Follows the reference's journey: one clap → the tail → mechanical → digita
 ### Ch 1 `one-clap` — One Clap in a Room
 | Row | Teaches | Animation |
 |---|---|---|
-| `direct-early-tail` | Three arrivals in strict order: direct (defines dry), early reflections ~50–80 ms (the size cue), then the wash | `clap-timeline` |
-| `pre-delay-gap` | Pre-delay = the gap between direct sound and reverb onset (0–200 ms and beyond); not an echo effect | `pre-delay-gap` |
-| `distance-rd-ratio` | Direct falls 6 dB per doubling of distance, room holds steady → R/D ratio rises; wet/dry is really a distance control | `distance-rd-ratio` + interactive `reverb-mix` + audio `verb-dry`/`verb-hall` |
+| `direct-early-tail` | Three arrivals in strict order: direct (defines dry), early reflections ~50–80 ms (the size cue), then the wash | `clap-timeline` + audio `verb-hall` |
+| `pre-delay-gap` | Pre-delay = the gap between direct sound and reverb onset (0–200 ms and beyond); not an echo effect | `pre-delay-gap` + audio `verb-predelay` (A/B counterpart = previous row, wave-1 adjacent-row pattern) |
+| `distance-rd-ratio` | Direct falls 6 dB per doubling of distance, room holds steady → R/D ratio rises; wet/dry is really a distance control | `distance-rd-ratio` + interactive `reverb-mix` + audio `verb-dry` |
 
 **Exam anchor:** explain how moving a source further away changes what we hear (R/D ratio rises; direct falls 6 dB per doubling; source recedes into the space).
 
 ### Ch 2 `the-tail` — The Tail: RT60 & Damping
 | Row | Teaches | Animation |
 |---|---|---|
-| `rt60-decay` | RT60 = time for the decay to fall 60 dB; small live room well under 1 s, hall 1–2 s, cathedral beyond | `rt60-decay-curve` (−60 dB marker geometrically exact) + interactive `reverb-decay` |
+| `rt60-decay` | RT60 = time for the decay to fall 60 dB; small live room well under 1 s, hall 1–2 s, cathedral beyond | `rt60-decay-curve` (−60 dB marker geometrically exact) + interactive `reverb-decay` + audio `verb-room` |
 | `absorption-damping` | Absorption converts energy to heat, takes highs first → damping darkens the tail (tone, not level) | `damping-darkens-tail` |
 | `diffusion-scatter` | Diffusion scatters reflections instead of removing them: smoother decay, similar length | `absorb-vs-diffuse` |
 
@@ -120,9 +120,7 @@ Follows the reference's journey: the instrument → the numbers → the edit →
 All follow the established discipline: single lazy context, master gain 0.15, 15 ms ramps, builders return every node, stopper disconnects in teardown. Registry names are collision-free against the existing registry.
 
 **Reverb** — synthetic impulse response through `ConvolverNode` (noise burst × exponential decay; envelope = 10^(−3t/RT60) so −60 dB lands at RT60 by definition; mono IR; `normalize` left at default `true`). Source = repeating percussive tick (lookahead interval timer, the drum-loop pattern) so the tail is audible between hits.
-- `verb-dry` / `verb-hall` (RT60 1.8 s) — the ch1 A/B
-- `verb-room` (RT60 0.4 s) — vs `verb-hall` for size
-- `verb-predelay` — hall with 80 ms gap before the wet path (DelayNode before convolver)
+- `verb-dry` / `verb-hall` (RT60 1.8 s) / `verb-room` (RT60 0.4 s) / `verb-predelay` (hall + 80 ms DelayNode on the wet path) — placed ONE per row on adjacent rows (the wave-1 A/B mechanism; `AudioBlock` takes a single preset). Tick spacing follows the active decay (max(1.2, decay + 0.4) s).
 - `ctl-reverb-mix` — `set({mix})` 0→1, equal-power crossfade (dry = cos(mix·π/2), wet = sin(mix·π/2))
 - `ctl-reverb-decay` — `set({decay})` 0.3→3.0 s, regenerates the IR buffer and reassigns `convolver.buffer`
 
