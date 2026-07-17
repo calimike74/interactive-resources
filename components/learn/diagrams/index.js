@@ -105,6 +105,9 @@ import BufferLatencyTradeoff from './BufferLatencyTradeoff';
 import ContinuousVsDiscrete from './ContinuousVsDiscrete';
 import AdcDacPipeline from './AdcDacPipeline';
 import FileSizeArithmetic from './FileSizeArithmetic';
+import ConnectorLineup from './ConnectorLineup';
+import BalancedNoiseRejection from './BalancedNoiseRejection';
+import SignalLevelsLadder from './SignalLevelsLadder';
 
 // Thin wrapper: reuses LfoBasics' canvas with a faster wobble and a wider swing so the
 // "Rate and Depth" row shows a visibly different diagram instead of an empty panel or a
@@ -217,6 +220,9 @@ const diagrams = {
     'continuous-vs-discrete': ContinuousVsDiscrete,
     'adc-dac-pipeline': AdcDacPipeline,
     'file-size-arithmetic': FileSizeArithmetic,
+    'connector-lineup': ConnectorLineup,
+    'balanced-noise-rejection': BalancedNoiseRejection,
+    'signal-levels-ladder': SignalLevelsLadder,
 };
 
 export default diagrams;
