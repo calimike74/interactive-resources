@@ -151,7 +151,7 @@ export default function PingPong() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 10px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('dry stays central · wet bounces L ↔ R', W / 2, H - 30);
+                ctx.fillText('dry stays central · wet bounces L ⇄ R', W / 2, H - 30);
                 ctx.globalAlpha = 1;
             }
 

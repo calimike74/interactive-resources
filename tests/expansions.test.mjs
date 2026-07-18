@@ -6,14 +6,7 @@ import { getLearnTopicIds, getLearnLessons } from '../lib/learn/topics/index.js'
 // Pre-existing orphans surfaced by this automated sweep (2026-07-17, wave-2 Task 1).
 // This array is exact-content-asserted below: it cannot grow silently — a new
 // entry here always requires a dated comment explaining why it's kept.
-const KNOWN_ORPHANS = [
-    // 2026-07-17: synthesis/envelopes/filter-envelope's description reads
-    // `the classic "wah" of analogue synths` — the straight quotes around "wah"
-    // break the contiguous substring match against this trigger. Pre-existing
-    // content drift from wave 1, not introduced by this task; not fixed here
-    // per the brief ("do not fix content in this task").
-    'classic wah of analogue synths',
-];
+const KNOWN_ORPHANS = [];
 
 // One text unit per row's `description` ONLY — this mirrors ExpandableText's
 // actual runtime input exactly (components/learn/LearnSpineLayout.js:252 passes
