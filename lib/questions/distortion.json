@@ -80,58 +80,6 @@
       "explanation": "Odd-harmonics-only content (from symmetric clipping) is typically described as thin, buzzy or hollow, while adding even harmonics (from asymmetric distortion) fills the sound out and gives it the character usually described as warm. Swapping the pairing (option B) reverses the actual association, and claiming harmonic content is inaudible or merely a volume difference (options C and D) ignores that harmonic content is precisely what gives distorted sounds their distinct tonal character."
     },
     {
-      "id": "distortion-mcq-07",
-      "type": "mcq",
-      "question": "Which distortion type is specifically associated with an asymmetric circuit and the even-order harmonics it adds?",
-      "options": [
-        "Tube saturation",
-        "Hard clipping",
-        "Fuzz",
-        "Bitcrushing"
-      ],
-      "correctIndex": 0,
-      "explanation": "Tube saturation is the named example of an asymmetric circuit — one that treats the positive and negative halves of the wave differently — and this asymmetry is what produces even harmonics. Hard clipping and fuzz are both symmetric, producing odd harmonics instead, and bitcrushing is a digital quantisation effect with no analogue circuit asymmetry involved at all."
-    },
-    {
-      "id": "distortion-mcq-08",
-      "type": "mcq",
-      "question": "A digital plug-in reduces the bit depth of a recording to create a deliberately gritty, coarse-stepped sound. Which effect is this, and how does its mechanism differ from tube saturation?",
-      "options": [
-        "Bitcrushing — it works by discarding bits in the digital domain, whereas tube saturation is analogue circuit colour from a real component being driven hard",
-        "Bitcrushing — it is the same mechanism as tube saturation, simply implemented in software instead of hardware",
-        "Tube saturation — reducing bit depth is another name for driving a valve circuit hard",
-        "Neither — reducing bit depth changes only the sample rate, which has no connection to distortion"
-      ],
-      "correctIndex": 0,
-      "explanation": "This is bitcrushing: a digital effect that deliberately throws bits away, coarsening the quantisation staircase on purpose. It works on a completely different principle from tube saturation, which is a real component (a valve) being overdriven in the analogue domain — the two are not the same mechanism in different eras, and bit depth is distinct from sample rate, not another name for it."
-    },
-    {
-      "id": "distortion-mcq-09",
-      "type": "mcq",
-      "question": "A listener describes a guitar tone as 'just a touch of warmth, no obvious grit, the note still sounds essentially clean.' Which member of the distortion family does this describe?",
-      "options": [
-        "Saturation",
-        "Overdrive",
-        "Distortion",
-        "Fuzz"
-      ],
-      "correctIndex": 0,
-      "explanation": "Saturation sits apart as the subtlest member of the family, adding warmth without audibly reshaping the wave — exactly the 'barely touched, still essentially clean' character described. Overdrive, distortion and fuzz all involve progressively more obvious clipping and would not be described as leaving the note essentially clean."
-    },
-    {
-      "id": "distortion-mcq-10",
-      "type": "mcq",
-      "question": "A guitarist describes a tone as 'thick and sustained, almost like a buzzing square wave — the original note has all but disappeared under the effect.' Which distortion type does this describe?",
-      "options": [
-        "Fuzz",
-        "Soft clipping",
-        "Tube saturation",
-        "Bitcrushing"
-      ],
-      "correctIndex": 0,
-      "explanation": "Fuzz is the most extreme member of the distortion family, clipping the wave almost to a square and burying the original signal under dense new harmonic content — matching the 'square wave' and 'disappeared under the effect' description exactly. Soft clipping and tube saturation both sit at the gentler end of the family, and bitcrushing is a digital quantisation effect rather than an analogue clipping one."
-    },
-    {
       "id": "distortion-num-01",
       "type": "numeric",
       "question": "Harmonics are whole-number multiples of a signal's fundamental frequency — the 2nd harmonic is 2 times the fundamental, the 3rd is 3 times, and so on. A guitar note has a fundamental frequency of 200 Hz. What is the frequency of its 3rd harmonic?",
@@ -196,6 +144,58 @@
         "Mix (where present) blends the distorted signal against the clean original for a parallel effect"
       ],
       "explanation": "These four controls act at different points in the chain: drive determines how much clipping happens, tone shapes the resulting sound afterwards, level restores a workable output volume, and mix (where offered) sets the balance between processed and unprocessed signal. Confusing drive and level is a common error, since both affect perceived loudness — but only drive changes how much the signal is actually being clipped."
+    },
+    {
+      "id": "distortion-mcq-07",
+      "type": "mcq",
+      "question": "Which distortion type is specifically associated with an asymmetric circuit and the even-order harmonics it adds?",
+      "options": [
+        "Tube saturation",
+        "Hard clipping",
+        "Fuzz",
+        "Bitcrushing"
+      ],
+      "correctIndex": 0,
+      "explanation": "Tube saturation is the named example of an asymmetric circuit — one that treats the positive and negative halves of the wave differently — and this asymmetry is what produces even harmonics. Hard clipping and fuzz are both symmetric, producing odd harmonics instead, and bitcrushing is a digital quantisation effect with no analogue circuit asymmetry involved at all."
+    },
+    {
+      "id": "distortion-mcq-08",
+      "type": "mcq",
+      "question": "A digital plug-in reduces the bit depth of a recording to create a deliberately gritty, coarse-stepped sound. Which effect is this, and how does its mechanism differ from tube saturation?",
+      "options": [
+        "Bitcrushing — it works by discarding bits in the digital domain, whereas tube saturation is analogue circuit colour from a real component being driven hard",
+        "Bitcrushing — it is the same mechanism as tube saturation, simply implemented in software instead of hardware",
+        "Tube saturation — reducing bit depth is another name for driving a valve circuit hard",
+        "Neither — reducing bit depth changes only the sample rate, which has no connection to distortion"
+      ],
+      "correctIndex": 0,
+      "explanation": "This is bitcrushing: a digital effect that deliberately throws bits away, coarsening the quantisation staircase on purpose. It works on a completely different principle from tube saturation, which is a real component (a valve) being overdriven in the analogue domain — the two are not the same mechanism in different eras, and bit depth is distinct from sample rate, not another name for it."
+    },
+    {
+      "id": "distortion-mcq-09",
+      "type": "mcq",
+      "question": "A listener describes a guitar tone as 'just a touch of warmth, no obvious grit, the note still sounds essentially clean.' Which member of the distortion family does this describe?",
+      "options": [
+        "Saturation",
+        "Overdrive",
+        "Distortion",
+        "Fuzz"
+      ],
+      "correctIndex": 0,
+      "explanation": "Saturation sits apart as the subtlest member of the family, adding warmth without audibly reshaping the wave — exactly the 'barely touched, still essentially clean' character described. Overdrive, distortion and fuzz all involve progressively more obvious clipping and would not be described as leaving the note essentially clean."
+    },
+    {
+      "id": "distortion-mcq-10",
+      "type": "mcq",
+      "question": "A guitarist describes a tone as 'thick and sustained, almost like a buzzing square wave — the original note has all but disappeared under the effect.' Which distortion type does this describe?",
+      "options": [
+        "Fuzz",
+        "Soft clipping",
+        "Tube saturation",
+        "Bitcrushing"
+      ],
+      "correctIndex": 0,
+      "explanation": "Fuzz is the most extreme member of the distortion family, clipping the wave almost to a square and burying the original signal under dense new harmonic content — matching the 'square wave' and 'disappeared under the effect' description exactly. Soft clipping and tube saturation both sit at the gentler end of the family, and bitcrushing is a digital quantisation effect rather than an analogue clipping one."
     },
     {
       "id": "distortion-num-04",
