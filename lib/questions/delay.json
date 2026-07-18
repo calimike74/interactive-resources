@@ -1,0 +1,245 @@
+{
+  "topicId": "delay",
+  "questions": [
+    {
+      "id": "delay-mcq-01",
+      "type": "mcq",
+      "question": "A producer sets a delay plug-in's wet/dry control to 100% wet on an insert and can no longer hear the original vocal — only repeats. What has actually happened to the dry signal?",
+      "options": [
+        "The dry signal has been permanently deleted by the plug-in and cannot be recovered",
+        "At 100% wet, the plug-in's output is only the delayed repeats — the dry signal is still on the track, it simply isn't passing through this effect any more",
+        "The feedback has been set too high, which is cancelling out the dry signal",
+        "The vocal track has been muted, unrelated to the delay settings"
+      ],
+      "correctIndex": 1,
+      "explanation": "Wet/dry controls the balance between repeats and original within the plug-in itself; on an insert, fully wet means only the wet path reaches the output, which is why delay is often used on a send instead so the dry signal keeps its own untouched path. Feedback governs how many repeats there are, not whether the dry signal is audible, so raising or lowering it would not explain a missing dry vocal."
+    },
+    {
+      "id": "delay-mcq-02",
+      "type": "mcq",
+      "question": "A mix engineer adds a 12 ms delay to a rhythm guitar with zero feedback, expecting a distinct echo. Instead the guitar just sounds thicker, with no separate repeat audible. Why?",
+      "options": [
+        "12 ms falls below the roughly 30 ms fusing threshold, so the ear cannot separate the repeat from the dry signal — it is heard as thickening rather than an echo",
+        "Zero feedback means the repeat is too quiet to hear as a distinct echo",
+        "12 ms is within the 30–120 ms slap range, so a clear slap should be audible and the engineer must be monitoring incorrectly",
+        "Delay effects only produce an audible repeat above 120 ms; anything shorter is inaudible"
+      ],
+      "correctIndex": 0,
+      "explanation": "Under about 30 ms, the repeat arrives too close behind the dry signal for the ear to hear it as a separate event, so it is perceived as a change in tone (thickening or comb-filtering) instead. Feedback controls how many repeats there are, not whether the first one is audible, and 12 ms sits below the slap range (roughly 30–120 ms), not inside it — a common way to lose this mark is mixing up the fusing and slap boundaries."
+    },
+    {
+      "id": "delay-mcq-03",
+      "type": "mcq",
+      "question": "A student slowly raises a delay's feedback control from 0% toward 100% while holding a single note. What happens to the repeats as feedback approaches and then reaches 100%?",
+      "options": [
+        "Below 100%, each repeat is quieter than the last and the chain eventually dies away; at 100% the repeats stop losing level and the delay can self-oscillate into a continuous, runaway tone",
+        "Feedback only changes the gap between repeats, not how many of them there are",
+        "Feedback sets the balance between repeats and the dry signal, so raising it just makes existing repeats louder without changing how many there are",
+        "Above roughly 50% feedback, the delay automatically switches into multi-tap mode, producing several independent repeats"
+      ],
+      "correctIndex": 0,
+      "explanation": "Feedback routes the delay's own output back into its input, so higher feedback means more of each repeat is recycled into the next one, producing more repeats before the level dies away; at 100% the loop no longer loses level and can run away into continuous self-oscillation. Feedback is often confused with wet/dry, but wet/dry only balances how loud existing repeats are against the dry signal — it does not change how many repeats are generated."
+    },
+    {
+      "id": "delay-mcq-04",
+      "type": "mcq",
+      "question": "Which combination of settings would recreate a classic slapback vocal effect?",
+      "options": [
+        "Delay time 65 ms, feedback 0%, wet/dry around 25% — a single audible repeat sitting behind the dry signal",
+        "Delay time 350 ms, feedback 45%, wet/dry 55% — a long, cascading echo",
+        "Delay time 12 ms, feedback 70%, wet/dry 90% — thickening from many fast repeats",
+        "Delay time 65 ms, feedback 40%, wet/dry 25% — a few decaying repeats"
+      ],
+      "correctIndex": 0,
+      "explanation": "Slapback needs a delay time in the roughly 50–120 ms range so the repeat is heard as a single distinct slap, combined with zero feedback so only one repeat is produced, at a moderate level so it sits behind the dry signal rather than competing with it. Option D shows that delay time alone is not enough — with feedback above 0% the same delay time produces a small decaying chain rather than the single repeat that defines slapback."
+    },
+    {
+      "id": "delay-mcq-05",
+      "type": "mcq",
+      "question": "An engineer compares two delay recordings of the same guitar phrase. In recording A, each repeat is both quieter and noticeably duller than the last. In recording B, each repeat is quieter but keeps the same tone throughout. Which is more likely the tape delay, and why?",
+      "options": [
+        "Recording A — tape's analogue feedback loop re-records each repeat through the tape, so every pass loses high-frequency content, producing darkening alongside the volume decay",
+        "Recording B — a lack of tonal change between repeats proves an analogue tape loop is being used, since tape is known for its warmth",
+        "Recording A — digital delays deliberately darken their repeats to imitate analogue warmth, so this must be a digital delay",
+        "Neither can be identified from this description, since repeats always just get quieter regardless of how the delay was made"
+      ],
+      "correctIndex": 0,
+      "explanation": "Analogue tape re-records its own feedback signal through the same record/playback loop on every pass, and tape loses some high-frequency content each time it is recorded — so tape repeats characteristically get quieter and duller together. A clean digital delay repeats identical data each pass, so nothing about the mechanism inherently darkens the tone; any change would have to be added deliberately with a filter, it is not built into how digital delay works."
+    },
+    {
+      "id": "delay-mcq-06",
+      "type": "mcq",
+      "question": "Why does a 'dotted' note value applied to a delay multiply the time by 1.5, while a 'triplet' of the same note value multiplies it by two-thirds?",
+      "options": [
+        "A dot adds half the note's own value again (× 1.5), while a triplet divides a beat into three equal parts and takes two of them (× ⅔) — both describe how the note's duration changes relative to the straight value",
+        "Dotted and triplet are two names for the same multiplier, chosen depending on whether the track is in 4/4 or 3/4 time",
+        "A dot always doubles the note's value (× 2), while a triplet halves it (× ½)",
+        "Triplet delays are always longer than dotted delays of the same note value, because triplet timing stretches a beat into three"
+      ],
+      "correctIndex": 0,
+      "explanation": "A dot lengthens a note by half its own value again, giving × 1.5, while a triplet fits three equal notes into the space normally taken by two, so each one is two-thirds of the straight value. A common error is to import the general music-theory shorthand of 'dot = longer, triplet = shorter' but apply the wrong fixed multiplier (× 2 or × ½) rather than the correct × 1.5 / × ⅔ figures."
+    },
+    {
+      "id": "delay-num-01",
+      "type": "numeric",
+      "question": "A delay is set to a tempo-synced quarter note at 120 BPM. Using 60,000 ÷ BPM, what is the delay time in milliseconds?",
+      "answer": 500,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "Quarter-note ms = 60,000 ÷ BPM. At 120 BPM: 60,000 ÷ 120 = 500 ms — dividing by 12 then by 10 keeps the working manageable without a calculator. This quarter-note figure is the anchor value that every dotted or triplet subdivision at this tempo is then multiplied from."
+    },
+    {
+      "id": "delay-num-02",
+      "type": "numeric",
+      "question": "A delay is set to a tempo-synced quarter note at 75 BPM. Using 60,000 ÷ BPM, what is the delay time in milliseconds?",
+      "answer": 800,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "60,000 ÷ 75 = 800 ms. One way to check without a calculator: 75 × 8 = 600, so 75 × 800 = 60,000 once both sides are multiplied by 100. A common error is recalling the more familiar 500 ms figure from 120 BPM instead of redoing the division for the BPM actually given."
+    },
+    {
+      "id": "delay-num-03",
+      "type": "numeric",
+      "question": "A track runs at 100 BPM, giving a quarter-note delay time of 600 ms. What is the delay time in milliseconds for a dotted quarter note at this tempo?",
+      "answer": 900,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "A dot adds half the note's own value again, so a dotted quarter note is the quarter-note value × 1.5: 600 × 1.5 = 900 ms, which can be found without a calculator as 600 + (600 ÷ 2) = 900. The dot always means × 1.5 of whichever note value it is attached to — it is not a fixed millisecond addition, so the same × 1.5 rule applies at any tempo."
+    },
+    {
+      "id": "delay-short-01",
+      "type": "short",
+      "question": "Explain why the repeats produced by an old tape echo machine get progressively darker as well as quieter, and why this does not happen with a clean digital delay.",
+      "sampleAnswer": "A tape echo re-records its own feedback signal through the same record/playback loop on every pass. Analogue tape loses some high-frequency content each time it is recorded, so every repeat comes out slightly duller than the one before it, alongside the expected drop in level from the feedback setting. A clean digital delay simply copies the same digital data on each pass, so the only thing that changes between repeats is level — there is no mechanism to alter the frequency content.",
+      "keyPoints": [
+        "Tape feedback re-records the signal through the tape loop on every repeat",
+        "Analogue tape loses high-frequency content each time it passes through the loop",
+        "Repeats therefore get quieter AND darker together — the signature clue of tape delay",
+        "A digital delay repeats identical data each pass, so only level (via feedback), not tone, changes between repeats"
+      ],
+      "explanation": "The combination of darkening and quietening together is the specific clue examiners point to when identifying a tape-based delay by ear, rather than quietening alone which does not distinguish tape from digital. A common misconception is assuming digital delays deliberately darken repeats to sound 'warmer' — they do not; any tonal change on a digital delay has to be added on purpose with a filter."
+    },
+    {
+      "id": "delay-short-02",
+      "type": "short",
+      "question": "Describe what the feedback control on a delay does, and explain what happens to the signal as feedback is pushed towards and beyond 100%.",
+      "sampleAnswer": "Feedback routes some of the delay's output back into its own input, so each repeat re-triggers the next one around the loop. At low feedback settings this produces a few repeats that decay quickly; as feedback increases, more of each repeat is fed back round the loop, producing more repeats before the signal dies away. As feedback approaches 100%, the repeats stop losing level with each pass, and pushing beyond it causes the signal to build rather than decay, creating a continuous, runaway self-oscillating tone rather than a series of discrete echoes.",
+      "keyPoints": [
+        "Feedback routes the delay's output back into its own input",
+        "Higher feedback means more repeats before the signal decays away",
+        "At and beyond 100% feedback, repeats stop losing level and the delay can self-oscillate into a runaway tone",
+        "Feedback is a different control from wet/dry, which balances repeat loudness against the dry signal rather than repeat count"
+      ],
+      "explanation": "Feedback and wet/dry are often confused because both affect how prominent the delay sounds, but wet/dry sets the level of whatever repeats already exist while feedback determines how many repeats are generated in the first place. Self-oscillation at very high feedback is used as a deliberate creative effect (drones, rhythmic build-ups) rather than being treated purely as a fault to avoid."
+    },
+    {
+      "id": "delay-short-03",
+      "type": "short",
+      "question": "Give the parameter recipe for a classic slapback delay and describe the historical context in which it became famous.",
+      "sampleAnswer": "A slapback delay uses a single short delay time, typically in the 50–120 ms range, with feedback at 0% so only one repeat is produced, mixed at a moderate wet/dry level so the repeat sits behind the dry signal rather than competing with it. It became the signature sound of 1950s rockabilly, most famously on Elvis Presley's Sun Records vocals and Scotty Moore's guitar, where it was originally created using tape echo machines rather than the digital plug-ins available today.",
+      "keyPoints": [
+        "Single delay time in the roughly 50–120 ms range",
+        "Feedback at 0% — exactly one repeat, not a decaying chain",
+        "Moderate wet/dry level so the repeat sits behind the dry signal",
+        "Signature 1950s rockabilly sound (Elvis Presley/Sun Records), originally made on tape"
+      ],
+      "explanation": "The defining parameter is the zero feedback, not the delay time alone — the same delay time with feedback raised produces a decaying echo train rather than the single-repeat slapback effect. Tape saturation and flutter on the original machines added extra warmth that digital slapback emulations often model deliberately."
+    },
+    {
+      "id": "delay-mcq-07",
+      "type": "mcq",
+      "question": "A vocal delay's repeats are building up an unpleasant hiss because the singer's 's' sounds are being repeated on every pass. What fix addresses this without simply turning the delay level down?",
+      "options": [
+        "Apply a high-cut (low-pass) filter to the delay return so high frequencies, including sibilance, are progressively rolled off on the repeats",
+        "Increase the feedback so the repeats decay faster and the sibilance is masked",
+        "Pan the wet signal hard to one side to move the sibilance out of the centre of the image",
+        "Apply a low-cut (high-pass) filter to the delay return to remove the low end causing the build-up"
+      ],
+      "correctIndex": 0,
+      "explanation": "Filtering high frequencies out of the wet path keeps the repeats audible while stopping sibilance and brightness from stacking up on every echo. Raising the feedback would create more repeats and make the problem worse, panning only moves the repeats in the stereo field without touching their frequency content, and a low-cut filter removes the wrong end of the spectrum — sibilance is a high-frequency problem, not a low-frequency one."
+    },
+    {
+      "id": "delay-mcq-08",
+      "type": "mcq",
+      "question": "What is Automatic Double Tracking (ADT) used for, and what makes it different from a general slapback or echo effect?",
+      "options": [
+        "It thickens a single vocal or instrument take so it sounds like two performances layered together, using zero feedback and a short repeat blended in behind the dry signal, with a touch of pitch or timing modulation so it doesn't read as a static doubled copy",
+        "It creates a long, clearly audible echo trail across a full bar for dramatic effect",
+        "It pans a single repeat hard to one side to create stereo width",
+        "It applies heavy feedback to a delay so the repeats build into a dense wash of sound"
+      ],
+      "correctIndex": 0,
+      "explanation": "ADT is designed to imitate the effect of a second human performance from a single take: the repeat is kept short and feedback-free so it blends into one thicker voice rather than being heard as a separate echo, and subtle pitch or timing modulation (originally from two tape machines running at slightly different speeds) is what stops the copy sounding like a static, mechanical double. A long audible echo, hard panning, or heavy feedback all describe other delay techniques (creative delay, ping-pong panning, and self-oscillating feedback respectively), not ADT."
+    },
+    {
+      "id": "delay-mcq-09",
+      "type": "mcq",
+      "question": "A producer wants a guitar stab to repeat three times at even intervals, each repeat the same volume as the last, with no decay. They try a single delay with high feedback but get a fading train of repeats instead of three equal-level hits. What should they use instead?",
+      "options": [
+        "A multi-tap delay, where each tap has its own independent time and level, rather than a single feedback loop that produces a decaying chain",
+        "The same single delay, but with the feedback lowered to 0%",
+        "The same single delay, but with a much shorter delay time",
+        "A ping-pong delay, so the repeats alternate between left and right"
+      ],
+      "correctIndex": 0,
+      "explanation": "Single-tap delay plus feedback always produces an exponentially decaying train of repeats on one loop; a multi-tap delay instead generates several fixed taps, each with an independently set time and level, which is what's needed for evenly spaced, equal-level hits. Lowering feedback to 0% would leave only one repeat rather than three, shortening the delay time only changes the gap between repeats rather than their structure, and ping-pong solves stereo placement, not the level/timing problem described."
+    },
+    {
+      "id": "delay-mcq-10",
+      "type": "mcq",
+      "question": "A DJ describes a delay as 'ping-pong' because they have panned its wet output hard left. A colleague says that isn't true ping-pong. What architecture would actually make it genuine ping-pong?",
+      "options": [
+        "Two delay lines with their feedback paths crossed — the left line's output feeds the right line's input and vice versa — so each successive repeat alternates automatically between channels; a single panned delay only ever produces repeats on the one side it's panned to",
+        "The same single delay line, but with the feedback pushed above 100% so the repeats bounce indefinitely",
+        "The same single delay line, but with a longer delay time than a typical panned delay",
+        "The same single delay line, with an extra reverb added to widen the stereo image"
+      ],
+      "correctIndex": 0,
+      "explanation": "True ping-pong needs two delay lines whose feedback paths are crossed, so the alternation between left and right happens automatically as the signal passes back and forth between the two loops — a single delay line, however it is panned or however long its delay time, can only ever put repeats on the side it is routed to. Pushing feedback above 100% on a single line produces a runaway, self-oscillating drone, which has nothing to do with stereo alternation."
+    },
+    {
+      "id": "delay-num-04",
+      "type": "numeric",
+      "question": "A track runs at 150 BPM, giving a quarter-note delay time of 400 ms. What is the delay time in milliseconds for a straight eighth note at this tempo?",
+      "answer": 200,
+      "tolerance": 0,
+      "unit": "ms",
+      "explanation": "An eighth note is half the length of a quarter note, so its delay time is the quarter-note value halved: 400 ÷ 2 = 200 ms. This halving pattern continues predictably down through subdivisions — a common error is to treat 'eighth' as meaning the BPM figure divided by 8, rather than the quarter-note millisecond value divided by 2."
+    },
+    {
+      "id": "delay-num-05",
+      "type": "numeric",
+      "question": "A track runs at 120 BPM, giving a quarter-note delay time of 500 ms. What is the delay time in milliseconds for a triplet quarter note at this tempo, to the nearest millisecond?",
+      "answer": 333,
+      "tolerance": 1,
+      "unit": "ms",
+      "explanation": "A triplet takes two of the three equal parts a beat is divided into, so the multiplier is ⅔: 500 × ⅔ = 1000 ÷ 3 = 333.33, which rounds to 333 ms. A common error is applying ⅓ instead of ⅔, giving 167 ms — but a triplet note keeps two-thirds of the straight value, it is shortened by only a third, not by two-thirds."
+    },
+    {
+      "id": "delay-short-04",
+      "type": "short",
+      "question": "Explain the signal-routing architecture that makes a delay a true ping-pong delay, as opposed to a single delay panned to one side.",
+      "sampleAnswer": "A true ping-pong delay uses two separate delay lines whose feedback paths are crossed: the output of the left delay line feeds into the input of the right line, and the output of the right line feeds into the input of the left line. This crossing means each successive repeat alternates automatically between the left and right channels. A single delay line panned hard to one side only ever produces repeats on that one side — it cannot alternate, because there is only one delay line and no crossed feedback path between channels.",
+      "keyPoints": [
+        "True ping-pong uses two delay lines, not one",
+        "Their feedback paths are crossed — the left line's output feeds the right line's input and vice versa",
+        "This crossing is what makes each repeat alternate channels automatically",
+        "A single panned delay only ever produces repeats on the side it is panned to — it cannot alternate"
+      ],
+      "explanation": "Students often describe ping-pong as simply 'a delay panned left and right', which misses the mechanism entirely — panning alone cannot produce alternation without the crossed feedback loop between two independent delay lines. Naming the crossed-feedback architecture, not just the audible bouncing effect, is what distinguishes a full answer from a partial one."
+    },
+    {
+      "id": "delay-short-05",
+      "type": "short",
+      "question": "Explain why the formula for a tempo-synced quarter-note delay is 60,000 ÷ BPM, showing what the 60,000 represents.",
+      "sampleAnswer": "BPM (beats per minute) tells you how many quarter-note beats occur in one minute. There are 60,000 milliseconds in one minute (60 seconds × 1,000 ms), so dividing that figure by the number of beats per minute gives the number of milliseconds each individual beat lasts. For example, at 120 BPM there are 120 quarter-note beats packed into 60,000 ms, so each one lasts 60,000 ÷ 120 = 500 ms.",
+      "keyPoints": [
+        "BPM is the number of quarter-note beats in one minute",
+        "One minute equals 60,000 milliseconds (60 × 1,000)",
+        "Dividing total milliseconds by beats-per-minute gives the milliseconds per single beat",
+        "The result is the tempo-synced quarter-note delay time, which other note values are then derived from by multiplying"
+      ],
+      "explanation": "Understanding where the 60,000 comes from, rather than just memorising the formula, is what lets a student derive a delay time for any BPM without a calculator, and explains why well-chosen tempos divide cleanly into it — dividing a round number of milliseconds by a round tempo tends to produce a mentally tractable answer."
+    }
+  ]
+}

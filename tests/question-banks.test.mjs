@@ -68,7 +68,7 @@ function typeMixFor(topicId) {
 // tasks 2-5 of the revise-question-banks plan (see
 // docs/superpowers/specs/2026-07-18-revise-question-banks-design.md) — this
 // guard test (task 1) is written before any of the four exist.
-const KNOWN_MISSING = ['delay', 'digital-analogue', 'distortion', 'leads-and-signals'];
+const KNOWN_MISSING = ['digital-analogue', 'distortion', 'leads-and-signals'];
 
 // Load every bank file's raw text (for the glyph lint) and parsed content
 // (for schema/count checks) up front. Parse failures are collected rather
