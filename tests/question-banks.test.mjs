@@ -63,12 +63,14 @@ function typeMixFor(topicId) {
 }
 
 // Learn topics with no question bank yet. Exact-content-asserted below — it
-// cannot grow silently, and shrinks to [] as each task below lands a bank.
-// 2026-07-18: delay, digital-analogue, distortion and leads-and-signals are
+// cannot grow silently, and a new entry here always requires a dated comment
+// explaining why it's kept. Mirrors the KNOWN_ORPHANS idiom in
+// expansions.test.mjs.
+// 2026-07-18: delay, digital-analogue, distortion and leads-and-signals were
 // tasks 2-5 of the revise-question-banks plan (see
-// docs/superpowers/specs/2026-07-18-revise-question-banks-design.md) — this
-// guard test (task 1) is written before any of the four exist.
-const KNOWN_MISSING = ['leads-and-signals'];
+// docs/superpowers/specs/2026-07-18-revise-question-banks-design.md); all
+// four now have banks, so this list is empty — 12/12 Learn topics covered.
+const KNOWN_MISSING = [];
 
 // Load every bank file's raw text (for the glyph lint) and parsed content
 // (for schema/count checks) up front. Parse failures are collected rather

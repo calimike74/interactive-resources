@@ -1,0 +1,254 @@
+{
+  "topicId": "leads-and-signals",
+  "questions": [
+    {
+      "id": "leads-and-signals-mcq-01",
+      "type": "mcq",
+      "question": "Which of the following correctly describes an XLR connector and where it is typically used?",
+      "options": [
+        "A 2-conductor, unbalanced 1/4″ jack designed for connecting instruments such as guitars",
+        "A 3-pin, locking, balanced connector used for microphones and other balanced line-level connections between professional audio equipment",
+        "An unbalanced connector supplied in red/white stereo pairs, common on consumer and DJ equipment",
+        "A 3-conductor 1/4″ jack that carries a balanced mono or unbalanced stereo signal"
+      ],
+      "correctIndex": 1,
+      "explanation": "XLR is the 3-pin, locking, balanced connector standard for microphones and other professional balanced connections. Option 0 describes TS, the unbalanced instrument jack; option 2 describes RCA, the unbalanced consumer/DJ connector; option 3 describes TRS, a different 3-conductor 1/4″ jack. None of the other three connectors locks in place the way XLR does."
+    },
+    {
+      "id": "leads-and-signals-mcq-02",
+      "type": "mcq",
+      "question": "What is the essential difference between a TS (Tip-Sleeve) and a TRS (Tip-Ring-Sleeve) 1/4″ jack?",
+      "options": [
+        "TS has two conductors and is unbalanced, typically used for instruments; TRS has three conductors and can carry a balanced mono signal or unbalanced stereo",
+        "TS and TRS are electrically identical; the only difference is the physical shape of the plug",
+        "TRS is always used for balanced stereo signals and can never carry a mono signal",
+        "TS has three conductors and TRS has two; TRS is used for instruments and TS for headphones"
+      ],
+      "correctIndex": 0,
+      "explanation": "TS's two conductors (tip and sleeve) make it unbalanced, suited to instruments; TRS adds a third conductor (the ring), letting it carry either a balanced mono signal or an unbalanced stereo signal. Option 1 is wrong because the conductor count is a real electrical difference, not just a shape difference. Option 2 wrongly rules out TRS's balanced-mono use. Option 3 reverses the conductor counts and typical uses of the two jacks entirely."
+    },
+    {
+      "id": "leads-and-signals-mcq-03",
+      "type": "mcq",
+      "question": "A DJ connects a turntable's output to a mixer's input using a red-and-white cable pair. What type of connector is this, and what best describes it?",
+      "options": [
+        "XLR — a balanced, locking connector built for professional microphone use",
+        "TRS — a balanced 3-conductor 1/4″ jack",
+        "RCA (phono) — an unbalanced connector, typically supplied as a stereo pair, common on consumer and DJ equipment",
+        "TS — an unbalanced 1/4″ jack designed for instruments"
+      ],
+      "correctIndex": 2,
+      "explanation": "The red-and-white pairing is the giveaway: this is RCA (phono), an unbalanced connector standard on consumer and DJ equipment. XLR (option 0) and TRS (option 1) are both balanced connectors, neither typically supplied as a coloured stereo pair in this way, and TS (option 3) is a 1/4″ instrument jack, not the connector used here."
+    },
+    {
+      "id": "leads-and-signals-mcq-04",
+      "type": "mcq",
+      "question": "Of the four connector types used in a typical studio (XLR, TRS, TS, RCA), which one is capable of carrying phantom power to a condenser microphone?",
+      "options": [
+        "RCA — its unbalanced single-conductor design is the standard connector for phantom power in professional studios",
+        "TS — its 2-conductor design is well suited to carrying both audio and a separate DC power feed",
+        "TRS — phantom power is sent down the ring conductor specifically, which XLR does not have",
+        "XLR — its 3-pin balanced design carries the DC voltage needed to power a condenser microphone's capsule and preamp, alongside the audio signal"
+      ],
+      "correctIndex": 3,
+      "explanation": "XLR is the standard connector for sending phantom power alongside the audio signal, powering a condenser microphone's capsule and internal preamp electronics. RCA and TS are unbalanced connectors with no matched pair of conductors to carry a symmetrical DC feed, and TRS's third conductor is not how phantom power is delivered — that is specifically an XLR arrangement."
+    },
+    {
+      "id": "leads-and-signals-mcq-05",
+      "type": "mcq",
+      "question": "A balanced cable carries three conductors: hot, cold and ground. Which statement correctly explains how this arrangement rejects noise?",
+      "options": [
+        "The cold conductor carries an inverted copy of the hot signal; any noise picked up equally on both is cancelled when the two are combined at the receiving end, while the wanted signal reinforces",
+        "The ground conductor actively blocks noise from reaching the hot and cold conductors, acting as a shield",
+        "Having three conductors simply carries three times the signal strength, which drowns out any noise picked up along the way",
+        "The cold conductor carries a duplicate, non-inverted copy of the hot signal, doubling the signal so noise becomes proportionally less noticeable"
+      ],
+      "correctIndex": 0,
+      "explanation": "The mechanism is a flip-and-sum trick: cold carries an inverted copy of hot, so identical noise picked up on both conductors cancels when combined at the receiver, while the already-opposite wanted signal reinforces. Option 1 overstates the ground conductor's role — it is a reference and shield, not the mechanism that cancels noise. Option 2 misdescribes three conductors as simply adding signal strength. Option 3 is the key error to avoid: if cold carried a non-inverted duplicate, summing would reinforce the noise too, not cancel it — the inversion is what makes the trick work."
+    },
+    {
+      "id": "leads-and-signals-mcq-06",
+      "type": "mcq",
+      "question": "A venue needs to run a keyboard's line-level output around 35 metres from the stage to a mixing desk at the back of the hall. As a general rule, which type of connector should be used for a run this long, and why?",
+      "options": [
+        "An unbalanced TS connector — unbalanced cables carry a stronger signal over distance, so they are always preferred for long runs",
+        "A balanced connector such as XLR or TRS — over long runs, an unbalanced TS cable is increasingly prone to picking up noise, while a balanced connector rejects it",
+        "An RCA connector — RCA is designed specifically for long-distance professional cable runs",
+        "Cable length makes no difference to which connector should be chosen; any of the four will perform identically"
+      ],
+      "correctIndex": 1,
+      "explanation": "The general rule is: the longer the run, the stronger the case for a balanced connector, because an unbalanced TS cable becomes increasingly susceptible to noise and high-frequency loss the longer it runs. Option 0 has the relationship backwards — unbalanced cables are the ones vulnerable over distance, not the preferred choice. RCA (option 2) is a short-run consumer connector, not a long-run professional one. Option 3 ignores that cable length is exactly the factor that makes balance matter."
+    },
+    {
+      "id": "leads-and-signals-mcq-07",
+      "type": "mcq",
+      "question": "What does a DI (direct injection) box do to a guitar's signal, and what type of output does it produce?",
+      "options": [
+        "It boosts the guitar's signal to line level while keeping it high-impedance and unbalanced",
+        "It converts the guitar's signal into a MIDI data stream that a synthesiser can play back",
+        "It converts the guitar's high-impedance, unbalanced, instrument-level signal into a low-impedance, balanced, mic-level signal suitable for a mixing desk's preamp input",
+        "It simply splits the guitar's signal into two identical unbalanced copies, without changing impedance or level"
+      ],
+      "correctIndex": 2,
+      "explanation": "A DI box's job is impedance and level conversion: it takes the guitar's high-impedance, unbalanced, instrument-level signal and outputs a low-impedance, balanced, mic-level signal a preamp input can use properly. Option 0 keeps the very properties (high impedance, unbalanced) that cause the original problem. Option 1 confuses DI conversion with an unrelated process — guitars produce audio, not MIDI, at a DI box. Option 3 describes a splitter, not a DI box; splitting alone does nothing to fix the impedance mismatch."
+    },
+    {
+      "id": "leads-and-signals-num-01",
+      "type": "numeric",
+      "question": "On the chapter's signal-level ladder, microphone level sits at approximately −50 dBu and line level sits at +4 dBu. How many dB of gain must a preamp add to bring a mic-level signal up to line level?",
+      "answer": 54,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Gain needed = line level − mic level = +4 − (−50) = 54 dB. This is the largest single gap on the ladder, which is why microphone signals always need a preamp stage before they can be used anywhere line level is expected — mic level is by far the smallest of the three signal levels."
+    },
+    {
+      "id": "leads-and-signals-num-02",
+      "type": "numeric",
+      "question": "On the same ladder, instrument level sits at approximately −20 dBu. How many dB of gain is needed to bring an instrument-level signal up to line level (+4 dBu)?",
+      "answer": 24,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Gain needed = +4 − (−20) = 24 dB. This is a smaller jump than the mic-to-line gap, since instrument level already sits closer to line level on the ladder — though an instrument-level source still normally needs a DI box to fix the impedance and balance mismatch, not just this level gap, before it reaches a desk properly."
+    },
+    {
+      "id": "leads-and-signals-short-01",
+      "type": "short",
+      "question": "A balanced XLR cable runs 20 metres across a stage cluttered with lighting cable, yet arrives at the mixing desk free of hum. Explain, step by step, how the balanced cable achieves this.",
+      "sampleAnswer": "The cable carries three conductors: hot, cold and ground. The hot conductor carries the original signal, and the cold conductor carries an inverted (flipped-polarity) copy of the same signal. As the cable runs alongside the lighting cable, both the hot and cold conductors pick up the same interference, in the same polarity, because they run side by side. At the receiving end, the desk's input flips the cold conductor's polarity back and sums it with the hot conductor. This addition cancels the identical noise on both conductors, while the wanted signal, already opposite in polarity between hot and cold, reinforces and doubles in level.",
+      "keyPoints": [
+        "Balanced cable uses hot, cold and ground conductors",
+        "The cold conductor carries an inverted copy of the hot signal",
+        "Interference along the run is picked up identically (same polarity) on both conductors",
+        "At the receiver, cold is flipped back and summed with hot: shared noise cancels, wanted signal doubles"
+      ],
+      "explanation": "This is the flip-and-sum trick that defines balanced cabling: because the noise arrives identically on both conductors but the wanted signal is already inverted between them, the same summing operation cancels one and reinforces the other. Unbalanced cables (TS, RCA) have no cold conductor, so there is nothing to flip and sum against — the noise reaches the desk unchallenged."
+    },
+    {
+      "id": "leads-and-signals-short-02",
+      "type": "short",
+      "question": "A guitarist wants to record directly into a mixing desk without using an amplifier. Explain why they cannot simply plug the guitar into the desk's line input, and what a DI box does to solve this.",
+      "sampleAnswer": "A guitar pickup produces an instrument-level, high-impedance, unbalanced signal — not the line-level, low-impedance, balanced signal a desk's line input is designed to receive. Plugging the guitar straight into a line input produces a weak, thin sound because of this mismatch. A DI (direct injection) box sits between the guitar and the desk, converting the high-impedance instrument signal into a low-impedance, balanced, mic-level signal that can instead be sent to a mic preamp input, where the desk's gain stage can bring it up to a usable level properly.",
+      "keyPoints": [
+        "A guitar pickup outputs an instrument-level, high-impedance, unbalanced signal",
+        "A line input expects a line-level, low-impedance, balanced signal — a direct mismatch",
+        "Plugging in directly produces a weak, thin sound",
+        "A DI box converts the signal to low-impedance, balanced, mic level, suitable for a mic preamp input"
+      ],
+      "explanation": "This traces the full mismatch-then-fix chain: instrument level and line level are two different rungs of the same ladder, and a DI box is the specific piece of equipment that bridges the gap by reshaping the guitar's signal into a form the desk's mic preamp — not its line input — can use properly."
+    },
+    {
+      "id": "leads-and-signals-short-03",
+      "type": "short",
+      "question": "For each of the following two scenarios, state which connector should be used and why: (a) connecting a condenser microphone to an audio interface; (b) connecting an electric guitar to a practice amplifier.",
+      "sampleAnswer": "(a) XLR — a condenser microphone needs a balanced, locking connector that can also carry phantom power to the interface, and XLR is the standard connector built for exactly this job. (b) TS — a guitar's pickup output is unbalanced and instrument-level, and TS is the standard 2-conductor unbalanced 1/4″ jack designed for instruments like guitars, matched to the unbalanced instrument input most practice amps provide.",
+      "keyPoints": [
+        "Condenser microphone → XLR: balanced, locking, and able to carry the phantom power the mic needs",
+        "Electric guitar → TS: unbalanced, 2-conductor, the standard connector for instrument-level signals",
+        "Each connector's design matches the electrical and mechanical needs of its source",
+        "Neither connector is interchangeable with the other's typical role"
+      ],
+      "explanation": "Both halves test the same underlying skill — matching a connector to what its source actually needs electrically (balanced or unbalanced, signal level, and any special requirement like phantom power) rather than treating the four connectors as interchangeable."
+    },
+    {
+      "id": "leads-and-signals-mcq-08",
+      "type": "mcq",
+      "question": "A session guitarist plugs their guitar straight into a mixing desk's line input for a quick soundcheck. Even with the gain turned up fully, the sound stays thin and lacks body. What is the most likely cause, and what normally fixes it?",
+      "options": [
+        "The guitar needs re-tuning; a tuning issue is being mistaken for weak signal strength",
+        "Phantom power on the input channel needs switching on to boost the signal",
+        "The desk's line input channel has a faulty fader; a different channel would fix it",
+        "Impedance mismatch — a guitar's pickup is a high-impedance, unbalanced, instrument-level source that a line input is not designed to receive; a DI box converts it to a low-impedance, balanced, mic-level signal the desk can use properly"
+      ],
+      "correctIndex": 3,
+      "explanation": "This is the classic impedance-mismatch symptom: an instrument-level, high-impedance signal fed into a line input, producing a thin, weak result regardless of how far the gain is turned up. Tuning (option 0) has no bearing on signal strength. Phantom power (option 1) powers condenser microphones — it does nothing for a passive guitar pickup and will not fix a level or impedance problem. A faulty fader (option 2) is a plausible-sounding but unrelated equipment fault; the desk is working exactly as designed for the wrong type of input."
+    },
+    {
+      "id": "leads-and-signals-mcq-09",
+      "type": "mcq",
+      "question": "What is the purpose of placing a limiter at the very end of a mixing chain, after EQ, compression and time-based effects have already been applied?",
+      "options": [
+        "To catch any remaining peaks in the fully processed signal, acting as a final ceiling now that every earlier stage has already shaped it",
+        "To boost the overall loudness of the mix before any other processing begins",
+        "To remove background noise picked up by the microphone at the start of the chain",
+        "To convert the balanced signal to unbalanced before it reaches the monitors"
+      ],
+      "correctIndex": 0,
+      "explanation": "A limiter's job is to act as a final safety net for peaks, which only makes sense once every earlier stage has finished shaping the signal — placing it last means nothing downstream can push the signal past where it has already reacted. Option 1 describes a task for early gain staging, not a final limiter. Option 2 is clean-up's job (EQ, gating), which happens first, not last. Option 3 describes a balance conversion, unrelated to what a limiter does."
+    },
+    {
+      "id": "leads-and-signals-mcq-10",
+      "type": "mcq",
+      "question": "A mix engineer is building a channel's processing chain and has an EQ, a compressor and a limiter to place in order. Which order matches the conventional signal chain taught for this topic?",
+      "options": [
+        "Limiter first (catching peaks early), then compressor, then EQ last",
+        "EQ first (clean-up), then compressor (dynamics), then limiter last (catching final peaks)",
+        "Compressor first, then limiter, then EQ last",
+        "The order makes no audible difference, since all three process the same signal regardless of sequence"
+      ],
+      "correctIndex": 1,
+      "explanation": "The conventional order works outward from clean-up: EQ first to shape the tone, compression next to even out dynamics, and the limiter last to catch any final peaks in the fully processed signal. Options 0 and 2 both place the limiter or compressor ahead of EQ, meaning later stages act on a signal that has already been artificially capped or evened out before it was properly cleaned up. Option 3 is the misconception the topic explicitly warns against — order changes what each stage is actually working on."
+    },
+    {
+      "id": "leads-and-signals-mcq-11",
+      "type": "mcq",
+      "question": "A synthesiser's main outputs are connected directly to a mixing desk's line inputs with no additional gain staging needed. What level does the synthesiser's output sit at?",
+      "options": [
+        "Mic level — the smallest of the three signal levels, needing a preamp's gain before use",
+        "Instrument level — a strong but high-impedance, unbalanced level typical of guitar and bass pickups",
+        "Line level — the standardised level equipment expects between its inputs and outputs",
+        "Speaker level — an amplified, high-power signal driving a passive loudspeaker directly"
+      ],
+      "correctIndex": 2,
+      "explanation": "A synthesiser's main output is designed to connect straight into a line input without a preamp or DI box in between, which is exactly what defines line level: the standardised level equipment expects at its inputs and outputs. Mic level (option 0) needs a preamp's gain first; instrument level (option 1) is the high-impedance, unbalanced level typical of pickups, not a synth's main output; speaker level (option 3) is a much higher-power signal driving a loudspeaker, not a line input."
+    },
+    {
+      "id": "leads-and-signals-mcq-12",
+      "type": "mcq",
+      "question": "An instrument-level signal is connected directly into an input designed for a much lower impedance, without any conversion in between. What is the most likely audible symptom?",
+      "options": [
+        "A signal that is too loud, causing the input to clip immediately",
+        "A pitch that is noticeably sharp or flat compared to the source",
+        "No audible change at all — impedance only affects visual metering, not the sound itself",
+        "A thin, weak signal — impedance mismatch reduces effective signal transfer between the two stages"
+      ],
+      "correctIndex": 3,
+      "explanation": "Impedance mismatch reduces how effectively the signal transfers between the two stages, producing a thin, weak result rather than a loud one. It has no effect on pitch (option 1) — that would be a tuning or sample-rate issue, not an impedance one — and it is very much audible, not just a metering artefact (option 2)."
+    },
+    {
+      "id": "leads-and-signals-num-03",
+      "type": "numeric",
+      "question": "Comparing the two lower rungs of the ladder directly: microphone level sits at approximately −50 dBu and instrument level at approximately −20 dBu. What is the gap between them, in dB?",
+      "answer": 30,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Gap = −20 − (−50) = 30 dB. Microphone level is the smallest of the three signal levels on the ladder, sitting 30 dB below instrument level and 54 dB below line level — together, the three figures show mic level as consistently the smallest rung, not just relative to line level."
+    },
+    {
+      "id": "leads-and-signals-short-04",
+      "type": "short",
+      "question": "A student sets up their channel processing in this order: limiter, then EQ, then compression. Explain what goes wrong with this order, and state the conventional order that should be used instead.",
+      "sampleAnswer": "Placing the limiter first means it catches any peaks in the raw, unprocessed signal — before EQ has shaped the tone or compression has evened out the dynamics. Because a limiter is a hard ceiling, any peaks it catches early are fixed at that point, so later processing such as an EQ boost or a compressor changing the dynamics can push the signal into places the limiter has already reacted to, undermining its usefulness as a final safety net. The conventional order is EQ (clean-up) first, then compression (dynamics), then any time-based effects, with the limiter last, so each stage works on a signal that has already been properly shaped by everything before it.",
+      "keyPoints": [
+        "A limiter placed first reacts to the raw, unprocessed signal rather than the finished one",
+        "Later stages (EQ, compression) can then push the signal beyond where the limiter already reacted",
+        "This undermines the limiter's job as a final safety net for peaks",
+        "Conventional order: clean-up (EQ) first, dynamics (compression), time-based effects, limiter last"
+      ],
+      "explanation": "A limiter's usefulness depends on acting on the final, fully shaped version of the signal — reacting to peaks only after EQ and compression have already run. Placed first, it instead reacts to a raw signal that later stages will still reshape, which can undermine its role as a last line of defence against clipping."
+    },
+    {
+      "id": "leads-and-signals-short-05",
+      "type": "short",
+      "question": "Name the three signal levels used in a typical studio, and explain briefly why matching level (and connector type) matters when connecting two pieces of equipment together.",
+      "sampleAnswer": "The three levels are mic level (the smallest, needing a preamp's gain before use), instrument level (stronger, but high-impedance and unbalanced, typical of guitar and bass pickups), and line level (the standardised, balanced level equipment expects between its inputs and outputs). Matching level matters because each stage of equipment is designed to receive a signal within a particular range: sending too small a signal, such as instrument level into a line input, produces a weak, thin result, since the receiving stage is not designed to boost or match that source properly. A DI box exists specifically to bridge the gap when an instrument-level source needs to reach a mic-level or line-level input properly.",
+      "keyPoints": [
+        "Mic level: smallest of the three, needs a preamp's gain",
+        "Instrument level: stronger but high-impedance and unbalanced (guitar, bass pickups)",
+        "Line level: the standardised, balanced level between equipment inputs and outputs",
+        "Mismatched levels produce a weak, thin result when a smaller signal meets an input built for a larger one",
+        "A DI box bridges the gap when an instrument-level source needs a mic- or line-level input"
+      ],
+      "explanation": "The three-tier ladder exists because different sources naturally produce very different signal strengths; treating them as interchangeable is a common cause of weak signals in a studio setup, which is exactly what tools like a DI box or a preamp's gain stage are built to correct."
+    }
+  ]
+}
