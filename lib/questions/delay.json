@@ -4,15 +4,15 @@
     {
       "id": "delay-mcq-01",
       "type": "mcq",
-      "question": "A producer sets a delay plug-in's wet/dry control to 100% wet on an insert and can no longer hear the original vocal — only repeats. What has actually happened to the dry signal?",
+      "question": "On a drum bus, an engineer inserts a delay plug-in on the overheads and turns its wet/dry control fully to wet, planning to blend some dry drums back in later from the channel fader. Soloing the bus afterwards, they hear only the delayed repeats, with no trace of the original cymbal hits. Which statement correctly explains this?",
       "options": [
-        "The dry signal has been permanently deleted by the plug-in and cannot be recovered",
-        "At 100% wet, the plug-in's output is only the delayed repeats — the dry signal is still on the track, it simply isn't passing through this effect any more",
-        "The feedback has been set too high, which is cancelling out the dry signal",
-        "The vocal track has been muted, unrelated to the delay settings"
+        "The wet/dry control sets the balance between repeats and original inside the plug-in itself; at 100% wet, only the delayed repeats reach this plug-in's output — the original drum recording is untouched and still exists on the track",
+        "Because the delay sits on a bus rather than on individual channels, the fully-wet setting has removed the dry signal from every track feeding into that bus",
+        "Fully wet only removes the dry signal if feedback is also turned up; the missing dry drums here mean the feedback must be maxed out too",
+        "Turning wet/dry fully to wet mutes the plug-in's input stage, so the dry drum signal was never recorded to the track in the first place"
       ],
-      "correctIndex": 1,
-      "explanation": "Wet/dry controls the balance between repeats and original within the plug-in itself; on an insert, fully wet means only the wet path reaches the output, which is why delay is often used on a send instead so the dry signal keeps its own untouched path. Feedback governs how many repeats there are, not whether the dry signal is audible, so raising or lowering it would not explain a missing dry vocal."
+      "correctIndex": 0,
+      "explanation": "Wet/dry balances repeats against the original signal inside the plug-in itself, so at 100% wet the plug-in's own output is only the delayed repeats — the underlying drum recording is completely unaffected, whether the insert sits on a bus or an individual channel. Feedback is a separate control governing how many repeats are generated, not whether the dry signal passes through, so it cannot explain a vanished dry signal on its own; and wet/dry shapes the plug-in's output blend, it does not act on its input, so the original take was recorded exactly as played."
     },
     {
       "id": "delay-mcq-02",
@@ -148,15 +148,15 @@
     {
       "id": "delay-mcq-07",
       "type": "mcq",
-      "question": "A vocal delay's repeats are building up an unpleasant hiss because the singer's 's' sounds are being repeated on every pass. What fix addresses this without simply turning the delay level down?",
+      "question": "A rapper's vocal has a tempo-synced eighth-note delay with moderate feedback. On the choruses, the repeated esses and hard consonants build into a bright, fizzy wash sitting on top of the beat. The engineer wants to tame the fizz without turning the delay down or changing its rhythmic pattern. What is the best fix?",
       "options": [
-        "Apply a high-cut (low-pass) filter to the delay return so high frequencies, including sibilance, are progressively rolled off on the repeats",
-        "Increase the feedback so the repeats decay faster and the sibilance is masked",
-        "Pan the wet signal hard to one side to move the sibilance out of the centre of the image",
-        "Apply a low-cut (high-pass) filter to the delay return to remove the low end causing the build-up"
+        "Apply a low-pass (high-cut) filter to the delay return so the high-frequency content, including the repeated esses, is rolled off a little more on each successive repeat",
+        "Lower the feedback to zero so there is only a single repeat left to filter, removing most of the fizz",
+        "Raise the delay return's high-cut filter cutoff frequency so more treble passes through and the repeats brighten until the fizz blends into the beat",
+        "Switch to a ping-pong delay so the repeats alternate between left and right, spreading the fizz across the stereo field instead of the centre"
       ],
       "correctIndex": 0,
-      "explanation": "Filtering high frequencies out of the wet path keeps the repeats audible while stopping sibilance and brightness from stacking up on every echo. Raising the feedback would create more repeats and make the problem worse, panning only moves the repeats in the stereo field without touching their frequency content, and a low-cut filter removes the wrong end of the spectrum — sibilance is a high-frequency problem, not a low-frequency one."
+      "explanation": "A low-pass filter on the delay return progressively rolls off high-frequency content, including the repeated esses, from each successive repeat, taming the fizz while leaving the delay's timing, feedback and level untouched. Raising a high-cut filter's cutoff frequency lets more treble through rather than less, so that would brighten the repeats and make the fizz worse; lowering feedback to zero would strip out almost all the repeats, destroying the rhythmic pattern the engineer wants to keep; and a ping-pong delay only relocates the fizz in the stereo field, it does nothing to its frequency content."
     },
     {
       "id": "delay-mcq-08",
