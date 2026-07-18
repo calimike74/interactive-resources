@@ -1,0 +1,245 @@
+{
+  "topicId": "digital-analogue",
+  "questions": [
+    {
+      "id": "digital-analogue-mcq-01",
+      "type": "mcq",
+      "question": "A guitarist bounces a part to a WAV file and copies that file to three separate backup drives. A friend instead dubs a cassette from an original cassette, then dubs a further copy from that copy, twice more. After these three generations, which statement correctly compares the two outcomes?",
+      "options": [
+        "Digital files can never lose any quality once recorded, regardless of how they are processed or compressed, so the comparison does not apply",
+        "The WAV copies are bit-for-bit identical to the original, with no quality loss on copying; the cassette dubs are physically re-recorded analogue copies, so hiss and pitch instability build up with every generation",
+        "Both processes degrade equally, because copying always introduces some loss regardless of format",
+        "The cassette dubs actually improve in quality with each generation, because analogue tape smooths out noise over time"
+      ],
+      "correctIndex": 1,
+      "explanation": "Digital storage is just numbers, and copying numbers exactly reproduces the same numbers every time; analogue tape is a continuously varying physical medium, so each generation of re-recording can add its own hiss, wow and flutter. Claiming digital files are immune to all quality loss (option 0) overstates the case — lossy compression can still degrade a file — but a straight file copy is a different process from re-recording physical tape. Tape does not improve with copying (option 3); its physical medium only degrades further with each pass."
+    },
+    {
+      "id": "digital-analogue-mcq-02",
+      "type": "mcq",
+      "question": "In a typical recording chain, where does the ADC sit, and what does it do?",
+      "options": [
+        "It sits between the DAW and the monitors, converting stored digital numbers back into a continuous voltage",
+        "It sits inside the microphone itself, converting sound waves directly into MIDI data",
+        "It sits between the microphone (or preamp) and the DAW, converting the incoming continuous analogue voltage into a stream of digital numbers",
+        "It sits after the monitors, correcting the digital signal for room acoustics"
+      ],
+      "correctIndex": 2,
+      "explanation": "The ADC (analogue-to-digital converter) sits at the front of the chain, sampling the microphone's continuous voltage into the stream of numbers the DAW can store and edit. Option 0 describes the DAC's job, at the opposite end of the chain, not the ADC's. A microphone converts sound to voltage, not to MIDI (option 1), and there is no conversion stage after the monitors (option 3) — the round trip ends there."
+    },
+    {
+      "id": "digital-analogue-mcq-03",
+      "type": "mcq",
+      "question": "Which statement correctly describes what the DAC does and where it sits in the chain?",
+      "options": [
+        "It sits between the DAW and the monitors, converting the stored digital numbers back into a continuous analogue voltage the monitors can reproduce",
+        "It sits between the microphone and the DAW, converting the analogue voltage into digital numbers for storage",
+        "It sits inside the DAW itself, applying quantisation to the audio during mixing",
+        "It sits before the ADC in the chain, preparing the analogue signal for digital conversion"
+      ],
+      "correctIndex": 0,
+      "explanation": "The DAC (digital-to-analogue converter) sits at the back end of the chain, reversing the ADC's work — turning the DAW's stored numbers back into the continuous voltage the monitors need to reproduce sound. Option 1 describes the ADC's job, not the DAC's. Quantisation happens during analogue-to-digital conversion, not inside the DAW during mixing (option 2), and the DAC comes after the ADC in the signal's round trip, not before it (option 3)."
+    },
+    {
+      "id": "digital-analogue-mcq-04",
+      "type": "mcq",
+      "question": "Which statement correctly defines sample rate?",
+      "options": [
+        "The number of amplitude levels each individual measurement can be rounded to",
+        "The overall loudness of the digital signal once converted from analogue",
+        "The number of audio channels recorded simultaneously, such as mono or stereo",
+        "The number of amplitude measurements the ADC takes every second, setting the signal's temporal resolution — not its loudness"
+      ],
+      "correctIndex": 3,
+      "explanation": "Sample rate is the ADC's clock speed — how many measurements it takes each second — which sets the signal's temporal resolution. Option 1 is the classic misconception the topic warns against: sample rate has nothing to do with loudness. Option 0 describes bit depth, not sample rate, and option 2 describes channel count, an unrelated setting."
+    },
+    {
+      "id": "digital-analogue-mcq-05",
+      "type": "mcq",
+      "question": "Which statement correctly defines bit depth?",
+      "options": [
+        "The number of measurements the ADC takes every second",
+        "The number of discrete amplitude levels each individual measurement can be rounded to",
+        "The total file size of the recorded audio file",
+        "The highest frequency a recording can capture"
+      ],
+      "correctIndex": 1,
+      "explanation": "Bit depth is the ADC's ruler — the number of discrete amplitude levels each measurement can round to. Option 0 describes sample rate, not bit depth. File size (option 2) depends on bit depth among other factors, but is not what bit depth itself measures, and the highest capturable frequency (option 3) is set by sample rate via the Nyquist limit, not by bit depth."
+    },
+    {
+      "id": "digital-analogue-mcq-06",
+      "type": "mcq",
+      "question": "Which statement correctly expresses the Nyquist rule?",
+      "options": [
+        "The sample rate must be at least equal to the highest frequency you want to capture",
+        "The bit depth must be at least twice the highest frequency you want to capture",
+        "The sample rate must be at least twice the highest frequency you want to capture faithfully",
+        "The highest frequency you can capture is equal to the sample rate itself, not half of it"
+      ],
+      "correctIndex": 2,
+      "explanation": "The Nyquist rule sets the sample rate floor at twice the highest frequency to be captured. Options 0 and 3 are both versions of the classic swap the topic flags: the sample rate is not the frequency ceiling itself, only double it — the true ceiling is half the sample rate. Bit depth (option 1) plays no part in the Nyquist rule at all; it governs dynamic range, a separate figure entirely."
+    },
+    {
+      "id": "digital-analogue-num-01",
+      "type": "numeric",
+      "question": "A sound engineer wants to capture audio frequencies up to 20 kHz, the approximate upper limit of human hearing. Using the Nyquist rule (sample rate must be at least twice the highest frequency captured), what is the minimum sample rate required, in Hz?",
+      "answer": 40000,
+      "tolerance": 0,
+      "unit": "Hz",
+      "explanation": "Minimum sample rate = 2 × highest frequency = 2 × 20,000 Hz = 40,000 Hz. Sampling below this rate would leave 20 kHz content unable to be captured faithfully — it would alias instead. This is the reverse of the more familiar Nyquist question: instead of being given a sample rate and asked for the frequency ceiling, here a target frequency is given and the question asks for the minimum sample rate that supports it."
+    },
+    {
+      "id": "digital-analogue-num-02",
+      "type": "numeric",
+      "question": "A digital system uses 4-bit quantisation, meaning each amplitude measurement is rounded to one of 2^n possible levels, where n is the bit depth. How many discrete amplitude levels does 4-bit quantisation provide?",
+      "answer": 16,
+      "tolerance": 0,
+      "unit": "levels",
+      "explanation": "Quantisation levels = 2^n. For 4-bit: 2^4 = 16 discrete amplitude levels. This is far coarser than the thousands of levels available at higher bit depths, which is why very low bit depths like 4-bit produce an audibly rough, stepped sound as each measurement is rounded to one of only a handful of possible values."
+    },
+    {
+      "id": "digital-analogue-num-03",
+      "type": "numeric",
+      "question": "A recording is made at 24-bit depth. Using the approximation that dynamic range increases by about 6 dB per bit, what is its approximate dynamic range in dB?",
+      "answer": 144,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Dynamic range ≈ bit depth × 6 dB. For 24-bit: 24 × 6 = 144 dB. This is the theoretical dynamic range of 24-bit audio, common in professional recording, giving substantial headroom between the noise floor and the loudest signal the system can hold before clipping."
+    },
+    {
+      "id": "digital-analogue-short-01",
+      "type": "short",
+      "question": "A recording chain runs mic → ADC → DAW → DAC → monitors. Explain what each converter does, and why the chain needs both — not just one — to work.",
+      "sampleAnswer": "The ADC (analogue-to-digital converter) sits near the start of the chain, sampling the microphone's continuously varying voltage into the stream of digital numbers the DAW can store and edit. The DAC (digital-to-analogue converter) sits near the end, reversing that process — turning the DAW's stored numbers back into a continuous voltage the monitors can reproduce as sound. Both stages are needed because conversion happens twice, in opposite directions: without the ADC there would be no digital numbers for the DAW to store or edit in the first place, and without the DAC the monitors would have nothing playable, since they need a continuous voltage rather than a list of stored numbers.",
+      "keyPoints": [
+        "ADC converts the mic's analogue voltage into digital numbers, near the start of the chain",
+        "DAC converts the DAW's stored digital numbers back into a continuous analogue voltage, near the end of the chain",
+        "Conversion happens twice, in opposite directions, across the full round trip",
+        "Monitors need a continuous voltage, not stored numbers, so the DAC step cannot be skipped"
+      ],
+      "explanation": "This traces the round-trip framing directly: conversion happens at both ends of the chain because the mic produces analogue voltage and the monitors need analogue voltage, while the DAW in between only stores and edits digital numbers. Removing either converter leaves the digital and analogue worlds unable to connect at that end of the chain."
+    },
+    {
+      "id": "digital-analogue-short-02",
+      "type": "short",
+      "question": "A collector has an original master tape copied hand-to-hand many times to make a chain of mixtapes; the tenth copy sounds noticeably worse than the first. A friend instead emails the same digital audio file to ten different people. Explain why the digital file does not suffer the same generational quality loss.",
+      "sampleAnswer": "Digital audio is stored as a series of discrete numbers, and copying a digital file means copying those exact numbers — the tenth copy contains identical numbers to the first, so there is nothing to degrade. Analogue tape, by contrast, stores sound as a continuously varying physical pattern; each time it is copied, the physical re-recording process introduces its own hiss, and small variations in tape speed add pitch wobble (wow and flutter). Because each new tape copy is made from the previous physical copy rather than the original, these small errors accumulate with every generation, which is why the tenth mixtape sounds noticeably worse than the first.",
+      "keyPoints": [
+        "Digital audio is a series of discrete numbers; copying reproduces the exact same numbers every time",
+        "Analogue tape stores sound as a continuously varying physical pattern that degrades a little with each physical copy",
+        "Tape copying introduces hiss and pitch instability (wow and flutter) at each generation",
+        "Errors accumulate because each tape copy is made from the previous copy, not the original, while digital copies always match the original exactly"
+      ],
+      "explanation": "This is the core two-worlds distinction: digital numbers copy perfectly because there is no physical medium involved, while analogue tape is a physical medium that degrades a little with every generation of re-recording. Hiss, wow and flutter are the named symptoms of that physical degradation."
+    },
+    {
+      "id": "digital-analogue-short-03",
+      "type": "short",
+      "question": "State the Nyquist rule, and explain what happens to real audio content that sits above the resulting frequency ceiling.",
+      "sampleAnswer": "The Nyquist rule states that the sample rate must be at least twice the highest frequency you want to capture; the resulting ceiling — half the sample rate — is called the Nyquist limit. Real content above that limit does not simply disappear from the recording. Instead, it aliases: the ADC misrepresents it, and it reappears in the audible range as a false, lower-pitched frequency that was never actually present in the original sound.",
+      "keyPoints": [
+        "Nyquist rule: sample rate must be at least twice the highest frequency to be captured",
+        "The resulting ceiling (half the sample rate) is the Nyquist limit",
+        "Content above the Nyquist limit does not disappear cleanly",
+        "It aliases — folding back into the audible range as a false, lower pitch"
+      ],
+      "explanation": "The rule and its consequence are two halves of the same idea: the rule sets where the ceiling is, and aliasing describes what happens when real content crosses it. Missing detail above the ceiling does not vanish quietly — it reappears as audible, false content, which is why the rule matters in practice, not just in theory."
+    },
+    {
+      "id": "digital-analogue-mcq-07",
+      "type": "mcq",
+      "question": "What causes aliasing in a digital recording, and what is its audible result?",
+      "options": [
+        "A real frequency above the Nyquist limit is present in the source; instead of being excluded cleanly, it folds back into the audible range and is recorded as a false, lower pitch",
+        "A real frequency above the Nyquist limit is present in the source; it is simply removed from the recording with no audible trace",
+        "The bit depth is set too low, causing amplitude values to round incorrectly and add a noise floor",
+        "The recording level is set too high, causing the loudest peaks to be clipped"
+      ],
+      "correctIndex": 0,
+      "explanation": "Aliasing happens when real content above the Nyquist limit cannot be captured correctly and instead folds back into the audible range as a false, lower pitch. It does not vanish cleanly (option 1) — that would be a tidy but incorrect outcome. Options 2 and 3 confuse aliasing with two different problems: quantisation noise is a bit-depth issue, and clipping is a level issue, neither of which is what causes aliasing."
+    },
+    {
+      "id": "digital-analogue-mcq-08",
+      "type": "mcq",
+      "question": "A recording is upgraded from 8-bit to 9-bit — one extra bit added to the ADC's ruler, where the number of levels a bit depth provides is 2 to the power of the bit depth. What happens to the number of amplitude levels available for each measurement?",
+      "options": [
+        "It increases by exactly one level",
+        "It increases by exactly six levels, matching the 6 dB per bit rule for dynamic range",
+        "It stays the same — bit depth only affects file size, not the number of levels",
+        "It doubles — each additional bit doubles the number of available amplitude levels"
+      ],
+      "correctIndex": 3,
+      "explanation": "Because levels = 2^n, adding one bit doubles the level count, not just adds a fixed number to it. Option 1 confuses the doubling rule for levels with the separate ~6 dB-per-bit rule for dynamic range — the two formulas measure different things and should not be swapped. Bit depth directly sets the number of levels available, so option 2 is incorrect; option 0 understates the effect of adding a bit."
+    },
+    {
+      "id": "digital-analogue-mcq-09",
+      "type": "mcq",
+      "question": "A recording is made at a very low bit depth, such as 4-bit. What is the audible result?",
+      "options": [
+        "The recording's frequency range narrows, so high frequencies are lost first",
+        "The coarse rounding of each amplitude measurement becomes audible as a raised noise floor — quantisation noise — sitting underneath the wanted signal",
+        "The recording plays back at a slower tempo than intended",
+        "The signal becomes completely inaudible below a certain volume, but is otherwise unaffected"
+      ],
+      "correctIndex": 1,
+      "explanation": "Coarse rounding at low bit depth raises the quantisation noise floor, which becomes audible underneath the wanted signal. Frequency range (option 0) is set by sample rate, not bit depth — a common mix-up the topic separates carefully. Bit depth has no effect on tempo (option 2), and the result is a raised noise floor throughout, not a clean cut-off at low volumes (option 3)."
+    },
+    {
+      "id": "digital-analogue-mcq-10",
+      "type": "mcq",
+      "question": "In the standard mic-to-monitors chain (mic → ADC → DAW → DAC → monitors), which two parts of the signal path remain in the analogue domain?",
+      "options": [
+        "The signal stored and edited inside the DAW, and the signal from the microphone into the ADC",
+        "The signal from the ADC into the DAW, and the signal from the DAW into the DAC",
+        "The signal from the microphone into the ADC, and the signal from the DAC out to the monitors",
+        "None of the chain remains analogue once an ADC is present anywhere in the signal path"
+      ],
+      "correctIndex": 2,
+      "explanation": "The round trip has two analogue segments bookending the digital middle: mic into ADC, and DAC out to monitors. Everything stored and edited inside the DAW (option 0, partly) is digital, not analogue, and the ADC-to-DAW and DAW-to-DAC segments (option 1) are both digital data paths, not analogue voltage. The chain is not digital throughout (option 3) — it starts and ends in the analogue domain by necessity, since mics generate voltage and monitors need voltage to move."
+    },
+    {
+      "id": "digital-analogue-num-04",
+      "type": "numeric",
+      "question": "An old sampler records audio at only 8-bit depth. Using the approximation that dynamic range increases by about 6 dB per bit, what is its approximate total dynamic range in dB?",
+      "answer": 48,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "Dynamic range ≈ bit depth × 6 dB. For 8-bit: 8 × 6 = 48 dB. This is a narrow dynamic range compared to modern standards, which is why classic 8-bit samplers have such a characteristically rough, noisy sound — the gap between the noise floor and the loudest signal they can hold is small."
+    },
+    {
+      "id": "digital-analogue-num-05",
+      "type": "numeric",
+      "question": "A short sound effect is recorded at a sample rate of 48,000 Hz and lasts exactly 2 seconds. How many individual samples does the recording contain?",
+      "answer": 96000,
+      "tolerance": 0,
+      "unit": "samples",
+      "explanation": "Number of samples = sample rate × duration in seconds = 48,000 × 2 = 96,000 samples. Each sample is one amplitude measurement taken by the ADC; over 2 seconds at 48,000 measurements per second, the total count is simply the product of the two."
+    },
+    {
+      "id": "digital-analogue-short-04",
+      "type": "short",
+      "question": "Explain how bit depth determines a recording's dynamic range, including the approximate figure this gives for an 8-bit and a 24-bit recording.",
+      "sampleAnswer": "Bit depth sets how many amplitude levels each individual measurement can be rounded to — think of it as the ADC's ruler. Coarser rounding (fewer bits) means the rounding error itself becomes audible as a noise floor sitting underneath the wanted signal — quantisation noise. Each extra bit roughly halves that rounding error, adding about 6 dB of usable range between the noise floor and the loudest signal the system can hold without clipping. An 8-bit recording therefore has only around 48 dB of dynamic range (8 × 6), while a 24-bit recording reaches roughly 144 dB (24 × 6) — a much deeper gap between noise floor and loudest signal.",
+      "keyPoints": [
+        "Bit depth sets the number of amplitude levels each measurement can round to",
+        "Coarser rounding (fewer bits) raises the audible quantisation noise floor",
+        "Each extra bit adds roughly 6 dB of dynamic range",
+        "8-bit ≈ 48 dB; 24-bit ≈ 144 dB"
+      ],
+      "explanation": "This links the mechanism (rounding error becomes noise) to the formula (roughly 6 dB per bit) and grounds it in two concrete figures. The gap between 48 dB and 144 dB illustrates just how much headroom bit depth buys between the noise floor and the loudest signal a system can hold."
+    },
+    {
+      "id": "digital-analogue-short-05",
+      "type": "short",
+      "question": "A student re-exports a finished mix at 8-bit instead of the original 16-bit, to save disk space, keeping the sample rate exactly the same. Explain what audibly changes as a result, and what does NOT change.",
+      "sampleAnswer": "Dropping from 16-bit to 8-bit removes 8 bits of resolution, and dynamic range falls by roughly 6 dB per bit lost — approximately 48 dB less usable range, meaning the quantisation noise floor rises noticeably and quiet passages are rounded much more coarsely. What does NOT change is the sample rate, which was left untouched: the highest frequency the recording can capture, set by the Nyquist limit, stays exactly the same, since sample rate and bit depth are two independent numbers doing two separate jobs — one sets frequency range, the other sets dynamic range.",
+      "keyPoints": [
+        "Dropping from 16-bit to 8-bit loses 8 bits of resolution",
+        "Dynamic range falls by roughly 6 dB per bit lost (~48 dB less range overall)",
+        "The quantisation noise floor rises and quiet passages round more coarsely",
+        "Sample rate is untouched, so the frequency ceiling (Nyquist limit) stays exactly the same — bit depth and sample rate are independent, each doing a separate job"
+      ],
+      "explanation": "This is the topic's central warning against mixing up the two formulas: sample rate (via Nyquist) sets frequency range, and bit depth sets dynamic range. Changing bit depth alone only ever touches dynamic range and the noise floor — the frequency ceiling is untouched because sample rate was never altered."
+    }
+  ]
+}
