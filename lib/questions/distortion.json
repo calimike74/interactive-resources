@@ -1,0 +1,245 @@
+{
+  "topicId": "distortion",
+  "questions": [
+    {
+      "id": "distortion-mcq-01",
+      "type": "mcq",
+      "question": "A student patches four distortion effects in a chain, wanting to move a signal in stages from the gentlest possible colouring to the most extreme clipping available. In what order should the four effects be engaged, gentlest first?",
+      "options": [
+        "Saturation, then overdrive, then distortion, then fuzz",
+        "Overdrive, then saturation, then fuzz, then distortion",
+        "Fuzz, then distortion, then overdrive, then saturation",
+        "Distortion, then fuzz, then saturation, then overdrive"
+      ],
+      "correctIndex": 0,
+      "explanation": "Correct — the family runs from the subtlest colouring to the harshest clipping: saturation barely reshapes the wave, overdrive and distortion add progressively more grit, and fuzz clips almost to a square wave. Putting fuzz first (option C) is the classic reversal, since fuzz is explicitly the most extreme member, not the mildest. Swapping the middle two out of sequence (options B and D) also breaks the graded continuum, since overdrive is consistently gentler than distortion."
+    },
+    {
+      "id": "distortion-mcq-02",
+      "type": "mcq",
+      "question": "What happens to a signal when a distortion effect's drive control is turned up?",
+      "options": [
+        "The signal is pushed harder into clipping, and the sound becomes louder and harsher at the same time",
+        "Only the amount of clipping increases; the perceived loudness stays exactly where it was before drive was touched",
+        "Only the loudness increases; the shape of the clipped waveform is unaffected once the signal has crossed the clipping threshold",
+        "The tone becomes darker, because drive is the control responsible for filtering high frequencies"
+      ],
+      "correctIndex": 0,
+      "explanation": "Drive pushes the signal harder into the circuit, and more clipping is inseparable from more perceived loudness and harshness — the two happen together, not one without the other. Treating loudness and clipping as independent (options B and C) misses this dual effect, and confusing drive with a filtering control mixes it up with tone, which is the separate control that shapes which frequencies survive the clipped edge."
+    },
+    {
+      "id": "distortion-mcq-03",
+      "type": "mcq",
+      "question": "In a distortion effect's Drive / Tone / Level chain, what is the specific job of the Level control?",
+      "options": [
+        "It sets the output volume to compensate for loudness gained from driving the signal harder, without touching how much clipping has occurred",
+        "It increases how hard the signal is pushed into the clipping circuit",
+        "It filters the clipped signal to remove or keep the harshest high frequencies",
+        "It blends the distorted signal back against the clean original for a parallel effect"
+      ],
+      "correctIndex": 0,
+      "explanation": "Level is the compensating control: it restores a usable output volume after drive has made the signal louder, without undoing or adding to the clipping itself. Option B describes drive's job (increasing clipping), option C describes tone's job (filtering the clipped edge), and option D describes mix — level changes only the final output volume."
+    },
+    {
+      "id": "distortion-mcq-04",
+      "type": "mcq",
+      "question": "What does the Tone control do in a distortion effect's signal chain?",
+      "options": [
+        "It filters the already-clipped signal, typically cutting or retaining the harshest high frequencies at the edge of the distorted sound",
+        "It determines how hard the input signal is pushed into clipping",
+        "It sets the final output volume after clipping has occurred",
+        "It blends the distorted signal with an unprocessed copy of the original"
+      ],
+      "correctIndex": 0,
+      "explanation": "Tone acts after the clipping stage, shaping which frequencies survive the harsh edge that clipping creates — usually as a simple filter. It is not drive (which controls how much clipping happens), level (which sets output volume), or mix (which blends distorted and clean signal), even though all four controls typically sit in the same chain."
+    },
+    {
+      "id": "distortion-mcq-05",
+      "type": "mcq",
+      "question": "How does soft clipping differ from hard clipping in shape and sound?",
+      "options": [
+        "Hard clipping cuts the signal peaks abruptly at a fixed threshold for a harsh, aggressive tone; soft clipping compresses the peaks gradually as they approach the threshold, so its harmonics fade faster and the tone sounds gentler",
+        "Hard clipping compresses gradually while soft clipping cuts abruptly — the names describe the opposite of what each actually does",
+        "There is no audible difference between the two; both cut the waveform identically",
+        "Soft clipping only affects low frequencies, while hard clipping only affects high frequencies"
+      ],
+      "correctIndex": 0,
+      "explanation": "Hard clipping's abrupt cutoff at the threshold produces a harsher sound, while soft clipping's gradual compression as the signal approaches the threshold produces a gentler result whose harmonics fade away faster. The names are not swapped — 'hard' genuinely means the sharper, more aggressive cutoff — and the difference is about the shape of the cutoff, not about which frequency range each affects."
+    },
+    {
+      "id": "distortion-mcq-06",
+      "type": "mcq",
+      "question": "Two distorted signals are compared: Signal A contains only odd harmonics; Signal B contains even harmonics as well as odd ones. Which pairing correctly matches each signal to its typical character?",
+      "options": [
+        "Signal A sounds thinner and buzzier; Signal B sounds thicker and warmer",
+        "Signal A sounds warmer and fuller; Signal B sounds thinner and buzzier",
+        "Both signals sound identical, since harmonic content above the fundamental has no audible effect",
+        "Signal A is louder than Signal B, but neither has a distinct tonal character"
+      ],
+      "correctIndex": 0,
+      "explanation": "Odd-harmonics-only content (from symmetric clipping) is typically described as thin, buzzy or hollow, while adding even harmonics (from asymmetric distortion) fills the sound out and gives it the character usually described as warm. Swapping the pairing (option B) reverses the actual association, and claiming harmonic content is inaudible or merely a volume difference (options C and D) ignores that harmonic content is precisely what gives distorted sounds their distinct tonal character."
+    },
+    {
+      "id": "distortion-mcq-07",
+      "type": "mcq",
+      "question": "Which distortion type is specifically associated with an asymmetric circuit and the even-order harmonics it adds?",
+      "options": [
+        "Tube saturation",
+        "Hard clipping",
+        "Fuzz",
+        "Bitcrushing"
+      ],
+      "correctIndex": 0,
+      "explanation": "Tube saturation is the named example of an asymmetric circuit — one that treats the positive and negative halves of the wave differently — and this asymmetry is what produces even harmonics. Hard clipping and fuzz are both symmetric, producing odd harmonics instead, and bitcrushing is a digital quantisation effect with no analogue circuit asymmetry involved at all."
+    },
+    {
+      "id": "distortion-mcq-08",
+      "type": "mcq",
+      "question": "A digital plug-in reduces the bit depth of a recording to create a deliberately gritty, coarse-stepped sound. Which effect is this, and how does its mechanism differ from tube saturation?",
+      "options": [
+        "Bitcrushing — it works by discarding bits in the digital domain, whereas tube saturation is analogue circuit colour from a real component being driven hard",
+        "Bitcrushing — it is the same mechanism as tube saturation, simply implemented in software instead of hardware",
+        "Tube saturation — reducing bit depth is another name for driving a valve circuit hard",
+        "Neither — reducing bit depth changes only the sample rate, which has no connection to distortion"
+      ],
+      "correctIndex": 0,
+      "explanation": "This is bitcrushing: a digital effect that deliberately throws bits away, coarsening the quantisation staircase on purpose. It works on a completely different principle from tube saturation, which is a real component (a valve) being overdriven in the analogue domain — the two are not the same mechanism in different eras, and bit depth is distinct from sample rate, not another name for it."
+    },
+    {
+      "id": "distortion-mcq-09",
+      "type": "mcq",
+      "question": "A listener describes a guitar tone as 'just a touch of warmth, no obvious grit, the note still sounds essentially clean.' Which member of the distortion family does this describe?",
+      "options": [
+        "Saturation",
+        "Overdrive",
+        "Distortion",
+        "Fuzz"
+      ],
+      "correctIndex": 0,
+      "explanation": "Saturation sits apart as the subtlest member of the family, adding warmth without audibly reshaping the wave — exactly the 'barely touched, still essentially clean' character described. Overdrive, distortion and fuzz all involve progressively more obvious clipping and would not be described as leaving the note essentially clean."
+    },
+    {
+      "id": "distortion-mcq-10",
+      "type": "mcq",
+      "question": "A guitarist describes a tone as 'thick and sustained, almost like a buzzing square wave — the original note has all but disappeared under the effect.' Which distortion type does this describe?",
+      "options": [
+        "Fuzz",
+        "Soft clipping",
+        "Tube saturation",
+        "Bitcrushing"
+      ],
+      "correctIndex": 0,
+      "explanation": "Fuzz is the most extreme member of the distortion family, clipping the wave almost to a square and burying the original signal under dense new harmonic content — matching the 'square wave' and 'disappeared under the effect' description exactly. Soft clipping and tube saturation both sit at the gentler end of the family, and bitcrushing is a digital quantisation effect rather than an analogue clipping one."
+    },
+    {
+      "id": "distortion-num-01",
+      "type": "numeric",
+      "question": "Harmonics are whole-number multiples of a signal's fundamental frequency — the 2nd harmonic is 2 times the fundamental, the 3rd is 3 times, and so on. A guitar note has a fundamental frequency of 200 Hz. What is the frequency of its 3rd harmonic?",
+      "answer": 600,
+      "tolerance": 0,
+      "unit": "Hz",
+      "explanation": "The 3rd harmonic is 3 times the fundamental: 3 × 200 Hz = 600 Hz. A common error is adding rather than multiplying (200 + 3 = 203 Hz), or confusing the harmonic number with a simple octave doubling (2 × 200 = 400 Hz, which is the 2nd harmonic, not the 3rd)."
+    },
+    {
+      "id": "distortion-num-02",
+      "type": "numeric",
+      "question": "Harmonics are whole-number multiples of a signal's fundamental frequency — the 2nd harmonic is 2 times the fundamental, the 3rd is 3 times, and so on. A synth pad has a fundamental frequency of 150 Hz. What is the frequency of its 2nd harmonic — the harmonic tube saturation is well known for adding?",
+      "answer": 300,
+      "tolerance": 0,
+      "unit": "Hz",
+      "explanation": "The 2nd harmonic is 2 times the fundamental: 2 × 150 Hz = 300 Hz. This is an even harmonic, the kind an asymmetric circuit such as tube saturation adds; a tempting slip is halving instead of doubling (150 ÷ 2 = 75 Hz), which finds a frequency below the fundamental rather than a harmonic above it."
+    },
+    {
+      "id": "distortion-num-03",
+      "type": "numeric",
+      "question": "Harmonics are whole-number multiples of a signal's fundamental frequency. A symmetric clipping circuit — one that treats the positive and negative halves of the wave identically — adds only odd-numbered harmonics (3rd, 5th, 7th, and so on) on top of the unaffected fundamental. A signal with a fundamental frequency of 100 Hz is passed through a symmetric clipping circuit. What is the frequency of the lowest new harmonic this clipping adds?",
+      "answer": 300,
+      "tolerance": 0,
+      "unit": "Hz",
+      "explanation": "The lowest odd harmonic above the fundamental is the 3rd: 3 × 100 Hz = 300 Hz. The fundamental itself (100 Hz) is not a 'new' harmonic since it was already present before clipping, and the 2nd harmonic (200 Hz) does not apply here because symmetric clipping produces only odd harmonics, not even ones."
+    },
+    {
+      "id": "distortion-short-01",
+      "type": "short",
+      "question": "Explain what happens to a waveform when it is clipped, and why clipped signals are typically perceived as louder and brighter than the original.",
+      "sampleAnswer": "Clipping happens when a signal is pushed past what a circuit can carry cleanly, so its peaks are reshaped — flattened or cut off — rather than passing through untouched. This reshaping adds new harmonic content above the fundamental that was not present in the clean signal. Because the flattened peaks pack more average energy into the waveform and the added harmonics sit at higher frequencies, clipped signals are perceived as both louder and brighter than the original, even at the same underlying input level.",
+      "keyPoints": [
+        "Clipping reshapes the peaks of the waveform once a threshold is exceeded — flattening or cutting them rather than letting them pass unchanged",
+        "This reshaping adds new harmonic content above the fundamental frequency",
+        "Flattened peaks carry more average energy than the original rounded peaks, increasing perceived loudness",
+        "The added harmonics sit at higher frequencies than the fundamental, contributing to a brighter perceived tone"
+      ],
+      "explanation": "Clipping is fundamentally a waveshaping process: once the signal exceeds what the circuit can carry, the peaks stop following the original shape and are reshaped instead. This is why distortion is inseparable from added harmonic content — the new, sharper-edged waveform contains frequencies the clean signal never had. The louder, brighter perception follows directly from this: squared-off peaks raise the average energy of the signal, and the new harmonics extend its content upward in frequency."
+    },
+    {
+      "id": "distortion-short-02",
+      "type": "short",
+      "question": "Explain how symmetric and asymmetric clipping differ, and what harmonic content each produces.",
+      "sampleAnswer": "Symmetric clipping circuits treat the positive and negative halves of the waveform identically, and this symmetry means they add only odd harmonics — this covers both hard clipping (harsh) and soft clipping (gentler, faster-decaying odd harmonics). Asymmetric circuits, such as tube saturation, treat the two halves of the wave differently; that asymmetry is what introduces even harmonics as well, which is usually described as a warmer character.",
+      "keyPoints": [
+        "Symmetric circuits process the positive and negative halves of the wave identically",
+        "Symmetric clipping (both hard and soft) produces odd harmonics only",
+        "Asymmetric circuits, such as tube saturation, treat the two halves of the wave differently",
+        "This asymmetry is specifically what introduces even harmonics, associated with a warmer sound"
+      ],
+      "explanation": "The determining factor is whether the circuit's response is symmetric or not, not whether the clipping is 'hard' or 'soft' — both hard and soft clipping are symmetric and both produce odd harmonics only, with soft clipping's simply decaying faster and sounding gentler. Even harmonics only appear once a circuit stops treating the two halves of the wave the same way, which is what asymmetric distortion (tube saturation) specifically does."
+    },
+    {
+      "id": "distortion-short-03",
+      "type": "short",
+      "question": "A distortion effect has Drive, Tone and Level controls (and often Mix). Describe the role each of these plays in the signal chain.",
+      "sampleAnswer": "Drive pushes the signal harder into the circuit — more drive means more clipping, and with it more harshness and loudness together. Tone acts on the already-clipped signal, usually as a filter that cuts or keeps the harshest high frequencies at the edge of the distorted sound. Level compensates for any volume gained by driving harder, restoring a usable output level without undoing the clipping itself. Mix, where present, blends the distorted signal back against the clean original for a parallel effect.",
+      "keyPoints": [
+        "Drive pushes the signal harder into the clipping circuit — more drive means more clipping, harshness and loudness together",
+        "Tone filters the already-clipped signal, typically cutting or retaining the harshest high frequencies",
+        "Level compensates for loudness gained from driving harder, without changing how much clipping has occurred",
+        "Mix (where present) blends the distorted signal against the clean original for a parallel effect"
+      ],
+      "explanation": "These four controls act at different points in the chain: drive determines how much clipping happens, tone shapes the resulting sound afterwards, level restores a workable output volume, and mix (where offered) sets the balance between processed and unprocessed signal. Confusing drive and level is a common error, since both affect perceived loudness — but only drive changes how much the signal is actually being clipped."
+    },
+    {
+      "id": "distortion-num-04",
+      "type": "numeric",
+      "question": "Harmonics are whole-number multiples of a signal's fundamental frequency — the 2nd harmonic is 2 times the fundamental, the 3rd is 3 times, and so on. A distorted bass note has a fundamental frequency of 250 Hz. What is the frequency of its 5th harmonic?",
+      "answer": 1250,
+      "tolerance": 0,
+      "unit": "Hz",
+      "explanation": "The 5th harmonic is 5 times the fundamental: 5 × 250 Hz = 1250 Hz. A common slip is multiplying by 4 instead of 5 (1000 Hz, mistaking it for the 4th harmonic), or adding rather than multiplying (250 + 5 = 255 Hz)."
+    },
+    {
+      "id": "distortion-num-05",
+      "type": "numeric",
+      "question": "Harmonics are whole-number multiples of a signal's fundamental frequency — the 2nd harmonic is 2 times the fundamental, the 3rd is 3 times, and so on. A synthesiser lead driven through tube saturation has a fundamental frequency of 120 Hz. What is the frequency of its 4th harmonic — an even harmonic of the kind this circuit is known for adding?",
+      "answer": 480,
+      "tolerance": 0,
+      "unit": "Hz",
+      "explanation": "The 4th harmonic is 4 times the fundamental: 4 × 120 Hz = 480 Hz. This is an even harmonic, consistent with tube saturation's asymmetric circuit; a tempting error is using the 3rd-harmonic multiplier instead (3 × 120 = 360 Hz), which would be an odd harmonic from a symmetric circuit, not the even one asked for here."
+    },
+    {
+      "id": "distortion-short-04",
+      "type": "short",
+      "question": "Compare the character of overdrive and fuzz as members of the distortion family.",
+      "sampleAnswer": "Overdrive sits near the gentle end of the distortion family — a mild-to-moderate clipping that adds grit and edge while still leaving the original note clearly recognisable. Fuzz sits at the opposite, most extreme end — very heavy clipping that pushes the waveform almost to a square wave, creating dense new harmonic content and heavy sustain, to the point where the original note is largely buried under the effect.",
+      "keyPoints": [
+        "Overdrive is near the gentle end of the family, adding moderate grit while the original note stays recognisable",
+        "Fuzz is the most extreme member, clipping the wave almost to a square wave",
+        "Fuzz creates dense harmonic content and heavy sustain",
+        "At extreme fuzz settings, the original note is largely buried under the added harmonic content"
+      ],
+      "explanation": "Overdrive and fuzz sit at opposite ends of the same gentle-to-extreme continuum, with distortion sitting between them. Overdrive is often assumed to be a strong effect, but within the family it is actually one of the milder options — it is fuzz, with its near-square-wave clipping and dense harmonic content, that represents the extreme."
+    },
+    {
+      "id": "distortion-short-05",
+      "type": "short",
+      "question": "Explain why bitcrushing and analogue saturation, though both loosely described as 'dirt' or distortion, belong to different families of effect.",
+      "sampleAnswer": "Analogue saturation gets its colour from a real component — a tube, transistor or transformer — being pushed hard, so the distortion happens as a physical, continuous process in the analogue domain. Bitcrushing works entirely differently: it is a digital effect that deliberately reduces bit depth, turning quantisation — normally something engineers try to avoid — into a deliberate coarse, stepped effect. One is analogue circuit colour from an overdriven component; the other is digital number-reduction applied on purpose.",
+      "keyPoints": [
+        "Analogue saturation is colour from a real component (tube, transistor, transformer) being driven hard",
+        "This happens as a continuous, physical process in the analogue domain",
+        "Bitcrushing is a digital effect that deliberately reduces bit depth",
+        "Bitcrushing turns quantisation — usually avoided — into a deliberate, coarse, stepped effect on purpose"
+      ],
+      "explanation": "Though both are grouped loosely as 'dirt', the two work on entirely different principles: one is a real analogue component being overdriven, the other is a digital process manipulating the numbers directly. The giveaway is that bitcrushing has no analogue equivalent — a transformer being overdriven is not the same mechanism as bitcrushing in another era, it produces a superficially similar gritty result by a physically different route."
+    }
+  ]
+}
