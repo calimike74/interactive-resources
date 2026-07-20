@@ -1,7 +1,12 @@
 # Review rulings applied — Handoff (2026-07-20)
 
-**Branch:** `learn-revise-gap`, commits `2a7c91d`..`dffeac3` (4 commits). **Not pushed, not deployed.**
-**⚠️ Same deploy-time lineage note as the revise banks:** this branch's history still contains the parallel Signature Machine session's compression-press wip (`1f6fdf7`). Deploying as-is ships that hidden resource. The cherry-pick set is now 13 commits rather than 9 — say the word and I'll build a clean branch off `main`.
+**🟢 DEPLOYED TO PRODUCTION 2026-07-20.** `main` fast-forwarded `47fee56` → `d46fcf0`.
+
+The compression-press lineage problem is **resolved, not deferred**. Rather than ship the parallel session's wip (`1f6fdf7`), a clean branch was cut from `main` and 18 commits cherry-picked around it — `git cherry-pick 9321ad6`, then `git cherry-pick 1f6fdf7..learn-revise-gap`. Zero conflicts, because none of this work ever touched the hazard files. Proof of isolation: `git diff --name-only` between the deploy branch and `learn-revise-gap` returned *exactly* the 19 compression-press and hazard files and nothing else, and all five hazard files are byte-identical to `main`.
+
+Live verification: 9 pages 200, `/compression-press` returns **404** (correctly absent), and 15/15 Playwright checks against production. `learn-revise-gap` still carries the other session's work — leave it alone; it is now behind `main` and theirs to rebase.
+
+**⚑ Note for future verification:** `curl` cannot verify this work. The interactives and ExpandableText are client-rendered and lazy-mount on scroll, so `dotted` and `play it` return 0 in raw HTML. That is expected, not a regression — use Playwright.
 
 ## The headline: one root cause explained three of your complaints
 
