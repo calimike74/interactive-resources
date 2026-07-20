@@ -44,6 +44,19 @@ Verified in-browser on the three chapters you named: one click starts, the sound
 
 **Audio exclusivity.** Now that controls latch, two interactives on one page can drone simultaneously — previously impossible. The fix needs an `onStopped` callback through all 15 components to avoid button-state desync; that's a bigger change than your report warranted, so I left it. Flagging it rather than silently shipping it.
 
+## Cross-topic audit (prompted by the expansion work)
+
+Expansions apply globally to every course, not per topic — so tripling the coverage tripled the collision surface. I audited all 268 triggers: **5 fire outside their home course.** Four are legitimate shared vocabulary and worth keeping — "low-pass filter" from synthesis landing on the EQ filters row is precisely what your own EQ/synth bridge resource teaches ("LPF = LPF = LPF"), and "dynamic range" and "quantisation noise" mean the same thing on the sampling and digital-analogue rows.
+
+One was a real mismatch: **"modulation depth"** on MIDI's *Beyond the Note* row means mod-wheel range, but it was serving an FM lecture about carriers and sidebands. Fixed by rewriting the entry to lead with the general meaning and treat FM as the specific case — correct on both rows now. Per-topic scoping would also have fixed it but would have destroyed the four useful cross-matches, so I did not go that way.
+
+**Also worth knowing:** the delay course's ADT row previously counted as "covered" only because the bare word "LFO" from the *synthesis* course happens to appear in its text. That row now has two genuine ADT-specific expansions, both mechanism-only with no millisecond figures, pending your ADT ruling.
+
+## Two content facts flagged for you
+
+1. **Sampling, sample-rate row:** "44.1 kHz survives from the CD format, while 48 kHz became the standard in professional production and video work." Industry convention, not stated in the course's own text.
+2. **Sampling, root-note row:** octave transposition described as "exactly doubles the speed." Restates the course's own logic; the twelfth-root-of-two factor was deliberately avoided to keep it non-calculator-safe.
+
 ## Still open — genuinely yours
 
 1. **The six wave-3 chapter maps** (`docs/superpowers/specs/2026-07-17-learn-rollout-wave3-chapter-maps.md`) — your standing #1 gate, not yet ruled on.
