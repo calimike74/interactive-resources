@@ -693,7 +693,7 @@ const DelayFlashcards = () => {
         id: "a3",
         question: "How does modulation affect delay?",
         answer: "Adding modulation (like chorus or vibrato) to a delay effect causes the delay time to fluctuate slightly, creating more organic-sounding echoes with subtle pitch and timing variations.",
-        furtherLearning: "Compare a standard digital delay to one with light modulation to hear how it adds character and analog-like qualities to the echoes.",
+        furtherLearning: "Compare a standard digital delay to one with light modulation to hear how it adds character and analogue-like qualities to the echoes.",
         practicalExample: "Tape echo units naturally had modulation due to mechanical imperfections; modern delay plugins often include modulation to emulate this warmth.",
         difficulty: 3,
         image: "modulated-delay",
@@ -722,7 +722,7 @@ const DelayFlashcards = () => {
       {
         id: "a6",
         question: "What is ADT (Automatic Double Tracking) and why is it important for A-Level study? (Edexcel 1.12e)",
-        answer: "ADT uses very short delays (5-40ms) with modulation to simulate double-tracking without re-recording. A-Level significance: Pioneered at Abbey Road Studios, demonstrates understanding of psychoacoustics and creative vs. corrective applications.",
+        answer: "ADT uses very short delays (15-40ms) with modulation to simulate double-tracking without re-recording. A-Level significance: Pioneered at Abbey Road Studios, demonstrates understanding of psychoacoustics and creative vs. corrective applications.",
         furtherLearning: "Ableton Live: Use Echo with very short delay times, add slight modulation. Compare to actual double-tracking - essential technique for Component 4 practical work.",
         practicalExample: "Component 4 Context: Beatles vocals, modern pop production. Shows technical knowledge of studio techniques and their digital emulation - key assessment area for advanced students.",
         difficulty: 3,

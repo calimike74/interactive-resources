@@ -204,10 +204,13 @@ test('every Learn topic has a question bank, except KNOWN_MISSING', () => {
     );
 });
 
-test('the mixing bank is a known orphan: registered on disk, no Learn topic, no topic page', () => {
-    assert.ok(banks.some(b => b.topicId === 'mixing'), 'mixing bank should exist on disk (known-unreachable, not deleted — Mike\'s open decision)');
-    assert.ok(!getLearnTopicIds().includes('mixing'), 'mixing should not (yet) have a Learn topic');
-    assert.ok(!getAllTopicIds().includes('mixing'), 'mixing should not (yet) have a topic page');
+// Retired 2026-07-20 on Mike's decision: the mixing bank was unreachable (no Learn
+// topic, no topic page) and is no longer carried. This test is the guard against it
+// silently returning — if mixing is ever revived, it needs a Learn topic and a page too.
+test('the mixing bank stays retired: not on disk, no Learn topic, no topic page', () => {
+    assert.ok(!banks.some(b => b.topicId === 'mixing'), 'mixing bank was retired — it must not reappear in the registry');
+    assert.ok(!getLearnTopicIds().includes('mixing'), 'mixing should not have a Learn topic');
+    assert.ok(!getAllTopicIds().includes('mixing'), 'mixing should not have a topic page');
 });
 
 test('no bank contains a banned glyph (▶ or ↔ — only ▸/⇄ are permitted)', () => {

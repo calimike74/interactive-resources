@@ -43,7 +43,7 @@
     {
       "id": "leads-and-signals-mcq-04",
       "type": "mcq",
-      "question": "Of the four connector types used in a typical studio (XLR, TRS, TS, RCA), which one is capable of carrying phantom power to a condenser microphone?",
+      "question": "Of the four connector types used in a typical studio (XLR, TRS, TS, RCA), which one is the standard connector for delivering phantom power to a condenser microphone?",
       "options": [
         "RCA — its unbalanced single-conductor design is the standard connector for phantom power in professional studios",
         "TS — its 2-conductor design is well suited to carrying both audio and a separate DC power feed",
@@ -51,7 +51,7 @@
         "XLR — its 3-pin balanced design carries the DC voltage needed to power a condenser microphone's capsule and preamp, alongside the audio signal"
       ],
       "correctIndex": 3,
-      "explanation": "XLR is the standard connector for sending phantom power alongside the audio signal, powering a condenser microphone's capsule and internal preamp electronics. RCA and TS are unbalanced connectors with no matched pair of conductors to carry a symmetrical DC feed, and TRS's third conductor is not how phantom power is delivered — that is specifically an XLR arrangement."
+      "explanation": "XLR is the standard connector for sending phantom power alongside the audio signal, powering a condenser microphone's capsule and internal preamp electronics. Phantom power needs a balanced pair of conductors carrying the same DC voltage, which is why RCA and TS — both unbalanced — cannot supply it. The TRS option misdescribes the mechanism: the voltage is not sent down one dedicated conductor, and XLR is the connector professional equipment uses for phantom power as standard."
     },
     {
       "id": "leads-and-signals-mcq-05",
