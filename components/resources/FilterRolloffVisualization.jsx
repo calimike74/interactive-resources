@@ -530,7 +530,7 @@ const FilterRolloffVisualization = () => {
                 <h4 className="font-medium mb-2">Resonance and Q</h4>
                 <p className="text-sm text-gray-600">
                   Resonance boosts frequencies at the cutoff point. High Q creates a peak that
-                  emphasizes the cutoff frequency. At extreme settings, the filter can
+                  emphasises the cutoff frequency. At extreme settings, the filter can
                   self-oscillate, producing a sine wave.
                 </p>
               </div>

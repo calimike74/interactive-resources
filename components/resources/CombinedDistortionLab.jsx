@@ -98,8 +98,8 @@ const DistortionLab = () => {
       genres: ['Blues', 'Classic Rock', 'Jazz Fusion', 'Country'],
       plugins: ['Waves Abbey Road Saturator', 'UAD Studer', 'Soundtoys Decapitator'],
       abletonDevice: 'Saturator (Soft Sine) / Glue Compressor (Clip)',
-      edexcelRef: 'Simulates analog tape saturation. Gradual onset of distortion.',
-      historicalNote: 'The sound of analog tape saturation that defined recordings from the 1960s-1990s.'
+      edexcelRef: 'Simulates analogue tape saturation. Gradual onset of distortion.',
+      historicalNote: 'The sound of analogue tape saturation that defined recordings from the 1960s-1990s.'
     },
     tube: {
       name: 'Tube Saturation',
@@ -163,7 +163,7 @@ const DistortionLab = () => {
       if (distortionType === 'hard') {
         if (isOdd) amp = (1/i) * driveAmount * 0.8;
       } else if (distortionType === 'tube') {
-        // Even harmonics emphasized in tube saturation
+        // Even harmonics emphasised in tube saturation
         if (!isOdd) amp = (1/i) * driveAmount * 0.7;
         else amp = (1/(i*2)) * driveAmount * 0.3;
       } else if (distortionType === 'soft') {
@@ -417,7 +417,7 @@ const DistortionLab = () => {
     {
       term: 'Saturation',
       difficulty: 'intermediate',
-      definition: 'Gentle distortion that occurs when analog equipment is driven hard. Adds harmonics and compression while maintaining musicality.',
+      definition: 'Gentle distortion that occurs when analogue equipment is driven hard. Adds harmonics and compression while maintaining musicality.',
       related: ['Soft Clipping', 'Tube', 'Harmonic Content']
     },
     {
@@ -483,7 +483,7 @@ const DistortionLab = () => {
     {
       term: 'Gain Staging',
       difficulty: 'intermediate',
-      definition: 'The practice of managing signal levels through a signal chain to optimize headroom and control where distortion occurs.',
+      definition: 'The practice of managing signal levels through a signal chain to optimise headroom and control where distortion occurs.',
       related: ['Headroom', 'Signal Chain', 'Threshold']
     }
   ];
@@ -850,7 +850,7 @@ const DistortionLab = () => {
                 <Alert className="mb-4 bg-blue-50 border-blue-200">
                   <Info className="w-4 h-4 text-blue-700" />
                   <AlertDescription className="text-blue-900 text-sm">
-                    <strong>Teaching Tip:</strong> Note how symmetric clipping (Hard/Soft) emphasizes
+                    <strong>Teaching Tip:</strong> Note how symmetric clipping (Hard/Soft) emphasises
                     <span className="text-orange-700 font-bold bg-orange-100 px-1 rounded mx-1">ODD</span>
                     harmonics, while asymmetric distortion (Tube) introduces
                     <span className="text-blue-700 font-bold bg-blue-100 px-1 rounded mx-1">EVEN</span>
@@ -978,13 +978,13 @@ const DistortionLab = () => {
                   <div className="bg-white p-3 rounded border">
                     <strong className="text-blue-700">Saturation:</strong>
                     <p className="text-sm text-gray-700 mt-1">
-                      Gentle distortion from analog equipment. Adds harmonics while maintaining musicality.
+                      Gentle distortion from analogue equipment. Adds harmonics while maintaining musicality.
                     </p>
                   </div>
                   <div className="bg-white p-3 rounded border">
                     <strong className="text-blue-700">Gain Staging:</strong>
                     <p className="text-sm text-gray-700 mt-1">
-                      Managing signal levels through a chain to optimize headroom and control distortion.
+                      Managing signal levels through a chain to optimise headroom and control distortion.
                     </p>
                   </div>
                 </div>

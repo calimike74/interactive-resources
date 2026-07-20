@@ -587,9 +587,9 @@ const Part2Bridge = ({ onComplete }) => {
                     LPF = LPF = LPF
                 </div>
                 <p style={{ color: '#8b909a', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
-                    A Low-Pass Filter in a synthesizer works <em>identically</em> to a Low-Pass Filter in an EQ.
+                    A Low-Pass Filter in a synthesiser works <em>identically</em> to a Low-Pass Filter in an EQ.
                     <br />
-                    <strong style={{ color: '#c9cdd4' }}>The math is the same. The physics is the same. Only the application differs.</strong>
+                    <strong style={{ color: '#c9cdd4' }}>The maths is the same. The physics is the same. Only the application differs.</strong>
                 </p>
             </div>
 
@@ -657,7 +657,7 @@ const Part2Bridge = ({ onComplete }) => {
                 • Usually static - set and forget<br/>
                 • Subtle resonance for surgical cuts<br/>
                 • Part of FIXING sounds<br/><br/>
-                <strong>KEY POINT:</strong> A Low-Pass Filter works identically in both contexts. The math and physics are the same - only the application differs.
+                <strong>KEY POINT:</strong> A Low-Pass Filter works identically in both contexts. The maths and physics are the same - only the application differs.
             </CopyableNote>
         </div>
     );

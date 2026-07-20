@@ -54,7 +54,7 @@ const AcousticsFlashcards = () => {
     intermediate: [
       {
         id: "i1",
-        question: "How do different materials affect sound wave behavior?",
+        question: "How do different materials affect sound wave behaviour?",
         answer: "Hard surfaces are more reflective, soft surfaces are more absorptive, thicker/denser objects provide more absorption, and thinner objects allow more transmission. The effect also depends on the frequency range of the original waveform.",
         furtherLearning: "Compare how your voice sounds when speaking toward a brick wall vs a thick curtain vs a thin window.",
         practicalExample: "Concrete walls reflect most frequencies, while thick fiberglass insulation absorbs them. A thin wooden door transmits more sound than a heavy metal door.",
@@ -75,7 +75,7 @@ const AcousticsFlashcards = () => {
       {
         id: "i3",
         question: "What is SPL and how does it relate to decay time measurements?",
-        answer: "SPL stands for Sound Pressure Level, measured in decibels (dB). In reverberation measurements, we plot SPL on the Y-axis and time on the X-axis to visualize how quickly the sound energy decays in a space.",
+        answer: "SPL stands for Sound Pressure Level, measured in decibels (dB). In reverberation measurements, we plot SPL on the Y-axis and time on the X-axis to visualise how quickly the sound energy decays in a space.",
         furtherLearning: "Use an SPL meter app to measure how sound levels change over time after a loud clap in different rooms.",
         practicalExample: "An impulse response graph shows the initial spike in SPL, followed by the decay curve that defines the room's acoustic character.",
         difficulty: 2,

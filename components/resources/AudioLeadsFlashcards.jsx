@@ -14,7 +14,7 @@ const AudioLeadsFlashcards = () => {
       {
         id: "b1",
         question: "What is an XLR connector and what is it primarily used for?",
-        answer: "XLR is a 3-pin balanced analog audio connector that locks in place. It's primarily used for microphones, connecting pro audio equipment, and balanced line-level connections.",
+        answer: "XLR is a 3-pin balanced analogue audio connector that locks in place. It's primarily used for microphones, connecting pro audio equipment, and balanced line-level connections.",
         furtherLearning: "Practice identifying XLR connectors on microphones and mixing desks. Notice how they lock securely in place.",
         practicalExample: "When connecting a dynamic microphone to a mixing desk, you'll use an XLR cable. The locking mechanism prevents accidental disconnection during live performances.",
         difficulty: 1,
@@ -98,7 +98,7 @@ const AudioLeadsFlashcards = () => {
       {
         id: "a1",
         question: "How can RCA connectors be used for digital audio, and what should you watch out for?",
-        answer: "Orange RCA connectors carry S/PDIF digital coaxial signals. Unlike analog RCA, these carry digital audio data. However, standard RCA cables may not have the correct impedance (75\u03A9) for digital use.",
+        answer: "Orange RCA connectors carry S/PDIF digital coaxial signals. Unlike analogue RCA, these carry digital audio data. However, standard RCA cables may not have the correct impedance (75\u03A9) for digital use.",
         furtherLearning: "Compare dedicated 75\u03A9 coaxial cables versus standard RCA cables for digital connections and note any differences in reliability.",
         practicalExample: "When connecting a digital mixer's S/PDIF output to an audio interface, use proper 75\u03A9 digital coax cable rather than standard RCA for best results.",
         difficulty: 3,
@@ -129,7 +129,7 @@ const AudioLeadsFlashcards = () => {
         id: "a4",
         question: "What are the considerations when using XLR for digital audio protocols?",
         answer: "XLR can carry digital protocols like AES/EBU, but this requires dedicated 110\u03A9 impedance cables. Standard analogue microphone XLR cables have no specified characteristic impedance, so they are not guaranteed to perform reliably for digital AES/EBU runs. Digital signals are more sensitive to cable quality and length.",
-        furtherLearning: "Research the differences between analog and digital XLR cables, particularly impedance specifications and maximum cable lengths.",
+        furtherLearning: "Research the differences between analogue and digital XLR cables, particularly impedance specifications and maximum cable lengths.",
         practicalExample: "Professional digital mixing consoles often use AES/EBU connections over XLR, requiring specific digital audio cables rather than standard microphone cables.",
         difficulty: 3,
         image: "digital-xlr",
@@ -481,7 +481,7 @@ const AudioLeadsFlashcards = () => {
 
         {/* Specifications */}
         <text x="145" y="30" fill="#2d3748" fontSize="8">110&#937; Impedance</text>
-        <text x="145" y="40" fill="#2d3748" fontSize="7">Different from analog</text>
+        <text x="145" y="40" fill="#2d3748" fontSize="7">Different from analogue</text>
         <text x="145" y="50" fill="#2d3748" fontSize="7">analogue XLR (no fixed Z)</text>
 
         <text x="145" y="70" fill="#e53e3e" fontSize="7">Requires proper</text>

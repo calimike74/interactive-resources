@@ -30,7 +30,7 @@ const GRAPHIC_PRESETS = {
 
 const QUIZ_QUESTIONS = [
     {
-        question: 'Why is it called a "graphic" equalizer?',
+        question: 'Why is it called a "graphic" equaliser?',
         options: [
             'Because it uses graphs to calculate EQ',
             'Because the slider positions visually represent the EQ curve',
@@ -84,7 +84,7 @@ const QUIZ_QUESTIONS = [
         options: [
             'Graphic is cheaper, parametric is expensive',
             'Graphic offers fast visual feedback, parametric offers surgical precision',
-            'Graphic is digital, parametric is analog',
+            'Graphic is digital, parametric is analogue',
             'Graphic has more bands, parametric has fewer',
         ],
         correct: 1,
@@ -975,7 +975,7 @@ export default function GraphicParametricEQ() {
                         color: 'rgba(255,255,255,0.85)',
                         textShadow: '0 1px 4px rgba(0,0,0,0.2)',
                     }}>
-                        Compare two essential equalizer types through interactive exploration
+                        Compare two essential equaliser types through interactive exploration
                     </p>
                 </div>
             </div>
@@ -1185,7 +1185,7 @@ export default function GraphicParametricEQ() {
                         <CopyableNote title="Key Definitions" variant="definition">
                             <p><strong>Graphic Equalizer:</strong> A filter bank with bandpass filters routed in parallel, with fixed center frequencies separated by regular intervals (octave, half-octave, or third-octave). Only gain is adjustable per band.</p>
                             <br />
-                            <p><strong>Parametric Equalizer:</strong> An equalizer with fewer bands but more parameters per band. Allows control of center frequency, gain, and Q for each band. Filters are routed in series.</p>
+                            <p><strong>Parametric Equalizer:</strong> An equaliser with fewer bands but more parameters per band. Allows control of center frequency, gain, and Q for each band. Filters are routed in series.</p>
                         </CopyableNote>
 
                         <CopyableNote title="Exam Tip" variant="exam">

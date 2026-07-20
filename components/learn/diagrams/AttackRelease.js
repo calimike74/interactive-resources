@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-// Progressive disclosure: signal crossing threshold → fast attack demo → slow attack demo → release behavior
+// Progressive disclosure: signal crossing threshold → fast attack demo → slow attack demo → release behaviour
 export default function AttackRelease() {
     const canvasRef = useRef(null);
     const frameRef = useRef(0);
@@ -197,7 +197,7 @@ export default function AttackRelease() {
                 ctx.globalAlpha = 1;
             }
 
-            // === BOTTOM: Release behavior ===
+            // === BOTTOM: Release behaviour ===
             // --- Phase 4 (340-440): Release illustration ---
             const p4 = progress(f, 340, 60);
 

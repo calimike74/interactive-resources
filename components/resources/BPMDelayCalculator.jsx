@@ -1729,7 +1729,7 @@ function BPMDelayCalculator() {
               </div>
               <div className="tl-margin-note">
                 <span className="tl-margin-term">Wow &amp; flutter</span>
-                Pitch wobble caused by tiny speed variations of the tape — the &ldquo;warmth&rdquo; of analog delay.
+                Pitch wobble caused by tiny speed variations of the tape — the &ldquo;warmth&rdquo; of analogue delay.
               </div>
             </div>
           </aside>

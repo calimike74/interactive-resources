@@ -17,9 +17,9 @@ The cutoff frequency is where the filter begins to take effect. The filter slope
 
 Q factor — the quality factor — defines how narrow or wide a filter's effect is. It is calculated as the centre frequency divided by the bandwidth. A high Q creates a narrow, surgical cut or boost. A low Q creates a broad, gentle adjustment. Q and bandwidth are inversely proportional — as Q goes up, bandwidth narrows.
 
-There are two main EQ architectures. A graphic equalizer splits the spectrum into fixed bands — typically 10 or 31 — each with its own gain slider. The bands are spaced at octave or third-octave intervals, and filters are routed in parallel. You get a visual "graph" of your frequency curve, but the frequencies are locked. You can only adjust gain, not frequency or Q.
+There are two main EQ architectures. A graphic equaliser splits the spectrum into fixed bands — typically 10 or 31 — each with its own gain slider. The bands are spaced at octave or third-octave intervals, and filters are routed in parallel. You get a visual "graph" of your frequency curve, but the frequencies are locked. You can only adjust gain, not frequency or Q.
 
-A parametric equalizer takes a different approach. It offers fewer bands — typically 4 to 7 — but each band gives you full control over three parameters: centre frequency, gain, and Q. Filters are routed in series, cascading through each band. This gives you surgical precision for targeting specific frequency problems.
+A parametric equaliser takes a different approach. It offers fewer bands — typically 4 to 7 — but each band gives you full control over three parameters: centre frequency, gain, and Q. Filters are routed in series, cascading through each band. This gives you surgical precision for targeting specific frequency problems.
 
 Shelving filters complete the toolkit. A high shelf boosts or cuts all frequencies above its shelf point by an equal amount — unlike a lowpass filter where attenuation increases with frequency. A low shelf does the same for frequencies below its point. Peak and notch filters boost or cut around a centre frequency while leaving surrounding frequencies untouched. These shelving filters are the building blocks of most parametric EQ designs.`;
 
