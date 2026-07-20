@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { startPreset, describePreset } from '@/lib/learn/audio-presets';
 import { editorial as ED } from '@/lib/theme';
 
-export default function AudioBlock({ preset, params, label = 'Hold to listen' }) {
+export default function AudioBlock({ preset, params, label = 'Play to listen' }) {
     const [playing, setPlaying] = useState(false);
     const handleRef = useRef(null);
 
@@ -28,12 +28,7 @@ export default function AudioBlock({ preset, params, label = 'Hold to listen' })
                 type="button"
                 aria-pressed={playing}
                 aria-label={`${label}: ${describePreset(preset)}`}
-                onPointerDown={start}
-                onPointerUp={stop}
-                onPointerLeave={stop}
-                onPointerCancel={stop}
-                onKeyDown={e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); playing ? stop() : start(); } }}
-                onContextMenu={e => e.preventDefault()}
+                onClick={() => (playing ? stop() : start())}
                 style={{
                     display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
                     padding: '0.5rem 1rem', borderRadius: '9999px',
@@ -46,7 +41,7 @@ export default function AudioBlock({ preset, params, label = 'Hold to listen' })
                 }}
             >
                 <span aria-hidden="true" style={{ fontSize: '0.7rem' }}>{playing ? '■' : '▸'}</span>
-                {playing ? 'Playing… release to stop' : label}
+                {playing ? 'Playing — tap to stop' : label}
             </button>
         </div>
     );

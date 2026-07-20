@@ -59,9 +59,8 @@ export default function BitDepthSlider() {
             />
             <button
                 type="button"
-                onPointerDown={start} onPointerUp={stop} onPointerLeave={stop} onPointerCancel={stop}
-                onKeyDown={e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); playing ? stop() : start(); } }}
-                aria-label={playing ? 'Release to stop the sustained tone' : 'Hold to hear the sustained tone'}
+                onClick={() => (playing ? stop() : start())}
+                aria-label={playing ? 'Stop the sustained tone' : 'Play the sustained tone'}
                 style={{
                     marginTop: '0.6rem', padding: '0.35rem 0.9rem', borderRadius: '9999px',
                     border: `1.5px solid ${playing ? ED.accent : ED.accentFaint}`,
@@ -70,7 +69,7 @@ export default function BitDepthSlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ release to stop' : '▸ hold to hear it'}
+                {playing ? '■ playing — tap to stop' : '▸ play it'}
             </button>
         </div>
     );

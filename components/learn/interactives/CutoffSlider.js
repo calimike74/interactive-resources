@@ -48,8 +48,7 @@ export default function CutoffSlider() {
             />
             <button
                 type="button"
-                onPointerDown={start} onPointerUp={stop} onPointerLeave={stop} onPointerCancel={stop}
-                onKeyDown={e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); playing ? stop() : start(); } }}
+                onClick={() => (playing ? stop() : start())}
                 style={{
                     marginTop: '0.6rem', padding: '0.35rem 0.9rem', borderRadius: '9999px',
                     border: `1.5px solid ${playing ? ED.accent : ED.accentFaint}`,
@@ -58,7 +57,7 @@ export default function CutoffSlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ release to stop' : '▸ hold to hear it'}
+                {playing ? '■ playing — tap to stop' : '▸ play it'}
             </button>
         </div>
     );
