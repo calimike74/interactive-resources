@@ -226,6 +226,7 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
     };
 
     return (
+        <>
         <nav
             ref={panelRef}
             style={{
@@ -449,5 +450,26 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                 }
             `}</style>
         </nav>
+
+        {/* The bar is position:fixed, so it reserves no space in the document
+            and everything after it — including the global SiteFooter, which the
+            root layout renders after {children} — could slide underneath it.
+            At maximum scroll that left Privacy and Cookie preferences literally
+            unclickable: elementFromPoint at the centre of each returned this
+            bar rather than the control, and there was nowhere further to
+            scroll. A cookie-preferences control a user cannot reach is a
+            problem beyond looking unfinished, on a site whose members are
+            16–18.
+
+            This spacer gives the bar back the room it occupies. Height matches
+            the bar's resting height (measured 100px on the live site) plus the
+            iOS safe-area inset the bar itself pads for. Deliberately not tied
+            to the open-panel state: the panel is a transient overlay, and a
+            spacer that changed height would shift the page under the reader. */}
+        <div
+            aria-hidden="true"
+            style={{ height: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}
+        />
+        </>
     );
 }
