@@ -226,6 +226,7 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
     };
 
     return (
+        <>
         <nav
             ref={panelRef}
             style={{
@@ -441,6 +442,26 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
             </div>
 
             <style jsx global>{`
+                /* This bar is position:fixed, so it reserves no space in the
+                   document, and the global SiteFooter — which the root layout
+                   renders after {children} — sat underneath it. At maximum
+                   scroll that left Privacy and Cookie preferences genuinely
+                   unreachable: elementFromPoint at the centre of each returned
+                   the bar, and scrollY + innerHeight was already the document
+                   height, so no amount of scrolling could uncover them. A
+                   cookie-preferences control the user cannot reach is a problem
+                   beyond looking unfinished, on a service whose members are
+                   16-18.
+
+                   The padding goes on body rather than on a spacer element
+                   beside the nav: a spacer sits *before* the footer, so the
+                   footer simply moves down with it and still ends the document
+                   under the bar. Only trailing space after the last element
+                   actually frees it. Scoped by styled-jsx to while this bar is
+                   mounted, so pages without it get no dead space. */
+                body {
+                    padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px));
+                }
                 @keyframes neu-bounce {
                     0% { transform: scale(1); }
                     40% { transform: scale(1.15); }
@@ -449,5 +470,6 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                 }
             `}</style>
         </nav>
+        </>
     );
 }
