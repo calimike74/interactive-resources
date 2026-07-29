@@ -442,6 +442,26 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
             </div>
 
             <style jsx global>{`
+                /* This bar is position:fixed, so it reserves no space in the
+                   document, and the global SiteFooter — which the root layout
+                   renders after {children} — sat underneath it. At maximum
+                   scroll that left Privacy and Cookie preferences genuinely
+                   unreachable: elementFromPoint at the centre of each returned
+                   the bar, and scrollY + innerHeight was already the document
+                   height, so no amount of scrolling could uncover them. A
+                   cookie-preferences control the user cannot reach is a problem
+                   beyond looking unfinished, on a service whose members are
+                   16-18.
+
+                   The padding goes on body rather than on a spacer element
+                   beside the nav: a spacer sits *before* the footer, so the
+                   footer simply moves down with it and still ends the document
+                   under the bar. Only trailing space after the last element
+                   actually frees it. Scoped by styled-jsx to while this bar is
+                   mounted, so pages without it get no dead space. */
+                body {
+                    padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px));
+                }
                 @keyframes neu-bounce {
                     0% { transform: scale(1); }
                     40% { transform: scale(1.15); }
@@ -450,26 +470,6 @@ export default function BottomTabBar({ activeTab, onTabChange, onPanelOption }) 
                 }
             `}</style>
         </nav>
-
-        {/* The bar is position:fixed, so it reserves no space in the document
-            and everything after it — including the global SiteFooter, which the
-            root layout renders after {children} — could slide underneath it.
-            At maximum scroll that left Privacy and Cookie preferences literally
-            unclickable: elementFromPoint at the centre of each returned this
-            bar rather than the control, and there was nowhere further to
-            scroll. A cookie-preferences control a user cannot reach is a
-            problem beyond looking unfinished, on a site whose members are
-            16–18.
-
-            This spacer gives the bar back the room it occupies. Height matches
-            the bar's resting height (measured 100px on the live site) plus the
-            iOS safe-area inset the bar itself pads for. Deliberately not tied
-            to the open-panel state: the panel is a transient overlay, and a
-            spacer that changed height would shift the page under the reader. */}
-        <div
-            aria-hidden="true"
-            style={{ height: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}
-        />
         </>
     );
 }
