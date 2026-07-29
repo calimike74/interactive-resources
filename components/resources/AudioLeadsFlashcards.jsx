@@ -856,7 +856,7 @@ const AudioLeadsFlashcards = () => {
       </div>
 
       <Card
-        className={`mb-4 transform transition-all duration-300 ${
+        className={`mb-4 transform transition-transform duration-300 ease-house ${
           showAnswer ? 'scale-105' : ''
         }`}
       >

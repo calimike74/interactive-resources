@@ -679,7 +679,7 @@ const DistortionLab = () => {
                       <button type="button"
                         key={key}
                         onClick={() => setDistortionType(key)}
-                        className={`px-3 py-2 rounded text-sm font-medium transition-all ${
+                        className={`px-3 py-2 rounded text-sm font-medium transition-[background-color,box-shadow,color,border-color] ease-house ${
                           distortionType === key
                             ? 'text-white shadow-md'
                             : 'bg-white text-gray-700 border hover:shadow'
@@ -876,7 +876,7 @@ const DistortionLab = () => {
                     >
                       {/* Bar */}
                       <div
-                        className="w-full rounded-t-sm transition-all duration-300 relative border-2"
+                        className="w-full rounded-t-sm transition-[height,background-color,border-color] duration-300 ease-house relative border-2"
                         style={{
                           height: `${Math.min(80, amp * 80)}%`,
                           backgroundColor: i === 0 ? '#94a3b8' : activeColor,
@@ -1329,7 +1329,7 @@ const DistortionLab = () => {
                           key={idx}
                           onClick={() => !showFeedback && handleAnswer(idx)}
                           disabled={showFeedback}
-                          className={`w-full text-left p-4 rounded border-2 transition-all ${
+                          className={`w-full text-left p-4 rounded border-2 transition-[background-color,border-color] ease-house ${
                             showFeedback
                               ? idx === filteredQuestions[currentQuestion].correct
                                 ? 'bg-green-50 border-green-500'

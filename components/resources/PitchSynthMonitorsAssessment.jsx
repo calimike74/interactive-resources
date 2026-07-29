@@ -358,7 +358,7 @@ export default function PitchSynthMonitorsAssessment() {
                     </div>
                     <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                         <div
-                            className="h-full rounded-full bg-emerald-500 transition-all duration-300"
+                            className="h-full rounded-full bg-emerald-500 transition-[width] duration-300 ease-house"
                             style={{ width: `${((index) / total) * 100}%` }}
                         />
                     </div>

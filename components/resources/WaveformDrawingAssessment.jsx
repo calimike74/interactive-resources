@@ -271,7 +271,7 @@ export default function WaveformDrawingAssessment() {
                     </div>
                     <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
                         <div
-                            className="h-full bg-emerald-600 transition-all duration-300"
+                            className="h-full bg-emerald-600 transition-[width] duration-300 ease-house"
                             style={{ width: `${(progress / total) * 100}%` }}
                         />
                     </div>

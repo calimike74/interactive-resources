@@ -407,7 +407,7 @@ function ProgressBar({ progress, total, type }) {
             </div>
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-stone-200">
                 <div
-                    className="h-full rounded-full bg-amber-700 transition-all"
+                    className="h-full rounded-full bg-amber-700 transition-[width] ease-house"
                     style={{ width: `${(progress / total) * 100}%` }}
                 />
             </div>

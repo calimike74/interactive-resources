@@ -399,7 +399,7 @@ export default function MIDIBinaryAssessment() {
                 </div>
                 <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                     <div
-                        className="h-full bg-blue-600 transition-all duration-300"
+                        className="h-full bg-blue-600 transition-[width] duration-300 ease-house"
                         style={{ width: `${(progress / total) * 100}%` }}
                     />
                 </div>
