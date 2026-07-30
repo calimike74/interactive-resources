@@ -47,6 +47,16 @@ const DESIGN_TOKENS_CSS = `
 const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
 
+// The stereo stage is drawn in a fixed coordinate space and scaled to fit
+// whatever width it is given. Hit-testing converts back into this space, so the
+// two can never drift apart the way they did when the width was hard-coded.
+const STAGE_W = 500, STAGE_H = 340;
+const STAGE_PAD = 20;                       // dead margin at each end of the field
+const stageXForPan = (pan) => ((pan + 100) / 200) * (STAGE_W - STAGE_PAD * 2) + STAGE_PAD;
+const stageYForIndex = (i) => 50 + (i % 6) * 45 + (i >= 6 ? 20 : 0);
+const panForStageX = (x) =>
+  Math.round(Math.min(100, Math.max(-100, ((x - STAGE_PAD) / (STAGE_W - STAGE_PAD * 2)) * 200 - 100)));
+
 // ============================================
 // COPYABLE NOTE
 // ============================================
@@ -231,6 +241,8 @@ const StereoPanning = () => {
   const [activePreset, setActivePreset] = useState('rock');
   const [instruments, setInstruments] = useState(INSTRUMENT_PRESETS.rock.instruments);
   const [dragging, setDragging] = useState(null);
+  // where inside the instrument the pointer grabbed it, in stage space
+  const grabOffset = useRef(0);
   const [micMode, setMicMode] = useState('xy');
   const [micAngle, setMicAngle] = useState(110);
   const [micSpacing, setMicSpacing] = useState(60);
@@ -274,12 +286,15 @@ const StereoPanning = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
-    const w = 500, h = 340;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.scale(dpr, dpr);
+    const w = STAGE_W, h = STAGE_H;
+    // Everything below draws in a fixed 500x340 space, but the stage renders at
+    // whatever width CSS gives it — so one set of coordinates works on a 390px
+    // phone and on desktop. Writing canvas.style.width here would override the
+    // responsive width set in the JSX and push the stage off the side of a phone.
+    const fit = (canvas.getBoundingClientRect().width || w) / w;
+    canvas.width = Math.round(w * fit * dpr);
+    canvas.height = Math.round(h * fit * dpr);
+    ctx.setTransform(fit * dpr, 0, 0, fit * dpr, 0, 0);
 
     // Background
     ctx.fillStyle = '#060A14';
@@ -310,8 +325,7 @@ const StereoPanning = () => {
     ctx.fillStyle = 'rgba(232, 228, 223, 0.3)';
     ctx.font = "9px 'Geist Mono', monospace";
     for (let p = -100; p <= 100; p += 25) {
-      const x = ((p + 100) / 200) * (w - 40) + 20;
-      ctx.fillText(p === 0 ? 'C' : `${p}`, x, h - 8);
+      ctx.fillText(p === 0 ? 'C' : `${p}`, stageXForPan(p), h - 8);
     }
 
     // Mono overlay
@@ -328,8 +342,10 @@ const StereoPanning = () => {
     const list = challengeActive ? challengeInstruments : instruments;
     list.forEach((inst, i) => {
       const pan = monoCheck ? 0 : inst.pan;
-      const x = ((pan + 100) / 200) * (w - 40) + 20;
-      const y = 50 + (i % 6) * 45 + (i >= 6 ? 20 : 0);
+      // same helpers the hit-test uses, so what is drawn and what is grabbable
+      // cannot drift apart
+      const x = stageXForPan(pan);
+      const y = stageYForIndex(i);
 
       // Circle
       ctx.fillStyle = dragging === i ? '#FF6B35' : 'rgba(74, 127, 212, 0.25)';
@@ -364,7 +380,15 @@ const StereoPanning = () => {
   // again whenever drawStage changes identity.
   const attachStage = useCallback((node) => {
     stageRef.current = node;
-    if (node) drawStage();
+    if (!node) return;
+    drawStage();
+    // the backing store is sized from the measured width, so it has to be
+    // rebuilt whenever that width changes — rotate a phone otherwise and the
+    // stage stays at its old resolution
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => drawStage());
+    ro.observe(node);
+    return () => ro.disconnect();
   }, [drawStage]);
 
   // ============================================
@@ -465,41 +489,59 @@ const StereoPanning = () => {
   // ============================================
   // DRAG HANDLING
   // ============================================
-  const handleStageMouseDown = (e) => {
+  // Client coordinates into the stage's own 500x340 space. Dividing by the fit
+  // is what makes the drag work at any width — the old code assumed the canvas
+  // was always 500px wide, so on a phone the hit targets sat well right of the
+  // instruments and the reachable pan range was clipped to about a quarter.
+  const toStageSpace = (e) => {
+    const rect = stageRef.current.getBoundingClientRect();
+    const fit = rect.width / STAGE_W || 1;
+    return { x: (e.clientX - rect.left) / fit, y: (e.clientY - rect.top) / fit };
+  };
+
+  const handleStagePointerDown = (e) => {
     const canvas = stageRef.current;
     if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const w = 500;
+    const { x: mx, y: my } = toStageSpace(e);
     const list = challengeActive ? challengeInstruments : instruments;
     for (let i = 0; i < list.length; i++) {
-      const pan = monoCheck ? 0 : list[i].pan;
-      const x = ((pan + 100) / 200) * (w - 40) + 20;
-      const y = 50 + (i % 6) * 45 + (i >= 6 ? 20 : 0);
-      if (Math.hypot(mx - x, my - y) < 22) {
+      const x = stageXForPan(monoCheck ? 0 : list[i].pan);
+      if (Math.hypot(mx - x, my - stageYForIndex(i)) < 22) {
+        // hold the instrument where it was actually grabbed, so it does not
+        // jump its centre to the pointer the instant you touch it
+        grabOffset.current = mx - x;
+        // capture keeps the drag alive past the edge of the canvas, which is
+        // what the old onMouseLeave={up} was silently cutting short. It throws
+        // if the pointer is no longer active, and losing capture is survivable —
+        // the drag just ends at the canvas edge — so never let it kill the grab.
+        try { canvas.setPointerCapture(e.pointerId); } catch { /* not fatal */ }
         setDragging(i);
         return;
       }
     }
   };
 
-  const handleStageMouseMove = (e) => {
-    if (dragging === null) return;
-    const canvas = stageRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const w = 500;
-    const newPan = Math.round(Math.min(100, Math.max(-100, ((mx - 20) / (w - 40)) * 200 - 100)));
-    if (challengeActive) {
-      setChallengeInstruments(prev => prev.map((inst, i) => i === dragging ? { ...inst, pan: newPan } : inst));
-    } else {
-      setInstruments(prev => prev.map((inst, i) => i === dragging ? { ...inst, pan: newPan } : inst));
-    }
+  const handleStagePointerMove = (e) => {
+    if (dragging === null || !stageRef.current) return;
+    const newPan = panForStageX(toStageSpace(e).x - grabOffset.current);
+    const update = (prev) => prev.map((inst, i) => (i === dragging ? { ...inst, pan: newPan } : inst));
+    if (challengeActive) setChallengeInstruments(update);
+    else setInstruments(update);
   };
 
-  const handleStageMouseUp = () => setDragging(null);
+  const endStageDrag = (e) => {
+    const canvas = stageRef.current;
+    if (canvas?.hasPointerCapture?.(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+    grabOffset.current = 0;
+    setDragging(null);
+  };
+
+  // a cancelled pointer is not a drop — same cleanup, nothing committed beyond
+  // the last move the user actually made
+  const cancelStageDrag = () => {
+    grabOffset.current = 0;
+    setDragging(null);
+  };
 
   // Challenge mode
   const startChallenge = () => {
@@ -686,16 +728,25 @@ const StereoPanning = () => {
                 ref={attachStage}
                 role="img"
                 aria-label={`Stereo field showing ${(challengeActive ? challengeInstruments : instruments).map(i => `${i.label} at ${i.pan === 0 ? 'centre' : (i.pan < 0 ? `L${Math.abs(i.pan)}` : `R${i.pan}`)}`).join(', ')}`}
-                style={{ display: 'block', borderRadius: 'var(--radius-lg)', cursor: dragging !== null ? 'grabbing' : 'grab', width: '100%', maxWidth: '500px', margin: '0 auto' }}
-                onMouseDown={handleStageMouseDown}
-                onMouseMove={handleStageMouseMove}
-                onMouseUp={handleStageMouseUp}
-                onMouseLeave={handleStageMouseUp}
+                style={{
+                  display: 'block', borderRadius: 'var(--radius-lg)',
+                  cursor: dragging !== null ? 'grabbing' : 'grab',
+                  width: '100%', maxWidth: `${STAGE_W}px`, aspectRatio: `${STAGE_W} / ${STAGE_H}`,
+                  margin: '0 auto',
+                  touchAction: 'none',   // or the browser pans the page instead of the instrument
+                }}
+                onPointerDown={handleStagePointerDown}
+                onPointerMove={handleStagePointerMove}
+                onPointerUp={endStageDrag}
+                onPointerCancel={cancelStageDrag}
               />
-              {/* Keyboard fallback sliders — visible in challenge mode for accessible pan control */}
-              {challengeActive && !challengeSubmitted && (
+              {/* Pan sliders. These are the keyboard path and the small-screen
+                  path, so they belong in both modes — when they only appeared in
+                  challenge mode, explore mode had no way to move an instrument
+                  without a mouse. */}
+              {!challengeSubmitted && (
                 <div style={{ marginTop: 'var(--space-3)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--space-2)' }}>
-                  {challengeInstruments.map((inst, i) => (
+                  {(challengeActive ? challengeInstruments : instruments).map((inst, i) => (
                     <div key={inst.id}>
                       <label style={{ display: 'block', fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_BODY, marginBottom: 2 }}>
                         {inst.emoji} {inst.label}: {inst.pan === 0 ? 'C' : (inst.pan < 0 ? `L${Math.abs(inst.pan)}` : `R${inst.pan}`)}
@@ -703,7 +754,12 @@ const StereoPanning = () => {
                       <input
                         type="range" min={-100} max={100} value={inst.pan}
                         aria-label={`${inst.label} pan position`}
-                        onChange={e => setChallengeInstruments(prev => prev.map((ci, idx) => idx === i ? { ...ci, pan: Number(e.target.value) } : ci))}
+                        onChange={e => {
+                          const pan = Number(e.target.value);
+                          const update = (prev) => prev.map((ci, idx) => (idx === i ? { ...ci, pan } : ci));
+                          if (challengeActive) setChallengeInstruments(update);
+                          else setInstruments(update);
+                        }}
                         style={{ width: '100%', accentColor: '#FF6B35' }}
                       />
                     </div>
@@ -711,7 +767,7 @@ const StereoPanning = () => {
                 </div>
               )}
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', marginTop: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
-                Drag instruments left/right to change pan position
+                Drag instruments left or right on the stage, or use the sliders below
               </p>
               {/* Canvas colour legend */}
               <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
