@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
 import { getAllResources } from '../lib/resources/index.js';
-import { SPEC_TOPICS, NON_SPEC_TOPICS, KNOWN_UNRESOLVED, isValidTopic } from '../lib/spec-topics.js';
+import { SPEC_TOPICS, NON_SPEC_TOPICS, SPEC_UMBRELLA_TOPICS, isValidTopic } from '../lib/spec-topics.js';
 
 const CANON_DIR = '/Users/mikelehnert/Obsidian/Professional/Curriculum-Topics';
 
@@ -25,24 +25,43 @@ test('every relatedTopics entry is a known label', () => {
     }
 });
 
-// The known-debt list must only shrink. If someone adds a new bad label and
-// then whitelists it, this fails.
-test('the unresolved-label list has not grown', () => {
-    assert.ok(
-        KNOWN_UNRESOLVED.length <= 2,
-        `KNOWN_UNRESOLVED has grown to ${KNOWN_UNRESOLVED.length}. It is debt awaiting a ` +
-        `curriculum decision, not a place to park new bad labels.`
-    );
+// The umbrella list is a narrow exemption, not a bypass for the folder diff
+// above. Only 1.12 is subdivided in Curriculum-Topics, so only 1.12 may appear
+// here — anything else means someone parked a bad label instead of fixing it.
+test('umbrella labels only exist for a spec point the folders subdivide', () => {
+    for (const label of SPEC_UMBRELLA_TOPICS) {
+        assert.match(
+            label,
+            /^1\.12\s/,
+            `"${label}" is not a 1.12 label. 1.12 is the only spec point split across ` +
+            `several Curriculum-Topics folders, so it is the only one that needs an umbrella name.`
+        );
+    }
 });
 
-test('every unresolved label is actually still in use', () => {
+// An umbrella nobody cites is just an unused synonym waiting to be mistaken for
+// a real topic. If a resource stops citing one, delete it rather than keep it.
+test('every umbrella label is actually still in use', () => {
     const inUse = new Set();
     for (const r of getAllResources()) {
         inUse.add(r.topic);
         for (const t of r.relatedTopics || []) inUse.add(t);
     }
-    for (const label of KNOWN_UNRESOLVED) {
-        assert.ok(inUse.has(label), `"${label}" is listed as unresolved debt but nothing uses it — delete it from KNOWN_UNRESOLVED`);
+    for (const label of SPEC_UMBRELLA_TOPICS) {
+        assert.ok(inUse.has(label), `"${label}" is listed as an umbrella label but nothing cites it — delete it from SPEC_UMBRELLA_TOPICS`);
+    }
+});
+
+// An umbrella is a cross-reference, not a home. A resource's own `topic` must
+// name the specific effect it teaches, or the topic pages group four different
+// effects under one heading.
+test('no resource uses an umbrella label as its own topic', () => {
+    for (const r of getAllResources()) {
+        assert.ok(
+            !SPEC_UMBRELLA_TOPICS.includes(r.topic),
+            `resource "${r.id}" has topic "${r.topic}". An umbrella belongs in relatedTopics — ` +
+            `name the specific effect (Delay, Distortion, Modulation or Reverb) as the topic.`
+        );
     }
 });
 

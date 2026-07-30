@@ -21,15 +21,8 @@ export default function sitemap() {
       changeFrequency: 'weekly',
       priority: 1.0,
     },
-    {
-      // Orientation page for anyone deciding whether to take the subject. High
-      // priority because it is the entry point for a search that has nothing
-      // to do with a topic name.
-      url: `${baseUrl}/what-is-a-level-music-technology`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
+    // The orientation page moved to the hub on 2026-07-30 and the route here is
+    // now a noindex stub pointing at it. Deliberately absent from this sitemap.
     ...resourceUrls,
   ];
 }
