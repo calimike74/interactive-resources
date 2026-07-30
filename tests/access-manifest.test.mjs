@@ -38,22 +38,17 @@ test('the free set covers all three chosen topics', () => {
     }
 });
 
-// The reason FREE_RESOURCES is an explicit list rather than a topic-prefix
-// match. If this ever stops failing, the mislabelled resources have been
-// renumbered and the derived approach becomes safe.
-test('mislabelled topics are still mislabelled, so the allow-list is still required', () => {
-    const resources = getAllResources();
-    for (const m of TOPIC_LABEL_MISMATCHES.filter((x) => x.kind === 'WRONG NUMBER')) {
-        for (const id of m.resources) {
-            const r = resources.find((x) => x.id === id);
-            if (!r) continue;
-            assert.equal(r.topic, m.found, `"${id}" topic label changed from "${m.found}" to "${r.topic}" — update TOPIC_LABEL_MISMATCHES in lib/access.js`);
-        }
-    }
+// The label mismatches were corrected on 2026-07-30, so this list is now
+// empty and lib/spec-topics.js guards the labels instead. Kept as an assertion
+// rather than deleted: if anyone repopulates it, that means drift came back and
+// the reasoning in lib/access.js needs rereading.
+test('the topic-label mismatch list is still empty', () => {
+    assert.deepEqual(TOPIC_LABEL_MISMATCHES, [], 'topic label drift has returned — see lib/spec-topics.js');
 });
 
-test('a wrongly-numbered resource has not leaked into the free set', () => {
-    // patch-bay-simulator is labelled "2.5 Recording"; 2.5 is Numeracy. A
-    // prefix match on "2.5" would have made it free. It must not be.
+test('patch-bay-simulator is not free', () => {
+    // It was once labelled "2.5 Recording" while 2.5 is Numeracy, which would
+    // have swept a signal-routing tool into the free numeracy set. The label is
+    // fixed now, but the assertion is cheap and the tool still is not free.
     assert.equal(isResourceFree('patch-bay-simulator'), false, 'patch-bay-simulator is not a numeracy tool and must not be free');
 });
