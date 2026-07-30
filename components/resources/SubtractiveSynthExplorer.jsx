@@ -5,6 +5,7 @@ import { theme, typography, spacing, borderRadius, transitions } from '@/lib/the
 import ProductionCopyButton from '@/components/ui/ProductionCopyButton';
 import { buildSynthCopyMarkdown } from '@/lib/copy-for-ai';
 import Callout from '@/components/Callout';
+import HarmonicSpectrum from '@/components/resources/HarmonicSpectrum';
 
 // ─── Design Tokens (light, warm, Ableton-inspired) ──────────────────────────
 
@@ -94,6 +95,39 @@ const QUIZ_QUESTIONS = [
         explanation: 'Subtractive synthesis starts with a harmonically rich waveform (like sawtooth) and uses filters to subtract/remove frequencies, sculpting the timbre.',
     },
 ];
+
+// The scope's stage, changed from the old cool navy #1a1a2e to the warm dark
+// used by the approved FFT lab. Not a taste edit: the spectrum now sits directly
+// beside the scope, and two dark panels in two different darks read as two
+// instruments bolted together rather than two views of one sound.
+// The scope and the spectrum, side by side — two views of one sound.
+//
+// An earlier attempt let this pair break out of the 640px reading column with a
+// negative-margin trick, on the reasoning that prose and instruments want
+// opposite widths. It looked wrong immediately: these sit inside a bordered
+// card, so the displays escaped their own box and overhung the border on both
+// sides. Widening the instrument is still the right idea — it just has to be the
+// CARD that widens, which belongs with the two-column rework of these sections
+// rather than with a transform.
+const displayPair = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+    gap: '1.25rem',
+};
+
+const SCOPE_STAGE = '#211C15';
+const SCOPE_LINE = 'rgba(250,242,228,0.10)';
+
+// Caption over each display. Small, quiet, and always present: an unlabelled
+// oscilloscope beside an unlabelled spectrum is two mystery rectangles.
+const paneLabel = {
+    margin: `0 0 6px`,
+    fontSize: '0.72rem',
+    fontWeight: 600,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    color: '#6B655C',
+};
 
 const SECTION_ACCENTS = {
     1: COLORS.osc,
@@ -290,32 +324,43 @@ function WaveformCanvas({ analyserRef, width = 500, height = 160, color = COLORS
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        const analyser = analyserRef.current;
-        if (!canvas || !analyser) return;
+        if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
-        const bufferLength = analyser.fftSize;
-        const dataArray = new Float32Array(bufferLength);
+        let dataArray = null;
 
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        const draw = () => {
-            if (reduceMotion) return;
-            animFrameRef.current = requestAnimationFrame(draw);
-            analyser.getFloatTimeDomainData(dataArray);
-
-            ctx.fillStyle = '#1a1a2e';
+        const drawStage = () => {
+            ctx.fillStyle = SCOPE_STAGE;
             ctx.fillRect(0, 0, width, height);
-
-            // centre line
-            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.strokeStyle = SCOPE_LINE;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(0, height / 2);
             ctx.lineTo(width, height / 2);
             ctx.stroke();
+        };
 
-            // waveform
+        const draw = () => {
+            animFrameRef.current = requestAnimationFrame(draw);
+
+            // Read the ref every frame. The analyser does not exist until the
+            // first user gesture builds the audio graph, and a ref's identity
+            // never changes — so capturing it here (as this did) meant the
+            // effect ran once against null, bailed, and never ran again. The
+            // scope stayed blank on first visit and only came alive after
+            // leaving the section and returning, which remounts the canvas.
+            const analyser = analyserRef.current;
+            drawStage();
+            if (!analyser) return;
+
+            const bufferLength = analyser.fftSize;
+            if (!dataArray || dataArray.length !== bufferLength) {
+                dataArray = new Float32Array(bufferLength);
+            }
+            analyser.getFloatTimeDomainData(dataArray);
+
             ctx.beginPath();
             ctx.strokeStyle = color;
             ctx.lineWidth = 2.5;
@@ -330,16 +375,8 @@ function WaveformCanvas({ analyserRef, width = 500, height = 160, color = COLORS
             ctx.stroke();
         };
 
-        // Static frame for reduced-motion users
         if (reduceMotion) {
-            ctx.fillStyle = '#1a1a2e';
-            ctx.fillRect(0, 0, width, height);
-            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(0, height / 2);
-            ctx.lineTo(width, height / 2);
-            ctx.stroke();
+            drawStage();
         } else {
             draw();
         }
@@ -673,6 +710,12 @@ export default function SubtractiveSynthExplorer() {
     const masterGainRef = useRef(null);
     const analyserRef = useRef(null);
     const releaseTimeoutRef = useRef(null);
+    // The fundamental currently sounding. HarmonicSpectrum needs it to know
+    // where H1..H8 actually are — the harmonic positions move with the note,
+    // so a fixed axis would put the bars in the wrong place an octave down.
+    // A ref, not state: it is read inside a requestAnimationFrame loop and must
+    // not re-render the tool sixty times a second.
+    const currentFreqRef = useRef(220);
 
     const ensureAudioCtx = useCallback(() => {
         if (audioCtxRef.current) return audioCtxRef.current;
@@ -707,6 +750,7 @@ export default function SubtractiveSynthExplorer() {
     }, []);
 
     const startTone = useCallback(async (freq) => {
+        currentFreqRef.current = freq;
         const ctx = ensureAudioCtx();
         if (ctx.state === 'suspended') await ctx.resume();
 
@@ -752,6 +796,7 @@ export default function SubtractiveSynthExplorer() {
     }, []);
 
     const triggerNote = useCallback(async (freq) => {
+        currentFreqRef.current = freq;
         const ctx = ensureAudioCtx();
         if (ctx.state === 'suspended') await ctx.resume();
 
@@ -989,7 +1034,19 @@ export default function SubtractiveSynthExplorer() {
                 </div>
 
                 {/* Waveform display */}
-                <WaveformCanvas analyserRef={analyserRef} color={accent} />
+                {/* Two views of one sound: the shape, and the recipe. Side by side rather
+                    than stacked — they are one idea, and stacking costs a screen of
+                    scrolling on a page that already had too many. */}
+                <div style={{ ...displayPair }}>
+                    <div>
+                        <p style={paneLabel}>The shape it traces</p>
+                        <WaveformCanvas analyserRef={analyserRef} color={accent} />
+                    </div>
+                    <div>
+                        <p style={paneLabel}>The harmonics inside it</p>
+                        <HarmonicSpectrum analyserRef={analyserRef} freqRef={currentFreqRef} />
+                    </div>
+                </div>
 
                 {/* Controls */}
                 <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', marginTop: spacing[4], flexWrap: 'wrap' }}>
@@ -1104,7 +1161,19 @@ export default function SubtractiveSynthExplorer() {
                 </div>
 
                 {/* Waveform */}
-                <WaveformCanvas analyserRef={analyserRef} color={accent} />
+                {/* The spectrum earns its place here more than anywhere: the analyser sits
+                    AFTER the filter, so bringing the cutoff down visibly removes the
+                    top harmonics. That is subtractive synthesis, on screen. */}
+                <div style={{ ...displayPair }}>
+                    <div>
+                        <p style={paneLabel}>The shape it traces</p>
+                        <WaveformCanvas analyserRef={analyserRef} color={accent} />
+                    </div>
+                    <div>
+                        <p style={paneLabel}>What the filter is taking away</p>
+                        <HarmonicSpectrum analyserRef={analyserRef} freqRef={currentFreqRef} />
+                    </div>
+                </div>
 
                 {/* Play */}
                 <div style={{ marginTop: spacing[4], display: 'flex', gap: spacing[4], alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1555,9 +1624,12 @@ export default function SubtractiveSynthExplorer() {
                 overflow: 'hidden',
                 width: '100vw',
                 marginLeft: 'calc(-50vw + 50%)',
-                marginTop: spacing[16],
+                // Was marginTop spacing[16] + minHeight 240px, which pinned the band
+                // open however much the padding inside it came down — the reason a
+                // first pass at shrinking this changed nothing at all.
+                marginTop: spacing[6],
                 marginBottom: spacing[6],
-                minHeight: '240px',
+                minHeight: '150px',
             }}>
                 <video aria-hidden="true"
                     autoPlay
@@ -1584,27 +1656,34 @@ export default function SubtractiveSynthExplorer() {
                     inset: 0,
                     background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
                 }} />
+                {/* Compressed from a 350px full-bleed poster to a band, 2026-07-30.
+                    Mike: "I'm having to scroll up and down a lot, and it isn't just
+                    on one page." On a tool page the instrument is the content, and a
+                    third of a screen of decorative video before you reach a single
+                    control is the most expensive thing here. The video stays — it is
+                    good, and it says "synthesis" faster than a sentence — it just
+                    stops being the first screen. */}
                 <div style={{
                     position: 'relative',
-                    maxWidth: '640px', margin: '0 auto',
-                    padding: `${spacing[12]} ${spacing[6]} ${spacing[10]}`,
+                    maxWidth: '760px', margin: '0 auto',
+                    padding: `${spacing[6]} ${spacing[6]} ${spacing[5]}`,
                     textAlign: 'center',
                 }}>
                     <h1 style={{
-                        fontSize: typography.size['4xl'],
+                        fontSize: typography.size['2xl'],
                         fontWeight: typography.weight.bold,
                         color: '#ffffff',
                         lineHeight: typography.lineHeight.tight,
-                        marginBottom: spacing[4],
+                        marginBottom: spacing[2],
                         textShadow: '0 2px 8px rgba(0,0,0,0.3)',
                     }}>
                         Subtractive Synthesis
                     </h1>
                     <p style={{
                         color: 'rgba(255,255,255,0.85)',
-                        fontSize: typography.size.lg,
-                        lineHeight: typography.lineHeight.relaxed,
-                        maxWidth: '480px', margin: '0 auto',
+                        fontSize: typography.size.base,
+                        lineHeight: typography.lineHeight.normal,
+                        maxWidth: '560px', margin: '0 auto',
                         textShadow: '0 1px 4px rgba(0,0,0,0.2)',
                     }}>
                         Build sounds from scratch. Choose waveforms, shape them with filters, sculpt dynamics with envelopes.
