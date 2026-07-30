@@ -45,7 +45,11 @@ const DESIGN_TOKENS_CSS = `
 `;
 
 const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
-const FONT_BODY = "'Inter', system-ui, sans-serif";
+// Inter is not loaded anywhere on this site — the root layout loads Geist,
+// Instrument Serif, Fraunces, Manrope and JetBrains Mono. Asking for it meant
+// silently falling back to system-ui for every visitor without Inter installed
+// locally. Manrope is the house sans and is already loaded.
+const FONT_BODY = "var(--font-manrope), system-ui, sans-serif";
 
 // The stereo stage is drawn in a fixed coordinate space and scaled to fit
 // whatever width it is given. Hit-testing converts back into this space, so the
