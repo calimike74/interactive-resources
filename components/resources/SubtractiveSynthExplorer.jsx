@@ -6,6 +6,8 @@ import ProductionCopyButton from '@/components/ui/ProductionCopyButton';
 import { buildSynthCopyMarkdown } from '@/lib/copy-for-ai';
 import Callout from '@/components/Callout';
 import HarmonicSpectrum from '@/components/resources/HarmonicSpectrum';
+import EpicycleWave from '@/components/resources/EpicycleWave';
+import Link from 'next/link';
 
 // ─── Design Tokens (light, warm, Ableton-inspired) ──────────────────────────
 
@@ -1039,14 +1041,43 @@ export default function SubtractiveSynthExplorer() {
                     scrolling on a page that already had too many. */}
                 <div style={{ ...displayPair }}>
                     <div>
-                        <p style={paneLabel}>The shape it traces</p>
-                        <WaveformCanvas analyserRef={analyserRef} color={accent} />
+                        <p style={paneLabel}>How the shape gets made</p>
+                        {/* The circles REPLACE the oscilloscope here rather than joining
+                            it, and that is the whole reason this fits: they draw the same
+                            waveform, so the pane costs no extra height. The live scope is
+                            still the right tool one section down, where the point is what
+                            the filter did to a real signal rather than where the shape
+                            came from. */}
+                        <EpicycleWave
+                            waveform={waveform}
+                            filterType={filterType}
+                            cutoff={cutoff}
+                            resonance={resonance}
+                            freqRef={currentFreqRef}
+                        />
                     </div>
                     <div>
                         <p style={paneLabel}>The harmonics inside it</p>
                         <HarmonicSpectrum analyserRef={analyserRef} freqRef={currentFreqRef} />
                     </div>
                 </div>
+
+                <p style={{
+                    margin: `${spacing[2]} 0 0`,
+                    fontSize: '0.82rem',
+                    lineHeight: 1.5,
+                    color: COLORS.textSecondary,
+                }}>
+                    Each circle is one harmonic, turning at its own speed. Stack them end
+                    to end and the last point draws the wave.{' '}
+                    <Link
+                        href="/additive-synth-explorer"
+                        style={{ color: accent, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                    >
+                        Build a sound this way
+                    </Link>{' '}
+                    on the additive explorer, where you set every harmonic yourself.
+                </p>
 
                 {/* Controls */}
                 <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', marginTop: spacing[4], flexWrap: 'wrap' }}>

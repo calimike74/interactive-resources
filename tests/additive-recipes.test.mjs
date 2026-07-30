@@ -7,6 +7,7 @@ import {
     HARMONIC_COUNT,
     SOUNDS,
     SOUND_ORDER,
+    idealHarmonics,
     waveVal,
 } from '../lib/additive-recipes.js';
 
@@ -137,6 +138,68 @@ test('both palettes cover all eight harmonics with distinct colours', () => {
             assert.match(c, /^#[0-9A-F]{6}$/i, `${name}: "${c}" is not a hex colour`);
         }
     }
+});
+
+/**
+ * The oscillator waveforms behind the subtractive explorer's circle display.
+ * Every one of these is a statement a student can be asked to make in writing.
+ */
+
+test('sine is the fundamental alone', () => {
+    const { amp } = idealHarmonics('sine');
+    assert.equal(amp[0], 1);
+    assert.deepEqual(amp.slice(1), [0, 0, 0, 0, 0, 0, 0]);
+});
+
+test('square keeps the odd harmonics at 1/n and drops the evens', () => {
+    const { amp, phase } = idealHarmonics('square');
+    for (let n = 1; n <= HARMONIC_COUNT; n++) {
+        const i = n - 1;
+        if (n % 2 === 1) {
+            assert.ok(Math.abs(amp[i] - 1 / n) < 1e-12, `H${n} should be 1/${n}`);
+            assert.equal(phase[i], 0, `H${n} of a square is in phase`);
+        } else {
+            assert.equal(amp[i], 0, `H${n} is even and must be absent from a square`);
+        }
+    }
+});
+
+test('sawtooth keeps every harmonic at 1/n, alternating', () => {
+    const { amp, phase } = idealHarmonics('sawtooth');
+    for (let n = 1; n <= HARMONIC_COUNT; n++) {
+        const i = n - 1;
+        assert.ok(Math.abs(amp[i] - 1 / n) < 1e-12, `H${n} should be 1/${n}`);
+        assert.equal(phase[i], n % 2 === 0 ? Math.PI : 0, `H${n} phase`);
+    }
+});
+
+test('triangle keeps the odd harmonics at 1/n squared, so it falls faster than a square', () => {
+    const { amp } = idealHarmonics('triangle');
+    const sq = idealHarmonics('square').amp;
+    for (let n = 1; n <= HARMONIC_COUNT; n++) {
+        const i = n - 1;
+        if (n % 2 === 1) {
+            assert.ok(Math.abs(amp[i] - 1 / (n * n)) < 1e-12, `H${n} should be 1/${n}^2`);
+        } else {
+            assert.equal(amp[i], 0, `H${n} is even and must be absent from a triangle`);
+        }
+    }
+    // The exam point: a triangle is the mellower of the two odd-harmonic waves.
+    assert.ok(amp[2] < sq[2], 'H3 of a triangle must be weaker than H3 of a square');
+    assert.ok(amp[6] < sq[6], 'H7 of a triangle must be weaker than H7 of a square');
+});
+
+test('every waveform has its fundamental at full strength', () => {
+    for (const type of ['sine', 'square', 'sawtooth', 'triangle']) {
+        assert.equal(idealHarmonics(type).amp[0], 1, `${type} must be normalised to H1 = 1`);
+    }
+});
+
+test('an unknown waveform is silent rather than wrong', () => {
+    // A typo in a preset should draw nothing, not a confident picture of a
+    // waveform nobody asked for.
+    const { amp } = idealHarmonics('supersaw');
+    assert.deepEqual(amp, new Array(HARMONIC_COUNT).fill(0));
 });
 
 test('H1 is the same colour on the additive and subtractive tools', () => {
