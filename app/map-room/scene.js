@@ -12,7 +12,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { buildWorld, tick, reheat } from './sim3d';
+import { buildWorld, tick, reheat, setLayout } from './sim3d';
+import { STUDIO_ANCHORS } from './layouts';
 import { ROOM, topicInk, conceptInk } from './palette';
 import { resolveFontStack, makeLabelSprite, makeGlowTexture, makeGlowSprite } from './labels';
 
@@ -41,12 +42,15 @@ const DIM = 0.12;            // how far a dimmed node keeps its own colour
 const FOG_C = new THREE.Color(ROOM.fog);
 
 export class MapRoomScene {
-    constructor(container, graph, { reduced, onSelect, onUserGesture } = {}) {
+    constructor(container, graph, { reduced, onSelect, onUserGesture, onHover } = {}) {
         this.container = container;
         this.reduced = !!reduced;
         this.onSelect = onSelect || (() => {});
         this.onUserGesture = onUserGesture || (() => {});
+        this.onHover = onHover || (() => {});
         this.disposed = false;
+        this.layoutMode = 'concept';
+        this.hiddenLabelIds = null;   // Set<nodeId> whose names the quiz withholds
 
         this.world = buildWorld(graph);
         const settle = this.reduced ? 600 : 170;
@@ -313,6 +317,29 @@ export class MapRoomScene {
         this.selectedId = null;
     }
 
+    setHiddenLabels(idSet) {
+        this.hiddenLabelIds = idSet && idSet.size ? idSet : null;
+    }
+
+    /* Re-hang the room: 'concept' (force layout) or 'studio' (signal chain). */
+    setLayout(mode) {
+        if (mode === this.layoutMode) return;
+        this.layoutMode = mode;
+        const anchors = mode === 'studio'
+            ? new Map(this.world.nodes
+                .filter((n) => n.kind === 'topic' && STUDIO_ANCHORS[n.parent])
+                .map((n) => [n.id, STUDIO_ANCHORS[n.parent]]))
+            : null;
+        setLayout(this.world, mode, anchors);
+        if (this.reduced) {
+            // no live sim under reduced motion — settle the new layout at once
+            for (let i = 0; i < 500; i++) tick(this.world);
+            this.world.alpha = 0;
+        }
+        setTimeout(() => { if (!this.disposed) this.flyToFit(null, 1.06); },
+            this.reduced ? 0 : 650);
+    }
+
     /* ---------- events ---------- */
 
     #bindEvents() {
@@ -425,6 +452,7 @@ export class MapRoomScene {
             if (id !== this.hoverId) {
                 this.hoverId = id;
                 this.renderer.domElement.style.cursor = id ? 'pointer' : 'grab';
+                this.onHover(id != null ? this.world.byId.get(id) : null);
             }
         }
 
@@ -438,7 +466,7 @@ export class MapRoomScene {
         }
 
         this.controls.autoRotate = !this.reduced && !this.focusSet && !this.selectedId
-            && now - this.lastGestureAt > 4000;
+            && this.layoutMode === 'concept' && now - this.lastGestureAt > 4000;
         this.controls.update();
 
         const emph = this.#emphasisSet();
@@ -489,6 +517,7 @@ export class MapRoomScene {
             const inSet = !emph || emph.has(n.id);
             const isSeed = n.id === this.hoverId || n.id === this.selectedId;
             L.isSeed = isSeed; L.d = d;
+            if (this.hiddenLabelIds?.has(n.id)) { L.targetO = 0; continue; }
             if (L.isTopic) {
                 L.targetO = inSet ? 1 : 0.14;
             } else {

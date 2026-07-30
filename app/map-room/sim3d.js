@@ -67,7 +67,16 @@ export function buildWorld(graph) {
             : n.hub ? 7.5 : 4.5;
     }
 
-    return { nodes, edges, byId, neighbours, degree, alpha: 1.2 };
+    return { nodes, edges, byId, neighbours, degree, alpha: 1.2, layout: 'concept', anchors: null };
+}
+
+/* Switch between the two truths of the room. anchors: Map<nodeId, {x,y,z}>.
+ * In studio layout anchored topics are pulled to their stations; the long
+ * cross-topic springs and the centring force relax so the chain can read. */
+export function setLayout(w, layout, anchors = null) {
+    w.layout = layout;
+    w.anchors = layout === 'studio' ? anchors : null;
+    reheat(w, 1.1);
 }
 
 export function tick(w) {
@@ -75,11 +84,12 @@ export function tick(w) {
     const alpha = Math.max(w.alpha, 0);
     if (alpha <= 0.015) return false;
 
+    const studio = w.layout === 'studio';
     for (const e of edges) {
         const rest = e.kind === 'parent'
             ? (e.a.kind === 'topic' || e.b.kind === 'topic' ? 130 : 95)
             : 480;
-        const k = e.kind === 'parent' ? 0.05 : 0.012;
+        const k = e.kind === 'parent' ? 0.05 : studio ? 0.0015 : 0.012;
         const dx = e.b.x - e.a.x, dy = e.b.y - e.a.y, dz = e.b.z - e.a.z;
         const d = Math.max(1, Math.sqrt(dx * dx + dy * dy + dz * dz));
         const f = k * (d - rest) * alpha;
@@ -107,9 +117,17 @@ export function tick(w) {
 
     for (const n of nodes) {
         if (n.fixed) { n.vx = 0; n.vy = 0; n.vz = 0; continue; }
-        n.vx -= n.x * 0.003 * alpha;
-        n.vy -= n.y * 0.003 * alpha;
-        n.vz -= n.z * 0.003 * alpha;
+        const anchor = studio ? w.anchors?.get(n.id) : null;
+        if (anchor) {
+            n.vx += (anchor.x - n.x) * 0.06 * alpha;
+            n.vy += (anchor.y - n.y) * 0.06 * alpha;
+            n.vz += (anchor.z - n.z) * 0.06 * alpha;
+        } else {
+            const centring = studio ? 0.0004 : 0.003;
+            n.vx -= n.x * centring * alpha;
+            n.vy -= n.y * centring * alpha;
+            n.vz -= n.z * centring * alpha;
+        }
         n.vx *= 0.82; n.vy *= 0.82; n.vz *= 0.82;
         n.x += n.vx; n.y += n.vy; n.z += n.vz;
     }

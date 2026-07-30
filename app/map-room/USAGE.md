@@ -22,6 +22,19 @@ Route: `/map-room` — `noindex,nofollow`, linked from no navigation.
   "Open this topic →" link — that link is the only navigation on the page.
 - **Play the 90-second tour**: arrow keys step beats, Escape exits. Any
   gesture on the map pauses autoplay.
+- **Walk the spec**: press ← → with nothing else running and the room steps
+  through the 23 topics in spec order, card raised at each stop.
+- **Exam routes**: four real Question 6s (2019–2023) lit as accumulating
+  paths across the room, one step per processor or idea, each step carrying
+  a line from that year's Principal Examiner's report.
+- **Signal chain**: the top-right pill re-hangs the whole room as the studio
+  chain, microphone to monitor; the flight between the two layouts is the
+  lesson. Concept space brings it home.
+- **Quiz me**: one node is lit with its name withheld; Reveal shows the
+  name, the blurb, and lights its neighbours. Nothing is stored.
+- **Sound**: switch it on, then hover a shaping/creating/theory topic that
+  carries a sound — EQ sweeps, compression pumps, delay repeats — with a
+  caption naming exactly what is heard.
 
 ## What can change in plain language
 
