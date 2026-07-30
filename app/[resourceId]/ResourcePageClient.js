@@ -61,6 +61,7 @@ import MIDIBinaryAssessment from '@/components/resources/MIDIBinaryAssessment';
 import AcousticsPsychoacoustics from '@/components/resources/AcousticsPsychoacoustics';
 import MixingProduction from '@/components/resources/MixingProduction';
 import ProductionAnalysis from '@/components/resources/ProductionAnalysis';
+import AdditiveSynthExplorer from '@/components/resources/AdditiveSynthExplorer';
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
@@ -114,6 +115,7 @@ const resourceComponents = {
     'AcousticsPsychoacoustics': AcousticsPsychoacoustics,
     'MixingProduction': MixingProduction,
     'ProductionAnalysis': ProductionAnalysis,
+    'AdditiveSynthExplorer': AdditiveSynthExplorer,
     // Add more as resources are added:
     // 'ADSRInteractive': ADSRInteractive,
 };
