@@ -21,6 +21,15 @@ export default function sitemap() {
       changeFrequency: 'weekly',
       priority: 1.0,
     },
+    {
+      // Orientation page for anyone deciding whether to take the subject. High
+      // priority because it is the entry point for a search that has nothing
+      // to do with a topic name.
+      url: `${baseUrl}/what-is-a-level-music-technology`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
     ...resourceUrls,
   ];
 }
