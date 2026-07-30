@@ -26,8 +26,20 @@ const C = {
     line: '#D4C9B4',
 };
 
-const FONT_TOPIC = '600 13px Fraunces, Georgia, serif';
-const FONT_CONCEPT = '400 10.5px Geist, sans-serif';
+/* next/font registers HASHED family names — the literal string 'Fraunces'
+ * is not a loaded family, so a hardcoded ctx.font would silently fall back
+ * to Georgia/system. Resolve the real names from the CSS variables at
+ * runtime instead. */
+function resolveFontStack(cssVar, fallback) {
+    const probe = document.createElement('span');
+    probe.style.fontFamily = `var(${cssVar})`;
+    probe.style.position = 'absolute';
+    probe.style.visibility = 'hidden';
+    document.body.appendChild(probe);
+    const fam = getComputedStyle(probe).fontFamily;
+    probe.remove();
+    return fam && fam !== 'initial' ? fam : fallback;
+}
 
 const EASE_HOUSE = [0.22, 1, 0.36, 1]; // matches --ease-house in globals.css
 const TOUR_BEAT_MS = 7500;
@@ -135,8 +147,13 @@ export default function MapRoomClient({ graph, tour }) {
             n.hub = n.kind !== 'topic' && (parentCount.get(n.id) || 0) > 1;
         }
 
+        const frauncesStack = resolveFontStack('--font-fraunces', 'Georgia, serif');
+        const geistStack = resolveFontStack('--font-geist-sans', 'sans-serif');
+
         world.current = {
             nodes, edges, byId, neighbours, degree,
+            fontTopic: `600 13px ${frauncesStack}`,
+            fontConcept: `400 10.5px ${geistStack}`,
             cam: { x: 0, y: 0, k: 0.001 },            // start pulled far out; intro tween lands us
             tween: null, alpha: 1.2, hover: null, needsFrame: true,
             drag: null, pinch: null, focus: null,      // focus: Set of node ids in tour beat
@@ -384,7 +401,7 @@ export default function MapRoomClient({ graph, tour }) {
             if (emph < 0.5 && !isTopic) continue;
             const x = sx(n.x), y = sy(n.y);
             if (x < -80 || x > width + 80 || y < -40 || y > height + 40) continue;
-            ctx.font = isTopic ? FONT_TOPIC : FONT_CONCEPT;
+            ctx.font = isTopic ? w.fontTopic : w.fontConcept;
             const label = n.label;
             const m = ctx.measureText(label);
             const bw2 = m.width + 8, bh2 = 16;
