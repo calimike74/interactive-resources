@@ -357,7 +357,15 @@ const StereoPanning = () => {
     });
   }, [instruments, challengeInstruments, challengeActive, dragging, monoCheck]);
 
-  useEffect(() => { drawStage(); }, [drawStage]);
+  // The canvas is mounted by its tab, which happens after an effect on mount
+  // would have run — and switching tabs changes none of drawStage's deps, so
+  // the effect never fired again and the stage stayed blank. Drawing from the
+  // ref callback covers both: React invokes it when the node attaches, and
+  // again whenever drawStage changes identity.
+  const attachStage = useCallback((node) => {
+    stageRef.current = node;
+    if (node) drawStage();
+  }, [drawStage]);
 
   // ============================================
   // MIC TECHNIQUE CANVAS
@@ -448,7 +456,11 @@ const StereoPanning = () => {
     }
   }, [micMode, micAngle, micSpacing]);
 
-  useEffect(() => { drawMicDiagram(); }, [drawMicDiagram]);
+  // same tab-mount problem as the stage canvas above
+  const attachMicCanvas = useCallback((node) => {
+    micCanvasRef.current = node;
+    if (node) drawMicDiagram();
+  }, [drawMicDiagram]);
 
   // ============================================
   // DRAG HANDLING
@@ -671,7 +683,7 @@ const StereoPanning = () => {
                 }} title="Simulates how your mix sounds when collapsed to mono — your pan positions are not changed.">{monoCheck ? '\u{1F50A} Mono Check: ON' : '\u{1F50A} Mono Check: OFF'}</button>
               </div>
               <canvas
-                ref={stageRef}
+                ref={attachStage}
                 role="img"
                 aria-label={`Stereo field showing ${(challengeActive ? challengeInstruments : instruments).map(i => `${i.label} at ${i.pan === 0 ? 'centre' : (i.pan < 0 ? `L${Math.abs(i.pan)}` : `R${i.pan}`)}`).join(', ')}`}
                 style={{ display: 'block', borderRadius: 'var(--radius-lg)', cursor: dragging !== null ? 'grabbing' : 'grab', width: '100%', maxWidth: '500px', margin: '0 auto' }}
@@ -738,7 +750,7 @@ const StereoPanning = () => {
                     }}>{m.label}</button>
                   ))}
                 </div>
-                <canvas ref={micCanvasRef} style={{ display: 'block', borderRadius: 'var(--radius-lg)', margin: '0 auto' }} />
+                <canvas ref={attachMicCanvas} style={{ display: 'block', borderRadius: 'var(--radius-lg)', margin: '0 auto' }} />
                 {micMode === 'xy' ? (
                   <div style={{ marginTop: 'var(--space-3)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
