@@ -29,7 +29,7 @@ export default function LearnTopicPage({ topic, parentTopicId, outro }) {
         <div style={{
             minHeight: '100vh',
             background: '#f5f4f2',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+            fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
         }}>
             {/* Header */}
             <header style={{

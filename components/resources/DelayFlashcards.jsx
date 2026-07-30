@@ -34,7 +34,7 @@ const DESIGN_TOKENS_CSS = `
 
     background: var(--bg);
     color: var(--fg);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-manrope), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     line-height: 1.55;
     padding: 2rem 1rem 4rem;
     min-height: 100%;

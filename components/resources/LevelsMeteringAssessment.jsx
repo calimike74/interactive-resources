@@ -292,7 +292,7 @@ export default function LevelsMeteringAssessment() {
                         Sign in via the revision page first, then return to this assessment.
                     </p>
                     <a
-                        href="/revise"
+                        href="/revise/numeracy"
                         className="mt-6 inline-block rounded-lg bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-800"
                     >
                         Go to revision sign-in

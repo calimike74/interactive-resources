@@ -45,7 +45,11 @@ const DESIGN_TOKENS_CSS = `
 `;
 
 const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
-const FONT_BODY = "'Inter', system-ui, sans-serif";
+// Inter is not loaded anywhere on this site — the root layout loads Geist,
+// Instrument Serif, Fraunces, Manrope and JetBrains Mono. Asking for it meant
+// silently falling back to system-ui for every visitor without Inter installed
+// locally. Manrope is the house sans and is already loaded.
+const FONT_BODY = "var(--font-manrope), system-ui, sans-serif";
 
 // The stereo stage is drawn in a fixed coordinate space and scaled to fit
 // whatever width it is given. Hit-testing converts back into this space, so the
@@ -315,7 +319,7 @@ const StereoPanning = () => {
 
     // Speaker labels
     ctx.fillStyle = '#C9B87A';
-    ctx.font = "10px 'Inter', system-ui, sans-serif";
+    ctx.font = "10px system-ui, sans-serif";
     ctx.textAlign = 'center';
     ctx.fillText('L', 20, 20);
     ctx.fillText('R', w - 20, 20);
@@ -333,7 +337,7 @@ const StereoPanning = () => {
       ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
       ctx.fillRect(0, 0, w, h);
       ctx.fillStyle = '#EF4444';
-      ctx.font = "bold 12px 'Inter', system-ui, sans-serif";
+      ctx.font = "bold 12px system-ui, sans-serif";
       ctx.textAlign = 'center';
       ctx.fillText('MONO CHECK \u2014 All sources collapse to centre', w / 2, h - 24);
     }
@@ -361,7 +365,7 @@ const StereoPanning = () => {
       ctx.fillText(inst.emoji, x, y + 5);
 
       // Label
-      ctx.font = "9px 'Inter', system-ui, sans-serif";
+      ctx.font = "9px system-ui, sans-serif";
       ctx.fillStyle = dragging === i ? '#FF6B35' : 'rgba(232, 228, 223, 0.7)';
       ctx.fillText(inst.label, x, y + 32);
 
@@ -440,11 +444,11 @@ const StereoPanning = () => {
       ctx.globalAlpha = 1;
       // Labels
       ctx.fillStyle = '#C9B87A';
-      ctx.font = "10px 'Inter', system-ui, sans-serif";
+      ctx.font = "10px system-ui, sans-serif";
       ctx.textAlign = 'center';
       ctx.fillText(`X-Y Coincident \u2014 ${micAngle}\u00B0`, cx, 20);
       ctx.fillStyle = 'rgba(232, 228, 223, 0.5)';
-      ctx.font = "9px 'Inter', system-ui, sans-serif";
+      ctx.font = "9px system-ui, sans-serif";
       ctx.fillText('Capsules at same point', cx, 36);
       ctx.fillText('Mono compatible \u2713', cx, h - 10);
     } else {
@@ -470,11 +474,11 @@ const StereoPanning = () => {
       ctx.setLineDash([]);
       // Labels
       ctx.fillStyle = '#C9B87A';
-      ctx.font = "10px 'Inter', system-ui, sans-serif";
+      ctx.font = "10px system-ui, sans-serif";
       ctx.textAlign = 'center';
       ctx.fillText(`A-B Spaced \u2014 ${micSpacing} cm`, cx, 20);
       ctx.fillStyle = 'rgba(232, 228, 223, 0.5)';
-      ctx.font = "9px 'Inter', system-ui, sans-serif";
+      ctx.font = "9px system-ui, sans-serif";
       ctx.fillText('Capsules spaced apart', cx, 36);
       ctx.fillText('Phase risk in mono \u26A0', cx, h - 10);
     }

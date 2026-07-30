@@ -557,7 +557,7 @@ const WaveformExplorer = () => {
         wrapper: {
             maxWidth: 760,
             margin: '0 auto',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         },
         header: {
             marginBottom: 16,
