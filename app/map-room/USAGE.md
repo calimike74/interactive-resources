@@ -1,38 +1,46 @@
-# The Map Room — usage
+# The Map Room — USAGE
 
-**What it is.** `/map-room` draws the whole of Component 4 as one force-directed
-graph: 23 topic nodes, ~300 concept nodes compiled from the vault's
-`Curriculum-Topics/` Official Spec files, and the connections between them.
-"Play the 90-second tour" walks the camera across the map, one caption per beat
-— graphcon-deck's slides-as-camera-moves idea. The page is `noindex,nofollow`
-and linked from no navigation.
+## What it is
 
-**How to use it.**
-- Drag to pan, scroll/pinch to zoom. Labels for concepts appear as you zoom in.
-- Hover lights up a node's neighbourhood; click a concept to pin its card.
-- Clicking a moss topic node with a live `/topic/` page navigates there.
-- In the tour: ← → step beats, ▶ auto-advances (7.5 s per beat), Esc exits to
-  free exploration.
+The whole of Component 4 hung in one dark room as a three-dimensional
+force-directed graph: 23 topic spheres, ~300 concept nodes, and every real
+connection between them, drawn from the vault's own spec files. Colour carries
+meaning — five curriculum families (capture, creating sound, shaping sound,
+the mix, theory), with shared ideas as brass pins. One built-in guided tour
+("The whole course in 90 seconds") plays as camera moves over the graph.
 
-**What can be changed in plain language.**
-- *The map's content* — edit `lib/map-room/graph.json`, or re-run
-  `python3 scripts/compile-map-room-graph.py lib/map-room/graph.json`
-  (Obsidian vault must be on disk; the script reads
-  `Professional/Curriculum-Topics/`). Hand-supplemented topics and curated
-  cross-links live in dictionaries at the top of that script.
-- *The tour* — edit `lib/map-room/tours/whole-course.json`. A beat is a list of
-  node ids to focus plus a caption; the camera frames the focus set
-  automatically, so no coordinates are ever needed. New tours are new JSON
-  files wired up in `page.js`.
-- *Colours/fonts* — constants at the top of `MapRoomClient.js` (canvas cannot
-  read CSS variables; values are hardcoded from BRAND.md).
+Route: `/map-room` — `noindex,nofollow`, linked from no navigation.
 
-**Limitations.**
-- C4 only for now; the `component` field in graph.json is ready for C3 nodes.
-- Three topics' concepts are hand-authored (1.12 Delay, 2.3 Signals) or
-  supplemented (1.2, 1.5) because their vault spec files aren't in the
-  bold-bullet format the parser reads.
-- Concept-level nodes don't deep-link into pages yet; only topic nodes carry
-  URLs (the 11 topics with live `/topic/` hubs).
-- Reduced-motion users get a settled, static map with instant camera cuts and
-  no auto-play.
+## How to use it
+
+- **Drag empty space** to turn the room; **scroll/pinch** to zoom;
+  right-drag/two-finger to pan.
+- **Grab any node and pull** — the simulation is live, so its neighbourhood
+  moves with it.
+- **Hover** lights a node's neighbourhood. Nothing opens on hover.
+- **Click** a node to raise its index card. Topics with a live page carry an
+  "Open this topic →" link — that link is the only navigation on the page.
+- **Play the 90-second tour**: arrow keys step beats, Escape exits. Any
+  gesture on the map pauses autoplay.
+
+## What can change in plain language
+
+- **Colours**: `palette.js` — one ink per topic (`TOPIC_INKS`), family names
+  and swatches (`FAMILIES`), room atmosphere (`ROOM`).
+- **The graph**: recompile with `scripts/compile-map-room-graph.py` after
+  editing spec files in the vault; output is `lib/map-room/graph.json`.
+- **Tours**: JSON only — `lib/map-room/tours/*.json`. A beat is
+  `{ focus: [nodeIds], withNeighbours, caption }`; the camera frames the
+  focus set itself, so layout changes never break a tour.
+- **Physics**: `sim3d.js` (spring lengths, repulsion, damping).
+- **Look of the scene**: `scene.js` (lighting, gloss, fog, label sizes,
+  glow, motes).
+
+## Limitations
+
+- Needs WebGL; a paper fallback card explains this if the context fails.
+- Topic labels declutter automatically (bigger node wins); a hidden label
+  reappears as you zoom or turn.
+- `prefers-reduced-motion`: no auto-rotate, no drifting motes, instant
+  camera cuts, tour advances manually only.
+- C3 is a later data pass — the schema already carries a `component` field.
