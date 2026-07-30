@@ -104,10 +104,17 @@
   box-sizing: border-box;
 }
 
+/* The house sans is the default, not an opt-in. Tool pages built before the
+   Botanical Press register landed inherited this rule and so rendered in the
+   OS system font — the front door was branded and everything behind it was
+   not. The system stack stays as the fallback, so if --font-manrope ever
+   fails to resolve the page lands on exactly the old behaviour rather than
+   on something worse. Canvas diagrams pin their own ctx.font and are
+   unaffected; nothing in the codebase lays out from measured font metrics. */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 a {

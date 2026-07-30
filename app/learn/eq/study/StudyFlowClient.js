@@ -295,7 +295,7 @@ export default function StudyFlowClient() {
             style={{
                 minHeight: '100vh',
                 background: '#0a0a12',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
                 color: '#e0e0e0',
             }}
             onPointerMove={handlePointerMove}

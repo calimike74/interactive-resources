@@ -1787,7 +1787,7 @@ export default function EQFilterBridge() {
     const partColors = { 1: '#DCC892', 2: '#ff9f43', 3: '#34d399', 4: '#74b9ff' };
 
     return (
-        <div style={{ minHeight: '100vh', background: '#050507', color: '#c9cdd4', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
+        <div style={{ minHeight: '100vh', background: '#050507', color: '#c9cdd4', fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, sans-serif' }}>
             {/* Hero with video background */}
             <div style={{
                 position: 'relative',

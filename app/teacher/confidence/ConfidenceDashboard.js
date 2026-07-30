@@ -33,7 +33,7 @@ export default function ConfidenceDashboard() {
         <div style={{
             minHeight: '100vh',
             background: '#f5f4f2',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         }}>
             <header style={{
                 padding: '2rem 1.5rem 1.5rem',
