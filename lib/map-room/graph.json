@@ -1,0 +1,4417 @@
+{
+ "nodes": [
+  {
+   "id": "t-software-and-hardware",
+   "label": "Software and Hardware",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": ""
+  },
+  {
+   "id": "t-microphones",
+   "label": "Microphones",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": ""
+  },
+  {
+   "id": "t-synthesis",
+   "label": "Synthesis",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "",
+   "url": "/topic/synthesis"
+  },
+  {
+   "id": "t-sampling",
+   "label": "Sampling",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "",
+   "url": "/topic/sampling"
+  },
+  {
+   "id": "t-sequencing",
+   "label": "Sequencing",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "",
+   "url": "/topic/midi"
+  },
+  {
+   "id": "t-audio-editing",
+   "label": "Audio Editing",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": ""
+  },
+  {
+   "id": "t-pitch-and-rhythm-correction",
+   "label": "Pitch and Rhythm Correction",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": ""
+  },
+  {
+   "id": "t-automation",
+   "label": "Automation",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": ""
+  },
+  {
+   "id": "t-dynamic-processing",
+   "label": "Dynamic Processing",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "",
+   "url": "/topic/dynamics"
+  },
+  {
+   "id": "t-stereo",
+   "label": "Stereo",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": ""
+  },
+  {
+   "id": "t-eq",
+   "label": "EQ",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "",
+   "url": "/topic/eq"
+  },
+  {
+   "id": "t-delay",
+   "label": "Delay",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "",
+   "url": "/topic/delay"
+  },
+  {
+   "id": "t-reverb",
+   "label": "Reverb",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "",
+   "url": "/topic/reverb"
+  },
+  {
+   "id": "t-modulation",
+   "label": "Modulation",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": ""
+  },
+  {
+   "id": "t-distortion",
+   "label": "Distortion",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "",
+   "url": "/topic/distortion"
+  },
+  {
+   "id": "t-balance-and-blend",
+   "label": "Balance and Blend",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": ""
+  },
+  {
+   "id": "t-mastering",
+   "label": "Mastering",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": ""
+  },
+  {
+   "id": "t-acoustics",
+   "label": "Acoustics",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": ""
+  },
+  {
+   "id": "t-monitor-speakers",
+   "label": "Monitor Speakers",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": ""
+  },
+  {
+   "id": "t-signals",
+   "label": "Signals",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "",
+   "url": "/topic/leads-and-signals"
+  },
+  {
+   "id": "t-digital-analogue",
+   "label": "Digital Analogue",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "",
+   "url": "/topic/digital-analogue"
+  },
+  {
+   "id": "t-numeracy",
+   "label": "Numeracy",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "",
+   "url": "/topic/numeracy"
+  },
+  {
+   "id": "t-levels",
+   "label": "Levels",
+   "kind": "topic",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": ""
+  },
+  {
+   "id": "c-daw-software-and-its-features",
+   "label": "DAW software and its features",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Digital Audio Workstations used in music production, including Ableton Live, Logic Pro, and Pro Tools. Feature"
+  },
+  {
+   "id": "c-audio-interface",
+   "label": "Audio Interface",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "A hardware device that converts analogue audio signals to digital data (ADC) and digital back to analogue (DAC"
+  },
+  {
+   "id": "c-recall",
+   "label": "Recall",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "(1 mark): Correct identification of terminology or hardware \u2014 single correct answer required"
+  },
+  {
+   "id": "c-abbreviation-expansion",
+   "label": "Abbreviation expansion",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Students are given an abbreviation (DI, DAW, VST, ASIO, ADC) and must state its full form"
+  },
+  {
+   "id": "c-signal-chain-description",
+   "label": "Signal chain description",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Students trace the path of an audio signal from input source through to recorded file, naming each stage"
+  },
+  {
+   "id": "c-equipment-selection-for-a-scenario",
+   "label": "Equipment selection for a scenario",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Given a specific recording context (e.g., home studio, live venue, post-production suite), students identify a"
+  },
+  {
+   "id": "c-audio-interfaces-and-their-specifications",
+   "label": "Audio interfaces and their specifications",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Hardware devices that convert analogue audio signals to digital data (ADC) and digital data to analogue audio "
+  },
+  {
+   "id": "c-daw",
+   "label": "DAW",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Digital Audio Workstation \u2014 software used for recording, editing, mixing, and producing audio on a computer"
+  },
+  {
+   "id": "c-evaluation-justification",
+   "label": "Evaluation/justification",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "(4\u20138 marks): Extended responses where students must demonstrate understanding of trade-offs (e.g., latency vs."
+  },
+  {
+   "id": "c-hardware-identification-from-image",
+   "label": "Hardware identification from image",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Students are shown a photograph of studio hardware and must name or describe the device"
+  },
+  {
+   "id": "c-specification-comparison",
+   "label": "Specification comparison",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Students explain the difference between two sample rate or bit depth values and their practical implications"
+  },
+  {
+   "id": "c-troubleshooting-latency",
+   "label": "Troubleshooting latency",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Students describe what causes monitoring latency and explain how to reduce it (adjusting buffer size, using AS"
+  },
+  {
+   "id": "c-midi-controllers-and-hardware-integration",
+   "label": "MIDI controllers and hardware integration",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "Physical devices used to input MIDI data, including keyboard controllers, drum pads, and control surfaces. Int"
+  },
+  {
+   "id": "c-plugin",
+   "label": "Plugin",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.1",
+   "blurb": "A software component (VST/AU/AAX format) that adds virtual instruments or effects processing within a DAW"
+  },
+  {
+   "id": "c-dynamic-microphone",
+   "label": "Dynamic microphone",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Moving-coil capsule \u2014 robust, handles high SPL, no power needed"
+  },
+  {
+   "id": "c-condenser-microphone",
+   "label": "Condenser microphone",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Charged capsule, needs phantom power \u2014 detailed high end"
+  },
+  {
+   "id": "c-ribbon-microphone",
+   "label": "Ribbon microphone",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Thin foil in a magnetic field \u2014 smooth, fragile, figure-of-8"
+  },
+  {
+   "id": "c-polar-patterns",
+   "label": "Polar patterns",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Cardioid, hypercardioid, figure-of-8, omni \u2014 where a mic listens"
+  },
+  {
+   "id": "c-mic-placement",
+   "label": "Mic placement",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Distance and angle set tone, spill and room balance"
+  },
+  {
+   "id": "c-off-axis-response",
+   "label": "Off-axis response",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "How frequency response changes away from the capsule's front"
+  },
+  {
+   "id": "c-gain-structure",
+   "label": "Gain structure",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Set input gain for best signal-to-noise without clipping"
+  },
+  {
+   "id": "c-phantom-power",
+   "label": "Phantom power",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "+48 V sent up the mic cable to power condenser capsules"
+  },
+  {
+   "id": "c-pad-switch",
+   "label": "Pad switch",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Attenuates a hot source before the preamp to prevent clipping"
+  },
+  {
+   "id": "c-multi-mic-recording",
+   "label": "Multi-mic recording",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Several mics on one source \u2014 drum kits, phase to manage"
+  },
+  {
+   "id": "c-advanced-microphone-techniques",
+   "label": "Advanced microphone techniques",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Understanding phase relationships between multiple microphones"
+  },
+  {
+   "id": "c-how-microphones-work",
+   "label": "How microphones work",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.2",
+   "blurb": "Sensitivity; electromagnetic induction; capacitance"
+  },
+  {
+   "id": "c-basic-waveforms",
+   "label": "Basic waveforms",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "sine, square, sawtooth, triangle"
+  },
+  {
+   "id": "c-low-pass-filters",
+   "label": "Low-pass filters",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Removing high frequencies, creating darker tones"
+  },
+  {
+   "id": "c-adsr",
+   "label": "ADSR",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Attack, Decay, Sustain, Release"
+  },
+  {
+   "id": "c-modulation-sources",
+   "label": "Modulation sources",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Creating movement in synthesized sounds"
+  },
+  {
+   "id": "c-fm-synthesis",
+   "label": "FM synthesis",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Frequency modulation using multiple oscillators"
+  },
+  {
+   "id": "c-square-wave-oscillators",
+   "label": "Square wave oscillators",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Creating basic electronic tones"
+  },
+  {
+   "id": "c-audio-bounces",
+   "label": "Audio bounces",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Demonstrating synthesis programming skills"
+  },
+  {
+   "id": "c-operator-programming",
+   "label": "Operator programming",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Creating specific sounds using Ableton Live"
+  },
+  {
+   "id": "c-a4-440hz",
+   "label": "A4 = 440Hz",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Standard tuning reference"
+  },
+  {
+   "id": "c-sine-wave",
+   "label": "Sine wave",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Pure fundamental frequency, no harmonics"
+  },
+  {
+   "id": "c-sound-design",
+   "label": "Sound design",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Creating custom sounds for specific musical contexts"
+  },
+  {
+   "id": "c-octave-matching",
+   "label": "Octave matching",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Students struggle with pitch precision and spectrum analysis"
+  },
+  {
+   "id": "c-hands-on-experimentation",
+   "label": "Hands-on experimentation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Direct parameter manipulation with immediate audio feedback"
+  },
+  {
+   "id": "c-harmonic-content",
+   "label": "Harmonic content",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.3",
+   "blurb": "Understanding frequency spectrum of different waveforms"
+  },
+  {
+   "id": "c-breakbeat-sampling",
+   "label": "Breakbeat sampling",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Extracting and manipulating drum patterns from recordings"
+  },
+  {
+   "id": "c-cropping-and-editing",
+   "label": "Cropping and editing",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Precise sample start/end point selection"
+  },
+  {
+   "id": "c-glitched-vocals",
+   "label": "Glitched vocals",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Digital artifacts and stutter effects"
+  },
+  {
+   "id": "c-breakbeat-projects",
+   "label": "Breakbeat projects",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Cropping down to isolated breakbeat patterns"
+  },
+  {
+   "id": "c-technical-precision",
+   "label": "Technical precision",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Accurate sample editing and timing"
+  },
+  {
+   "id": "c-audio-clip-manipulation",
+   "label": "Audio clip manipulation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Real-time sample triggering and modification"
+  },
+  {
+   "id": "c-timeline-editing",
+   "label": "Timeline editing",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Precise sample placement and editing"
+  },
+  {
+   "id": "c-simpler",
+   "label": "Simpler",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Basic sample playback and manipulation"
+  },
+  {
+   "id": "c-warp-markers",
+   "label": "Warp markers",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Essential for sample timing and synchronisation"
+  },
+  {
+   "id": "c-sample-based-synthesis",
+   "label": "Sample-based synthesis",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Using samples as oscillator sources"
+  },
+  {
+   "id": "c-sample-clearance",
+   "label": "Sample clearance",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Understanding legal requirements for commercial use"
+  },
+  {
+   "id": "c-industry-standards",
+   "label": "Industry standards",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Professional sampling workflows and practices"
+  },
+  {
+   "id": "c-technical-skills",
+   "label": "Technical skills",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Isolating rhythmic patterns from complex recordings"
+  },
+  {
+   "id": "c-digital-processing",
+   "label": "Digital processing",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.4",
+   "blurb": "Creating intentional digital artifacts"
+  },
+  {
+   "id": "c-midi-controller-keyboard",
+   "label": "MIDI controller keyboard",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Real-time note input performed into the sequencer"
+  },
+  {
+   "id": "c-step-input",
+   "label": "Step input",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Non-real-time entry on a drum grid, one step at a time"
+  },
+  {
+   "id": "c-pencil-tool",
+   "label": "Pencil tool",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Drawing notes straight into the piano roll"
+  },
+  {
+   "id": "c-quantise",
+   "label": "Quantise",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Snapping recorded notes to the nearest grid value"
+  },
+  {
+   "id": "c-swing-quantise",
+   "label": "Swing quantise",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Percentage quantise that keeps or adds groove"
+  },
+  {
+   "id": "c-velocity",
+   "label": "Velocity",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "How hard a note was struck \u2014 drives level and timbre"
+  },
+  {
+   "id": "c-piano-roll",
+   "label": "Piano roll",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Grid editor where pitch is vertical and time horizontal"
+  },
+  {
+   "id": "c-list-editor",
+   "label": "List editor",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Every MIDI event as an editable row of numbers"
+  },
+  {
+   "id": "c-note-length-editing",
+   "label": "Note length editing",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Trimming and extending durations after input"
+  },
+  {
+   "id": "c-real-time-input",
+   "label": "Real-time input",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Using a MIDI controller keyboard"
+  },
+  {
+   "id": "c-non-real-time-input",
+   "label": "Non real-time input",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Step grid (drum editor)"
+  },
+  {
+   "id": "c-editing-skills",
+   "label": "Editing skills",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Velocity and note length"
+  },
+  {
+   "id": "c-how-midi-works-by-studying-data-bytes",
+   "label": "How MIDI works by studying data bytes",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.5",
+   "blurb": "Note on/off; pitch; controllers; pitch bend; LSB and MSB; tempo data in bpm"
+  },
+  {
+   "id": "c-destructive-editing",
+   "label": "Destructive editing",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Permanently modifies original audio files, cannot be undone beyond immediate undo history"
+  },
+  {
+   "id": "c-comping-workflow",
+   "label": "Comping workflow",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Assembling final track from best sections of multiple recording takes"
+  },
+  {
+   "id": "c-cutting",
+   "label": "Cutting",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Splitting audio at specific points to create separate regions"
+  },
+  {
+   "id": "c-purpose",
+   "label": "Purpose",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Prevents clicks and pops at edit boundaries"
+  },
+  {
+   "id": "c-fade-in",
+   "label": "Fade in",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Gradual volume increase from silence at region start"
+  },
+  {
+   "id": "c-background-noise-removal",
+   "label": "Background noise removal",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Eliminating unwanted ambient sound between musical phrases"
+  },
+  {
+   "id": "c-formant-preservation",
+   "label": "Formant preservation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Maintaining natural timbre during pitch correction"
+  },
+  {
+   "id": "c-audio-quantisation",
+   "label": "Audio quantisation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Automatically aligning audio transients to musical grid"
+  },
+  {
+   "id": "c-session-view",
+   "label": "Session view",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Loop-based, clip-triggering arrangement workflow (Ableton Live)"
+  },
+  {
+   "id": "c-bar-range-copying",
+   "label": "Bar range copying",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Selecting and duplicating specific musical sections"
+  },
+  {
+   "id": "c-edit-point-checklist",
+   "label": "Edit point checklist",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Copy, paste, crossfade, listen, verify workflow"
+  },
+  {
+   "id": "c-practical-copy-paste-tasks",
+   "label": "Practical copy/paste tasks",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Most common question type, requiring clean edit points"
+  },
+  {
+   "id": "c-mark-allocation",
+   "label": "Mark allocation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.6",
+   "blurb": "Bar range accuracy (1), edit quality and noise removal (1), repeated sections (1), overall quality (1)"
+  },
+  {
+   "id": "c-spectrum-analysis",
+   "label": "Spectrum analysis",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Visual frequency identification using spectrum analyser tools"
+  },
+  {
+   "id": "c-transposition",
+   "label": "Transposition",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Moving audio content up or down in pitch"
+  },
+  {
+   "id": "c-beat-detection",
+   "label": "Beat detection",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Identifying rhythmic elements in audio recordings"
+  },
+  {
+   "id": "c-practical-application",
+   "label": "Practical application",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Students using spectrum analyser and tuner for pitch identification"
+  },
+  {
+   "id": "c-past-paper-scenarios",
+   "label": "Past paper scenarios",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "3-mark questions requiring pitch correction competency"
+  },
+  {
+   "id": "c-transpose-effect",
+   "label": "Transpose effect",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Real-time pitch shifting with formant options"
+  },
+  {
+   "id": "c-spectrum-analyser",
+   "label": "Spectrum analyser",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Visual frequency identification and verification"
+  },
+  {
+   "id": "c-frequency-calculations",
+   "label": "Frequency calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Converting between musical notes and Hz values"
+  },
+  {
+   "id": "c-spectral-analysis",
+   "label": "Spectral analysis",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Using EQ visualization for pitch identification"
+  },
+  {
+   "id": "c-warp-marker-placement",
+   "label": "Warp marker placement",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Exact timing reference points for correction"
+  },
+  {
+   "id": "c-formant-corrected-pitch-shifting",
+   "label": "Formant-corrected pitch shifting",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Maintaining natural vocal timbre"
+  },
+  {
+   "id": "c-warp-marker-workflow",
+   "label": "Warp marker workflow",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Manual timing correction using visual feedback"
+  },
+  {
+   "id": "c-artifact-management",
+   "label": "Artifact management",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.7",
+   "blurb": "Minimizing digital artifacts during correction"
+  },
+  {
+   "id": "c-volume-automation",
+   "label": "Volume automation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Dynamic level control throughout a track"
+  },
+  {
+   "id": "c-linear-automation",
+   "label": "Linear automation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Straight-line parameter changes"
+  },
+  {
+   "id": "c-grid-synchronised-automation",
+   "label": "Grid-synchronised automation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Parameter changes aligned to musical timing"
+  },
+  {
+   "id": "c-mix-enhancement",
+   "label": "Mix enhancement",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Using automation to improve balance and musical interest"
+  },
+  {
+   "id": "c-real-time-recording",
+   "label": "Real-time recording",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Capturing live parameter movements"
+  },
+  {
+   "id": "c-track-volume",
+   "label": "Track volume",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Master level control for each track"
+  },
+  {
+   "id": "c-automation-curve-mathematics",
+   "label": "Automation curve mathematics",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Linear vs exponential parameter changes"
+  },
+  {
+   "id": "c-volume-riding",
+   "label": "Volume riding",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Maintaining consistent vocal levels"
+  },
+  {
+   "id": "c-filter-sweeps",
+   "label": "Filter sweeps",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Building tension and energy"
+  },
+  {
+   "id": "c-real-time-control",
+   "label": "Real-time control",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Live parameter manipulation during performance"
+  },
+  {
+   "id": "c-multiple-lesson-references",
+   "label": "Multiple lesson references",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "indicate automation is assessment-critical"
+  },
+  {
+   "id": "c-parameter-identification",
+   "label": "Parameter identification",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Knowing which parameters can be automated"
+  },
+  {
+   "id": "c-left-right-stereo-movement",
+   "label": "Left/right stereo movement",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.8",
+   "blurb": "Creating dynamic stereo width"
+  },
+  {
+   "id": "c-controlling-dynamic-range",
+   "label": "Controlling dynamic range",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Reducing the difference between loud and quiet parts"
+  },
+  {
+   "id": "c-noise-reduction",
+   "label": "Noise reduction",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Removing unwanted background noise"
+  },
+  {
+   "id": "c-limiting",
+   "label": "Limiting",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Preventing signal overload and maximizing loudness"
+  },
+  {
+   "id": "c-threshold",
+   "label": "Threshold",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Level at which compression begins (dB)"
+  },
+  {
+   "id": "c-fast-attack-slow-release",
+   "label": "Fast attack + slow release",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Smooth, musical compression"
+  },
+  {
+   "id": "c-settings",
+   "label": "Settings",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Medium attack, medium-slow release"
+  },
+  {
+   "id": "c-x-axis",
+   "label": "X-axis",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Input level (dB)"
+  },
+  {
+   "id": "c-drawing-graphs",
+   "label": "Drawing graphs",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Students must be able to visualize compression and gating curves"
+  },
+  {
+   "id": "c-heavy-compression",
+   "label": "Heavy compression",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "on drums for power and sustain"
+  },
+  {
+   "id": "c-vocal-compression",
+   "label": "Vocal compression",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "for radio-ready consistency"
+  },
+  {
+   "id": "c-gentle-compression",
+   "label": "Gentle compression",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "to maintain natural dynamics"
+  },
+  {
+   "id": "c-side-chain-compression",
+   "label": "Side-chain compression",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "for pumping effects"
+  },
+  {
+   "id": "c-adding-sustain",
+   "label": "Adding sustain",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Making instruments sound longer and more consistent"
+  },
+  {
+   "id": "c-creating-tight-sounds",
+   "label": "Creating tight sounds",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.9",
+   "blurb": "Controlling natural decay and reverb"
+  },
+  {
+   "id": "c-pan-pot-panoramic-potentiometer",
+   "label": "Pan pot (panoramic potentiometer)",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Control that positions a mono signal in the stereo field"
+  },
+  {
+   "id": "c-stereo-image",
+   "label": "Stereo image",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "The perceived spatial arrangement of sounds between the speakers"
+  },
+  {
+   "id": "c-why-it-matters",
+   "label": "Why it matters",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Many playback systems sum stereo to mono (phone speakers, some PA systems, AM radio)"
+  },
+  {
+   "id": "c-auto-panning",
+   "label": "Auto-panning",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Automated movement of sound across the stereo field"
+  },
+  {
+   "id": "c-hard-left-hard-right",
+   "label": "Hard left / hard right",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Signal sent entirely to one channel (pan values of -100% or +100%)"
+  },
+  {
+   "id": "c-stereo-width",
+   "label": "Stereo width",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "How wide or narrow the perceived sound field is"
+  },
+  {
+   "id": "c-phase-cancellation-risk",
+   "label": "Phase cancellation risk",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Out-of-phase stereo content can cancel when summed to mono"
+  },
+  {
+   "id": "c-stereo-delay-chorus",
+   "label": "Stereo delay/chorus",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Creating width through time-based effects"
+  },
+  {
+   "id": "c-coincident-pair",
+   "label": "Coincident pair",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Two mics with capsules at the same point (e.g., XY, Blumlein)"
+  },
+  {
+   "id": "c-centre-panning",
+   "label": "Centre panning",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Signal sent equally to both channels"
+  },
+  {
+   "id": "c-phantom-centre",
+   "label": "Phantom centre",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "The illusion of a centre source created by equal signal in both speakers"
+  },
+  {
+   "id": "c-checking-mono-compatibility",
+   "label": "Checking mono compatibility",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Summing the mix to mono to check for cancellations"
+  },
+  {
+   "id": "c-haas-effect",
+   "label": "Haas effect",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Short delay (1-30 ms) on one channel creates perception of width without obvious echo"
+  },
+  {
+   "id": "c-spaced-pair",
+   "label": "Spaced pair",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.10",
+   "blurb": "Two mics placed apart (e.g., AB)"
+  },
+  {
+   "id": "c-low-shelf",
+   "label": "Low shelf",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Boosts or cuts all frequencies below a set point"
+  },
+  {
+   "id": "c-parametric-eq",
+   "label": "Parametric EQ",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Full control over frequency, gain, and Q"
+  },
+  {
+   "id": "c-gain",
+   "label": "Gain",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Amount of boost or cut applied (measured in dB)"
+  },
+  {
+   "id": "c-narrow-q",
+   "label": "Narrow Q",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Affects a small frequency range, surgical corrections"
+  },
+  {
+   "id": "c-tool",
+   "label": "Tool",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "De-esser (specialized EQ/compressor combination)"
+  },
+  {
+   "id": "c-frequencies",
+   "label": "Frequencies",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Hum (50Hz/60Hz and harmonics), air conditioning, electrical interference"
+  },
+  {
+   "id": "c-detection",
+   "label": "Detection",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Sweep EQ technique, spectrum analysis, critical listening"
+  },
+  {
+   "id": "c-drawing-graphs-of-eq",
+   "label": "Drawing graphs of EQ",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Students must be able to visualize frequency response curves"
+  },
+  {
+   "id": "c-high-pass-filter",
+   "label": "High-pass filter",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Remove low-frequency rumble (80-120Hz)"
+  },
+  {
+   "id": "c-kick-drum",
+   "label": "Kick drum",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Low-end weight (60-80Hz), attack clarity (2-5kHz)"
+  },
+  {
+   "id": "c-fundamental",
+   "label": "Fundamental",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Low-end power (40-100Hz)"
+  },
+  {
+   "id": "c-high-shelf",
+   "label": "High shelf",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Boosts or cuts all frequencies above a set point"
+  },
+  {
+   "id": "c-graphic-eq",
+   "label": "Graphic EQ",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "Fixed frequency bands with gain controls"
+  },
+  {
+   "id": "c-cut-off-frequency",
+   "label": "Cut-off frequency",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.11",
+   "blurb": "The frequency point where the EQ takes effect"
+  },
+  {
+   "id": "c-delay-time",
+   "label": "Delay time",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Gap between dry signal and repeat, in ms or note values"
+  },
+  {
+   "id": "c-feedback",
+   "label": "Feedback",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Repeat fed back to the input \u2014 more feedback, more repeats"
+  },
+  {
+   "id": "c-slapback",
+   "label": "Slapback",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Single short repeat, 60\u2013120 ms \u2014 the 1950s rock-and-roll vocal"
+  },
+  {
+   "id": "c-ping-pong-delay",
+   "label": "Ping-pong delay",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Two crossed delay lines bounce repeats left and right"
+  },
+  {
+   "id": "c-multitap-delay",
+   "label": "Multitap delay",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Several parallel taps, each with its own time and level"
+  },
+  {
+   "id": "c-tape-delay",
+   "label": "Tape delay",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Echo from a tape loop \u2014 darker each repeat, wow and flutter"
+  },
+  {
+   "id": "c-tempo-sync",
+   "label": "Tempo sync",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Delay time locked to note divisions of the project tempo"
+  },
+  {
+   "id": "c-dotted-eighth-delay",
+   "label": "Dotted-eighth delay",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Sync'd 3/16 repeat that weaves around the beat"
+  },
+  {
+   "id": "c-wet-dry-mix",
+   "label": "Wet/dry mix",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "Balance of effected against unprocessed signal"
+  },
+  {
+   "id": "c-delay-calculations",
+   "label": "Delay calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "60000 \u00f7 BPM gives the crotchet in milliseconds"
+  },
+  {
+   "id": "c-filtered-feedback",
+   "label": "Filtered feedback",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12d",
+   "blurb": "EQ inside the loop darkens each successive repeat"
+  },
+  {
+   "id": "c-room",
+   "label": "Room",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Small acoustic space simulation (short decay, prominent early reflections)"
+  },
+  {
+   "id": "c-pre-delay",
+   "label": "Pre-delay",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Time gap between direct sound and reverb onset (0-200ms+; indicates perceived distance)"
+  },
+  {
+   "id": "c-send-return-auxiliary",
+   "label": "Send/return (auxiliary)",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Standard method; allows multiple sources to share one reverb"
+  },
+  {
+   "id": "c-gated-reverb",
+   "label": "Gated reverb",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Gate on reverb output creates dramatic cut-off (iconic 1980s drum sound)"
+  },
+  {
+   "id": "c-lead-vocal",
+   "label": "Lead vocal",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Plate or synthetic hall (1-2 seconds), 60-80ms pre-delay for clarity and presence"
+  },
+  {
+   "id": "c-snare",
+   "label": "Snare",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Plate reverb (0.8-1.5 seconds) or gated reverb for punchy impact"
+  },
+  {
+   "id": "c-spatial-depth",
+   "label": "Spatial depth",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Longer/darker reverb pushes sounds back; shorter/brighter keeps forward"
+  },
+  {
+   "id": "c-hall",
+   "label": "Hall",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Large concert hall simulation (longer decay, spacious character)"
+  },
+  {
+   "id": "c-decay-time-rt60",
+   "label": "Decay time / RT60",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Time for reverb to decay by 60dB (determines perceived room size and character)"
+  },
+  {
+   "id": "c-insert",
+   "label": "Insert",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Direct on-channel processing (less common; used for special effects)"
+  },
+  {
+   "id": "c-reverse-reverb",
+   "label": "Reverse reverb",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Reversed reverb tail placed before the dry signal (build-up effect)"
+  },
+  {
+   "id": "c-backing-vocals",
+   "label": "Backing vocals",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Longer decay, less pre-delay to push slightly behind lead"
+  },
+  {
+   "id": "c-room-overhead",
+   "label": "Room/overhead",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Short ambience or room algorithm (0.3-0.8 seconds) for liveness"
+  },
+  {
+   "id": "c-cohesion",
+   "label": "Cohesion",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12r",
+   "blurb": "Shared reverb send creates sense of instruments in the same space"
+  },
+  {
+   "id": "c-lfo-low-frequency-oscillator",
+   "label": "LFO (Low Frequency Oscillator)",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "The most common modulator \u2014 a slow oscillator (typically below 20 Hz) that cyclically varies a parameter"
+  },
+  {
+   "id": "c-what-it-does",
+   "label": "What it does",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Creates the illusion of multiple sound sources playing together"
+  },
+  {
+   "id": "c-key-lfo-parameters",
+   "label": "Key LFO parameters",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": ""
+  },
+  {
+   "id": "c-how-it-works",
+   "label": "How it works",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Duplicates the signal, delays the copy by 20-50 ms, and modulates the delay time with an LFO"
+  },
+  {
+   "id": "c-rate",
+   "label": "Rate",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Speed of the LFO cycle"
+  },
+  {
+   "id": "c-result",
+   "label": "Result",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Slight pitch variation in the delayed copy creates a thickening, shimmering effect"
+  },
+  {
+   "id": "c-depth",
+   "label": "Depth",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Intensity of the modulation effect"
+  },
+  {
+   "id": "c-parameters",
+   "label": "Parameters",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Rate, depth, delay time (20-50 ms), feedback, dry/wet mix"
+  },
+  {
+   "id": "c-waveform",
+   "label": "Waveform",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Shape of the LFO cycle (sine, triangle, square, etc.)"
+  },
+  {
+   "id": "c-typical-use",
+   "label": "Typical use",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Thickening vocals, guitars, pads, synth strings"
+  },
+  {
+   "id": "c-comb-filtering",
+   "label": "Comb filtering",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Pattern of peaks and notches in the frequency spectrum caused by short delay + feedback"
+  },
+  {
+   "id": "c-key-distinction-from-chorus",
+   "label": "Key distinction from chorus",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Shorter delay + feedback = comb filtering (metallic sweep)"
+  },
+  {
+   "id": "c-key-distinction-from-flanger",
+   "label": "Key distinction from flanger",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12m",
+   "blurb": "Phaser uses allpass filters (not delay); notch spacing is non-harmonic"
+  },
+  {
+   "id": "c-overdrive",
+   "label": "Overdrive",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Mimics tube amplifier breakup; preserves instrument tone character; soft clipping behaviour; used in blues, cl"
+  },
+  {
+   "id": "c-drive-gain",
+   "label": "Drive/Gain",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Pre-distortion gain stage that pushes signal into nonlinear range"
+  },
+  {
+   "id": "c-clipping-type",
+   "label": "Clipping type",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Hard clipping (abrupt truncation) vs soft clipping (gradual rounding)"
+  },
+  {
+   "id": "c-tube-valve-distortion",
+   "label": "Tube/Valve distortion",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Thermionic valves producing natural compression and even harmonic emphasis; warm analogue character"
+  },
+  {
+   "id": "c-waveshaping",
+   "label": "Waveshaping",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Mathematical transfer functions applied to audio signal to reshape waveform"
+  },
+  {
+   "id": "c-soft-clipping",
+   "label": "Soft clipping",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Gradual compression of waveform peaks; predominantly odd harmonics with smoother decay; warmer character"
+  },
+  {
+   "id": "c-even-harmonics",
+   "label": "Even harmonics",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "(2nd, 4th, 6th) - Musically consonant; warm, rich character; associated with tube/valve distortion"
+  },
+  {
+   "id": "c-peak-level",
+   "label": "Peak level",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Maximum instantaneous amplitude; shown on DAW meters"
+  },
+  {
+   "id": "c-waveform-analysis",
+   "label": "Waveform analysis",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Oscilloscope/time-domain view showing waveform shape changes from clipping"
+  },
+  {
+   "id": "c-digital-clipping",
+   "label": "Digital clipping",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Signal exceeding 0 dBFS in the digital domain"
+  },
+  {
+   "id": "c-gain-staging",
+   "label": "Gain staging",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Proper level management through entire signal chain"
+  },
+  {
+   "id": "c-preamp",
+   "label": "Preamp",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "First gain stage; tone-shaping controls (gain, EQ); primary source of driven tone"
+  },
+  {
+   "id": "c-el34",
+   "label": "EL34",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "British sound; gritty mid-range (Marshall, Orange, Hiwatt)"
+  },
+  {
+   "id": "c-boost",
+   "label": "Boost",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.12x",
+   "blurb": "Clean gain increase to drive amp harder without adding its own distortion"
+  },
+  {
+   "id": "c-level-balancing-between-instruments-and-voices",
+   "label": "Level balancing between instruments and voices",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "adjusting fader levels so that each element sits appropriately in the mix hierarchy, with primary elements (ty"
+  },
+  {
+   "id": "c-balance",
+   "label": "Balance",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The relative volume relationship between all elements in a mix, ensuring each instrument is heard at an approp"
+  },
+  {
+   "id": "c-panning-for-stereo-placement-and-separation",
+   "label": "Panning for stereo placement and separation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "positioning elements across the stereo field to create clarity, separation, and a sense of width; understandin"
+  },
+  {
+   "id": "c-blend",
+   "label": "Blend",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The cohesion between mix elements \u2014 how well instruments sit together as a unified sound rather than as separa"
+  },
+  {
+   "id": "c-frequency-management-to-avoid-masking",
+   "label": "Frequency management to avoid masking",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "recognising when two instruments occupy the same frequency region and applying EQ or arrangement decisions to "
+  },
+  {
+   "id": "c-panning",
+   "label": "Panning",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The positioning of an audio signal within the stereo field, from hard left to centre to hard right"
+  },
+  {
+   "id": "c-use-of-effects-to-create-depth-and-space",
+   "label": "Use of effects to create depth and space",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "applying reverb, delay, and other time-based effects to place elements at different perceived distances within"
+  },
+  {
+   "id": "c-masking",
+   "label": "Masking",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The phenomenon where one sound obscures another because they share the same frequency range and volume level"
+  },
+  {
+   "id": "c-creative-vs-technical-mixing-decisions",
+   "label": "Creative vs technical mixing decisions",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "understanding the difference between technically correct balance (all elements audible, no clipping) and music"
+  },
+  {
+   "id": "c-frequency-spectrum",
+   "label": "Frequency spectrum",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The full range of audible frequencies (approximately 20 Hz\u201320 kHz), divided into sub-bass, bass, low-mid, mid,"
+  },
+  {
+   "id": "c-monitoring-considerations-for-mixing",
+   "label": "Monitoring considerations for mixing",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "using appropriate monitoring levels and environments to make accurate balance judgements; understanding the li"
+  },
+  {
+   "id": "c-stereo-field",
+   "label": "Stereo field",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The perceived left-to-right width of a mix, created by panning individual elements across the two channels"
+  },
+  {
+   "id": "c-headroom",
+   "label": "Headroom",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The difference between the loudest peak in a mix and the maximum level (0 dBFS), providing safety margin to pr"
+  },
+  {
+   "id": "c-mix-bus",
+   "label": "Mix bus",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.13",
+   "blurb": "The master channel or stereo output channel through which all individual tracks are routed before reaching the"
+  },
+  {
+   "id": "c-section-1-14-mastering",
+   "label": "Section 1.14: Mastering",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "The purpose of mastering as the final stage of audio post-production, including preparing music for distributi"
+  },
+  {
+   "id": "c-lufs",
+   "label": "LUFS",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "Loudness Units Full Scale \u2014 a perceptual loudness measurement standard used to set integrated loudness targets"
+  },
+  {
+   "id": "c-true-peak",
+   "label": "True Peak",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "The maximum absolute level of an audio signal, including intersample peaks that occur between digital samples;"
+  },
+  {
+   "id": "c-dithering",
+   "label": "Dithering",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "The deliberate addition of low-level noise to an audio signal when reducing bit depth, in order to mask quanti"
+  },
+  {
+   "id": "c-loudness-normalisation",
+   "label": "Loudness normalisation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "The process by which streaming platforms (Spotify, Apple Music) and broadcast systems automatically adjust pla"
+  },
+  {
+   "id": "c-multiband-compression",
+   "label": "Multiband compression",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "A dynamics processor that divides the audio signal into multiple frequency bands and applies independent compr"
+  },
+  {
+   "id": "c-stereo-enhancement",
+   "label": "Stereo enhancement",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "Processing applied during mastering to adjust perceived stereo width, often using mid-side processing to separ"
+  },
+  {
+   "id": "c-mid-side-processing",
+   "label": "Mid-side processing",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "A mastering technique that encodes the stereo signal into a mid channel (sum of left and right) and a side cha"
+  },
+  {
+   "id": "c-dynamic-range",
+   "label": "Dynamic range",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "1.14",
+   "blurb": "The difference between the quietest and loudest parts of an audio signal; high loudness masters often have red"
+  },
+  {
+   "id": "c-sound-reflection",
+   "label": "Sound reflection",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "How surfaces bounce sound waves back into the room"
+  },
+  {
+   "id": "c-haas-zone",
+   "label": "Haas zone",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "25-35ms threshold between echo and reverberation perception"
+  },
+  {
+   "id": "c-time-gap",
+   "label": "Time gap",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "between direct sound and first reflection"
+  },
+  {
+   "id": "c-first-repetitions",
+   "label": "First repetitions",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "of the original sound reaching the listener"
+  },
+  {
+   "id": "c-thousands-of-reflections",
+   "label": "Thousands of reflections",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "blend together into continuous ambience"
+  },
+  {
+   "id": "c-rt60",
+   "label": "RT60",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "Time for reverberated signal to decay by 60dB (1/1000th of original amplitude)"
+  },
+  {
+   "id": "c-larger-rooms",
+   "label": "Larger rooms",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "Longer reverberation times"
+  },
+  {
+   "id": "c-living-rooms",
+   "label": "Living rooms",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "0.4-0.6 seconds"
+  },
+  {
+   "id": "c-distance-cues",
+   "label": "Distance cues",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "Primary factor in spatial perception"
+  },
+  {
+   "id": "c-hard-surfaces",
+   "label": "Hard surfaces",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "Concrete, glass, wood (high reflection)"
+  },
+  {
+   "id": "c-specular-reflection",
+   "label": "Specular reflection",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "Mirror-like bounces from smooth surfaces"
+  },
+  {
+   "id": "c-real-space-sampling",
+   "label": "Real space sampling",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "Captures actual room acoustics"
+  },
+  {
+   "id": "c-intimate-vocals",
+   "label": "Intimate vocals",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.1",
+   "blurb": "Small room characteristics (short pre-delay, quick decay)"
+  },
+  {
+   "id": "c-drivers",
+   "label": "Drivers",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Woofer (low frequencies), tweeter (high frequencies), mid-range driver"
+  },
+  {
+   "id": "c-nearfield-monitors",
+   "label": "Nearfield monitors",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Positioned close to the listener (1-2m), most common in small/home studios"
+  },
+  {
+   "id": "c-flat-frequency-response",
+   "label": "Flat frequency response",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Why this is desirable for accurate mixing decisions"
+  },
+  {
+   "id": "c-equilateral-triangle-positioning",
+   "label": "Equilateral triangle positioning",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Monitors and listener form equal-sided triangle"
+  },
+  {
+   "id": "c-acoustic-treatment",
+   "label": "Acoustic treatment",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "How room acoustics affect what you hear from monitors"
+  },
+  {
+   "id": "c-choosing-appropriate-monitors",
+   "label": "Choosing appropriate monitors",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "for different studio environments"
+  },
+  {
+   "id": "c-crossover-networks",
+   "label": "Crossover networks",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "How the audio signal is split and directed to the appropriate driver"
+  },
+  {
+   "id": "c-midfield-monitors",
+   "label": "Midfield monitors",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Positioned at medium distance, used in larger control rooms"
+  },
+  {
+   "id": "c-frequency-range",
+   "label": "Frequency range",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Typical ranges for different monitor types"
+  },
+  {
+   "id": "c-ear-height",
+   "label": "Ear height",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Tweeters should be at ear level"
+  },
+  {
+   "id": "c-near-field-advantage",
+   "label": "Near-field advantage",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Hearing more direct sound than reflected sound"
+  },
+  {
+   "id": "c-understanding-why-mixes-translate-differently",
+   "label": "Understanding why mixes translate differently",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "across playback systems"
+  },
+  {
+   "id": "c-woofer",
+   "label": "Woofer",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Driver designed to reproduce low frequencies"
+  },
+  {
+   "id": "c-bass-reflex-ports",
+   "label": "Bass reflex ports",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.2",
+   "blurb": "Purpose and effect on low-frequency reproduction"
+  },
+  {
+   "id": "c-mic-level",
+   "label": "Mic level",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Millivolts from a microphone \u2014 needs a preamp to be usable"
+  },
+  {
+   "id": "c-line-level",
+   "label": "Line level",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Standard operating level of mixers and outboard gear"
+  },
+  {
+   "id": "c-instrument-level",
+   "label": "Instrument level",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Guitar or bass pickup output \u2014 higher than mic, unbalanced"
+  },
+  {
+   "id": "c-balanced-cable",
+   "label": "Balanced cable",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Two signal conductors plus screen \u2014 noise cancels on arrival"
+  },
+  {
+   "id": "c-unbalanced-cable",
+   "label": "Unbalanced cable",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Single conductor plus screen \u2014 picks up interference over distance"
+  },
+  {
+   "id": "c-xlr",
+   "label": "XLR",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Three-pin balanced connector for microphones"
+  },
+  {
+   "id": "c-jack-connections",
+   "label": "Jack connections",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "TS unbalanced or TRS balanced quarter-inch connectors"
+  },
+  {
+   "id": "c-di-box",
+   "label": "DI box",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Converts instrument level to balanced mic level for long runs"
+  },
+  {
+   "id": "c-impedance",
+   "label": "Impedance",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Opposition to signal flow \u2014 mismatches lose level and tone"
+  },
+  {
+   "id": "c-preamp-gain",
+   "label": "Preamp gain",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "First and most important level decision in the chain"
+  },
+  {
+   "id": "c-midi-vs-audio-signal",
+   "label": "MIDI vs audio signal",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.3",
+   "blurb": "Control data versus the sound itself \u2014 one is instructions"
+  },
+  {
+   "id": "c-analogue-signals",
+   "label": "Analogue signals",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Continuous waveforms representing information through variations in amplitude, frequency, or phase"
+  },
+  {
+   "id": "c-adc-analogue-to-digital-converter",
+   "label": "ADC (Analogue-to-Digital Converter)",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Converts analogue sound waves into binary digital data"
+  },
+  {
+   "id": "c-sample-rate",
+   "label": "Sample rate",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "The number of samples taken per second, measured in Hertz (Hz) or kilohertz (kHz)"
+  },
+  {
+   "id": "c-digital-resolution",
+   "label": "Digital resolution",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "The accuracy with which amplitude values are represented"
+  },
+  {
+   "id": "c-core-principle",
+   "label": "Core principle",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Sampling rate must be at least twice the highest frequency to be captured"
+  },
+  {
+   "id": "c-cause",
+   "label": "Cause",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Frequencies above the Nyquist frequency (half the sample rate) fold back into the audible range"
+  },
+  {
+   "id": "c-project-requirements",
+   "label": "Project requirements",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Match sample rate to final delivery format when possible"
+  },
+  {
+   "id": "c-common-bit-depths",
+   "label": "Common bit depths",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "16-bit (CD quality), 24-bit (professional recording), 32-bit float (DAW processing)"
+  },
+  {
+   "id": "c-mathematical-relationship",
+   "label": "Mathematical relationship",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Dynamic range \u2248 bit depth \u00d7 6dB"
+  },
+  {
+   "id": "c-recording-quality",
+   "label": "Recording quality",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "24-bit recommended for all professional recording to maximize fidelity"
+  },
+  {
+   "id": "c-stereo-24-bit-48khz",
+   "label": "Stereo 24-bit/48kHz",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "48,000 \u00d7 3 bytes \u00d7 2 channels = 288,000 bytes per second (\u2248288KB/s)"
+  },
+  {
+   "id": "c-continuous-resolution",
+   "label": "Continuous resolution",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "No quantization steps, infinite amplitude resolution within system limits"
+  },
+  {
+   "id": "c-physical-degradation",
+   "label": "Physical degradation",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Tape wear, vinyl surface noise, component aging affect signal quality"
+  },
+  {
+   "id": "c-perfect-cloning",
+   "label": "Perfect cloning",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.4",
+   "blurb": "Bit-perfect copies with zero generation loss"
+  },
+  {
+   "id": "c-standard-tuning-reference",
+   "label": "Standard tuning reference",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "A4 = 440Hz as mathematical foundation"
+  },
+  {
+   "id": "c-sample-rate-calculations",
+   "label": "Sample rate calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "44.1kHz, 48kHz, 96kHz relationships and requirements"
+  },
+  {
+   "id": "c-bpm-calculations",
+   "label": "BPM calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Beats per minute to milliseconds conversion"
+  },
+  {
+   "id": "c-logarithmic-scale-understanding",
+   "label": "Logarithmic scale understanding",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "dB as ratio measurement system"
+  },
+  {
+   "id": "c-frequency-identification",
+   "label": "Frequency identification",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Mathematical conversion from Hz to musical notes"
+  },
+  {
+   "id": "c-oscillator-frequency-calculations",
+   "label": "Oscillator frequency calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Converting musical notes to Hz for programming"
+  },
+  {
+   "id": "c-transpose-calculations",
+   "label": "Transpose calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Cents and semitone mathematics for pitch adjustment"
+  },
+  {
+   "id": "c-frequency-band-calculations",
+   "label": "Frequency band calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Mathematical understanding of EQ ranges"
+  },
+  {
+   "id": "c-compression-ratio-mathematics",
+   "label": "Compression ratio mathematics",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Input/output level calculations"
+  },
+  {
+   "id": "c-delay-time-calculations",
+   "label": "Delay time calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "BPM to milliseconds conversion for musical timing"
+  },
+  {
+   "id": "c-level-balance-calculations",
+   "label": "Level balance calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Relative dB relationships in professional mixing"
+  },
+  {
+   "id": "c-gain-staging-calculations",
+   "label": "Gain staging calculations",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Optimal recording levels and headroom management"
+  },
+  {
+   "id": "c-project-mathematics",
+   "label": "Project mathematics",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.5",
+   "blurb": "Sample rate, bit depth, and format conversion calculations"
+  },
+  {
+   "id": "c-decibels-are-relative",
+   "label": "Decibels are relative",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "they express a ratio between two values, not an absolute measurement"
+  },
+  {
+   "id": "c-not-suitable-for-preventing-clipping",
+   "label": "NOT suitable for preventing clipping",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "misses transient peaks"
+  },
+  {
+   "id": "c-analogue-headroom",
+   "label": "Analogue headroom",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Space between 0 VU and the point of unacceptable distortion (typically 12-20 dB)"
+  },
+  {
+   "id": "c-goal",
+   "label": "Goal",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Maintain a healthy signal level throughout the chain \u2014 not too hot (clipping) and not too quiet (noise)"
+  },
+  {
+   "id": "c-clipping",
+   "label": "Clipping",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "occurs when a signal exceeds the maximum level a system can handle"
+  },
+  {
+   "id": "c-noise-floor",
+   "label": "Noise floor",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "The level of background noise in a system when no signal is present"
+  },
+  {
+   "id": "c-decibel-db",
+   "label": "Decibel (dB)",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Logarithmic unit expressing a ratio between two values"
+  },
+  {
+   "id": "c-logarithmic-scale",
+   "label": "Logarithmic scale",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "dB values are not evenly spaced; the scale compresses large ranges into manageable numbers"
+  },
+  {
+   "id": "c-digital-headroom",
+   "label": "Digital headroom",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Space between the signal level and 0 dBFS"
+  },
+  {
+   "id": "c-in-the-daw",
+   "label": "In the DAW",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Keep individual track levels below 0 dBFS; use channel faders to balance; leave headroom on the master bus"
+  },
+  {
+   "id": "c-analogue-clipping",
+   "label": "Analogue clipping",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Gradual \u2014 soft clipping compresses peaks, adding harmonic distortion (sometimes musically desirable)"
+  },
+  {
+   "id": "c-signal-to-noise-ratio-snr",
+   "label": "Signal-to-noise ratio (SNR)",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "The difference in dB between the signal level and the noise floor"
+  },
+  {
+   "id": "c-dbfs",
+   "label": "dBFS",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Decibels Full Scale \u2014 digital reference where 0 dBFS is maximum"
+  },
+  {
+   "id": "c-why-logarithmic",
+   "label": "Why logarithmic?",
+   "kind": "concept",
+   "component": "c4",
+   "parent": "2.6",
+   "blurb": "Matches human perception of loudness (we perceive equal ratios of intensity as equal changes in loudness)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "c-daw-software-and-its-features",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-audio-interface",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-recall",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-abbreviation-expansion",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-signal-chain-description",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-equipment-selection-for-a-scenario",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-audio-interfaces-and-their-specifications",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-daw",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-evaluation-justification",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-hardware-identification-from-image",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-specification-comparison",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-troubleshooting-latency",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-midi-controllers-and-hardware-integration",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-plugin",
+   "to": "t-software-and-hardware",
+   "kind": "parent"
+  },
+  {
+   "from": "c-dynamic-microphone",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-condenser-microphone",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-ribbon-microphone",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-polar-patterns",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-mic-placement",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-off-axis-response",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-gain-structure",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-phantom-power",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-pad-switch",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-multi-mic-recording",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-advanced-microphone-techniques",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-how-microphones-work",
+   "to": "t-microphones",
+   "kind": "parent"
+  },
+  {
+   "from": "c-basic-waveforms",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-low-pass-filters",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-adsr",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-modulation-sources",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-fm-synthesis",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-square-wave-oscillators",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-audio-bounces",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-operator-programming",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-a4-440hz",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-sine-wave",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-sound-design",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-octave-matching",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-hands-on-experimentation",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-harmonic-content",
+   "to": "t-synthesis",
+   "kind": "parent"
+  },
+  {
+   "from": "c-breakbeat-sampling",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-cropping-and-editing",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-glitched-vocals",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-breakbeat-projects",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-technical-precision",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-audio-clip-manipulation",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-timeline-editing",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-simpler",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-warp-markers",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-sample-based-synthesis",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-sample-clearance",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-industry-standards",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-technical-skills",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-digital-processing",
+   "to": "t-sampling",
+   "kind": "parent"
+  },
+  {
+   "from": "c-midi-controller-keyboard",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-step-input",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-pencil-tool",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-quantise",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-swing-quantise",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-velocity",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-piano-roll",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-list-editor",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-note-length-editing",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-real-time-input",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-non-real-time-input",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-editing-skills",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-how-midi-works-by-studying-data-bytes",
+   "to": "t-sequencing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-destructive-editing",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-comping-workflow",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-cutting",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-purpose",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-fade-in",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-background-noise-removal",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-warp-markers",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-formant-preservation",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-audio-quantisation",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-session-view",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-bar-range-copying",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-edit-point-checklist",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-practical-copy-paste-tasks",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-mark-allocation",
+   "to": "t-audio-editing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-spectrum-analysis",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-transposition",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-beat-detection",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-practical-application",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-past-paper-scenarios",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-transpose-effect",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-spectrum-analyser",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-warp-markers",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-frequency-calculations",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-spectral-analysis",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-warp-marker-placement",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-formant-corrected-pitch-shifting",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-warp-marker-workflow",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-artifact-management",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "parent"
+  },
+  {
+   "from": "c-volume-automation",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-linear-automation",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-grid-synchronised-automation",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-audio-bounces",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-mix-enhancement",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-real-time-recording",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-track-volume",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-automation-curve-mathematics",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-volume-riding",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-filter-sweeps",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-real-time-control",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-multiple-lesson-references",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-parameter-identification",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-left-right-stereo-movement",
+   "to": "t-automation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-controlling-dynamic-range",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-noise-reduction",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-limiting",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-threshold",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-fast-attack-slow-release",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-settings",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-x-axis",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-drawing-graphs",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-heavy-compression",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-vocal-compression",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-gentle-compression",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-side-chain-compression",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-adding-sustain",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-creating-tight-sounds",
+   "to": "t-dynamic-processing",
+   "kind": "parent"
+  },
+  {
+   "from": "c-pan-pot-panoramic-potentiometer",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-stereo-image",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-why-it-matters",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-auto-panning",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-hard-left-hard-right",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-stereo-width",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-phase-cancellation-risk",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-stereo-delay-chorus",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-coincident-pair",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-centre-panning",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-phantom-centre",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-checking-mono-compatibility",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-haas-effect",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-spaced-pair",
+   "to": "t-stereo",
+   "kind": "parent"
+  },
+  {
+   "from": "c-low-shelf",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-parametric-eq",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-gain",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-narrow-q",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-tool",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-frequencies",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-detection",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-drawing-graphs-of-eq",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-high-pass-filter",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-kick-drum",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-fundamental",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-high-shelf",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-graphic-eq",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-cut-off-frequency",
+   "to": "t-eq",
+   "kind": "parent"
+  },
+  {
+   "from": "c-delay-time",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-feedback",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-slapback",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-ping-pong-delay",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-multitap-delay",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-haas-effect",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-tape-delay",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-tempo-sync",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-dotted-eighth-delay",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-wet-dry-mix",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-delay-calculations",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-filtered-feedback",
+   "to": "t-delay",
+   "kind": "parent"
+  },
+  {
+   "from": "c-room",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-pre-delay",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-send-return-auxiliary",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-gated-reverb",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-lead-vocal",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-snare",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-spatial-depth",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-hall",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-decay-time-rt60",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-insert",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-reverse-reverb",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-backing-vocals",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-room-overhead",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-cohesion",
+   "to": "t-reverb",
+   "kind": "parent"
+  },
+  {
+   "from": "c-lfo-low-frequency-oscillator",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-what-it-does",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-key-lfo-parameters",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-how-it-works",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-rate",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-result",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-depth",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-parameters",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-feedback",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-waveform",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-typical-use",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-comb-filtering",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-key-distinction-from-chorus",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-key-distinction-from-flanger",
+   "to": "t-modulation",
+   "kind": "parent"
+  },
+  {
+   "from": "c-overdrive",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-drive-gain",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-clipping-type",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-tube-valve-distortion",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-waveshaping",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-soft-clipping",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-even-harmonics",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-peak-level",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-waveform-analysis",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-digital-clipping",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-gain-staging",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-preamp",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-el34",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-boost",
+   "to": "t-distortion",
+   "kind": "parent"
+  },
+  {
+   "from": "c-level-balancing-between-instruments-and-voices",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-balance",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-panning-for-stereo-placement-and-separation",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-blend",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-frequency-management-to-avoid-masking",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-panning",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-use-of-effects-to-create-depth-and-space",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-masking",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-creative-vs-technical-mixing-decisions",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-frequency-spectrum",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-monitoring-considerations-for-mixing",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-stereo-field",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-headroom",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-mix-bus",
+   "to": "t-balance-and-blend",
+   "kind": "parent"
+  },
+  {
+   "from": "c-section-1-14-mastering",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-lufs",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-true-peak",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-dithering",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-limiting",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-loudness-normalisation",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-multiband-compression",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-stereo-enhancement",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-mid-side-processing",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-dynamic-range",
+   "to": "t-mastering",
+   "kind": "parent"
+  },
+  {
+   "from": "c-sound-reflection",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-haas-zone",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-time-gap",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-first-repetitions",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-thousands-of-reflections",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-rt60",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-larger-rooms",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-living-rooms",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-distance-cues",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-hard-surfaces",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-specular-reflection",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-real-space-sampling",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-pre-delay",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-intimate-vocals",
+   "to": "t-acoustics",
+   "kind": "parent"
+  },
+  {
+   "from": "c-drivers",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-nearfield-monitors",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-flat-frequency-response",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-equilateral-triangle-positioning",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-acoustic-treatment",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-choosing-appropriate-monitors",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-crossover-networks",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-midfield-monitors",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-frequency-range",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-ear-height",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-near-field-advantage",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-understanding-why-mixes-translate-differently",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-woofer",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-bass-reflex-ports",
+   "to": "t-monitor-speakers",
+   "kind": "parent"
+  },
+  {
+   "from": "c-mic-level",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-line-level",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-instrument-level",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-balanced-cable",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-unbalanced-cable",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-xlr",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-jack-connections",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-phantom-power",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-di-box",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-impedance",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-preamp-gain",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-midi-vs-audio-signal",
+   "to": "t-signals",
+   "kind": "parent"
+  },
+  {
+   "from": "c-analogue-signals",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-adc-analogue-to-digital-converter",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-sample-rate",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-digital-resolution",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-core-principle",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-cause",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-project-requirements",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-common-bit-depths",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-mathematical-relationship",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-recording-quality",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-stereo-24-bit-48khz",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-continuous-resolution",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-physical-degradation",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-perfect-cloning",
+   "to": "t-digital-analogue",
+   "kind": "parent"
+  },
+  {
+   "from": "c-standard-tuning-reference",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-sample-rate-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-bpm-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-logarithmic-scale-understanding",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-frequency-identification",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-oscillator-frequency-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-transpose-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-frequency-band-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-compression-ratio-mathematics",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-delay-time-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-automation-curve-mathematics",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-level-balance-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-gain-staging-calculations",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-project-mathematics",
+   "to": "t-numeracy",
+   "kind": "parent"
+  },
+  {
+   "from": "c-decibels-are-relative",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-not-suitable-for-preventing-clipping",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-analogue-headroom",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-goal",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-clipping",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-noise-floor",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-decibel-db",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-logarithmic-scale",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-digital-headroom",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-in-the-daw",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-analogue-clipping",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-signal-to-noise-ratio-snr",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-dbfs",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "c-why-logarithmic",
+   "to": "t-levels",
+   "kind": "parent"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-eq",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-numeracy",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-automation",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-dynamic-processing",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-delay",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-balance-and-blend",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-sampling",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-sequencing",
+   "kind": "related"
+  },
+  {
+   "from": "t-synthesis",
+   "to": "t-pitch-and-rhythm-correction",
+   "kind": "related"
+  },
+  {
+   "from": "t-sampling",
+   "to": "t-audio-editing",
+   "kind": "related"
+  },
+  {
+   "from": "t-sampling",
+   "to": "t-eq",
+   "kind": "related"
+  },
+  {
+   "from": "t-sampling",
+   "to": "t-dynamic-processing",
+   "kind": "related"
+  },
+  {
+   "from": "t-sampling",
+   "to": "t-automation",
+   "kind": "related"
+  },
+  {
+   "from": "t-sampling",
+   "to": "t-delay",
+   "kind": "related"
+  },
+  {
+   "from": "t-sampling",
+   "to": "t-numeracy",
+   "kind": "related"
+  },
+  {
+   "from": "t-pitch-and-rhythm-correction",
+   "to": "t-numeracy",
+   "kind": "related"
+  },
+  {
+   "from": "t-pitch-and-rhythm-correction",
+   "to": "t-eq",
+   "kind": "related"
+  },
+  {
+   "from": "t-pitch-and-rhythm-correction",
+   "to": "t-audio-editing",
+   "kind": "related"
+  },
+  {
+   "from": "t-pitch-and-rhythm-correction",
+   "to": "t-automation",
+   "kind": "related"
+  },
+  {
+   "from": "t-pitch-and-rhythm-correction",
+   "to": "t-dynamic-processing",
+   "kind": "related"
+  },
+  {
+   "from": "t-pitch-and-rhythm-correction",
+   "to": "t-sampling",
+   "kind": "related"
+  },
+  {
+   "from": "t-automation",
+   "to": "t-eq",
+   "kind": "related"
+  },
+  {
+   "from": "t-automation",
+   "to": "t-dynamic-processing",
+   "kind": "related"
+  },
+  {
+   "from": "t-automation",
+   "to": "t-delay",
+   "kind": "related"
+  },
+  {
+   "from": "t-automation",
+   "to": "t-balance-and-blend",
+   "kind": "related"
+  },
+  {
+   "from": "t-automation",
+   "to": "t-numeracy",
+   "kind": "related"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-eq",
+   "kind": "related"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-delay",
+   "kind": "related"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-numeracy",
+   "kind": "related"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-balance-and-blend",
+   "kind": "related"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-audio-editing",
+   "kind": "related"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-sequencing",
+   "kind": "related"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-microphones",
+   "kind": "related"
+  },
+  {
+   "from": "t-eq",
+   "to": "t-delay",
+   "kind": "related"
+  },
+  {
+   "from": "t-eq",
+   "to": "t-numeracy",
+   "kind": "related"
+  },
+  {
+   "from": "t-eq",
+   "to": "t-balance-and-blend",
+   "kind": "related"
+  },
+  {
+   "from": "t-microphones",
+   "to": "t-signals",
+   "kind": "signal-path"
+  },
+  {
+   "from": "t-signals",
+   "to": "t-levels",
+   "kind": "signal-path"
+  },
+  {
+   "from": "t-levels",
+   "to": "t-software-and-hardware",
+   "kind": "signal-path"
+  },
+  {
+   "from": "t-software-and-hardware",
+   "to": "t-audio-editing",
+   "kind": "signal-path"
+  },
+  {
+   "from": "t-audio-editing",
+   "to": "t-balance-and-blend",
+   "kind": "signal-path"
+  },
+  {
+   "from": "t-balance-and-blend",
+   "to": "t-mastering",
+   "kind": "signal-path"
+  },
+  {
+   "from": "t-mastering",
+   "to": "t-monitor-speakers",
+   "kind": "signal-path"
+  },
+  {
+   "from": "t-dynamic-processing",
+   "to": "t-levels",
+   "kind": "exam-link"
+  },
+  {
+   "from": "t-delay",
+   "to": "t-numeracy",
+   "kind": "exam-link"
+  },
+  {
+   "from": "t-sampling",
+   "to": "t-digital-analogue",
+   "kind": "exam-link"
+  },
+  {
+   "from": "t-stereo",
+   "to": "t-delay",
+   "kind": "exam-link"
+  },
+  {
+   "from": "t-reverb",
+   "to": "t-acoustics",
+   "kind": "exam-link"
+  },
+  {
+   "from": "t-pitch-and-rhythm-correction",
+   "to": "t-sequencing",
+   "kind": "exam-link"
+  }
+ ]
+}
