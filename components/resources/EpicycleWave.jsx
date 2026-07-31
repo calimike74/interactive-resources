@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { borderRadius } from '@/lib/theme';
-import { HARM_STAGE, HARMONIC_COUNT, idealHarmonics } from '@/lib/additive-recipes';
+import { HARM_STAGE, HARMONIC_COUNT, chainScaleDivisor, idealHarmonics } from '@/lib/additive-recipes';
 
 /**
  * The waveform, drawn as a chain of spinning circles — one per harmonic.
@@ -24,6 +24,11 @@ import { HARM_STAGE, HARMONIC_COUNT, idealHarmonics } from '@/lib/additive-recip
  * and drop away, and the wave the pen draws rounds off towards a sine. That is
  * subtractive synthesis in one image, and the lab tool could not show it because
  * its filter stage was removed in July.
+ *
+ * The first version of this said all that and then quietly undid it, by scaling
+ * the drawing to whatever was left after filtering — see chainScaleDivisor. The
+ * lesson is worth keeping: a display that fits itself to its own data cannot
+ * show data getting smaller.
  *
  * PHASE IS NOT OPTIONAL. A low-pass does not only make a harmonic quieter, it
  * delays it, and a harmonic that arrives late changes the SHAPE of the sum. If
@@ -59,11 +64,6 @@ function waveVal(amp, phase, t) {
     return v;
 }
 
-function sumOf(a) {
-    let t = 0;
-    for (let i = 0; i < a.length; i++) t += a[i];
-    return t;
-}
 
 export default function EpicycleWave({
     waveform = 'sawtooth',
@@ -118,10 +118,16 @@ export default function EpicycleWave({
         const phases = new Float32Array(HARMONIC_COUNT);
         const amp = new Array(HARMONIC_COUNT).fill(0);
         const phase = new Array(HARMONIC_COUNT).fill(0);
+        // Kept alongside the filtered amplitudes so the drawing can be scaled
+        // against the waveform BEFORE the filter touched it — see
+        // chainScaleDivisor for why that is the difference between showing the
+        // filter's work and hiding it.
+        let idealAmp = new Array(HARMONIC_COUNT).fill(0);
 
         const recompute = () => {
             const p = propsRef.current;
             const ideal = idealHarmonics(p.waveform);
+            idealAmp = ideal.amp;
             const f0 = (freqRef?.current) || 220;
 
             if (probe) {
@@ -146,10 +152,21 @@ export default function EpicycleWave({
             ctx.fillStyle = STAGE;
             ctx.fillRect(0, 0, W, H);
 
-            const originX = Math.min(66, W * 0.22);
+            // Where the chain of circles gets to live. The old rule capped this at
+            // a flat 66px, which was right when the pane was 260px wide and wrong
+            // the moment the two-column rework made it 500-plus: the circles kept
+            // their tiny corner while the wave stretched across everything, and
+            // the part of the picture the section is ABOUT read as a footnote.
+            //
+            // Now it takes whichever is smaller — a fifth of the width, or just
+            // enough for a chain as tall as the pane allows. On a wide pane the
+            // height binds and the circles fill their half properly; on a narrow
+            // one the width binds, exactly as before, so nothing gets squeezed.
+            const halfH = H * 0.42;
+            const originX = Math.min(W * 0.22, halfH + 12);
             const originY = H / 2;
-            const s = Math.max(0.35, sumOf(amp));
-            const scale = Math.min(originX - 10, H * 0.42) / s;
+            const s = chainScaleDivisor(idealAmp, amp);
+            const scale = Math.min(originX - 10, halfH) / s;
             const waveX0 = originX + s * scale + 14;
             const waveW = Math.max(40, W - waveX0 - 6);
 

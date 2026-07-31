@@ -7,6 +7,7 @@ import {
     HARMONIC_COUNT,
     SOUNDS,
     SOUND_ORDER,
+    chainScaleDivisor,
     idealHarmonics,
     waveVal,
 } from '../lib/additive-recipes.js';
@@ -214,5 +215,54 @@ test('H1 is the same colour on the additive and subtractive tools', () => {
             found.some((c) => c.toUpperCase() === colour.toUpperCase()),
             `${colour} is in HARM_STAGE but not in HarmonicSpectrum.jsx — the two spectrum displays have drifted apart`,
         );
+    }
+});
+
+// ─── The circles have to be allowed to get smaller ───────────────────────────
+//
+// This is the rule the epicycle display shipped without, and its absence was
+// invisible in every screenshot: the picture looked right at every cutoff, and
+// only a pixel count across two cutoffs showed that closing the filter made the
+// drawing BIGGER. Locking it down here because it is a one-character mistake to
+// make again.
+
+test('filtering a waveform never makes the drawing grow', () => {
+    const { amp: ideal } = idealHarmonics('sawtooth');
+    const open = chainScaleDivisor(ideal, ideal);
+    // A low-pass has taken out everything above the third harmonic.
+    const filtered = ideal.map((a, i) => (i < 3 ? a : 0));
+    const shut = chainScaleDivisor(ideal, filtered);
+    assert.equal(shut, open, 'the divisor must not follow the filtered sum downwards');
+    // Which is what makes the drawn radius of a surviving harmonic fall.
+    assert.ok(filtered[0] / shut <= ideal[0] / open, 'H1 must not be drawn larger once the filter closes');
+});
+
+test('a resonant peak is scaled down to fit rather than drawn off the canvas', () => {
+    const { amp: ideal } = idealHarmonics('square');
+    // Q of 20 puts roughly +26dB on the harmonic nearest the cutoff.
+    const boosted = ideal.map((a, i) => (i === 2 ? a * 20 : a));
+    const d = chainScaleDivisor(ideal, boosted);
+    let sum = 0;
+    for (const a of boosted) sum += a;
+    assert.equal(d, sum, 'when the live chain is longer than the unfiltered one, it sets the scale');
+    assert.ok(sum / d <= 1, 'the chain can never be longer than the space allowed for it');
+});
+
+test('a fully closed filter cannot divide by zero', () => {
+    const { amp: ideal } = idealHarmonics('sine');
+    const silence = new Array(HARMONIC_COUNT).fill(0);
+    assert.ok(chainScaleDivisor(silence, silence) >= 0.35, 'a floor keeps the drawing finite when nothing survives');
+    assert.ok(Number.isFinite(chainScaleDivisor(ideal, silence)));
+});
+
+test('each waveform is measured against its own unfiltered self', () => {
+    // A sine's single circle and a sawtooth's chain of eight should both fill
+    // the pane, or the sine looks like a quiet sawtooth rather than a different
+    // waveform.
+    for (const type of ['sine', 'square', 'sawtooth', 'triangle']) {
+        const { amp } = idealHarmonics(type);
+        let sum = 0;
+        for (const a of amp) sum += a;
+        assert.equal(chainScaleDivisor(amp, amp), Math.max(0.35, sum), `${type} must scale to its own full chain`);
     }
 });
