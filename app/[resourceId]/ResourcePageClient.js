@@ -7,6 +7,7 @@ import { getTopicForResource } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
+import GateKeeper from '@/components/GateKeeper';
 
 // Resource components registry
 // Add new components here as they're created
@@ -249,9 +250,12 @@ export default function ResourcePageClient() {
 
             <Breadcrumbs />
 
-            {/* Resource Content */}
+            {/* Resource Content — gated when the September soft gate is on and
+                this resource is not in the free set; see lib/gate.js. */}
             <main>
-                <ResourceComponent />
+                <GateKeeper resourceId={resource.id} title={resource.title}>
+                    <ResourceComponent />
+                </GateKeeper>
             </main>
 
             {/* Footer */}
