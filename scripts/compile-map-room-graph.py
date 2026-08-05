@@ -390,4 +390,11 @@ for path in ["lib/map-room/routes/exam-routes.json",
         if old.startswith("_"):
             continue
         txt = re.sub(rf'"{re.escape(old)}"', f'"{new}"', txt)
-    p.write_text(txt)
+    # Two old ids can remap onto the same new one, leaving a focus set that
+    # names the same node twice. Harmless to the renderer (focusSet is a Set)
+    # but it makes the data read as if a step lights more than it does.
+    data = json.loads(txt)
+    for step in ([s for r in data.get("routes", []) for s in r["steps"]]
+                 + data.get("beats", [])):
+        step["focus"] = list(dict.fromkeys(step["focus"]))
+    p.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")

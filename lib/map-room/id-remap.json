@@ -29,6 +29,6 @@
   "c-noise-reduction": "c-gating",
   "c-insert": "t-reverb",
   "c-frequencies": "t-eq",
-  "c-stereo-image": "t-stereo",
-  "c-stereo-delay-chorus": "t-stereo"
+  "c-stereo-image": "c-itd-iid",
+  "c-stereo-delay-chorus": "c-haas-effect"
 }

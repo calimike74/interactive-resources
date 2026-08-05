@@ -1,59 +1,98 @@
 {
- "id": "whole-course-90s",
- "title": "The whole course in 90 seconds",
- "beats": [
-  {
-   "focus": [],
-   "caption": "This is Component 4 — every concept you will meet, drawn in its place."
-  },
-  {
-   "focus": ["t-microphones"],
-   "withNeighbours": true,
-   "caption": "Everything starts at a microphone — capture decides what you have to mix later."
-  },
-  {
-   "focus": ["t-microphones", "t-signals", "t-levels"],
-   "caption": "Signals flow: mic level becomes line level, and good gain keeps noise below the music."
-  },
-  {
-   "focus": ["t-levels", "t-digital-analogue"],
-   "withNeighbours": true,
-   "caption": "At the converter, sound becomes numbers — sample rate and bit depth set the limits."
-  },
-  {
-   "focus": ["t-software-and-hardware", "t-sequencing"],
-   "withNeighbours": true,
-   "caption": "Inside the DAW, audio and MIDI live side by side — one is sound, one is instructions."
-  },
-  {
-   "focus": ["t-synthesis", "t-sampling"],
-   "withNeighbours": true,
-   "caption": "Synthesis builds sound from nothing; sampling borrows it — both feed your productions."
-  },
-  {
-   "focus": ["t-audio-editing", "t-pitch-and-rhythm-correction", "t-automation"],
-   "caption": "Editing, correction and automation shape a take into a performance."
-  },
-  {
-   "focus": ["t-eq", "t-dynamic-processing", "t-delay", "t-reverb", "t-modulation", "t-distortion"],
-   "caption": "The processors — EQ, compression, and the time-based effects — do the mixing work."
-  },
-  {
-   "focus": ["c-low-pass-filter", "t-synthesis", "t-eq"],
-   "withNeighbours": false,
-   "caption": "Nothing lives alone: the filter you met in synthesis is the EQ you mix with."
-  },
-  {
-   "focus": ["t-dynamic-processing", "t-levels", "c-limiting"],
-   "caption": "Compression is a levels decision — squeeze dynamics and the average level can rise."
-  },
-  {
-   "focus": ["t-stereo", "t-balance-and-blend", "t-mastering", "t-monitor-speakers"],
-   "caption": "Everything converges on the mix: balance it, place it in stereo, master it, trust your monitors."
-  },
-  {
-   "focus": [],
-   "caption": "One subject, one map. Every lesson from here is a journey across it."
-  }
- ]
+  "id": "whole-course-90s",
+  "title": "The whole course in 90 seconds",
+  "beats": [
+    {
+      "focus": [],
+      "caption": "This is Component 4 — every concept you will meet, drawn in its place."
+    },
+    {
+      "focus": [
+        "t-microphones"
+      ],
+      "withNeighbours": true,
+      "caption": "Everything starts at a microphone — capture decides what you have to mix later."
+    },
+    {
+      "focus": [
+        "t-microphones",
+        "t-signals",
+        "t-levels"
+      ],
+      "caption": "Signals flow: mic level becomes line level, and good gain keeps noise below the music."
+    },
+    {
+      "focus": [
+        "t-levels",
+        "t-digital-analogue"
+      ],
+      "withNeighbours": true,
+      "caption": "At the converter, sound becomes numbers — sample rate and bit depth set the limits."
+    },
+    {
+      "focus": [
+        "t-software-and-hardware",
+        "t-sequencing"
+      ],
+      "withNeighbours": true,
+      "caption": "Inside the DAW, audio and MIDI live side by side — one is sound, one is instructions."
+    },
+    {
+      "focus": [
+        "t-synthesis",
+        "t-sampling"
+      ],
+      "withNeighbours": true,
+      "caption": "Synthesis builds sound from nothing; sampling borrows it — both feed your productions."
+    },
+    {
+      "focus": [
+        "t-audio-editing",
+        "t-pitch-and-rhythm-correction",
+        "t-automation"
+      ],
+      "caption": "Editing, correction and automation shape a take into a performance."
+    },
+    {
+      "focus": [
+        "t-eq",
+        "t-dynamic-processing",
+        "t-delay",
+        "t-reverb",
+        "t-modulation",
+        "t-distortion"
+      ],
+      "caption": "The processors — EQ, compression, and the time-based effects — do the mixing work."
+    },
+    {
+      "focus": [
+        "c-low-pass-filter",
+        "t-synthesis",
+        "t-eq"
+      ],
+      "withNeighbours": false,
+      "caption": "Nothing lives alone: the filter you met in synthesis is the EQ you mix with."
+    },
+    {
+      "focus": [
+        "t-dynamic-processing",
+        "t-levels",
+        "c-limiting"
+      ],
+      "caption": "Compression is a levels decision — squeeze dynamics and the average level can rise."
+    },
+    {
+      "focus": [
+        "t-stereo",
+        "t-balance-and-blend",
+        "t-mastering",
+        "t-monitor-speakers"
+      ],
+      "caption": "Everything converges on the mix: balance it, place it in stereo, master it, trust your monitors."
+    },
+    {
+      "focus": [],
+      "caption": "One subject, one map. Every lesson from here is a journey across it."
+    }
+  ]
 }
