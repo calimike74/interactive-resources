@@ -9,22 +9,22 @@
             "marks": 20,
             "steps": [
                 {
-                    "focus": ["t-dynamic-processing", "c-heavy-compression", "c-threshold", "c-vocal-compression"],
+                    "focus": ["t-dynamic-processing", "c-threshold-ratio", "c-threshold-ratio", "c-compression"],
                     "caption": "First stop: a very high ratio means a heavily compressed vocal — say what that does.",
                     "note": "Examiner, 2023: the make-up gain's job was often confused and misunderstood."
                 },
                 {
-                    "focus": ["t-eq", "c-high-shelf", "c-frequencies", "c-frequency-management-to-avoid-masking"],
+                    "focus": ["t-eq", "c-low-high-shelf-filters", "t-eq", "c-frequency-masking"],
                     "caption": "The EQ boosts mids and highs, so the vocal brightens and comes forward in the mix.",
                     "note": "Examiner, 2023: very few noticed boosting the lows invites muddiness against the bass guitar."
                 },
                 {
-                    "focus": ["t-delay", "c-feedback", "c-tempo-sync", "c-delay-time"],
+                    "focus": ["t-delay", "c-delay-time-feedback", "c-tempo-synced-delay", "c-delay-time-feedback"],
                     "caption": "High feedback means too many repeats; the delay time is tempo-synced at a quaver.",
                     "note": "Examiner, 2023: very few candidates worked out the quaver tempo-sync."
                 },
                 {
-                    "focus": ["t-stereo", "c-stereo-delay-chorus", "c-stereo-image"],
+                    "focus": ["t-stereo", "t-stereo", "t-stereo"],
                     "caption": "The two delay times differ on purpose — offset repeats build a stereo image.",
                     "note": "Examiner, 2023: some argued the offset was a mistake and would have removed it."
                 },
@@ -43,17 +43,17 @@
             "marks": 20,
             "steps": [
                 {
-                    "focus": ["t-synthesis", "c-basic-waveforms", "c-square-wave-oscillators", "c-harmonic-content"],
+                    "focus": ["t-synthesis", "c-waveforms", "c-waveforms", "c-harmonic-content"],
                     "caption": "Name what you see first — oscillators, sub-oscillator, waveforms. Naming alone caps at five marks.",
                     "note": "Examiner, 2019: candidates who only listed parameters maxed out at 5 AO3 marks."
                 },
                 {
-                    "focus": ["c-low-pass-filters", "c-cut-off-frequency", "c-adsr"],
+                    "focus": ["c-low-pass-filter", "c-gain-cut-off-frequency", "c-adsr-envelope"],
                     "caption": "The discriminator: the envelope drives the filter cutoff here, not the volume.",
                     "note": "Examiner, 2019: only the top candidates noticed the envelope was routed to the filter."
                 },
                 {
-                    "focus": ["c-modulation-sources", "c-lfo-low-frequency-oscillator"],
+                    "focus": ["c-lfo-modulation", "c-lfo-rate-depth-waveform"],
                     "caption": "The LFO is a control signal, not an audible bass note — a mark-losing confusion.",
                     "note": "Examiner, 2019: a surprising number thought the LFO was for audible bass."
                 },
@@ -77,22 +77,22 @@
             "marks": 20,
             "steps": [
                 {
-                    "focus": ["t-distortion", "c-overdrive", "c-drive-gain"],
+                    "focus": ["t-distortion", "c-overdrive", "c-drive-tone"],
                     "caption": "Gain drives the clipping; level sets the output. Swapping them cost whole paragraphs.",
                     "note": "Examiner, 2022: the gain-versus-level confusion made a lot of writing uncreditable."
                 },
                 {
-                    "focus": ["t-eq", "c-frequencies", "c-gain"],
+                    "focus": ["t-eq", "t-eq", "c-gain-cut-off-frequency"],
                     "caption": "EQ was the best-answered pedal — describing how a boost muddies the bass earned marks.",
                     "note": "Examiner, 2022: EQ best answered, then overdrive, then compression, then wah."
                 },
                 {
-                    "focus": ["t-dynamic-processing", "c-adding-sustain", "c-gentle-compression"],
+                    "focus": ["t-dynamic-processing", "c-attack-release", "c-threshold-ratio"],
                     "caption": "Compression on bass evens the level and adds sustain — say why funk wants that.",
                     "note": "Examiner, 2022: many scored 8–12 — full AO3 plus only a few applied points."
                 },
                 {
-                    "focus": ["c-cut-off-frequency", "t-modulation"],
+                    "focus": ["c-gain-cut-off-frequency", "t-modulation"],
                     "caption": "The wah is a swept filter peak. Knowing how it worked unlocked the top band.",
                     "note": "Examiner, 2022: wah understanding gave access to another five or so marks."
                 },
@@ -111,22 +111,22 @@
             "marks": 20,
             "steps": [
                 {
-                    "focus": ["t-eq", "c-parametric-eq", "c-high-pass-filter"],
+                    "focus": ["t-eq", "c-parametric-graphic-eq", "c-high-pass-filter"],
                     "caption": "Precision first: it is a parametric EQ — calling it a notch filter lost marks.",
                     "note": "Examiner, 2020: much incorrect terminology — parametric EQs called notch filters or BPFs."
                 },
                 {
-                    "focus": ["t-dynamic-processing", "c-threshold", "c-noise-reduction"],
+                    "focus": ["t-dynamic-processing", "c-threshold-ratio", "c-gating"],
                     "caption": "Read settings against consequence: this gate threshold would silence the rhythm guitars entirely.",
                     "note": "Examiner, 2020: the gate would yield silence — only a few students noticed."
                 },
                 {
-                    "focus": ["t-reverb", "c-insert", "c-send-return-auxiliary"],
+                    "focus": ["t-reverb", "t-reverb", "c-pre-fader-post-fader-sends"],
                     "caption": "Routing is knowledge too — reverb placed as an insert changes what the chain does.",
                     "note": "Examiner, 2020: very few candidates commented on the routing at all."
                 },
                 {
-                    "focus": ["t-stereo", "c-hard-left-hard-right", "c-stereo-image"],
+                    "focus": ["t-stereo", "c-panning-conventions", "t-stereo"],
                     "caption": "The guitars are hard-panned, so the stereo picture is wide — the easiest applied mark.",
                     "note": "Examiner, 2020: noting the wide stereo picture was the easiest AO4 mark to score."
                 },

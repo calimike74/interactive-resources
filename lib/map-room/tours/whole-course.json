@@ -39,7 +39,7 @@
    "caption": "The processors — EQ, compression, and the time-based effects — do the mixing work."
   },
   {
-   "focus": ["c-low-pass-filters", "t-synthesis", "t-eq"],
+   "focus": ["c-low-pass-filter", "t-synthesis", "t-eq"],
    "withNeighbours": false,
    "caption": "Nothing lives alone: the filter you met in synthesis is the EQ you mix with."
   },
