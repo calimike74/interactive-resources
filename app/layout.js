@@ -5,6 +5,7 @@ import { ContextMenuProvider } from "@/components/ContextMenu";
 import { PHProvider } from "./posthog-provider";
 import CookieBanner from "@/components/CookieBanner";
 import SiteFooter from "@/components/SiteFooter";
+import ReturnRail from "@/components/ReturnRail";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -85,6 +86,7 @@ export default function RootLayout({ children }) {
           </ContextMenuProvider>
         </PHProvider>
         <CookieBanner />
+        <ReturnRail />
       </body>
     </html>
   );
