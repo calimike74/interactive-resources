@@ -52,6 +52,34 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
         [graph]
     );
 
+    /* What a topic owns, and which of those it shares with another topic.
+     * Shared ideas are counted from parent EDGES — a merged node keeps a
+     * single `parent` field but carries an edge to every topic that owns it. */
+    const childrenOf = useMemo(() => {
+        const byId = new Map(graph.nodes.map((n) => [n.id, n]));
+        const owners = new Map();     // concept id -> topic ids that claim it
+        const kids = new Map();       // topic id   -> concept nodes
+        for (const e of graph.edges) {
+            if (e.kind !== 'parent') continue;
+            const fromIsTopic = byId.get(e.from)?.kind === 'topic';
+            const topicId = fromIsTopic ? e.from : e.to;
+            const conceptId = fromIsTopic ? e.to : e.from;
+            if (byId.get(topicId)?.kind !== 'topic' || !byId.get(conceptId)) continue;
+            if (!owners.has(conceptId)) owners.set(conceptId, []);
+            if (!kids.has(topicId)) kids.set(topicId, []);
+            owners.get(conceptId).push(topicId);
+            kids.get(topicId).push(conceptId);
+        }
+        return (topicId) => {
+            const ids = kids.get(topicId) || [];
+            const shared = ids.filter((id) => (owners.get(id) || []).length > 1);
+            return {
+                count: ids.length,
+                shared: shared.map((id) => byId.get(id).label),
+            };
+        };
+    }, [graph]);
+
     /* ----- scene lifecycle ----- */
     useEffect(() => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -234,6 +262,7 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
     const cardTopic = cardNode && cardNode.kind !== 'topic'
         ? graph.nodes.find((n) => n.kind === 'topic' && n.parent === cardNode.parent)
         : null;
+    const topicChildren = cardNode?.kind === 'topic' ? childrenOf(cardNode.id) : null;
     const walkTopic = walkIdx != null ? specTopics[walkIdx] : null;
     const bottomRail = tourState || routeState;
 
@@ -408,11 +437,18 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                 </div>
             )}
 
-            {/* index card */}
+            {/* index card — a topic is one of 23 headings in the spec, so it
+                earns a fuller card than a single idea inside one */}
             {cardNode && (
                 <div
-                    className="absolute bottom-6 left-6 max-w-[300px] rounded-xl border p-4 shadow-lg"
-                    style={{ background: ROOM.paper, borderColor: ROOM.line }}
+                    className="absolute bottom-6 left-6 rounded-xl border shadow-lg"
+                    style={{
+                        background: ROOM.paper, borderColor: ROOM.line,
+                        width: cardNode.kind === 'topic'
+                            ? 'min(352px, calc(100vw - 48px))'
+                            : 'min(300px, calc(100vw - 48px))',
+                        padding: cardNode.kind === 'topic' ? '18px 18px 16px' : '16px',
+                    }}
                 >
                     <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide"
                         style={{ color: '#6B6F5C' }}>
@@ -423,17 +459,58 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                                 ? 'Shared idea — lives in more than one topic'
                                 : `Inside ${cardNode.parent} ${cardTopic?.label ?? ''}`}
                     </div>
-                    <div className="mt-0.5 text-[16px] font-semibold"
+                    <div className={cardNode.kind === 'topic' ? 'mt-1 text-[21px] font-semibold leading-tight' : 'mt-0.5 text-[16px] font-semibold'}
                         style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', color: ROOM.paperInk }}>
                         {cardNode.label}
                     </div>
                     {cardNode.blurb && (
-                        <p className="mt-1 text-[12.5px] leading-snug" style={{ color: '#6B6F5C' }}>
-                            {cardNode.blurb}.
+                        <p className={cardNode.kind === 'topic' ? 'mt-1.5 text-[13px] leading-snug' : 'mt-1 text-[12.5px] leading-snug'}
+                            style={{ color: cardNode.kind === 'topic' ? '#55594A' : '#6B6F5C' }}>
+                            {/* curated blurbs already punctuate; topic lines do not */}
+                            {/\.$/.test(cardNode.blurb) ? cardNode.blurb : `${cardNode.blurb}.`}
                         </p>
                     )}
+
+                    {cardNode.kind === 'topic' && cardNode.teaches?.length > 0 && (
+                        <div className="mt-3 border-t pt-2.5" style={{ borderColor: ROOM.line }}>
+                            <div className="text-[10.5px] uppercase tracking-wide" style={{ color: '#8A6430' }}>
+                                What you&rsquo;ll learn
+                            </div>
+                            <ul className="mt-1.5 space-y-1">
+                                {cardNode.teaches.map((t) => (
+                                    <li key={t} className="flex gap-2 text-[12.5px] leading-snug"
+                                        style={{ color: '#55594A' }}>
+                                        <span aria-hidden style={{ color: topicInk(cardNode.parent) }}>—</span>
+                                        <span>{t}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {cardNode.kind === 'topic' && topicChildren && (
+                        <div className="mt-3 border-t pt-2 text-[11px] leading-snug"
+                            style={{ borderColor: ROOM.line, color: '#6B6F5C' }}>
+                            <span style={{ fontFamily: 'var(--font-geist-mono), monospace' }}>
+                                {topicChildren.count} ideas in the map
+                            </span>
+                            {topicChildren.shared.length > 0 && (
+                                <>
+                                    {' · '}
+                                    <span style={{ color: '#9B7530' }}>
+                                        {topicChildren.shared.length} shared with another topic
+                                    </span>
+                                    <div className="mt-0.5" style={{ color: '#9B7530' }}>
+                                        {topicChildren.shared.join(' · ')}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
+
                     {cardNode.url && (
-                        <a href={cardNode.url} className="mt-2 inline-block text-[13px] font-medium"
+                        <a href={cardNode.url}
+                            className="mt-2.5 inline-block text-[13px] font-medium"
                             style={{ color: ROOM.field }}>
                             Open this topic →
                         </a>
