@@ -351,8 +351,15 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
             {/* header */}
             {!failed && (
                 <div className="pointer-events-none absolute left-6 top-6 max-w-[360px]">
+                    <a
+                        href="https://musictechstudio.co.uk"
+                        className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.14em] opacity-75 transition-opacity duration-150 hover:opacity-100"
+                        style={{ color: ROOM.ink, textDecoration: 'none' }}
+                    >
+                        ← musictechstudio.co.uk
+                    </a>
                     <h1 style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', color: ROOM.ink }}
-                        className="text-[28px] font-semibold leading-tight">
+                        className="mt-1.5 text-[28px] font-semibold leading-tight">
                         The Map Room
                     </h1>
                     <p className="mt-1 text-[13px] leading-snug" style={{ color: ROOM.inkSoft }}>
