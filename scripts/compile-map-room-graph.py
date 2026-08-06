@@ -253,8 +253,13 @@ def pick(sections, cap):
                 break
     return chosen
 
-# live /topic/ hub slugs (lib/topics.js getAllTopicIds, checked 2026-07-30)
-URLS = {"1.3": "/topic/synthesis", "1.4": "/topic/sampling", "1.5": "/topic/midi",
+# live /topic/ hub slugs (lib/topics.js getAllTopicIds, checked 2026-07-30).
+# Each entry matches the destination page's own `specRef` — 1.1 was missing
+# only because the page is called "Recording & Production", not because it
+# covers anything else (lib/topics.js: specRef '1.1', DAW / interface /
+# signal flow / buffer size).
+URLS = {"1.1": "/topic/recording",
+        "1.3": "/topic/synthesis", "1.4": "/topic/sampling", "1.5": "/topic/midi",
         "1.9": "/topic/dynamics", "1.11": "/topic/eq", "1.12d": "/topic/delay",
         "1.12r": "/topic/reverb", "1.12x": "/topic/distortion",
         "2.3": "/topic/leads-and-signals", "2.4": "/topic/digital-analogue",

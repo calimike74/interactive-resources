@@ -12,7 +12,8 @@
     "How an interface turns sound into data",
     "Why buffer size trades latency against stability",
     "Which connector each job actually needs"
-   ]
+   ],
+   "url": "/topic/recording"
   },
   {
    "id": "t-microphones",
