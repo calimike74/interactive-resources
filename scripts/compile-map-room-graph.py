@@ -133,6 +133,24 @@ STOP = {"definition", "problem", "solution", "connection", "applications",
         "limited answer", "detailed answer", "what to learn", "why", "how", "when",
         "assessment focus", "spec reference", "learning outcomes", "context",
         "general effects parameters", "music styles knowledge", "mathematical relationships"}
+
+# Labels that normalise to the same key but are DIFFERENT concepts. norm()
+# strips parenthetical content, so "Drivers (ASIO/Core Audio)" and "Drivers
+# (woofer & tweeter)" both become "driver" and would merge into one hub — a
+# link that would actively mislead. Keys here are never merged.
+NEVER_MERGE = {"driver", "phantom", "quantisation", "quantise"}
+
+# Curated labels meaning the same thing as a twin worded differently elsewhere.
+ALIAS = {
+    norm("Brickwall limiting"): norm("Limiting"),      # Mastering -> Dynamics
+    norm("Delay time & feedback"): norm("Feedback"),   # Delay <-> Modulation
+}
+# Topics whose curated list omits a concept that genuinely belongs to them too.
+EXTRA_HOMES = [
+    ("Phantom power", "2.3"),   # Signals: phantom travels the balanced line
+    ("Pre-delay", "2.1"),       # Acoustics: the direct-to-first-reflection gap
+]
+
 TOPIC_LABELS = {l.lower() for _, _, l in TOPICS}
 
 NORM_TOPICS = None
@@ -254,48 +272,63 @@ for folder, tid, label in TOPICS:
     nodes.append(tn)
 
 topic_node_id = {tid: f"t-{slug(label)}" for _, tid, label in TOPICS}
+TOPIC_LABEL = {tid: label for _, tid, label in TOPICS}
+
+# Concepts come from the hand-curated subtopic overlay, not the harvested
+# spec prose — see docs/plans/2026-08-05-map-room-node-swap.md.
+CURATED = Path("/Users/mikelehnert/Obsidian/Professional/Planning-and-Admin/"
+               "Overnight-Runs/2026-08-04/topic-subtopics-curated.json")
+curated = json.loads(CURATED.read_text())
+CURATED_KEY = {tid: "t-" + slug(label) for _, tid, label in TOPICS}
 
 for folder, tid, label in TOPICS:
-    if tid in HAND_CONCEPTS:
-        concepts = HAND_CONCEPTS[tid]
-        report[tid]["source"] = "hand-authored"
-    else:
-        base = VAULT / folder
-        if tid in ALT_SPEC:
-            spec = base / ALT_SPEC[tid]
-        else:
-            hits = list(base.glob("01 - Curriculum Materials/*Official Spec*.md"))
-            spec = hits[0] if hits else None
-        if not spec or not spec.exists():
-            report[tid]["source"] = "MISSING"
-            continue
-        sections = parse_spec(spec)
-        extra = HAND_EXTRA.get(tid, [])
-        concepts = list(extra)
-        have = {norm(t) for t, _ in concepts}
-        for t, b in pick(sections, CAP_PER_TOPIC):
-            if len(concepts) >= CAP_PER_TOPIC:
-                break
-            if norm(t) not in have:
-                concepts.append((t, b)); have.add(norm(t))
-        report[tid]["source"] = spec.name + (" +hand" if extra else "")
+    entry = curated.get(CURATED_KEY[tid])
+    if not entry:
+        raise SystemExit(f"no curated subtopics for {tid} — refusing to compile")
+    concepts = [(s["label"], s.get("blurb", ""), s.get("family", ""))
+                for s in entry["subtopics"]]
+    report[tid]["source"] = "curated"
     report[tid]["count"] = len(concepts)
 
-    for term, blurb in concepts:
+    for term, blurb, family in concepts:
         n = norm(term)
-        if n in by_norm:                       # shared hub — second owner
+        n = ALIAS.get(n, n)
+        if n in NEVER_MERGE:
+            node = {"id": f"c-{slug(TOPIC_LABEL[tid])}-{slug(term)}", "label": term,
+                    "kind": "concept", "component": "c4", "parent": tid,
+                    "blurb": blurb, "family": family}
+            nodes.append(node)
+            edges.append({"from": node["id"], "to": topic_node_id[tid], "kind": "parent"})
+            continue
+        # Same normalised key AND the same literal wording -> genuinely one
+        # concept, merge into the existing hub. Same key but DIFFERENT
+        # wording (e.g. "Resonance (Q)" vs "Resonance") is not a safe merge:
+        # collapsing it would silently drop one topic's exact curated label
+        # from the graph, which every-topic-keeps-its-curated-children
+        # guards against. Fall through and give it its own node instead.
+        if n in by_norm and by_norm[n]["label"] == term:  # shared hub — second owner
             node = by_norm[n]
             node["kind"] = "concept"
             edges.append({"from": node["id"], "to": topic_node_id[tid], "kind": "parent"})
             report[tid].setdefault("shared", []).append(term)
             continue
         node = {"id": f"c-{slug(term)}", "label": term, "kind": "concept",
-                "component": "c4", "parent": tid, "blurb": blurb}
+                "component": "c4", "parent": tid, "blurb": blurb, "family": family}
         if any(x["id"] == node["id"] for x in nodes):
             node["id"] = f"c-{tid.replace('.', '')}-{slug(term)}"
         by_norm[n] = node
         nodes.append(node)
         edges.append({"from": node["id"], "to": topic_node_id[tid], "kind": "parent"})
+
+# EXTRA_HOMES: topics whose curated list omits a concept that genuinely
+# belongs to them too. Additional parent edges only — never new nodes.
+for home_label, home_tid in EXTRA_HOMES:
+    home_n = ALIAS.get(norm(home_label), norm(home_label))
+    home_node = by_norm.get(home_n)
+    if not home_node:
+        raise SystemExit(f"EXTRA_HOMES: no existing node for {home_label!r} (norm {home_n!r})")
+    edges.append({"from": home_node["id"], "to": topic_node_id[home_tid], "kind": "parent"})
+    report[home_tid].setdefault("shared", []).append(home_label)
 
 # topic<->topic edges from Cross-Curriculum Links files
 seen_pairs = set()
@@ -345,3 +378,23 @@ for tid in sorted(report):
     r = report[tid]
     print(f"  {tid:<6} {r.get('count','?'):>3} concepts   {r.get('source','')}"
           + (f"   shared: {len(r['shared'])}" if 'shared' in r else ""))
+
+# Rewrite routes and tours through the id-remap, as a final pass, so those
+# data files can never drift from the graph the compiler just emitted.
+REMAP = json.loads(Path("lib/map-room/id-remap.json").read_text())
+for path in ["lib/map-room/routes/exam-routes.json",
+             "lib/map-room/tours/whole-course.json"]:
+    p = Path(path)
+    txt = p.read_text()
+    for old, new in REMAP.items():
+        if old.startswith("_"):
+            continue
+        txt = re.sub(rf'"{re.escape(old)}"', f'"{new}"', txt)
+    # Two old ids can remap onto the same new one, leaving a focus set that
+    # names the same node twice. Harmless to the renderer (focusSet is a Set)
+    # but it makes the data read as if a step lights more than it does.
+    data = json.loads(txt)
+    for step in ([s for r in data.get("routes", []) for s in r["steps"]]
+                 + data.get("beats", [])):
+        step["focus"] = list(dict.fromkeys(step["focus"]))
+    p.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
