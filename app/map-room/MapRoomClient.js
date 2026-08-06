@@ -64,7 +64,7 @@ const specKey = (parent) => {
     return [Number(m[1] || 9), Number(m[2] || 99), m[3] || ''];
 };
 
-export default function MapRoomClient({ graph, tour, examRoutes }) {
+export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined = {} }) {
     const stageRef = useRef(null);
     const sceneRef = useRef(null);
     const audioRef = useRef(null);
@@ -545,6 +545,13 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                                 </>
                             )}
                         </div>
+                    )}
+
+                    {cardNode.kind === 'topic' && lightlyExamined[cardNode.id] && (
+                        <p className="mt-2.5 border-t pt-2 text-[11.5px] italic leading-snug"
+                            style={{ borderColor: ROOM.line, color: '#8A6430' }}>
+                            {lightlyExamined[cardNode.id]}
+                        </p>
                     )}
 
                     {cardNode.kind === 'topic'
