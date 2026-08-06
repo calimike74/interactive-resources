@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 
 const graph = JSON.parse(readFileSync('lib/map-room/graph.json', 'utf8'));
 const routes = JSON.parse(readFileSync('lib/map-room/routes/exam-routes.json', 'utf8'));
@@ -136,6 +136,60 @@ test('topic copy is UK English', () => {
     for (const t of topics) {
         for (const s of [t.blurb, ...t.teaches]) {
             assert.ok(!american.test(s), `${t.parent} uses US spelling: "${s}"`);
+        }
+    }
+});
+
+/* Every topic leads somewhere. A card that raises a name and no way out is
+ * the state this replaced, so these guard the destinations rather than trust
+ * a hand-kept list. */
+
+const topicIds = new Set(
+    [...readFileSync('lib/topics.js', 'utf8').matchAll(/id:\s*'([^']+)'/g)].map((m) => m[1]));
+const resourceIds = new Set(
+    readdirSync('lib/resources').filter((f) => f.endsWith('.js') && f !== 'index.js')
+        .map((f) => f.replace(/\.js$/, '')));
+
+test('every topic has a destination', () => {
+    for (const t of topics) {
+        assert.ok(t.destination, `${t.parent} ${t.label} has nowhere to go`);
+        assert.ok(['topic', 'bench', 'members'].includes(t.destination.kind),
+            `${t.parent} has an unknown destination kind: ${t.destination.kind}`);
+    }
+});
+
+test('a link destination points at something this repo actually serves', () => {
+    for (const t of topics) {
+        const d = t.destination;
+        if (d.kind === 'members') continue;
+        assert.ok(d.href, `${t.parent} is a ${d.kind} with no href`);
+        if (d.href.startsWith('http')) {
+            assert.match(d.href, /^https:\/\//, `${t.parent} external link is not https`);
+            continue;
+        }
+        const slug = d.href.replace(/^\//, '');
+        if (slug.startsWith('topic/')) {
+            assert.ok(topicIds.has(slug.slice('topic/'.length)),
+                `${t.parent} points at /${slug}, which lib/topics.js does not define`);
+        } else {
+            assert.ok(resourceIds.has(slug),
+                `${t.parent} points at /${slug}, which lib/resources has no file for`);
+        }
+    }
+});
+
+test('a bench says what it is, a members door says what is behind it', () => {
+    for (const t of topics) {
+        const d = t.destination;
+        if (d.kind === 'bench') {
+            assert.ok(d.label && d.verb, `${t.parent} bench needs a label and a verb`);
+            assert.match(d.verb, /^(Open|Take)$/, `${t.parent} has an odd verb: ${d.verb}`);
+        }
+        if (d.kind === 'members') {
+            for (const k of ['chapters', 'papers', 'traps']) {
+                assert.ok(Number.isInteger(d[k]) && d[k] > 0,
+                    `${t.parent} members door has no real ${k} count`);
+            }
         }
     }
 });

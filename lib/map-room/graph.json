@@ -12,7 +12,12 @@
     "How an interface turns sound into data",
     "Why buffer size trades latency against stability",
     "Which connector each job actually needs"
-   ]
+   ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/recording"
+   },
+   "url": "/topic/recording"
   },
   {
    "id": "t-microphones",
@@ -26,7 +31,14 @@
     "Reading polar patterns and off-axis colour",
     "Setting gain before anything else",
     "Why two microphones can cancel each other"
-   ]
+   ],
+   "destination": {
+    "kind": "bench",
+    "href": "https://c3c4-workshops.vercel.app/microphones/",
+    "label": "Inside the Microphone",
+    "verb": "Open"
+   },
+   "url": "https://c3c4-workshops.vercel.app/microphones/"
   },
   {
    "id": "t-synthesis",
@@ -41,6 +53,10 @@
     "How an envelope gives a sound its shape",
     "Using an LFO to put movement in"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/synthesis"
+   },
    "url": "/topic/synthesis"
   },
   {
@@ -56,6 +72,10 @@
     "Warping a sample to the project tempo",
     "What clearance a released track needs"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/sampling"
+   },
    "url": "/topic/sampling"
   },
   {
@@ -71,6 +91,10 @@
     "Editing velocity and note length for feel",
     "How pitch bend and tempo data travel"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/midi"
+   },
    "url": "/topic/midi"
   },
   {
@@ -85,7 +109,13 @@
     "Cutting at zero crossings to avoid clicks",
     "Using fades to hide an edit",
     "Staying non-destructive until the bounce"
-   ]
+   ],
+   "destination": {
+    "kind": "members",
+    "chapters": 6,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-pitch-and-rhythm-correction",
@@ -99,7 +129,14 @@
     "Choosing a warp mode to suit the material",
     "Quantising rhythm while keeping the groove",
     "Working offline against working in real time"
-   ]
+   ],
+   "destination": {
+    "kind": "bench",
+    "href": "/pitch-synth-monitors-assessment",
+    "label": "the Pitch Correction assessment",
+    "verb": "Take"
+   },
+   "url": "/pitch-synth-monitors-assessment"
   },
   {
    "id": "t-automation",
@@ -113,7 +150,13 @@
     "Automating an effect rather than a level",
     "Choosing curve shapes for smooth changes",
     "Editing breakpoints and clip envelopes"
-   ]
+   ],
+   "destination": {
+    "kind": "members",
+    "chapters": 5,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-dynamic-processing",
@@ -128,6 +171,10 @@
     "Gating, expansion and de-essing in practice",
     "Reading a compression or gating graph"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/dynamics"
+   },
    "url": "/topic/dynamics"
   },
   {
@@ -142,7 +189,14 @@
     "Panning to place a sound, not just to spread it",
     "Why width can collapse when summed to mono",
     "Using the Haas effect deliberately"
-   ]
+   ],
+   "destination": {
+    "kind": "bench",
+    "href": "/stereo-panning",
+    "label": "the Stereo & Panning Explorer",
+    "verb": "Open"
+   },
+   "url": "/stereo-panning"
   },
   {
    "id": "t-eq",
@@ -157,6 +211,10 @@
     "Sweeping to find a problem frequency",
     "Clearing sibilance, hum and rumble"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/eq"
+   },
    "url": "/topic/eq"
   },
   {
@@ -172,6 +230,10 @@
     "Slapback, ping-pong and multi-tap in use",
     "Why very short delays comb-filter"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/delay"
+   },
    "url": "/topic/delay"
   },
   {
@@ -187,6 +249,10 @@
     "Sending to a reverb rather than inserting it",
     "Gated and reverse reverb as effects"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/reverb"
+   },
    "url": "/topic/reverb"
   },
   {
@@ -201,7 +267,14 @@
     "What separates chorus, flanger and phaser",
     "Tremolo against vibrato \u2014 level or pitch",
     "Ring modulation's carrier and modulator"
-   ]
+   ],
+   "destination": {
+    "kind": "bench",
+    "href": "https://c3c4-workshops.vercel.app/modulation/",
+    "label": "the Modulation workshop",
+    "verb": "Open"
+   },
+   "url": "https://c3c4-workshops.vercel.app/modulation/"
   },
   {
    "id": "t-distortion",
@@ -216,6 +289,10 @@
     "Why symmetry decides which harmonics appear",
     "Keeping gain staging under control"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/distortion"
+   },
    "url": "/topic/distortion"
   },
   {
@@ -230,7 +307,13 @@
     "Finding and clearing frequency masking",
     "Creating depth with reverb and delay",
     "Checking in mono and on other speakers"
-   ]
+   ],
+   "destination": {
+    "kind": "members",
+    "chapters": 6,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-mastering",
@@ -244,7 +327,13 @@
     "What glue and multiband compression do",
     "Mid-side moves and keeping bass mono",
     "Preparing files for each delivery format"
-   ]
+   ],
+   "destination": {
+    "kind": "members",
+    "chapters": 5,
+    "papers": 6,
+    "traps": 7
+   }
   },
   {
    "id": "t-acoustics",
@@ -258,7 +347,14 @@
     "Direct sound against reverberant sound",
     "Where room modes build up",
     "Absorption or diffusion, and when"
-   ]
+   ],
+   "destination": {
+    "kind": "bench",
+    "href": "https://c3c4-workshops.vercel.app/frequency-lab/",
+    "label": "the Frequency Lab",
+    "verb": "Open"
+   },
+   "url": "https://c3c4-workshops.vercel.app/frequency-lab/"
   },
   {
    "id": "t-monitor-speakers",
@@ -272,7 +368,14 @@
     "Why flat response beats a flattering one",
     "Placing monitors and taming boundaries",
     "What headphones and small speakers hide"
-   ]
+   ],
+   "destination": {
+    "kind": "bench",
+    "href": "https://c3c4-workshops.vercel.app/monitor-speakers/",
+    "label": "Inside the Monitor",
+    "verb": "Open"
+   },
+   "url": "https://c3c4-workshops.vercel.app/monitor-speakers/"
   },
   {
    "id": "t-signals",
@@ -287,6 +390,10 @@
     "What common-mode rejection removes",
     "When a DI box is the right answer"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/leads-and-signals"
+   },
    "url": "/topic/leads-and-signals"
   },
   {
@@ -302,6 +409,10 @@
     "How aliasing appears, and how to avoid it",
     "What analogue still does differently"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/digital-analogue"
+   },
    "url": "/topic/digital-analogue"
   },
   {
@@ -317,6 +428,10 @@
     "Reading the decibel scale and its ratios",
     "Checking a sample rate against Nyquist"
    ],
+   "destination": {
+    "kind": "topic",
+    "href": "/topic/numeracy"
+   },
    "url": "/topic/numeracy"
   },
   {
@@ -331,7 +446,14 @@
     "Peak, RMS, VU and LUFS metering",
     "Gain staging through the whole chain",
     "Staying clear of clipping and the noise floor"
-   ]
+   ],
+   "destination": {
+    "kind": "bench",
+    "href": "/levels-metering-assessment",
+    "label": "the Levels & Metering assessment",
+    "verb": "Take"
+   },
+   "url": "/levels-metering-assessment"
   },
   {
    "id": "c-daw-software",

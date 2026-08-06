@@ -20,6 +20,45 @@ const TOUR_BEAT_MS = 7500;
 const GRAIN =
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\")";
 
+/* Every topic leads somewhere, and the card says honestly where. Three cases:
+ * a topic hub on this site, a bench that is already public (some of which are
+ * assessments, not tools you can hear — so the verb comes from the data), and
+ * the four topics whose only full page is inside membership. That last one is
+ * a door, not a dead end: it says what is behind it. */
+function TopicWayOut({ dest }) {
+    if (!dest) return null;
+
+    if (dest.kind === 'members') {
+        const { chapters, papers, traps } = dest;
+        return (
+            <div className="mt-2.5 border-t pt-2.5" style={{ borderColor: ROOM.line }}>
+                <p className="text-[12px] leading-snug" style={{ color: '#55594A' }}>
+                    <span aria-hidden style={{ color: '#9B7530' }}>⬦ </span>
+                    The full topic — {chapters} chapters, {papers} past-paper questions
+                    with mark schemes and {traps} examiner traps — is part of membership.
+                </p>
+                <a href="https://grades.musictechstudio.co.uk/"
+                    className="mt-1.5 inline-block text-[13px] font-medium"
+                    style={{ color: ROOM.field }}>
+                    See what&rsquo;s inside →
+                </a>
+            </div>
+        );
+    }
+
+    const external = dest.href.startsWith('http');
+    return (
+        <a href={dest.href}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className="mt-2.5 inline-block text-[13px] font-medium"
+            style={{ color: ROOM.field }}>
+            {dest.kind === 'bench'
+                ? `${dest.verb} ${dest.label} →`
+                : 'Open this topic →'}
+        </a>
+    );
+}
+
 const specKey = (parent) => {
     const m = /^(\d+)\.(\d+)([a-z]?)$/.exec(parent) || [];
     return [Number(m[1] || 9), Number(m[2] || 99), m[3] || ''];
@@ -508,13 +547,15 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                         </div>
                     )}
 
-                    {cardNode.url && (
-                        <a href={cardNode.url}
-                            className="mt-2.5 inline-block text-[13px] font-medium"
-                            style={{ color: ROOM.field }}>
-                            Open this topic →
-                        </a>
-                    )}
+                    {cardNode.kind === 'topic'
+                        ? <TopicWayOut dest={cardNode.destination} />
+                        : cardNode.url && (
+                            <a href={cardNode.url}
+                                className="mt-2.5 inline-block text-[13px] font-medium"
+                                style={{ color: ROOM.field }}>
+                                Open this topic →
+                            </a>
+                        )}
                 </div>
             )}
 
