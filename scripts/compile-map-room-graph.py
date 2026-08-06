@@ -253,17 +253,10 @@ def pick(sections, cap):
                 break
     return chosen
 
-# live /topic/ hub slugs (lib/topics.js getAllTopicIds, checked 2026-07-30).
-# Each entry matches the destination page's own `specRef` — 1.1 was missing
-# only because the page is called "Recording & Production", not because it
-# covers anything else (lib/topics.js: specRef '1.1', DAW / interface /
-# signal flow / buffer size).
-URLS = {"1.1": "/topic/recording",
-        "1.3": "/topic/synthesis", "1.4": "/topic/sampling", "1.5": "/topic/midi",
-        "1.9": "/topic/dynamics", "1.11": "/topic/eq", "1.12d": "/topic/delay",
-        "1.12r": "/topic/reverb", "1.12x": "/topic/distortion",
-        "2.3": "/topic/leads-and-signals", "2.4": "/topic/digital-analogue",
-        "2.5": "/topic/numeracy"}
+# Where each topic sends a student now lives beside its card copy, in
+# data/map-room/topic-summaries.json — one file owns what the card says and
+# where it goes. All 23 have a destination: a topic hub here, a bench that is
+# already public, or an honest members door where no free page exists.
 
 nodes, edges = [], []
 by_norm = {}          # normalised label -> node dict (for cross-topic merge)
@@ -280,11 +273,15 @@ for folder, tid, label in TOPICS:
     summary = SUMMARIES.get(tid)
     if not summary:
         raise SystemExit(f"no topic summary for {tid} — refusing to compile")
+    dest = summary.get("destination")
+    if not dest:
+        raise SystemExit(f"no destination for {tid} — refusing to compile")
     tn = {"id": f"t-{slug(label)}", "label": label, "kind": "topic",
           "component": "c4", "parent": tid,
-          "blurb": summary["blurb"], "teaches": summary["teaches"]}
-    if tid in URLS:
-        tn["url"] = URLS[tid]
+          "blurb": summary["blurb"], "teaches": summary["teaches"],
+          "destination": dest}
+    if dest.get("href"):
+        tn["url"] = dest["href"]
     nodes.append(tn)
 
 topic_node_id = {tid: f"t-{slug(label)}" for _, tid, label in TOPICS}
