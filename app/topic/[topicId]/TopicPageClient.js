@@ -243,7 +243,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                     <OverviewSection overview={topic.overview} theme={t} />
                 )}
 
-                {/* Learn Section */}
+                {/* Walkthrough Section */}
                 <section style={{ marginBottom: spacing[10] }}>
                     <h2
                         style={{
@@ -253,7 +253,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                             marginBottom: spacing[4],
                         }}
                     >
-                        Learn
+                        Walkthrough
                     </h2>
                     {hasLearnContent(topic.id) ? (
                         <Link
@@ -293,7 +293,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                                         color: t.text.primary,
                                         marginBottom: spacing[1],
                                     }}>
-                                        Start Learning
+                                        Start the walkthrough
                                     </h3>
                                     <p style={{
                                         fontSize: typography.size.sm,
@@ -312,7 +312,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                             </div>
                         </Link>
                     ) : (
-                        <ComingSoonPlaceholder label="Guided lessons coming soon" theme={t} />
+                        <ComingSoonPlaceholder label="Walkthrough coming soon" theme={t} />
                     )}
                 </section>
 
@@ -351,7 +351,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                     )}
                 </section>
 
-                {/* Revise Section */}
+                {/* Practice quiz Section */}
                 <section id="revise" style={{ marginBottom: spacing[10], scrollMarginTop: '16px' }}>
                     <h2
                         style={{
@@ -361,7 +361,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                             marginBottom: spacing[4],
                         }}
                     >
-                        Revise
+                        Practice quiz
                     </h2>
                     {getAvailableTopics().includes(topic.id) || reviseResources.length > 0 ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[4] }}>
@@ -372,7 +372,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                                         <ProgressCard progress={progress} t={t} />
                                     )}
 
-                                    {/* Start Revision link */}
+                                    {/* Start practising link */}
                                     <Link
                                         href={`/revise/${topic.id}`}
                                         style={{ textDecoration: 'none' }}
@@ -410,7 +410,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                                                     color: t.text.primary,
                                                     marginBottom: spacing[1],
                                                 }}>
-                                                    {progress ? 'Continue Revision' : 'Start Revision'}
+                                                    {progress ? 'Continue practising' : 'Start practising'}
                                                 </h3>
                                                 <p style={{
                                                     fontSize: typography.size.sm,
@@ -512,7 +512,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                             )}
                         </div>
                     ) : (
-                        <ComingSoonPlaceholder label="Revision quizzes and flashcards coming soon" theme={t} />
+                        <ComingSoonPlaceholder label="Practice quizzes and flashcards coming soon" theme={t} />
                     )}
                 </section>
 

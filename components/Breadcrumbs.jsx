@@ -132,7 +132,7 @@ function buildCrumbs(pathname) {
     // /learn/[topicId] or /learn/[topicId]/[lessonId]
     if (segments[0] === 'learn' && segments[1]) {
         const topic = getTopic(segments[1]);
-        crumbs.push({ label: 'Learn', href: '/' });
+        crumbs.push({ label: 'Walkthrough', href: '/' });
 
         if (topic) {
             crumbs.push({
@@ -161,7 +161,7 @@ function buildCrumbs(pathname) {
     // /revise/[topicId]
     if (segments[0] === 'revise' && segments[1]) {
         const topic = getTopic(segments[1]);
-        crumbs.push({ label: 'Revise', href: '/' });
+        crumbs.push({ label: 'Practice quiz', href: '/' });
         crumbs.push({
             label: topic ? topic.name : segments[1],
             href: `/revise/${segments[1]}`,

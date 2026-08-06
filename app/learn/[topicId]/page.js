@@ -11,8 +11,8 @@ export async function generateMetadata({ params }) {
     const topic = getTopic(topicId);
 
     return {
-        title: topic ? `Learn — ${topic.name}` : 'Learn',
-        description: topic ? `Guided lessons for ${topic.name}` : 'Guided lessons',
+        title: topic ? `Walkthrough — ${topic.name}` : 'Walkthrough',
+        description: topic ? `Step-by-step walkthrough of ${topic.name}` : 'Step-by-step topic walkthroughs',
     };
 }
 

@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import { getAllTopicIds, getTopic } from '@/lib/topics';
 import { getResource, resourceExists } from '@/lib/resources';
+import { hasLearnContent } from '@/lib/learn/topics';
+import { hasReviseContent } from '@/lib/questions';
 import TopicPageClient from './TopicPageClient';
 
 export function generateStaticParams() {
@@ -15,9 +17,16 @@ export async function generateMetadata({ params }) {
         return { title: 'Topic Not Found' };
     }
 
+    const hasAnyContent =
+        topic.resourceIds.some(id => resourceExists(id)) ||
+        hasLearnContent(topicId) ||
+        hasReviseContent(topicId);
+
     return {
         title: `${topic.specRef} ${topic.name}`,
         description: topic.description,
+        // Placeholder topics have nothing to show yet — keep them out of search indexes
+        ...(hasAnyContent ? {} : { robots: { index: false, follow: false } }),
     };
 }
 

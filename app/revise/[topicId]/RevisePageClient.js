@@ -483,7 +483,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                         fontWeight: typography.weight.semibold,
                         color: t.text.primary,
                     }}>
-                        Revise: {topic.name}
+                        Practice quiz: {topic.name}
                     </h1>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>

@@ -14,6 +14,8 @@ export async function generateMetadata({ params }) {
     return {
         title: `${data.essayTitle} — Feedback`,
         description: `Interactive feedback for ${data.essayTitle} (${data.topic})`,
+        // Essay feedback names individual students — keep out of search indexes
+        robots: { index: false, follow: false },
     };
 }
 

@@ -34,11 +34,11 @@ const MODE_INFO = {
         subtitle: 'Hands-on tools to experiment with audio concepts.',
     },
     learn: {
-        heading: 'Guided Lessons',
-        subtitle: 'Step-by-step walkthroughs of each topic.',
+        heading: 'Walkthroughs',
+        subtitle: 'Step-by-step lessons through each topic.',
     },
     revise: {
-        heading: 'Revision & Quizzes',
+        heading: 'Practice Quizzes',
         subtitle: 'Test your knowledge with quick-fire questions.',
     },
     progress: {
@@ -86,7 +86,7 @@ export default function ResourcesHub() {
                 <LiquidHero
                     badge="A-Level Music Technology"
                     title={['Interactive Resources']}
-                    tagline="Explore  •  Learn  •  Practice"
+                    tagline="Explore  •  Walkthroughs  •  Practice"
                 />
                 <SplashCursor
                     DENSITY_DISSIPATION={3}

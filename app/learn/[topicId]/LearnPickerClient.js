@@ -99,7 +99,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [], rati
                         color: ED.ink,
                         marginTop: '0.5rem',
                     }}>
-                        Learn: {topic.name}
+                        Walkthrough: {topic.name}
                     </h1>
                     <p style={{
                         fontSize: '16px',

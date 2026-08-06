@@ -210,7 +210,7 @@ export default function ProgressDashboard() {
                                             color: t.accent.primary,
                                             fontWeight: typography.weight.medium,
                                         }}>
-                                            Revise →
+                                            Practice →
                                         </span>
                                     </div>
                                 </Link>
