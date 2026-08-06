@@ -264,9 +264,20 @@ nodes, edges = [], []
 by_norm = {}          # normalised label -> node dict (for cross-topic merge)
 report = defaultdict(dict)
 
+# A topic node used to carry an empty blurb, so clicking the biggest thing in
+# the room showed a name and a link and nothing else. These are hand-written
+# from each topic's own spec file; the compiler only places them.
+SUMMARIES = json.loads(
+    (Path(__file__).resolve().parent.parent
+     / "data/map-room/topic-summaries.json").read_text())
+
 for folder, tid, label in TOPICS:
+    summary = SUMMARIES.get(tid)
+    if not summary:
+        raise SystemExit(f"no topic summary for {tid} — refusing to compile")
     tn = {"id": f"t-{slug(label)}", "label": label, "kind": "topic",
-          "component": "c4", "parent": tid, "blurb": ""}
+          "component": "c4", "parent": tid,
+          "blurb": summary["blurb"], "teaches": summary["teaches"]}
     if tid in URLS:
         tn["url"] = URLS[tid]
     nodes.append(tn)
