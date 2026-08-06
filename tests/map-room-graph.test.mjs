@@ -100,3 +100,42 @@ test('every topic keeps its curated children', () => {
         }
     }
 });
+
+/* A topic node used to ship with blurb: "" — clicking Sampling, one of the
+ * 23 headings the whole course hangs off, raised a card with a name and a
+ * link and nothing else. These guard the card's content. */
+
+const topics = graph.nodes.filter((n) => n.kind === 'topic');
+
+test('every topic says what it is and what it teaches', () => {
+    for (const t of topics) {
+        assert.ok(t.blurb && t.blurb.length > 40,
+            `${t.parent} ${t.label} has no usable blurb`);
+        assert.ok(Array.isArray(t.teaches) && t.teaches.length >= 3 && t.teaches.length <= 4,
+            `${t.parent} ${t.label} should teach 3-4 things, got ${t.teaches?.length}`);
+        for (const line of t.teaches) {
+            assert.ok(line.length >= 12 && line.length <= 52,
+                `${t.parent} bullet is the wrong length: "${line}"`);
+        }
+    }
+});
+
+test('no equations reach the screen', () => {
+    // House rule: the tools teach sound first — the maths stays off the node.
+    const maths = /[=×÷^√]|\d+\s*[+\-*/]\s*\d+/;
+    for (const t of topics) {
+        assert.ok(!maths.test(t.blurb), `${t.parent} blurb shows working: ${t.blurb}`);
+        for (const line of t.teaches) {
+            assert.ok(!maths.test(line), `${t.parent} bullet shows working: ${line}`);
+        }
+    }
+});
+
+test('topic copy is UK English', () => {
+    const american = /\b\w*(?:analyz|coloriz|optimiz|normaliz|synthesiz|emphasiz)\w*\b|\bcolor\b|\bcenter\b|\bmeters\b(?! )/i;
+    for (const t of topics) {
+        for (const s of [t.blurb, ...t.teaches]) {
+            assert.ok(!american.test(s), `${t.parent} uses US spelling: "${s}"`);
+        }
+    }
+});

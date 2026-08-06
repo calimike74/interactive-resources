@@ -6,7 +6,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.1",
-   "blurb": ""
+   "blurb": "The studio as one system \u2014 how the computer, the interface and your controllers hand audio to each other, and what each setting costs you",
+   "teaches": [
+    "What the DAW does that a plug-in cannot",
+    "How an interface turns sound into data",
+    "Why buffer size trades latency against stability",
+    "Which connector each job actually needs"
+   ]
   },
   {
    "id": "t-microphones",
@@ -14,7 +20,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.2",
-   "blurb": ""
+   "blurb": "Everything a recording will ever contain arrives through the microphone \u2014 where you put it decides more than any plug-in can undo later",
+   "teaches": [
+    "Choosing a microphone type for the source",
+    "Reading polar patterns and off-axis colour",
+    "Setting gain before anything else",
+    "Why two microphones can cancel each other"
+   ]
   },
   {
    "id": "t-synthesis",
@@ -22,7 +34,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.3",
-   "blurb": "",
+   "blurb": "Sound built from nothing \u2014 an oscillator makes the raw tone, then filters and envelopes shape it into something playable",
+   "teaches": [
+    "What each waveform's harmonics sound like",
+    "How filters remove and emphasise frequencies",
+    "How an envelope gives a sound its shape",
+    "Using an LFO to put movement in"
+   ],
    "url": "/topic/synthesis"
   },
   {
@@ -31,7 +49,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.4",
-   "blurb": "",
+   "blurb": "Recorded sound as raw material \u2014 crop it, stretch it, reverse it, and it becomes an instrument you never played",
+   "teaches": [
+    "Cropping a breakbeat down to a usable loop",
+    "Changing pitch without changing tempo",
+    "Warping a sample to the project tempo",
+    "What clearance a released track needs"
+   ],
    "url": "/topic/sampling"
   },
   {
@@ -40,7 +64,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.5",
-   "blurb": "",
+   "blurb": "MIDI carries instructions, not sound \u2014 which is why a sequenced part can be re-timed, re-voiced and corrected long after you played it",
+   "teaches": [
+    "Recording in real time or step by step",
+    "What quantise fixes and what it flattens",
+    "Editing velocity and note length for feel",
+    "How pitch bend and tempo data travel"
+   ],
    "url": "/topic/midi"
   },
   {
@@ -49,7 +79,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.6",
-   "blurb": ""
+   "blurb": "Where one good take gets assembled out of several imperfect ones \u2014 quietly enough that nobody hears the joins",
+   "teaches": [
+    "Comping a lead from multiple takes",
+    "Cutting at zero crossings to avoid clicks",
+    "Using fades to hide an edit",
+    "Staying non-destructive until the bounce"
+   ]
   },
   {
    "id": "t-pitch-and-rhythm-correction",
@@ -57,7 +93,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.7",
-   "blurb": ""
+   "blurb": "Correction is a judgement, not a button \u2014 how far you pull a performance toward the grid changes what it sounds like",
+   "teaches": [
+    "Tuning without losing the singer's formants",
+    "Choosing a warp mode to suit the material",
+    "Quantising rhythm while keeping the groove",
+    "Working offline against working in real time"
+   ]
   },
   {
    "id": "t-automation",
@@ -65,7 +107,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.8",
-   "blurb": ""
+   "blurb": "Automation is the mix moving \u2014 a level, a filter or a send that changes over time so the arrangement keeps developing",
+   "teaches": [
+    "Writing volume and pan moves over time",
+    "Automating an effect rather than a level",
+    "Choosing curve shapes for smooth changes",
+    "Editing breakpoints and clip envelopes"
+   ]
   },
   {
    "id": "t-dynamic-processing",
@@ -73,7 +121,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.9",
-   "blurb": "",
+   "blurb": "These processors act on level alone \u2014 holding loud moments back and lifting quiet ones, which is what makes a mix breathe",
+   "teaches": [
+    "Setting threshold and ratio for the source",
+    "How attack and release shape a transient",
+    "Gating, expansion and de-essing in practice",
+    "Reading a compression or gating graph"
+   ],
    "url": "/topic/dynamics"
   },
   {
@@ -82,7 +136,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.10",
-   "blurb": ""
+   "blurb": "Two speakers, one image \u2014 stereo is built from timing and level differences that your ears read as direction and width",
+   "teaches": [
+    "Choosing a stereo microphone pair for the room",
+    "Panning to place a sound, not just to spread it",
+    "Why width can collapse when summed to mono",
+    "Using the Haas effect deliberately"
+   ]
   },
   {
    "id": "t-eq",
@@ -90,7 +150,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.11",
-   "blurb": "",
+   "blurb": "EQ is subtraction as often as addition \u2014 you make room for one sound by taking frequencies out of another",
+   "teaches": [
+    "Shelves, bands and high-pass filters",
+    "What Q actually changes",
+    "Sweeping to find a problem frequency",
+    "Clearing sibilance, hum and rumble"
+   ],
    "url": "/topic/eq"
   },
   {
@@ -99,7 +165,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.12d",
-   "blurb": "",
+   "blurb": "A repeat you can place in time \u2014 long enough to hear as an echo, short enough to stop being one and become a tone",
+   "teaches": [
+    "Syncing repeats to the project tempo",
+    "What feedback adds, and when it runs away",
+    "Slapback, ping-pong and multi-tap in use",
+    "Why very short delays comb-filter"
+   ],
    "url": "/topic/delay"
   },
   {
@@ -108,7 +180,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.12r",
-   "blurb": "",
+   "blurb": "The room you did not record in \u2014 its size, its surfaces, and how long it takes for the sound to disappear",
+   "teaches": [
+    "Pre-delay, decay and damping in practice",
+    "Algorithmic against convolution reverb",
+    "Sending to a reverb rather than inserting it",
+    "Gated and reverse reverb as effects"
+   ],
    "url": "/topic/reverb"
   },
   {
@@ -117,7 +195,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.12m",
-   "blurb": ""
+   "blurb": "A parameter moving on its own \u2014 one LFO sits behind chorus, flanging, phasing and tremolo alike",
+   "teaches": [
+    "How rate, depth and waveform change the effect",
+    "What separates chorus, flanger and phaser",
+    "Tremolo against vibrato \u2014 level or pitch",
+    "Ring modulation's carrier and modulator"
+   ]
   },
   {
    "id": "t-distortion",
@@ -125,7 +209,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.12x",
-   "blurb": "",
+   "blurb": "Controlled damage \u2014 clipping a waveform adds harmonics that were never in the original sound",
+   "teaches": [
+    "Overdrive, fuzz, saturation and bitcrushing",
+    "Hard clipping against soft clipping",
+    "Why symmetry decides which harmonics appear",
+    "Keeping gain staging under control"
+   ],
    "url": "/topic/distortion"
   },
   {
@@ -134,7 +224,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.13",
-   "blurb": ""
+   "blurb": "The mix before the effects \u2014 faders, panning and space arranged so every part can be heard without fighting",
+   "teaches": [
+    "Building a static mix first",
+    "Finding and clearing frequency masking",
+    "Creating depth with reverb and delay",
+    "Checking in mono and on other speakers"
+   ]
   },
   {
    "id": "t-mastering",
@@ -142,7 +238,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "1.14",
-   "blurb": ""
+   "blurb": "The last pass \u2014 making a finished mix sit alongside commercial releases without crushing what the mix was doing",
+   "teaches": [
+    "Loudness targets and true peak limits",
+    "What glue and multiband compression do",
+    "Mid-side moves and keeping bass mono",
+    "Preparing files for each delivery format"
+   ]
   },
   {
    "id": "t-acoustics",
@@ -150,7 +252,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "2.1",
-   "blurb": ""
+   "blurb": "The room is part of the signal chain \u2014 its reflections arrive with every recording whether you wanted them or not",
+   "teaches": [
+    "What RT60 measures",
+    "Direct sound against reverberant sound",
+    "Where room modes build up",
+    "Absorption or diffusion, and when"
+   ]
   },
   {
    "id": "t-monitor-speakers",
@@ -158,7 +266,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "2.2",
-   "blurb": ""
+   "blurb": "You can only mix what you hear \u2014 a monitor's job is to tell you the truth, including the parts you would rather not know",
+   "teaches": [
+    "How drivers and crossovers split the band",
+    "Why flat response beats a flattering one",
+    "Placing monitors and taming boundaries",
+    "What headphones and small speakers hide"
+   ]
   },
   {
    "id": "t-signals",
@@ -166,7 +280,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "2.3",
-   "blurb": "",
+   "blurb": "How audio survives the journey down a cable \u2014 and why the wrong connection adds noise no EQ will take back out",
+   "teaches": [
+    "Balanced against unbalanced connections",
+    "Reading TRS, TS and XLR wiring",
+    "What common-mode rejection removes",
+    "When a DI box is the right answer"
+   ],
    "url": "/topic/leads-and-signals"
   },
   {
@@ -175,7 +295,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "2.4",
-   "blurb": "",
+   "blurb": "Turning a continuous wave into numbers and back again \u2014 every conversion sets a limit on what can be recorded",
+   "teaches": [
+    "What sample rate and bit depth each decide",
+    "Why Nyquist sets the ceiling",
+    "How aliasing appears, and how to avoid it",
+    "What analogue still does differently"
+   ],
    "url": "/topic/digital-analogue"
   },
   {
@@ -184,7 +310,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "2.5",
-   "blurb": "",
+   "blurb": "The working-out the exam asks for \u2014 delay times, dynamic range, gain changes, each one answering a practical studio question",
+   "teaches": [
+    "Working out delay times from tempo",
+    "Moving between octaves, semitones and cents",
+    "Reading the decibel scale and its ratios",
+    "Checking a sample rate against Nyquist"
+   ],
    "url": "/topic/numeracy"
   },
   {
@@ -193,7 +325,13 @@
    "kind": "topic",
    "component": "c4",
    "parent": "2.6",
-   "blurb": ""
+   "blurb": "Level is the one thing every stage shares \u2014 set it wrong early and no amount of later processing fully recovers it",
+   "teaches": [
+    "dBu, dBV and dBFS, and where each applies",
+    "Peak, RMS, VU and LUFS metering",
+    "Gain staging through the whole chain",
+    "Staying clear of clipping and the noise floor"
+   ]
   },
   {
    "id": "c-daw-software",

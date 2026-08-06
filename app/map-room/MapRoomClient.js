@@ -8,11 +8,11 @@ import { ROOM, FAMILIES, topicInk, topicFamily } from './palette';
 /* The Map Room — the whole of Component 4 in the round.
  *
  * The scene (scene.js) owns the three.js world; this component owns the
- * room's furniture and its five ways of moving through the course:
- * free orbit, the guided tour, the spec walk (arrow keys), exam routes
- * (real Question 6s lit as paths), and the quiz. Navigation is still
- * deliberate: hover lights, click raises the card, the card's link is
- * the only way out of the room.
+ * room's furniture and its four ways of moving through the course:
+ * free orbit, the guided tour, the spec walk (arrow keys), and exam routes
+ * (real Question 6s lit as paths). Navigation is still deliberate: hover
+ * lights, click raises the card, the card's link is the only way out of
+ * the room.
  */
 
 const TOUR_BEAT_MS = 7500;
@@ -33,7 +33,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
     const [tourState, setTourState] = useState(null);
     const [routeState, setRouteState] = useState(null);   // { idx, step }
     const [routesOpen, setRoutesOpen] = useState(false);
-    const [quizState, setQuizState] = useState(null);     // { node, revealed }
     const [walkIdx, setWalkIdx] = useState(null);
     const [layoutMode, setLayoutMode] = useState('concept');
     const [soundOn, setSoundOn] = useState(false);
@@ -41,7 +40,7 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
     const [failed, setFailed] = useState(false);
 
     const modeRef = useRef({});
-    modeRef.current = { tourState, routeState, quizState, walkIdx, card, soundOn };
+    modeRef.current = { tourState, routeState, walkIdx, card, soundOn };
 
     const specTopics = useMemo(
         () => graph.nodes
@@ -53,16 +52,40 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
         [graph]
     );
 
+    /* What a topic owns, and which of those it shares with another topic.
+     * Shared ideas are counted from parent EDGES — a merged node keeps a
+     * single `parent` field but carries an edge to every topic that owns it. */
+    const childrenOf = useMemo(() => {
+        const byId = new Map(graph.nodes.map((n) => [n.id, n]));
+        const owners = new Map();     // concept id -> topic ids that claim it
+        const kids = new Map();       // topic id   -> concept nodes
+        for (const e of graph.edges) {
+            if (e.kind !== 'parent') continue;
+            const fromIsTopic = byId.get(e.from)?.kind === 'topic';
+            const topicId = fromIsTopic ? e.from : e.to;
+            const conceptId = fromIsTopic ? e.to : e.from;
+            if (byId.get(topicId)?.kind !== 'topic' || !byId.get(conceptId)) continue;
+            if (!owners.has(conceptId)) owners.set(conceptId, []);
+            if (!kids.has(topicId)) kids.set(topicId, []);
+            owners.get(conceptId).push(topicId);
+            kids.get(topicId).push(conceptId);
+        }
+        return (topicId) => {
+            const ids = kids.get(topicId) || [];
+            const shared = ids.filter((id) => (owners.get(id) || []).length > 1);
+            return {
+                count: ids.length,
+                shared: shared.map((id) => byId.get(id).label),
+            };
+        };
+    }, [graph]);
+
     /* ----- scene lifecycle ----- */
     useEffect(() => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const scene = new MapRoomScene(stageRef.current, graph, {
             reduced,
             onSelect: (node) => {
-                if (modeRef.current.quizState) {
-                    sceneRef.current?.setHiddenLabels(null);
-                    setQuizState(null);
-                }
                 setCard(node ? { node } : null);
             },
             onUserGesture: () => {
@@ -91,7 +114,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
     const backToRoom = useCallback(() => {
         const scene = sceneRef.current;
         if (scene) {
-            scene.setHiddenLabels(null);
             scene.setFocus(null);
             scene.clearSelection();
             scene.flyToFit(null, 1.08);
@@ -99,7 +121,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
         setCard(null);
         setTourState(null);
         setRouteState(null);
-        setQuizState(null);
         setWalkIdx(null);
     }, []);
 
@@ -126,7 +147,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
         scene.flyToFit(focus, focus ? 1.28 : 1.08);
         setCard(null);
         setRouteState(null);
-        setQuizState(null);
         setWalkIdx(null);
         setTourState({ beat: beatIdx, playing: playing && !scene.reduced });
     }, [tour, beatFocus]);
@@ -154,7 +174,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
         scene.flyToFit(union, 1.3);
         setCard(null);
         setTourState(null);
-        setQuizState(null);
         setWalkIdx(null);
         setRouteState({ idx, step });
     }, [examRoutes]);
@@ -168,11 +187,9 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
         for (const nb of scene.world.neighbours.get(topic.id) || []) focus.add(nb);
         scene.setFocus(focus);
         scene.clearSelection();
-        scene.setHiddenLabels(null);
         scene.flyToFit(focus, 1.3);
         setTourState(null);
         setRouteState(null);
-        setQuizState(null);
         setCard({ node: topic });
         setWalkIdx(idx);
     }, [specTopics]);
@@ -190,37 +207,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
         }
         goWalk(next);
     }, [specTopics, goWalk]);
-
-    /* ----- quiz ----- */
-    const startQuiz = useCallback(() => {
-        const scene = sceneRef.current;
-        if (!scene) return;
-        const pool = scene.world.nodes.filter((n) =>
-            n.kind !== 'topic' && n.blurb && n.label.length <= 34
-            && (scene.world.neighbours.get(n.id)?.size || 0) >= 2);
-        if (!pool.length) return;
-        const node = pool[Math.floor(Math.random() * pool.length)];
-        scene.setHiddenLabels(new Set([node.id]));
-        scene.setFocus(new Set([node.id]));
-        scene.clearSelection();
-        scene.lookAtNode(node.id);
-        setCard(null);
-        setTourState(null);
-        setRouteState(null);
-        setWalkIdx(null);
-        setQuizState({ node, revealed: false });
-    }, []);
-
-    const revealQuiz = useCallback(() => {
-        const scene = sceneRef.current;
-        const q = modeRef.current.quizState;
-        if (!scene || !q) return;
-        scene.setHiddenLabels(null);
-        const focus = new Set([q.node.id]);
-        for (const nb of scene.world.neighbours.get(q.node.id) || []) focus.add(nb);
-        scene.setFocus(focus);
-        setQuizState({ node: q.node, revealed: true });
-    }, []);
 
     /* ----- sound ----- */
     const toggleSound = useCallback(() => {
@@ -244,10 +230,10 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
     /* ----- keyboard ----- */
     useEffect(() => {
         const onKey = (e) => {
-            const { tourState: ts, routeState: rs, quizState: qs, walkIdx: wi } = modeRef.current;
+            const { tourState: ts, routeState: rs, walkIdx: wi } = modeRef.current;
             if (e.key === 'Escape') {
                 setRoutesOpen(false);
-                if (qs || rs || ts || wi != null) { backToRoom(); return; }
+                if (rs || ts || wi != null) { backToRoom(); return; }
                 setCard(null);
                 sceneRef.current?.clearSelection();
                 return;
@@ -259,7 +245,7 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                 goRouteStep(rs.idx, Math.min(route.steps.length - 1, Math.max(0, rs.step + dir)));
             } else if (ts) {
                 goToBeat(Math.min(tour.beats.length - 1, Math.max(0, ts.beat + dir)), ts.playing);
-            } else if (!qs) {
+            } else {
                 stepWalk(dir);
             }
         };
@@ -276,17 +262,9 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
     const cardTopic = cardNode && cardNode.kind !== 'topic'
         ? graph.nodes.find((n) => n.kind === 'topic' && n.parent === cardNode.parent)
         : null;
-    const quizNode = quizState?.node;
-    const quizTopic = quizNode
-        ? graph.nodes.find((n) => n.kind === 'topic' && n.parent === quizNode.parent)
-        : null;
-    const quizNeighbours = quizNode && sceneRef.current
-        ? [...(sceneRef.current.world.neighbours.get(quizNode.id) || [])]
-            .map((id) => sceneRef.current.world.byId.get(id)?.label)
-            .filter(Boolean).slice(0, 4)
-        : [];
+    const topicChildren = cardNode?.kind === 'topic' ? childrenOf(cardNode.id) : null;
     const walkTopic = walkIdx != null ? specTopics[walkIdx] : null;
-    const bottomRail = tourState || routeState || quizState;
+    const bottomRail = tourState || routeState;
 
     return (
         <div
@@ -358,14 +336,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                                 style={{ borderColor: 'rgba(242,235,224,0.3)', color: ROOM.ink }}
                             >
                                 Exam routes
-                            </button>
-                            <button
-                                type="button"
-                                onClick={startQuiz}
-                                className="pointer-events-auto rounded-lg border px-3 py-2 text-[12.5px] font-medium"
-                                style={{ borderColor: 'rgba(242,235,224,0.3)', color: ROOM.ink }}
-                            >
-                                Quiz me
                             </button>
                         </div>
                     )}
@@ -467,11 +437,18 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                 </div>
             )}
 
-            {/* index card */}
-            {cardNode && !quizState && (
+            {/* index card — a topic is one of 23 headings in the spec, so it
+                earns a fuller card than a single idea inside one */}
+            {cardNode && (
                 <div
-                    className="absolute bottom-6 left-6 max-w-[300px] rounded-xl border p-4 shadow-lg"
-                    style={{ background: ROOM.paper, borderColor: ROOM.line }}
+                    className="absolute bottom-6 left-6 rounded-xl border shadow-lg"
+                    style={{
+                        background: ROOM.paper, borderColor: ROOM.line,
+                        width: cardNode.kind === 'topic'
+                            ? 'min(352px, calc(100vw - 48px))'
+                            : 'min(300px, calc(100vw - 48px))',
+                        padding: cardNode.kind === 'topic' ? '18px 18px 16px' : '16px',
+                    }}
                 >
                     <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide"
                         style={{ color: '#6B6F5C' }}>
@@ -482,17 +459,58 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                                 ? 'Shared idea — lives in more than one topic'
                                 : `Inside ${cardNode.parent} ${cardTopic?.label ?? ''}`}
                     </div>
-                    <div className="mt-0.5 text-[16px] font-semibold"
+                    <div className={cardNode.kind === 'topic' ? 'mt-1 text-[21px] font-semibold leading-tight' : 'mt-0.5 text-[16px] font-semibold'}
                         style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', color: ROOM.paperInk }}>
                         {cardNode.label}
                     </div>
                     {cardNode.blurb && (
-                        <p className="mt-1 text-[12.5px] leading-snug" style={{ color: '#6B6F5C' }}>
-                            {cardNode.blurb}.
+                        <p className={cardNode.kind === 'topic' ? 'mt-1.5 text-[13px] leading-snug' : 'mt-1 text-[12.5px] leading-snug'}
+                            style={{ color: cardNode.kind === 'topic' ? '#55594A' : '#6B6F5C' }}>
+                            {/* curated blurbs already punctuate; topic lines do not */}
+                            {/\.$/.test(cardNode.blurb) ? cardNode.blurb : `${cardNode.blurb}.`}
                         </p>
                     )}
+
+                    {cardNode.kind === 'topic' && cardNode.teaches?.length > 0 && (
+                        <div className="mt-3 border-t pt-2.5" style={{ borderColor: ROOM.line }}>
+                            <div className="text-[10.5px] uppercase tracking-wide" style={{ color: '#8A6430' }}>
+                                What you&rsquo;ll learn
+                            </div>
+                            <ul className="mt-1.5 space-y-1">
+                                {cardNode.teaches.map((t) => (
+                                    <li key={t} className="flex gap-2 text-[12.5px] leading-snug"
+                                        style={{ color: '#55594A' }}>
+                                        <span aria-hidden style={{ color: topicInk(cardNode.parent) }}>—</span>
+                                        <span>{t}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {cardNode.kind === 'topic' && topicChildren && (
+                        <div className="mt-3 border-t pt-2 text-[11px] leading-snug"
+                            style={{ borderColor: ROOM.line, color: '#6B6F5C' }}>
+                            <span style={{ fontFamily: 'var(--font-geist-mono), monospace' }}>
+                                {topicChildren.count} ideas in the map
+                            </span>
+                            {topicChildren.shared.length > 0 && (
+                                <>
+                                    {' · '}
+                                    <span style={{ color: '#9B7530' }}>
+                                        {topicChildren.shared.length} shared with another topic
+                                    </span>
+                                    <div className="mt-0.5" style={{ color: '#9B7530' }}>
+                                        {topicChildren.shared.join(' · ')}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
+
                     {cardNode.url && (
-                        <a href={cardNode.url} className="mt-2 inline-block text-[13px] font-medium"
+                        <a href={cardNode.url}
+                            className="mt-2.5 inline-block text-[13px] font-medium"
                             style={{ color: ROOM.field }}>
                             Open this topic →
                         </a>
@@ -605,73 +623,6 @@ export default function MapRoomClient({ graph, tour, examRoutes }) {
                 </div>
             )}
 
-            {/* quiz panel */}
-            {quizState && quizNode && (
-                <div className="absolute inset-x-0 bottom-6 flex justify-center px-4">
-                    <div className="pointer-events-auto max-w-[480px] rounded-2xl border px-5 py-4 shadow-lg"
-                        style={{ background: ROOM.paper, borderColor: ROOM.line }}>
-                        <div className="text-[11px] uppercase tracking-wide" style={{ color: '#6B6F5C' }}>
-                            Quiz — one node is lit, its name withheld
-                        </div>
-                        {!quizState.revealed ? (
-                            <>
-                                <p className="mt-1 text-[13.5px] leading-snug" style={{ color: ROOM.paperInk }}>
-                                    Say what it is before you look. It lives inside{' '}
-                                    {quizNode.hub
-                                        ? 'more than one topic — it is a shared idea'
-                                        : <strong>{quizNode.parent} {quizTopic?.label ?? ''}</strong>}.
-                                </p>
-                                <div className="mt-2.5 flex gap-2">
-                                    <button type="button" onClick={revealQuiz}
-                                        className="rounded-lg px-3.5 py-1.5 text-[12.5px] font-medium"
-                                        style={{ background: ROOM.field, color: ROOM.paper }}>
-                                        Reveal
-                                    </button>
-                                    <button type="button" onClick={startQuiz}
-                                        className="rounded-lg border px-3 py-1.5 text-[12.5px]"
-                                        style={{ borderColor: ROOM.line, color: '#6B6F5C' }}>
-                                        Another
-                                    </button>
-                                    <button type="button" onClick={backToRoom}
-                                        className="rounded-lg border px-3 py-1.5 text-[12.5px]"
-                                        style={{ borderColor: ROOM.line, color: '#6B6F5C' }}>
-                                        Esc
-                                    </button>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="mt-0.5 text-[16px] font-semibold"
-                                    style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', color: ROOM.paperInk }}>
-                                    {quizNode.label}
-                                </div>
-                                {quizNode.blurb && (
-                                    <p className="mt-1 text-[12.5px] leading-snug" style={{ color: '#6B6F5C' }}>
-                                        {quizNode.blurb}.
-                                    </p>
-                                )}
-                                {quizNeighbours.length > 0 && (
-                                    <p className="mt-1 text-[12px] leading-snug" style={{ color: '#8A6430' }}>
-                                        It touches: {quizNeighbours.join(' · ')}
-                                    </p>
-                                )}
-                                <div className="mt-2.5 flex gap-2">
-                                    <button type="button" onClick={startQuiz}
-                                        className="rounded-lg px-3.5 py-1.5 text-[12.5px] font-medium"
-                                        style={{ background: ROOM.field, color: ROOM.paper }}>
-                                        Another
-                                    </button>
-                                    <button type="button" onClick={backToRoom}
-                                        className="rounded-lg border px-3 py-1.5 text-[12.5px]"
-                                        style={{ borderColor: ROOM.line, color: '#6B6F5C' }}>
-                                        Done
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

@@ -39,7 +39,16 @@ const easeHouse = cubicBezier(EASE_HOUSE);
 
 const FLY_MS = 1100;
 const DIM = 0.12;            // how far a dimmed node keeps its own colour
+const DIM_MIX = 0.93;        // how far a dimmed pixel sinks into the fog
+const DIM_SCALE = 0.5;       // and how far it shrinks back into the room
 const FOG_C = new THREE.Color(ROOM.fog);
+/* Same fog, in raw sRGB. The shader mixes after the colour-space pass, so it
+ * needs the hex as written rather than the linear value THREE.Color holds. */
+const FOG_SRGB = new THREE.Vector3(
+    parseInt(ROOM.fog.slice(1, 3), 16) / 255,
+    parseInt(ROOM.fog.slice(3, 5), 16) / 255,
+    parseInt(ROOM.fog.slice(5, 7), 16) / 255,
+);
 
 export class MapRoomScene {
     constructor(container, graph, { reduced, onSelect, onUserGesture, onHover } = {}) {
@@ -50,7 +59,6 @@ export class MapRoomScene {
         this.onHover = onHover || (() => {});
         this.disposed = false;
         this.layoutMode = 'concept';
-        this.hiddenLabelIds = null;   // Set<nodeId> whose names the quiz withholds
 
         this.world = buildWorld(graph);
         const settle = this.reduced ? 600 : 170;
@@ -145,11 +153,32 @@ export class MapRoomScene {
         const mat = new THREE.MeshStandardMaterial({
             roughness: 0.3, metalness: 0.05, envMapIntensity: 0.85,
         });
+
+        /* Dimming has to happen after the lighting, not before it. Fading a
+         * node's base colour leaves its environment-map highlight at full
+         * strength, so an unlit sphere still reads as a glossy ball in front
+         * of the map. This mixes the finished pixel toward the room's fog,
+         * which takes the specular with it. */
+        geo.setAttribute('aDim', new THREE.InstancedBufferAttribute(
+            new Float32Array(nodes.length), 1).setUsage(THREE.DynamicDrawUsage));
+        mat.onBeforeCompile = (shader) => {
+            shader.uniforms.uFogC = { value: FOG_SRGB };
+            shader.vertexShader = shader.vertexShader
+                .replace('#include <common>', '#include <common>\nattribute float aDim;\nvarying float vDim;')
+                .replace('#include <begin_vertex>', '#include <begin_vertex>\nvDim = aDim;');
+            shader.fragmentShader = shader.fragmentShader
+                .replace('#include <common>', '#include <common>\nvarying float vDim;\nuniform vec3 uFogC;')
+                .replace('#include <dithering_fragment>',
+                    '#include <dithering_fragment>\ngl_FragColor.rgb = mix(gl_FragColor.rgb, uFogC, vDim);');
+        };
+
         const mesh = new THREE.InstancedMesh(geo, mat, nodes.length);
         mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 
         this.baseColour = [];
         this.liveColour = [];
+        this.dimAttr = geo.getAttribute('aDim');
+        this.dimNow = new Float32Array(nodes.length);
         this.scaleNow = new Float32Array(nodes.length).fill(1);
         const m = new THREE.Matrix4();
         nodes.forEach((n, i) => {
@@ -317,10 +346,6 @@ export class MapRoomScene {
         this.selectedId = null;
     }
 
-    setHiddenLabels(idSet) {
-        this.hiddenLabelIds = idSet && idSet.size ? idSet : null;
-    }
-
     /* Re-hang the room: 'concept' (force layout) or 'studio' (signal chain). */
     setLayout(mode) {
         if (mode === this.layoutMode) return;
@@ -479,11 +504,13 @@ export class MapRoomScene {
         w.nodes.forEach((n, i) => {
             const inSet = !emph || emph.has(n.id);
             const isSeed = n.id === this.hoverId || n.id === this.selectedId;
-            const targetScale = isSeed ? 1.32 : 1;
+            this.dimNow[i] += ((inSet ? 0 : 1) - this.dimNow[i]) * 0.14;
+            const targetScale = (isSeed ? 1.32 : 1) * (1 - this.dimNow[i] * (1 - DIM_SCALE));
             this.scaleNow[i] += (targetScale - this.scaleNow[i]) * 0.16;
             const s = n.r * this.scaleNow[i];
             m.makeScale(s, s, s).setPosition(n.x, n.y, n.z);
             this.nodesMesh.setMatrixAt(i, m);
+            this.dimAttr.array[i] = this.dimNow[i] * DIM_MIX;
 
             tmp.copy(this.baseColour[i]);
             if (!inSet) tmp.lerp(FOG_C, 1 - DIM);
@@ -492,6 +519,7 @@ export class MapRoomScene {
         });
         this.nodesMesh.instanceMatrix.needsUpdate = true;
         this.nodesMesh.instanceColor.needsUpdate = true;
+        this.dimAttr.needsUpdate = true;
 
         // edges follow their nodes; dim with the same emphasis
         const pos = this.linesMesh.geometry.attributes.position.array;
@@ -517,7 +545,6 @@ export class MapRoomScene {
             const inSet = !emph || emph.has(n.id);
             const isSeed = n.id === this.hoverId || n.id === this.selectedId;
             L.isSeed = isSeed; L.d = d;
-            if (this.hiddenLabelIds?.has(n.id)) { L.targetO = 0; continue; }
             if (L.isTopic) {
                 L.targetO = inSet ? 1 : 0.14;
             } else {
@@ -573,7 +600,12 @@ export class MapRoomScene {
             G.material.opacity += ((inSet ? G.base : 0.04) - G.material.opacity) * 0.14;
         }
 
-        if (!this.reduced && this.motes) this.motes.rotation.y += 0.00016;
+        if (this.motes) {
+            if (!this.reduced) this.motes.rotation.y += 0.00016;
+            // the dust is atmosphere, not information — settle it while reading
+            const want = emph ? 0.05 : 0.22;
+            this.motes.material.opacity += (want - this.motes.material.opacity) * 0.1;
+        }
 
         this.renderer.render(this.scene, this.camera);
     }
