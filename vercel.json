@@ -1,6 +1,12 @@
 {
   "redirects": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "music.mikelehnert.co.uk" }],
+      "destination": "https://resources.musictechstudio.co.uk/",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "music.mikelehnert.co.uk" }],
       "destination": "https://resources.musictechstudio.co.uk/:path*",
