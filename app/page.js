@@ -27,6 +27,27 @@ const ED = {
     mono: 'var(--font-jbmono), ui-monospace, monospace',
 };
 
+// The other rooms of the estate — the subject map here, and the two
+// reading rooms over on the grades site. Link only: those pages are
+// finished surfaces.
+const ROOMS = [
+    {
+        name: 'The Map Room',
+        href: '/map-room',
+        desc: 'The whole of Component 4 drawn as one map — every concept in its place.',
+    },
+    {
+        name: 'The Library',
+        href: 'https://grades.musictechstudio.co.uk/the-library',
+        desc: 'Every volume behind the course, with doors into the Reading Room and the curriculum.',
+    },
+    {
+        name: 'The Reading Room',
+        href: 'https://grades.musictechstudio.co.uk/reading-room',
+        desc: 'The reading list as a real shelf — take a volume down, turn it over.',
+    },
+];
+
 // Mode descriptions shown under the hero
 const MODE_INFO = {
     explore: {
@@ -221,6 +242,69 @@ export default function ResourcesHub() {
                         )}
                     </>
                 )}
+
+                {/* More rooms — the estate beyond the tools */}
+                <section aria-label="More rooms" style={{ marginTop: spacing[8] }}>
+                    <h3
+                        style={{
+                            fontFamily: ED.serif,
+                            fontStyle: 'italic',
+                            fontWeight: 400,
+                            fontSize: '22px',
+                            color: ED.inkSoft,
+                            marginBottom: spacing[4],
+                            paddingBottom: spacing[2],
+                            borderBottom: `1px solid ${ED.rule}`,
+                        }}
+                    >
+                        More rooms
+                    </h3>
+                    <div
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                            gap: spacing[5],
+                        }}
+                    >
+                        {ROOMS.map((room) => (
+                            <a
+                                key={room.name}
+                                href={room.href}
+                                className="mts-room-link"
+                                style={{ textDecoration: 'none', color: ED.ink, display: 'block' }}
+                            >
+                                <div
+                                    style={{
+                                        fontFamily: ED.serif,
+                                        fontStyle: 'italic',
+                                        fontSize: '20px',
+                                        marginBottom: spacing[1] ?? '4px',
+                                    }}
+                                >
+                                    {room.name}{' '}
+                                    <span aria-hidden="true" style={{ color: ED.visited, fontSize: '15px' }}>
+                                        →
+                                    </span>
+                                </div>
+                                <p
+                                    style={{
+                                        fontFamily: ED.sans,
+                                        fontSize: '14px',
+                                        lineHeight: 1.5,
+                                        color: ED.inkSoft,
+                                        margin: 0,
+                                        maxWidth: '38ch',
+                                    }}
+                                >
+                                    {room.desc}
+                                </p>
+                            </a>
+                        ))}
+                    </div>
+                    <style>{`
+                        .mts-room-link:hover div { color: ${ED.visited}; }
+                    `}</style>
+                </section>
             </main>
 
             {/* Bottom Tab Bar */}
