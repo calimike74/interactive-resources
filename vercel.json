@@ -1,5 +1,11 @@
 {
   "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "music.mikelehnert.co.uk" }],
+      "destination": "https://resources.musictechstudio.co.uk/:path*",
+      "permanent": false
+    },
     { "source": "/learn/synthesis/synthesis", "destination": "/learn/synthesis/subtractive", "permanent": true },
     { "source": "/learn/eq/eq", "destination": "/learn/eq", "permanent": true },
     { "source": "/learn/dynamics/compression", "destination": "/learn/dynamics", "permanent": true },
