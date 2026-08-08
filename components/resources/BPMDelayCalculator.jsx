@@ -1833,7 +1833,57 @@ function BPMDelayCalculator() {
           </div>
         </div>
 
-        {/* LOOP */}
+        {/* CONTROLS — the actual lever. Kept directly adjacent to the ms
+            readout above (not after the hear-it layer below) so changing a
+            note value or tempo updates a number you can see without
+            scrolling, on mobile as well as desktop. */}
+        <div className="tl-controls">
+          <div>
+            <div className="tl-ctrl-label">Tempo</div>
+            <div className="tl-bpm-row">
+              <div className="tl-bpm-display">
+                {bpm}<span className="small">BPM</span>
+              </div>
+              <input aria-label="Beats per minute (BPM)"
+                aria-valuetext={`${bpm} beats per minute`}
+                className="tl-bpm-slider" type="range" min="60" max="180"
+                value={bpm}
+                onChange={e => setBpm(parseInt(e.target.value, 10))}
+              />
+            </div>
+            <div className="tl-bpm-presets">
+              {BPM_PRESETS.map(p => (
+                <button type="button"
+                  key={p}
+                  className={'tl-bpm-preset' + (bpm === p ? ' active' : '')}
+                  onClick={() => setBpm(p)}
+                >{p}</button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="tl-ctrl-label">Note value</div>
+            <div className="tl-notes">
+              {NOTE_VALUES.map(n => (
+                <div
+                  key={n.id}
+                  className={'tl-note-btn' + (n.id === noteId ? ' active' : '')}
+                  onClick={() => setNoteId(n.id)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setNoteId(n.id); } }}
+                  role="button" tabIndex={0}
+                >
+                  <div className="tl-note-symbol"><NoteIcon id={n.id} size={22} /></div>
+                  <div className="tl-note-label">{n.label}</div>
+                  <div className="tl-note-ms">{Math.round(calcMs(bpm, n.multiplier))}ms</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* LOOP — the hear-it layer. Moved after the controls: this is for
+            confirming by ear once the number's already changed, not for
+            changing the number. */}
         <div className="tl-loop-row">
           <button type="button"
             className={'tl-loop-btn' + (loopOn ? ' on' : '')}
@@ -1878,51 +1928,6 @@ function BPMDelayCalculator() {
               <span className="tl-pad-key">{s.key}</span>{s.label}
             </div>
           ))}
-        </div>
-
-        {/* CONTROLS */}
-        <div className="tl-controls">
-          <div>
-            <div className="tl-ctrl-label">Tempo</div>
-            <div className="tl-bpm-row">
-              <div className="tl-bpm-display">
-                {bpm}<span className="small">BPM</span>
-              </div>
-              <input aria-label="Beats per minute (BPM)"
-                aria-valuetext={`${bpm} beats per minute`}
-                className="tl-bpm-slider" type="range" min="60" max="180"
-                value={bpm}
-                onChange={e => setBpm(parseInt(e.target.value, 10))}
-              />
-            </div>
-            <div className="tl-bpm-presets">
-              {BPM_PRESETS.map(p => (
-                <button type="button"
-                  key={p}
-                  className={'tl-bpm-preset' + (bpm === p ? ' active' : '')}
-                  onClick={() => setBpm(p)}
-                >{p}</button>
-              ))}
-            </div>
-          </div>
-          <div>
-            <div className="tl-ctrl-label">Note value</div>
-            <div className="tl-notes">
-              {NOTE_VALUES.map(n => (
-                <div
-                  key={n.id}
-                  className={'tl-note-btn' + (n.id === noteId ? ' active' : '')}
-                  onClick={() => setNoteId(n.id)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setNoteId(n.id); } }}
-                  role="button" tabIndex={0}
-                >
-                  <div className="tl-note-symbol"><NoteIcon id={n.id} size={22} /></div>
-                  <div className="tl-note-label">{n.label}</div>
-                  <div className="tl-note-ms">{Math.round(calcMs(bpm, n.multiplier))}ms</div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         <p className="tl-aside">

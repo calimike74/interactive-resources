@@ -196,6 +196,18 @@ export default function MIDIPitchBendController() {
                     </div>
                   </div>
 
+                  {/* Compact live readout — mobile only. The full "Current
+                      Values" card is the second grid column, which stacks
+                      far below the wheel on a phone; without this, dragging
+                      the wheel gives zero visible feedback until you scroll. */}
+                  <div className="md:hidden bg-gradient-to-r from-mustard-100 to-blue-100 rounded-lg px-4 py-3 flex items-center justify-center gap-2 font-mono text-sm" aria-live="polite">
+                    <span className="font-bold text-gray-700">{pitchBendValue}</span>
+                    <span className="text-gray-400">→</span>
+                    <span className="font-bold text-blue-600">{calculatePitchBend() > 0 ? '+' : ''}{calculatePitchBend()}&nbsp;st</span>
+                    <span className="text-gray-400">→</span>
+                    <span className="font-bold text-mustard-700 text-base">{calculateNote()}</span>
+                  </div>
+
                   <button type="button"
                     onClick={() => setPitchBendValue(8192)}
                     className="w-full bg-mustard-100 hover:bg-mustard-200 text-mustard-700 font-semibold py-2 px-4 rounded transition-colors"
