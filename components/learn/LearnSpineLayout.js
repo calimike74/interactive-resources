@@ -45,7 +45,8 @@ export default function LearnSpineLayout({ topic, token, answeredSections, paren
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-    // IntersectionObserver for section activation
+    // IntersectionObserver for section reading-focus (dims/lifts sections outside
+    // the central reading band, and highlights the matching spine node).
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -61,18 +62,47 @@ export default function LearnSpineLayout({ topic, token, answeredSections, paren
                     });
                     return next;
                 });
-                // Track which sections have ever been visible (for diagram persistence)
-                setHasBeenVisible((prev) => {
-                    const next = new Set(prev);
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            next.add(Number(entry.target.dataset.sectionIndex));
-                        }
-                    });
-                    return next.size !== prev.size ? next : prev;
-                });
             },
             { rootMargin: '-35% 0px -15% 0px' }
+        );
+
+        const refs = sectionRefs.current;
+        refs.forEach((el) => {
+            if (el) observer.observe(el);
+        });
+
+        return () => observer.disconnect();
+    }, [topic.rows.length]);
+
+    // Separate, more generous IntersectionObserver purely for mounting diagrams.
+    // The reading-focus band above is deliberately narrow (roughly the middle of
+    // the viewport), so a section can sit fully on screen — its diagram box
+    // visible, bordered, waiting — while never crossing that narrow band, e.g.
+    // if a scroll lands with the section just inside the excluded top/bottom
+    // margin. Gating the diagram's mount on the same narrow observer left the
+    // canvas never created in that case: a blank box with no console error,
+    // because nothing had thrown — the diagram simply hadn't been asked to
+    // render yet. Mounting as soon as a section is anywhere near the viewport
+    // avoids that gap.
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                setHasBeenVisible((prev) => {
+                    const next = new Set(prev);
+                    let changed = false;
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const idx = Number(entry.target.dataset.sectionIndex);
+                            if (!next.has(idx)) {
+                                next.add(idx);
+                                changed = true;
+                            }
+                        }
+                    });
+                    return changed ? next : prev;
+                });
+            },
+            { rootMargin: '200px 0px 200px 0px' }
         );
 
         const refs = sectionRefs.current;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { theme, typography, spacing, borderRadius } from '@/lib/theme';
 
 const t = theme.light;
@@ -35,8 +35,19 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
     const [dragItem, setDragItem] = useState(null);
     const [dragOverZone, setDragOverZone] = useState(null);
     const [kbSelected, setKbSelected] = useState(null); // item id selected via keyboard/click-to-select
-    const [shuffledNames] = useState(() => shuffle(hotspots.map(h => ({ id: h.id, label: h.label, name: h.name }))));
-    const [shuffledDescs] = useState(() => shuffle(hotspots.map(h => ({ id: h.id, label: h.label, clue: h.matchClue || stripRefs(h.description) }))));
+    // Start in the hotspots' natural (unshuffled) order so the server-rendered
+    // HTML and the client's first render are identical, then shuffle client-side
+    // only, after mount — calling Math.random() during the render that gets
+    // server-rendered would produce a different order server vs. client and
+    // React would fail to reconcile the mismatched markup on hydration.
+    const [shuffledNames, setShuffledNames] = useState(() => hotspots.map(h => ({ id: h.id, label: h.label, name: h.name })));
+    const [shuffledDescs, setShuffledDescs] = useState(() => hotspots.map(h => ({ id: h.id, label: h.label, clue: h.matchClue || stripRefs(h.description) })));
+
+    useEffect(() => {
+        setShuffledNames(prev => shuffle(prev));
+        setShuffledDescs(prev => shuffle(prev));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const foundationHotspots = hotspots.filter(h => h.level === 'foundation');
     const allHotspots = hotspots;
@@ -226,12 +237,12 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
             `}</style>
 
             {/* Header */}
-            <h2 style={{
+            <h1 style={{
                 fontSize: typography.size['2xl'],
                 fontWeight: typography.weight.bold,
                 color: t.text.primary,
                 marginBottom: spacing[1],
-            }}>{title || 'Controls Assessment'}</h2>
+            }}>{title || 'Controls Assessment'}</h1>
 
             {/* Stage indicator */}
             <div style={{

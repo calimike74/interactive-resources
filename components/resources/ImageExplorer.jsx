@@ -73,14 +73,27 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
 
     const connectedIds = new Set(connections.map(c => c.hotspotId));
 
-    // Initialise box position once page renders
+    // Initialise box position once page renders.
+    // On narrow viewports there's no room beside the image, so the card goes
+    // below the image (and stays clamped inside the viewport) instead of
+    // floating off the right edge.
     useEffect(() => {
         if (!boxPos && imageContainerRef.current) {
             const rect = imageContainerRef.current.getBoundingClientRect();
-            setBoxPos({
-                x: rect.right + 20,
-                y: Math.min(Math.max(rect.top + 20, 20), window.innerHeight - 200),
-            });
+            const mobile = window.innerWidth < 768;
+            const boxWidth = mobile ? 280 : 340;
+            const margin = 16;
+            if (mobile) {
+                setBoxPos({
+                    x: Math.max(margin, Math.min(rect.left, window.innerWidth - boxWidth - margin)),
+                    y: rect.bottom + margin,
+                });
+            } else {
+                setBoxPos({
+                    x: rect.right + 20,
+                    y: Math.min(Math.max(rect.top + 20, 20), window.innerHeight - 200),
+                });
+            }
         }
     }, [imageLoaded, boxPos]);
 
@@ -214,6 +227,22 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
         }
     }, [kbSelectMode]);
 
+    // Entering selection mode moves focus straight to the first unconnected zone,
+    // instead of leaving it on the plug — otherwise the next Tab press walks
+    // through whatever comes after the plug in DOM order (page footer, cookie
+    // banner, etc.) rather than reaching a zone at all.
+    useEffect(() => {
+        if (!kbSelectMode) return;
+        const connectedNow = new Set(connections.map(c => c.hotspotId));
+        const firstAvailable = hotspots.find(h => !connectedNow.has(h.id));
+        if (firstAvailable) {
+            zoneRefs.current[firstAvailable.id]?.focus();
+        }
+        // Only re-run when selection mode toggles on — connections/hotspots are
+        // read fresh from this render's closure at that moment.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [kbSelectMode]);
+
     // Calculate SVG paths between zones and their matching explanation cards
     const recalcPaths = useCallback(() => {
         if (!pageRef.current || !connectorBoxRef.current) return;
@@ -318,13 +347,13 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
 
             {/* Title and instruction */}
             {title && (
-                <h2 style={{
+                <h1 style={{
                     fontSize: typography.size['2xl'],
                     fontWeight: typography.weight.bold,
                     color: t.text.primary,
                     marginBottom: spacing[2],
                     fontFamily: typography.fontFamily,
-                }}>{title}</h2>
+                }}>{title}</h1>
             )}
             {instruction && (
                 <p style={{
@@ -378,6 +407,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                 role={kbSelectMode && !isConnected ? 'button' : undefined}
                                 tabIndex={kbSelectMode && !isConnected ? 0 : undefined}
                                 aria-label={hotspot.name}
+                                title={hotspot.name}
                                 onKeyDown={(e) => handleZoneKeyDown(e, hotspot.id)}
                                 style={{
                                     flex: hotspot.zone.width,
@@ -414,19 +444,25 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                 }}>
                                     {hotspot.label}
                                 </span>
-                                <span style={{
-                                    color: '#FFFFFF',
-                                    fontSize: '11px',
-                                    fontWeight: typography.weight.semibold,
-                                    fontFamily: typography.fontFamily,
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    textShadow: '0 1px 2px rgba(0,0,0,0.2)',
-                                    lineHeight: 1.2,
-                                }}>
-                                    {hotspot.name}
-                                </span>
+                                {/* On narrow viewports there isn't room to show the name without
+                                    truncating to unreadable fragments — the badge + colour + title
+                                    tooltip carry identity instead; the full name still appears in
+                                    the connected-items list and detail panel once a zone connects. */}
+                                {!isMobile && (
+                                    <span style={{
+                                        color: '#FFFFFF',
+                                        fontSize: '11px',
+                                        fontWeight: typography.weight.semibold,
+                                        fontFamily: typography.fontFamily,
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                                        lineHeight: 1.2,
+                                    }}>
+                                        {hotspot.name}
+                                    </span>
+                                )}
                             </div>
                         );
                     })}

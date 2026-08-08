@@ -9,7 +9,7 @@ export default function OperatorAssessment() {
             imageSrc={operatorConfig.imageSrc}
             imageAlt={operatorConfig.imageAlt}
             hotspots={operatorConfig.hotspots}
-            title={operatorConfig.title}
+            title="Operator Controls Assessment"
         />
     );
 }
