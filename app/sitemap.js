@@ -23,6 +23,12 @@ export default function sitemap() {
     },
     // The orientation page moved to the hub on 2026-07-30 and the route here is
     // now a noindex stub pointing at it. Deliberately absent from this sitemap.
+    {
+      url: `${baseUrl}/map-room`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     ...resourceUrls,
   ];
 }
