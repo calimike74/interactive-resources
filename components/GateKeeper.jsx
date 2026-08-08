@@ -168,7 +168,7 @@ function PasscodePanel({ title, onUnlocked }) {
                         >
                             musictechstudio.co.uk
                         </a>
-                        . Already in one of Mike&rsquo;s classes? Ask for this term&rsquo;s passcode
+                        . Use this site in class? Ask your teacher for this term&rsquo;s passcode
                         below. The rest of this page, including what the topic covers and why it
                         matters in the exam, stays visible either way.
                     </p>
