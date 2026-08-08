@@ -69,7 +69,10 @@ export default function MIDIPitchBendController() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-mustard-50 to-blue-50 p-4">
       <div className="max-w-6xl mx-auto">
-        {/* Hero with video background */}
+        {/* Hero — a functional 14-bit bend-wheel motif (CSS/SVG, house palette)
+            replaces the cold blue server-room/binary stock image. The wheel
+            sits at centre (8192 = 0b10000000000000), which is exactly what
+            the simulator below opens on. */}
         <div style={{
           position: 'relative',
           overflow: 'hidden',
@@ -77,57 +80,67 @@ export default function MIDIPitchBendController() {
           marginLeft: 'calc(-50vw + 50%)',
           marginBottom: '1.5rem',
           minHeight: '240px',
+          background: '#0d0b08',
         }}>
-          <video aria-hidden="true"
-            autoPlay
-            muted
-            loop
-            playsInline
-            onLoadedData={(e) => {
-              e.target.style.opacity = 1;
-              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) e.target.pause();
-            }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: 0,
-              transition: 'opacity 0.8s ease-out',
-            }}
-            src="/midi-hero.mp4"
-          />
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
-          }} />
+            background: 'radial-gradient(ellipse 60% 80% at 50% 30%, rgba(184,90,63,0.22) 0%, transparent 65%)',
+          }} aria-hidden="true" />
           <div style={{
             position: 'relative',
-            maxWidth: '640px', margin: '0 auto',
-            padding: '3rem 1.5rem 2.5rem',
-            textAlign: 'center',
+            maxWidth: '760px', margin: '0 auto',
+            padding: '2.75rem 1.5rem 2.25rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1.75rem',
           }}>
-            <h1 style={{
-              fontSize: '2.25rem',
-              fontWeight: 700,
-              color: '#ffffff',
-              lineHeight: 1.2,
-              marginBottom: '1rem',
-              textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-            }}>
-              MIDI Pitch Bend & Controller
-            </h1>
-            <p style={{
-              color: 'rgba(255,255,255,0.85)',
-              fontSize: '1.125rem',
-              lineHeight: 1.6,
-              maxWidth: '480px', margin: '0 auto',
-              textShadow: '0 1px 4px rgba(0,0,0,0.2)',
-            }}>
-              An interactive guide to pitch bend data, 14-bit resolution, and MIDI controller messages.
-            </p>
+            <div style={{ textAlign: 'center' }}>
+              <h1 style={{
+                fontSize: '2.25rem',
+                fontWeight: 700,
+                color: '#ffffff',
+                lineHeight: 1.2,
+                marginBottom: '1rem',
+              }}>
+                MIDI Pitch Bend & Controller
+              </h1>
+              <p style={{
+                color: 'rgba(255,255,255,0.75)',
+                fontSize: '1.125rem',
+                lineHeight: 1.6,
+                maxWidth: '480px', margin: '0 auto',
+              }}>
+                An interactive guide to pitch bend data, 14-bit resolution, and MIDI controller messages.
+              </p>
+            </div>
+
+            <svg
+              viewBox="0 0 420 150"
+              style={{ width: '100%', maxWidth: 380, height: 'auto' }}
+              role="img"
+              aria-label="A pitch bend wheel at its centre rest position, reading 8192 -- binary 10000000000000, 14 bits, split into MSB 64 and LSB 0."
+            >
+              <title>The pitch bend wheel at centre: 8192</title>
+              {/* wheel track */}
+              <rect x="26" y="10" width="34" height="130" rx="17" fill="none" stroke="#B85A3F" strokeWidth="2" />
+              <line x1="43" y1="10" x2="43" y2="26" stroke="#B85A3F" strokeWidth="1.5" opacity="0.6" />
+              <line x1="43" y1="124" x2="43" y2="140" stroke="#B85A3F" strokeWidth="1.5" opacity="0.6" />
+              {/* thumb at centre rest */}
+              <circle cx="43" cy="75" r="15" fill="#B85A3F" />
+              <circle cx="43" cy="75" r="15" fill="none" stroke="#F2EBE0" strokeWidth="1.5" opacity="0.5" />
+              <text x="10" y="24" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">+1</text>
+              <text x="10" y="130" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">−1</text>
+
+              {/* readout */}
+              <g fontFamily="var(--font-jbmono), ui-monospace, monospace">
+                <text x="90" y="46" fill="#F2EBE0" fontSize="12" opacity="0.6">14-BIT VALUE · CENTRE</text>
+                <text x="90" y="80" fill="#ffffff" fontSize="30" fontWeight="700">8192</text>
+                <text x="90" y="106" fill="#DCC892" fontSize="15" letterSpacing="1">10000000000000</text>
+                <text x="90" y="130" fill="rgba(242,235,224,0.55)" fontSize="12">MSB 64 · LSB 0</text>
+              </g>
+            </svg>
           </div>
         </div>
 
