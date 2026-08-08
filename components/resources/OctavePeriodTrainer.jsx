@@ -3,6 +3,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Target } from 'lucide-react';
 
+// Sine trace for the hero diagram — a plain point-by-point path, not an
+// audio-accurate render (this is illustration, not a measurement tool).
+function sinePath(width, height, cycles, amplitudeRatio = 0.6) {
+    const steps = 120;
+    const midY = height / 2;
+    const amp = midY * amplitudeRatio;
+    let d = '';
+    for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const x = t * width;
+        const y = midY - Math.sin(t * cycles * 2 * Math.PI) * amp;
+        d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+    }
+    return d.trim();
+}
+
 // ============================================
 // CORE CONCEPTS (What students need to know)
 // ============================================
@@ -909,17 +925,6 @@ const Part3Explore = () => {
 export default function OctavePeriodTrainer() {
     const [currentPart, setCurrentPart] = useState(1);
     const [visitedParts, setVisitedParts] = useState(new Set([1]));
-    const videoRef = useRef(null);
-
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            video.pause();
-            video.removeAttribute('src');
-            video.load();
-        }
-    }, []);
 
     const goToPart = (part) => {
         setCurrentPart(part);
@@ -930,9 +935,16 @@ export default function OctavePeriodTrainer() {
     const partNames = { 1: 'Foundations', 2: 'The Mistake', 3: 'Explore' };
 
     return (
-        <div style={{ minHeight: '100vh', background: '#050507', color: '#c9cdd4', fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, sans-serif' }}>
+        <div style={{ minHeight: '100vh', background: '#F2EBE0', padding: '2rem 1.25rem 3rem', fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, sans-serif' }}>
+        {/* The instrument panel — a contained dark "terminal" card on the house
+            cream page ground, rather than a full-viewport dark background.
+            Everything inside (header, hero, Part1/2/3, footer bar) keeps its
+            existing near-black styling untouched; only the page's own ground
+            changes, so the transition into the shared light site footer below
+            this component is no longer a hard cut. */}
+        <div style={{ maxWidth: '1100px', margin: '0 auto', background: '#050507', color: '#c9cdd4', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 1px 0 rgba(43,36,24,0.06), 0 24px 60px -32px rgba(43,36,24,0.45)' }}>
             {/* Header */}
-            <header style={{ background: 'linear-gradient(180deg, #101218 0%, #0a0b0f 100%)', borderBottom: '1px solid #ffffff10', position: 'sticky', top: 0, zIndex: 100 }}>
+            <header style={{ background: 'linear-gradient(180deg, #101218 0%, #0a0b0f 100%)', borderBottom: '1px solid #ffffff10' }}>
                 <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
                         <h1 style={{ fontSize: '0.9rem', fontWeight: '400', letterSpacing: '0.15em', color: '#8b909a', textTransform: 'uppercase', margin: 0 }}>
@@ -966,56 +978,27 @@ export default function OctavePeriodTrainer() {
                 </div>
             </header>
 
-            {/* Hero with video background */}
+            {/* Hero — a functional period-doubling diagram (440 Hz vs. its octave
+                down at 220 Hz, period T vs. 2T) replaces the decorative AI hero
+                video. It states the tool's one idea before a word of copy does. */}
             <div style={{
                 position: 'relative',
-                overflow: 'hidden',
-                width: '100vw',
-                marginLeft: 'calc(-50vw + 50%)',
-                marginBottom: '1rem',
-                minHeight: '240px',
+                padding: '2.5rem 1.5rem 2rem',
+                textAlign: 'center',
+                background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(220,200,146,0.12) 0%, transparent 65%)',
             }}>
-                <video aria-hidden="true"
-                    ref={videoRef}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    onLoadedData={(e) => { e.target.style.opacity = 1; }}
-                    style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        opacity: 0,
-                        transition: 'opacity 0.8s ease-out',
-                    }}
-                    src="/numeracy-hero.mp4"
-                />
-                <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(to bottom, rgba(5,5,7,0.4) 0%, rgba(5,5,7,0.7) 100%)',
-                }} />
-                <div style={{
-                    position: 'relative',
-                    maxWidth: '640px', margin: '0 auto',
-                    padding: '3rem 1.5rem 2.5rem',
-                    textAlign: 'center',
-                }}>
+                <div style={{ maxWidth: '640px', margin: '0 auto 1.75rem' }}>
                     <h2 style={{
                         fontSize: '2.25rem',
                         fontWeight: '700',
-                        color: '#ffffff',
+                        color: '#f8f9fa',
                         lineHeight: 1.15,
                         marginBottom: '1rem',
-                        textShadow: '0 2px 8px rgba(0,0,0,0.3)',
                     }}>
                         Octave Period Trainer
                     </h2>
                     <p style={{
-                        color: 'rgba(255,255,255,0.85)',
+                        color: 'rgba(201,205,212,0.85)',
                         fontSize: '1.1rem',
                         lineHeight: 1.6,
                         maxWidth: '480px', margin: '0 auto',
@@ -1023,6 +1006,38 @@ export default function OctavePeriodTrainer() {
                         Explore the mathematical relationship between frequency and period
                     </p>
                 </div>
+
+                <svg
+                    viewBox="0 0 560 300"
+                    style={{ width: '100%', maxWidth: 480, height: 'auto', margin: '0 auto', display: 'block' }}
+                    role="img"
+                    aria-label="Two sine waves. The upper trace, at 440 hertz, completes four cycles across the frame with period T. The lower trace, one octave down at 220 hertz, completes two cycles with period 2T -- exactly double."
+                >
+                    <title>Octave down doubles the period</title>
+                    {/* upper trace: 440 Hz, 4 cycles, period T */}
+                    <text x="0" y="24" fill="#DCC892" fontSize="14" fontFamily="var(--font-jbmono), ui-monospace, monospace" fontWeight="700">440 HZ</text>
+                    <g transform="translate(0,44)">
+                        <path d={sinePath(560, 50, 4)} fill="none" stroke="#DCC892" strokeWidth="2.5" strokeLinejoin="round" />
+                    </g>
+                    <g transform="translate(0,112)">
+                        <line x1="0" y1="0" x2="140" y2="0" stroke="#DCC892" strokeWidth="1.5" />
+                        <line x1="0" y1="-5" x2="0" y2="5" stroke="#DCC892" strokeWidth="1.5" />
+                        <line x1="140" y1="-5" x2="140" y2="5" stroke="#DCC892" strokeWidth="1.5" />
+                        <text x="70" y="24" fill="#DCC892" fontSize="13" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle" fontWeight="700">T</text>
+                    </g>
+
+                    {/* lower trace: 220 Hz, 2 cycles, period 2T -- twice T's width */}
+                    <text x="0" y="168" fill="#f8f9fa" fontSize="14" fontFamily="var(--font-jbmono), ui-monospace, monospace" fontWeight="700">220 HZ · OCTAVE DOWN</text>
+                    <g transform="translate(0,188)">
+                        <path d={sinePath(560, 50, 2)} fill="none" stroke="#f8f9fa" strokeWidth="2.5" strokeLinejoin="round" />
+                    </g>
+                    <g transform="translate(0,256)">
+                        <line x1="0" y1="0" x2="280" y2="0" stroke="#f8f9fa" strokeWidth="1.5" />
+                        <line x1="0" y1="-5" x2="0" y2="5" stroke="#f8f9fa" strokeWidth="1.5" />
+                        <line x1="280" y1="-5" x2="280" y2="5" stroke="#f8f9fa" strokeWidth="1.5" />
+                        <text x="140" y="24" fill="#f8f9fa" fontSize="13" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle" fontWeight="700">2T — twice the period</text>
+                    </g>
+                </svg>
             </div>
 
             {/* Content */}
@@ -1038,6 +1053,7 @@ export default function OctavePeriodTrainer() {
                     A-Level Music Technology | Component 4: Producing and Analysing | 2.5 Numeracy
                 </div>
             </footer>
+        </div>
         </div>
     );
 }
