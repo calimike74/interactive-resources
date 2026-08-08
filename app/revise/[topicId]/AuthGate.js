@@ -86,6 +86,21 @@ export default function AuthGate({ onAuthenticated, submitLabel = 'Start Quiz' }
                 }}>
                     Open your grades link, copy the code after the last slash, and paste it here. Ask your teacher if you don&apos;t have a link.
                 </p>
+                <p style={{
+                    fontSize: typography.size.sm,
+                    color: t.text.tertiary,
+                    lineHeight: typography.lineHeight.relaxed,
+                    marginTop: spacing[3],
+                }}>
+                    Joined on your own? Your progress lives in your studio — sign in at{' '}
+                    <a
+                        href="https://grades.musictechstudio.co.uk"
+                        style={{ color: ED.accent }}
+                    >
+                        grades.musictechstudio.co.uk
+                    </a>{' '}
+                    with your member email instead.
+                </p>
             </div>
 
             <form onSubmit={handleSubmit}>
