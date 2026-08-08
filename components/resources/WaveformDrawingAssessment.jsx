@@ -142,7 +142,7 @@ export default function WaveformDrawingAssessment() {
     }, [questionIndex, finished]);
 
     if (!authChecked) {
-        return <div className="min-h-[60vh] bg-slate-50" />;
+        return <div className="min-h-[60vh] bg-cream" />;
     }
 
     const current = QUESTIONS[questionIndex];
@@ -240,18 +240,18 @@ export default function WaveformDrawingAssessment() {
     }
 
     return (
-        <div className="min-h-[60vh] bg-slate-50 py-8 px-4 sm:px-6">
+        <div className="min-h-[60vh] bg-cream py-8 px-4 sm:px-6">
             <div className="max-w-2xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
-                    <p className="text-xs uppercase tracking-widest text-slate-500 mb-1">
+                    <p className="text-xs font-[family-name:var(--font-jbmono)] uppercase tracking-widest text-sienna-600 mb-1">
                         Topic 2.5 Numeracy · Revision Drill
                     </p>
-                    <h1 className="text-2xl font-semibold text-slate-900">
+                    <h1 className="font-[family-name:var(--font-fraunces)] text-2xl font-medium text-ink">
                         Waveform Drawing Assessment
                     </h1>
                     {!token && (
-                        <p className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-3 py-2">
+                        <p className="mt-2 text-xs text-mustard-700 bg-mustard-50 border border-mustard-200 rounded-md px-3 py-2">
                             You aren&apos;t signed in to the revision dashboard, so your score won&apos;t be saved. You can still work through the questions.
                         </p>
                     )}
@@ -260,26 +260,26 @@ export default function WaveformDrawingAssessment() {
                 {/* Progress bar */}
                 <div className="mb-6">
                     <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium text-slate-600">
+                        <span className="text-sm font-medium text-ink/60">
                             Question {progress} of {total}
                         </span>
-                        <span className="text-xs uppercase tracking-wider text-slate-500">
+                        <span className="text-xs uppercase tracking-wider text-ink/50">
                             {current.type === 'mcq' ? 'Multiple choice'
                                 : current.type === 'numeric' ? 'Calculation'
                                 : 'Short answer'}
                         </span>
                     </div>
-                    <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-line rounded-full overflow-hidden">
                         <div
-                            className="h-full bg-emerald-600 transition-[width] duration-300 ease-house"
+                            className="h-full bg-sienna-500 transition-[width] duration-300 ease-house"
                             style={{ width: `${(progress / total) * 100}%` }}
                         />
                     </div>
                 </div>
 
                 {/* Question card */}
-                <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
-                    <h2 className="text-lg sm:text-xl font-semibold text-slate-900 leading-snug mb-6">
+                <div className="bg-paper rounded-xl border border-line shadow-[0_1px_0_rgba(43,36,24,0.04),0_18px_40px_-24px_rgba(43,36,24,0.22)] p-6 sm:p-8">
+                    <h2 className="text-lg sm:text-xl font-semibold text-ink leading-snug mb-6">
                         {current.prompt}
                     </h2>
 
@@ -334,14 +334,14 @@ export default function WaveformDrawingAssessment() {
                         <button
                             type="button"
                             onClick={nextQuestion}
-                            className="mt-6 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg transition-colors"
+                            className="mt-6 w-full bg-sienna-500 hover:bg-sienna-600 text-white font-semibold py-3 rounded-full transition-colors"
                         >
                             {questionIndex + 1 >= total ? 'See results' : 'Next question'}
                         </button>
                     )}
                 </div>
 
-                <p className="text-xs text-slate-500 text-center mt-4">
+                <p className="text-xs text-ink/50 text-center mt-4">
                     Based on Worksheet 7 (C4 Intervention Pack) · drawn from 2019, 2023, 2024 and 2025 papers
                 </p>
             </div>
@@ -356,8 +356,8 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
     return (
         <div className="flex flex-col gap-3">
             {options.map((option, i) => {
-                let classes = 'border-slate-200 bg-white text-slate-900 hover:border-emerald-400 hover:bg-emerald-50';
-                let badgeClasses = 'bg-slate-100 text-slate-600';
+                let classes = 'border-line bg-paper text-ink hover:border-sienna-300 hover:bg-sienna-50';
+                let badgeClasses = 'bg-cream text-ink/60';
 
                 if (showFeedback) {
                     if (i === correctIndex) {
@@ -367,11 +367,11 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                         classes = 'border-rose-500 bg-rose-50 text-rose-900';
                         badgeClasses = 'bg-rose-600 text-white';
                     } else {
-                        classes = 'border-slate-200 bg-white text-slate-500';
+                        classes = 'border-line bg-paper text-ink/40';
                     }
                 } else if (i === selectedIndex) {
-                    classes = 'border-emerald-500 bg-emerald-50 text-emerald-900';
-                    badgeClasses = 'bg-emerald-600 text-white';
+                    classes = 'border-sienna-500 bg-sienna-50 text-ink';
+                    badgeClasses = 'bg-sienna-500 text-white';
                 }
 
                 return (
@@ -400,7 +400,7 @@ function DiagramOptions({ diagramOptions, correctIndex, selectedIndex, showFeedb
     return (
         <div className="grid grid-cols-2 gap-3">
             {diagramOptions.map((kind, i) => {
-                let classes = 'border-slate-200 bg-white hover:border-emerald-400 hover:bg-emerald-50';
+                let classes = 'border-line bg-paper hover:border-sienna-300 hover:bg-sienna-50';
 
                 if (showFeedback) {
                     if (i === correctIndex) {
@@ -408,10 +408,10 @@ function DiagramOptions({ diagramOptions, correctIndex, selectedIndex, showFeedb
                     } else if (i === selectedIndex) {
                         classes = 'border-rose-500 bg-rose-50';
                     } else {
-                        classes = 'border-slate-200 bg-white opacity-60';
+                        classes = 'border-line bg-paper opacity-60';
                     }
                 } else if (i === selectedIndex) {
-                    classes = 'border-emerald-500 bg-emerald-50';
+                    classes = 'border-sienna-500 bg-sienna-50';
                 }
 
                 return (
@@ -422,7 +422,7 @@ function DiagramOptions({ diagramOptions, correctIndex, selectedIndex, showFeedb
                         disabled={showFeedback}
                         className={`flex flex-col items-center gap-2 p-3 border-2 rounded-lg transition-colors ${classes} ${showFeedback ? 'cursor-default' : 'cursor-pointer'}`}
                     >
-                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-cream text-ink/70 text-xs font-semibold">
                             {String.fromCharCode(65 + i)}
                         </span>
                         <WaveformOptionDiagram kind={kind} />
@@ -544,16 +544,16 @@ function NumericInput({ unit, showFeedback, onSubmit }) {
                 onChange={e => setValue(e.target.value)}
                 disabled={showFeedback}
                 placeholder="Your answer"
-                className="flex-1 px-4 py-3 text-lg font-mono border-2 border-slate-200 rounded-lg focus:border-emerald-500 focus:outline-none disabled:bg-slate-100"
+                className="flex-1 px-4 py-3 text-lg font-[family-name:var(--font-jbmono)] border-2 border-line rounded-lg bg-paper text-ink focus:border-sienna-500 focus:outline-none disabled:bg-cream"
             />
             {unit && (
-                <span className="text-sm font-medium text-slate-600 whitespace-nowrap">{unit}</span>
+                <span className="text-sm font-medium text-ink/60 whitespace-nowrap">{unit}</span>
             )}
             {!showFeedback && (
                 <button
                     type="submit"
                     disabled={!value.trim()}
-                    className="bg-emerald-700 hover:bg-emerald-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                    className="bg-sienna-500 hover:bg-sienna-600 disabled:bg-line disabled:text-ink/40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-full transition-colors"
                 >
                     Check
                 </button>
@@ -581,13 +581,13 @@ function ShortAnswer({ showFeedback, onSubmit }) {
                 disabled={showFeedback}
                 placeholder="Type your answer..."
                 rows={4}
-                className="w-full p-4 text-base border-2 border-slate-200 rounded-lg focus:border-emerald-500 focus:outline-none disabled:bg-slate-100 resize-y"
+                className="w-full p-4 text-base border-2 border-line rounded-lg bg-paper text-ink focus:border-sienna-500 focus:outline-none disabled:bg-cream resize-y"
             />
             {!showFeedback && (
                 <button
                     type="submit"
                     disabled={!value.trim()}
-                    className="mt-3 bg-emerald-700 hover:bg-emerald-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                    className="mt-3 bg-sienna-500 hover:bg-sienna-600 disabled:bg-line disabled:text-ink/40 disabled:cursor-not-allowed text-white font-semibold px-5 py-3 rounded-full transition-colors"
                 >
                     Submit
                 </button>
@@ -611,12 +611,12 @@ function FeedbackPanel({ correct, type, explanation, sampleAnswer }) {
     return (
         <div className={`mt-6 border rounded-lg p-4 ${tone}`}>
             <p className={`font-semibold mb-2 ${headingTone}`}>{heading}</p>
-            <p className="text-sm text-slate-700 leading-relaxed">{explanation}</p>
+            <p className="text-sm text-ink/80 leading-relaxed">{explanation}</p>
 
             {type === 'short' && sampleAnswer && (
-                <div className="mt-3 pt-3 border-t border-slate-200">
-                    <p className="text-xs uppercase tracking-wider text-slate-500 mb-1">Sample answer</p>
-                    <p className="text-sm italic text-slate-700 leading-relaxed">{sampleAnswer}</p>
+                <div className="mt-3 pt-3 border-t border-line">
+                    <p className="text-xs uppercase tracking-wider text-ink/50 mb-1">Sample answer</p>
+                    <p className="text-sm italic text-ink/80 leading-relaxed">{sampleAnswer}</p>
                 </div>
             )}
         </div>
@@ -640,10 +640,10 @@ function ResultsScreen({ responses, questions, onRestart }) {
         : 'Needs work — revisit the worksheet and try again.';
 
     return (
-        <div className="min-h-[60vh] bg-slate-50 py-8 px-4 sm:px-6">
+        <div className="min-h-[60vh] bg-cream py-8 px-4 sm:px-6">
             <div className="max-w-2xl mx-auto">
-                <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
-                    <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">
+                <div className="bg-paper rounded-xl border border-line shadow-[0_1px_0_rgba(43,36,24,0.04),0_18px_40px_-24px_rgba(43,36,24,0.22)] p-6 sm:p-8">
+                    <h2 className="font-[family-name:var(--font-fraunces)] text-2xl font-medium text-ink text-center mb-2">
                         Assessment complete
                     </h2>
 
@@ -651,15 +651,15 @@ function ResultsScreen({ responses, questions, onRestart }) {
                         <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full border-4 ${scoreColour}`}>
                             <span className="text-3xl font-bold">{percentage}%</span>
                         </div>
-                        <p className="mt-3 text-sm text-slate-600">
+                        <p className="mt-3 text-sm text-ink/60">
                             {correctCount} of {total} correct
                         </p>
-                        <p className="mt-1 text-sm text-slate-700 font-medium text-center">
+                        <p className="mt-1 text-sm text-ink/80 font-medium text-center">
                             {headlineLabel}
                         </p>
                     </div>
 
-                    <h3 className="text-base font-semibold text-slate-900 mb-3 mt-6">
+                    <h3 className="text-base font-semibold text-ink mb-3 mt-6">
                         Question breakdown
                     </h3>
                     <ul className="flex flex-col gap-2">
@@ -673,22 +673,22 @@ function ResultsScreen({ responses, questions, onRestart }) {
                             return (
                                 <li
                                     key={q.id}
-                                    className="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-md p-3"
+                                    className="flex items-start gap-3 bg-cream border border-line rounded-md p-3"
                                 >
                                     <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold flex-shrink-0 ${iconClasses}`}>
                                         {icon}
                                     </span>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm text-slate-800 leading-snug">
+                                        <p className="text-sm text-ink leading-snug">
                                             {q.prompt}
                                         </p>
                                         {r && (
-                                            <p className="text-xs text-slate-500 mt-1">
-                                                Your answer: <span className="font-mono">{r.answerDisplay || String(r.answer)}</span>
+                                            <p className="text-xs text-ink/50 mt-1">
+                                                Your answer: <span className="font-[family-name:var(--font-jbmono)]">{r.answerDisplay || String(r.answer)}</span>
                                             </p>
                                         )}
                                     </div>
-                                    <span className="text-[10px] uppercase tracking-wider text-slate-500 flex-shrink-0">
+                                    <span className="text-[10px] uppercase tracking-wider text-ink/40 flex-shrink-0">
                                         {q.type}
                                     </span>
                                 </li>
@@ -699,7 +699,7 @@ function ResultsScreen({ responses, questions, onRestart }) {
                     <button
                         type="button"
                         onClick={onRestart}
-                        className="mt-6 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg transition-colors"
+                        className="mt-6 w-full bg-sienna-500 hover:bg-sienna-600 text-white font-semibold py-3 rounded-full transition-colors"
                     >
                         Try again
                     </button>
