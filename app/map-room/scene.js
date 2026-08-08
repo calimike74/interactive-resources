@@ -130,16 +130,15 @@ export class MapRoomScene {
         this.ro = new ResizeObserver(() => this.resize());
         this.ro.observe(container);
 
-        // Arrive: settle the framing, then breathe in (cut, if reduced).
+        // Arrive: cut straight to the settled framing. (Was a pulled-back
+        // start that flew in over FLY_MS — a "breathe in" entrance — but on
+        // first paint that read as an unwanted flicker/zoom rather than a
+        // cinematic reveal, so every visit now arrives the way `reduced`
+        // already did: the first frame IS the final framing.)
         const fit = this.#fitFor(null, 1.06);
         const dir = new THREE.Vector3(0.42, 0.3, 1).normalize();
         this.controls.target.set(0, 0, 0);
-        if (this.reduced) {
-            this.camera.position.copy(dir.multiplyScalar(fit.dist));
-        } else {
-            this.camera.position.copy(dir.clone().multiplyScalar(fit.dist * 1.3));
-            this.flyTo(new THREE.Vector3(0, 0, 0), fit.dist);
-        }
+        this.camera.position.copy(dir.multiplyScalar(fit.dist));
         this.camera.lookAt(0, 0, 0);
 
         this.raf = requestAnimationFrame((t) => this.#frame(t));
