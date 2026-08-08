@@ -48,14 +48,25 @@ function TopicWayOut({ dest }) {
 
     const external = dest.href.startsWith('http');
     return (
-        <a href={dest.href}
-            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            className="mt-2.5 inline-block text-[13px] font-medium"
-            style={{ color: ROOM.field }}>
-            {dest.kind === 'bench'
-                ? `${dest.verb} ${dest.label} →`
-                : 'Open this topic →'}
-        </a>
+        <div className="mt-2.5">
+            <a href={dest.href}
+                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                className="inline-block text-[13px] font-medium"
+                style={{ color: ROOM.field }}>
+                {dest.kind === 'bench'
+                    ? `${dest.verb} ${dest.label} →`
+                    : 'Open this topic →'}
+            </a>
+            {/* Honest heads-up for a bench that is public but not free: the
+                workshops site has its own soft gate, same passcode as this
+                one. Not every bench needs this — only set `locked` on the
+                ones that are gated there. */}
+            {dest.locked && (
+                <p className="mt-1 text-[11.5px] leading-snug" style={{ color: '#6B6F5C' }}>
+                    Behind the same term passcode as this site.
+                </p>
+            )}
+        </div>
     );
 }
 

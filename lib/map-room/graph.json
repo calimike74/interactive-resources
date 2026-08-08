@@ -36,7 +36,8 @@
     "kind": "bench",
     "href": "https://workshops.musictechstudio.co.uk/microphones/",
     "label": "Inside the Microphone",
-    "verb": "Open"
+    "verb": "Open",
+    "locked": true
    },
    "url": "https://workshops.musictechstudio.co.uk/microphones/"
   },
@@ -272,7 +273,8 @@
     "kind": "bench",
     "href": "https://workshops.musictechstudio.co.uk/modulation/",
     "label": "the Modulation workshop",
-    "verb": "Open"
+    "verb": "Open",
+    "locked": true
    },
    "url": "https://workshops.musictechstudio.co.uk/modulation/"
   },
@@ -352,7 +354,8 @@
     "kind": "bench",
     "href": "https://workshops.musictechstudio.co.uk/frequency-lab/",
     "label": "the Frequency Lab",
-    "verb": "Open"
+    "verb": "Open",
+    "locked": true
    },
    "url": "https://workshops.musictechstudio.co.uk/frequency-lab/"
   },
@@ -373,7 +376,8 @@
     "kind": "bench",
     "href": "https://workshops.musictechstudio.co.uk/monitor-speakers/",
     "label": "Inside the Monitor",
-    "verb": "Open"
+    "verb": "Open",
+    "locked": true
    },
    "url": "https://workshops.musictechstudio.co.uk/monitor-speakers/"
   },
