@@ -45,7 +45,7 @@ export default function PrivacyPage() {
 
                 <Section title="What we collect" t={t}>
                     <ul>
-                        <li>Your student token (pseudonymous identifier, set when you log in via grades.musictechstudio.co.uk)</li>
+                        <li>Your student token (pseudonymous identifier, set when you log in via member.musictechstudio.co.uk)</li>
                         <li>Resource progress — which interactive resources you've used and engagement with them</li>
                         <li>Anonymous analytics events (page views, interaction events) — only with your consent</li>
                     </ul>
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
 
                 <Section title="Cookies" t={t}>
                     <p><strong>Optional (with consent)</strong> — PostHog analytics cookie.</p>
-                    <p>Any consent given on grades.musictechstudio.co.uk applies here too (and vice versa) because the consent cookie is set at the parent domain.</p>
+                    <p>Any consent given on member.musictechstudio.co.uk applies here too (and vice versa) because the consent cookie is set at the parent domain.</p>
                     <p>
                         <button
                             type="button"

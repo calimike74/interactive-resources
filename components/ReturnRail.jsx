@@ -21,7 +21,7 @@ import { editorial } from '@/lib/theme';
 // Fixed positioning on purpose: the explorers are built to a strict
 // no-scroll viewport, so the rail must never take part in page layout.
 // z-index sits below the cookie banner (1000) — consent keeps priority.
-const STUDIO_URL = 'https://grades.musictechstudio.co.uk';
+const STUDIO_URL = 'https://member.musictechstudio.co.uk';
 const KEY = 'mts-from-studio';
 
 // This site's topic ids → the member course's topic slugs. Topics with no
