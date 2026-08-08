@@ -15,18 +15,27 @@ import {
 } from '@/lib/gate';
 
 /**
- * Wraps a single resource's interactive region. Everything around it — the
- * page title, the topic, why it matters in the exam, the past-paper links —
- * stays outside this component and therefore stays public. See lib/gate.js
- * for why this check is a classroom courtesy lock and not authentication.
+ * Wraps a single resource's interactive region, or a Learn lesson's body.
+ * Everything around it — the page title, the topic, why it matters in the
+ * exam, the past-paper links — stays outside this component and therefore
+ * stays public. See lib/gate.js for why this check is a classroom courtesy
+ * lock and not authentication.
+ *
+ * Exemption is `free` if the caller already knows it (Learn callers pass
+ * `free={isTopicFree(topicId)}` — there is no per-resource id on a lesson
+ * page), otherwise it falls back to `isResourceExempt(resourceId)` for the
+ * resource-page caller. Passing `free` explicitly always wins.
  */
-export default function GateKeeper({ resourceId, title, children }) {
-    // Both isGateActive() and isResourceExempt() only read build-time data
+export default function GateKeeper({ resourceId, title, children, free }) {
+    const exempt = free !== undefined ? free : isResourceExempt(resourceId);
+
+    // Both isGateActive() and the exemption check only read build-time data
     // (env vars baked in, and the static free list) — safe to call during
     // the prerendered pass, so 'open' resolves with no flash for the common
-    // case (gate off, or a free resource) instead of waiting on an effect.
+    // case (gate off, or a free resource/topic) instead of waiting on an
+    // effect.
     const [status, setStatus] = useState(() => (
-        !isGateActive() || isResourceExempt(resourceId) ? 'open' : 'checking'
+        !isGateActive() || exempt ? 'open' : 'checking'
     ));
 
     useEffect(() => {
@@ -50,7 +59,7 @@ export default function GateKeeper({ resourceId, title, children }) {
             if (!cancelled) setStatus(valid ? 'open' : 'locked');
         })();
         return () => { cancelled = true; };
-    }, [status, resourceId]);
+    }, [status, resourceId, exempt]);
 
     if (status === 'open') return children;
 

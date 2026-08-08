@@ -6,6 +6,8 @@ import Link from 'next/link';
 import LearnSpineLayout from './LearnSpineLayout';
 import { getTopicResponses } from '@/lib/learn/section-persistence';
 import { editorial as ED } from '@/lib/theme';
+import GateKeeper from '@/components/GateKeeper';
+import { isTopicFree } from '@/lib/access';
 
 export default function LearnTopicPage({ topic, parentTopicId, outro }) {
     const searchParams = useSearchParams();
@@ -98,14 +100,20 @@ export default function LearnTopicPage({ topic, parentTopicId, outro }) {
                 </div>
             </header>
 
-            {/* Content — spine layout for all learn flows */}
-            <LearnSpineLayout
-                topic={topic}
-                token={token}
-                answeredSections={answeredSections}
-                parentTopicId={parentTopicId}
-                outro={outro}
-            />
+            {/* Content — spine layout for all learn flows. Gated for
+                non-free topics: the header above (title, subtitle,
+                description, section count) stays outside GateKeeper and
+                therefore stays public, same shop-window shape as a
+                resource page — see components/GateKeeper.jsx. */}
+            <GateKeeper title={topic.title} free={isTopicFree(parentTopicId)}>
+                <LearnSpineLayout
+                    topic={topic}
+                    token={token}
+                    answeredSections={answeredSections}
+                    parentTopicId={parentTopicId}
+                    outro={outro}
+                />
+            </GateKeeper>
         </div>
     );
 }
