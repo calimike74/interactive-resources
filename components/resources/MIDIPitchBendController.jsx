@@ -414,23 +414,22 @@ export default function MIDIPitchBendController() {
               </div>
             </div>
 
-            {/* Task 1B: Operator Settings */}
+            {/* Task 1B: Synthesiser Settings */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <BookOpen className="w-6 h-6 text-green-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Task 1B: Pitch Bend Range in Ableton Operator</h2>
+                <h2 className="text-2xl font-bold text-gray-800">Task 1B: Pitch Bend Range in Your Synthesiser</h2>
               </div>
 
               <div className="space-y-6">
                 {/* Question 1: Where to find the setting */}
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-gray-800 mb-3">1. Where to change pitch bend range in Operator</h3>
+                  <h3 className="font-bold text-gray-800 mb-3">1. Where to change pitch bend range</h3>
                   <div className="bg-white p-4 rounded">
                     <p className="font-semibold text-green-700 mb-2">Location:</p>
                     <ol className="list-decimal list-inside space-y-2 text-gray-700 ml-4">
-                      <li>Open Operator on your MIDI track</li>
-                      <li>Click the <strong>"Global"</strong> tab (top right of Operator interface)</li>
-                      <li>Look for the <strong>"Pitch Bend Range"</strong> control</li>
+                      <li>Open your synthesiser on the MIDI track</li>
+                      <li>Look for a <strong>"Pitch Bend Range"</strong> (or "Bend Range") control — often in a global or settings tab</li>
                       <li>This is usually shown in <strong>semitones</strong> (default is often 2 semitones)</li>
                     </ol>
                   </div>
@@ -536,7 +535,7 @@ export default function MIDIPitchBendController() {
                   </div>
                   <p className="text-gray-700 text-sm">
                     Use the interactive simulator above to experiment with different pitch bend ranges.
-                    The simulator shows the data — listen in Ableton to hear how the bend actually sounds.
+                    The simulator shows the data — listen in your DAW to hear how the bend actually sounds.
                   </p>
                 </div>
               </div>
@@ -788,31 +787,31 @@ export default function MIDIPitchBendController() {
                       <p className="text-gray-700 text-sm">
                         Unlike CC controllers which can change continuously during a note,
                         velocity is set once when the note starts and doesn't change during the note.
-                        However, you can draw velocity automation in Ableton's clip envelope view to
-                        control how velocity affects each individual note.
+                        However, some DAWs let you draw velocity automation in a clip or note editor
+                        to control how velocity affects each individual note.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* How to use in Ableton */}
+              {/* How to use in a DAW */}
               <div className="mt-6 bg-gradient-to-r from-mustard-100 to-blue-100 p-6 rounded-lg">
                 <div className="flex items-center gap-2 mb-3">
                   <Lightbulb className="w-6 h-6 text-orange-600" />
-                  <h3 className="text-xl font-bold text-gray-800">How to Use MIDI CC in Ableton Live</h3>
+                  <h3 className="text-xl font-bold text-gray-800">How to Draw MIDI CC Automation</h3>
                 </div>
                 <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                  <li>Open a MIDI clip and go to the clip view (double-click the clip)</li>
-                  <li>In the bottom section, you'll see the envelope editor</li>
-                  <li>Click the dropdown that says "MIDI Ctrl"</li>
+                  <li>Open the MIDI clip or automation lane for the track</li>
+                  <li>Find the CC/automation editor — often shown below or alongside the piano roll</li>
                   <li>Select the CC number you want to control (e.g., "1 Modulation", "7 Volume", etc.)</li>
                   <li>Draw your automation by clicking and dragging to create breakpoints</li>
                   <li>The CC values will be sent to your instrument along with the note data</li>
                 </ol>
                 <p className="text-sm text-gray-600 mt-3">
-                  <strong>Pro tip:</strong> You can also map MIDI CC to Ableton's own parameters using MIDI mapping mode (Cmd/Ctrl + M),
-                  but using clip envelopes gives you precise, drawable automation!
+                  <strong>Pro tip:</strong> Many DAWs also let you map a MIDI CC straight to a plugin
+                  parameter using a MIDI-learn or mapping mode, but drawing it into the clip or
+                  automation lane gives you precise, editable automation!
                 </p>
               </div>
             </div>
