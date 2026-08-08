@@ -34,11 +34,11 @@
    ],
    "destination": {
     "kind": "bench",
-    "href": "https://c3c4-workshops.vercel.app/microphones/",
+    "href": "https://workshops.musictechstudio.co.uk/microphones/",
     "label": "Inside the Microphone",
     "verb": "Open"
    },
-   "url": "https://c3c4-workshops.vercel.app/microphones/"
+   "url": "https://workshops.musictechstudio.co.uk/microphones/"
   },
   {
    "id": "t-synthesis",
@@ -270,11 +270,11 @@
    ],
    "destination": {
     "kind": "bench",
-    "href": "https://c3c4-workshops.vercel.app/modulation/",
+    "href": "https://workshops.musictechstudio.co.uk/modulation/",
     "label": "the Modulation workshop",
     "verb": "Open"
    },
-   "url": "https://c3c4-workshops.vercel.app/modulation/"
+   "url": "https://workshops.musictechstudio.co.uk/modulation/"
   },
   {
    "id": "t-distortion",
@@ -350,11 +350,11 @@
    ],
    "destination": {
     "kind": "bench",
-    "href": "https://c3c4-workshops.vercel.app/frequency-lab/",
+    "href": "https://workshops.musictechstudio.co.uk/frequency-lab/",
     "label": "the Frequency Lab",
     "verb": "Open"
    },
-   "url": "https://c3c4-workshops.vercel.app/frequency-lab/"
+   "url": "https://workshops.musictechstudio.co.uk/frequency-lab/"
   },
   {
    "id": "t-monitor-speakers",
@@ -371,11 +371,11 @@
    ],
    "destination": {
     "kind": "bench",
-    "href": "https://c3c4-workshops.vercel.app/monitor-speakers/",
+    "href": "https://workshops.musictechstudio.co.uk/monitor-speakers/",
     "label": "Inside the Monitor",
     "verb": "Open"
    },
-   "url": "https://c3c4-workshops.vercel.app/monitor-speakers/"
+   "url": "https://workshops.musictechstudio.co.uk/monitor-speakers/"
   },
   {
    "id": "t-signals",
