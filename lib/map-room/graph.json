@@ -14,10 +14,11 @@
     "Which connector each job actually needs"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/recording"
-   },
-   "url": "/topic/recording"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-microphones",
@@ -33,13 +34,11 @@
     "Why two microphones can cancel each other"
    ],
    "destination": {
-    "kind": "bench",
-    "href": "https://workshops.musictechstudio.co.uk/microphones/",
-    "label": "Inside the Microphone",
-    "verb": "Open",
-    "locked": true
-   },
-   "url": "https://workshops.musictechstudio.co.uk/microphones/"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 6,
+    "traps": 5
+   }
   },
   {
    "id": "t-synthesis",
@@ -74,10 +73,11 @@
     "What clearance a released track needs"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/sampling"
-   },
-   "url": "/topic/sampling"
+    "kind": "members",
+    "chapters": 6,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-sequencing",
@@ -132,12 +132,11 @@
     "Working offline against working in real time"
    ],
    "destination": {
-    "kind": "bench",
-    "href": "/pitch-synth-monitors-assessment",
-    "label": "the Pitch Correction assessment",
-    "verb": "Take"
-   },
-   "url": "/pitch-synth-monitors-assessment"
+    "kind": "members",
+    "chapters": 6,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-automation",
@@ -173,10 +172,11 @@
     "Reading a compression or gating graph"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/dynamics"
-   },
-   "url": "/topic/dynamics"
+    "kind": "members",
+    "chapters": 4,
+    "papers": 6,
+    "traps": 5
+   }
   },
   {
    "id": "t-stereo",
@@ -192,12 +192,11 @@
     "Using the Haas effect deliberately"
    ],
    "destination": {
-    "kind": "bench",
-    "href": "/stereo-panning",
-    "label": "the Stereo & Panning Explorer",
-    "verb": "Open"
-   },
-   "url": "/stereo-panning"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 5,
+    "traps": 5
+   }
   },
   {
    "id": "t-eq",
@@ -213,10 +212,11 @@
     "Clearing sibilance, hum and rumble"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/eq"
-   },
-   "url": "/topic/eq"
+    "kind": "members",
+    "chapters": 3,
+    "papers": 6,
+    "traps": 5
+   }
   },
   {
    "id": "t-delay",
@@ -232,10 +232,11 @@
     "Why very short delays comb-filter"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/delay"
-   },
-   "url": "/topic/delay"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-reverb",
@@ -251,10 +252,11 @@
     "Gated and reverse reverb as effects"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/reverb"
-   },
-   "url": "/topic/reverb"
+    "kind": "members",
+    "chapters": 2,
+    "papers": 6,
+    "traps": 5
+   }
   },
   {
    "id": "t-modulation",
@@ -270,13 +272,11 @@
     "Ring modulation's carrier and modulator"
    ],
    "destination": {
-    "kind": "bench",
-    "href": "https://workshops.musictechstudio.co.uk/modulation/",
-    "label": "the Modulation workshop",
-    "verb": "Open",
-    "locked": true
-   },
-   "url": "https://workshops.musictechstudio.co.uk/modulation/"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-distortion",
@@ -292,10 +292,11 @@
     "Keeping gain staging under control"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/distortion"
-   },
-   "url": "/topic/distortion"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 6,
+    "traps": 6
+   }
   },
   {
    "id": "t-balance-and-blend",
@@ -351,13 +352,11 @@
     "Absorption or diffusion, and when"
    ],
    "destination": {
-    "kind": "bench",
-    "href": "https://workshops.musictechstudio.co.uk/frequency-lab/",
-    "label": "the Frequency Lab",
-    "verb": "Open",
-    "locked": true
-   },
-   "url": "https://workshops.musictechstudio.co.uk/frequency-lab/"
+    "kind": "members",
+    "chapters": 6,
+    "papers": 5,
+    "traps": 6
+   }
   },
   {
    "id": "t-monitor-speakers",
@@ -373,13 +372,11 @@
     "What headphones and small speakers hide"
    ],
    "destination": {
-    "kind": "bench",
-    "href": "https://workshops.musictechstudio.co.uk/monitor-speakers/",
-    "label": "Inside the Monitor",
-    "verb": "Open",
-    "locked": true
-   },
-   "url": "https://workshops.musictechstudio.co.uk/monitor-speakers/"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 2,
+    "traps": 5
+   }
   },
   {
    "id": "t-signals",
@@ -395,10 +392,11 @@
     "When a DI box is the right answer"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/leads-and-signals"
-   },
-   "url": "/topic/leads-and-signals"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 5,
+    "traps": 5
+   }
   },
   {
    "id": "t-digital-analogue",
@@ -414,10 +412,11 @@
     "What analogue still does differently"
    ],
    "destination": {
-    "kind": "topic",
-    "href": "/topic/digital-analogue"
-   },
-   "url": "/topic/digital-analogue"
+    "kind": "members",
+    "chapters": 2,
+    "papers": 6,
+    "traps": 5
+   }
   },
   {
    "id": "t-numeracy",
@@ -452,12 +451,11 @@
     "Staying clear of clipping and the noise floor"
    ],
    "destination": {
-    "kind": "bench",
-    "href": "/levels-metering-assessment",
-    "label": "the Levels & Metering assessment",
-    "verb": "Take"
-   },
-   "url": "/levels-metering-assessment"
+    "kind": "members",
+    "chapters": 5,
+    "papers": 3,
+    "traps": 5
+   }
   },
   {
    "id": "c-daw-software",

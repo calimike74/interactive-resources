@@ -186,7 +186,15 @@ test('a bench says what it is, a members door says what is behind it', () => {
             assert.match(d.verb, /^(Open|Take)$/, `${t.parent} has an odd verb: ${d.verb}`);
         }
         if (d.kind === 'members') {
-            for (const k of ['chapters', 'papers', 'traps']) {
+            // A members door may cite a real, measured chapter/paper/trap
+            // count, or cite none at all (MapRoomClient falls back to a
+            // countless line for a topic not yet measured) -- but never a
+            // PARTIAL set, which would mean one real count sitting next to
+            // silently-broken ones.
+            const present = ['chapters', 'papers', 'traps'].filter((k) => k in d);
+            assert.ok(present.length === 0 || present.length === 3,
+                `${t.parent} members door has a partial count set: ${present.join(', ') || 'none'}`);
+            for (const k of present) {
                 assert.ok(Number.isInteger(d[k]) && d[k] > 0,
                     `${t.parent} members door has no real ${k} count`);
             }

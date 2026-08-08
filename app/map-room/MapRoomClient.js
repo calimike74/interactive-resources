@@ -30,12 +30,20 @@ function TopicWayOut({ dest }) {
 
     if (dest.kind === 'members') {
         const { chapters, papers, traps } = dest;
+        // A members door cites a real, measured chapter/paper/trap count
+        // wherever one exists (see data/map-room/topic-summaries.json) — never
+        // a guess. A topic that hasn't been measured yet falls back to this
+        // countless line rather than rendering "undefined chapters".
+        const hasCounts = Number.isInteger(chapters) && Number.isInteger(papers) && Number.isInteger(traps);
         return (
             <div className="mt-2.5 border-t pt-2.5" style={{ borderColor: ROOM.line }}>
                 <p className="text-[12px] leading-snug" style={{ color: '#55594A' }}>
                     <span aria-hidden style={{ color: '#9B7530' }}>⬦ </span>
-                    The full topic — {chapters} chapters, {papers} past-paper questions
-                    with mark schemes and {traps} examiner traps — is part of membership.
+                    {hasCounts
+                        ? <>The full topic — {chapters} chapters, {papers} past-paper questions
+                            with mark schemes and {traps} examiner traps — is part of membership.</>
+                        : <>The full topic — past-paper questions with mark schemes and examiner
+                            traps — is part of membership.</>}
                 </p>
                 <a href="https://grades.musictechstudio.co.uk/"
                     className="mt-1.5 inline-block text-[13px] font-medium"
@@ -48,25 +56,14 @@ function TopicWayOut({ dest }) {
 
     const external = dest.href.startsWith('http');
     return (
-        <div className="mt-2.5">
-            <a href={dest.href}
-                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="inline-block text-[13px] font-medium"
-                style={{ color: ROOM.field }}>
-                {dest.kind === 'bench'
-                    ? `${dest.verb} ${dest.label} →`
-                    : 'Open this topic →'}
-            </a>
-            {/* Honest heads-up for a bench that is public but not free: the
-                workshops site has its own soft gate, same passcode as this
-                one. Not every bench needs this — only set `locked` on the
-                ones that are gated there. */}
-            {dest.locked && (
-                <p className="mt-1 text-[11.5px] leading-snug" style={{ color: '#6B6F5C' }}>
-                    Behind the same term passcode as this site.
-                </p>
-            )}
-        </div>
+        <a href={dest.href}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className="mt-2.5 inline-block text-[13px] font-medium"
+            style={{ color: ROOM.field }}>
+            {dest.kind === 'bench'
+                ? `${dest.verb} ${dest.label} →`
+                : 'Open this topic →'}
+        </a>
     );
 }
 

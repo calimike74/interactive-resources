@@ -1,5 +1,5 @@
 {
-  "_comment": "One index card per Component 4 topic, keyed by spec number. `blurb` says what the topic is; `teaches` is what a student will be able to do. Written from each topic's own Curriculum-Topics spec file and its curated subtopic list. UK English. `destination` is where the card sends a student: a topic hub here, a bench that is already public, or an honest members door when no free page exists. Nothing here is generated — edit this file and re-run scripts/compile-map-room-graph.py.",
+  "_comment": "One index card per Component 4 topic, keyed by spec number. `blurb` says what the topic is; `teaches` is what a student will be able to do. Written from each topic's own Curriculum-Topics spec file and its curated subtopic list. UK English. `destination` is where the card sends a student: a topic hub here (only the free three), or an honest members door for every other topic -- Mike's explicit choice, rejecting a soft-locked-resources-page alternative as funnelling strangers into the Sherborne-facing site. Member-door chapters/papers/traps counts are measured from grades-dashboard (read-only), never guessed -- see the door-conversion commit for the method. Nothing here is generated -- edit this file and re-run scripts/compile-map-room-graph.py.",
   "1.1": {
     "blurb": "The studio as one system — how the computer, the interface and your controllers hand audio to each other, and what each setting costs you",
     "teaches": [
@@ -9,8 +9,10 @@
       "Which connector each job actually needs"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/recording"
+      "kind": "members",
+      "chapters": 5,
+      "papers": 6,
+      "traps": 6
     }
   },
   "1.2": {
@@ -22,11 +24,10 @@
       "Why two microphones can cancel each other"
     ],
     "destination": {
-      "kind": "bench",
-      "href": "https://workshops.musictechstudio.co.uk/microphones/",
-      "label": "Inside the Microphone",
-      "verb": "Open",
-      "locked": true
+      "kind": "members",
+      "chapters": 5,
+      "papers": 6,
+      "traps": 5
     }
   },
   "1.3": {
@@ -51,8 +52,10 @@
       "What clearance a released track needs"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/sampling"
+      "kind": "members",
+      "chapters": 6,
+      "papers": 6,
+      "traps": 6
     }
   },
   "1.5": {
@@ -92,10 +95,10 @@
       "Working offline against working in real time"
     ],
     "destination": {
-      "kind": "bench",
-      "href": "/pitch-synth-monitors-assessment",
-      "label": "the Pitch Correction assessment",
-      "verb": "Take"
+      "kind": "members",
+      "chapters": 6,
+      "papers": 6,
+      "traps": 6
     }
   },
   "1.8": {
@@ -122,8 +125,10 @@
       "Reading a compression or gating graph"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/dynamics"
+      "kind": "members",
+      "chapters": 4,
+      "papers": 6,
+      "traps": 5
     }
   },
   "1.10": {
@@ -135,10 +140,10 @@
       "Using the Haas effect deliberately"
     ],
     "destination": {
-      "kind": "bench",
-      "href": "/stereo-panning",
-      "label": "the Stereo & Panning Explorer",
-      "verb": "Open"
+      "kind": "members",
+      "chapters": 5,
+      "papers": 5,
+      "traps": 5
     }
   },
   "1.11": {
@@ -150,8 +155,10 @@
       "Clearing sibilance, hum and rumble"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/eq"
+      "kind": "members",
+      "chapters": 3,
+      "papers": 6,
+      "traps": 5
     }
   },
   "1.12d": {
@@ -163,8 +170,10 @@
       "Why very short delays comb-filter"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/delay"
+      "kind": "members",
+      "chapters": 5,
+      "papers": 6,
+      "traps": 6
     }
   },
   "1.12m": {
@@ -176,11 +185,10 @@
       "Ring modulation's carrier and modulator"
     ],
     "destination": {
-      "kind": "bench",
-      "href": "https://workshops.musictechstudio.co.uk/modulation/",
-      "label": "the Modulation workshop",
-      "verb": "Open",
-      "locked": true
+      "kind": "members",
+      "chapters": 5,
+      "papers": 6,
+      "traps": 6
     }
   },
   "1.12r": {
@@ -192,8 +200,10 @@
       "Gated and reverse reverb as effects"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/reverb"
+      "kind": "members",
+      "chapters": 2,
+      "papers": 6,
+      "traps": 5
     }
   },
   "1.12x": {
@@ -205,8 +215,10 @@
       "Keeping gain staging under control"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/distortion"
+      "kind": "members",
+      "chapters": 5,
+      "papers": 6,
+      "traps": 6
     }
   },
   "1.13": {
@@ -248,11 +260,10 @@
       "Absorption or diffusion, and when"
     ],
     "destination": {
-      "kind": "bench",
-      "href": "https://workshops.musictechstudio.co.uk/frequency-lab/",
-      "label": "the Frequency Lab",
-      "verb": "Open",
-      "locked": true
+      "kind": "members",
+      "chapters": 6,
+      "papers": 5,
+      "traps": 6
     }
   },
   "2.2": {
@@ -264,11 +275,10 @@
       "What headphones and small speakers hide"
     ],
     "destination": {
-      "kind": "bench",
-      "href": "https://workshops.musictechstudio.co.uk/monitor-speakers/",
-      "label": "Inside the Monitor",
-      "verb": "Open",
-      "locked": true
+      "kind": "members",
+      "chapters": 5,
+      "papers": 2,
+      "traps": 5
     }
   },
   "2.3": {
@@ -280,8 +290,10 @@
       "When a DI box is the right answer"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/leads-and-signals"
+      "kind": "members",
+      "chapters": 5,
+      "papers": 5,
+      "traps": 5
     }
   },
   "2.4": {
@@ -293,8 +305,10 @@
       "What analogue still does differently"
     ],
     "destination": {
-      "kind": "topic",
-      "href": "/topic/digital-analogue"
+      "kind": "members",
+      "chapters": 2,
+      "papers": 6,
+      "traps": 5
     }
   },
   "2.5": {
@@ -319,10 +333,10 @@
       "Staying clear of clipping and the noise floor"
     ],
     "destination": {
-      "kind": "bench",
-      "href": "/levels-metering-assessment",
-      "label": "the Levels & Metering assessment",
-      "verb": "Take"
+      "kind": "members",
+      "chapters": 5,
+      "papers": 3,
+      "traps": 5
     }
   }
 }
