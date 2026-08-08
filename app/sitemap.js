@@ -29,6 +29,21 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    // Free-download story books. Static HTML in public/ — not part of
+    // getAllResources() — so they're listed here by hand, same pattern as
+    // /map-room above.
+    {
+      url: `${baseUrl}/story-of-the-studio`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/story-of-synthesis`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
     ...resourceUrls,
   ];
 }

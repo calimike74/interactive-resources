@@ -48,6 +48,20 @@ const ROOMS = [
     },
 ];
 
+// Free full-length books — static HTML pages in public/, one link each.
+const BOOKS = [
+    {
+        name: 'The Story of the Studio',
+        href: '/story-of-the-studio',
+        desc: 'How recording grew up, 1930 to now · 82 pages · free PDF',
+    },
+    {
+        name: 'The Story of Synthesis',
+        href: '/story-of-synthesis',
+        desc: 'A century of electronic sound · 69 pages · free PDF',
+    },
+];
+
 // Mode descriptions shown under the hero
 const MODE_INFO = {
     explore: {
@@ -303,6 +317,69 @@ export default function ResourcesHub() {
                     </div>
                     <style>{`
                         .mts-room-link:hover div { color: ${ED.visited}; }
+                    `}</style>
+                </section>
+
+                {/* The bookshelf — two free full-length books, static PDF downloads */}
+                <section aria-label="Free books" style={{ marginTop: spacing[8] }}>
+                    <h3
+                        style={{
+                            fontFamily: ED.serif,
+                            fontStyle: 'italic',
+                            fontWeight: 400,
+                            fontSize: '22px',
+                            color: ED.inkSoft,
+                            marginBottom: spacing[4],
+                            paddingBottom: spacing[2],
+                            borderBottom: `1px solid ${ED.rule}`,
+                        }}
+                    >
+                        The bookshelf
+                    </h3>
+                    <div
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                            gap: spacing[5],
+                        }}
+                    >
+                        {BOOKS.map((book) => (
+                            <a
+                                key={book.name}
+                                href={book.href}
+                                className="mts-book-link"
+                                style={{ textDecoration: 'none', color: ED.ink, display: 'block' }}
+                            >
+                                <div
+                                    style={{
+                                        fontFamily: ED.serif,
+                                        fontStyle: 'italic',
+                                        fontSize: '20px',
+                                        marginBottom: spacing[1] ?? '4px',
+                                    }}
+                                >
+                                    {book.name}{' '}
+                                    <span aria-hidden="true" style={{ color: ED.visited, fontSize: '15px' }}>
+                                        →
+                                    </span>
+                                </div>
+                                <p
+                                    style={{
+                                        fontFamily: ED.sans,
+                                        fontSize: '14px',
+                                        lineHeight: 1.5,
+                                        color: ED.inkSoft,
+                                        margin: 0,
+                                        maxWidth: '38ch',
+                                    }}
+                                >
+                                    {book.desc}
+                                </p>
+                            </a>
+                        ))}
+                    </div>
+                    <style>{`
+                        .mts-book-link:hover div { color: ${ED.visited}; }
                     `}</style>
                 </section>
             </main>
