@@ -51,7 +51,12 @@ export function makeLabelSprite(THREE, text, {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 4;
     const material = new THREE.SpriteMaterial({
-        map: texture, transparent: true, depthWrite: false,
+        // Starts invisible: the scene fades every label toward its computed
+        // target opacity each frame (scene.js #frame). Without this, THREE's
+        // default opacity of 1 means every one of the ~300 concept labels
+        // is fully visible for the first rendered frame — a bright, cluttered
+        // flash of the whole room's names before the fade-out catches up.
+        map: texture, transparent: true, depthWrite: false, opacity: 0,
     });
     const sprite = new THREE.Sprite(material);
     sprite.scale.set((worldHeight * w) / h, worldHeight, 1);
