@@ -243,7 +243,13 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                     <OverviewSection overview={topic.overview} theme={t} />
                 )}
 
-                {/* Walkthrough Section */}
+                {/* Walkthrough Section — omitted entirely until there is a
+                    walkthrough to show. A "coming soon" placeholder here
+                    reads as a broken promise to a stranger landing on the
+                    page cold; the Explore and Revise sections below still
+                    show their own placeholder when they are genuinely
+                    mid-build, which is a different situation. */}
+                {hasLearnContent(topic.id) && (
                 <section style={{ marginBottom: spacing[10] }}>
                     <h2
                         style={{
@@ -255,7 +261,6 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                     >
                         Walkthrough
                     </h2>
-                    {hasLearnContent(topic.id) ? (
                         <Link
                             href={`/learn/${topic.id}`}
                             style={{ textDecoration: 'none' }}
@@ -311,10 +316,8 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                                 </span>
                             </div>
                         </Link>
-                    ) : (
-                        <ComingSoonPlaceholder label="Walkthrough coming soon" theme={t} />
-                    )}
                 </section>
+                )}
 
                 {/* Explore Section — Interactive Tools */}
                 <section id="explore" style={{ marginBottom: spacing[10], scrollMarginTop: '16px' }}>
