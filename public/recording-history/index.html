@@ -3,155 +3,194 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Five eras of recording history, told through the songs that changed how records get made — a Component 3 listening playlist with every 'first' sourced and confidence-flagged.">
 <title>The History of Recorded Music — Component 3 playlist</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%23B85A3F' stroke-width='2'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23B85A3F'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%23d2552f' stroke-width='2'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23d2552f'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,600&family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,600;10..48,700;10..48,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --paper: #F8F2E8; --paper-warm: #F4EDDF; --cream: #F2EBE0;
-    --ink: #1F2A1C; --ink-soft: #5C6653; --line: #D4C9B4;
-    --field: #3A4A35; --field-100: #DDE3D7; --field-50: #EFF2EC;
-    --sienna: #B85A3F; --sienna-50: #FBF1EB; --mustard-600: #9B7530; --brass: #A8843B;
-    --ease-house: cubic-bezier(0.22, 1, 0.36, 1);
-    --serif: "Fraunces", Georgia, serif;
-    --sans: "Geist", "Avenir Next", sans-serif;
-    --mono: "Geist Mono", "SF Mono", monospace;
+  :root{
+    --bg:#f7efe2; --paper:#fffaf0; --paper-2:#f1e6d4;
+    --ink:#2a201a; --ink-2:#6b5a4a; --ink-3:#9c8a76;
+    --line:rgba(42,32,26,.17); --hair:rgba(42,32,26,.08);
+    --topic:#d2552f; --topic-soft:rgba(210,85,47,.12);
+    --hall:#2767c4; --hall-soft:rgba(39,103,196,.08);
+    --gold:#caa05a; --gold-text:#8a6a2a; --tape:#3a2c20;
+    --spring:cubic-bezier(0.34,1.56,0.64,1); --ease:cubic-bezier(0.22,1,0.36,1);
+    --serif:'Fraunces',Georgia,serif; --display:'Bricolage Grotesque',sans-serif;
+    --sans:'Hanken Grotesk',system-ui,sans-serif; --mono:'Space Mono',monospace;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: var(--sans); color: var(--ink); font-size: 15px; line-height: 1.55;
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);color:var(--ink);font-size:15px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
     background:
-      radial-gradient(1200px 500px at 90% -8%, rgba(58,74,53,0.06), transparent 60%),
-      radial-gradient(900px 700px at -8% 30%, rgba(184,90,63,0.045), transparent 55%),
-      linear-gradient(178deg, #FAF5EC 0%, var(--paper) 40%, var(--paper-warm) 100%);
+      radial-gradient(1100px 480px at 92% -6%, rgba(39,103,196,.05), transparent 60%),
+      radial-gradient(900px 700px at -6% 28%, rgba(210,85,47,.06), transparent 55%),
+      linear-gradient(178deg,#f9f2e6 0%, var(--bg) 45%, #f3e9d7 100%);
   }
+
+  /* ---------- tape-dark meta bar ---------- */
+  .meta{background:var(--tape);color:#f3e8d8;padding:13px 22px;font-family:var(--mono);font-size:12px}
+  .meta .row{max-width:1080px;margin:0 auto;display:flex;gap:22px;flex-wrap:wrap;align-items:baseline}
+  .meta b{color:#fff;font-weight:700}
+  .meta .amber{color:var(--gold)}
 
   /* ---------- sticky rail ---------- */
-  .rail {
-    position: sticky; top: 0; z-index: 20;
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    padding: 10px 24px; border-bottom: 1px solid var(--line);
-    background: rgba(248, 242, 232, 0.92); backdrop-filter: blur(8px);
+  .rail{
+    position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:9px 22px;border-bottom:1px solid var(--line);
+    background:rgba(247,239,226,.92);backdrop-filter:blur(8px);
   }
-  .rail .group { display: flex; gap: 6px; align-items: center; }
-  .rail .divider { width: 1px; height: 18px; background: var(--line); margin: 0 6px; }
-  .chip {
-    font-size: 12px; padding: 4px 11px; border-radius: 999px; cursor: pointer;
-    border: 1px solid var(--line); background: rgba(255,255,255,0.5); color: var(--ink-soft);
-    font-family: var(--sans);
-    transition: border-color 240ms var(--ease-house), background 240ms var(--ease-house), color 240ms var(--ease-house);
-  }
-  .chip:hover { border-color: var(--field); color: var(--ink); }
-  .chip[aria-pressed="true"] { background: var(--field); border-color: var(--field); color: var(--cream); }
-  .chip.era-jump { border-style: dashed; }
-  .chip:focus-visible { outline: 2px solid var(--field); outline-offset: 1px; }
+  .dlbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .seg{position:relative;display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;background:var(--paper-2);
+    border:1px solid var(--line);border-radius:999px;max-width:100%}
+  .seg .pill{position:absolute;left:0;top:0;z-index:1;border-radius:999px;background:var(--topic);
+    box-shadow:0 1px 3px rgba(0,0,0,.10);opacity:0;will-change:transform,width,height}
+  .seg .pill.animate{transition:transform .5s var(--spring),width .5s var(--spring),height .5s var(--spring)}
+  .seg button{position:relative;z-index:2;border:0;background:transparent;cursor:pointer;font-family:var(--sans);
+    font-weight:700;font-size:13px;color:var(--ink-2);padding:7px 14px;border-radius:999px;white-space:nowrap;transition:color .25s}
+  .seg button.on{color:#fff}
+  .seg button:focus-visible{outline:2px solid var(--topic);outline-offset:2px}
+  .divider{width:1px;height:20px;background:var(--line)}
+  .jumps{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .jump{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line);background:rgba(255,255,255,.55);
+    border-radius:999px;padding:6px 12px;cursor:pointer;transition:border-color .25s var(--ease),color .25s var(--ease)}
+  .jump:hover{border-color:var(--topic);color:var(--ink)}
+  .jump:focus-visible{outline:2px solid var(--topic);outline-offset:1px}
+  .jump i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
 
   /* ---------- masthead ---------- */
-  .masthead { max-width: 980px; margin: 0 auto; padding: 44px 32px 8px; }
-  .eyebrow {
-    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--sienna);
-  }
-  h1 { font-family: var(--serif); font-weight: 500; font-size: 46px; line-height: 1.04; margin-top: 8px; max-width: 20ch; }
-  .standfirst { margin-top: 12px; max-width: 62ch; color: var(--ink-soft); font-size: 15.5px; }
-  .caveat {
-    margin-top: 18px; max-width: 760px; border: 1px solid var(--line); border-left: 3px solid var(--mustard-600);
-    border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--ink-soft);
-    background: rgba(255,255,255,0.45);
-  }
-  .caveat strong { color: var(--ink); font-weight: 600; }
+  .masthead{max-width:1080px;margin:0 auto;padding:42px 26px 8px}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--topic);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .eyebrow::before{content:'';width:26px;height:2px;background:var(--topic)}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,4.6vw,54px);line-height:1.04;
+    letter-spacing:-.015em;margin-top:10px;max-width:22ch}
+  .standfirst{margin-top:12px;max-width:64ch;color:var(--ink-2);font-family:var(--serif);font-size:17px;line-height:1.5}
+
+  /* the signal path — one recorded sound travelling through five media */
+  .hero{margin-top:30px}
+  .hero svg{display:block;width:100%;height:auto}
+  .hlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;fill:var(--ink-3)}
+  .reel{animation:spin 6s linear infinite;transform-box:fill-box;transform-origin:center}
+  .reel.slow{animation-duration:6.4s}
+  .flow{stroke-dasharray:6 10;animation:dash 1.2s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes dash{to{stroke-dashoffset:-32}}
+
+  .caveat{margin-top:22px;max-width:880px;border:1.5px dashed rgba(202,160,90,.7);border-radius:12px;
+    padding:12px 16px;font-size:13px;color:var(--ink-2);background:rgba(202,160,90,.08)}
+  .caveat strong{color:var(--ink);font-weight:700}
 
   /* ---------- timeline ---------- */
-  .timeline { max-width: 980px; margin: 26px auto 0; padding: 0 32px 80px; }
+  .timeline{max-width:1080px;margin:14px auto 0;padding:0 26px 84px}
 
-  .era { padding-top: 26px; }
-  .era-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; scroll-margin-top: 64px; }
-  .era-head h2 { font-family: var(--serif); font-size: 27px; font-weight: 600; }
-  .era-years { font-family: var(--mono); font-size: 12.5px; color: var(--paper); padding: 3px 10px; border-radius: 999px; }
-  .era-blurb { margin-top: 8px; max-width: 68ch; color: var(--ink-soft); font-size: 14px; }
+  .era{padding-top:40px}
+  .era-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;scroll-margin-top:74px}
+  .node{width:34px;height:34px;border-radius:50%;color:#fff;display:grid;place-items:center;flex:none;
+    font-family:var(--mono);font-weight:700;font-size:15px;
+    box-shadow:0 0 0 5px var(--bg),0 2px 8px rgba(42,32,26,.28)}
+  .era-head h2{font-family:var(--display);font-weight:700;font-size:clamp(21px,2.6vw,29px);letter-spacing:-.01em}
+  .era-years{font-family:var(--mono);font-size:12px;color:#fff;padding:4px 11px;border-radius:999px}
+  .era-blurb{margin-top:10px;max-width:70ch;color:var(--ink-2);font-family:var(--serif);font-style:italic;
+    font-size:16px;line-height:1.55}
 
-  .era-body { display: grid; grid-template-columns: 74px 1fr; gap: 0 22px; margin-top: 16px; }
-  @media (max-width: 760px) { .era-body { grid-template-columns: 40px 1fr; gap: 0 12px; } }
+  .era-body{display:grid;grid-template-columns:74px 1fr;gap:0 22px;margin-top:18px}
+  @media (max-width:760px){.era-body{grid-template-columns:38px 1fr;gap:0 12px}}
 
   /* the medium spine — the storage medium of each era, drawn as its own texture */
-  .spine { position: relative; }
-  .spine svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .spine{position:relative}
+  .spine svg{position:absolute;inset:0;width:100%;height:100%}
 
-  .cards { display: flex; flex-direction: column; gap: 14px; padding-bottom: 30px; }
-  .card {
-    border: 1px solid var(--line); border-radius: 12px; padding: 15px 18px 13px;
-    background: rgba(255,255,255,0.55);
-    transition: border-color 240ms var(--ease-house), box-shadow 240ms var(--ease-house);
+  .cards{display:flex;flex-direction:column;gap:15px;padding-bottom:32px;min-width:0}
+  .card{
+    border:1px solid var(--line);border-left-width:3px;border-radius:14px;padding:16px 19px 14px;
+    background:var(--paper);
+    transition:box-shadow .28s var(--ease),transform .28s var(--ease);
   }
-  .card:hover { border-color: var(--field); box-shadow: 0 6px 22px rgba(31,42,28,0.07); }
-  .card .top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-  .card .year { font-family: var(--serif); font-size: 25px; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .card h3 { font-size: 15.5px; font-weight: 600; line-height: 1.3; }
-  .badge {
-    margin-left: auto; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
-    text-transform: uppercase; padding: 3px 8px; border-radius: 999px; white-space: nowrap;
-  }
-  .badge.contested { background: #F6E8D2; color: #8A5A18; border: 1px solid #E2C893; }
-  .badge.uncertain { background: #F2DDD3; color: #95421F; border: 1px solid #E0B9A5; }
-  .card .song { margin-top: 7px; font-size: 14px; }
-  .card .song .title { font-family: var(--serif); font-style: italic; font-weight: 500; }
-  .card .why { margin-top: 6px; font-size: 13.5px; color: var(--ink-soft); max-width: 72ch; }
-  .card .listen-for { margin-top: 6px; font-size: 13px; color: var(--field); max-width: 72ch; }
-  .card .listen-for::before { content: "Listen for — "; font-weight: 600; }
-  .card details { margin-top: 7px; font-size: 12.5px; color: var(--ink-soft); max-width: 72ch; }
-  .card details summary { cursor: pointer; color: var(--mustard-600); font-weight: 500; width: fit-content; }
-  .card .row { margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .yt {
-    display: inline-flex; align-items: center; gap: 7px;
-    font-size: 12.5px; font-weight: 500; text-decoration: none;
-    color: var(--paper); background: var(--sienna); border-radius: 8px; padding: 6px 13px;
-    transition: background 240ms var(--ease-house);
-  }
-  .yt:hover { background: #95421F; }
-  .yt svg { width: 13px; height: 13px; }
-  .no-link { font-size: 12px; color: var(--ink-soft); font-style: italic; }
+  .card:hover{box-shadow:0 18px 40px -26px rgba(42,32,26,.45);transform:translateY(-1px)}
+  .card .top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .card .year{font-family:var(--serif);font-size:29px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+  .card h3{font-family:var(--sans);font-size:15.5px;font-weight:700;line-height:1.35;flex:1;min-width:16ch}
+  .badge{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap;font-weight:700}
+  .badge.contested{background:rgba(202,160,90,.16);color:var(--gold-text);border:1px solid rgba(202,160,90,.65)}
+  .badge.uncertain{background:rgba(210,85,47,.12);color:#95421F;border:1px solid rgba(210,85,47,.5)}
+  .card .song{margin-top:8px;font-size:14px}
+  .card .song .title{font-family:var(--serif);font-style:italic;font-weight:500;font-size:15px}
+  .card .why{margin-top:6px;font-size:13.5px;color:var(--ink-2);max-width:74ch}
+  .cue{margin-top:11px;padding:10px 14px;border-left:3px solid var(--hall);background:var(--hall-soft);
+    border-radius:0 10px 10px 0;max-width:74ch}
+  .cue .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--hall);font-weight:700}
+  .cue p{margin:4px 0 0;font-size:13.5px;color:var(--ink-2)}
+  .card details{margin-top:9px;font-size:12.5px;color:var(--ink-2);max-width:74ch}
+  .card details summary{cursor:pointer;width:fit-content;font-family:var(--mono);font-size:11px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--gold-text);font-weight:700}
+  .card details p{margin-top:6px}
+  .card .row{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .yt{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-weight:700;font-size:12.5px;
+    text-decoration:none;color:#fff;background:var(--topic);border-radius:999px;padding:7px 15px;
+    transition:background .2s var(--ease)}
+  .yt:hover{background:#b13f1e}
+  .yt svg{width:13px;height:13px}
+  .yt:focus-visible{outline:2px solid var(--topic);outline-offset:2px}
+  .no-link{font-size:12px;color:var(--ink-3);font-style:italic}
 
-  /* producers rail */
-  .producers { margin-top: 4px; padding: 12px 16px; border: 1px dashed var(--line); border-radius: 12px; background: rgba(255,255,255,0.3); }
-  .producers h4 {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--ink-soft); font-weight: 500;
+  /* producers rail — the era's people, on the dark console */
+  .producers{margin-top:8px;border-radius:16px;padding:18px 21px;border:1px solid #20160e;
+    background:radial-gradient(120% 140% at 20% -10%,#41301f 0%,#2a1d12 55%,#1c130b 100%);
+    color:#f3e7d4;box-shadow:0 24px 50px -34px rgba(20,14,8,.8)}
+  .producers h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);font-weight:700}
+  .producers ul{list-style:none;margin-top:10px;display:grid;gap:9px}
+  .producers li{font-size:13px;line-height:1.55;color:#cbb79c;max-width:80ch}
+  .producers .name{color:#fff;font-weight:700}
+  .producers .exemplar{font-family:var(--serif);font-style:italic;color:var(--gold)}
+
+  footer{max-width:1080px;margin:0 auto;padding:0 26px 60px;font-family:var(--mono);font-size:11.5px;
+    color:var(--ink-3);line-height:1.7}
+  footer a{color:var(--topic)}
+  footer .home-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-family:var(--mono);
+    font-size:11.5px;text-decoration:none;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;
+    padding:6px 13px;background:rgba(255,255,255,.55);
+    transition:border-color .25s var(--ease),color .25s var(--ease)}
+  footer .home-link:hover{border-color:var(--topic);color:var(--ink)}
+  footer .home-link:focus-visible{outline:2px solid var(--topic);outline-offset:2px}
+
+  .hidden{display:none !important}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reel,.flow{animation:none}
+    .seg .pill.animate{transition:none}
+    .card,.jump,.yt,.home-link{transition:none}
+    .card:hover{transform:none}
   }
-  .producers ul { list-style: none; margin-top: 8px; display: grid; gap: 7px; }
-  .producers li { font-size: 13px; max-width: 78ch; }
-  .producers .name { font-weight: 600; }
-  .producers .exemplar { font-family: var(--serif); font-style: italic; }
-
-  footer { max-width: 980px; margin: 0 auto; padding: 0 32px 60px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); line-height: 1.7; }
-  footer a { color: var(--sienna); }
-  footer .home-link {
-    display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
-    font-family: var(--mono); font-size: 11.5px; text-decoration: none;
-    color: var(--ink-soft); border: 1px solid var(--line); border-radius: 999px;
-    padding: 6px 13px; background: rgba(255,255,255,0.5);
-    transition: border-color 240ms var(--ease-house), color 240ms var(--ease-house);
-  }
-  footer .home-link:hover { border-color: var(--field); color: var(--ink); }
-  footer .home-link:focus-visible { outline: 2px solid var(--field); outline-offset: 2px; }
-
-  .hidden { display: none !important; }
-
-  @media (prefers-reduced-motion: reduce) { .chip, .card, .yt { transition: none; } }
 </style>
 </head>
 <body>
 
+<div class="meta"><div class="row">
+  <span><b>THE HISTORY OF RECORDED MUSIC</b> · five eras · 21 milestones</span>
+  <span><span class="amber">▶</span> a playlist you can actually play</span>
+  <span><span class="amber">✓</span> every &ldquo;first&rdquo; sourced &amp; confidence-flagged</span>
+</div></div>
+
 <nav class="rail" aria-label="Filters and era navigation">
-  <div class="group" role="group" aria-label="Show">
-    <button class="chip" data-filter="all" aria-pressed="true">Everything</button>
-    <button class="chip" data-filter="firsts" aria-pressed="false">The firsts</button>
-    <button class="chip" data-filter="producers" aria-pressed="false">The producers</button>
+  <span class="dlbl">Show</span>
+  <div class="seg" id="seg" role="group" aria-label="Filter cards">
+    <span class="pill" id="pill" aria-hidden="true"></span>
+    <button class="on" data-filter="all" aria-pressed="true">Everything</button>
+    <button data-filter="firsts" aria-pressed="false">The firsts</button>
+    <button data-filter="producers" aria-pressed="false">The producers</button>
   </div>
   <div class="divider" aria-hidden="true"></div>
-  <div class="group" id="era-jumps" aria-label="Jump to era"></div>
+  <div class="jumps" id="era-jumps" aria-label="Jump to era"></div>
 </nav>
 
 <header class="masthead">
@@ -161,6 +200,104 @@
     Five eras, told through the songs that changed how records get made. Every card is a first —
     the first time a machine, a technique or an idea is audible on a record you can play in the room.
   </p>
+
+  <div class="hero" aria-hidden="false">
+    <svg viewBox="0 0 960 150" role="img" aria-label="The journey of a recorded sound through five media: a wax disc, a tape machine with spinning reels, a multitrack console, a sample grid and a DAW waveform, joined by one signal line.">
+      <defs>
+        <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3829"/><stop offset="1" stop-color="#2d2017"/></linearGradient>
+        <radialGradient id="rg" cx="50%" cy="40%" r="65%"><stop offset="0" stop-color="#6b5132"/><stop offset="1" stop-color="#2f2316"/></radialGradient>
+      </defs>
+
+      <!-- the signal line, threading every era -->
+      <path d="M8,70 H952" class="flow" stroke="var(--topic)" stroke-width="2.5" fill="none" opacity=".6"/>
+
+      <!-- wax disc -->
+      <g>
+        <circle cx="70" cy="70" r="36" fill="var(--paper)" stroke="#6E5A44" stroke-width="2"/>
+        <circle cx="70" cy="70" r="27" fill="none" stroke="#6E5A44" stroke-width="1" opacity=".55"/>
+        <circle cx="70" cy="70" r="19" fill="none" stroke="#6E5A44" stroke-width="1" opacity=".4"/>
+        <circle cx="70" cy="70" r="11" fill="none" stroke="#6E5A44" stroke-width="1" opacity=".3"/>
+        <circle cx="70" cy="70" r="4" fill="#6E5A44"/>
+      </g>
+      <text x="70" y="136" text-anchor="middle" class="hlbl">WAX · 1877</text>
+
+      <!-- tape machine -->
+      <g>
+        <rect x="150" y="26" width="170" height="88" rx="10" fill="url(#tg)"/>
+        <g class="reel" transform="translate(196,58)">
+          <circle r="18" fill="url(#rg)" stroke="#1d1610" stroke-width="2"/><circle r="6" fill="#1d1610"/>
+          <g stroke="#8a6c45" stroke-width="2"><line y1="-15" y2="-8"/><line y1="15" y2="8"/><line x1="-15" x2="-8"/><line x1="15" x2="8"/></g>
+        </g>
+        <g class="reel slow" transform="translate(274,58)">
+          <circle r="18" fill="url(#rg)" stroke="#1d1610" stroke-width="2"/><circle r="6" fill="#1d1610"/>
+          <g stroke="#8a6c45" stroke-width="2"><line y1="-15" y2="-8"/><line y1="15" y2="8"/><line x1="-15" x2="-8"/><line x1="15" x2="8"/></g>
+        </g>
+        <g stroke="#caa07a" stroke-width="1.5" opacity=".55">
+          <line x1="162" y1="94" x2="308" y2="94"/><line x1="162" y1="99" x2="308" y2="99"/>
+          <line x1="162" y1="104" x2="308" y2="104"/>
+        </g>
+      </g>
+      <text x="235" y="136" text-anchor="middle" class="hlbl">TAPE · 1936</text>
+
+      <!-- multitrack console -->
+      <g>
+        <rect x="390" y="34" width="130" height="76" rx="8" fill="var(--paper)" stroke="#95421F" stroke-width="1.6"/>
+        <g stroke="var(--hair)" stroke-width="2">
+          <line x1="408" y1="44" x2="408" y2="100"/><line x1="427" y1="44" x2="427" y2="100"/>
+          <line x1="446" y1="44" x2="446" y2="100"/><line x1="465" y1="44" x2="465" y2="100"/>
+          <line x1="484" y1="44" x2="484" y2="100"/><line x1="503" y1="44" x2="503" y2="100"/>
+        </g>
+        <g fill="#95421F">
+          <rect x="403" y="56" width="10" height="7" rx="1.5"/><rect x="422" y="48" width="10" height="7" rx="1.5"/>
+          <rect x="441" y="66" width="10" height="7" rx="1.5"/><rect x="460" y="46" width="10" height="7" rx="1.5"/>
+          <rect x="479" y="60" width="10" height="7" rx="1.5"/><rect x="498" y="52" width="10" height="7" rx="1.5"/>
+        </g>
+      </g>
+      <text x="455" y="136" text-anchor="middle" class="hlbl">CONSOLE · 1969</text>
+
+      <!-- sample grid -->
+      <g>
+        <rect x="580" y="38" width="110" height="68" rx="8" fill="var(--paper)" stroke="#4F8296" stroke-width="1.6"/>
+        <g>
+          <rect x="590" y="46" width="12" height="12" rx="2.5" fill="#4F8296" opacity=".85"/>
+          <rect x="610" y="46" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="630" y="46" width="12" height="12" rx="2.5" fill="#4F8296" opacity=".85"/>
+          <rect x="650" y="46" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="670" y="46" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="590" y="66" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="610" y="66" width="12" height="12" rx="2.5" fill="#4F8296" opacity=".85"/>
+          <rect x="630" y="66" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="650" y="66" width="12" height="12" rx="2.5" fill="#4F8296" opacity=".85"/>
+          <rect x="670" y="66" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="590" y="86" width="12" height="12" rx="2.5" fill="#4F8296" opacity=".85"/>
+          <rect x="610" y="86" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="630" y="86" width="12" height="12" rx="2.5" fill="none" stroke="var(--hair)"/>
+          <rect x="650" y="86" width="12" height="12" rx="2.5" fill="#4F8296" opacity=".85"/>
+          <rect x="670" y="86" width="12" height="12" rx="2.5" fill="#4F8296" opacity=".85"/>
+        </g>
+      </g>
+      <text x="635" y="136" text-anchor="middle" class="hlbl">SAMPLES &amp; MIDI · 1980</text>
+
+      <!-- the DAW -->
+      <g>
+        <rect x="740" y="30" width="180" height="84" rx="10" fill="var(--paper)" stroke="#3A4A35" stroke-width="1.6"/>
+        <g fill="#3A4A35" opacity=".8">
+          <rect x="752" y="64" width="4" height="16" rx="2"/><rect x="760" y="58" width="4" height="28" rx="2"/>
+          <rect x="768" y="50" width="4" height="44" rx="2"/><rect x="776" y="42" width="4" height="60" rx="2"/>
+          <rect x="784" y="52" width="4" height="40" rx="2"/><rect x="792" y="60" width="4" height="24" rx="2"/>
+          <rect x="800" y="66" width="4" height="12" rx="2"/><rect x="808" y="58" width="4" height="28" rx="2"/>
+          <rect x="824" y="46" width="4" height="52" rx="2"/><rect x="832" y="40" width="4" height="64" rx="2"/>
+          <rect x="840" y="50" width="4" height="44" rx="2"/><rect x="848" y="58" width="4" height="28" rx="2"/>
+          <rect x="856" y="64" width="4" height="16" rx="2"/><rect x="864" y="56" width="4" height="32" rx="2"/>
+          <rect x="872" y="62" width="4" height="20" rx="2"/><rect x="880" y="66" width="4" height="12" rx="2"/>
+          <rect x="888" y="60" width="4" height="24" rx="2"/><rect x="896" y="64" width="4" height="16" rx="2"/>
+        </g>
+        <line x1="816" y1="36" x2="816" y2="108" stroke="var(--gold)" stroke-width="2"/>
+      </g>
+      <text x="830" y="136" text-anchor="middle" class="hlbl">THE DAW · 1996</text>
+    </svg>
+  </div>
+
   <div class="caveat">
     <strong>Teacher selection, not spec content.</strong> The spec names no tracks, artists or producers —
     every choice here is a pedagogical one, and "first" claims in recording history are almost always
@@ -760,6 +897,8 @@ const ERA_INK = {
   prelude: '#6E5A44', era1: '#8A5A18', era2: '#B85A3F', era3: '#95421F',
   era4: '#4F8296', era5: '#3A4A35',
 };
+/* Timeline node letter per era — P for the prelude, then the spec's own 1–5. */
+const NODE_MARK = { prelude: 'P', era1: '1', era2: '2', era3: '3', era4: '4', era5: '5' };
 /* The medium spine: each era's storage medium drawn as an SVG texture. */
 const SPINES = {
   prelude: ink => `<pattern id="sp-prelude" width="20" height="14" patternUnits="userSpaceOnUse">
@@ -794,18 +933,22 @@ function el(tag, cls, html) {
 }
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-function milestoneCard(m) {
+function milestoneCard(m, ink) {
   const card = el('article', 'card');
   card.dataset.kind = 'first';
+  card.style.borderLeftColor = ink;
   const top = el('div', 'top');
-  top.appendChild(el('span', 'year', esc(m.year)));
+  const year = el('span', 'year', esc(m.year));
+  year.style.color = ink;
+  top.appendChild(year);
   top.appendChild(el('h3', null, esc(m.headline)));
   if (m.confidence === 'standard-account') top.appendChild(el('span', 'badge contested', 'contested first'));
   if (m.confidence === 'uncertain') top.appendChild(el('span', 'badge uncertain', 'unverified — check'));
   card.appendChild(top);
   if (m.song) card.appendChild(el('p', 'song', `<span class="title">${esc(m.song)}</span> — ${esc(m.artist)}`));
   if (m.why) card.appendChild(el('p', 'why', esc(m.why)));
-  if (m.listen_for) card.appendChild(el('p', 'listen-for', esc(m.listen_for)));
+  if (m.listen_for) card.appendChild(el('div', 'cue',
+    `<span class="lbl">Listen for</span><p>${esc(m.listen_for)}</p>`));
   if (m.note) {
     const label = m.confidence === 'solid' ? 'Worth knowing' : 'The contested bit';
     const d = el('details', null, `<summary>${label}</summary><p>${esc(m.note)}</p>`);
@@ -846,10 +989,13 @@ function render() {
   const jumps = document.getElementById('era-jumps');
   jumps.innerHTML = '';
   for (const era of DATA.eras) {
-    const ink = ERA_INK[era.key] || '#5C6653';
+    const ink = ERA_INK[era.key] || '#6b5a4a';
     const section = el('section', 'era');
     section.id = era.key;
     const head = el('div', 'era-head');
+    const node = el('span', 'node', esc(NODE_MARK[era.key] || '·'));
+    node.style.background = ink;
+    head.appendChild(node);
     head.appendChild(el('h2', null, esc(era.label)));
     const yrs = el('span', 'era-years', esc(era.years));
     yrs.style.background = ink;
@@ -865,29 +1011,50 @@ function render() {
     const cards = el('div', 'cards');
     const ms = (DATA.milestones || []).filter(m => m.era === era.key)
       .sort((a, b) => (a.year || 0) - (b.year || 0));
-    for (const m of ms) cards.appendChild(milestoneCard(m));
+    for (const m of ms) cards.appendChild(milestoneCard(m, ink));
     const rail = producersRail(era.key);
     if (rail) cards.appendChild(rail);
     body.appendChild(cards);
     section.appendChild(body);
     mount.appendChild(section);
 
-    const jump = el('button', 'chip era-jump', esc(era.label.split('—')[0].trim()));
+    const jump = el('button', 'jump',
+      `<i style="background:${ink}" aria-hidden="true"></i>${esc(era.label.split('—')[0].trim())}`);
     jump.addEventListener('click', () => document.getElementById(era.key)
       .querySelector('.era-head').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
     jumps.appendChild(jump);
   }
 }
 
-/* filters */
-document.querySelectorAll('.chip[data-filter]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.chip[data-filter]').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+/* filters — the sprung pill picks, the cards obey */
+(function () {
+  const seg = document.getElementById('seg');
+  const pill = document.getElementById('pill');
+  const btns = [...seg.querySelectorAll('button')];
+  function place() {
+    const b = btns.find(x => x.classList.contains('on')) || btns[0];
+    pill.style.width = b.offsetWidth + 'px';
+    pill.style.height = b.offsetHeight + 'px';
+    pill.style.transform = `translate(${b.offsetLeft}px, ${b.offsetTop}px)`;
+    pill.style.opacity = '1';
+  }
+  function pick(btn) {
+    btns.forEach(b => {
+      b.classList.toggle('on', b === btn);
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+    place();
     const f = btn.dataset.filter;
     document.querySelectorAll('.card').forEach(c => c.classList.toggle('hidden', f === 'producers'));
     document.querySelectorAll('.producers').forEach(p => p.classList.toggle('hidden', f === 'firsts'));
-  });
-});
+  }
+  btns.forEach(b => b.addEventListener('click', () => pick(b)));
+  place();
+  window.addEventListener('load', place);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  window.addEventListener('resize', place);
+  setTimeout(() => pill.classList.add('animate'), 0);
+})();
 
 render();
 </script>

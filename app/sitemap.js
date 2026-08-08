@@ -44,6 +44,13 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    // The recording-history era playlist — same static-HTML-in-public pattern.
+    {
+      url: `${baseUrl}/recording-history`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
     ...resourceUrls,
   ];
 }

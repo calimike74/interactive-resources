@@ -48,7 +48,8 @@ const ROOMS = [
     },
 ];
 
-// Free full-length books — static HTML pages in public/, one link each.
+// Free full-length books and the era playlist — static HTML pages in
+// public/, one link each.
 const BOOKS = [
     {
         name: 'The Story of the Studio',
@@ -59,6 +60,11 @@ const BOOKS = [
         name: 'The Story of Synthesis',
         href: '/story-of-synthesis',
         desc: 'A century of electronic sound · 69 pages · free PDF',
+    },
+    {
+        name: 'The History of Recorded Music',
+        href: '/recording-history',
+        desc: 'Five eras as a listening playlist · 21 sourced milestones, every "first" flagged',
     },
 ];
 
