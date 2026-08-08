@@ -98,7 +98,7 @@ const TAPE_LAB_CSS = `
   background: #000; overflow: hidden;
   margin-bottom: 4px;
   box-shadow: 0 4px 0 var(--ink), 6px 8px 0 rgba(26,22,18,0.08);
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
 }
 .tape-lab .tl-video-hero video {
   width: 100%; height: 100%; object-fit: cover; display: block;
@@ -209,6 +209,30 @@ const TAPE_LAB_CSS = `
               transform 200ms ease-out;
 }
 .tape-lab .tl-head-label .num { color: var(--oxblood); margin-right: 4px; font-weight: 800; }
+
+/* Mobile: the three head labels sit at fixed rail percentages (12% / 22% / variable),
+   which collide once the rail is narrower than their combined text width. Below 640px
+   drop them out of absolute rail-relative positioning into a normal-flow row so they
+   can never overlap, whatever the head positions are. */
+@media (max-width: 640px) {
+  .tape-lab .tl-head-labels-row {
+    position: static !important;
+    height: auto !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 6px;
+    column-gap: 10px;
+  }
+  .tape-lab .tl-head-labels-row .tl-head-label {
+    position: static !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+}
 
 .tape-lab .tl-bracket {
   position: absolute; top: 56px; height: 18px;
@@ -1763,7 +1787,7 @@ function BPMDelayCalculator() {
               {railOverflow ? '>' : ''}{Math.round(ms)} ms{railOverflow ? ' (off scale)' : ''}
             </div>
           </div>
-          <div style={{ position: 'relative', margin: '4px 12px 0', height: 16 }}>
+          <div className="tl-head-labels-row" style={{ position: 'relative', margin: '4px 12px 0', height: 16 }}>
             <div className="tl-head-label" style={{ left: '12%' }}>
               <span className="num">①</span>Erase
             </div>

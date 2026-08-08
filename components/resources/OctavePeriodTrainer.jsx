@@ -936,7 +936,7 @@ export default function OctavePeriodTrainer() {
                 <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
                         <h1 style={{ fontSize: '0.9rem', fontWeight: '400', letterSpacing: '0.15em', color: '#8b909a', textTransform: 'uppercase', margin: 0 }}>
-                            <span style={{ color: '#DCC892', fontWeight: '600' }}>Octave</span> = Double the <span style={{ color: '#DCC892', fontWeight: '600' }}>Period</span>
+                            <span style={{ color: '#DCC892', fontWeight: '600' }}>Octave Down</span> = Double the <span style={{ color: '#DCC892', fontWeight: '600' }}>Period</span>
                         </h1>
                         <div style={{ fontSize: '0.65rem', color: '#4a4f5a', fontFamily: 'monospace', marginTop: '0.25rem' }}>
                             A-Level Music Technology | 2.5 Numeracy

@@ -209,7 +209,7 @@ export default function MIDIPitchBendController() {
                       Pitch Bend Range (Semitones)
                     </label>
                     <p className="text-xs text-gray-600 mb-3">
-                      This is the setting you'd change in Operator's "Global" tab
+                      This is the setting you'd change on your synthesiser's global settings page
                     </p>
                     <input aria-label="Pitch Bend Range"
                       type="range"
@@ -484,7 +484,7 @@ export default function MIDIPitchBendController() {
                     </div>
                     <div className="bg-white p-4 rounded">
                       <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                        <li>Open Operator and go to the <strong>Global tab</strong></li>
+                        <li>Open your synthesiser and go to its <strong>global settings page</strong></li>
                         <li>Set <strong>Pitch Bend Range to 7 semitones</strong></li>
                         <li>In your MIDI clip, open the <strong>Envelope Editor</strong> (bottom of clip view)</li>
                         <li>From the dropdown, select <strong>"MIDI Ctrl" - "Pitch Bend"</strong></li>
@@ -505,7 +505,7 @@ export default function MIDIPitchBendController() {
                     </div>
                     <div className="bg-white p-4 rounded">
                       <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                        <li>Open Operator and go to the <strong>Global tab</strong></li>
+                        <li>Open your synthesiser and go to its <strong>global settings page</strong></li>
                         <li>Set <strong>Pitch Bend Range to 12 semitones</strong></li>
                         <li>In your MIDI clip, open the <strong>Envelope Editor</strong></li>
                         <li>Select <strong>"MIDI Ctrl" - "Pitch Bend"</strong></li>
