@@ -1,13 +1,30 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { theme } from '@/lib/theme';
 
 // ============================================
 // WAVEFORM DRAWING EXPLORER
 // Free-play practice — no login, no submission
 // 10 challenges with Show Answer toggle
 // ============================================
+
+// ─── House Design Tokens (Botanical Press — see app/globals.css @theme) ─────
+const HOUSE = {
+    bg: '#F2EBE0',            // cream page ground
+    surface: '#F8F2E8',       // paper card
+    ink: '#1F2A1C',
+    inkMuted: 'rgba(31,42,28,0.62)',
+    inkFaint: 'rgba(31,42,28,0.42)',
+    border: '#D4C9B4',
+    accent: '#B85A3F',        // sienna — primary action
+    accentHover: '#95421F',
+    accentSoft: '#FBF1EB',
+    field: '#3A4A35',         // moss — secondary/confirm action
+    fieldHover: '#2D3A2A',
+    mono: 'var(--font-jbmono), ui-monospace, SFMono-Regular, Menlo, monospace',
+    serif: 'var(--font-fraunces), Georgia, serif',
+    sans: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+};
 
 const WaveformExplorer = () => {
     const [currentChallenge, setCurrentChallenge] = useState(0);
@@ -22,9 +39,8 @@ const WaveformExplorer = () => {
     const canvasHeight = 350;
     const padding = { top: 50, right: 50, bottom: 60, left: 70 };
 
-    const t = theme.light;
-
-    // Canvas-specific colors (exam-style graph paper)
+    // Canvas-specific colors (exam-style graph paper — kept as-is; this is the
+    // functional part of the tool and deliberately reads like real exam paper)
     const canvasTheme = {
         bg: '#f5f5f5',
         bgGraph: '#ffffff',
@@ -34,9 +50,9 @@ const WaveformExplorer = () => {
         axisLine: '#000000',
         text: '#000000',
         textSecondary: '#666666',
-        userLine: '#2563eb',
+        userLine: HOUSE.accent,
         originalLine: 'rgba(100, 100, 100, 0.6)',
-        answerLine: '#10b981',
+        answerLine: '#0d7d5f',
     };
 
     // Waveform shape definitions
@@ -356,16 +372,16 @@ const WaveformExplorer = () => {
             const badgeWidth = ctx.measureText(badgeText).width + 16;
             const badgeX = padding.left + innerWidth - badgeWidth - 8;
 
-            ctx.fillStyle = 'rgba(37, 99, 235, 0.15)';
+            ctx.fillStyle = 'rgba(184, 90, 63, 0.15)';
             ctx.beginPath();
             ctx.roundRect(badgeX, padding.top + 8, badgeWidth, 22, 4);
             ctx.fill();
 
-            ctx.strokeStyle = '#2563eb';
+            ctx.strokeStyle = '#B85A3F';
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            ctx.fillStyle = '#2563eb';
+            ctx.fillStyle = '#B85A3F';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(badgeText, badgeX + badgeWidth / 2, padding.top + 19);
@@ -554,28 +570,50 @@ const WaveformExplorer = () => {
 
     // --- Styles ---
     const styles = {
+        page: {
+            background: HOUSE.bg,
+            padding: '28px 20px',
+            borderRadius: 20,
+        },
         wrapper: {
             maxWidth: 760,
             margin: '0 auto',
-            fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            fontFamily: HOUSE.sans,
+        },
+        card: {
+            background: HOUSE.surface,
+            border: `1px solid ${HOUSE.border}`,
+            borderRadius: 16,
+            padding: '24px',
+            boxShadow: '0 1px 0 rgba(43,36,24,0.04), 0 18px 40px -24px rgba(43,36,24,0.22)',
+        },
+        eyebrow: {
+            fontFamily: HOUSE.mono,
+            fontSize: 11,
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: HOUSE.accent,
+            margin: '0 0 6px',
         },
         header: {
             marginBottom: 16,
         },
         title: {
-            fontSize: 20,
-            fontWeight: 700,
-            color: t.text.primary,
+            fontFamily: HOUSE.serif,
+            fontSize: 22,
+            fontWeight: 500,
+            color: HOUSE.ink,
             margin: 0,
         },
         description: {
             fontSize: 15,
-            color: t.text.secondary,
-            marginTop: 4,
+            color: HOUSE.inkMuted,
+            marginTop: 6,
             marginBottom: 0,
         },
         canvasContainer: {
-            border: `1px solid ${t.border.medium}`,
+            border: `1px solid ${HOUSE.border}`,
             borderRadius: 8,
             overflow: 'hidden',
             background: '#f5f5f5',
@@ -589,7 +627,7 @@ const WaveformExplorer = () => {
         },
         hint: {
             fontSize: 13,
-            color: t.text.tertiary,
+            color: HOUSE.inkFaint,
             marginTop: 8,
             marginBottom: 12,
             fontStyle: 'italic',
@@ -601,23 +639,24 @@ const WaveformExplorer = () => {
             marginBottom: 16,
         },
         btn: {
-            padding: '8px 16px',
+            padding: '9px 18px',
             fontSize: 13,
             fontWeight: 600,
-            border: `1px solid ${t.border.medium}`,
-            borderRadius: 6,
+            fontFamily: HOUSE.sans,
+            border: `1px solid ${HOUSE.border}`,
+            borderRadius: 999,
             cursor: 'pointer',
-            background: t.bg.primary,
-            color: t.text.primary,
-            transition: 'background 0.15s',
+            background: HOUSE.surface,
+            color: HOUSE.ink,
+            transition: 'background 150ms var(--ease-house, ease), transform 100ms var(--ease-house, ease)',
         },
         btnPrimary: {
-            background: t.accent.primary,
+            background: HOUSE.accent,
             color: '#fff',
             border: 'none',
         },
         btnSuccess: {
-            background: t.accent.success,
+            background: HOUSE.field,
             color: '#fff',
             border: 'none',
         },
@@ -634,22 +673,25 @@ const WaveformExplorer = () => {
             width: 10,
             height: 10,
             borderRadius: '50%',
-            border: `1.5px solid ${t.border.strong}`,
-            background: t.bg.secondary,
+            border: `1.5px solid ${HOUSE.border}`,
+            background: HOUSE.surface,
             cursor: 'pointer',
             transition: 'background 0.15s, border-color 0.15s',
             padding: 0,
         },
         dotActive: {
-            background: t.accent.primary,
-            borderColor: t.accent.primary,
+            background: HOUSE.accent,
+            borderColor: HOUSE.accent,
         },
     };
 
     return (
+        <div style={styles.page}>
         <div style={styles.wrapper}>
+            <div style={styles.card}>
             {/* Header */}
             <div style={styles.header}>
+                <p style={styles.eyebrow}>Challenge {currentChallenge + 1} of {challenges.length}</p>
                 <h2 style={styles.title}>{currentChallengeData.description}</h2>
                 <p style={styles.description}>
                     {currentChallengeData.name} &mdash; {currentChallengeData.originalCycles} cycle{currentChallengeData.originalCycles !== 1 ? 's' : ''} &rarr; {currentChallengeData.targetCycles} cycle{currentChallengeData.targetCycles !== 1 ? 's' : ''}
@@ -674,7 +716,7 @@ const WaveformExplorer = () => {
                     onTouchEnd={handleTouchEnd}
                 />
             </div>
-            <p style={{ ...styles.hint, marginTop: 4, marginBottom: 0, color: '#888' }}>
+            <p style={{ ...styles.hint, marginTop: 4, marginBottom: 0, color: HOUSE.inkFaint }}>
                 Keyboard users: press Show Answer to see the correct waveform.
             </p>
 
@@ -736,6 +778,8 @@ const WaveformExplorer = () => {
                     />
                 ))}
             </div>
+            </div>
+        </div>
         </div>
     );
 };
