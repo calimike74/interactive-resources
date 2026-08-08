@@ -303,22 +303,23 @@ export default function MIDIBinaryAssessment() {
                 : 'bg-rose-50 border-rose-300 text-rose-900';
 
         return (
-            <div className="mx-auto max-w-3xl px-4 py-8 font-sans text-slate-800">
+            <div className="min-h-[60vh] bg-cream py-10 px-4 sm:px-6">
+            <div className="mx-auto max-w-3xl text-ink">
                 <header className="mb-6">
-                    <h1 className="text-3xl font-semibold text-slate-900">MIDI, Binary & Numeracy — Results</h1>
-                    <p className="mt-1 text-sm text-slate-600">Based on Worksheet 8 (Pre-exam Revision Pack)</p>
+                    <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-medium text-ink">MIDI, Binary & Numeracy — Results</h1>
+                    <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">Based on Worksheet 8 (Pre-exam Revision Pack)</p>
                 </header>
 
                 <div className={`mb-6 rounded-2xl border-2 p-6 ${bandColour}`}>
                     <p className="text-sm font-medium uppercase tracking-wide opacity-80">Score</p>
                     <p className="mt-1 text-5xl font-bold">
                         {correctCount}
-                        <span className="text-2xl text-slate-500"> / {scored.length}</span>
+                        <span className="text-2xl opacity-60"> / {scored.length}</span>
                     </p>
                     <p className="mt-2 text-lg font-medium">{percentage}%</p>
                 </div>
 
-                <h2 className="mb-3 text-xl font-semibold text-slate-900">Per-question feedback</h2>
+                <h2 className="mb-3 text-xl font-semibold text-ink">Per-question feedback</h2>
                 <ul className="space-y-3">
                     {responses.map((r, i) => (
                         <li
@@ -330,7 +331,7 @@ export default function MIDIBinaryAssessment() {
                             }`}
                         >
                             <div className="mb-1 flex items-start justify-between gap-3">
-                                <p className="text-sm font-semibold text-slate-900">
+                                <p className="text-sm font-semibold text-ink">
                                     Q{i + 1}. {r.prompt}
                                 </p>
                                 <span
@@ -343,11 +344,11 @@ export default function MIDIBinaryAssessment() {
                                     {r.correct ? 'Correct' : 'Wrong'}
                                 </span>
                             </div>
-                            <p className="text-sm text-slate-700">
+                            <p className="text-sm text-ink/70">
                                 <span className="font-medium">Your answer:</span> {r.answer}
                             </p>
                             {r.explanation && (
-                                <p className="mt-2 text-sm text-slate-600">
+                                <p className="mt-2 text-sm text-ink/60">
                                     <span className="font-medium">Why:</span> {r.explanation}
                                 </p>
                             )}
@@ -358,11 +359,12 @@ export default function MIDIBinaryAssessment() {
                 <div className="mt-8 flex flex-wrap gap-3">
                     <button type="button"
                         onClick={handleRestart}
-                        className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                        className="rounded-full bg-sienna-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sienna-600"
                     >
                         Try again
                     </button>
                 </div>
+            </div>
             </div>
         );
     }
@@ -371,19 +373,20 @@ export default function MIDIBinaryAssessment() {
     // QUESTION SCREEN
     // ============================================
     return (
-        <div className="mx-auto max-w-3xl px-4 py-8 font-sans text-slate-800">
+        <div className="min-h-[60vh] bg-cream py-10 px-4 sm:px-6">
+        <div className="mx-auto max-w-3xl text-ink">
             <header className="mb-6">
-                <h1 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
+                <h1 className="font-[family-name:var(--font-fraunces)] text-2xl font-medium text-ink sm:text-3xl">
                     MIDI, Binary & Numeracy Assessment
                 </h1>
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">
                     1.5 Sequencing + 2.5 Numeracy — drilled from Worksheet 8
                 </p>
             </header>
 
             {/* Progress bar */}
             <div className="mb-6">
-                <div className="mb-2 flex items-center justify-between text-xs text-slate-600">
+                <div className="mb-2 flex items-center justify-between text-xs text-ink/60">
                     <span className="font-medium">
                         Question {progress} of {total}
                     </span>
@@ -397,22 +400,22 @@ export default function MIDIBinaryAssessment() {
                             : 'Type your answer'}
                     </span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-line">
                     <div
-                        className="h-full bg-blue-600 transition-[width] duration-300 ease-house"
+                        className="h-full bg-sienna-500 transition-[width] duration-300 ease-house"
                         style={{ width: `${(progress / total) * 100}%` }}
                     />
                 </div>
             </div>
 
             {/* Question card */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-                <h2 className="mb-5 text-lg font-semibold leading-snug text-slate-900 sm:text-xl">
+            <div className="rounded-2xl border border-line bg-paper p-6 sm:p-8 shadow-[0_1px_0_rgba(43,36,24,0.04),0_18px_40px_-24px_rgba(43,36,24,0.22)]">
+                <h2 className="mb-5 text-lg font-semibold leading-snug text-ink sm:text-xl">
                     {current.prompt}
                 </h2>
 
                 {current.instruction && (
-                    <p className="-mt-2 mb-4 text-sm text-slate-600">{current.instruction}</p>
+                    <p className="-mt-2 mb-4 text-sm text-ink/60">{current.instruction}</p>
                 )}
 
                 {/* MCQ input */}
@@ -423,14 +426,14 @@ export default function MIDIBinaryAssessment() {
                             const showResult = showFeedback;
                             const isAnswer = i === current.correctIndex;
                             const baseClass =
-                                'w-full text-left rounded-xl border p-3 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500';
-                            let styling = 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50';
+                                'w-full text-left rounded-xl border p-3 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sienna-500';
+                            let styling = 'border-line bg-paper hover:border-sienna-200 hover:bg-sienna-50';
                             if (showResult && isAnswer) {
                                 styling = 'border-emerald-400 bg-emerald-50 text-emerald-900';
                             } else if (showResult && isSelected && !isAnswer) {
                                 styling = 'border-rose-400 bg-rose-50 text-rose-900';
                             } else if (isSelected) {
-                                styling = 'border-blue-500 bg-blue-50';
+                                styling = 'border-sienna-500 bg-sienna-50';
                             }
                             return (
                                 <button type="button"
@@ -457,17 +460,17 @@ export default function MIDIBinaryAssessment() {
                             const canSelect =
                                 isSelected || multiSelected.length < current.requiredCount;
                             const showResult = showFeedback;
-                            let styling = 'border-slate-200 bg-white';
+                            let styling = 'border-line bg-paper';
                             if (showResult && isSelected && opt.valid) {
                                 styling = 'border-emerald-400 bg-emerald-50';
                             } else if (showResult && isSelected && !opt.valid) {
                                 styling = 'border-rose-400 bg-rose-50';
                             } else if (isSelected) {
-                                styling = 'border-blue-500 bg-blue-50';
+                                styling = 'border-sienna-500 bg-sienna-50';
                             } else if (!canSelect) {
-                                styling = 'border-slate-200 bg-slate-50 opacity-50';
+                                styling = 'border-line bg-cream opacity-50';
                             } else {
-                                styling = 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50';
+                                styling = 'border-line bg-paper hover:border-sienna-200 hover:bg-sienna-50';
                             }
                             return (
                                 <label
@@ -488,13 +491,13 @@ export default function MIDIBinaryAssessment() {
                                                 setMultiSelected((sel) => [...sel, opt.id]);
                                             }
                                         }}
-                                        className="h-4 w-4 accent-blue-600"
+                                        className="h-4 w-4 accent-sienna-500"
                                     />
-                                    <span className="text-sm text-slate-800">{opt.label}</span>
+                                    <span className="text-sm text-ink">{opt.label}</span>
                                 </label>
                             );
                         })}
-                        <p className="mt-2 text-xs text-slate-500">
+                        <p className="mt-2 text-xs text-ink/50">
                             Selected: {multiSelected.length} / {current.requiredCount}
                         </p>
                     </div>
@@ -519,10 +522,10 @@ export default function MIDIBinaryAssessment() {
                                     ? 'Type 7 binary digits, e.g. 1100100'
                                     : 'Type your answer…'
                             }
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 font-mono text-base text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:bg-slate-100"
+                            className="w-full rounded-xl border border-line bg-paper px-4 py-3 font-[family-name:var(--font-jbmono)] text-base text-ink shadow-sm focus:border-sienna-500 focus:outline-none focus:ring-2 focus:ring-sienna-200 disabled:bg-cream"
                         />
                         {current.type === 'trainer' && (
-                            <p className="mt-2 text-xs text-slate-500">
+                            <p className="mt-2 text-xs text-ink/50">
                                 Tip: place values left-to-right are 64, 32, 16, 8, 4, 2, 1.
                             </p>
                         )}
@@ -581,14 +584,14 @@ export default function MIDIBinaryAssessment() {
                                 ((current.type === 'text' || current.type === 'trainer') &&
                                     !currentInput.trim())
                             }
-                            className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                            className="rounded-full bg-sienna-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sienna-600 disabled:cursor-not-allowed disabled:bg-line disabled:text-ink/40"
                         >
                             Check answer
                         </button>
                     ) : (
                         <button type="button"
                             onClick={handleNext}
-                            className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+                            className="rounded-full bg-field-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-field-600"
                         >
                             {questionIndex + 1 >= total ? 'See results' : 'Next question'}
                         </button>
@@ -597,10 +600,11 @@ export default function MIDIBinaryAssessment() {
             </div>
 
             {!student && (
-                <p className="mt-4 text-center text-xs text-slate-500">
+                <p className="mt-4 text-center text-xs text-ink/50">
                     Sign in via the revision portal to save your score.
                 </p>
             )}
+        </div>
         </div>
     );
 }
