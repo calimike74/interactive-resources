@@ -152,7 +152,7 @@ function PasscodePanel({ title, onUnlocked }) {
                             marginBottom: spacing[2],
                         }}
                     >
-                        Locked with a classroom passcode
+                        Part of the course
                     </h2>
                     <p
                         style={{
@@ -161,10 +161,16 @@ function PasscodePanel({ title, onUnlocked }) {
                             lineHeight: typography.lineHeight.relaxed,
                         }}
                     >
-                        {title ? `"${title}" needs` : 'This interactive needs'} this term&rsquo;s passcode
-                        to open. Your teacher has it — ask them for the current code. The rest of
-                        this page, including what the topic covers and why it matters in the exam,
-                        stays visible without it.
+                        {title ? `"${title}" is` : 'This interactive is'} part of the full course at{' '}
+                        <a
+                            href="https://musictechstudio.co.uk"
+                            style={{ color: ED.accent }}
+                        >
+                            musictechstudio.co.uk
+                        </a>
+                        . Already in one of Mike&rsquo;s classes? Ask for this term&rsquo;s passcode
+                        below. The rest of this page, including what the topic covers and why it
+                        matters in the exam, stays visible either way.
                     </p>
                 </div>
 
