@@ -45,7 +45,7 @@ function TopicWayOut({ dest }) {
                         : <>The full topic — past-paper questions with mark schemes and examiner
                             traps — is part of membership.</>}
                 </p>
-                <a href="https://grades.musictechstudio.co.uk/"
+                <a href="https://member.musictechstudio.co.uk/"
                     className="mt-1.5 inline-block text-[13px] font-medium"
                     style={{ color: ROOM.field }}>
                     See what&rsquo;s inside →

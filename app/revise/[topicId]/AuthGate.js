@@ -94,10 +94,10 @@ export default function AuthGate({ onAuthenticated, submitLabel = 'Start Quiz' }
                 }}>
                     Joined on your own? Your progress lives in your studio — sign in at{' '}
                     <a
-                        href="https://grades.musictechstudio.co.uk"
+                        href="https://member.musictechstudio.co.uk"
                         style={{ color: ED.accent }}
                     >
-                        grades.musictechstudio.co.uk
+                        member.musictechstudio.co.uk
                     </a>{' '}
                     with your member email instead.
                 </p>

@@ -38,12 +38,12 @@ const ROOMS = [
     },
     {
         name: 'The Library',
-        href: 'https://grades.musictechstudio.co.uk/the-library',
+        href: 'https://member.musictechstudio.co.uk/the-library',
         desc: 'Every volume behind the course, with doors into the Reading Room and the curriculum.',
     },
     {
         name: 'The Reading Room',
-        href: 'https://grades.musictechstudio.co.uk/reading-room',
+        href: 'https://member.musictechstudio.co.uk/reading-room',
         desc: 'The reading list as a real shelf — take a volume down, turn it over.',
     },
 ];
