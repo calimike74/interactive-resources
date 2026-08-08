@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="The Story of the Studio — a free 82-page book on the five eras of recording, from direct-to-tape mono to the DAW, written for A-Level Music Technology Component 3.">
+<title>The Story of the Studio — free book</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='2' width='10' height='12' rx='1' fill='none' stroke='%23B85A3F' stroke-width='2'/%3E%3Cline x1='6' y1='6' x2='10' y2='6' stroke='%23B85A3F' stroke-width='1.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F8F2E8; --paper-warm: #F4EDDF; --cream: #F2EBE0;
+    --ink: #1F2A1C; --ink-soft: #5C6653; --line: #D4C9B4;
+    --field: #3A4A35; --field-100: #DDE3D7; --field-50: #EFF2EC;
+    --sienna: #B85A3F; --sienna-50: #FBF1EB; --mustard-600: #9B7530; --brass: #A8843B;
+    --ease-house: cubic-bezier(0.22, 1, 0.36, 1);
+    --serif: "Fraunces", Georgia, serif;
+    --sans: "Geist", "Avenir Next", sans-serif;
+    --mono: "Geist Mono", "SF Mono", monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--sans); color: var(--ink); font-size: 15px; line-height: 1.55;
+    min-height: 100vh; display: flex; flex-direction: column;
+    background:
+      radial-gradient(1200px 500px at 90% -8%, rgba(58,74,53,0.06), transparent 60%),
+      radial-gradient(900px 700px at -8% 30%, rgba(184,90,63,0.045), transparent 55%),
+      linear-gradient(178deg, #FAF5EC 0%, var(--paper) 40%, var(--paper-warm) 100%);
+  }
+  main { max-width: 980px; margin: 0 auto; padding: 56px 32px 48px; flex: 1; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--sienna);
+  }
+  h1 { font-family: var(--serif); font-weight: 500; font-size: 46px; line-height: 1.04; margin-top: 8px; max-width: 20ch; }
+  .standfirst { margin-top: 14px; max-width: 60ch; color: var(--ink-soft); font-size: 15.5px; }
+  .meta-line {
+    margin-top: 18px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+
+  .eras { margin-top: 34px; border-top: 1px solid var(--line); }
+  .eras li {
+    list-style: none; display: flex; gap: 16px; align-items: baseline;
+    padding: 13px 4px; border-bottom: 1px solid var(--line);
+  }
+  .eras .n { font-family: var(--mono); font-size: 12px; color: var(--sienna); min-width: 1.4em; }
+  .eras .name { font-family: var(--serif); font-size: 18px; }
+  .eras .span { margin-left: auto; font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; }
+
+  .back-matter { margin-top: 22px; max-width: 60ch; color: var(--ink-soft); font-size: 14px; }
+
+  .download {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 34px;
+    font-family: var(--sans); font-weight: 500; font-size: 15.5px; text-decoration: none;
+    color: var(--cream); background: var(--field); border: 1px solid var(--field);
+    border-radius: 999px; padding: 13px 26px;
+    transition: background 240ms var(--ease-house), border-color 240ms var(--ease-house);
+  }
+  .download:hover { background: #2F3D2B; border-color: #2F3D2B; }
+  .download:focus-visible { outline: 2px solid var(--sienna); outline-offset: 2px; }
+  .download .size { font-family: var(--mono); font-size: 11.5px; opacity: 0.75; }
+  .free-note { margin-top: 12px; font-size: 13px; color: var(--ink-soft); max-width: 52ch; }
+
+  footer { max-width: 980px; margin: 0 auto; padding: 0 32px 60px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); line-height: 1.7; width: 100%; }
+  footer a { color: var(--sienna); }
+  footer .home-link {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+    font-family: var(--mono); font-size: 11.5px; text-decoration: none;
+    color: var(--ink-soft); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 13px; background: rgba(255,255,255,0.5);
+    transition: border-color 240ms var(--ease-house), color 240ms var(--ease-house);
+  }
+  footer .home-link:hover { border-color: var(--field); color: var(--ink); }
+  footer .home-link:focus-visible { outline: 2px solid var(--field); outline-offset: 2px; }
+
+  @media (max-width: 640px) {
+    main { padding: 40px 22px 36px; }
+    h1 { font-size: 34px; }
+    .eras .span { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .download, .chip { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Free download &middot; Component 3</p>
+  <h1>The Story of the Studio</h1>
+  <p class="standfirst">
+    An 82-page illustrated book on how records get made — the whole arc from
+    direct-to-tape mono to the DAW, told era by era for A-Level Music Technology.
+    Each chapter closes with a &ldquo;hearing the era&rdquo; section, so you learn
+    to place a recording by what your ears find in it.
+  </p>
+  <p class="meta-line">82 pages &middot; five eras &middot; PDF</p>
+
+  <ul class="eras" aria-label="The five eras covered in the book">
+    <li><span class="n">1</span><span class="name">Mono, direct to tape</span><span class="span">c.1930&ndash;1963</span></li>
+    <li><span class="n">2</span><span class="name">Early multitrack</span><span class="span">c.1964&ndash;1969</span></li>
+    <li><span class="n">3</span><span class="name">Large-scale analogue</span><span class="span">c.1969&ndash;1995</span></li>
+    <li><span class="n">4</span><span class="name">Digital recording and MIDI</span><span class="span">c.1980&ndash;present</span></li>
+    <li><span class="n">5</span><span class="name">DAWs and emerging technologies</span><span class="span">c.1996&ndash;present</span></li>
+  </ul>
+
+  <p class="back-matter">
+    In the back: a glossary, a listening companion, an era-identification drill and a
+    ninety-year timeline — the same skills Component 3&rsquo;s listening questions reward.
+  </p>
+
+  <a class="download" href="/downloads/The-Story-of-the-Studio.pdf" download>
+    Download the book <span class="size">PDF &middot; 49&nbsp;MB</span>
+  </a>
+  <p class="free-note">
+    Free to read, keep and print. Teachers are welcome to share it with their classes.
+  </p>
+</main>
+
+<footer>
+  <p>Written and illustrated for musictechstudio.co.uk. The five-era framing follows the
+  Pearson Edexcel A-Level Music Technology specification&rsquo;s own recording eras.</p>
+  <a href="/" class="home-link">&larr; resources.musictechstudio.co.uk</a>
+</footer>
+</body>
+</html>
