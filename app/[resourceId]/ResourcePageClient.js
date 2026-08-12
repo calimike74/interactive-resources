@@ -139,6 +139,13 @@ export default function ResourcePageClient() {
     const backLabel = parentTopic ? `← ${parentTopic.name}` : '← Back to Resources';
     const ResourceComponent = resourceComponents[resource.component];
 
+    // Related assessment: link internally, and only when the prepFor slug
+    // resolves to a real registered resource. No dead pill is better than
+    // any dead link — the external assessment subdomain this used to point
+    // at has no DNS record.
+    const prepForId = resource.prepFor && resource.prepFor.length > 0 ? resource.prepFor[0] : null;
+    const assessmentHref = prepForId && resourceExists(prepForId) ? `/${prepForId}` : null;
+
     // Handle missing component
     if (!ResourceComponent) {
         return <ComponentNotFound resource={resource} theme={t} />;
@@ -227,11 +234,9 @@ export default function ResourcePageClient() {
                     </div>
 
                     {/* Related assessment link */}
-                    {resource.prepFor && resource.prepFor.length > 0 && (
-                        <a
-                            href={`https://assess.musictechstudio.co.uk/${resource.prepFor[0]}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                    {assessmentHref && (
+                        <Link
+                            href={assessmentHref}
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -243,7 +248,7 @@ export default function ResourcePageClient() {
                             }}
                         >
                             Take the Assessment →
-                        </a>
+                        </Link>
                     )}
                 </div>
             </header>
@@ -343,11 +348,9 @@ export default function ResourcePageClient() {
                             {backLabel}
                         </Link>
 
-                        {resource.prepFor && resource.prepFor.length > 0 && (
-                            <a
-                                href={`https://assess.musictechstudio.co.uk/${resource.prepFor[0]}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                        {assessmentHref && (
+                            <Link
+                                href={assessmentHref}
                                 style={{
                                     padding: `${spacing[3]} ${spacing[5]}`,
                                     background: glass.bgPrimary,
@@ -363,7 +366,7 @@ export default function ResourcePageClient() {
                                 }}
                             >
                                 Ready? Take the Assessment →
-                            </a>
+                            </Link>
                         )}
                     </div>
                 </div>
