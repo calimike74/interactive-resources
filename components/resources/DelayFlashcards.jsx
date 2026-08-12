@@ -641,7 +641,7 @@ const DelayFlashcards = () => {
         id: "i2",
         question: "What is a Ping-Pong Delay? (Edexcel 1.12d - Exam Essential)",
         answer: "Ping-Pong Delay alternates echoes between left and right stereo channels, creating spatial movement. A-Level requirement: Must understand stereo imaging, channel alternation (L→R→L→R), and requires proper stereo monitoring to be effective.",
-        furtherLearning: "Ableton Live Echo: Enable 'Ping Pong' mode, best with center-panned sources. Try on lead vocals or guitar solos - listen on headphones to hear full effect.",
+        furtherLearning: "Ableton Live Echo: Enable 'Ping Pong' mode, best with centre-panned sources. Try on lead vocals or guitar solos - listen on headphones to hear full effect.",
         practicalExample: "Component 4 Assessment: Essential for demonstrating stereo processing knowledge. Used in dub, electronic music, and rock solos. Key exam topic - know when and why to use it.",
         difficulty: 2,
         image: "ping-pong",
@@ -734,7 +734,7 @@ const DelayFlashcards = () => {
         question: "How does the Haas Effect relate to slapback delay in A-Level production work?",
         answer: "Haas Effect: Sounds within 20-40ms are perceived as one thicker sound, not separate echoes. A-Level application: Slapback delays (40-120ms) sit just above this fusion zone - heard as a distinct, tight echo that adds space, rather than fusing into one sound.",
         furtherLearning: "Test the boundary: Record vocals, apply delays from 20ms to 80ms. Note when it transitions from thickening to distinct echo - critical for Component 4 understanding.",
-        practicalExample: "Assessment Essential: Demonstrates psychoacoustic knowledge. Used correctively to enhance vocals without obvious delay artifacts. Shows advanced understanding of perception vs. technical parameters.",
+        practicalExample: "Assessment Essential: Demonstrates psychoacoustic knowledge. Used correctively to enhance vocals without obvious delay artefacts. Shows advanced understanding of perception vs. technical parameters.",
         difficulty: 3,
         image: "haas-effect",
         category: "advanced"

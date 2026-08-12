@@ -204,7 +204,7 @@ export default function MIDIPitchBendController() {
                     />
                     <div className="flex justify-between text-xs text-gray-600 mt-1">
                       <span>Down (0)</span>
-                      <span>Center (8192)</span>
+                      <span>Centre (8192)</span>
                       <span>Up (16383)</span>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ export default function MIDIPitchBendController() {
                     onClick={() => setPitchBendValue(8192)}
                     className="w-full bg-mustard-100 hover:bg-mustard-200 text-mustard-700 font-semibold py-2 px-4 rounded transition-colors"
                   >
-                    Reset to Center
+                    Reset to Centre
                   </button>
 
                   {/* Pitch Bend Range Control */}
@@ -359,7 +359,7 @@ export default function MIDIPitchBendController() {
                         <div className="text-3xl font-bold text-blue-700">0</div>
                       </div>
                       <div className="bg-mustard-100 p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-600 mb-1">Center (No Bend)</div>
+                        <div className="text-sm text-gray-600 mb-1">Centre (No Bend)</div>
                         <div className="text-3xl font-bold text-mustard-700">8192</div>
                       </div>
                       <div className="bg-blue-100 p-4 rounded-lg text-center">
@@ -517,7 +517,7 @@ export default function MIDIPitchBendController() {
                           <ul className="list-disc list-inside ml-6 mt-2 space-y-1 text-sm">
                             <li>To bend <strong>UP</strong> 7 semitones: Draw the line to the <strong>maximum value</strong> (top of envelope)</li>
                             <li>To bend <strong>DOWN</strong> 7 semitones: Draw the line to the <strong>minimum value</strong> (bottom of envelope)</li>
-                            <li>For a smooth bend: Create a <strong>ramp from center (0) to max or min</strong></li>
+                            <li>For a smooth bend: Create a <strong>ramp from centre (0) to max or min</strong></li>
                           </ul>
                         </li>
                       </ol>
@@ -684,7 +684,7 @@ export default function MIDIPitchBendController() {
 
                     <div className="bg-white p-3 rounded">
                       <div className="text-sm font-semibold text-gray-600 mb-1">Value Range:</div>
-                      <p className="text-gray-700">0-127 (0 = hard left, 64 = center, 127 = hard right)</p>
+                      <p className="text-gray-700">0-127 (0 = hard left, 64 = centre, 127 = hard right)</p>
                     </div>
 
                     <div className="bg-white p-3 rounded border-l-4 border-green-500">

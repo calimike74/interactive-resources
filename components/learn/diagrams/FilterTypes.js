@@ -132,7 +132,7 @@ export default function FilterTypes() {
             ctx.fillStyle = color;
             ctx.font = 'bold 8px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(type === 'bp' ? 'Center' : 'Cutoff', cutoffX, plotY + plotH + 9);
+            ctx.fillText(type === 'bp' ? 'Centre' : 'Cutoff', cutoffX, plotY + plotH + 9);
 
             // Pass/Cut labels — positioned inside region fills, vertically centered
             ctx.font = '8px -apple-system, sans-serif';

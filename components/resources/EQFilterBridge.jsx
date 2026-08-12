@@ -561,7 +561,7 @@ const Part1Review = ({ onComplete }) => {
 const Part2Bridge = ({ onComplete }) => {
     const comparisons = [
         { aspect: 'Primary Purpose', synthesis: { text: 'Creative sound design', icon: '' }, eq: { text: 'Corrective mixing', icon: '' } },
-        { aspect: 'What It Affects', synthesis: { text: 'Raw synthesized waveforms', icon: '〜' }, eq: { text: 'Recorded audio', icon: '' } },
+        { aspect: 'What It Affects', synthesis: { text: 'Raw synthesised waveforms', icon: '〜' }, eq: { text: 'Recorded audio', icon: '' } },
         { aspect: 'How It\'s Used', synthesis: { text: 'Dynamic - sweeps, modulation, LFO', icon: '↗' }, eq: { text: 'Static - set and forget', icon: '▬' } },
         { aspect: 'Resonance Use', synthesis: { text: 'Extreme - self-oscillation, acid', icon: '' }, eq: { text: 'Gentle peak at centre frequency; rarely pushed to extremes', icon: '' } },
         { aspect: 'Typical Settings', synthesis: { text: 'Wide sweeps, high resonance', icon: '' }, eq: { text: 'Precise frequencies, 3-6dB', icon: '' } }
@@ -648,7 +648,7 @@ const Part2Bridge = ({ onComplete }) => {
             <CopyableNote title="Synthesis vs EQ - Key Differences" color="#ff9f43" variant="exam">
                 <strong>SAME FILTERS, DIFFERENT CONTEXT:</strong><br/><br/>
                 <strong>SYNTHESIS (1.3) - Creative Filtering:</strong><br/>
-                • Applied to raw synthesized waveforms<br/>
+                • Applied to raw synthesised waveforms<br/>
                 • Used dynamically with sweeps, LFO modulation<br/>
                 • Extreme resonance for acid sounds<br/>
                 • Part of BUILDING sounds<br/><br/>
@@ -846,7 +846,7 @@ const AudioEngine = ({ filterType, frequency, gain, q, categoryColor }) => {
                 }}>
                      <strong style={{ color: '#c9cdd4' }}>Try this:</strong> Move the frequency slider while listening. 
                     Notice how the {filterType === 'highpass' || filterType === 'lowpass' ? 'cutoff point' : 
-                    filterType === 'bell' ? 'center of the boost/cut' : 'filter'} changes which frequencies you hear.
+                    filterType === 'bell' ? 'centre of the boost/cut' : 'filter'} changes which frequencies you hear.
                 </div>
             )}
         </div>
@@ -886,7 +886,7 @@ const Part3NewConcepts = ({ onComplete }) => {
         },
         {
             name: 'Bell / Parametric',
-            description: 'Boost or cut frequencies around a center point',
+            description: 'Boost or cut frequencies around a centre point',
             color: '#22d3ee',
             isNew: true,
             filters: [
@@ -1048,7 +1048,7 @@ const Part3NewConcepts = ({ onComplete }) => {
             <CopyableNote title="NEW EQ Filter Types - Definitions" color="#34d399" variant="definition">
                 <strong>NEW IN EQ (not in synthesis):</strong><br/><br/>
                 • <strong>Shelf Filters:</strong> Boost or cut ALL frequencies above (high shelf) or below (low shelf) a point. Unlike pass filters, they don't remove - they adjust level. Used for: adding "air" (high shelf boost), warmth (low shelf boost), or reducing rumble (low shelf cut).<br/><br/>
-                • <strong>Bell / Parametric Filter:</strong> Boost or cut frequencies AROUND a center frequency. The Q controls bandwidth - high Q = narrow surgical cuts, low Q = broad musical boosts. The most common EQ type used in mixing.
+                • <strong>Bell / Parametric Filter:</strong> Boost or cut frequencies AROUND a centre frequency. The Q controls bandwidth - high Q = narrow surgical cuts, low Q = broad musical boosts. The most common EQ type used in mixing.
             </CopyableNote>
 
             <CopyableNote title="All EQ Filter Types Summary" color="#22d3ee" variant="key">
@@ -1058,7 +1058,7 @@ const Part3NewConcepts = ({ onComplete }) => {
                 • Notch Filter - Remove a narrow band<br/><br/>
                 <strong>New in EQ (1.11):</strong><br/>
                 • Shelf Filters - Boost/cut above or below a point<br/>
-                • Bell/Parametric - Boost/cut around a center frequency with adjustable Q
+                • Bell/Parametric - Boost/cut around a centre frequency with adjustable Q
             </CopyableNote>
         </div>
     );
@@ -1090,9 +1090,9 @@ const Part4Practice = () => {
         { name: 'Low Shelf Cut', type: 'lowshelf', frequency: 150, gain: -6, q: 1, color: '#e879f9', hint: 'Cut on the LEFT, transitions to 0dB on the right' },
         { name: 'High Shelf Boost', type: 'highshelf', frequency: 8000, gain: 6, q: 1, color: '#e879f9', hint: 'Boosted on the RIGHT, transitions from 0dB on the left' },
         { name: 'High Shelf Cut', type: 'highshelf', frequency: 10000, gain: -4, q: 1, color: '#e879f9', hint: 'Cut on the RIGHT, transitions from 0dB on the left' },
-        { name: 'Bell Boost (Wide)', type: 'bell', frequency: 1000, gain: 6, q: 0.7, color: '#22d3ee', hint: 'Symmetrical bump centered on the frequency, wide curve' },
-        { name: 'Bell Boost (Narrow)', type: 'bell', frequency: 2500, gain: 8, q: 4, color: '#22d3ee', hint: 'Symmetrical bump centered on the frequency, narrow curve' },
-        { name: 'Bell Cut (Surgical)', type: 'bell', frequency: 400, gain: -9, q: 6, color: '#22d3ee', hint: 'Symmetrical dip centered on the frequency, narrow curve' },
+        { name: 'Bell Boost (Wide)', type: 'bell', frequency: 1000, gain: 6, q: 0.7, color: '#22d3ee', hint: 'Symmetrical bump centred on the frequency, wide curve' },
+        { name: 'Bell Boost (Narrow)', type: 'bell', frequency: 2500, gain: 8, q: 4, color: '#22d3ee', hint: 'Symmetrical bump centred on the frequency, narrow curve' },
+        { name: 'Bell Cut (Surgical)', type: 'bell', frequency: 400, gain: -9, q: 6, color: '#22d3ee', hint: 'Symmetrical dip centred on the frequency, narrow curve' },
         { name: 'Notch Filter', type: 'notch', frequency: 1000, gain: 0, q: 10, color: '#ff0066', hint: 'Sharp narrow dip at the frequency, almost like a spike downward' },
         { name: 'Notch Filter', type: 'notch', frequency: 50, gain: 0, q: 8, color: '#ff0066', hint: 'Sharp narrow dip at the frequency, almost like a spike downward' },
     ];
@@ -1240,7 +1240,7 @@ const Part4Practice = () => {
             } else if (challenge.type === 'lowshelf' || challenge.type === 'highshelf') {
                 setFeedback("Shelf filters transition between two levels - they don't drop to silence like pass filters.");
             } else if (challenge.type === 'bell') {
-                setFeedback("Bell curves are symmetrical around the center frequency. Check your boost/cut direction.");
+                setFeedback("Bell curves are symmetrical around the centre frequency. Check your boost/cut direction.");
             } else if (challenge.type === 'notch') {
                 setFeedback("Notch filters have a very narrow, deep cut. It should look like a sharp spike downward.");
             }
@@ -1723,7 +1723,7 @@ const Part4Practice = () => {
                         { icon: '', title: 'Same Filters, Different Context', desc: 'LPF, HPF, BPF, and Notch work identically in synthesis and EQ - only the application differs.' },
                         { icon: '', title: 'Synthesis = Creative, EQ = Corrective', desc: 'Synthesis uses dynamic sweeps and extreme resonance. EQ uses static, subtle settings.' },
                         { icon: '', title: 'New in EQ: Shelf Filters', desc: 'Boost or cut all frequencies above/below a point without removing them completely.' },
-                        { icon: '', title: 'New in EQ: Bell/Parametric', desc: 'The most common EQ type - boost or cut around a center frequency with adjustable Q.' }
+                        { icon: '', title: 'New in EQ: Bell/Parametric', desc: 'The most common EQ type - boost or cut around a centre frequency with adjustable Q.' }
                     ].map((item, idx) => (
                         <div key={idx} style={{ display: 'flex', gap: '1rem', padding: '1rem', background: '#16181f', borderRadius: '12px' }}>
                             <span style={{ fontSize: '1.5rem' }}>{item.icon}</span>
@@ -1741,7 +1741,7 @@ const Part4Practice = () => {
                 • HPF: Flat line at 0dB, drops steeply LEFT of cutoff<br/>
                 • LPF: Flat line at 0dB, drops steeply RIGHT of cutoff<br/>
                 • Shelf: Transitions gradually to target gain level<br/>
-                • Bell: Symmetrical curve centered on frequency, width determined by Q<br/>
+                • Bell: Symmetrical curve centred on frequency, width determined by Q<br/>
                 • Higher Q = narrower curve | Lower Q = wider curve<br/>
                 • Steeper slope (24dB/oct) = sharper drop than gentle slope (12dB/oct)
             </CopyableNote>
