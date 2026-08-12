@@ -585,6 +585,14 @@ export default function StereoRecordingEssay() {
                             }}>
                                 Model Answer
                             </div>
+                            <p style={{
+                                fontSize: typography.size.xs,
+                                color: t.text.tertiary,
+                                fontStyle: 'italic',
+                                margin: `0 0 ${spacing[3]}`,
+                            }}>
+                                Model response written against the Edexcel mark scheme and examiner reports for this question type.
+                            </p>
                             {MODEL_ANSWER.split('\n\n').map((para, i) => (
                                 <p key={i} style={{
                                     fontSize: typography.size.sm,
