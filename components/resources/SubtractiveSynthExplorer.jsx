@@ -109,12 +109,10 @@ const QUIZ_QUESTIONS = [
 // opposite widths. It looked wrong immediately: these sit inside a bordered
 // card, so the displays escaped their own box and overhung the border on both
 // sides. Widening the instrument is still the right idea — it just has to be the
-// CARD that widens, which belongs with the two-column rework of these sections
-// rather than with a transform.
-const displayPair = {
+// CARD that widens, which is what the workbench below finally does.
+const displayStack = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-    gap: '1.25rem',
+    gap: '0.9rem',
 };
 
 const SCOPE_STAGE = '#211C15';
@@ -651,9 +649,12 @@ function MiniKeyboard({ onNoteOn, onNoteOff, activeNote }) {
 
 // ─── Interactive Container (bordered box for interactive widgets) ─────────────
 
-function InteractiveBox({ children, hint }) {
+function InteractiveBox({ children, hint, flush }) {
     return (
-        <div style={{ marginBottom: spacing[6] }}>
+        // `flush` drops the bottom margin: inside a sticky rack that margin is
+        // dead space at the foot of the panel, and dead space is the difference
+        // between pinning on a laptop and not.
+        <div style={{ marginBottom: flush ? 0 : spacing[6] }}>
             <div style={{
                 border: `3px solid ${COLORS.borderStrong}`,
                 borderRadius: borderRadius.lg,
@@ -671,6 +672,66 @@ function InteractiveBox({ children, hint }) {
                     {hint}
                 </p>
             )}
+        </div>
+    );
+}
+
+// ─── The workbench: instrument on one side, reading on the other ─────────────
+//
+// Mike, 2026-07-31, on the Filter section: "it is only half delivered... this is
+// going to go on a paid site. I want this to be full throttle."
+//
+// The half that was missing was not a display, it was an ARRANGEMENT. The cutoff
+// slider lived in Section 2 and the spinning circles in Section 1, so the single
+// thing this page exists to show — close the filter, watch the harmonics shrink
+// and drop away — could not be done and seen at the same time. No amount of
+// polish on either half fixes that; they have to share a screen.
+//
+// So a section is now an instrument and a text, not a stack of both. The rack
+// holds every control AND every display for that section and stays put while the
+// reading scrolls past it, which means slider and circles are together at any
+// scroll position. It also answers the older complaint that got the hero cut
+// down ("I'm having to scroll up and down a lot"): two columns of roughly equal
+// height are about half as tall as the same material stacked.
+//
+// Below 1024px it collapses to one column with the rack first — the order the
+// page already had, so nothing changes on a phone.
+//
+// A <style> block rather than a style object because sticky positioning and a
+// breakpoint cannot be expressed inline.
+//
+// Sticky is CONDITIONAL, and that took three attempts to get honest. A panel
+// pinned with `top` alone and taller than the space below it never shows its own
+// bottom — it pins on arrival and the rest is unreachable, so the Play button
+// simply ceases to exist on a short laptop. Capping the height and letting it
+// scroll inside itself is worse still: the controls are technically reachable
+// but behind a second scrollbar nobody expects. So the panel is measured against
+// the space available, and where it does not fit it stops being sticky and just
+// scrolls with the page. You lose the convenience on a small window; you never
+// lose the controls.
+const BENCH_CSS = `
+.sse-bench { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+.sse-bench__rack { order: -1; min-width: 0; }
+.sse-bench__read { min-width: 0; }
+@media (min-width: 1024px) {
+  .sse-bench {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+    gap: 2.25rem;
+    align-items: start;
+  }
+  .sse-bench__rack { order: 0; }
+  .sse-bench__rack--pinned {
+    position: sticky;
+    top: var(--sse-stick, 76px);
+  }
+}
+`;
+
+function Workbench({ rack, rackRef, pinned, children }) {
+    return (
+        <div className="sse-bench">
+            <div className="sse-bench__read">{children}</div>
+            <div ref={rackRef} className={`sse-bench__rack${pinned ? ' sse-bench__rack--pinned' : ''}`}>{rack}</div>
         </div>
     );
 }
@@ -703,6 +764,23 @@ export default function SubtractiveSynthExplorer() {
     const tabListRef = useRef(null);
     const tabBtnRefs = useRef({});
     const [tabIndicator, setTabIndicator] = useState({ x: 0, width: 0, ready: false });
+
+    // How far down the sticky rack has to sit to clear the furniture above it.
+    // Measured rather than guessed: the nav's height depends on the tab labels,
+    // which wrap at narrow widths, and a hardcoded offset would let the rack
+    // slide underneath.
+    //
+    // Measuring also turned up a bug that predates this rework. The section tabs
+    // are sticky at top:0 and so is the site header, which has the higher
+    // z-index — so the moment you scrolled, the tab bar pinned itself
+    // underneath the header and became invisible AND unclickable. Nobody had
+    // noticed because until now there was no reason to look at the top of the
+    // window while scrolled. The tabs now pin below the header instead.
+    const navRef = useRef(null);
+    const rackRef = useRef(null);
+    const [headerH, setHeaderH] = useState(0);
+    const [stickTop, setStickTop] = useState(76);
+    const [pinned, setPinned] = useState(false);
 
     // Audio refs
     const audioCtxRef = useRef(null);
@@ -928,6 +1006,57 @@ export default function SubtractiveSynthExplorer() {
         return () => window.removeEventListener('resize', handler);
     }, [currentSection]);
 
+    useEffect(() => {
+        const measure = () => {
+            const hdr = document.querySelector('header');
+            // Only a header that pins itself to the top eats space; one that
+            // scrolls away with the page does not.
+            const pinned = hdr && ['sticky', 'fixed'].includes(getComputedStyle(hdr).position);
+            const h = pinned ? Math.round(hdr.getBoundingClientRect().height) : 0;
+            const navH = navRef.current ? Math.round(navRef.current.getBoundingClientRect().height) : 0;
+            setHeaderH(h);
+            setStickTop(h + navH + 12);
+        };
+        measure();
+        window.addEventListener('resize', measure);
+        return () => window.removeEventListener('resize', measure);
+    }, []);
+
+    // Pin the panel only where it fits. Measured with a ResizeObserver as well
+    // as on resize, because the displays are canvases that settle a frame or two
+    // after the section renders.
+    useEffect(() => {
+        const el = rackRef.current;
+        if (!el) return undefined;
+        const check = () => {
+            const twoColumn = window.matchMedia('(min-width: 1024px)').matches;
+            const room = window.innerHeight - stickTop - 20;
+            setPinned(twoColumn && el.scrollHeight <= room);
+        };
+        check();
+        const ro = new ResizeObserver(check);
+        ro.observe(el);
+        window.addEventListener('resize', check);
+        return () => { ro.disconnect(); window.removeEventListener('resize', check); };
+    }, [currentSection, stickTop]);
+
+    // Clicking a section tab lands the student on the instrument, not on
+    // whatever part of the page they happened to be scrolled to. Without this
+    // the Filter panel opens two-thirds below the fold and the circles — the
+    // whole point of that section — are off screen until you scroll.
+    const sectionTopRef = useRef(null);
+    const mountedRef = useRef(false);
+    useEffect(() => {
+        if (!mountedRef.current) { mountedRef.current = true; return; }
+        const el = sectionTopRef.current;
+        if (!el) return;
+        const y = window.scrollY + el.getBoundingClientRect().top - stickTop + 4;
+        window.scrollTo({
+            top: Math.max(0, y),
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        });
+    }, [currentSection, stickTop]);
+
     const baseFreq = 220 * Math.pow(2, octave);
     const accent = SECTION_ACCENTS[currentSection];
 
@@ -940,8 +1069,10 @@ export default function SubtractiveSynthExplorer() {
         color: COLORS.text,
     };
 
-    const contentCol = {
-        maxWidth: '640px',
+    // Wide enough for two columns, and no wider: at 1180px the reading side lands
+    // at roughly 65 characters, which is where prose wants to be.
+    const benchCol = {
+        maxWidth: '1180px',
         margin: '0 auto',
         padding: `0 ${spacing[6]}`,
     };
@@ -960,6 +1091,10 @@ export default function SubtractiveSynthExplorer() {
         lineHeight: typography.lineHeight.relaxed,
         marginBottom: spacing[8],
     };
+
+    // The section's opening paragraph is prose and keeps a reading measure even
+    // though its container is now nearly twice as wide.
+    const introStyle = { ...bodyStyle, maxWidth: '640px' };
 
     const btnStyle = (active, activeColor = accent) => ({
         border: 'none',
@@ -1006,109 +1141,104 @@ export default function SubtractiveSynthExplorer() {
     // ─── Section 1: Oscillators ────────────────────────────────────────────────
 
     const renderSection1 = () => (
-        <div style={contentCol}>
-            <div style={{ paddingTop: spacing[12], marginBottom: spacing[10] }}>
+        <div style={benchCol}>
+            <div style={{ paddingTop: spacing[10], marginBottom: spacing[6] }}>
                 <h2 style={h2Style}>Oscillators</h2>
-                <p style={bodyStyle}>
+                <p style={introStyle}>
                     Every subtractive synth starts with an oscillator. It generates a raw waveform — the
-                    harmonic content you will later shape with filters. Choose a waveform below and press
+                    harmonic content you will later shape with filters. Choose a waveform and press
                     play to hear how they differ.
                 </p>
             </div>
 
-            <InteractiveBox hint="Select a waveform, then press play to hear it">
-                {/* Waveform selector */}
-                <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[5], flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {WAVEFORMS.map(w => (
+            <Workbench rackRef={rackRef} pinned={pinned} rack={
+                <InteractiveBox flush>
+                    {/* Transport above the waveform tiles for the same reason as the
+                        Filter panel: the control that starts the sound is the one that
+                        must never be the first thing a short window cuts off. */}
+                    <div style={{ display: 'flex', gap: spacing[3], alignItems: 'center', marginBottom: spacing[4], flexWrap: 'wrap' }}>
                         <button type="button"
-                            key={w.id}
-                            onClick={() => setWaveform(w.id)}
-                            style={{
-                                ...btnStyle(waveform === w.id),
-                                display: 'flex', flexDirection: 'column', alignItems: 'center',
-                                gap: spacing[2], padding: `${spacing[3]} ${spacing[4]}`, minWidth: '90px',
-                            }}
+                            onClick={() => isPlaying ? stopTone() : startTone(baseFreq)}
+                            style={{ ...(isPlaying ? actionBtn('#dc2626') : actionBtn(accent)), padding: `${spacing[2]} ${spacing[5]}` }}
                         >
-                            <WaveformIcon type={w.id} color={waveform === w.id ? '#FFFFFF' : COLORS.textSecondary} />
-                            {w.label}
+                            {isPlaying ? 'Stop' : 'Play'}
                         </button>
-                    ))}
-                </div>
-
-                {/* Waveform display */}
-                {/* Two views of one sound: the shape, and the recipe. Side by side rather
-                    than stacked — they are one idea, and stacking costs a screen of
-                    scrolling on a page that already had too many. */}
-                <div style={{ ...displayPair }}>
-                    <div>
-                        <p style={paneLabel}>How the shape gets made</p>
-                        {/* The circles REPLACE the oscilloscope here rather than joining
-                            it, and that is the whole reason this fits: they draw the same
-                            waveform, so the pane costs no extra height. The live scope is
-                            still the right tool one section down, where the point is what
-                            the filter did to a real signal rather than where the shape
-                            came from. */}
-                        <EpicycleWave
-                            waveform={waveform}
-                            filterType={filterType}
-                            cutoff={cutoff}
-                            resonance={resonance}
-                            freqRef={currentFreqRef}
-                        />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
+                            <span style={{ color: COLORS.textHint, fontSize: typography.size.xs }}>Octave</span>
+                            {[-2, -1, 0, 1, 2].map(o => (
+                                <button type="button"
+                                    key={o}
+                                    onClick={() => { setOctave(o); if (isPlaying) startTone(220 * Math.pow(2, o)); }}
+                                    style={pillBtn(octave === o)}
+                                >
+                                    {o > 0 ? `+${o}` : o}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                    <div>
-                        <p style={paneLabel}>The harmonics inside it</p>
-                        <HarmonicSpectrum analyserRef={analyserRef} freqRef={currentFreqRef} />
-                    </div>
-                </div>
 
-                <p style={{
-                    margin: `${spacing[2]} 0 0`,
-                    fontSize: '0.82rem',
-                    lineHeight: 1.5,
-                    color: COLORS.textSecondary,
-                }}>
-                    Each circle is one harmonic, turning at its own speed. Stack them end
-                    to end and the last point draws the wave.{' '}
-                    <Link
-                        href="/additive-synth-explorer"
-                        style={{ color: accent, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '2px' }}
-                    >
-                        Build a sound this way
-                    </Link>{' '}
-                    on the additive explorer, where you set every harmonic yourself.
-                </p>
-
-                {/* Controls */}
-                <div style={{ display: 'flex', gap: spacing[4], alignItems: 'center', marginTop: spacing[4], flexWrap: 'wrap' }}>
-                    <button type="button"
-                        onClick={() => isPlaying ? stopTone() : startTone(baseFreq)}
-                        style={isPlaying
-                            ? { ...actionBtn('#dc2626') }
-                            : { ...actionBtn(accent) }
-                        }
-                    >
-                        {isPlaying ? 'Stop' : 'Play'}
-                    </button>
-                    <span style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontStyle: 'italic' }}>
-                        This bypasses the envelope — use Trigger Note in Section 3 to hear the full ADSR shape.
-                    </span>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
-                        <span style={{ color: COLORS.textHint, fontSize: typography.size.xs }}>Octave</span>
-                        {[-2, -1, 0, 1, 2].map(o => (
+                    {/* Waveform selector. Icon beside the label rather than above it:
+                        the stacked tiles were 76px tall for 20px of information. */}
+                    <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[4], flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {WAVEFORMS.map(w => (
                             <button type="button"
-                                key={o}
-                                onClick={() => { setOctave(o); if (isPlaying) startTone(220 * Math.pow(2, o)); }}
-                                style={pillBtn(octave === o)}
+                                key={w.id}
+                                onClick={() => setWaveform(w.id)}
+                                style={{
+                                    ...btnStyle(waveform === w.id),
+                                    display: 'flex', alignItems: 'center',
+                                    gap: spacing[2], padding: `${spacing[2]} ${spacing[3]}`,
+                                }}
                             >
-                                {o > 0 ? `+${o}` : o}
+                                <WaveformIcon type={w.id} size={26} color={waveform === w.id ? '#FFFFFF' : COLORS.textSecondary} />
+                                {w.label}
                             </button>
                         ))}
                     </div>
-                </div>
-            </InteractiveBox>
 
+                    {/* Waveform display */}
+                    {/* Two views of one sound: the shape, and the recipe. Stacked rather
+                        than side by side now that the rack is a column — each display
+                        gets the full width of the panel, which the circles in particular
+                        want, since they need room for the chain AND the wave it draws. */}
+                    <div style={displayStack}>
+                        <div>
+                            <p style={paneLabel}>How the shape gets made</p>
+                            {/* The circles REPLACE the oscilloscope here rather than joining
+                                it, and that is the whole reason this fits: they draw the same
+                                waveform, so the pane costs no extra height. */}
+                            <EpicycleWave
+                                waveform={waveform}
+                                filterType={filterType}
+                                cutoff={cutoff}
+                                resonance={resonance}
+                                freqRef={currentFreqRef}
+                                height={170}
+                            />
+                        </div>
+                        <div>
+                            <p style={paneLabel}>The harmonics inside it</p>
+                            <HarmonicSpectrum analyserRef={analyserRef} freqRef={currentFreqRef} height={150} />
+                        </div>
+                    </div>
+
+                    <p style={{
+                        margin: `${spacing[3]} 0 0`,
+                        fontSize: '0.82rem',
+                        lineHeight: 1.5,
+                        color: COLORS.textSecondary,
+                    }}>
+                        Each circle is one harmonic, turning at its own speed.{' '}
+                        <Link
+                            href="/additive-synth-explorer"
+                            style={{ color: accent, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                        >
+                            Build a sound this way
+                        </Link>{' '}
+                        on the additive explorer, where you set every harmonic yourself.
+                    </p>
+                </InteractiveBox>
+            }>
             {/* Inline check — interleaved after hands-on exploration */}
             <Callout type="question" title="Which waveform would you start with for subtractive synthesis?">
                 <Callout.Options
@@ -1155,84 +1285,115 @@ export default function SubtractiveSynthExplorer() {
                     </p>
                 </div>
             </div>
+            </Workbench>
         </div>
     );
 
     // ─── Section 2: The Filter ─────────────────────────────────────────────────
 
     const renderSection2 = () => (
-        <div style={contentCol}>
-            <div style={{ paddingTop: spacing[12], marginBottom: spacing[10] }}>
+        <div style={benchCol}>
+            <div style={{ paddingTop: spacing[10], marginBottom: spacing[6] }}>
                 <h2 style={h2Style}>The Filter</h2>
-                <p style={bodyStyle}>
+                <p style={introStyle}>
                     This is the "subtractive" part. A filter removes frequencies from the oscillator's
-                    waveform. Play the sound, then sweep the cutoff frequency to hear harmonics disappear.
+                    waveform. Press play, then drag the cutoff down and watch the outer circles shrink
+                    away as you hear the sound get darker — that is the harmonics being taken out.
                 </p>
             </div>
 
-            <InteractiveBox hint="Adjust the cutoff while playing to hear the filter sweep in real-time">
-                {/* Filter type */}
-                <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[5], flexWrap: 'wrap' }}>
-                    {FILTER_TYPES.map(f => (
-                        <button type="button" key={f.id} onClick={() => setFilterType(f.id)} style={btnStyle(filterType === f.id)}>
-                            {f.label}
+            {/* No hint under this panel: it carries three displays and the
+                opening paragraph already says what to do with the slider, so the
+                extra line was two centimetres the rack could not spare. */}
+            <Workbench rackRef={rackRef} pinned={pinned} rack={
+                <InteractiveBox flush>
+                    {/* Transport first, not last. This panel is the tallest on the
+                        page, so on a short window its bottom edge is the part that
+                        gets cut — and the one control that must never be out of
+                        reach is the one that starts the sound. */}
+                    <div style={{ display: 'flex', gap: spacing[2], marginBottom: spacing[4], flexWrap: 'wrap', alignItems: 'center' }}>
+                        <button type="button"
+                            onClick={() => isPlaying ? stopTone() : startTone(baseFreq)}
+                            style={{ ...(isPlaying ? actionBtn('#dc2626') : actionBtn(accent)), padding: `${spacing[2]} ${spacing[5]}` }}
+                        >
+                            {isPlaying ? 'Stop' : 'Play'}
                         </button>
-                    ))}
-                </div>
-
-                {/* Sliders */}
-                <div style={{ display: 'flex', gap: spacing[6], marginBottom: spacing[5], flexWrap: 'wrap' }}>
-                    <SynthControl label="Cutoff" value={cutoff} min={20} max={20000} step={1} onChange={setCutoff} unit="Hz" color={accent} logScale />
-                    <SynthControl label="Resonance" value={resonance} min={0.5} max={20} step={0.1} onChange={setResonance} color={accent} />
-                </div>
-
-                {/* Filter response */}
-                <div style={{ marginBottom: spacing[4] }}>
-                    <FilterResponseSVG type={filterType} cutoff={cutoff} resonance={resonance} accentColor={accent} />
-                </div>
-
-                {/* Waveform */}
-                {/* The spectrum earns its place here more than anywhere: the analyser sits
-                    AFTER the filter, so bringing the cutoff down visibly removes the
-                    top harmonics. That is subtractive synthesis, on screen. */}
-                <div style={{ ...displayPair }}>
-                    <div>
-                        <p style={paneLabel}>The shape it traces</p>
-                        <WaveformCanvas analyserRef={analyserRef} color={accent} />
+                        {FILTER_TYPES.map(f => (
+                            <button type="button" key={f.id} onClick={() => setFilterType(f.id)} style={btnStyle(filterType === f.id)}>
+                                {f.label}
+                            </button>
+                        ))}
                     </div>
-                    <div>
-                        <p style={paneLabel}>What the filter is taking away</p>
-                        <HarmonicSpectrum analyserRef={analyserRef} freqRef={currentFreqRef} />
+
+                    {/* Sliders. These are the reason the whole page was rearranged: the
+                        cutoff control and the circles it acts on now sit in one panel,
+                        so the cause and the effect are on screen together. */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: spacing[5], marginBottom: spacing[4] }}>
+                        <SynthControl label="Cutoff" value={cutoff} min={20} max={20000} step={1} onChange={setCutoff} unit="Hz" color={accent} logScale />
+                        <SynthControl label="Resonance" value={resonance} min={0.5} max={20} step={0.1} onChange={setResonance} color={accent} />
                     </div>
-                </div>
 
-                {/* Play */}
-                <div style={{ marginTop: spacing[4], display: 'flex', gap: spacing[4], alignItems: 'center', flexWrap: 'wrap' }}>
-                    <button type="button"
-                        onClick={() => isPlaying ? stopTone() : startTone(baseFreq)}
-                        style={isPlaying ? actionBtn('#dc2626') : actionBtn(accent)}
-                    >
-                        {isPlaying ? 'Stop' : 'Play'}
-                    </button>
-                    <span style={{ color: COLORS.textHint, fontSize: typography.size.xs, fontStyle: 'italic' }}>
-                        This bypasses the envelope — use Trigger Note in Section 3 to hear the full ADSR shape.
-                    </span>
-                </div>
-            </InteractiveBox>
+                    {/* Three answers to one slider. The circles come FIRST, directly
+                        under the control that acts on them, because they are the answer
+                        Mike asked for and the one a student should meet before any
+                        diagram: cause and headline effect within a few centimetres of
+                        each other. The response curve and the bars sit below as the
+                        supporting evidence.
 
+                        The oscilloscope that used to sit here has gone: the circles draw
+                        the same filtered shape and say WHY it looks like that, so keeping
+                        both was one display too many for the height available. */}
+                    <div style={displayStack}>
+                        <div>
+                            <p style={paneLabel}>What it does to each harmonic</p>
+                            <EpicycleWave
+                                waveform={waveform}
+                                filterType={filterType}
+                                cutoff={cutoff}
+                                resonance={resonance}
+                                freqRef={currentFreqRef}
+                                height={165}
+                            />
+                        </div>
+                        <div>
+                            <p style={paneLabel}>What is left of the sound</p>
+                            {/* The analyser sits AFTER the filter, so this is measured
+                                rather than modelled — closing the cutoff visibly removes
+                                the top bars. Subtractive synthesis, on screen. */}
+                            <HarmonicSpectrum analyserRef={analyserRef} freqRef={currentFreqRef} height={125} />
+                        </div>
+                    </div>
+
+                    <p style={{ color: COLORS.textHint, fontSize: typography.size.xs, margin: `${spacing[3]} 0 0` }}>
+                        Filtering a <strong style={{ color: COLORS.textSecondary, fontWeight: 600 }}>{WAVEFORMS.find(w => w.id === waveform)?.label.toLowerCase()}</strong> wave
+                        {' · '}change that in Oscillators
+                    </p>
+                </InteractiveBox>
+            }>
             {/* Inline definition with nested try-it prompt */}
             <Callout type="definition" title="Cutoff Frequency">
                 The frequency at which the filter begins to attenuate the signal. Below this point (for a low-pass filter), frequencies pass through unchanged. Above it, they are progressively reduced.
                 <Callout type="listen" title="Hear the difference" collapsible={false}>
-                    Set the filter to Low-Pass above, then slowly drag the cutoff from 20kHz down to 200Hz while playing. Notice how the bright, buzzy harmonics disappear — that is subtractive synthesis in action.
+                    Set the filter to Low-Pass, press play, then drag the cutoff slowly from 20kHz down to 200Hz. The bright, buzzy harmonics disappear from the sound, the outer circles shrink to nothing, and the bars fall away one by one — three views of the same thing, which is subtractive synthesis in action.
                 </Callout>
             </Callout>
 
             {/* Educational content */}
             <div style={{ marginBottom: spacing[12] }}>
-                <h3 style={{ fontSize: typography.size.xl, fontWeight: typography.weight.semibold, color: COLORS.text, marginBottom: spacing[5] }}>
+                <h3 style={{ fontSize: typography.size.xl, fontWeight: typography.weight.semibold, color: COLORS.text, marginBottom: spacing[4] }}>
                     How filters work
                 </h3>
+
+                {/* The response curve reads better here than in the panel. It is a
+                    DIAGRAM — the shape a student has to recognise and draw in the
+                    exam — so it belongs beside the words that name it, where it
+                    redraws itself as they read about each type. Moving it also gave
+                    the panel back the height it needed to fit a laptop window. */}
+                <div style={{ marginBottom: spacing[5] }}>
+                    <p style={paneLabel}>{FILTER_TYPES.find(f => f.id === filterType)?.label} — the shape of its response</p>
+                    <FilterResponseSVG type={filterType} cutoff={cutoff} resonance={resonance} height={130} accentColor={accent} />
+                </div>
+
                 <KeyConcept label="Low-Pass Filter (LPF)">
                     Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled — the most common filter in subtractive synthesis. A typical synth LPF rolls off at −12 or −24 dB per octave; steeper slopes remove harmonics faster.
                 </KeyConcept>
@@ -1265,52 +1426,55 @@ export default function SubtractiveSynthExplorer() {
                     </p>
                 </div>
             </div>
+            </Workbench>
         </div>
     );
 
     // ─── Section 3: Envelope ───────────────────────────────────────────────────
 
     const renderSection3 = () => (
-        <div style={contentCol}>
-            <div style={{ paddingTop: spacing[12], marginBottom: spacing[10] }}>
+        <div style={benchCol}>
+            <div style={{ paddingTop: spacing[10], marginBottom: spacing[6] }}>
                 <h2 style={h2Style}>Amplitude Envelope</h2>
-                <p style={bodyStyle}>
+                <p style={introStyle}>
                     The ADSR envelope controls how the volume changes over time when a note is played.
                     It gives each sound its characteristic "shape" — from plucky stabs to swelling pads.
                 </p>
             </div>
 
-            <InteractiveBox hint="Adjust the sliders and press Trigger Note to hear the envelope shape">
-                {/* Envelope viz */}
-                <div style={{ marginBottom: spacing[5] }}>
-                    <EnvelopeShapeSVG attack={attack} decay={decay} sustain={sustain} release={release} accentColor={accent} />
-                </div>
+            <Workbench rackRef={rackRef} pinned={pinned} rack={
+                <InteractiveBox flush hint="Adjust the sliders and press Trigger Note to hear the envelope shape">
+                    {/* Envelope viz */}
+                    <div style={{ marginBottom: spacing[4] }}>
+                        <EnvelopeShapeSVG attack={attack} decay={decay} sustain={sustain} release={release} height={130} accentColor={accent} />
+                    </div>
 
-                {/* ADSR sliders */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: spacing[5], marginBottom: spacing[5] }}>
-                    <SynthControl label="Attack" value={attack} min={0.001} max={2} step={0.001} onChange={setAttack} unit="s" color={accent} />
-                    <SynthControl label="Decay" value={decay} min={0.001} max={2} step={0.001} onChange={setDecay} unit="s" color={accent} />
-                    <SynthControl label="Sustain" value={sustain} min={0} max={1} step={0.01} onChange={setSustain} color={accent} />
-                    <SynthControl label="Release" value={release} min={0.001} max={3} step={0.001} onChange={setRelease} unit="s" color={accent} />
-                </div>
+                    {/* ADSR sliders */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: spacing[4], marginBottom: spacing[4] }}>
+                        <SynthControl label="Attack" value={attack} min={0.001} max={2} step={0.001} onChange={setAttack} unit="s" color={accent} />
+                        <SynthControl label="Decay" value={decay} min={0.001} max={2} step={0.001} onChange={setDecay} unit="s" color={accent} />
+                        <SynthControl label="Sustain" value={sustain} min={0} max={1} step={0.01} onChange={setSustain} color={accent} />
+                        <SynthControl label="Release" value={release} min={0.001} max={3} step={0.001} onChange={setRelease} unit="s" color={accent} />
+                    </div>
 
-                {/* Trigger */}
-                <button type="button"
-                    onClick={() => {
-                        triggerNote(baseFreq);
-                        setTimeout(() => releaseNote(), (attack + decay + 0.3) * 1000);
-                    }}
-                    style={actionBtn(accent)}
-                >
-                    Trigger Note
-                </button>
+                    {/* Trigger */}
+                    <button type="button"
+                        onClick={() => {
+                            triggerNote(baseFreq);
+                            setTimeout(() => releaseNote(), (attack + decay + 0.3) * 1000);
+                        }}
+                        style={actionBtn(accent)}
+                    >
+                        Trigger Note
+                    </button>
 
-                {/* Waveform */}
-                <div style={{ marginTop: spacing[4] }}>
-                    <WaveformCanvas analyserRef={analyserRef} color={accent} />
-                </div>
-            </InteractiveBox>
-
+                    {/* Waveform */}
+                    <div style={{ marginTop: spacing[4] }}>
+                        <p style={paneLabel}>The sound as it happens</p>
+                        <WaveformCanvas analyserRef={analyserRef} height={130} color={accent} />
+                    </div>
+                </InteractiveBox>
+            }>
             {/* Inline warning — common exam mistake */}
             <Callout type="warning" title="Sustain is a level, not a time">
                 Students often describe sustain as "how long the sound holds." That is wrong — sustain is the <strong>amplitude level</strong> maintained while the key is held. The hold duration depends on how long the player keeps the key pressed, not on the sustain value. Set sustain to 0 above and trigger a note to hear the difference.
@@ -1353,6 +1517,7 @@ export default function SubtractiveSynthExplorer() {
                     </p>
                 </div>
             </div>
+            </Workbench>
         </div>
     );
 
@@ -1362,10 +1527,15 @@ export default function SubtractiveSynthExplorer() {
         const quizScore = Object.values(quizAnswers).filter((a, i) => a === QUIZ_QUESTIONS[i]?.correct).length;
 
         return (
-            <div style={{ ...contentCol, maxWidth: '800px' }}>
-                <div style={{ paddingTop: spacing[12], marginBottom: spacing[10] }}>
+            // No sticky rack here. The patch panel carries every control on the
+            // page plus a keyboard, so it is taller than a laptop window — pinning
+            // it would put its own bottom half permanently out of reach. It takes
+            // the full width instead, which lets its internal grids spread out and
+            // costs less height than the 800px column it had before.
+            <div style={benchCol}>
+                <div style={{ paddingTop: spacing[10], marginBottom: spacing[6] }}>
                     <h2 style={h2Style}>Build a Patch</h2>
-                    <p style={bodyStyle}>
+                    <p style={introStyle}>
                         Combine everything: oscillator waveform, filter settings, and ADSR envelope.
                         Try the presets to hear classic synth sounds, then tweak to create your own.
                     </p>
@@ -1501,6 +1671,7 @@ export default function SubtractiveSynthExplorer() {
                         Quick check
                     </h3>
 
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: `0 ${spacing[8]}`, alignItems: 'start' }}>
                     {QUIZ_QUESTIONS.map((q, qi) => (
                         <div key={qi} style={{ marginBottom: spacing[6] }}>
                             <p style={{ color: COLORS.text, fontSize: typography.size.sm, fontWeight: typography.weight.medium, marginBottom: spacing[3] }}>
@@ -1556,6 +1727,7 @@ export default function SubtractiveSynthExplorer() {
                             )}
                         </div>
                     ))}
+                    </div>
 
                     {!quizSubmitted ? (
                         <button type="button"
@@ -1582,10 +1754,12 @@ export default function SubtractiveSynthExplorer() {
     // ─── Main Render ───────────────────────────────────────────────────────────
 
     return (
-        <div style={pageStyle}>
+        <div style={{ ...pageStyle, '--sse-stick': `${stickTop}px` }}>
+            <style>{BENCH_CSS}</style>
+
             {/* Navigation */}
-            <nav style={{
-                position: 'sticky', top: 0, zIndex: 50,
+            <nav ref={navRef} style={{
+                position: 'sticky', top: headerH, zIndex: 50,
                 background: 'rgba(245,244,242,0.95)', backdropFilter: 'blur(8px)',
                 borderBottom: `1px solid ${COLORS.border}`,
                 padding: `${spacing[3]} ${spacing[6]}`,
@@ -1723,6 +1897,7 @@ export default function SubtractiveSynthExplorer() {
             </div>
 
             {/* Current section */}
+            <div ref={sectionTopRef} />
             {currentSection === 1 && renderSection1()}
             {currentSection === 2 && renderSection2()}
             {currentSection === 3 && renderSection3()}
@@ -1730,7 +1905,7 @@ export default function SubtractiveSynthExplorer() {
 
             {/* Bottom navigation */}
             <div style={{
-                maxWidth: '640px', margin: '0 auto',
+                ...benchCol,
                 padding: `${spacing[4]} ${spacing[6]} ${spacing[12]}`,
                 display: 'flex', justifyContent: 'space-between',
             }}>
