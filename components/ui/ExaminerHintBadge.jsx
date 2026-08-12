@@ -1,6 +1,7 @@
 'use client';
 
 import { getHintsForTopic, hasHints } from '@/lib/examiner-hints';
+import { withComponentPrefix } from '@/lib/topics';
 import { theme, typography, spacing, borderRadius, editorial as ED } from '@/lib/theme';
 import Popover from './Popover';
 
@@ -72,7 +73,7 @@ export default function ExaminerHintBadge({ topicCode, position = 'top' }) {
                         fontFamily: typography.fontFamilyMono,
                     }}
                 >
-                    {topicCode}
+                    {withComponentPrefix(topicCode)}
                 </span>
             </div>
 

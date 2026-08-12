@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getAllTopicIds, getTopic } from '@/lib/topics';
+import { getAllTopicIds, getTopic, withComponentPrefix } from '@/lib/topics';
 import { getResource, resourceExists } from '@/lib/resources';
 import { hasLearnContent } from '@/lib/learn/topics';
 import { hasReviseContent } from '@/lib/questions';
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
         hasReviseContent(topicId);
 
     return {
-        title: `${topic.specRef} ${topic.name}`,
+        title: `${withComponentPrefix(topic.specRef)} ${topic.name}`,
         description: topic.description,
         // Placeholder topics have nothing to show yet — keep them out of search indexes
         ...(hasAnyContent ? {} : { robots: { index: false, follow: false } }),
