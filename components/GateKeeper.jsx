@@ -13,6 +13,7 @@ import {
     GATE_STORAGE_KEY,
     GATE_COOKIE_MAX_AGE_SECONDS,
 } from '@/lib/gate';
+import { readPassParam, stripPassParam, verifyMemberPass } from '@/lib/memberPass';
 
 /**
  * Wraps a single resource's interactive region, or a Learn lesson's body.
@@ -49,6 +50,26 @@ export default function GateKeeper({ resourceId, title, children, free }) {
         }
         let cancelled = false;
         (async () => {
+            // WO-12 silent member handoff: a `?pass=` on the URL means a
+            // signed-in member arrived via a dashboard link. Try it FIRST,
+            // before the classroom passcode's own stored-token check — it's
+            // the common member path. GATE_DIGEST is public (NEXT_PUBLIC_*,
+            // already in this bundle) so deriving the same token the
+            // passcode path derives needs no secret of its own.
+            const passParam = readPassParam(window.location.href);
+            if (passParam) {
+                const passValid = await verifyMemberPass(passParam);
+                stripPassParam();
+                if (passValid) {
+                    const token = await deriveToken(subtle);
+                    persistUnlock(token);
+                    if (!cancelled) setStatus('open');
+                    return;
+                }
+                // invalid/expired — fall through to the normal check below,
+                // no error shown ("no error drama" per WO-12).
+            }
+
             let stored = null;
             try {
                 stored = window.localStorage.getItem(GATE_STORAGE_KEY);
@@ -180,6 +201,23 @@ function PasscodePanel({ title, onUnlocked }) {
                         . Use this site in class? Ask your teacher for this term&rsquo;s passcode
                         below. The rest of this page, including what the topic covers and why it
                         matters in the exam, stays visible either way.
+                    </p>
+                    <p
+                        style={{
+                            marginTop: spacing[3],
+                            fontSize: typography.size.sm,
+                            color: t.text.tertiary,
+                            lineHeight: typography.lineHeight.relaxed,
+                        }}
+                    >
+                        Member?{' '}
+                        <a
+                            href="https://member.musictechstudio.co.uk/"
+                            style={{ color: ED.accent }}
+                        >
+                            Sign in via your studio
+                        </a>
+                        .
                     </p>
                 </div>
 
