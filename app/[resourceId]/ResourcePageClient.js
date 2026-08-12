@@ -23,6 +23,7 @@ import EQAssessmentPrototype from '@/components/resources/EQAssessmentPrototype'
 import EssayScaffold from '@/components/resources/EssayScaffold';
 import SubtractiveSynthExplorer from '@/components/resources/SubtractiveSynthExplorer';
 import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
+import CompressionLab from '@/components/resources/CompressionLab';
 import CompressorExplorer from '@/components/resources/CompressorExplorer';
 import CompressorCurvePractice from '@/components/resources/CompressorCurvePractice';
 import EssayScaffoldPractice from '@/components/resources/EssayScaffoldPractice';
@@ -77,6 +78,7 @@ const resourceComponents = {
     'EssayScaffold': EssayScaffold,
     'SubtractiveSynthExplorer': SubtractiveSynthExplorer,
     'StereoRecordingEssay': StereoRecordingEssay,
+    'CompressionLab': CompressionLab,
     'CompressorExplorer': CompressorExplorer,
     'CompressorCurvePractice': CompressorCurvePractice,
     'EssayScaffoldPractice': EssayScaffoldPractice,

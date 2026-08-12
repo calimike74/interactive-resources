@@ -2,7 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { getAllResources } from '../lib/resources/index.js';
 
-const VALID_KINDS = ['sandbox', 'interface', 'retrieval', 'practice'];
+// 'lab' added 2026-08-12 with the Compression Lab — the INTERACTIVE-BAR
+// genre: a guided isolate-then-combine arc that ENDS in a sandbox, distinct
+// from a resource that is only a sandbox.
+const VALID_KINDS = ['sandbox', 'interface', 'retrieval', 'practice', 'lab'];
 
 test('every registered resource declares a valid kind', () => {
     const resources = getAllResources();
