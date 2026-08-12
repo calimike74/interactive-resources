@@ -1,860 +1,624 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Music, Sliders, Info, BookOpen, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
+import Callout from '@/components/Callout';
+
+// ─── Shared style fragments (Botanical Press, matching MIDIBinaryAssessment.jsx) ─
+
+const FRAUNCES = 'font-[family-name:var(--font-fraunces)]';
+const MONO = 'font-[family-name:var(--font-jbmono)]';
+const CARD_SHADOW = 'shadow-[0_1px_0_rgba(43,36,24,0.04),0_18px_40px_-24px_rgba(43,36,24,0.22)]';
+
+const ACCENTS = {
+  field: { stripe: 'border-t-field-500', badgeBg: 'bg-field-100', badgeText: 'text-field-700', text: 'text-field-700' },
+  sienna: { stripe: 'border-t-sienna-500', badgeBg: 'bg-sienna-100', badgeText: 'text-sienna-700', text: 'text-sienna-700' },
+  mustard: { stripe: 'border-t-mustard-500', badgeBg: 'bg-mustard-100', badgeText: 'text-mustard-700', text: 'text-mustard-700' },
+};
+
+function SectionHeader({ eyebrow, title, children }) {
+  return (
+    <div className="mb-6">
+      <p className={`${MONO} text-xs uppercase tracking-wide text-sienna-600`}>{eyebrow}</p>
+      <h2 className={`${FRAUNCES} mt-1 text-3xl font-medium text-ink sm:text-4xl`}>{title}</h2>
+      {children && <p className="mt-3 max-w-[65ch] text-base leading-relaxed text-ink/70">{children}</p>}
+    </div>
+  );
+}
+
+function ControllerCard({ accent, name, ccLabel, controls, range, example, uses, plain = false }) {
+  const a = ACCENTS[accent];
+  return (
+    <div className={`rounded-2xl border border-line ${plain ? '' : `border-t-[3px] ${a.stripe}`} bg-paper p-5 ${CARD_SHADOW}`}>
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <h3 className={`${FRAUNCES} text-lg font-medium italic text-ink`}>{name}</h3>
+        <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${plain ? 'bg-line/60 text-ink/70' : `${a.badgeBg} ${a.badgeText}`}`}>
+          {ccLabel}
+        </span>
+      </div>
+      <div className="space-y-3 text-sm">
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">What it controls</p>
+          <p className="text-ink/80">{controls}</p>
+        </div>
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">Value range</p>
+          <p className={`${MONO} text-ink/80`}>{range}</p>
+        </div>
+        {example && (
+          <div className="rounded-xl bg-cream/60 p-3">
+            <p className={`mb-1 text-xs font-semibold uppercase tracking-wide ${plain ? 'text-ink/50' : a.text}`}>Production example</p>
+            <p className="text-ink/80">{example}</p>
+          </div>
+        )}
+        {uses && (
+          <div>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink/50">Common uses</p>
+            <ul className="list-inside list-disc space-y-0.5 text-ink/80">
+              {uses.map((u) => <li key={u}>{u}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Retrieval quiz ───────────────────────────────────────────────────────────
+
+const QUIZ_QUESTIONS = [
+  {
+    question: 'How many data bytes does a MIDI pitch bend message use to carry its value?',
+    options: ['1', '2', '3', '14'],
+    correct: 1,
+    explanation: 'Two data bytes — an LSB and an MSB — carry the 14-bit value, after a single status byte (E0h–EFh) identifies the message as pitch bend on a given channel.',
+  },
+  {
+    question: 'What is the pitch bend value at its centre, no-bend, position?',
+    options: ['0', '127', '8192', '16383'],
+    correct: 2,
+    explanation: '8192 is exactly half of 16,384 (2¹⁴) — the middle of the 0–16,383 range, where the wheel sits at rest.',
+  },
+  {
+    question: 'Pitch bend uses 14-bit resolution rather than the usual 7-bit. Why?',
+    options: [
+      'Because it needs to address 14 MIDI channels at once',
+      'Because pitch is sensitive enough that 128 steps would sound audibly stepped',
+      'Because it was designed to match 14-bit audio files',
+      'Because filter sweeps need 14-bit precision',
+    ],
+    correct: 1,
+    explanation: 'Human hearing is sensitive to small pitch changes. 7-bit gives only 128 steps, which produces an audible "zipper" as the pitch glides; 14-bit gives 16,384 steps — fine enough to sound continuous.',
+  },
+  {
+    question: 'A synthesiser’s Pitch Bend Range is set to 7 semitones. What does this allow?',
+    options: [
+      'Bending up or down by up to 7 semitones (a perfect fifth) from the held note',
+      'Bending only upward, never downward',
+      'A fixed 7-semitone transposition of every note played',
+      'Seven different pitch bend curves to choose between',
+    ],
+    correct: 0,
+    explanation: 'The range value is symmetric — it sets the maximum bend in either direction from the held note. At 7 semitones, pushing the wheel fully up bends a perfect fifth sharp; pulling it fully down bends a perfect fifth flat.',
+  },
+  {
+    question: 'Which of these is NOT a standard General MIDI CC assignment?',
+    options: ['CC1 — Modulation', 'CC7 — Volume', 'CC64 — Sustain', 'CC100 — Reverb Depth'],
+    correct: 3,
+    explanation: 'CC100 isn’t one of the standard controller assignments covered here. CC1 (modulation), CC7 (volume) and CC64 (sustain) are fixed General MIDI assignments worth memorising alongside CC10 (pan), CC11 (expression) and CC74 (filter cutoff).',
+  },
+];
+
+function RetrievalQuiz() {
+  const [answers, setAnswers] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const score = Object.values(answers).filter((a, i) => a === QUIZ_QUESTIONS[i]?.correct).length;
+  const allAnswered = Object.keys(answers).length >= QUIZ_QUESTIONS.length;
+
+  return (
+    <div className="mt-4">
+      <div className="space-y-6">
+        {QUIZ_QUESTIONS.map((q, qi) => (
+          <div key={qi} className="rounded-2xl border border-line bg-paper p-5">
+            <p className="mb-3 text-sm font-semibold text-ink">{qi + 1}. {q.question}</p>
+            <div className="flex flex-col gap-2">
+              {q.options.map((opt, oi) => {
+                const selected = answers[qi] === oi;
+                const isCorrect = oi === q.correct;
+                let cls = 'border-line bg-cream/50 text-ink/80 hover:border-sienna-200 hover:bg-sienna-50';
+                if (submitted) {
+                  if (isCorrect) cls = 'border-emerald-400 bg-emerald-50 text-emerald-900';
+                  else if (selected) cls = 'border-rose-400 bg-rose-50 text-rose-900';
+                } else if (selected) {
+                  cls = 'border-sienna-500 bg-sienna-50 text-ink';
+                }
+                return (
+                  <button type="button"
+                    key={oi}
+                    disabled={submitted}
+                    onClick={() => !submitted && setAnswers((prev) => ({ ...prev, [qi]: oi }))}
+                    className={`rounded-xl border px-4 py-2.5 text-left text-sm transition ${cls}`}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+            {submitted && (
+              <p className="mt-3 rounded-xl bg-cream px-3 py-2 text-xs leading-relaxed text-ink/70">
+                {q.explanation}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5">
+        {!submitted ? (
+          <button type="button"
+            onClick={() => setSubmitted(true)}
+            disabled={!allAnswered}
+            className="rounded-full bg-field-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-field-600 disabled:cursor-not-allowed disabled:bg-line disabled:text-ink/40"
+          >
+            Check answers
+          </button>
+        ) : (
+          <p className={`text-base font-semibold ${score === QUIZ_QUESTIONS.length ? 'text-field-700' : 'text-sienna-700'}`}>
+            {score}/{QUIZ_QUESTIONS.length} correct{score === QUIZ_QUESTIONS.length && ' — every one.'}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Main component ────────────────────────────────────────────────────────────
 
 export default function MIDIPitchBendController() {
-  const [activeTab, setActiveTab] = useState('pitchbend');
-  const [pitchBendValue, setPitchBendValue] = useState(8192); // Center position
+  const [pitchBendValue, setPitchBendValue] = useState(8192); // Centre position
   const [pitchBendRange, setPitchBendRange] = useState(2); // Semitones
-  const [expandedSections, setExpandedSections] = useState({
-    bytes: true,
-    resolution: false,
-    range: false
-  });
 
-  // Calculate actual pitch bend in semitones based on value and range
   const calculatePitchBend = () => {
     let normalizedValue;
     if (pitchBendValue >= 8192) {
-      // Upward bend: 8192 to 16383 maps to 0 to +1
       normalizedValue = (pitchBendValue - 8192) / 8191;
     } else {
-      // Downward bend: 0 to 8192 maps to -1 to 0
       normalizedValue = (pitchBendValue - 8192) / 8192;
     }
     return (normalizedValue * pitchBendRange).toFixed(2);
   };
 
-  // Calculate note name based on pitch bend
   const calculateNote = (baseNote = 'E4') => {
     const semitonesBent = parseFloat(calculatePitchBend());
     const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-    // E4 is index 4 in octave 4
-    const baseNoteIndex = 4; // E is the 5th note (index 4)
+    const baseNoteIndex = 4;
     const baseOctave = 4;
-
-    // Calculate total semitones from C0
     const totalSemitones = baseOctave * 12 + baseNoteIndex + semitonesBent;
-
-    // Calculate new octave and note index
     const newOctave = Math.floor(totalSemitones / 12);
     let newNoteIndex = Math.round(totalSemitones % 12);
-
-    // Handle negative modulo
-    if (newNoteIndex < 0) {
-      newNoteIndex += 12;
-    }
-
+    if (newNoteIndex < 0) newNoteIndex += 12;
     return notes[newNoteIndex] + newOctave;
   };
 
-  // Convert 14-bit value to two 7-bit bytes
   const get14BitBytes = () => {
-    const lsb = pitchBendValue & 0x7F; // Least Significant Byte (lower 7 bits)
-    const msb = (pitchBendValue >> 7) & 0x7F; // Most Significant Byte (upper 7 bits)
+    const lsb = pitchBendValue & 0x7F;
+    const msb = (pitchBendValue >> 7) & 0x7F;
     return { lsb, msb };
   };
 
-  const toggleSection = (section) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
-
   const { lsb, msb } = get14BitBytes();
+  const bendAmount = calculatePitchBend();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-mustard-50 to-blue-50 p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Hero — a functional 14-bit bend-wheel motif (CSS/SVG, house palette)
-            replaces the cold blue server-room/binary stock image. The wheel
-            sits at centre (8192 = 0b10000000000000), which is exactly what
-            the simulator below opens on. */}
+    <div className="min-h-screen bg-cream">
+      {/* Hero — a functional 14-bit bend-wheel motif (CSS/SVG, house palette)
+          replaces the cold blue server-room/binary stock image. The wheel
+          sits at centre (8192 = 0b10000000000000), which is exactly what
+          the simulator below opens on. */}
+      <div style={{
+        position: 'relative',
+        overflow: 'hidden',
+        width: '100vw',
+        marginLeft: 'calc(-50vw + 50%)',
+        marginBottom: '1.5rem',
+        minHeight: '240px',
+        background: '#0d0b08',
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse 60% 80% at 50% 30%, rgba(184,90,63,0.22) 0%, transparent 65%)',
+        }} aria-hidden="true" />
         <div style={{
           position: 'relative',
-          overflow: 'hidden',
-          width: '100vw',
-          marginLeft: 'calc(-50vw + 50%)',
-          marginBottom: '1.5rem',
-          minHeight: '240px',
-          background: '#0d0b08',
+          maxWidth: '760px', margin: '0 auto',
+          padding: '2.75rem 1.5rem 2.25rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1.75rem',
         }}>
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'radial-gradient(ellipse 60% 80% at 50% 30%, rgba(184,90,63,0.22) 0%, transparent 65%)',
-          }} aria-hidden="true" />
-          <div style={{
-            position: 'relative',
-            maxWidth: '760px', margin: '0 auto',
-            padding: '2.75rem 1.5rem 2.25rem',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '1.75rem',
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <h1 style={{
-                fontSize: '2.25rem',
-                fontWeight: 700,
-                color: '#ffffff',
-                lineHeight: 1.2,
-                marginBottom: '1rem',
-              }}>
-                MIDI Pitch Bend & Controller
-              </h1>
-              <p style={{
-                color: 'rgba(255,255,255,0.75)',
-                fontSize: '1.125rem',
-                lineHeight: 1.6,
-                maxWidth: '480px', margin: '0 auto',
-              }}>
-                An interactive guide to pitch bend data, 14-bit resolution, and MIDI controller messages.
-              </p>
-            </div>
-
-            <svg
-              viewBox="0 0 420 150"
-              style={{ width: '100%', maxWidth: 380, height: 'auto' }}
-              role="img"
-              aria-label="A pitch bend wheel at its centre rest position, reading 8192 -- binary 10000000000000, 14 bits, split into MSB 64 and LSB 0."
-            >
-              <title>The pitch bend wheel at centre: 8192</title>
-              {/* wheel track */}
-              <rect x="26" y="10" width="34" height="130" rx="17" fill="none" stroke="#B85A3F" strokeWidth="2" />
-              <line x1="43" y1="10" x2="43" y2="26" stroke="#B85A3F" strokeWidth="1.5" opacity="0.6" />
-              <line x1="43" y1="124" x2="43" y2="140" stroke="#B85A3F" strokeWidth="1.5" opacity="0.6" />
-              {/* thumb at centre rest */}
-              <circle cx="43" cy="75" r="15" fill="#B85A3F" />
-              <circle cx="43" cy="75" r="15" fill="none" stroke="#F2EBE0" strokeWidth="1.5" opacity="0.5" />
-              <text x="10" y="24" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">+1</text>
-              <text x="10" y="130" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">−1</text>
-
-              {/* readout */}
-              <g fontFamily="var(--font-jbmono), ui-monospace, monospace">
-                <text x="90" y="46" fill="#F2EBE0" fontSize="12" opacity="0.6">14-BIT VALUE · CENTRE</text>
-                <text x="90" y="80" fill="#ffffff" fontSize="30" fontWeight="700">8192</text>
-                <text x="90" y="106" fill="#DCC892" fontSize="15" letterSpacing="1">10000000000000</text>
-                <text x="90" y="130" fill="rgba(242,235,224,0.55)" fontSize="12">MSB 64 · LSB 0</text>
-              </g>
-            </svg>
+          <div style={{ textAlign: 'center' }}>
+            <h1 style={{
+              fontFamily: 'var(--font-fraunces), Georgia, serif',
+              fontSize: '2.25rem',
+              fontWeight: 500,
+              color: '#ffffff',
+              lineHeight: 1.2,
+              marginBottom: '1rem',
+            }}>
+              MIDI Pitch Bend &amp; Controller
+            </h1>
+            <p style={{
+              color: 'rgba(255,255,255,0.75)',
+              fontSize: '1.125rem',
+              lineHeight: 1.6,
+              maxWidth: '480px', margin: '0 auto',
+            }}>
+              An interactive guide to pitch bend data, 14-bit resolution, and MIDI controller messages.
+            </p>
           </div>
+
+          <svg
+            viewBox="0 0 420 150"
+            style={{ width: '100%', maxWidth: 380, height: 'auto' }}
+            role="img"
+            aria-label="A pitch bend wheel at its centre rest position, reading 8192 -- binary 10000000000000, 14 bits, split into MSB 64 and LSB 0."
+          >
+            <title>The pitch bend wheel at centre: 8192</title>
+            <rect x="26" y="10" width="34" height="130" rx="17" fill="none" stroke="#B85A3F" strokeWidth="2" />
+            <line x1="43" y1="10" x2="43" y2="26" stroke="#B85A3F" strokeWidth="1.5" opacity="0.6" />
+            <line x1="43" y1="124" x2="43" y2="140" stroke="#B85A3F" strokeWidth="1.5" opacity="0.6" />
+            <circle cx="43" cy="75" r="15" fill="#B85A3F" />
+            <circle cx="43" cy="75" r="15" fill="none" stroke="#F2EBE0" strokeWidth="1.5" opacity="0.5" />
+            <text x="10" y="24" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">+1</text>
+            <text x="10" y="130" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">−1</text>
+
+            <g fontFamily="var(--font-jbmono), ui-monospace, monospace">
+              <text x="90" y="46" fill="#F2EBE0" fontSize="12" opacity="0.6">14-BIT VALUE · CENTRE</text>
+              <text x="90" y="80" fill="#ffffff" fontSize="30" fontWeight="700">8192</text>
+              <text x="90" y="106" fill="#DCC892" fontSize="15" letterSpacing="1">10000000000000</text>
+              <text x="90" y="130" fill="rgba(242,235,224,0.55)" fontSize="12">MSB 64 · LSB 0</text>
+            </g>
+          </svg>
         </div>
+      </div>
 
-        {/* Tab Navigation */}
-        <div className="bg-white rounded-lg shadow-lg mb-6">
-          <div className="flex border-b">
-            <button type="button"
-              onClick={() => setActiveTab('pitchbend')}
-              className={`flex-1 py-4 px-6 font-semibold transition-colors ${
-                activeTab === 'pitchbend'
-                  ? 'text-mustard-600 border-b-2 border-mustard-600 bg-mustard-50'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              Pitch Bend Data
-            </button>
-            <button type="button"
-              onClick={() => setActiveTab('controllers')}
-              className={`flex-1 py-4 px-6 font-semibold transition-colors ${
-                activeTab === 'controllers'
-                  ? 'text-mustard-600 border-b-2 border-mustard-600 bg-mustard-50'
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              MIDI Controllers
-            </button>
-          </div>
-        </div>
+      <div className="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
 
-        {/* Pitch Bend Data tab content */}
-        {activeTab === 'pitchbend' && (
-          <div className="space-y-6">
-            {/* Interactive Pitch Bend Simulator */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Sliders className="w-6 h-6 text-mustard-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Interactive Pitch Bend Simulator</h2>
-              </div>
+        {/* ─── Section 1: Pitch Bend Data ────────────────────────────────── */}
+        <section className="pt-2">
+          <SectionHeader eyebrow="1.5 Sequencing" title="Pitch Bend Data">
+            A pitch wheel lets a performer bend a note's pitch smoothly, in real time. To keep that glide
+            free of audible steps, MIDI gives pitch bend its own message type — and 14 bits of resolution
+            instead of the usual 7.
+          </SectionHeader>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* Pitch Bend Control */}
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Move the Pitch Bend Wheel
-                    </label>
-                    <input aria-label="Pitch Bend Wheel"
-                      type="range"
-                      min="0"
-                      max="16383"
-                      value={pitchBendValue}
-                      onChange={(e) => setPitchBendValue(parseInt(e.target.value))}
-                      className="w-full h-3 bg-gradient-to-r from-blue-300 via-mustard-300 to-blue-300 rounded-lg appearance-none cursor-pointer"
-                      style={{
-                        background: `linear-gradient(to right,
-                          #93c5fd 0%,
-                          #c4b5fd ${((pitchBendValue / 16383) * 100)}%,
-                          #e0e7ff ${((pitchBendValue / 16383) * 100)}%,
-                          #93c5fd 100%)`
-                      }}
-                    />
-                    <div className="flex justify-between text-xs text-gray-600 mt-1">
-                      <span>Down (0)</span>
-                      <span>Centre (8192)</span>
-                      <span>Up (16383)</span>
-                    </div>
-                  </div>
-
-                  {/* Compact live readout — mobile only. The full "Current
-                      Values" card is the second grid column, which stacks
-                      far below the wheel on a phone; without this, dragging
-                      the wheel gives zero visible feedback until you scroll. */}
-                  <div className="md:hidden bg-gradient-to-r from-mustard-100 to-blue-100 rounded-lg px-4 py-3 flex items-center justify-center gap-2 font-mono text-sm" aria-live="polite">
-                    <span className="font-bold text-gray-700">{pitchBendValue}</span>
-                    <span className="text-gray-400">→</span>
-                    <span className="font-bold text-blue-600">{calculatePitchBend() > 0 ? '+' : ''}{calculatePitchBend()}&nbsp;st</span>
-                    <span className="text-gray-400">→</span>
-                    <span className="font-bold text-mustard-700 text-base">{calculateNote()}</span>
-                  </div>
-
-                  <button type="button"
-                    onClick={() => setPitchBendValue(8192)}
-                    className="w-full bg-mustard-100 hover:bg-mustard-200 text-mustard-700 font-semibold py-2 px-4 rounded transition-colors"
-                  >
-                    Reset to Centre
-                  </button>
-
-                  {/* Pitch Bend Range Control */}
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Pitch Bend Range (Semitones)
-                    </label>
-                    <p className="text-xs text-gray-600 mb-3">
-                      This is the setting you'd change on your synthesiser's global settings page
-                    </p>
-                    <input aria-label="Pitch Bend Range"
-                      type="range"
-                      min="1"
-                      max="24"
-                      value={pitchBendRange}
-                      onChange={(e) => setPitchBendRange(parseInt(e.target.value))}
-                      className="w-full"
-                    />
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="text-2xl font-bold text-mustard-600">{pitchBendRange} semitones</span>
-                      <span className="text-sm text-gray-600">({(pitchBendRange / 12).toFixed(1)} octaves)</span>
-                    </div>
+          {/* Interactive simulator — the working engine, kept verbatim */}
+          <div className={`rounded-2xl border border-line bg-paper p-5 sm:p-6 ${CARD_SHADOW}`}>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="space-y-4">
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-ink">
+                    Move the pitch bend wheel
+                  </label>
+                  <input aria-label="Pitch Bend Wheel"
+                    type="range"
+                    min="0"
+                    max="16383"
+                    value={pitchBendValue}
+                    onChange={(e) => setPitchBendValue(parseInt(e.target.value, 10))}
+                    className="w-full accent-sienna-500"
+                    style={{
+                      background: `linear-gradient(to right,
+                        #E5B097 0%,
+                        #C99F44 ${((pitchBendValue / 16383) * 100)}%,
+                        #EBE0BE ${((pitchBendValue / 16383) * 100)}%,
+                        #E5B097 100%)`,
+                      height: '10px',
+                      borderRadius: '999px',
+                      appearance: 'none',
+                      cursor: 'pointer',
+                    }}
+                  />
+                  <div className="mt-1 flex justify-between text-xs text-ink/50">
+                    <span>Down (0)</span>
+                    <span>Centre (8192)</span>
+                    <span>Up (16383)</span>
                   </div>
                 </div>
 
-                {/* Real-time Display */}
-                <div className="space-y-4">
-                  <div className="bg-gradient-to-br from-mustard-100 to-blue-100 p-6 rounded-lg">
-                    <h3 className="font-bold text-gray-700 mb-3">Current Values</h3>
-
-                    <div className="space-y-3">
-                      <div className="bg-white p-3 rounded">
-                        <div className="text-sm text-gray-600">14-bit MIDI Value</div>
-                        <div className="text-2xl font-bold text-mustard-600">{pitchBendValue}</div>
-                      </div>
-
-                      <div className="bg-white p-3 rounded">
-                        <div className="text-sm text-gray-600">Pitch Bend Amount</div>
-                        <div className="text-2xl font-bold text-blue-600">
-                          {calculatePitchBend() > 0 ? '+' : ''}{calculatePitchBend()} semitones
-                        </div>
-                      </div>
-
-                      <div className="bg-white p-3 rounded">
-                        <div className="text-sm text-gray-600">Starting from E4, you're now at:</div>
-                        <div className="text-3xl font-bold text-mustard-700">{calculateNote()}</div>
-                      </div>
-
-                      <div className="bg-white p-3 rounded">
-                        <div className="text-sm text-gray-600">Three MIDI Bytes</div>
-                        <div className="font-mono text-sm mt-1">
-                          <span className="text-mustard-600">E0</span> <span className="text-gray-500">(Status: Pitch Bend, Channel 1)</span>
-                        </div>
-                        <div className="font-mono text-sm">
-                          <span className="text-blue-600">LSB: {lsb}</span> <span className="text-gray-500">(Least Significant Byte)</span>
-                        </div>
-                        <div className="font-mono text-sm">
-                          <span className="text-green-600">MSB: {msb}</span> <span className="text-gray-500">(Most Significant Byte)</span>
-                        </div>
-                        <div className="text-xs text-gray-500 mt-2 italic">
-                          Note: Status bytes E0-EF represent pitch bend on channels 1-16
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                {/* Compact live readout — mobile only. The full "Current
+                    Values" card is the second grid column, which stacks
+                    far below the wheel on a phone; without this, dragging
+                    the wheel gives zero visible feedback until you scroll.
+                    This is what keeps the wheel and its byte readout
+                    co-visible at 390px without a scroll. */}
+                <div className={`${MONO} flex items-center justify-center gap-2 rounded-xl bg-cream px-4 py-3 text-sm md:hidden`} aria-live="polite">
+                  <span className="font-bold text-ink">{pitchBendValue}</span>
+                  <span className="text-ink/40">→</span>
+                  <span className="font-bold text-sienna-700">{bendAmount > 0 ? '+' : ''}{bendAmount}&nbsp;st</span>
+                  <span className="text-ink/40">→</span>
+                  <span className="text-base font-bold text-field-700">{calculateNote()}</span>
                 </div>
-              </div>
-            </div>
 
-            {/* Technical specifications */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Info className="w-6 h-6 text-blue-600" />
-                <h2 className="text-2xl font-bold text-gray-800">How MIDI Transmits Pitch Bend Data</h2>
-              </div>
-
-              {/* Question 1: Bytes */}
-              <div className="mb-6">
                 <button type="button"
-                  onClick={() => toggleSection('bytes')}
-                  className="w-full flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors"
+                  onClick={() => setPitchBendValue(8192)}
+                  className="w-full rounded-full border border-line bg-cream py-2 text-sm font-semibold text-ink transition hover:border-sienna-300 hover:bg-sienna-50"
                 >
-                  <h3 className="font-bold text-gray-800">1. How many bytes does MIDI use?</h3>
-                  {expandedSections.bytes ? <ChevronUp /> : <ChevronDown />}
+                  Reset to centre
                 </button>
 
-                {expandedSections.bytes && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="mb-4">
-                      <div className="font-semibold text-mustard-700 mb-2">Answer:</div>
-                      <p className="text-gray-700 mb-3">
-                        MIDI uses <strong>THREE bytes total</strong> to transmit pitch bend data:
-                      </p>
-                      <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                        <li><strong>1 Status byte</strong> (E0h) - identifies this as a pitch bend message</li>
-                        <li><strong>2 Data bytes</strong> - carry the actual pitch bend value (LSB and MSB)</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-white p-4 rounded border-l-4 border-mustard-500">
-                      <div className="font-semibold text-mustard-700 mb-2">Why does pitch bend need more bytes?</div>
-                      <p className="text-gray-700 mb-2">
-                        Pitch bend uses <strong>2 data bytes</strong> (instead of 1 like most controllers) because:
-                      </p>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 ml-4">
-                        <li>It needs to be <strong>smooth and precise</strong> - you can hear even small jumps in pitch</li>
-                        <li>One byte only gives 128 steps (0-127), which sounds <strong>choppy and stepped</strong></li>
-                        <li>Two bytes give 16,384 steps, making bends sound <strong>smooth and natural</strong></li>
-                        <li>Think of it like video frame rate - 128 steps is like 24fps (visible jumps), while 16,384 is like 240fps (silky smooth)</li>
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Question 2: Range */}
-              <div className="mb-6">
-                <button type="button"
-                  onClick={() => toggleSection('range')}
-                  className="w-full flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors"
-                >
-                  <h3 className="font-bold text-gray-800">2. What is the total range of pitch bend values?</h3>
-                  {expandedSections.range ? <ChevronUp /> : <ChevronDown />}
-                </button>
-
-                {expandedSections.range && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="grid md:grid-cols-3 gap-4 mb-4">
-                      <div className="bg-blue-100 p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-600 mb-1">Full Downward Bend</div>
-                        <div className="text-3xl font-bold text-blue-700">0</div>
-                      </div>
-                      <div className="bg-mustard-100 p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-600 mb-1">Centre (No Bend)</div>
-                        <div className="text-3xl font-bold text-mustard-700">8192</div>
-                      </div>
-                      <div className="bg-blue-100 p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-600 mb-1">Full Upward Bend</div>
-                        <div className="text-3xl font-bold text-blue-700">16383</div>
-                      </div>
-                    </div>
-
-                    <div className="bg-white p-4 rounded border-l-4 border-blue-500">
-                      <div className="font-semibold text-blue-700 mb-2">Total number of positions:</div>
-                      <p className="text-gray-700 mb-2">
-                        <strong>16,384 possible positions</strong> (0 to 16,383)
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        This is calculated as 2<sup>14</sup> = 16,384 (because it's 14-bit resolution)
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Question 3: 14-bit Resolution */}
-              <div className="mb-6">
-                <button type="button"
-                  onClick={() => toggleSection('resolution')}
-                  className="w-full flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors"
-                >
-                  <h3 className="font-bold text-gray-800">3. What is 14-bit resolution?</h3>
-                  {expandedSections.resolution ? <ChevronUp /> : <ChevronDown />}
-                </button>
-
-                {expandedSections.resolution && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="mb-4">
-                      <div className="font-semibold text-mustard-700 mb-2">What "14-bit" means:</div>
-                      <p className="text-gray-700 mb-3">
-                        "14-bit" means the system uses <strong>14 binary digits (bits)</strong> to represent the value.
-                        This gives us 2<sup>14</sup> = <strong>16,384 different possible values</strong>.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-4 rounded mb-4">
-                      <h4 className="font-semibold text-gray-800 mb-3">Comparison: 7-bit vs 14-bit</h4>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="border-2 border-orange-300 p-3 rounded">
-                          <div className="font-semibold text-orange-700 mb-2">7-bit (Most MIDI CC)</div>
-                          <ul className="text-sm space-y-1 text-gray-700">
-                            <li>Values: 0-127</li>
-                            <li>Total steps: <strong>128</strong></li>
-                            <li>Used for: Modulation, Volume, Pan</li>
-                            <li>Result: Acceptable for on/off controls</li>
-                          </ul>
-                        </div>
-                        <div className="border-2 border-green-300 p-3 rounded">
-                          <div className="font-semibold text-green-700 mb-2">14-bit (Pitch Bend)</div>
-                          <ul className="text-sm space-y-1 text-gray-700">
-                            <li>Values: 0-16,383</li>
-                            <li>Total steps: <strong>16,384</strong></li>
-                            <li>Used for: Pitch Bend</li>
-                            <li>Result: Ultra-smooth, imperceptible steps</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-white p-4 rounded border-l-4 border-green-500">
-                      <div className="font-semibold text-green-700 mb-2">Why is higher resolution important for pitch bend?</div>
-                      <ol className="list-decimal list-inside space-y-2 text-gray-700 ml-4">
-                        <li><strong>Human hearing is sensitive to pitch</strong> - We can detect very small changes in pitch (smaller than 1/100th of a semitone)</li>
-                        <li><strong>128 steps sound robotic</strong> - With only 7-bit (128 steps), you'd hear a "stepped" or "zipper" effect when bending pitch</li>
-                        <li><strong>16,384 steps sound smooth</strong> - 14-bit gives such small increments that the human ear perceives it as perfectly smooth</li>
-                        <li><strong>Comparison</strong>: Modulation (CC1) at 7-bit is fine because we're less sensitive to wobble speed, but pitch needs precision</li>
-                      </ol>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Synthesiser settings */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <BookOpen className="w-6 h-6 text-green-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Range & Bending</h2>
-              </div>
-
-              <div className="space-y-6">
-                {/* Question 1: Where to find the setting */}
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-gray-800 mb-3">1. Where to change pitch bend range</h3>
-                  <div className="bg-white p-4 rounded">
-                    <p className="font-semibold text-green-700 mb-2">Location:</p>
-                    <ol className="list-decimal list-inside space-y-2 text-gray-700 ml-4">
-                      <li>Open your synthesiser on the MIDI track</li>
-                      <li>Look for a <strong>"Pitch Bend Range"</strong> (or "Bend Range") control — often in a global or settings tab</li>
-                      <li>This is usually shown in <strong>semitones</strong> (default is often 2 semitones)</li>
-                    </ol>
-                  </div>
-                </div>
-
-                {/* Question 2: Common ranges */}
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-gray-800 mb-3">2. Common pitch bend range settings</h3>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-white p-4 rounded border-l-4 border-blue-500">
-                      <div className="font-bold text-blue-700 mb-2">2 Semitones</div>
-                      <p className="text-sm text-gray-700 mb-2"><strong>Musical use:</strong></p>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        <li>Subtle bass slides</li>
-                        <li>Realistic guitar bends</li>
-                        <li>Adding expressiveness to leads</li>
-                        <li>Standard for most synth playing</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-white p-4 rounded border-l-4 border-mustard-500">
-                      <div className="font-bold text-mustard-700 mb-2">7 Semitones</div>
-                      <p className="text-sm text-gray-700 mb-2"><strong>Musical use:</strong></p>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        <li>Perfect fifth bends</li>
-                        <li>Dramatic pitch dives</li>
-                        <li>Sci-fi sound effects</li>
-                        <li>Blues-style wide bends</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-white p-4 rounded border-l-4 border-green-500">
-                      <div className="font-bold text-green-700 mb-2">12 Semitones</div>
-                      <p className="text-sm text-gray-700 mb-2"><strong>Musical use:</strong></p>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        <li>Full octave bends</li>
-                        <li>Extreme pitch effects</li>
-                        <li>Theremin-style playing</li>
-                        <li>Experimental/ambient music</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Question 3: Creating specific bends */}
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <div className="flex items-center gap-2 mb-3 flex-wrap">
-                    <h3 className="font-bold text-gray-800">3. How to create specific pitch bends</h3>
-                    <span className="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-semibold">Ableton Live device</span>
-                  </div>
-                  <p className="text-xs text-gray-600 mb-4">
-                    The walkthroughs below use Ableton Live's Envelope Editor. Other DAWs (Logic, Cubase, FL Studio) draw pitch bend automation in a similar way, but the menu names and locations differ.
+                <div className="rounded-xl bg-cream p-4">
+                  <label className="mb-2 block text-sm font-semibold text-ink">
+                    Pitch bend range (semitones)
+                  </label>
+                  <p className="mb-3 text-xs text-ink/60">
+                    This is the setting you would change on your synthesiser's global settings page —
+                    see Range &amp; Bending below.
                   </p>
-
-                  <div className="mb-6">
-                    <div className="bg-mustard-100 p-3 rounded-lg mb-3">
-                      <h4 className="font-bold text-mustard-700 mb-2">Creating a 7-semitone bend (Perfect Fifth)</h4>
-                    </div>
-                    <div className="bg-white p-4 rounded">
-                      <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                        <li>Open your synthesiser and go to its <strong>global settings page</strong></li>
-                        <li>Set <strong>Pitch Bend Range to 7 semitones</strong></li>
-                        <li>In your MIDI clip, open Ableton's <strong>Envelope Editor</strong> (bottom of clip view)</li>
-                        <li>From the dropdown, select <strong>"MIDI Ctrl" - "Pitch Bend"</strong></li>
-                        <li>Draw your envelope:
-                          <ul className="list-disc list-inside ml-6 mt-2 space-y-1 text-sm">
-                            <li>To bend <strong>UP</strong> 7 semitones: Draw the line to the <strong>maximum value</strong> (top of envelope)</li>
-                            <li>To bend <strong>DOWN</strong> 7 semitones: Draw the line to the <strong>minimum value</strong> (bottom of envelope)</li>
-                            <li>For a smooth bend: Create a <strong>ramp from centre (0) to max or min</strong></li>
-                          </ul>
-                        </li>
-                      </ol>
-                    </div>
+                  <input aria-label="Pitch Bend Range"
+                    type="range"
+                    min="1"
+                    max="24"
+                    value={pitchBendRange}
+                    onChange={(e) => setPitchBendRange(parseInt(e.target.value, 10))}
+                    className="w-full accent-field-500"
+                  />
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-xl font-bold text-field-700">{pitchBendRange} semitones</span>
+                    <span className={`${MONO} text-xs text-ink/50`}>({(pitchBendRange / 12).toFixed(1)} octaves)</span>
                   </div>
+                </div>
+              </div>
 
-                  <div>
-                    <div className="bg-blue-100 p-3 rounded-lg mb-3">
-                      <h4 className="font-bold text-blue-700 mb-2">Creating a 12-semitone bend (One Octave)</h4>
+              <div>
+                <div className="rounded-xl bg-cream p-5">
+                  <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-ink/60">Current values</h3>
+                  <div className="space-y-3">
+                    <div className="rounded-lg bg-paper p-3">
+                      <div className="text-xs text-ink/50">14-bit MIDI value</div>
+                      <div className={`${MONO} text-2xl font-bold text-sienna-700`}>{pitchBendValue}</div>
                     </div>
-                    <div className="bg-white p-4 rounded">
-                      <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                        <li>Open your synthesiser and go to its <strong>global settings page</strong></li>
-                        <li>Set <strong>Pitch Bend Range to 12 semitones</strong></li>
-                        <li>In your MIDI clip, open Ableton's <strong>Envelope Editor</strong></li>
-                        <li>Select <strong>"MIDI Ctrl" - "Pitch Bend"</strong></li>
-                        <li>Draw your envelope:
-                          <ul className="list-disc list-inside ml-6 mt-2 space-y-1 text-sm">
-                            <li>To bend <strong>UP</strong> 1 octave: Draw to <strong>maximum</strong> (top)</li>
-                            <li>To bend <strong>DOWN</strong> 1 octave: Draw to <strong>minimum</strong> (bottom)</li>
-                            <li>For dramatic effect: Try a quick ramp up/down or a slow glide</li>
-                          </ul>
-                        </li>
-                      </ol>
-                      <div className="mt-3 p-3 bg-blue-50 rounded">
-                        <p className="text-sm text-gray-700">
-                          <strong>Pro tip:</strong> The envelope controls how much of the range you use. Maximum envelope = full range.
-                          If you want to bend only 6 semitones with a 12-semitone range, draw the envelope to the halfway point!
-                        </p>
+                    <div className="rounded-lg bg-paper p-3">
+                      <div className="text-xs text-ink/50">Pitch bend amount</div>
+                      <div className={`${MONO} text-2xl font-bold text-field-700`}>
+                        {bendAmount > 0 ? '+' : ''}{bendAmount} semitones
                       </div>
                     </div>
+                    <div className="rounded-lg bg-paper p-3">
+                      <div className="text-xs text-ink/50">Starting from E4, you're now at</div>
+                      <div className={`${FRAUNCES} text-2xl font-medium italic text-ink`}>{calculateNote()}</div>
+                    </div>
+                    <div className="rounded-lg bg-paper p-3">
+                      <div className="mb-1 text-xs text-ink/50">Three MIDI bytes</div>
+                      <div className={`${MONO} text-sm`}>
+                        <span className="font-semibold text-sienna-700">E0</span> <span className="text-ink/50">status: pitch bend, channel 1</span>
+                      </div>
+                      <div className={`${MONO} text-sm`}>
+                        <span className="font-semibold text-field-700">LSB: {lsb}</span> <span className="text-ink/50">least significant byte</span>
+                      </div>
+                      <div className={`${MONO} text-sm`}>
+                        <span className="font-semibold text-mustard-700">MSB: {msb}</span> <span className="text-ink/50">most significant byte</span>
+                      </div>
+                      <p className="mt-2 text-xs italic text-ink/50">
+                        Status bytes E0h–EFh represent pitch bend on channels 1–16.
+                      </p>
+                    </div>
                   </div>
-                </div>
-
-                {/* Try it yourself section */}
-                <div className="bg-gradient-to-r from-mustard-100 to-blue-100 p-4 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Lightbulb className="w-5 h-5 text-orange-600" />
-                    <h4 className="font-bold text-gray-800">Try it yourself!</h4>
-                  </div>
-                  <p className="text-gray-700 text-sm">
-                    Use the interactive simulator above to experiment with different pitch bend ranges.
-                    The simulator shows the data — listen in your DAW to hear how the bend actually sounds.
-                  </p>
                 </div>
               </div>
             </div>
           </div>
-        )}
 
-        {/* MIDI Controllers tab content */}
-        {activeTab === 'controllers' && (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Sliders className="w-6 h-6 text-mustard-600" />
-                <h2 className="text-2xl font-bold text-gray-800">MIDI Controllers Beyond Pitch Bend</h2>
+          <div className="mt-6 space-y-4">
+            <Callout type="definition" title="Pitch bend resolution">
+              Pitch bend is the one common MIDI message that uses 14-bit resolution instead of the usual
+              7-bit. 2<sup>14</sup> = 16,384 possible values (0–16,383), giving a smooth glide with no
+              audible "steps". The centre — no bend at all — sits exactly halfway, at 8192.
+            </Callout>
+
+            <Callout type="question" title="A pitch bend message carries the value 16383 — full bend up. What are its LSB and MSB bytes?">
+              <Callout.Options
+                options={['LSB 127, MSB 127', 'LSB 0, MSB 127', 'LSB 127, MSB 0', 'LSB 255, MSB 255']}
+                correctIndex={0}
+                explanation="16383 in binary is fourteen 1s. Split into two 7-bit bytes, the lower 7 bits (127) become the LSB and the upper 7 bits (127) become the MSB. A MIDI data byte is 7-bit, so it can never reach 255."
+              />
+            </Callout>
+
+            <Callout type="tip" title="2024 Q1(b)">
+              2024's Q1(b) asked exactly this, across three one-mark parts: how many bytes MIDI uses for
+              pitch bend, the value at the centre position, and how 16383 is transmitted as LSB/MSB. All
+              three are questions about representation, not musicality — get the numbers automatic and
+              they're free marks.
+            </Callout>
+
+            <Callout type="tip" title="The signed-range version" defaultOpen={false}>
+              Some mark schemes describe this same 14-bit space as running from −8192 to +8191 rather
+              than 0 to 16,383 (2023 Q2(b)). It's the identical 16,384 values — just counted outward from
+              centre instead of up from zero. Recognise both framings.
+            </Callout>
+          </div>
+        </section>
+
+        <hr className="my-10 border-line" />
+
+        {/* ─── Section 2: Range & Bending ─────────────────────────────────── */}
+        <section>
+          <SectionHeader eyebrow="1.5 Sequencing" title="Range & Bending">
+            The 14-bit value above is only half the story. What it actually does to the pitch depends on
+            a separate setting — the pitch bend range — configured on the synthesiser or plugin, not
+            inside the MIDI data itself.
+          </SectionHeader>
+
+          <Callout type="definition" title="Pitch bend range">
+            The number of semitones the wheel's full travel represents. It's a setting on the instrument,
+            usually shown in semitones (2 is a common default) — not part of the pitch bend message
+            itself. The same value from the simulator above (say, full-up at 16383) means a small nudge
+            at a 2-semitone range and a full octave leap at a 12-semitone range.
+          </Callout>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {[
+              { st: '2', title: '2 semitones', uses: ['Subtle bass slides', 'Realistic guitar bends', 'Standard default for most synth playing'] },
+              { st: '7', title: '7 semitones', uses: ['Perfect-fifth bends, either direction', 'Dramatic pitch dives', 'Blues-style wide bends'] },
+              { st: '12', title: '12 semitones', uses: ['Full octave bends', 'Theremin-style playing', 'Experimental / ambient effects'] },
+            ].map((r) => (
+              <div key={r.st} className="rounded-xl border border-line bg-paper p-4">
+                <div className={`${MONO} text-2xl font-bold text-sienna-700`}>{r.st}</div>
+                <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink/50">{r.title}</div>
+                <ul className="list-inside list-disc space-y-0.5 text-sm text-ink/70">
+                  {r.uses.map((u) => <li key={u}>{u}</li>)}
+                </ul>
               </div>
+            ))}
+          </div>
 
-              <p className="text-gray-600 mb-6">
-                MIDI Controllers (CC messages) are used to control various parameters of your instruments.
-                Unlike pitch bend which uses 14-bit resolution, most MIDI CC messages use 7-bit (0-127).
-              </p>
-
-              {/* Controller Cards */}
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* CC 1 - Modulation */}
-                <div className="border-2 border-mustard-200 rounded-lg p-5 bg-mustard-50">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-mustard-700">CC 1 - Modulation Wheel</h3>
-                    <span className="bg-mustard-200 text-mustard-800 px-3 py-1 rounded-full text-sm font-semibold">CC 1</span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">What it controls:</div>
-                      <p className="text-gray-700">
-                        Usually adds vibrato (pitch wobble) or other modulation effects to the sound.
-                        The exact effect depends on how the synth is programmed.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Value Range:</div>
-                      <p className="text-gray-700">0-127 (7-bit)</p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded border-l-4 border-mustard-500">
-                      <div className="text-sm font-semibold text-mustard-700 mb-1">Production Example:</div>
-                      <p className="text-gray-700 text-sm">
-                        <strong>Expressive Lead Synth:</strong> Draw a gradual increase in CC1 modulation during a held note
-                        to add vibrato that builds intensity. Perfect for emotional lead lines - start clean,
-                        then add wobble as the note sustains (like a singer or guitarist would naturally do).
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Common Uses:</div>
-                      <ul className="text-sm text-gray-700 space-y-1">
-                        <li>Adding vibrato to synth leads</li>
-                        <li>Creating wobbly LFO effects</li>
-                        <li>Filter modulation depth</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CC 7 - Volume */}
-                <div className="border-2 border-blue-200 rounded-lg p-5 bg-blue-50">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-blue-700">CC 7 - Volume</h3>
-                    <span className="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">CC 7</span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">What it controls:</div>
-                      <p className="text-gray-700">
-                        Controls the overall volume/loudness of the MIDI channel. This is different from velocity -
-                        it affects all notes on the track.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Value Range:</div>
-                      <p className="text-gray-700">0-127 (0 = silent, 127 = full volume)</p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded border-l-4 border-blue-500">
-                      <div className="text-sm font-semibold text-blue-700 mb-1">Production Example:</div>
-                      <p className="text-gray-700 text-sm">
-                        <strong>Dynamic String Swells:</strong> Use CC7 automation to create a crescendo effect on a string pad.
-                        Start at value 30, then slowly ramp up to 110 over 4 bars for a dramatic build-up in your track.
-                        This is smoother than using clip volume automation and happens at the MIDI level.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Common Uses:</div>
-                      <ul className="text-sm text-gray-700 space-y-1">
-                        <li>Creating volume swells and fades</li>
-                        <li>Balancing instrument layers</li>
-                        <li>Ducking effects</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CC 10 - Pan */}
-                <div className="border-2 border-green-200 rounded-lg p-5 bg-green-50">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-green-700">CC 10 - Pan</h3>
-                    <span className="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">CC 10</span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">What it controls:</div>
-                      <p className="text-gray-700">
-                        Controls the stereo position (left/right placement) of the sound.
-                        This creates width and space in your mix.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Value Range:</div>
-                      <p className="text-gray-700">0-127 (0 = hard left, 64 = centre, 127 = hard right)</p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded border-l-4 border-green-500">
-                      <div className="text-sm font-semibold text-green-700 mb-1">Production Example:</div>
-                      <p className="text-gray-700 text-sm">
-                        <strong>Auto-Pan Effect:</strong> Create movement in a hi-hat pattern by drawing a repeating wave
-                        pattern in CC10 that goes from 0 (left) to 127 (right) and back. This creates an auto-pan effect
-                        that makes the hi-hats bounce between speakers, adding width and interest to your rhythm section.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Common Uses:</div>
-                      <ul className="text-sm text-gray-700 space-y-1">
-                        <li>Creating stereo movement/auto-pan</li>
-                        <li>Positioning instruments in mix</li>
-                        <li>Adding spatial interest</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CC 11 - Expression */}
-                <div className="border-2 border-orange-200 rounded-lg p-5 bg-orange-50">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-orange-700">CC 11 - Expression</h3>
-                    <span className="bg-orange-200 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">CC 11</span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">What it controls:</div>
-                      <p className="text-gray-700">
-                        Similar to volume (CC7) but designed for real-time expression changes.
-                        Think of it as the "performance intensity" control - like how hard a violinist presses the bow.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Value Range:</div>
-                      <p className="text-gray-700">0-127 (affects volume but separately from CC7)</p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded border-l-4 border-orange-500">
-                      <div className="text-sm font-semibold text-orange-700 mb-1">Production Example:</div>
-                      <p className="text-gray-700 text-sm">
-                        <strong>Realistic Orchestral Dynamics:</strong> When working with orchestral samples,
-                        use CC11 to control the intensity of each phrase. Draw it higher for forte sections
-                        and lower for piano sections. This is more realistic than just using velocity because
-                        it affects the whole phrase dynamically, like a real conductor's gestures.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Common Uses:</div>
-                      <ul className="text-sm text-gray-700 space-y-1">
-                        <li>Orchestral library dynamics</li>
-                        <li>Real-time performance intensity</li>
-                        <li>Breath controller simulation</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CC 74 - Filter Cutoff */}
-                <div className="border-2 border-pink-200 rounded-lg p-5 bg-pink-50">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-pink-700">CC 74 - Filter Cutoff / Brightness</h3>
-                    <span className="bg-pink-200 text-pink-800 px-3 py-1 rounded-full text-sm font-semibold">CC 74</span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">What it controls:</div>
-                      <p className="text-gray-700">
-                        Controls the filter cutoff frequency, which affects the brightness/darkness of the sound.
-                        Lower values = darker/duller, higher values = brighter/sharper.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Value Range:</div>
-                      <p className="text-gray-700">0-127 (0 = very dark/closed filter, 127 = bright/open filter)</p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded border-l-4 border-pink-500">
-                      <div className="text-sm font-semibold text-pink-700 mb-1">Production Example:</div>
-                      <p className="text-gray-700 text-sm">
-                        <strong>Filter Sweep Build-Up:</strong> Create tension in a breakdown by starting with CC74 at 20
-                        (very dark, muffled sound), then slowly automating it up to 110 over 8 bars as you build toward the drop.
-                        This classic technique makes the sound gradually "open up" and is perfect for EDM, house, and techno builds.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">Common Uses:</div>
-                      <ul className="text-sm text-gray-700 space-y-1">
-                        <li>Filter sweep effects</li>
-                        <li>Creating build-ups and drops</li>
-                        <li>Adding movement to static sounds</li>
-                        <li>Controlling synth brightness</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Additional note on velocity */}
-                <div className="border-2 border-gray-200 rounded-lg p-5 bg-gray-50">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-gray-700">Note: Velocity (Not a CC!)</h3>
-                    <span className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">0-127</span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-white p-3 rounded">
-                      <div className="text-sm font-semibold text-gray-600 mb-1">What it is:</div>
-                      <p className="text-gray-700">
-                        Velocity is NOT a MIDI CC - it's part of the Note On message itself.
-                        It represents how hard you hit a key (0 = softest, 127 = hardest).
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded border-l-4 border-gray-400">
-                      <div className="text-sm font-semibold text-gray-700 mb-1">Key Difference:</div>
-                      <p className="text-gray-700 text-sm">
-                        Unlike CC controllers which can change continuously during a note,
-                        velocity is set once when the note starts and doesn't change during the note.
-                        However, some DAWs let you draw velocity automation in a clip or note editor
-                        to control how velocity affects each individual note.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* How to use in a DAW */}
-              <div className="mt-6 bg-gradient-to-r from-mustard-100 to-blue-100 p-6 rounded-lg">
-                <div className="flex items-center gap-2 mb-3">
-                  <Lightbulb className="w-6 h-6 text-orange-600" />
-                  <h3 className="text-xl font-bold text-gray-800">How to Draw MIDI CC Automation</h3>
-                </div>
-                <ol className="list-decimal list-inside space-y-2 text-gray-700">
-                  <li>Open the MIDI clip or automation lane for the track</li>
-                  <li>Find the CC/automation editor — often shown below or alongside the piano roll</li>
-                  <li>Select the CC number you want to control (e.g., "1 Modulation", "7 Volume", etc.)</li>
-                  <li>Draw your automation by clicking and dragging to create breakpoints</li>
-                  <li>The CC values will be sent to your instrument along with the note data</li>
-                </ol>
-                <p className="text-sm text-gray-600 mt-3">
-                  <strong>Pro tip:</strong> Many DAWs also let you map a MIDI CC straight to a plugin
-                  parameter using a MIDI-learn or mapping mode, but drawing it into the clip or
-                  automation lane gives you precise, editable automation!
-                </p>
-              </div>
+          <div className="mt-6 rounded-2xl border border-line bg-paper p-5">
+            <h3 className="mb-3 text-sm font-semibold text-ink">Drawing a specific bend</h3>
+            <p className="mb-4 text-sm leading-relaxed text-ink/70">
+              The method is the same wherever you produce: set the instrument's pitch bend range, then
+              draw a pitch bend automation lane (sometimes called an envelope or MIDI CC lane) from
+              centre towards the top or bottom of its range. A ramp to the very top or bottom uses the
+              full range you set; a ramp only halfway there bends by half that amount.
+            </p>
+            <ol className="list-inside list-decimal space-y-1.5 text-sm text-ink/80">
+              <li>Set the instrument's <strong>global pitch bend range</strong> to the number of semitones you want available.</li>
+              <li>Open the pitch bend automation lane for your MIDI clip or track.</li>
+              <li>Draw a ramp from the centre line to the top (bend up) or bottom (bend down) of the lane.</li>
+              <li>A ramp to a point partway up or down bends by that same proportion of the range you set.</li>
+            </ol>
+            <div className="mt-4 space-y-1.5 border-t border-line pt-3 text-xs text-ink/60">
+              <p><strong className="text-ink/80">In Ableton Live:</strong> open the clip's Envelope Editor and choose "MIDI Ctrl" → "Pitch Bend" from the dropdown, then draw the ramp.</p>
+              <p><strong className="text-ink/80">In Logic Pro:</strong> open the Piano Roll's MIDI Draw pane (or an automation lane) and choose Pitch Bend, then draw the same shape.</p>
             </div>
           </div>
-        )}
 
-        {/* Footer */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mt-6 text-center">
-          <p className="text-gray-500 text-xs">
-            Experiment with the controls above to understand how MIDI data works!
-          </p>
-        </div>
+          <div className="mt-6 space-y-4">
+            <Callout type="question" title="A synth's Pitch Bend Range is set to 12 semitones. The wheel is pushed fully up (16383). How far does the pitch actually bend?">
+              <Callout.Options
+                options={['+2 semitones', '+6 semitones', '+12 semitones', '+24 semitones']}
+                correctIndex={2}
+                explanation="The range setting defines what the wheel's extremes mean. 16383 is the top of the wheel's travel, so at a 12-semitone range it bends the full 12 semitones — one octave up."
+              />
+            </Callout>
+
+            <Callout type="listen" title="Try it yourself" collapsible={false}>
+              Set the range slider in the simulator above to 12, then drag the bend wheel to its maximum.
+              Watch the note readout jump a full octave — then bring the range back down to 2 and repeat
+              the same wheel movement.
+            </Callout>
+          </div>
+        </section>
+
+        <hr className="my-10 border-line" />
+
+        {/* ─── Section 3: MIDI Controllers ────────────────────────────────── */}
+        <section>
+          <SectionHeader eyebrow="1.5 Sequencing" title="MIDI Controllers">
+            Beyond pitch bend, MIDI Control Change (CC) messages report a continuous parameter — a
+            controller number identifying which control, and a value showing its position. Unlike pitch
+            bend, CC data is 7-bit: coarser resolution than pitch bend needs, but plenty for something
+            like a mod wheel or a volume fader.
+          </SectionHeader>
+
+          <Callout type="definition" title="MIDI CC (Control Change)">
+            A Control Change message carries a controller number (0–127, identifying which control —
+            modulation, volume, pan…) and a value (0–127, its current position). CC data is always 7-bit:
+            128 steps is fine for something like a mod wheel, but too coarse for pitch bend, which is why
+            pitch bend has its own 14-bit message type instead.
+          </Callout>
+
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <ControllerCard
+              accent="field"
+              name="CC 1 — Modulation Wheel"
+              ccLabel="CC 1"
+              controls="Usually adds vibrato (pitch wobble) or another modulation effect to the sound — the exact effect depends on how the instrument is programmed."
+              range="0–127 (7-bit)"
+              example="Expressive lead synth: draw a gradual increase in CC1 during a held note to add vibrato that builds intensity — clean at first, then wobbling in, the way a singer or guitarist would do it naturally."
+              uses={['Adding vibrato to synth leads', 'Wobbly LFO-style effects', 'Filter modulation depth']}
+            />
+            <ControllerCard
+              accent="sienna"
+              name="CC 7 — Volume"
+              ccLabel="CC 7"
+              controls="Sets the overall volume of the MIDI channel. Different from velocity — this affects every note on the track, not just the one it's attached to."
+              range="0–127 (0 = silent, 127 = full volume)"
+              example="Dynamic string swells: automate CC7 from 30 up to 110 over four bars for a crescendo. This is smoother than clip-volume automation because it happens at the MIDI level, ahead of the instrument."
+              uses={['Volume swells and fades', 'Balancing instrument layers', 'Ducking effects']}
+            />
+            <ControllerCard
+              accent="mustard"
+              name="CC 10 — Pan"
+              ccLabel="CC 10"
+              controls="Sets the stereo position (left/right) of the sound, adding width and space to a mix."
+              range="0–127 (0 = hard left, 64 = centre, 127 = hard right)"
+              example="Auto-pan: draw a repeating wave in CC10 between 0 and 127 to make a hi-hat pattern bounce between speakers, adding movement to a static rhythm part."
+              uses={['Stereo movement / auto-pan', 'Positioning instruments in the mix', 'Adding spatial interest']}
+            />
+            <ControllerCard
+              accent="field"
+              name="CC 11 — Expression"
+              ccLabel="CC 11"
+              controls="Similar to volume, but designed for real-time performance changes on top of the track's base level — a 'performance intensity' control, like bow pressure on a violin."
+              range="0–127, affects volume separately from CC7"
+              example="Realistic orchestral dynamics: draw CC11 higher for forte phrases and lower for piano ones — more realistic than velocity alone, which only sets loudness at the start of each note."
+              uses={['Orchestral library dynamics', 'Real-time performance intensity', 'Breath-controller simulation']}
+            />
+            <ControllerCard
+              accent="sienna"
+              name="CC 74 — Filter Cutoff / Brightness"
+              ccLabel="CC 74"
+              controls="Sets the filter cutoff frequency, which controls how bright or dark the sound is. Lower values are darker; higher values are brighter."
+              range="0–127 (0 = dark/closed filter, 127 = bright/open filter)"
+              example="Filter sweep build-up: start CC74 at 20 (dark, muffled) and automate it up to 110 over eight bars as a breakdown builds toward the drop — a classic EDM/house technique."
+              uses={['Filter sweep effects', 'Build-ups and drops', 'Controlling synth brightness']}
+            />
+            <ControllerCard
+              accent="mustard"
+              plain
+              name="Velocity — not a CC"
+              ccLabel="0–127"
+              controls="Velocity is not a Control Change message — it's carried inside the Note On message itself, representing how hard a key was struck."
+              range="0–127 (0 = softest, 127 = hardest)"
+              example="Unlike CC data, velocity is set once when the note starts and doesn't change while the note sounds — though some DAWs let you edit velocity per note after the fact."
+              uses={null}
+            />
+          </div>
+
+          <div className="mt-6 space-y-4">
+            <Callout type="question" title="Which MIDI CC number is the standard assignment for the sustain pedal?">
+              <Callout.Options
+                options={['CC1', 'CC7', 'CC64', 'CC74']}
+                correctIndex={2}
+                explanation="CC64 is the General MIDI sustain pedal assignment — values 64–127 hold the sustain on, 0–63 release it. CC1 is modulation, CC7 is volume, CC74 is filter cutoff."
+              />
+            </Callout>
+
+            <Callout type="tip" title="7-bit velocity">
+              Note velocity uses the same logic in miniature: 7 bits, 2⁷ = 128 values, 0–127 — which is
+              why a fact like "127 is the loudest a note can be struck" (2021 Q2(b), 2 marks) always
+              traces back to the bit count, not a musical decision.
+            </Callout>
+
+            <Callout type="tip" title="Naming the messages" defaultOpen={false}>
+              2019's Q2(b) asked for three MIDI messages other than Note On/Off, worth 3 marks.
+              Everything on this page qualifies: Pitch Bend and any of the five Control Change types
+              above.
+            </Callout>
+          </div>
+        </section>
+
+        <hr className="my-10 border-line" />
+
+        {/* ─── Retrieval quiz ─────────────────────────────────────────────── */}
+        <section>
+          <SectionHeader eyebrow="Quick check" title="Retrieval quiz">
+            Five questions across everything above. Answer all five, then check.
+          </SectionHeader>
+          <RetrievalQuiz />
+        </section>
+
       </div>
     </div>
   );
