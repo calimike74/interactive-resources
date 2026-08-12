@@ -17,8 +17,8 @@ const ROOM_COLOURS = {
 const PATCH_BAYS = {
     'PB1': { label: 'RocSoc Room Mic Lines', room: 'studio-1', connectors: 12 },
     'PB1-lobby': { label: 'Lobby Mic Lines', room: 'lobby', connectors: 2 },
-    'PB2': { label: 'Patrick Shelley Mic Lines 1-12', room: 'studio-2', connectors: 12 },
-    'PB3': { label: 'Patrick Shelley Mic Lines 13-24', room: 'studio-2', connectors: 12 },
+    'PB2': { label: 'Studio 2 Mic Lines 1-12', room: 'studio-2', connectors: 12 },
+    'PB3': { label: 'Studio 2 Mic Lines 13-24', room: 'studio-2', connectors: 12 },
     'PB4': { label: 'Recital Hall Mic Lines 1-12', room: 'recital', connectors: 12 },
     'PB5': { label: 'Recital Hall Mic Lines 13-24', room: 'recital', connectors: 9, extras: [{ label: 'TLA C-1 A', room: 'tla-red7' }, { label: 'TLA C-1 B', room: 'tla-red7' }, { label: 'RED 7', room: 'tla-red7' }] },
     'PB6': { label: 'Console Mic Inputs 1-16', room: 'console', connectors: 16 },
@@ -27,7 +27,7 @@ const PATCH_BAYS = {
 
 const TABS = [
     { id: 'studio-1', label: 'RocSoc Room', bays: ['PB1'] }, // PB1-lobby physically adjacent but belongs to Lobby tab
-    { id: 'studio-2', label: 'Patrick Shelley', bays: ['PB2', 'PB3'] },
+    { id: 'studio-2', label: 'Studio 2', bays: ['PB2', 'PB3'] },
     { id: 'recital', label: 'Recital Hall', bays: ['PB4', 'PB5'] },
     { id: 'lobby', label: 'Lobby', bays: ['PB1-lobby'] },
     { id: 'console', label: 'Console', bays: ['PB6', 'PB7'] },
@@ -931,7 +931,7 @@ export default function PatchBaySimulator() {
                     <div style={styles.voltLegendTitle}>Room Colours</div>
                     {[
                         ['studio-1', 'RocSoc Room'],
-                        ['studio-2', 'Patrick Shelley'],
+                        ['studio-2', 'Studio 2'],
                         ['recital',  'Recital Hall'],
                         ['lobby',    'Lobby'],
                         ['console',  'Console'],
