@@ -7,8 +7,10 @@ import { theme, typography, borderRadius, spacing, transitions, glass, editorial
 import { getAvailableTopics } from '@/lib/questions';
 import { getQuizProgress } from '@/lib/quiz-persistence';
 import { hasLearnContent } from '@/lib/learn/topics';
+import { withComponentPrefix } from '@/lib/topics';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import GlassMorphismGrid from '@/components/GlassMorphismGrid';
+import InBuildBand from '@/components/InBuildBand';
 
 // Type labels for resource badges
 const typeLabels = {
@@ -121,7 +123,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                                     boxShadow: glass.iconShadow,
                                 }}
                             >
-                                {topic.specRef}
+                                {withComponentPrefix(topic.specRef)}
                             </span>
                         </div>
 
@@ -192,7 +194,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                                     color: ED.inkFade,
                                 }}
                             >
-                                Topic {topic.specRef}
+                                Topic {withComponentPrefix(topic.specRef)}
                             </span>
                         </div>
 
@@ -350,7 +352,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                             ))}
                         </div>
                     ) : (
-                        <ComingSoonPlaceholder label="Interactive tools coming soon" theme={t} />
+                        <InBuildBand topic={topic} />
                     )}
                 </section>
 

@@ -9,6 +9,7 @@ import { prioritiseQuestions } from '@/lib/spaced-repetition';
 import AuthGate from './AuthGate';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { getHintsForTopic, hasHints } from '@/lib/examiner-hints';
+import { withComponentPrefix } from '@/lib/topics';
 
 export default function RevisePageClient({ topic }) {
     const t = theme.light;
@@ -522,7 +523,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                         textTransform: 'uppercase',
                         color: ED.inkFade,
                     }}>
-                        Topic {topic.specRef}
+                        Topic {withComponentPrefix(topic.specRef)}
                     </span>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAllTopicDefs, getTopicForResource } from '@/lib/topics';
+import { getAllTopicDefs, getTopicForResource, withComponentPrefix } from '@/lib/topics';
 import { getAllResources } from '@/lib/resources';
 import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 
@@ -484,7 +484,7 @@ function ResultItem({ item, itemId, isSelected, onSelect, onHover }) {
                     flexShrink: 0,
                     lineHeight: '1.8',
                 }}>
-                    {item.specRef}
+                    {withComponentPrefix(item.specRef)}
                 </span>
             )}
 

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import { getResource } from '@/lib/resources';
+import { withComponentPrefix } from '@/lib/topics';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
 
 // Editorial palette — paper & ink, no per-topic colour noise.
@@ -115,7 +116,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                     }}
                 >
                     Unit
-                    <span style={{ color: ED.ink, marginLeft: '4px' }}>{topic.specRef}</span>
+                    <span style={{ color: ED.ink, marginLeft: '4px' }}>{withComponentPrefix(topic.specRef)}</span>
                 </span>
                 <ExaminerHintBadge topicCode={topic.specRef} position="bottom" />
             </div>

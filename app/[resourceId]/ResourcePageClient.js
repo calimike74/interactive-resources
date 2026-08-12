@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getResource, resourceExists } from '@/lib/resources';
-import { getTopicForResource } from '@/lib/topics';
+import { getTopicForResource, withComponentPrefix } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
@@ -215,7 +215,7 @@ export default function ResourcePageClient() {
                                     border: '1px solid rgba(37, 99, 235, 0.2)',
                                 }}
                             >
-                                {resource.topic}
+                                {withComponentPrefix(resource.topic)}
                             </span>
                             {parentTopic && (
                                 <ExaminerHintBadge

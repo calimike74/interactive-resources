@@ -6,6 +6,7 @@ import { theme, typography, borderRadius, spacing, transitions, glass, editorial
 import Breadcrumbs from '@/components/Breadcrumbs';
 import GlassMorphismGrid from '@/components/GlassMorphismGrid';
 import { getProgress } from '@/lib/learn/course-progress';
+import { withComponentPrefix } from '@/lib/topics';
 
 const EMPTY_PROGRESS = {};
 // No storage-event subscription: we don't need live cross-tab updates, and a
@@ -85,7 +86,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [], rati
                             textTransform: 'uppercase',
                             color: ED.inkFade,
                         }}>
-                            Topic {topic.specRef}
+                            Topic {withComponentPrefix(topic.specRef)}
                         </span>
                     </div>
 
