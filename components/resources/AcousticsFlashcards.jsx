@@ -57,7 +57,7 @@ const AcousticsFlashcards = () => {
         question: "How do different materials affect sound wave behaviour?",
         answer: "Hard surfaces are more reflective, soft surfaces are more absorptive, thicker/denser objects provide more absorption, and thinner objects allow more transmission. The effect also depends on the frequency range of the original waveform.",
         furtherLearning: "Compare how your voice sounds when speaking toward a brick wall vs a thick curtain vs a thin window.",
-        practicalExample: "Concrete walls reflect most frequencies, while thick fiberglass insulation absorbs them. A thin wooden door transmits more sound than a heavy metal door.",
+        practicalExample: "Concrete walls reflect most frequencies, while thick fibreglass insulation absorbs them. A thin wooden door transmits more sound than a heavy metal door.",
         difficulty: 2,
         image: "material-properties",
         category: "materials"
@@ -66,7 +66,7 @@ const AcousticsFlashcards = () => {
         id: "i2",
         question: "How does room size affect reverberation characteristics?",
         answer: "In smaller rooms, sound waves reach walls more quickly, creating shorter early reflection times. Room dimensions also determine which frequencies are reinforced or cancelled through standing wave patterns.",
-        furtherLearning: "Record the same sound source in rooms of different sizes and analyze the difference in reverb tail length.",
+        furtherLearning: "Record the same sound source in rooms of different sizes and analyse the difference in reverb tail length.",
         practicalExample: "A small vocal booth has very short early reflections (under 10ms), while a large warehouse might have early reflections arriving 50-100ms after the direct sound.",
         difficulty: 2,
         image: "room-size-effect",
@@ -96,7 +96,7 @@ const AcousticsFlashcards = () => {
     advanced: [
       {
         id: "a1",
-        question: "How would you analyze the acoustic properties of a small, empty room with fibreglass insulation?",
+        question: "How would you analyse the acoustic properties of a small, empty room with fibreglass insulation?",
         answer: "Due to the small size, sound will arrive at walls quickly, creating short early reflection times. The fibreglass absorption material on all six surfaces will absorb most reflections, resulting in a very short RT60 and 'dead' acoustic character with minimal reverberation.",
         furtherLearning: "Design an acoustic treatment plan for a home studio, calculating surface areas and absorption coefficients needed.",
         practicalExample: "A vocal isolation booth uses this principle - small dimensions plus maximum absorption creates an acoustically 'dry' environment perfect for close-mic recording.",
@@ -118,7 +118,7 @@ const AcousticsFlashcards = () => {
         id: "a3",
         question: "What factors determine the optimal RT60 for different applications?",
         answer: "Optimal RT60 depends on room volume, intended use, and frequency content. Speech intelligibility requires shorter RT60 (0.6-1.2s), while orchestral music benefits from longer RT60 (1.8-2.2s). Room size also affects the ideal range.",
-        furtherLearning: "Research the RT60 specifications for different venue types - recording studios, concert halls, lecture theaters, and churches.",
+        furtherLearning: "Research the RT60 specifications for different venue types - recording studios, concert halls, lecture theatres, and churches.",
         practicalExample: "A podcast recording room targets 0.2-0.4s RT60, while a concert hall aims for 2.0s RT60 to enhance musical bloom and blend.",
         difficulty: 3,
         image: "optimal-rt60",
@@ -300,7 +300,7 @@ const AcousticsFlashcards = () => {
         <rect x="70" y="65" width="15" height="15" fill="#DCC892" />
         <text x="70" y="90" fill="#DCC892" fontSize="7">Speech</text>
         <rect x="100" y="50" width="15" height="30" fill="#DCC892" />
-        <text x="100" y="90" fill="#DCC892" fontSize="7">Theater</text>
+        <text x="100" y="90" fill="#DCC892" fontSize="7">Theatre</text>
         <rect x="130" y="35" width="15" height="45" fill="#ef4444" />
         <text x="130" y="90" fill="#ef4444" fontSize="7">Concert</text>
         <rect x="160" y="30" width="15" height="50" fill="#DCC892" />

@@ -1108,7 +1108,7 @@ const DistortionLab = () => {
         <TabsContent value="chain" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Signal Chain Visualization</CardTitle>
+              <CardTitle>Signal Chain Visualisation</CardTitle>
               <p className="text-sm text-gray-600">
                 Understand how distortion fits into an audio signal path
               </p>

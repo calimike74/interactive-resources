@@ -443,7 +443,7 @@ const FilterRolloffVisualization = () => {
                   lineHeight: typography.lineHeight.tight,
                   marginBottom: spacing[4],
                   textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-              }}>Filter Rolloff Visualization</h1>
+              }}>Filter Rolloff Visualisation</h1>
               <p style={{
                   color: 'rgba(255,255,255,0.85)',
                   fontSize: typography.size.lg,

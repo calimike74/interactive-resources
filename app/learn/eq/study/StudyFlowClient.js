@@ -7,7 +7,7 @@ import { theme, typography, borderRadius, spacing, transitions } from '@/lib/the
 
 // ─── Study content ─────────────────────────────────────────────────────────────
 
-const STUDY_TEXT = `Equalization — or EQ — is the process of adjusting the balance between frequency components within an audio signal. Every sound you hear is made up of multiple frequencies, and EQ gives you the tools to shape which frequencies are louder or quieter.
+const STUDY_TEXT = `Equalisation — or EQ — is the process of adjusting the balance between frequency components within an audio signal. Every sound you hear is made up of multiple frequencies, and EQ gives you the tools to shape which frequencies are louder or quieter.
 
 The foundation of EQ lies in four filter types. A lowpass filter allows frequencies below a cutoff point to pass through while attenuating everything above it — creating warmer, darker sounds by removing high-frequency content. A highpass filter does the opposite, letting high frequencies through while cutting the lows — useful for removing rumble and mud from a recording.
 

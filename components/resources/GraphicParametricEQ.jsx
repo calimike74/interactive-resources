@@ -62,11 +62,11 @@ const QUIZ_QUESTIONS = [
         options: [
             'Gain amount',
             'Number of bands',
-            'Center frequency and Q (bandwidth)',
+            'Centre frequency and Q (bandwidth)',
             'Output volume',
         ],
         correct: 2,
-        explanation: 'Parametric EQ allows control of center frequency, gain, AND Q for each band - multiple parameters.',
+        explanation: 'Parametric EQ allows control of centre frequency, gain, AND Q for each band - multiple parameters.',
     },
     {
         question: 'A mixing engineer needs to remove a specific resonant frequency at 847Hz. Which EQ type offers better precision?',
@@ -1024,7 +1024,7 @@ export default function GraphicParametricEQ() {
                                         marginBottom: spacing[3],
                                     }}
                                 >
-                                    Graphic Equalizer
+                                    Graphic Equaliser
                                 </h3>
                                 <p style={{ color: t.text.secondary, marginBottom: spacing[4], lineHeight: typography.lineHeight.relaxed }}>
                                     A <strong>filter bank</strong> with many bands at fixed frequencies. You can only adjust the <strong>gain</strong> of each band.
@@ -1055,7 +1055,7 @@ export default function GraphicParametricEQ() {
 
                                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                     {[
-                                        'Fixed center frequencies',
+                                        'Fixed centre frequencies',
                                         'Fixed Q per band',
                                         'Only gain is adjustable',
                                         'Parallel filter routing',
@@ -1111,7 +1111,7 @@ export default function GraphicParametricEQ() {
                                         marginBottom: spacing[3],
                                     }}
                                 >
-                                    Parametric Equalizer
+                                    Parametric Equaliser
                                 </h3>
                                 <p style={{ color: t.text.secondary, marginBottom: spacing[4], lineHeight: typography.lineHeight.relaxed }}>
                                     Fewer bands but <strong>full control</strong> over each: frequency, gain, AND Q (bandwidth).
@@ -1142,7 +1142,7 @@ export default function GraphicParametricEQ() {
 
                                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                     {[
-                                        'Adjustable center frequency',
+                                        'Adjustable centre frequency',
                                         'Adjustable Q (bandwidth)',
                                         'Adjustable gain',
                                         'Series filter routing',
@@ -1183,14 +1183,14 @@ export default function GraphicParametricEQ() {
                         </div>
 
                         <CopyableNote title="Key Definitions" variant="definition">
-                            <p><strong>Graphic Equalizer:</strong> A filter bank with bandpass filters routed in parallel, with fixed center frequencies separated by regular intervals (octave, half-octave, or third-octave). Only gain is adjustable per band.</p>
+                            <p><strong>Graphic Equaliser:</strong> A filter bank with bandpass filters routed in parallel, with fixed centre frequencies separated by regular intervals (octave, half-octave, or third-octave). Only gain is adjustable per band.</p>
                             <br />
-                            <p><strong>Parametric Equalizer:</strong> An equaliser with fewer bands but more parameters per band. Allows control of center frequency, gain, and Q for each band. Filters are routed in series.</p>
+                            <p><strong>Parametric Equaliser:</strong> An equaliser with fewer bands but more parameters per band. Allows control of centre frequency, gain, and Q for each band. Filters are routed in series.</p>
                         </CopyableNote>
 
                         <CopyableNote title="Exam Tip" variant="exam">
                             <p>A common exam question format: "Explain TWO advantages of parametric EQ over graphic EQ."</p>
-                            <p>Answer: (1) Adjustable center frequency for precise targeting, (2) Adjustable Q for controlling the width of the affected range.</p>
+                            <p>Answer: (1) Adjustable centre frequency for precise targeting, (2) Adjustable Q for controlling the width of the affected range.</p>
                         </CopyableNote>
                     </div>
                 )}

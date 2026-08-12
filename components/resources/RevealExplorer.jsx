@@ -226,7 +226,7 @@ const EXAMPLE_REVEALS = [
     // Spotlight reveal example using real images
     {
         id: 'eq-frequency-reveal',
-        title: 'Graphic Equalizer',
+        title: 'Graphic Equaliser',
         topic: '1.11 EQ',
         description: 'Hover to reveal the frequency band annotations hidden beneath the EQ',
         mode: 'spotlight',
@@ -235,7 +235,7 @@ const EXAMPLE_REVEALS = [
         maskSize: 400,
         maskShape: 'circle',
         infoPanel: {
-            subtitle: '31-Band Graphic Equalizer',
+            subtitle: '31-Band Graphic Equaliser',
             description: 'A graphic EQ uses parallel filter routing where all bands process the original signal simultaneously, with outputs summed together. Each slider controls a fixed frequency band.',
             stats: [
                 { label: 'Routing', value: 'Parallel', detail: 'All bands process signal at once' },

@@ -1134,7 +1134,7 @@ const Quiz = () => {
                 <strong>ZERO-MARKS ANSWER:</strong><br/>
                 "Copy the vocal track and layer them together."<br/><br/>
                 <strong>A* ANSWER:</strong><br/>
-                "True double tracking involves recording a second vocal take, capturing the natural timing and pitch variations that occur between performances. Alternatively, ADT (Automatic Double Tracking) can simulate this effect by processing a single take with a short delay (10-40ms) and subtle pitch modulation (+/-5-20 cents). The small timing and pitch differences create a thickened, wider sound without obvious echo artifacts. Simply copying the track would only increase level, as identical waveforms combine constructively without creating the characteristic 'two voices' effect."
+                "True double tracking involves recording a second vocal take, capturing the natural timing and pitch variations that occur between performances. Alternatively, ADT (Automatic Double Tracking) can simulate this effect by processing a single take with a short delay (10-40ms) and subtle pitch modulation (+/-5-20 cents). The small timing and pitch differences create a thickened, wider sound without obvious echo artefacts. Simply copying the track would only increase level, as identical waveforms combine constructively without creating the characteristic 'two voices' effect."
             </CopyableNote>
         </div>
     );
