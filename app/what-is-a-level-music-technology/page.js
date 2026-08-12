@@ -24,11 +24,14 @@ export const metadata = {
     title: 'Moved — What is A-level Music Technology?',
     robots: { index: false, follow: true },
     alternates: { canonical: HOME },
-    other: { refresh: `0; url=${HOME}` },
 };
 
 export default function MovedPage() {
     return (
+        <>
+        {/* metadata.other renders name="refresh", which browsers ignore —
+            only http-equiv="refresh" fires. App Router hoists this into <head>. */}
+        <meta httpEquiv="refresh" content={`0; url=${HOME}`} />
         <main
             style={{
                 minHeight: '60vh',
@@ -48,5 +51,6 @@ export default function MovedPage() {
                 </a>
             </p>
         </main>
+        </>
     );
 }
