@@ -95,6 +95,19 @@ export default function ExaminerHintBadge({ topicCode, position = 'top' }) {
                         {h.hint}
                     </p>
                 ))}
+                <p
+                    style={{
+                        margin: 0,
+                        marginTop: spacing[2],
+                        paddingTop: spacing[2],
+                        borderTop: `1px solid ${t.border.subtle}`,
+                        fontSize: typography.size.xs,
+                        fontStyle: 'italic',
+                        color: t.text.tertiary,
+                    }}
+                >
+                    From the 2025 Principal Examiner&rsquo;s reports (Edexcel 9MT0).
+                </p>
             </div>
         </Popover>
     );

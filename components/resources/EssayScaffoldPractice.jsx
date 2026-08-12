@@ -331,6 +331,9 @@ function UnderstandTab({ topic }) {
                             ? topic.points[hoveredPoint].tip
                             : 'Hover over a scaffold point to see what the examiner is looking for.'}
                     </div>
+                    <div style={{ fontSize: 11, color: C.textSecondary, opacity: 0.75, fontStyle: 'italic', marginTop: 8 }}>
+                        Guidance written against the Edexcel mark scheme for this question type.
+                    </div>
                 </div>
             </div>
 

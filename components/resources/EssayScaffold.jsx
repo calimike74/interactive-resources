@@ -321,6 +321,15 @@ export default function EssayScaffold() {
                     }}>
                         <strong style={{ color: t.accent.warning }}>Examiner tip: </strong>
                         {exercise.examinerTip}
+                        <span style={{
+                            display: 'block',
+                            marginTop: spacing[2],
+                            fontSize: typography.size.xs,
+                            fontStyle: 'italic',
+                            color: t.text.tertiary,
+                        }}>
+                            Guidance written against the Edexcel mark scheme for this question type.
+                        </span>
                     </div>
                 )}
 

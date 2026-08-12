@@ -791,6 +791,9 @@ function EvaluateResponse() {
             borderRadius: '12px', padding: '20px 24px', marginTop: '16px',
           }}>
             <span style={{ fontFamily: FONT_HEADING, color: '#6EE7B7', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>Model Answer</span>
+            <p style={{ color: 'rgba(232, 228, 223, 0.6)', fontSize: '12px', fontStyle: 'italic', margin: '0 0 10px' }}>
+                Model response written against the Edexcel mark scheme for this question type.
+            </p>
             <p style={{ color: 'rgba(232, 228, 223, 0.85)', fontSize: '14px', lineHeight: 1.75, margin: 0 }}>{MODEL_ANSWER}</p>
           </div>
         )}

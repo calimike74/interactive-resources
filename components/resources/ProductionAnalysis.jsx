@@ -422,6 +422,9 @@ const ProductionAnalysis = () => {
                           <CopyableNote title="Model answer" variant="key" color="var(--success)">
                             {q.modelAnswer}
                           </CopyableNote>
+                          <p style={{ marginTop: 'var(--space-2)', color: 'var(--foreground-tertiary)', fontSize: 'var(--text-xs)', fontStyle: 'italic' }}>
+                            Model answer written against the Edexcel mark scheme for this question type.
+                          </p>
                           <div style={{ marginTop: 'var(--space-3)' }}>
                             <div style={{ color: 'var(--foreground-tertiary)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Mark-scheme checks</div>
                             <ul style={{ paddingLeft: 22, color: 'var(--foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: 1.7 }}>
