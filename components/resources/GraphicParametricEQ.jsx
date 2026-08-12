@@ -95,9 +95,9 @@ const QUIZ_QUESTIONS = [
 // ============================================
 // THEME CONSTANTS
 // ============================================
-const CYAN = '#22d3ee';
-const ORANGE = '#f97316';
-const PURPLE = '#C99F44';
+const CYAN = '#3A4A35';   // was neon cyan #22d3ee — house field (moss), "graphic EQ" side of the compare
+const ORANGE = '#B85A3F'; // was neon orange #f97316 — house sienna, "parametric EQ" side of the compare
+const PURPLE = '#C99F44'; // unused (kept as-is — not a rendering defect)
 
 // ============================================
 // COPYABLE NOTE COMPONENT
@@ -954,7 +954,7 @@ export default function GraphicParametricEQ() {
                 <div style={{
                     position: 'absolute',
                     inset: 0,
-                    background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+                    background: 'linear-gradient(to bottom, rgba(31,42,28,0.4) 0%, rgba(31,42,28,0.75) 100%)',
                 }} />
                 <div style={{
                     position: 'relative',
@@ -962,6 +962,7 @@ export default function GraphicParametricEQ() {
                     padding: `${spacing[10]} ${spacing[6]} ${spacing[8]}`,
                 }}>
                     <h1 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size['3xl'],
                         fontWeight: typography.weight.bold,
                         color: '#ffffff',
@@ -997,6 +998,7 @@ export default function GraphicParametricEQ() {
                     <div>
                         <h2
                             style={{
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                                 fontSize: typography.size['2xl'],
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.primary,
@@ -1018,6 +1020,7 @@ export default function GraphicParametricEQ() {
                             >
                                 <h3
                                     style={{
+                                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                                         fontSize: typography.size.xl,
                                         fontWeight: typography.weight.semibold,
                                         color: CYAN,
@@ -1105,6 +1108,7 @@ export default function GraphicParametricEQ() {
                             >
                                 <h3
                                     style={{
+                                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                                         fontSize: typography.size.xl,
                                         fontWeight: typography.weight.semibold,
                                         color: ORANGE,
@@ -1200,6 +1204,7 @@ export default function GraphicParametricEQ() {
                     <div>
                         <h2
                             style={{
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                                 fontSize: typography.size['2xl'],
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.primary,
@@ -1220,7 +1225,7 @@ export default function GraphicParametricEQ() {
                                 }}
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[4] }}>
-                                    <h3 style={{ fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: CYAN }}>
+                                    <h3 style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: CYAN }}>
                                         10-Band Graphic EQ
                                     </h3>
                                     <span
@@ -1329,7 +1334,7 @@ export default function GraphicParametricEQ() {
                                 }}
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[4] }}>
-                                    <h3 style={{ fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: ORANGE }}>
+                                    <h3 style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: ORANGE }}>
                                         3-Band Parametric EQ
                                     </h3>
                                     <span
@@ -1388,6 +1393,7 @@ export default function GraphicParametricEQ() {
                     <div>
                         <h2
                             style={{
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                                 fontSize: typography.size['2xl'],
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.primary,
@@ -1408,7 +1414,7 @@ export default function GraphicParametricEQ() {
                                 }}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[4] }}>
-                                    <h3 style={{ fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary }}>
+                                    <h3 style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary }}>
                                         Live Sound
                                     </h3>
                                 </div>
@@ -1478,7 +1484,7 @@ export default function GraphicParametricEQ() {
                                 }}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[4] }}>
-                                    <h3 style={{ fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary }}>
+                                    <h3 style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary }}>
                                         Studio Mixing
                                     </h3>
                                 </div>
@@ -1553,7 +1559,7 @@ export default function GraphicParametricEQ() {
                                 padding: spacing[5],
                             }}
                         >
-                            <h3 style={{ fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary, marginBottom: spacing[4] }}>
+                            <h3 style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', fontSize: typography.size.lg, fontWeight: typography.weight.semibold, color: t.text.primary, marginBottom: spacing[4] }}>
                                 Quick Reference Table
                             </h3>
 
@@ -1641,6 +1647,7 @@ export default function GraphicParametricEQ() {
                     <div>
                         <h2
                             style={{
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                                 fontSize: typography.size['2xl'],
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.primary,

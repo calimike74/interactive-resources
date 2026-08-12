@@ -353,7 +353,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                         fontWeight: typography.weight.bold,
                         color: t.text.primary,
                         margin: 0,
-                        fontFamily: typography.fontFamily,
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                     }}>{title}</h1>
                     {daw && (
                         <span style={{
@@ -616,7 +616,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                                     fontSize: typography.size.lg,
                                     fontWeight: typography.weight.bold,
                                     color: t.text.primary,
-                                    fontFamily: typography.fontFamily,
+                                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                                     margin: 0,
                                     flex: 1,
                                     letterSpacing: '-0.01em',

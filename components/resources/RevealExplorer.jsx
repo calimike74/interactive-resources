@@ -676,6 +676,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                         ← Back to Gallery
                     </button>
                     <h2 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size['2xl'],
                         fontWeight: typography.weight.bold,
                         color: t.text.primary,
@@ -852,6 +853,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                         border: `1px solid ${t.border.subtle}`,
                     }}>
                         <h3 style={{
+                            fontFamily: 'var(--font-fraunces), Georgia, serif',
                             fontSize: typography.size.lg,
                             fontWeight: typography.weight.semibold,
                             color: t.text.primary,
@@ -950,6 +952,7 @@ const SpotlightBuilderView = ({ onBack }) => {
                             border: `1px solid ${t.border.subtle}`,
                         }}>
                             <h3 style={{
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                                 fontSize: typography.size.lg,
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.primary,
@@ -1159,6 +1162,7 @@ const HotspotPanel = ({ hotspot, onClose }) => {
                         Component
                     </div>
                     <h3 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size.xl,
                         fontWeight: typography.weight.bold,
                         color: t.text.primary,
@@ -1203,6 +1207,7 @@ const GalleryView = ({ onSelectExample }) => {
         <div style={{ padding: spacing[6] }}>
             <div style={{ marginBottom: spacing[6] }}>
                 <h2 style={{
+                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                     fontSize: typography.size['2xl'],
                     fontWeight: typography.weight.bold,
                     color: t.text.primary,
@@ -1280,6 +1285,7 @@ const GalleryView = ({ onSelectExample }) => {
                         </div>
 
                         <h3 style={{
+                            fontFamily: 'var(--font-fraunces), Georgia, serif',
                             fontSize: typography.size.lg,
                             fontWeight: typography.weight.semibold,
                             color: t.text.primary,
@@ -1348,6 +1354,7 @@ const ExplorerView = ({ example, onBack }) => {
                         ← Back to Gallery
                     </button>
                     <h2 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size['2xl'],
                         fontWeight: typography.weight.bold,
                         color: t.text.primary,
@@ -2037,6 +2044,7 @@ const BuilderView = ({ onBack }) => {
                         ← Back to Gallery
                     </button>
                     <h2 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size['2xl'],
                         fontWeight: typography.weight.bold,
                         color: t.text.primary,
@@ -2254,6 +2262,7 @@ const BuilderView = ({ onBack }) => {
                             border: `1px solid ${t.border.subtle}`,
                         }}>
                             <h3 style={{
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                                 fontSize: typography.size.lg,
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.primary,
@@ -2377,6 +2386,7 @@ const BuilderView = ({ onBack }) => {
                         border: `1px solid ${t.border.subtle}`,
                     }}>
                         <h3 style={{
+                            fontFamily: 'var(--font-fraunces), Georgia, serif',
                             fontSize: typography.size.lg,
                             fontWeight: typography.weight.semibold,
                             color: t.text.primary,
@@ -2456,6 +2466,7 @@ const BuilderView = ({ onBack }) => {
                             border: `1px solid ${t.border.subtle}`,
                         }}>
                             <h3 style={{
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                                 fontSize: typography.size.lg,
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.primary,
@@ -2587,6 +2598,7 @@ export default function RevealExplorer() {
                 }}>
                     <div>
                         <h1 style={{
+                            fontFamily: 'var(--font-fraunces), Georgia, serif',
                             fontSize: typography.size.xl,
                             fontWeight: typography.weight.bold,
                             color: t.text.primary,
@@ -2688,6 +2700,7 @@ export default function RevealExplorer() {
                         border: `1px solid ${t.border.subtle}`,
                     }}>
                         <h2 style={{
+                            fontFamily: 'var(--font-fraunces), Georgia, serif',
                             fontSize: typography.size.lg,
                             fontWeight: typography.weight.semibold,
                             color: t.text.primary,
@@ -2706,6 +2719,7 @@ export default function RevealExplorer() {
                                     marginBottom: spacing[2],
                                 }}></div>
                                 <h3 style={{
+                                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                                     fontSize: typography.size.base,
                                     fontWeight: typography.weight.semibold,
                                     color: t.text.primary,
@@ -2728,6 +2742,7 @@ export default function RevealExplorer() {
                                     marginBottom: spacing[2],
                                 }}></div>
                                 <h3 style={{
+                                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                                     fontSize: typography.size.base,
                                     fontWeight: typography.weight.semibold,
                                     color: t.text.primary,
@@ -2750,6 +2765,7 @@ export default function RevealExplorer() {
                                     marginBottom: spacing[2],
                                 }}></div>
                                 <h3 style={{
+                                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                                     fontSize: typography.size.base,
                                     fontWeight: typography.weight.semibold,
                                     color: t.text.primary,

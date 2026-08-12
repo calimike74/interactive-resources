@@ -473,6 +473,7 @@ function DefinitionsSection({ title, definitions }) {
     return (
         <div>
             <h3 style={{
+                fontFamily: 'var(--font-fraunces), Georgia, serif',
                 fontSize: typography.size.xl,
                 fontWeight: typography.weight.semibold,
                 color: t.text.primary,

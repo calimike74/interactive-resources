@@ -127,7 +127,7 @@ export default function EssayScaffold() {
                 <div style={{
                     position: 'absolute',
                     inset: 0,
-                    background: 'linear-gradient(to bottom, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.7) 100%)',
+                    background: 'linear-gradient(to bottom, rgba(31,42,28,0.4) 0%, rgba(31,42,28,0.75) 100%)',
                 }} />
                 <div style={{
                     position: 'relative',
@@ -136,6 +136,7 @@ export default function EssayScaffold() {
                     textAlign: 'center',
                 }}>
                     <h1 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size['4xl'],
                         fontWeight: typography.weight.bold,
                         color: '#ffffff',
@@ -289,6 +290,7 @@ export default function EssayScaffold() {
                     marginBottom: spacing[4],
                 }}>
                     <h2 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size.xl,
                         fontWeight: typography.weight.semibold,
                         color: t.text.primary,
@@ -375,6 +377,7 @@ export default function EssayScaffold() {
                     borderRadius: borderRadius.lg,
                 }}>
                     <h3 style={{
+                        fontFamily: 'var(--font-fraunces), Georgia, serif',
                         fontSize: typography.size.base,
                         fontWeight: typography.weight.semibold,
                         color: t.text.primary,
@@ -441,6 +444,7 @@ function ScaffoldSidebar({ zone, level, zones, theme: t }) {
                 padding: spacing[5],
             }}>
                 <h3 style={{
+                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                     fontSize: typography.size.lg,
                     fontWeight: typography.weight.semibold,
                     color: t.text.primary,
@@ -505,6 +509,7 @@ function ScaffoldSidebar({ zone, level, zones, theme: t }) {
                     {zone.range}
                 </span>
                 <h3 style={{
+                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                     fontSize: typography.size.lg,
                     fontWeight: typography.weight.bold,
                     color: t.text.primary,

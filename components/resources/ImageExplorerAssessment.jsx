@@ -243,6 +243,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                     fontWeight: typography.weight.bold,
                     color: t.text.primary,
                     margin: 0,
+                    fontFamily: 'var(--font-fraunces), Georgia, serif',
                 }}>{title || 'Controls Assessment'}</h1>
                 {daw && (
                     <span style={{
@@ -675,6 +676,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                 fontWeight: typography.weight.bold,
                                 color: t.accent.success,
                                 marginBottom: spacing[2],
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                             }}>
                                 Stage 1 Complete
                             </h3>
@@ -713,6 +715,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                                 fontWeight: typography.weight.bold,
                                 color: score === total ? t.accent.success : t.accent.warning,
                                 marginBottom: spacing[2],
+                                fontFamily: 'var(--font-fraunces), Georgia, serif',
                             }}>
                                 {score === total ? 'Perfect Score!' : `${score} of ${total} correct`}
                             </h3>
