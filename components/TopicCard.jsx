@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { typography, borderRadius, spacing, transitions } from '@/lib/theme';
 import { getResource } from '@/lib/resources';
 import { withComponentPrefix } from '@/lib/topics';
+import { hasLearnContent } from '@/lib/learn/topics';
+import { hasReviseContent } from '@/lib/questions';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
 
 // Editorial palette — paper & ink, no per-topic colour noise.
@@ -56,8 +58,20 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
     const [popoverBelow, setPopoverBelow] = useState(false);
     const cardRef = useRef(null);
 
+    // Explore resources specifically — what the footer/popover below honestly
+    // describe. Keep this exactly as before: a card with zero Explore tools
+    // still says "In preparation" even once it's reachable (see isReachable).
     const hasResources = !comingSoon && topic.resourceIds.length > 0;
     const resourceCount = topic.resourceIds.length;
+
+    // Whether the card should be a link at all. A band can have real Learn
+    // or Revise content ready before its Explore tool ships (e.g. 1.1
+    // Software and Hardware, 1.4 Sampling) — those cards shouldn't dead-end
+    // just because hasResources (Explore-only) is false. Sourced the same
+    // way tests/orphan-content-integrity.test.mjs reads content, not
+    // hardcoded band ids. The topic page itself already renders an honest
+    // in-build Explore placeholder when resourceIds is empty.
+    const isReachable = hasResources || (!comingSoon && (hasLearnContent(topic.id) || hasReviseContent(topic.id)));
 
     // The popover opens above the card by default; if the card sits too close to
     // the top of the viewport (e.g. first grid row), flip it below to avoid clipping.
@@ -78,15 +92,15 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                 position: 'relative',
                 background: ED.card,
                 borderRadius: borderRadius.lg,
-                border: `1px solid ${isHovered && hasResources ? ED.inkFade : ED.rule}`,
-                boxShadow: isHovered && hasResources
+                border: `1px solid ${isHovered && isReachable ? ED.inkFade : ED.rule}`,
+                boxShadow: isHovered && isReachable
                     ? '0 1px 0 rgba(24,20,16,.04), 0 8px 24px -12px rgba(24,20,16,.18), 0 24px 48px -28px rgba(24,20,16,.18)'
                     : '0 1px 2px rgba(24,20,16,.04), 0 8px 16px -8px rgba(24,20,16,.08)',
                 padding: spacing[6],
-                cursor: hasResources ? 'pointer' : 'default',
+                cursor: isReachable ? 'pointer' : 'default',
                 transition: `transform 220ms ${transitions.easing}, box-shadow 220ms, border-color 220ms`,
-                transform: isHovered && hasResources ? 'translateY(-2px)' : 'none',
-                opacity: hasResources ? 1 : 0.65,
+                transform: isHovered && isReachable ? 'translateY(-2px)' : 'none',
+                opacity: isReachable ? 1 : 0.65,
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
@@ -130,7 +144,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                     fontSize: '24px',
                     lineHeight: 1.12,
                     letterSpacing: '-0.012em',
-                    color: hasResources ? ED.ink : ED.inkSoft,
+                    color: isReachable ? ED.ink : ED.inkSoft,
                     margin: `${spacing[1]} 0 ${spacing[3]}`,
                 }}
             >
@@ -340,7 +354,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
         </article>
     );
 
-    if (!hasResources) {
+    if (!isReachable) {
         return card;
     }
 
