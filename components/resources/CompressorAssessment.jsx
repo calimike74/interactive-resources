@@ -10,6 +10,8 @@ export default function CompressorAssessment() {
             imageAlt={compressorConfig.imageAlt}
             hotspots={compressorConfig.hotspots}
             title="Compressor Controls Assessment"
+            daw={compressorConfig.daw}
+            dawNote={compressorConfig.dawNote}
         />
     );
 }

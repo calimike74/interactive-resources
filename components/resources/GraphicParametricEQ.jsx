@@ -1534,7 +1534,7 @@ export default function GraphicParametricEQ() {
                                         color: t.text.tertiary,
                                     }}
                                 >
-                                    <strong>Common use:</strong> EQ Eight in Ableton Live for mixing individual tracks
+                                    <strong>Common use:</strong> a parametric EQ plugin (e.g. EQ Eight in Ableton Live) for mixing individual tracks
                                 </div>
                             </div>
                         </div>

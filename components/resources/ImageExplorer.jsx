@@ -49,7 +49,7 @@ function renderWithRefs(text, hotspots) {
     });
 }
 
-export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, instruction }) {
+export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, instruction, daw, dawNote }) {
     const [connections, setConnections] = useState([]);
     const [dragging, setDragging] = useState(null);
     const [hoveredHotspot, setHoveredHotspot] = useState(null);
@@ -347,13 +347,37 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
 
             {/* Title and instruction */}
             {title && (
-                <h1 style={{
-                    fontSize: typography.size['2xl'],
-                    fontWeight: typography.weight.bold,
-                    color: t.text.primary,
-                    marginBottom: spacing[2],
+                <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2], flexWrap: 'wrap', marginBottom: spacing[2] }}>
+                    <h1 style={{
+                        fontSize: typography.size['2xl'],
+                        fontWeight: typography.weight.bold,
+                        color: t.text.primary,
+                        margin: 0,
+                        fontFamily: typography.fontFamily,
+                    }}>{title}</h1>
+                    {daw && (
+                        <span style={{
+                            fontSize: typography.size.xs,
+                            fontWeight: typography.weight.semibold,
+                            color: t.text.secondary,
+                            background: t.bg.tertiary,
+                            borderRadius: borderRadius.full,
+                            padding: `${spacing[1]} ${spacing[3]}`,
+                            fontFamily: typography.fontFamily,
+                        }}>{daw} device</span>
+                    )}
+                </div>
+            )}
+            {dawNote && (
+                <p style={{
+                    fontSize: typography.size.sm,
+                    color: t.text.tertiary,
+                    marginBottom: spacing[3],
                     fontFamily: typography.fontFamily,
-                }}>{title}</h1>
+                    lineHeight: typography.lineHeight.relaxed,
+                }}>
+                    {dawNote}
+                </p>
             )}
             {instruction && (
                 <p style={{

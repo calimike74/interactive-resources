@@ -26,7 +26,7 @@ function stripRefs(text) {
     return text.replace(/\{\{[A-G]\}\}/g, '').replace(/\s{2,}/g, ' ').trim();
 }
 
-export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, title, skipNameStage = false }) {
+export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, title, skipNameStage = false, daw, dawNote }) {
     const [stage, setStage] = useState(skipNameStage ? 2 : 1); // 1 = name matching, 2 = description matching
     const [placements, setPlacements] = useState({}); // { hotspotId: draggedItemId }
     const [feedback, setFeedback] = useState({}); // { hotspotId: 'correct' | 'incorrect' }
@@ -237,12 +237,34 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
             `}</style>
 
             {/* Header */}
-            <h1 style={{
-                fontSize: typography.size['2xl'],
-                fontWeight: typography.weight.bold,
-                color: t.text.primary,
-                marginBottom: spacing[1],
-            }}>{title || 'Controls Assessment'}</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2], flexWrap: 'wrap', marginBottom: spacing[1] }}>
+                <h1 style={{
+                    fontSize: typography.size['2xl'],
+                    fontWeight: typography.weight.bold,
+                    color: t.text.primary,
+                    margin: 0,
+                }}>{title || 'Controls Assessment'}</h1>
+                {daw && (
+                    <span style={{
+                        fontSize: typography.size.xs,
+                        fontWeight: typography.weight.semibold,
+                        color: t.text.secondary,
+                        background: t.bg.tertiary,
+                        borderRadius: borderRadius.full,
+                        padding: `${spacing[1]} ${spacing[3]}`,
+                    }}>{daw} device</span>
+                )}
+            </div>
+            {dawNote && (
+                <p style={{
+                    fontSize: typography.size.sm,
+                    color: t.text.tertiary,
+                    marginBottom: spacing[3],
+                    lineHeight: typography.lineHeight.relaxed,
+                }}>
+                    {dawNote}
+                </p>
+            )}
 
             {/* Stage indicator */}
             <div style={{

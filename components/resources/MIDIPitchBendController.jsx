@@ -155,7 +155,7 @@ export default function MIDIPitchBendController() {
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              Task 1A & 1B: Pitch Bend Data
+              Pitch Bend Data
             </button>
             <button type="button"
               onClick={() => setActiveTab('controllers')}
@@ -165,12 +165,12 @@ export default function MIDIPitchBendController() {
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              Task 1C: MIDI Controllers
+              MIDI Controllers
             </button>
           </div>
         </div>
 
-        {/* Task 1A & 1B: Pitch Bend Content */}
+        {/* Pitch Bend Data tab content */}
         {activeTab === 'pitchbend' && (
           <div className="space-y-6">
             {/* Interactive Pitch Bend Simulator */}
@@ -295,11 +295,11 @@ export default function MIDIPitchBendController() {
               </div>
             </div>
 
-            {/* Task 1A: Technical Specifications */}
+            {/* Technical specifications */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Info className="w-6 h-6 text-blue-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Task 1A: How MIDI Transmits Pitch Bend Data</h2>
+                <h2 className="text-2xl font-bold text-gray-800">How MIDI Transmits Pitch Bend Data</h2>
               </div>
 
               {/* Question 1: Bytes */}
@@ -439,11 +439,11 @@ export default function MIDIPitchBendController() {
               </div>
             </div>
 
-            {/* Task 1B: Synthesiser Settings */}
+            {/* Synthesiser settings */}
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <BookOpen className="w-6 h-6 text-green-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Task 1B: Pitch Bend Range in Your Synthesiser</h2>
+                <h2 className="text-2xl font-bold text-gray-800">Range & Bending</h2>
               </div>
 
               <div className="space-y-6">
@@ -501,7 +501,13 @@ export default function MIDIPitchBendController() {
 
                 {/* Question 3: Creating specific bends */}
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <h3 className="font-bold text-gray-800 mb-3">3. How to create specific pitch bends</h3>
+                  <div className="flex items-center gap-2 mb-3 flex-wrap">
+                    <h3 className="font-bold text-gray-800">3. How to create specific pitch bends</h3>
+                    <span className="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-semibold">Ableton Live device</span>
+                  </div>
+                  <p className="text-xs text-gray-600 mb-4">
+                    The walkthroughs below use Ableton Live's Envelope Editor. Other DAWs (Logic, Cubase, FL Studio) draw pitch bend automation in a similar way, but the menu names and locations differ.
+                  </p>
 
                   <div className="mb-6">
                     <div className="bg-mustard-100 p-3 rounded-lg mb-3">
@@ -511,7 +517,7 @@ export default function MIDIPitchBendController() {
                       <ol className="list-decimal list-inside space-y-2 text-gray-700">
                         <li>Open your synthesiser and go to its <strong>global settings page</strong></li>
                         <li>Set <strong>Pitch Bend Range to 7 semitones</strong></li>
-                        <li>In your MIDI clip, open the <strong>Envelope Editor</strong> (bottom of clip view)</li>
+                        <li>In your MIDI clip, open Ableton's <strong>Envelope Editor</strong> (bottom of clip view)</li>
                         <li>From the dropdown, select <strong>"MIDI Ctrl" - "Pitch Bend"</strong></li>
                         <li>Draw your envelope:
                           <ul className="list-disc list-inside ml-6 mt-2 space-y-1 text-sm">
@@ -532,7 +538,7 @@ export default function MIDIPitchBendController() {
                       <ol className="list-decimal list-inside space-y-2 text-gray-700">
                         <li>Open your synthesiser and go to its <strong>global settings page</strong></li>
                         <li>Set <strong>Pitch Bend Range to 12 semitones</strong></li>
-                        <li>In your MIDI clip, open the <strong>Envelope Editor</strong></li>
+                        <li>In your MIDI clip, open Ableton's <strong>Envelope Editor</strong></li>
                         <li>Select <strong>"MIDI Ctrl" - "Pitch Bend"</strong></li>
                         <li>Draw your envelope:
                           <ul className="list-disc list-inside ml-6 mt-2 space-y-1 text-sm">
@@ -568,13 +574,13 @@ export default function MIDIPitchBendController() {
           </div>
         )}
 
-        {/* Task 1C: MIDI Controllers */}
+        {/* MIDI Controllers tab content */}
         {activeTab === 'controllers' && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Sliders className="w-6 h-6 text-mustard-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Task 1C: MIDI Controllers Beyond Pitch Bend</h2>
+                <h2 className="text-2xl font-bold text-gray-800">MIDI Controllers Beyond Pitch Bend</h2>
               </div>
 
               <p className="text-gray-600 mb-6">
@@ -845,10 +851,7 @@ export default function MIDIPitchBendController() {
 
         {/* Footer */}
         <div className="bg-white rounded-lg shadow-lg p-6 mt-6 text-center">
-          <p className="text-gray-600 text-sm">
-            Created for Year 12 A-Level Music Technology Students
-          </p>
-          <p className="text-gray-500 text-xs mt-2">
+          <p className="text-gray-500 text-xs">
             Experiment with the controls above to understand how MIDI data works!
           </p>
         </div>

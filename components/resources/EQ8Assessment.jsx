@@ -10,6 +10,8 @@ export default function EQ8Assessment() {
             imageAlt={eq8Config.imageAlt}
             hotspots={eq8Config.hotspots}
             title="EQ Eight Controls Assessment"
+            daw={eq8Config.daw}
+            dawNote={eq8Config.dawNote}
         />
     );
 }

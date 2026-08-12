@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { theme, typography, borderRadius, spacing, transitions } from '@/lib/theme';
-import { supabase } from '@/lib/supabase';
 
 const SCAFFOLD_LEVELS = [
     { id: 'full', label: 'Full Support', description: 'All scaffolds visible' },
@@ -73,16 +72,18 @@ const SELF_ASSESSMENT = [
     { id: 'connectives', label: 'I used evaluative language (therefore, this suggests, consequently, however)' },
 ];
 
+const MIN_CHECKED_TO_REVEAL = 4;
+
+const MODEL_ANSWER = 'Spaced pair (AB) uses two microphones positioned apart from each other, so the stereo image is created by tiny time-of-arrival differences as sound reaches each capsule. This produces a wide, spacious image with a strong sense of the room, making it well suited to orchestral or large-ensemble recording where ambience matters. However, because the image relies on timing rather than level, summing the signal to mono can cause phase cancellation, thinning or colouring the sound — a real risk in broadcast or streaming contexts where mono playback is still common.\n\nCoincident pair (XY) places two directional microphones with their capsules as close together as possible, angled apart so the stereo image is created by intensity differences alone rather than timing. Because both capsules receive the sound at effectively the same moment, XY collapses to mono with excellent phase coherence and no cancellation. The trade-off is a narrower, less enveloping image than a spaced pair, so XY suits situations demanding mono compatibility and accurate localisation — close-miked ensembles or broadcast interviews — more than it suits capturing room ambience.\n\nMid-side (MS) combines a forward-facing cardioid microphone (the mid signal) with a sideways-facing figure-of-eight microphone (the side signal). The stereo image is not fixed at the point of recording: after capture, the engineer decodes it by creating Left = Mid + Side and Right = Mid − Side, so stereo width can be adjusted, or collapsed entirely, during mixing. Removing the side signal leaves a pure mono mid signal with no phase issues at all, which is exactly why mid-side is particularly valued in broadcast work, where mono compatibility and post-recording flexibility both matter more than a fixed, maximally wide image.\n\nOverall, spaced pair prioritises width and ambience at the cost of mono safety; XY prioritises mono compatibility and accuracy at the cost of width; and mid-side offers both by deferring the width decision to the mix, at the cost of a slightly more complex setup and decoding stage. The right choice depends on the scenario: spaced pair for spacious orchestral capture where mono playback is unlikely, XY for broadcast or close-miked work needing guaranteed mono compatibility, and mid-side wherever post-production flexibility matters, such as any release that needs both stereo and mono versions.';
+
 export default function StereoRecordingEssay() {
     const t = theme.light;
-    const [studentName, setStudentName] = useState('');
     const [scaffoldLevel, setScaffoldLevel] = useState('full');
     const [essayContent, setEssayContent] = useState({});
     const [checkedItems, setCheckedItems] = useState({});
     const [showExtension, setShowExtension] = useState(false);
     const [activeTechnique, setActiveTechnique] = useState(null);
-    const [submitting, setSubmitting] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
+    const [modelRevealed, setModelRevealed] = useState(false);
     const tabListRef = useRef(null);
     const tabBtnRefs = useRef({});
     const [tabIndicator, setTabIndicator] = useState({ x: 0, width: 0, ready: false });
@@ -120,79 +121,7 @@ export default function StereoRecordingEssay() {
     };
 
     const checkedCount = Object.values(checkedItems).filter(Boolean).length;
-
-    const handleSubmit = async () => {
-        if (!studentName.trim()) {
-            alert('Please enter your name before submitting.');
-            return;
-        }
-        const content = essayContent.response?.trim();
-        if (!content || wordCount < 20) {
-            alert('Please write at least 20 words before submitting.');
-            return;
-        }
-        setSubmitting(true);
-        try {
-            const { error } = await supabase
-                .from('essay_responses')
-                .insert({
-                    resource_id: 'stereo-recording-essay',
-                    student_name: studentName.trim(),
-                    content,
-                    word_count: wordCount,
-                    scaffold_level: scaffoldLevel,
-                });
-            if (error) throw error;
-            setSubmitted(true);
-        } catch (err) {
-            alert('Error submitting: ' + err.message);
-        } finally {
-            setSubmitting(false);
-        }
-    };
-
-    if (submitted) {
-        return (
-            <div style={{
-                maxWidth: '500px',
-                margin: '0 auto',
-                padding: spacing[10],
-                fontFamily: typography.fontFamily,
-                textAlign: 'center',
-            }}>
-                <div style={{
-                    background: t.bg.primary,
-                    borderRadius: borderRadius['2xl'],
-                    padding: spacing[8],
-                    boxShadow: t.shadow.lg,
-                }}>
-                    <div style={{ fontSize: '3rem', marginBottom: spacing[4] }}>✓</div>
-                    <h2 style={{
-                        fontSize: typography.size.xl,
-                        fontWeight: typography.weight.bold,
-                        color: t.text.primary,
-                        marginBottom: spacing[2],
-                    }}>
-                        Essay Submitted
-                    </h2>
-                    <p style={{
-                        fontSize: typography.size.sm,
-                        color: t.text.secondary,
-                        marginBottom: spacing[4],
-                    }}>
-                        Thanks {studentName}. Your teacher will mark your response.
-                    </p>
-                    <p style={{
-                        fontSize: typography.size.sm,
-                        color: t.text.tertiary,
-                        fontFamily: typography.fontFamilyMono,
-                    }}>
-                        {wordCount} words
-                    </p>
-                </div>
-            </div>
-        );
-    }
+    const canReveal = checkedCount >= MIN_CHECKED_TO_REVEAL && wordCount >= 20;
 
     return (
         <div style={{
@@ -597,68 +526,85 @@ export default function StereoRecordingEssay() {
                         </div>
                     </div>
 
-                    {/* Name + Submit */}
+                    {/* Reveal-and-compare */}
                     <div style={{
                         marginTop: spacing[6],
                         padding: spacing[5],
                         background: t.bg.secondary,
                         borderRadius: borderRadius.lg,
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
-                        gap: spacing[4],
-                        flexWrap: 'wrap',
+                        gap: spacing[2],
                     }}>
-                        <input aria-label="Your name"
-                            type="text"
-                            value={studentName}
-                            onChange={(e) => setStudentName(e.target.value)}
-                            placeholder="Your name"
+                        <button type="button"
+                            onClick={() => canReveal && setModelRevealed(true)}
+                            disabled={!canReveal}
                             style={{
-                                flex: '1 1 200px',
-                                padding: spacing[3],
+                                padding: `${spacing[3]} ${spacing[6]}`,
                                 borderRadius: borderRadius.lg,
-                                border: `1px solid ${t.border.input}`,
+                                border: 'none',
+                                cursor: canReveal ? 'pointer' : 'not-allowed',
                                 fontSize: typography.size.base,
+                                fontWeight: typography.weight.semibold,
                                 fontFamily: typography.fontFamily,
-                                background: t.bg.primary,
-                                color: t.text.primary,
+                                background: canReveal ? t.accent.primary : t.bg.tertiary,
+                                color: canReveal ? t.text.inverse : t.text.tertiary,
+                                transition: `all ${transitions.fast}`,
                             }}
-                        />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1], flex: '0 0 auto' }}>
-                            <button type="button"
-                                onClick={handleSubmit}
-                                disabled={submitting || !studentName.trim() || wordCount < 20}
-                                style={{
-                                    padding: `${spacing[3]} ${spacing[6]}`,
-                                    borderRadius: borderRadius.lg,
-                                    border: 'none',
-                                    cursor: submitting || !studentName.trim() || wordCount < 20 ? 'not-allowed' : 'pointer',
-                                    fontSize: typography.size.base,
-                                    fontWeight: typography.weight.semibold,
-                                    fontFamily: typography.fontFamily,
-                                    background: submitting || !studentName.trim() || wordCount < 20
-                                        ? t.bg.tertiary
-                                        : t.accent.primary,
-                                    color: submitting || !studentName.trim() || wordCount < 20
-                                        ? t.text.tertiary
-                                        : t.text.inverse,
-                                    transition: `all ${transitions.fast}`,
-                                }}
-                            >
-                                {submitting ? 'Submitting...' : 'Submit Essay'}
-                            </button>
-                            {wordCount < 20 && (
-                                <span style={{
-                                    fontSize: typography.size.xs,
-                                    color: t.text.tertiary,
-                                    fontFamily: typography.fontFamily,
-                                    textAlign: 'center',
-                                }}>
-                                    Write at least 20 words to submit
-                                </span>
-                            )}
-                        </div>
+                        >
+                            Compare to model answer
+                        </button>
+                        {!canReveal && (
+                            <span style={{
+                                fontSize: typography.size.xs,
+                                color: t.text.tertiary,
+                                fontFamily: typography.fontFamily,
+                                textAlign: 'center',
+                            }}>
+                                Write at least 20 words and tick {MIN_CHECKED_TO_REVEAL} boxes above to unlock the model answer
+                            </span>
+                        )}
                     </div>
+
+                    {modelRevealed && (
+                        <div style={{
+                            marginTop: spacing[6],
+                            padding: spacing[5],
+                            background: t.accent.successLight,
+                            borderRadius: borderRadius.lg,
+                            border: `1px solid ${t.accent.success}`,
+                        }}>
+                            <div style={{
+                                fontSize: typography.size.xs,
+                                fontWeight: typography.weight.semibold,
+                                color: t.accent.success,
+                                textTransform: 'uppercase',
+                                letterSpacing: typography.letterSpacing.wide,
+                                marginBottom: spacing[3],
+                            }}>
+                                Model Answer
+                            </div>
+                            <p style={{
+                                fontSize: typography.size.xs,
+                                color: t.text.tertiary,
+                                fontStyle: 'italic',
+                                margin: `0 0 ${spacing[3]}`,
+                            }}>
+                                Model response written against the Edexcel mark scheme and examiner reports for this question type.
+                            </p>
+                            {MODEL_ANSWER.split('\n\n').map((para, i) => (
+                                <p key={i} style={{
+                                    fontSize: typography.size.sm,
+                                    color: t.text.primary,
+                                    margin: i === 0 ? 0 : `${spacing[3]} 0 0`,
+                                    lineHeight: typography.lineHeight.relaxed,
+                                }}>
+                                    {para}
+                                </p>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

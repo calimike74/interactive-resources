@@ -10,6 +10,8 @@ export default function OperatorAssessment() {
             imageAlt={operatorConfig.imageAlt}
             hotspots={operatorConfig.hotspots}
             title="Operator Controls Assessment"
+            daw={operatorConfig.daw}
+            dawNote={operatorConfig.dawNote}
         />
     );
 }

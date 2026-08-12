@@ -10,6 +10,8 @@ export default function GateAssessment() {
             imageAlt={gateConfig.imageAlt}
             hotspots={gateConfig.hotspots}
             title="Gate Controls Assessment"
+            daw={gateConfig.daw}
+            dawNote={gateConfig.dawNote}
         />
     );
 }

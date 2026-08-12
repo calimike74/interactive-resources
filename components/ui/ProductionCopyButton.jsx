@@ -5,7 +5,7 @@ import { PRODUCTION_MODES } from '@/lib/copy-for-ai';
 import { spacing, borderRadius, transitions } from '@/lib/theme';
 
 const MODE_ICONS = {
-    ableton: (
+    daw: (
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
             <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
@@ -172,7 +172,7 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                         Copy for AI
                     </p>
                     <p style={{ fontSize: 11, color: '#6B7280', margin: 0, lineHeight: 1.5 }}>
-                        Copies your current settings to paste into ChatGPT or similar — get help recreating this in Ableton.
+                        Copies your current settings to paste into ChatGPT or similar — get help recreating this in your DAW.
                     </p>
                     {/* Arrow */}
                     <div style={{

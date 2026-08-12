@@ -307,7 +307,7 @@ export default function MIDIBinaryAssessment() {
             <div className="mx-auto max-w-3xl text-ink">
                 <header className="mb-6">
                     <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-medium text-ink">MIDI, Binary & Numeracy — Results</h1>
-                    <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">Based on Worksheet 8 (Pre-exam Revision Pack)</p>
+                    <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">1.5 Sequencing + 2.5 Numeracy</p>
                 </header>
 
                 <div className={`mb-6 rounded-2xl border-2 p-6 ${bandColour}`}>
@@ -380,7 +380,7 @@ export default function MIDIBinaryAssessment() {
                     MIDI, Binary & Numeracy Assessment
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">
-                    1.5 Sequencing + 2.5 Numeracy — drilled from Worksheet 8
+                    1.5 Sequencing + 2.5 Numeracy — exam-style practice questions
                 </p>
             </header>
 
