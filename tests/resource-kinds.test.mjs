@@ -6,7 +6,9 @@ const VALID_KINDS = ['sandbox', 'interface', 'retrieval', 'practice'];
 
 test('every registered resource declares a valid kind', () => {
     const resources = getAllResources();
-    assert.ok(resources.length >= 51, `expected >= 51 resources, got ${resources.length}`);
+    // WO-08 (2026-08-12) retired eq-assessment-prototype + patch-bay-simulator,
+    // dropping the count from 52 to 50.
+    assert.ok(resources.length >= 49, `expected >= 49 resources, got ${resources.length}`);
     for (const r of resources) {
         assert.ok(
             VALID_KINDS.includes(r.kind),
