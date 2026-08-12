@@ -342,7 +342,7 @@ export default function WaveformDrawingAssessment() {
                 </div>
 
                 <p className="text-xs text-ink/50 text-center mt-4">
-                    Based on Worksheet 7 (C4 Intervention Pack) · drawn from 2019, 2023, 2024 and 2025 papers
+                    Drawn from 2019, 2023, 2024 and 2025 exam papers
                 </p>
             </div>
         </div>

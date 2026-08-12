@@ -1765,7 +1765,7 @@ const Part4Practice = () => {
             <div style={{ marginTop: '2rem', padding: '2rem', background: 'linear-gradient(135deg, rgba(52,211,153,0.1) 0%, #101218 100%)', borderRadius: '16px', border: '1px solid rgba(52,211,153,0.3)', textAlign: 'center' }}>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#34d399', marginBottom: '0.5rem' }}>Well Done!</h3>
                 <p style={{ color: '#8b909a', maxWidth: '500px', margin: '0 auto' }}>
-                    You've bridged your synthesis knowledge to EQ. Use the navigation above to revisit any section, and copy the notes to OneNote for revision.
+                    You've bridged your synthesis knowledge to EQ. Use the navigation above to revisit any section, and copy the notes to your notes app for revision.
                 </p>
             </div>
         </div>
@@ -1785,6 +1785,7 @@ export default function EQFilterBridge() {
     };
 
     const partColors = { 1: '#DCC892', 2: '#ff9f43', 3: '#34d399', 4: '#74b9ff' };
+    const partSubtitles = { 1: 'What You Know', 2: 'Same Tools', 3: 'New Filters', 4: 'Draw Curves' };
 
     return (
         <div style={{ minHeight: '100vh', background: '#050507', color: '#c9cdd4', fontFamily: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, sans-serif' }}>
@@ -1851,19 +1852,21 @@ export default function EQFilterBridge() {
                             <button type="button"
                                 key={part}
                                 onClick={() => goToPart(part)}
+                                title={`Part ${part}: ${partSubtitles[part]}`}
                                 style={{
-                                    padding: '0.5rem 1rem',
+                                    padding: '0.4rem 1rem',
                                     background: currentPart === part ? partColors[part] : 'transparent',
                                     border: `1px solid ${currentPart === part ? 'transparent' : visitedParts.has(part) ? 'rgba(255,200,100,0.15)' : '#ffffff10'}`,
                                     borderRadius: '8px',
                                     color: currentPart === part ? '#050507' : visitedParts.has(part) ? '#c9cdd4' : '#767b88',
                                     cursor: 'pointer',
                                     fontFamily: 'monospace',
-                                    fontSize: '0.75rem',
-                                    fontWeight: '600'
+                                    textAlign: 'center',
+                                    lineHeight: 1.3,
                                 }}
                             >
-                                Part {part}
+                                <div style={{ fontSize: '0.75rem', fontWeight: '600' }}>Part {part}</div>
+                                <div style={{ fontSize: '0.6rem', fontWeight: '400', opacity: 0.85, textTransform: 'none', letterSpacing: 0 }}>{partSubtitles[part]}</div>
                             </button>
                         ))}
                     </div>

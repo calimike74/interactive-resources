@@ -281,10 +281,10 @@ const DistortionLab = () => {
     },
     {
       difficulty: 'intermediate',
-      question: 'In Ableton Live, which device would you use for hard clipping?',
+      question: 'Bonus (Ableton Live users) — which device would you use for hard clipping?',
       options: ['Saturator (Digital Clip)', 'Dynamic Tube', 'Erosion', 'Reverb'],
       correct: 0,
-      explanation: 'The Saturator device in Digital Clip mode provides hard clipping distortion in Ableton Live.'
+      explanation: 'The Saturator device in Digital Clip mode provides hard clipping distortion in Ableton Live. This is not required Edexcel spec knowledge — other DAWs use different device names for the same concept.'
     },
 
     // Advanced level
@@ -1078,11 +1078,10 @@ const DistortionLab = () => {
                     <span className="text-green-600 font-bold">✓</span>
                     <span><strong>Understand</strong> gain staging and headroom management</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600 font-bold">✓</span>
-                    <span><strong>Know</strong> which Ableton Live devices create each distortion type</span>
-                  </li>
                 </ul>
+                <p className="text-xs text-gray-500 mt-3">
+                  The Edexcel spec does not require DAW-specific device knowledge — the Ableton Live Device Reference above is a bonus if that&apos;s what you use.
+                </p>
               </div>
 
               {/* Current Distortion Type Reference */}
@@ -1414,7 +1413,7 @@ const DistortionLab = () => {
                       className={copySuccess ? 'bg-green-100 border-green-400' : ''}
                     >
                       <Copy className="w-4 h-4 mr-2" />
-                      {copySuccess ? '✓ Copied!' : 'Copy to OneNote'}
+                      {copySuccess ? '✓ Copied!' : 'Copy Results (paste into OneNote or any notes app)'}
                     </Button>
                     <Button onClick={resetQuiz} variant="outline">
                       Try Again

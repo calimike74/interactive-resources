@@ -10,6 +10,8 @@ export default function AutoFilterAssessment() {
             imageAlt={autofilterConfig.imageAlt}
             hotspots={autofilterConfig.hotspots}
             title="Auto Filter Controls Assessment"
+            daw={autofilterConfig.daw}
+            dawNote={autofilterConfig.dawNote}
         />
     );
 }
