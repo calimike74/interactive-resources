@@ -9,7 +9,7 @@ import { theme, typography, borderRadius, spacing, transitions } from '@/lib/the
 const YOUTUBE_ID = 'rguok2Q95FE';
 
 const KEY_TERMS = [
-    { term: 'Equalization (EQ)', timestamp: '0:48' },
+    { term: 'Equalisation (EQ)', timestamp: '0:48' },
     { term: 'Frequency spectrum', timestamp: '0:55' },
     { term: 'Highpass filter', timestamp: '1:34' },
     { term: 'Cutoff frequency', timestamp: '1:49' },
