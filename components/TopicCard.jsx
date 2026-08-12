@@ -67,15 +67,11 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
     // Whether the card should be a link at all. A band can have real Learn
     // or Revise content ready before its Explore tool ships (e.g. 1.1
     // Software and Hardware, 1.4 Sampling) — those cards shouldn't dead-end
-    // just because hasResources (Explore-only) is false. No `!comingSoon`
-    // guard here deliberately: app/page.js's getHasContent puts these bands
-    // in the "In preparation" section for the active tab precisely because
-    // they lack Explore resources, but that's exactly the case this fix
-    // targets — a comingSoon card with real Learn/Revise content must still
-    // be reachable. Sourced the same way tests/orphan-content-integrity.test.mjs
-    // reads content, not hardcoded band ids. The topic page itself already
-    // renders an honest in-build Explore placeholder when resourceIds is empty.
-    const isReachable = hasResources || hasLearnContent(topic.id) || hasReviseContent(topic.id);
+    // just because hasResources (Explore-only) is false. Sourced the same
+    // way tests/orphan-content-integrity.test.mjs reads content, not
+    // hardcoded band ids. The topic page itself already renders an honest
+    // in-build Explore placeholder when resourceIds is empty.
+    const isReachable = hasResources || (!comingSoon && (hasLearnContent(topic.id) || hasReviseContent(topic.id)));
 
     // The popover opens above the card by default; if the card sits too close to
     // the top of the viewport (e.g. first grid row), flip it below to avoid clipping.
