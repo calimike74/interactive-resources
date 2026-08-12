@@ -1,0 +1,172 @@
+{
+  "topicId": "microphones",
+  "questions": [
+    {
+      "id": "microphones-mcq-01",
+      "type": "mcq",
+      "question": "Which type of microphone uses electromagnetic induction, requires no external power, and is most suited to high-SPL sources such as drums?",
+      "options": [
+        "Dynamic (moving-coil)",
+        "Condenser (capacitor)",
+        "Ribbon",
+        "Piezoelectric"
+      ],
+      "correctIndex": 0,
+      "explanation": "A dynamic moving-coil microphone works by electromagnetic induction — a diaphragm attached to a coil moves within a magnetic field, generating a voltage. It requires no power, is robust, and handles very high sound pressure levels well, making it the standard choice for drum kits and guitar amplifiers."
+    },
+    {
+      "id": "microphones-mcq-02",
+      "type": "mcq",
+      "question": "Phantom power (+48V) is required by which microphone type?",
+      "options": [
+        "Condenser (capacitor)",
+        "Dynamic (moving-coil)",
+        "Ribbon",
+        "Boundary"
+      ],
+      "correctIndex": 0,
+      "explanation": "Condenser microphones use a charged capacitor (two plates — one fixed, one a thin diaphragm). The capacitance changes with sound pressure, generating a signal. This requires a polarising voltage and a built-in preamp, both powered by phantom power, typically +48V sent down the XLR cable from the mixing desk or audio interface."
+    },
+    {
+      "id": "microphones-mcq-03",
+      "type": "mcq",
+      "question": "Which polar pattern picks up sound equally from all directions?",
+      "options": [
+        "Omnidirectional",
+        "Cardioid",
+        "Figure-of-8 (bidirectional)",
+        "Hypercardioid"
+      ],
+      "correctIndex": 0,
+      "explanation": "An omnidirectional polar pattern has equal sensitivity at all angles (360°). It does not exhibit the proximity effect and captures natural room ambience. It is commonly used for orchestral recording, broadcast tie-clip mics, and any situation where consistent off-axis pickup is desirable."
+    },
+    {
+      "id": "microphones-mcq-04",
+      "type": "mcq",
+      "question": "The proximity effect is best described as:",
+      "options": [
+        "An increase in low-frequency response when a directional microphone is placed very close to a sound source",
+        "A reduction in high-frequency response caused by a windshield placed over the capsule",
+        "Distortion that occurs when the microphone capsule is overloaded by high SPL",
+        "Phase cancellation between two microphones placed close together"
+      ],
+      "correctIndex": 0,
+      "explanation": "Directional microphones (cardioid, figure-of-8, hypercardioid) exhibit the proximity effect: when placed within about 30 cm of a source, bass frequencies are boosted. This is a property of pressure-gradient capsules. Engineers exploit it for a warm vocal sound, but must compensate with a high-pass filter when recording speech. Omnidirectional mics do not exhibit this effect."
+    },
+    {
+      "id": "microphones-mcq-05",
+      "type": "mcq",
+      "question": "In an MS (Mid-Side) stereo microphone technique, which component determines the width of the stereo image?",
+      "options": [
+        "The level of the Side (figure-of-8) microphone signal",
+        "The angle between the two capsules",
+        "The distance of the pair from the sound source",
+        "The polar pattern of the Mid microphone"
+      ],
+      "correctIndex": 0,
+      "explanation": "MS uses a Mid mic (usually cardioid, pointing directly at the source) and a Side mic (figure-of-8, pointing 90° to the side). The stereo image is decoded by summing M+S for left and M−S for right. Increasing the level of the Side signal widens the stereo image; reducing it narrows it down to mono. This makes MS uniquely flexible — width can be adjusted in post-production."
+    },
+    {
+      "id": "microphones-mcq-06",
+      "type": "mcq",
+      "question": "Which of the following best describes a ribbon microphone?",
+      "options": [
+        "It uses a piezoelectric crystal that generates voltage when deformed by sound pressure",
+        "It uses a thin metal ribbon suspended between the poles of a magnet, producing a figure-of-8 polar pattern",
+        "It uses a charged backplate and diaphragm forming a capacitor, requiring phantom power",
+        "It uses a coil of wire attached to a diaphragm moving within a magnetic field"
+      ],
+      "correctIndex": 1,
+      "explanation": "A ribbon microphone uses a very thin strip (ribbon) of aluminium foil suspended in a magnetic field. Sound waves cause the ribbon to vibrate, generating a voltage by electromagnetic induction. Ribbon mics naturally produce a figure-of-8 polar pattern because the ribbon is open to sound from both front and back. They are prized for their smooth, warm high-frequency response but are fragile and generally have lower output than condensers."
+    },
+    {
+      "id": "microphones-mcq-07",
+      "type": "mcq",
+      "question": "A Blumlein pair stereo technique uses:",
+      "options": [
+        "Two omnidirectional microphones spaced several metres apart",
+        "One cardioid microphone and one figure-of-8 microphone at the same position",
+        "Two spaced cardioid microphones pointed directly at the source",
+        "Two coincident figure-of-8 microphones angled at 90° to each other"
+      ],
+      "correctIndex": 3,
+      "explanation": "The Blumlein pair, named after Alan Blumlein, uses two figure-of-8 microphones placed coincidentally (capsules as close as possible) and angled at 90° to each other. This captures a remarkably natural and spacious stereo image with excellent localisation. Because figure-of-8 mics pick up from the rear as well, the technique also captures significant room ambience, making it best suited to good-sounding acoustic spaces."
+    },
+    {
+      "id": "microphones-mcq-08",
+      "type": "mcq",
+      "question": "The 3:1 rule in multi-microphone recording states that:",
+      "options": [
+        "Microphones should be placed at least three times the source-to-mic distance apart from each other to minimise phase cancellation",
+        "At least three microphones should be used for any stereo recording",
+        "The signal-to-noise ratio should be at least 3:1 for an acceptable recording",
+        "Microphone gain should be set to one-third of the maximum to avoid clipping"
+      ],
+      "correctIndex": 0,
+      "explanation": "The 3:1 rule is a practical guideline for reducing phase interference in multi-mic setups. If microphone A is 10 cm from a source, microphone B should be at least 30 cm from microphone A. This ensures the level difference between the two signals is large enough (approximately 10 dB) that any phase cancellation when the signals are summed is perceptually insignificant."
+    },
+    {
+      "id": "microphones-mcq-09",
+      "type": "mcq",
+      "question": "What is the primary purpose of a pop shield (pop filter) placed in front of a microphone during vocal recording?",
+      "options": [
+        "To boost the high-frequency presence of the vocal",
+        "To provide acoustic isolation from room reflections behind the singer",
+        "To reduce plosive blasts of air (from 'p' and 'b' sounds) hitting the diaphragm",
+        "To attenuate sibilance on 's' and 't' sounds"
+      ],
+      "correctIndex": 2,
+      "explanation": "A pop shield is a mesh screen (nylon or metal) placed between the singer and the microphone. Its primary function is to diffuse the high-velocity bursts of air caused by plosive consonants ('p', 'b', 't'). Without a pop shield, these bursts hit the diaphragm directly, causing a low-frequency thump that can overload the capsule. Pop shields do not significantly affect sibilance — that is addressed by a de-esser."
+    },
+    {
+      "id": "microphones-num-01",
+      "type": "numeric",
+      "question": "How many volts of phantom power is the standard supplied by a professional mixing desk or audio interface to power a condenser microphone?",
+      "answer": 48,
+      "tolerance": 0,
+      "unit": "V",
+      "explanation": "The standard phantom power voltage defined by IEC 61938 is +48V, delivered down pins 2 and 3 of an XLR connector relative to pin 1 (ground). Some equipment offers +12V or +24V for older or lower-powered condenser designs, but +48V is the professional standard required by the majority of studio condenser microphones."
+    },
+    {
+      "id": "microphones-num-02",
+      "type": "numeric",
+      "question": "In an XY stereo pair, two cardioid microphones are placed with their capsules coincident. What is the standard angle between the two microphones, in degrees?",
+      "answer": 90,
+      "tolerance": 0,
+      "unit": "degrees",
+      "explanation": "In the standard XY configuration, two cardioid microphones are placed with their capsules as close together as possible (coincident) and angled at 90° to each other (45° either side of the centre axis). Because the capsules are coincident, there are no time-of-arrival differences between channels — stereo is achieved entirely through level differences. This avoids phase problems that can arise with spaced-pair (AB) techniques."
+    },
+    {
+      "id": "microphones-num-03",
+      "type": "numeric",
+      "question": "A signal clipping in a DAW is indicated at 0 dBFS. If the engineer sets the recording level so peaks reach −18 dBFS, how many decibels of headroom are available before clipping?",
+      "answer": 18,
+      "tolerance": 0,
+      "unit": "dB",
+      "explanation": "In digital audio, 0 dBFS (decibels relative to full scale) is the maximum value — any signal above this clips. Headroom is the difference between the operating level and 0 dBFS. If peaks are set at −18 dBFS, there is 18 dB of headroom. Recording at approximately −18 dBFS is common practice in modern DAW workflows, aligning with the EBU R68 recommended alignment level and giving sufficient headroom for unexpected transients."
+    },
+    {
+      "id": "microphones-num-04",
+      "type": "numeric",
+      "question": "In a spaced pair (AB) stereo setup, two omnidirectional microphones are placed 60 cm apart. A sound arrives from the far left. Given that sound travels at 343 m/s, what is the time difference (in milliseconds) between the sound arriving at the nearer and farther microphone? Round to one decimal place.",
+      "answer": 1.7,
+      "tolerance": 0.1,
+      "unit": "ms",
+      "explanation": "If the sound arrives from the extreme left, the maximum path difference equals the spacing between the microphones: 0.6m. Time = distance ÷ speed = 0.6 ÷ 343 = 0.00175 seconds ≈ 1.7ms. This inter-channel time difference is what creates the stereo image in a spaced pair technique. Larger spacings give wider stereo but increase the risk of phase issues when summed to mono."
+    },
+    {
+      "id": "microphones-short-01",
+      "type": "short",
+      "question": "Compare close microphone technique with ambient (distant) microphone technique, explaining the effect of each on the recorded sound.",
+      "sampleAnswer": "Close microphone technique places the microphone very close to the sound source (typically within 30 cm). This captures a direct, dry, detailed sound with minimal room reverberation, giving the engineer maximum control over the recorded signal. However, directional microphones placed this close will exhibit the proximity effect, boosting bass frequencies. Ambient technique places the microphone further from the source, at a distance of one metre or more. This captures more room sound and natural reverberation, giving a sense of space and environment. The direct sound is softer and more blended with reflections. Ambient mics are often used alongside close mics in multi-mic setups to add depth and air to the recording.",
+      "keyPoints": [
+        "Close mic: direct, dry, detailed sound with minimal room ambience",
+        "Close mic with directional mic: proximity effect boosts low frequencies",
+        "Ambient mic: captures room reverberation and sense of space",
+        "Ambient mic: softer direct sound, blended with room reflections",
+        "Both techniques are often combined in multi-mic setups"
+      ],
+      "explanation": "The choice of mic placement fundamentally shapes the character of a recording. Close mics give isolation and control, useful in multi-track sessions to prevent bleed. Ambient mics capture the acoustic character of the room and are important in classical or orchestral recording where the hall is part of the sound. In studio rock recording, both are used together — for example, a close snare mic plus overheads plus a room mic blended in the mix."
+    }
+  ]
+}

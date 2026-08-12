@@ -54,9 +54,20 @@ const BANNED_GLYPHS = ['▶', '↔'];
 // plan with a disclosed 12/3/5 deviation — the chapter honestly supports only
 // three calculation families (the dBu-ladder differences), so forcing five
 // numerics would invent arithmetic the course never taught. Mike can overrule.
+// 2026-08-12 (WO-11): microphones/acoustics/software-hardware are not new
+// authored banks — they are the orphaned 20-question 'recording' bank
+// (keyed to a band WO-02 dissolved) redistributed across its real spec
+// homes, item-by-item classified against the 1.2/2.1/1.1 spec extracts.
+// Padding any of the three back up to the default 10/5/5 would mean
+// inventing new questions no source content supports — out of scope for a
+// re-home. Together the three still sum to the original 10 mcq / 5 numeric
+// / 5 short (see WO-11-recording-content-rehome.md acceptance notes).
 const DEFAULT_TYPE_MIX = { mcq: 10, numeric: 5, short: 5 };
 const TYPE_MIX = {
     'leads-and-signals': { mcq: 12, numeric: 3, short: 5 },
+    microphones: { mcq: 9, numeric: 4, short: 1 },
+    acoustics: { mcq: 0, numeric: 1, short: 2 },
+    'software-hardware': { mcq: 1, numeric: 0, short: 2 },
 };
 function typeMixFor(topicId) {
     return TYPE_MIX[topicId] ?? DEFAULT_TYPE_MIX;
@@ -170,17 +181,23 @@ test('every question bank has a valid schema', () => {
     assert.deepStrictEqual(failures, [], failures.join('\n'));
 });
 
-test('every bank has exactly 20 questions matching its declared TYPE_MIX', () => {
+test('every bank has exactly as many questions as its declared TYPE_MIX totals', () => {
+    // The total is derived from TYPE_MIX rather than hardcoded, so a bank's
+    // expected count is always the sum of its own declared mix. Every bank
+    // without an override still sums to 20 via DEFAULT_TYPE_MIX (10+5+5) —
+    // this only changes behaviour for banks with a declared partial mix
+    // (see the WO-11 comment on TYPE_MIX above).
     const failures = [];
     for (const bank of banks) {
         if (bank.parseError || !Array.isArray(bank.parsed?.questions)) continue; // reported by the schema test above
 
         const questions = bank.parsed.questions;
-        if (questions.length !== 20) {
-            failures.push(`${bank.filename}: expected exactly 20 questions, found ${questions.length}`);
+        const mix = typeMixFor(bank.topicId);
+        const expectedTotal = Object.values(mix).reduce((a, b) => a + b, 0);
+        if (questions.length !== expectedTotal) {
+            failures.push(`${bank.filename}: expected ${expectedTotal} questions (TYPE_MIX total), found ${questions.length}`);
         }
 
-        const mix = typeMixFor(bank.topicId);
         const counts = { mcq: 0, numeric: 0, short: 0 };
         for (const q of questions) {
             if (q.type in counts) counts[q.type] += 1;

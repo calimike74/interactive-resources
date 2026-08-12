@@ -1,0 +1,43 @@
+{
+  "topicId": "acoustics",
+  "questions": [
+    {
+      "id": "acoustics-num-01",
+      "type": "numeric",
+      "question": "A rectangular room is 5 metres long. Calculate the frequency of the lowest axial room mode along this dimension. Use the speed of sound as 343 m/s. Round to one decimal place.",
+      "answer": 34.3,
+      "tolerance": 0.5,
+      "unit": "Hz",
+      "explanation": "The lowest axial mode occurs when half a wavelength fits exactly between the two parallel walls. Frequency = speed of sound ÷ (2 × room length) = 343 ÷ (2 × 5) = 343 ÷ 10 = 34.3 Hz. Room modes cause standing waves at specific frequencies, creating peaks and nulls at different positions. Bass trapping is used to control these resonances in studio environments."
+    },
+    {
+      "id": "acoustics-short-01",
+      "type": "short",
+      "question": "Explain the difference between acoustic absorption and acoustic diffusion in studio treatment, and describe a situation where each would be the preferred choice.",
+      "sampleAnswer": "Acoustic absorption converts sound energy into heat using porous materials (such as rockwool panels or acoustic foam), reducing reflections and the overall reverberant energy in a room. It is preferred in vocal booths and control rooms where a dry, controlled acoustic is needed. Acoustic diffusion scatters sound reflections in many directions without removing energy, using surfaces with varied depths (such as polycylindrical or quadratic residue diffusers). Diffusion is preferred in live rooms and performance spaces where you want to reduce flutter echoes and harsh reflections while maintaining a sense of liveliness and ambience.",
+      "keyPoints": [
+        "absorption converts sound energy to heat using porous materials",
+        "absorption reduces reflections and reverberant energy",
+        "diffusion scatters reflections without removing energy",
+        "diffusion uses surfaces with varied depth profiles",
+        "absorption preferred for dead/controlled spaces (vocal booths)",
+        "diffusion preferred where liveliness is desired (live rooms)"
+      ],
+      "explanation": "A well-treated studio uses both absorption and diffusion strategically. Over-absorbing a room creates a dead, uncomfortable acoustic that can feel claustrophobic and make it difficult for musicians to perform naturally. Combining absorption (to control low-mid buildup and first reflections) with diffusion (to maintain a sense of space) creates a balanced acoustic environment suitable for both recording and critical listening."
+    },
+    {
+      "id": "acoustics-short-02",
+      "type": "short",
+      "question": "A student is recording an acoustic guitar in a home studio and notices the recording sounds thin and boxy. Explain two likely causes of this problem and suggest a practical solution for each.",
+      "sampleAnswer": "First cause: the microphone may be pointed directly at the sound hole, which produces a boomy, resonant low-mid frequency (the Helmholtz resonance of the guitar body) that masks the natural tonal balance — the perceived 'boxiness'. Solution: reposition the microphone to aim at the 12th fret area, where the string overtones and body resonance are more balanced, producing a fuller, more natural sound. Second cause: the untreated room is producing strong early reflections from nearby walls that combine with the direct sound, causing comb filtering (frequency cancellation) that thins out the tone. Solution: add absorption panels or even a duvet behind the microphone position and to the sides to reduce first reflections reaching the mic.",
+      "keyPoints": [
+        "mic aimed at sound hole captures boomy Helmholtz resonance",
+        "repositioning to 12th fret gives a more balanced tone",
+        "untreated room reflections cause comb filtering / thinness",
+        "adding absorption reduces problematic reflections",
+        "distance from walls affects reflection timing and severity"
+      ],
+      "explanation": "Home studio acoustics are the most common source of recording problems. The guitar's sound hole radiates strong low-mid energy that can overwhelm close microphones — pointing slightly away captures a more balanced frequency spectrum. Room reflections arriving within a few milliseconds of the direct sound create destructive interference at certain frequencies, thinning the tone. Simple treatment (absorption at first reflection points) dramatically improves recording quality without expensive studio construction."
+    }
+  ]
+}
