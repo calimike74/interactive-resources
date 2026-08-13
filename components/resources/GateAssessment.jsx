@@ -12,6 +12,7 @@ export default function GateAssessment() {
             title="Gate Controls Assessment"
             daw={gateConfig.daw}
             dawNote={gateConfig.dawNote}
+            logic={gateConfig.logic}
         />
     );
 }

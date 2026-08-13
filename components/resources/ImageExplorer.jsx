@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { theme, typography, spacing, borderRadius, glass } from '@/lib/theme';
+import DawToggle, { useDawChoice } from '@/components/ui/DawToggle';
 
 const t = theme.light;
 
@@ -49,7 +50,28 @@ function renderWithRefs(text, hotspots) {
     });
 }
 
-export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, instruction, daw, dawNote }) {
+// WO-10: configs may carry a `logic` block — a complete Logic Pro peer of
+// the Ableton default. When present, a DAW toggle renders above the
+// explorer and the core remounts (key) on switch so cable connections
+// never dangle across devices. Configs without a logic block behave
+// exactly as before.
+export default function ImageExplorer({ logic, ...ableton }) {
+    const [daw, choose] = useDawChoice();
+    const useLogic = Boolean(logic) && daw === 'logic';
+    const active = useLogic ? { ...ableton, ...logic } : ableton;
+    return (
+        <div>
+            {logic && (
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <DawToggle value={useLogic ? 'logic' : 'ableton'} onChange={choose} />
+                </div>
+            )}
+            <ImageExplorerCore key={useLogic ? 'logic' : 'ableton'} {...active} />
+        </div>
+    );
+}
+
+function ImageExplorerCore({ imageSrc, imageAlt, hotspots, title, instruction, daw, dawNote }) {
     const [connections, setConnections] = useState([]);
     const [dragging, setDragging] = useState(null);
     const [hoveredHotspot, setHoveredHotspot] = useState(null);

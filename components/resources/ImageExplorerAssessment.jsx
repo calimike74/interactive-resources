@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { theme, typography, spacing, borderRadius } from '@/lib/theme';
+import DawToggle, { useDawChoice } from '@/components/ui/DawToggle';
 
 const t = theme.light;
 
@@ -26,7 +27,26 @@ function stripRefs(text) {
     return text.replace(/\{\{[A-G]\}\}/g, '').replace(/\s{2,}/g, ' ').trim();
 }
 
-export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, title, skipNameStage = false, daw, dawNote }) {
+// WO-10: same per-DAW model as ImageExplorer — an optional `logic` prop
+// renders the toggle and remounts the assessment on switch so placements
+// and feedback never leak between devices.
+export default function ImageExplorerAssessment({ logic, ...ableton }) {
+    const [daw, choose] = useDawChoice();
+    const useLogic = Boolean(logic) && daw === 'logic';
+    const active = useLogic ? { ...ableton, ...logic } : ableton;
+    return (
+        <div>
+            {logic && (
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <DawToggle value={useLogic ? 'logic' : 'ableton'} onChange={choose} />
+                </div>
+            )}
+            <ImageExplorerAssessmentCore key={useLogic ? 'logic' : 'ableton'} {...active} />
+        </div>
+    );
+}
+
+function ImageExplorerAssessmentCore({ imageSrc, imageAlt, hotspots, title, skipNameStage = false, daw, dawNote }) {
     const [stage, setStage] = useState(skipNameStage ? 2 : 1); // 1 = name matching, 2 = description matching
     const [placements, setPlacements] = useState({}); // { hotspotId: draggedItemId }
     const [feedback, setFeedback] = useState({}); // { hotspotId: 'correct' | 'incorrect' }
