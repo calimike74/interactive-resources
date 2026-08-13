@@ -11,6 +11,53 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
 
+// WO-05 Batch B: this component referenced 191 CSS custom properties that
+// were defined NOWHERE in the repo — every background, radius, border and
+// spacing var silently resolved to nothing, so the live page rendered
+// unstyled (the audit's single most severe design finding). The block
+// below defines the full family it consumes, scoped to this page's root,
+// at the Botanical Press house values — the same pattern and values its
+// Revelation-era siblings (ProductionAnalysis, StereoPanning) use.
+const DESIGN_TOKENS_CSS = `
+  .digital-analogue-root {
+    --accent: #3A4A35;
+    --accent-soft: rgba(58, 74, 53, 0.1);
+    --background: #F2EBE0;
+    --background-raised: #F8F2E8;
+    --foreground: #1F2A1C;
+    --foreground-secondary: #4A5142;
+    --foreground-tertiary: #6B6F5C;
+    --border: #D4C9B4;
+    --border-strong: #B3A78F;
+    --canvas-background: #211C15;
+    --canvas-surface: #2A241B;
+    --canvas-surface-2: #332C21;
+    --canvas-foreground: #F3E9D8;
+    --canvas-foreground-secondary: #C6B9A2;
+    --canvas-foreground-tertiary: #9A8E77;
+    --canvas-border: #3B342A;
+    --canvas-border-hover: #4A4136;
+    --canvas-highlight: #DCC892;
+    --success: #059669;
+    --success-soft: rgba(5, 150, 105, 0.1);
+    --error: #DC2626;
+    --error-soft: rgba(220, 38, 38, 0.1);
+    --warning: #D97706;
+    --annotation-info: #9B7530;
+    --moss: #5F7058;
+    --sienna: #B85A3F;
+    --mustard: #C99F44;
+    --shadow-md: 0 4px 6px -1px rgba(43,36,24,0.1), 0 2px 4px -1px rgba(43,36,24,0.06);
+    --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+    --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
+    --text-xs: 0.75rem; --text-sm: 0.875rem; --text-base: 1rem;
+    --text-lg: 1.125rem; --text-xl: 1.25rem; --text-2xl: 1.5rem; --text-3xl: 1.875rem; --text-4xl: 2.25rem;
+    --radius-sm: 0.25rem; --radius-md: 0.375rem; --radius-lg: 0.5rem; --radius-xl: 0.75rem; --radius-full: 9999px;
+    --duration-fast: 150ms; --duration-normal: 300ms;
+    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+`;
+
 // ============================================
 // COPYABLE NOTE
 // ============================================
@@ -613,13 +660,14 @@ const DigitalAnalogue = () => {
   const isCanvasTab = activeTab === 'interactive';
 
   return (
-    <div style={{
+    <div className="digital-analogue-root" style={{
       fontFamily: FONT_BODY,
       background: isCanvasTab ? 'var(--canvas-background)' : 'var(--background)',
       color: isCanvasTab ? 'var(--canvas-foreground)' : 'var(--foreground)',
       minHeight: '100vh',
       transition: 'background var(--duration-normal) var(--ease-out), color var(--duration-normal) var(--ease-out)'
     }} data-mode={isCanvasTab ? 'canvas' : undefined}>
+      <style dangerouslySetInnerHTML={{ __html: DESIGN_TOKENS_CSS }} />
 
       {/* Header */}
       <div style={{ padding: 'var(--space-8) var(--space-6) var(--space-4)', textAlign: 'center' }}>
