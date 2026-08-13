@@ -157,14 +157,14 @@ function SideLabel({ icon, label, side = 'left', lineWidth = 55, y = 0 }) {
                         : `linear-gradient(145deg, ${C.iconBg}, #101018)`,
                     border: `1px solid ${hovered ? 'rgba(91,141,239,0.4)' : C.iconBorder}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s ease',
+                    transition: 'transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
                     boxShadow: hovered
                         ? '0 0 20px rgba(91,141,239,0.2), inset 0 1px 1px rgba(255,255,255,0.05)'
                         : 'inset 0 1px 1px rgba(255,255,255,0.03), 0 2px 8px rgba(0,0,0,0.3)',
                 }}>
                     <span style={{
                         fontSize: 22, lineHeight: 1,
-                        transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s ease',
+                        transition: 'transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
                         transform: hovered ? 'scale(1.08)' : 'scale(1)',
                         filter: hovered ? 'brightness(1.2)' : 'brightness(0.85)',
                     }}>{icon}</span>
@@ -579,7 +579,7 @@ function PracticeTab({ topic }) {
                             height: '100%', borderRadius: 2,
                             background: activeLevel === 'full' ? C.green : activeLevel === 'partial' ? C.accent : C.amber,
                             width: activeLevel === 'full' ? '33%' : activeLevel === 'partial' ? '66%' : '100%',
-                            transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.5s ease',
+                            transition: 'transform 0.5s ease, opacity 0.5s ease, background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease',
                         }} />
                     </div>
                 </div>
@@ -700,7 +700,7 @@ function TestTab({ topic }) {
                                     borderRadius: 10, padding: '10px 24px',
                                     fontSize: 14, fontWeight: 600,
                                     cursor: 'pointer', fontFamily: font,
-                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.3s ease',
+                                    transition: 'transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
                                     boxShadow: attempt.length > 20 ? '0 0 20px rgba(251,191,36,0.3)' : 'none',
                                 }}
                             >
@@ -909,7 +909,7 @@ export default function EssayScaffoldPractice() {
                                     fontFamily: font,
                                     color: isActive ? C.accent : C.textSecondary,
                                     cursor: 'pointer',
-                                    transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.25s ease',
+                                    transition: 'transform 0.25s ease, opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
                                     display: 'flex', alignItems: 'center', gap: 7,
                                     whiteSpace: 'nowrap',
                                 }}

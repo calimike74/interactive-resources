@@ -105,7 +105,7 @@ function SectionNav({ active, onNavigate }) {
             borderRadius: '8px',
             border: 'none',
             cursor: 'pointer',
-            transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s ease',
+            transition: 'transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
           }}
         >
           {s.label}
@@ -765,7 +765,7 @@ function EvaluateResponse() {
               width: '20px', height: '20px', minWidth: '20px', borderRadius: '5px',
               border: checked[i] ? '2px solid #059669' : '2px solid rgba(74, 127, 212, 0.3)',
               background: checked[i] ? 'rgba(5, 150, 105, 0.15)' : 'transparent',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px', transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '1px', transition: 'transform 0.2s, opacity 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s',
             }}>
               {checked[i] && <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
             </div>
@@ -780,7 +780,7 @@ function EvaluateResponse() {
               background: canReveal ? T.accent : 'rgba(255, 107, 53, 0.25)',
               color: canReveal ? '#fff' : 'rgba(255, 107, 53, 0.5)',
               border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 600,
-              cursor: canReveal ? 'pointer' : 'not-allowed', fontFamily: FONT_BODY, transition: 'transform, opacity, background-color, color, border-color, box-shadow 0.2s',
+              cursor: canReveal ? 'pointer' : 'not-allowed', fontFamily: FONT_BODY, transition: 'transform 0.2s, opacity 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s',
             }}>How did I do?</button>
           {!canReveal && <p style={{ textAlign: 'center', color: T.textTertiary, fontSize: '12px', marginTop: '8px' }}>Tick at least 3 items to unlock the model answer</p>}
         </div>
