@@ -11,19 +11,23 @@ import Link from 'next/link';
 
 // ─── Design Tokens (light, warm, Ableton-inspired) ──────────────────────────
 
+// WO-07 (skin only, per the work order): the page's private palette pulled
+// onto the Botanical Press tokens — cream ground, paper cards, ink text,
+// field/sienna section accents — so the synthesis pair reads as one product.
+// Behaviour and layout untouched.
 const COLORS = {
-    bg: '#f5f4f2',           // warm off-white
-    surface: '#FFFFFF',       // white cards
-    text: '#1a1a2e',          // deep navy
+    bg: '#F2EBE0',           // house cream
+    surface: '#F8F2E8',       // house paper cards
+    text: '#1F2A1C',          // house ink
     textSecondary: '#4a4f5a', // muted
     textHint: '#8b909a',      // hints, captions
     border: '#d1d5db',        // subtle borders
-    borderStrong: '#1a1a2e',  // interactive container borders
-    // section accent colors
-    osc: '#9B7530',           // purple - oscillators
-    filter: '#0891b2',        // teal - filters
-    env: '#059669',           // green - envelopes
-    patch: '#d97706',         // amber - patch builder
+    borderStrong: '#1F2A1C',  // interactive container borders (ink)
+    // section accent colours
+    osc: '#9B7530',           // house mustard - oscillators
+    filter: '#3A4A35',        // house field - filters (was off-palette teal)
+    env: '#059669',           // green - envelopes (site success green)
+    patch: '#A0522D',         // house sienna - patch builder (was amber)
 };
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -455,7 +459,7 @@ function FilterResponseSVG({ type, cutoff, resonance, width = 500, height = 160,
 
     return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
-            <rect width={width} height={height} fill="#1a1a2e" rx={6} />
+            <rect width={width} height={height} fill={SCOPE_STAGE} rx={6} />
             {freqMarks.map(f => (
                 <g key={f}>
                     <line x1={freqToX(f)} y1={padding.top} x2={freqToX(f)} y2={height - padding.bottom} stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
@@ -531,7 +535,7 @@ function EnvelopeShapeSVG({ attack, decay, sustain, release, width = 400, height
 
     return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
-            <rect width={width} height={height} fill="#1a1a2e" rx={6} />
+            <rect width={width} height={height} fill={SCOPE_STAGE} rx={6} />
             <line x1={pad.left} y1={y0} x2={width - pad.right} y2={y0} stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
             <path d={fillD} fill={accentColor} fillOpacity={0.12} />
             <path d={pathD} fill="none" stroke={accentColor} strokeWidth={2.5} strokeLinejoin="round" />
@@ -1555,7 +1559,7 @@ export default function SubtractiveSynthExplorer() {
                             ))}
                             <div style={{ marginLeft: 'auto' }}>
                                 <ProductionCopyButton
-                                    accent={COLORS.mastery || '#0891b2'}
+                                    accent={COLORS.mastery || COLORS.filter}
                                     buildContent={(mode, learnMode) => {
                                         const matchedPreset = PRESETS.find(p =>
                                             p.waveform === waveform && p.cutoff === cutoff && p.filterType === filterType
@@ -1894,6 +1898,23 @@ export default function SubtractiveSynthExplorer() {
                         Build sounds from scratch. Choose waveforms, shape them with filters, sculpt dynamics with envelopes.
                     </p>
                 </div>
+            </div>
+
+            {/* WO-07: the definitive definition, above every tab so it is
+                unmissable regardless of where the student lands. Mike: "We
+                need to make a definitive 'this is what subtractive synthesis
+                is'." Mirrors the additive sibling's opening block. */}
+            <div style={{ maxWidth: '760px', margin: '0 auto', padding: `${spacing[5]} ${spacing[6]} 0` }}>
+                <Callout type="definition" title="What is subtractive synthesis?" collapsible={false}>
+                    Subtractive synthesis starts with a waveform that is already rich in harmonics — a sawtooth or
+                    square from an oscillator — and subtracts from it: a filter removes harmonics, and envelopes shape
+                    how level and brightness change over time. Oscillator → filter → amplifier is the signal path the
+                    paper expects you to name. It is the exact opposite of{' '}
+                    <a href="/additive-synth-explorer" style={{ color: COLORS.osc, fontWeight: 600 }}>
+                        additive synthesis
+                    </a>
+                    , which builds a sound up from pure sine waves.
+                </Callout>
             </div>
 
             {/* Current section */}

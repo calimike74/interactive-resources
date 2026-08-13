@@ -10,6 +10,9 @@ import {
     SOUND_ORDER,
     waveVal,
 } from '@/lib/additive-recipes';
+import Callout from '@/components/Callout';
+import ProductionCopyButton from '@/components/ui/ProductionCopyButton';
+import { buildAdditiveCopyMarkdown } from '@/lib/copy-for-ai';
 
 /**
  * Additive Synth Explorer — the other half of 1.3 Synthesis.
@@ -76,6 +79,47 @@ const C = {
 
 const CANVAS_FONT = '11px Inter, system-ui, sans-serif';
 
+// WO-07: the retrieval quiz that gives this page the same closing shape as
+// its subtractive sibling. Synthesis has anchored the 20-mark Q6 three
+// times in seven years (2019, 2024, 2025) — harmonic-content vocabulary is
+// what those essays reward.
+const QUIZ_QUESTIONS = [
+    {
+        question: 'What does additive synthesis combine to build a sound?',
+        options: [
+            'Sine waves at the fundamental and its harmonics, each at a chosen level',
+            'Several filtered sawtooth waves',
+            'Short samples of real instruments',
+            'White noise shaped by an envelope',
+        ],
+        correct: 0,
+        explanation: 'Additive synthesis stacks pure sine waves — the fundamental plus harmonics at whole-number multiples of its frequency — and the levels you give them decide the timbre.',
+    },
+    {
+        question: 'The fundamental is 220 Hz. What is the frequency of harmonic 3?',
+        options: ['223 Hz', '440 Hz', '660 Hz', '880 Hz'],
+        correct: 2,
+        explanation: 'Harmonic n sits at n × the fundamental: 3 × 220 = 660 Hz. This multiply-the-fundamental relationship is exactly the technical numeracy the paper rewards.',
+    },
+    {
+        question: 'A recipe with strong upper harmonics will sound…',
+        options: ['Quieter', 'Brighter and buzzier', 'Lower in pitch', 'More out of tune'],
+        correct: 1,
+        explanation: 'Upper-harmonic energy reads to the ear as brightness and edge. Pull those sliders down and the same note turns pure and round — pitch does not change, timbre does.',
+    },
+    {
+        question: 'How does additive synthesis differ from subtractive?',
+        options: [
+            'Additive is digital; subtractive is analogue',
+            'Additive builds up from sine waves; subtractive filters harmonics away from an already-rich waveform',
+            'Additive uses envelopes; subtractive does not',
+            'They are the same process under different names',
+        ],
+        correct: 1,
+        explanation: 'Opposite directions to the same goal: additive constructs the harmonic recipe from nothing; subtractive starts with a sawtooth or square that has every harmonic, and carves away.',
+    },
+];
+
 // ─── Stage geometry ─────────────────────────────────────────────────────────
 const BASE_OMEGA = 2 * Math.PI * 0.4;   // turns per second for the fundamental
 const PERIODS = 4;                       // full cycles drawn across the width
@@ -111,6 +155,7 @@ export default function AdditiveSynthExplorer() {
     const [fundamental, setFundamental] = useState(220);
     const [volume, setVolume] = useState(50);
     const [playing, setPlaying] = useState(false);
+    const [quizAnswers, setQuizAnswers] = useState({});
 
     // The animation loop must see the CURRENT recipe every frame. Reading state
     // through the closure would freeze it at whatever it was when the effect ran,
@@ -526,8 +571,75 @@ export default function AdditiveSynthExplorer() {
                     </p>
                 </header>
 
+                {/* ── WO-07: the definitive definition, first thing on the page,
+                       mirroring the subtractive page so the pair reads as one
+                       product. Mike: "We need to make a definitive 'this is
+                       what X is'." ── */}
+                <div style={{ marginBottom: '18px' }}>
+                    <Callout type="definition" title="What is additive synthesis?" collapsible={false}>
+                        Additive synthesis builds a timbre from nothing by stacking sine waves — a fundamental plus its
+                        harmonics — each at a chosen level. Strong upper harmonics make a sound bright and buzzy; few
+                        harmonics leave it pure and round. It is the exact opposite of{' '}
+                        <Link href="/subtractive-synth-explorer" style={{ color: C.accentInk, fontWeight: 600 }}>
+                            subtractive synthesis
+                        </Link>
+                        , which starts from a harmonically rich waveform and filters harmonics away.
+                    </Callout>
+                </div>
+
+                {/* ── WO-07: pinned section nav — the same skeleton idiom as the
+                       subtractive page's tab bar, so a stranger clicking between
+                       the pair sees one product. Anchor links, not switched
+                       views: this page's engine is one continuous instrument. ── */}
+                <nav
+                    aria-label="Page sections"
+                    style={{
+                        position: 'sticky',
+                        top: 8,
+                        zIndex: 5,
+                        display: 'flex',
+                        gap: '6px',
+                        flexWrap: 'wrap',
+                        background: 'rgba(245,244,242,0.92)',
+                        backdropFilter: 'blur(6px)',
+                        WebkitBackdropFilter: 'blur(6px)',
+                        border: `1px solid ${C.line}`,
+                        borderRadius: '999px',
+                        padding: '6px',
+                        marginBottom: '18px',
+                        boxShadow: C.shadow,
+                    }}
+                >
+                    {[
+                        ['#stage', 'The stage'],
+                        ['#sounds', 'Sounds'],
+                        ['#build', 'Build your own'],
+                        ['#exam', 'For the exam'],
+                        ['#quiz', 'Quiz'],
+                    ].map(([href, label]) => (
+                        <a
+                            key={href}
+                            href={href}
+                            style={{
+                                color: C.text,
+                                textDecoration: 'none',
+                                fontSize: '0.82rem',
+                                fontWeight: 600,
+                                padding: '6px 14px',
+                                borderRadius: '999px',
+                                background: 'transparent',
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = C.line; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                        >
+                            {label}
+                        </a>
+                    ))}
+                </nav>
+
                 {/* ── the stage ────────────────────────────────────────────── */}
                 <section
+                    id="stage"
                     style={{
                         ...card,
                         background: C.stage,
@@ -673,6 +785,7 @@ export default function AdditiveSynthExplorer() {
 
                 {/* ── pick a sound + spectrum ──────────────────────────────── */}
                 <div
+                    id="sounds"
                     style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -775,8 +888,16 @@ export default function AdditiveSynthExplorer() {
                 </div>
 
                 {/* ── build your own ───────────────────────────────────────── */}
-                <section style={{ ...card, marginBottom: '18px' }}>
-                    <h2 style={h2}>Build your own — nudge the eight harmonics</h2>
+                <section id="build" style={{ ...card, marginBottom: '18px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                        <h2 style={{ ...h2, margin: 0 }}>Build your own — nudge the eight harmonics</h2>
+                        <ProductionCopyButton
+                            accent={C.accent}
+                            buildContent={(mode, learnMode) =>
+                                buildAdditiveCopyMarkdown({ amps, signs, mode, learnMode })
+                            }
+                        />
+                    </div>
                     <div
                         style={{
                             display: 'grid',
@@ -846,7 +967,7 @@ export default function AdditiveSynthExplorer() {
                 </section>
 
                 {/* ── exam notes ───────────────────────────────────────────── */}
-                <section style={{ ...card, marginBottom: '18px' }}>
+                <section id="exam" style={{ ...card, marginBottom: '18px' }}>
                     <h2 style={h2}>Why this matters for the exam</h2>
                     <ul
                         style={{
@@ -908,6 +1029,62 @@ export default function AdditiveSynthExplorer() {
                             round.
                         </li>
                     </ul>
+                </section>
+
+                {/* ── WO-07: retrieval quiz — the same closing shape as the
+                       subtractive sibling ── */}
+                <section id="quiz" style={{ ...card, marginBottom: '18px' }}>
+                    <h2 style={h2}>Check it stuck</h2>
+                    <div style={{ display: 'grid', gap: '14px' }}>
+                        {QUIZ_QUESTIONS.map((q, qi) => {
+                            const picked = quizAnswers[qi];
+                            return (
+                                <div key={qi} style={{ border: `1px solid ${C.line}`, borderRadius: '12px', padding: '14px' }}>
+                                    <p style={{ margin: '0 0 10px', fontWeight: 600, fontSize: '0.92rem', color: C.text }}>
+                                        {qi + 1}. {q.question}
+                                    </p>
+                                    <div style={{ display: 'grid', gap: '8px' }}>
+                                        {q.options.map((o, oi) => {
+                                            const isCorrect = oi === q.correct;
+                                            const isPicked = picked === oi;
+                                            const answered = picked !== undefined;
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={o}
+                                                    onClick={() => picked === undefined && setQuizAnswers((a) => ({ ...a, [qi]: oi }))}
+                                                    style={{
+                                                        textAlign: 'left',
+                                                        fontSize: '0.86rem',
+                                                        lineHeight: 1.45,
+                                                        padding: '9px 12px',
+                                                        borderRadius: '10px',
+                                                        cursor: answered ? 'default' : 'pointer',
+                                                        border: `1px solid ${answered && isCorrect ? C.accentInk : answered && isPicked ? '#B04A3A' : C.line}`,
+                                                        background: answered && isCorrect ? 'rgba(143,75,46,0.10)' : answered && isPicked ? 'rgba(176,74,58,0.10)' : C.surface,
+                                                        color: answered && !isCorrect && !isPicked ? C.muted : C.text,
+                                                    }}
+                                                >
+                                                    {o}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    {picked !== undefined && (
+                                        <p style={{ margin: '10px 0 0', fontSize: '0.84rem', lineHeight: 1.5, color: C.muted }}>
+                                            {q.explanation}
+                                        </p>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {Object.keys(quizAnswers).length === QUIZ_QUESTIONS.length && (
+                        <p style={{ margin: '14px 0 0', fontWeight: 600, fontSize: '0.95rem', color: C.accentInk }}>
+                            {QUIZ_QUESTIONS.filter((q, i) => quizAnswers[i] === q.correct).length}/{QUIZ_QUESTIONS.length}{' '}
+                            — synthesis anchored the 20-mark essay in 2019, 2024 and 2025. This vocabulary is what it rewards.
+                        </p>
+                    )}
                 </section>
 
                 {/* ── the pair ─────────────────────────────────────────────── */}

@@ -122,31 +122,38 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 36,
+                    gap: 7,
                     height: 36,
-                    borderRadius: '50%',
+                    borderRadius: 18,
                     border: `1.5px solid ${copied ? accent : '#D1D5DB'}`,
                     background: copied ? `${accent}15` : '#FFFFFF',
                     color: copied ? accent : '#6B7280',
                     cursor: 'pointer',
-                    padding: 0,
+                    // WO-07: the icon-only circle failed its owner — Mike could
+                    // not tell what "the copy thing" did. Visible label now,
+                    // same behaviour.
+                    padding: '0 14px',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
                     filter: blurring ? 'blur(4px)' : 'blur(0px)',
                     transition: `all ${transitions.fast} ${transitions.easing}`,
                     boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                 }}
             >
                 {copied ? (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12" />
                     </svg>
                 ) : (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-                        <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-                        <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-                        <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" />
+                    // A recognisable copy glyph (two sheets), not the ambiguous
+                    // three-sliders icon the review couldn't decode.
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="9" y="9" width="12" height="12" rx="2" />
+                        <path d="M5 15V5a2 2 0 0 1 2-2h10" />
                     </svg>
                 )}
+                <span>{copied ? 'Copied!' : 'Copy for AI'}</span>
             </button>
 
             {/* Hover hint — explains what the button does */}
