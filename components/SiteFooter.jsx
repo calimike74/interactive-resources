@@ -7,6 +7,7 @@ export default function SiteFooter() {
     const t = theme.light;
     return (
         <footer
+            className="site-footer"
             style={{
                 padding: '24px 20px',
                 textAlign: 'center',

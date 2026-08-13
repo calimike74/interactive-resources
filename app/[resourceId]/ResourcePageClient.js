@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getResource, resourceExists } from '@/lib/resources';
+import { openCookiePreferences } from '@/lib/consent';
 import { getTopicForResource, withComponentPrefix } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -151,6 +152,121 @@ export default function ResourcePageClient() {
     // Handle missing component
     if (!ResourceComponent) {
         return <ComponentNotFound resource={resource} theme={t} />;
+    }
+
+    // Full-bleed labs own the viewport (the Explore standard: one screen,
+    // no scroll, the instrument fills it). Slim chrome: back link + topic
+    // badge + gate — no breadcrumbs, no footer.
+    if (resource.fullBleed) {
+        return (
+            <div
+                className="lab-fullbleed"
+                style={{
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                    background: t.bg.secondary,
+                    fontFamily: typography.fontFamily,
+                }}
+            >
+                <header
+                    style={{
+                        background: glass.bg,
+                        backdropFilter: 'blur(' + glass.blur + ')',
+                        WebkitBackdropFilter: 'blur(' + glass.blur + ')',
+                        borderBottom: `1px solid ${glass.border}`,
+                        padding: `${spacing[2]} ${spacing[6]}`,
+                        flexShrink: 0,
+                        zIndex: 100,
+                    }}
+                >
+                    <div
+                        style={{
+                            maxWidth: '1400px',
+                            margin: '0 auto',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            gap: spacing[3],
+                        }}
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
+                            <Link
+                                href={backHref}
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: spacing[1],
+                                    color: t.text.secondary,
+                                    textDecoration: 'none',
+                                    fontSize: typography.size.sm,
+                                    padding: `${spacing[1]} ${spacing[3]}`,
+                                    borderRadius: glass.radiusPill,
+                                    border: '1px solid ' + glass.border,
+                                    transition: `color ${transitions.fast}`,
+                                }}
+                            >
+                                {backLabel}
+                            </Link>
+                            <span
+                                style={{
+                                    background: 'rgba(37, 99, 235, 0.12)',
+                                    color: t.accent.info,
+                                    padding: `${spacing[1]} ${spacing[3]}`,
+                                    borderRadius: borderRadius.full,
+                                    fontSize: typography.size.xs,
+                                    fontWeight: typography.weight.medium,
+                                }}
+                            >
+                                {withComponentPrefix(resource.topic)}
+                            </span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[4] }}>
+                            {assessmentHref && (
+                                <Link
+                                    href={assessmentHref}
+                                    style={{
+                                        color: t.accent.primary,
+                                        textDecoration: 'none',
+                                        fontSize: typography.size.sm,
+                                        fontWeight: typography.weight.medium,
+                                    }}
+                                >
+                                    Take the Assessment →
+                                </Link>
+                            )}
+                            {/* the hidden site footer's links, kept reachable */}
+                            <span style={{ fontSize: 11, color: t.text.tertiary }}>
+                                <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>
+                                    Privacy
+                                </Link>
+                                <span style={{ margin: '0 6px', opacity: 0.5 }}>·</span>
+                                <button
+                                    type="button"
+                                    onClick={openCookiePreferences}
+                                    style={{
+                                        background: 'transparent',
+                                        border: 'none',
+                                        color: 'inherit',
+                                        cursor: 'pointer',
+                                        font: 'inherit',
+                                        padding: 0,
+                                    }}
+                                >
+                                    Cookie preferences
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </header>
+                <main style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+                    <GateKeeper resourceId={resource.id} title={resource.title}>
+                        <ResourceComponent />
+                    </GateKeeper>
+                </main>
+            </div>
+        );
     }
 
     return (

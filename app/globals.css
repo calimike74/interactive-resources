@@ -188,3 +188,10 @@ main {
     scroll-behavior: auto !important;
   }
 }
+
+/* Full-bleed labs own the viewport (the Explore standard: one screen, no
+   scroll). The site footer's Privacy + Cookie links move into the lab's
+   own slim header, so the footer is hidden rather than lost. */
+body:has(.lab-fullbleed) .site-footer {
+    display: none;
+}
