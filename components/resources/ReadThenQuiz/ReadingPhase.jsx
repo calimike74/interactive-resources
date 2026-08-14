@@ -62,7 +62,7 @@ export default function ReadingPhase({ passage, scaffoldLevel, onComplete }) {
                     fontSize: typography.size.sm,
                     fontWeight: typography.weight.medium,
                 }}>
-                    Read carefully — this passage will disappear
+                    Read carefully: this passage will disappear
                 </span>
                 <span style={{
                     background: t.bg.tertiary,
@@ -105,7 +105,7 @@ export default function ReadingPhase({ passage, scaffoldLevel, onComplete }) {
                     }}
                 >
                     {ready
-                        ? "I'm Ready — Show Questions"
+                        ? "I'm Ready: Show Questions"
                         : `Read for at least ${remainingSeconds}s more...`
                     }
                 </button>
@@ -116,7 +116,7 @@ export default function ReadingPhase({ passage, scaffoldLevel, onComplete }) {
                 }}>
                     {ready
                         ? 'The passage will disappear when you continue'
-                        : 'Take your time — the button activates when you\'ve had enough time to read'
+                        : 'Take your time: the button activates when you\'ve had enough time to read'
                     }
                 </p>
             </div>

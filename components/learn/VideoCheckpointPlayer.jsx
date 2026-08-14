@@ -307,7 +307,7 @@ export default function VideoCheckpointPlayer({
                     </span>
                 </div>
                 <div style={{ fontSize: typography.size.xs, color: t.text.tertiary, marginTop: spacing[1] }}>
-                    Pauses for a question — answer to continue.
+                    Pauses for a question: answer to continue.
                 </div>
             </div>
 

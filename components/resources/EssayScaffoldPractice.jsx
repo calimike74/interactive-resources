@@ -56,7 +56,7 @@ const ESSAY_TOPICS = [
         points: [
             { ao: 3, verb: 'Define', full: 'compression and its role in controlling dynamic range', partial: 'compression and its role in _____', tip: 'Show technical understanding' },
             { ao: 3, verb: 'Explain', full: 'threshold, ratio, attack & release with practical examples', partial: 'threshold, ratio, _____ & _____ with practical examples', tip: 'Demonstrate applied knowledge' },
-            { ao: 4, verb: 'Evaluate', full: 'creative vs corrective compression — when and why each is used', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Evaluate', full: 'creative vs corrective compression: when and why each is used', partial: null, tip: 'Make a judgement with reasoning' },
             { ao: 4, verb: 'Compare', full: 'parallel compression to standard insert processing', partial: null, tip: 'Weigh advantages and limitations' },
             { ao: 4, verb: 'Conclude', full: 'with impact on final mix balance and commercial loudness', partial: 'with impact on _____', tip: 'Synthesise your argument' },
         ],
@@ -84,7 +84,7 @@ const ESSAY_TOPICS = [
         points: [
             { ao: 3, verb: 'Define', full: 'reverb and delay, distinguishing between the two effects', partial: 'reverb and delay, distinguishing between _____', tip: 'Show technical understanding' },
             { ao: 3, verb: 'Explain', full: 'key parameters: pre-delay, decay time, wet/dry mix, feedback, and delay time', partial: 'key parameters: pre-delay, _____, wet/dry mix, _____, and delay time', tip: 'Demonstrate applied knowledge' },
-            { ao: 4, verb: 'Evaluate', full: 'how reverb creates a sense of space and depth — plate, hall, room, and spring types', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Evaluate', full: 'how reverb creates a sense of space and depth: plate, hall, room, and spring types', partial: null, tip: 'Make a judgement with reasoning' },
             { ao: 4, verb: 'Compare', full: 'using reverb/delay as insert effects vs send/return (aux) effects', partial: null, tip: 'Weigh advantages and limitations' },
             { ao: 4, verb: 'Conclude', full: 'with impact on the spatial qualities and cohesion of the final mix', partial: 'with impact on _____ and cohesion of the final mix', tip: 'Synthesise your argument' },
         ],
@@ -98,7 +98,7 @@ const ESSAY_TOPICS = [
         points: [
             { ao: 3, verb: 'Define', full: 'stereo recording and the principles of creating a stereo image', partial: 'stereo recording and the principles of _____', tip: 'Show technical understanding' },
             { ao: 3, verb: 'Explain', full: 'XY, AB (spaced pair), and Mid-Side techniques with mic placement details', partial: 'XY, _____, and _____ techniques with mic placement details', tip: 'Demonstrate applied knowledge' },
-            { ao: 4, verb: 'Evaluate', full: 'coincident vs spaced techniques — mono compatibility, phase issues, and stereo width', partial: null, tip: 'Make a judgement with reasoning' },
+            { ao: 4, verb: 'Evaluate', full: 'coincident vs spaced techniques: mono compatibility, phase issues, and stereo width', partial: null, tip: 'Make a judgement with reasoning' },
             { ao: 4, verb: 'Compare', full: 'the suitability of different techniques for different acoustic sources', partial: null, tip: 'Weigh advantages and limitations' },
             { ao: 4, verb: 'Conclude', full: 'with impact on realism, spatial accuracy, and listener experience', partial: 'with impact on realism and _____', tip: 'Synthesise your argument' },
         ],
@@ -311,11 +311,11 @@ function UnderstandTab({ topic }) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <AOBadge ao={3} />
-                            <span style={{ fontSize: 12, color: C.textSecondary }}>Analyse — show technical knowledge</span>
+                            <span style={{ fontSize: 12, color: C.textSecondary }}>Analyse: show technical knowledge</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <AOBadge ao={4} />
-                            <span style={{ fontSize: 12, color: C.textSecondary }}>Evaluate — make reasoned judgements</span>
+                            <span style={{ fontSize: 12, color: C.textSecondary }}>Evaluate: make reasoned judgements</span>
                         </div>
                     </div>
                 </div>
@@ -440,9 +440,9 @@ function PracticeTab({ topic }) {
                     borderRadius: 10, padding: 14, marginTop: 14,
                 }}>
                     <div style={{ fontSize: 13, color: C.green, fontWeight: 600, marginBottom: 4 }}>
-                        {activeLevel === 'full' && 'Full Scaffold — Study the structure'}
-                        {activeLevel === 'partial' && 'Partial Scaffold — Fill the gaps'}
-                        {activeLevel === 'minimal' && 'Minimal Scaffold — Build it yourself'}
+                        {activeLevel === 'full' && 'Full Scaffold: Study the structure'}
+                        {activeLevel === 'partial' && 'Partial Scaffold: Fill the gaps'}
+                        {activeLevel === 'minimal' && 'Minimal Scaffold: Build it yourself'}
                     </div>
                     <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.5 }}>
                         {activeLevel === 'full' && 'Read through the complete scaffold. Understand why each point is included and in this order.'}
@@ -881,7 +881,7 @@ export default function EssayScaffoldPractice() {
                             }}>Music Technology</span>
                         </h1>
                         <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.85)' }}>
-                            Three ways to engage with exam essay structure — understand the criteria, practise with support, then test from memory.
+                            Three ways to engage with exam essay structure: understand the criteria, practise with support, then test from memory.
                         </p>
                     </div>
                 </div>

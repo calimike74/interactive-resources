@@ -139,7 +139,7 @@ export default function TransductionChain() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Signal in, something vibrates, signal out — shared by mics and speakers too', W / 2, 195);
+                ctx.fillText('Signal in, something vibrates, signal out: shared by mics and speakers too', W / 2, 195);
                 ctx.globalAlpha = 1;
             }
 

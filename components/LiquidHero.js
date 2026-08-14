@@ -211,7 +211,7 @@ export default function LiquidHero({
                     background: COLORS.bg,
                     cursor: 'grab',
                 }}
-                aria-label={`${badge} — ${titleText}`}
+                aria-label={`${badge}: ${titleText}`}
                 role="img"
             />
 

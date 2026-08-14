@@ -100,7 +100,7 @@
       "id": "dynamics-short-01",
       "type": "short",
       "question": "Explain the difference between a hard knee and a soft knee in a compressor, and describe the effect each has on the sound.",
-      "sampleAnswer": "A hard knee means gain reduction switches on abruptly at the exact threshold level — signals below it are unaffected and signals above it are immediately reduced by the full ratio. A soft knee applies gain reduction gradually across a range of levels around the threshold (e.g. a few dB either side), so compression increases progressively as the signal approaches and passes through the threshold. A hard knee sounds more obvious and aggressive; a soft knee sounds more transparent and natural, making it suitable for sources where the compression should be undetectable.",
+      "sampleAnswer": "A hard knee means gain reduction switches on abruptly at the exact threshold level. Signals below it are unaffected and signals above it are immediately reduced by the full ratio. A soft knee applies gain reduction gradually across a range of levels around the threshold (e.g. a few dB either side), so compression increases progressively as the signal approaches and passes through the threshold. A hard knee sounds more obvious and aggressive; a soft knee sounds more transparent and natural, making it suitable for sources where the compression should be undetectable.",
       "keyPoints": [
         "Hard knee: gain reduction is applied abruptly at the threshold",
         "Soft knee: gain reduction is introduced gradually across a range around the threshold",
@@ -112,20 +112,20 @@
       "id": "dynamics-short-02",
       "type": "short",
       "question": "Describe how a noise gate works and explain two situations in a music production context where a noise gate would be useful.",
-      "sampleAnswer": "A noise gate reduces the level of a signal that falls below a set threshold, typically to silence or near-silence. Unlike a compressor, which reduces loud signals, a noise gate acts on quiet signals — it is a type of downward expander with a very high ratio. When the signal level drops below the threshold, the gate closes (attenuates the signal); when the signal rises above the threshold, the gate opens. Example uses: (1) Removing bleed from a snare drum microphone between hits — the snare mic will pick up hi-hat and other kit noise; a gate closes when the snare is not being struck. (2) Removing amp hiss or electrical noise from a guitar track during silent passages — the gate closes when the guitarist stops playing, eliminating background hum.",
+      "sampleAnswer": "A noise gate reduces the level of a signal that falls below a set threshold, typically to silence or near-silence. Unlike a compressor, which reduces loud signals, a noise gate acts on quiet signals. It is a type of downward expander with a very high ratio. When the signal level drops below the threshold, the gate closes (attenuates the signal); when the signal rises above the threshold, the gate opens. Example uses: (1) Removing bleed from a snare drum microphone between hits. The snare mic will pick up hi-hat and other kit noise; a gate closes when the snare is not being struck. (2) Removing amp hiss or electrical noise from a guitar track during silent passages: the gate closes when the guitarist stops playing, eliminating background hum.",
       "keyPoints": [
         "A noise gate attenuates signals that fall below the threshold",
         "The gate opens when the signal exceeds the threshold and closes when it falls below",
         "Valid use case 1: removing mic bleed between drum hits",
         "Valid use case 2: gating amp noise or room noise on an instrument track during silent passages"
       ],
-      "explanation": "Noise gates are expanders with an extreme ratio. They are directionally opposite to compressors — reducing quiet signals rather than loud ones. Attack, hold, and release parameters also exist on gates, controlling how quickly the gate opens and closes."
+      "explanation": "Noise gates are expanders with an extreme ratio. They are directionally opposite to compressors: reducing quiet signals rather than loud ones. Attack, hold, and release parameters also exist on gates, controlling how quickly the gate opens and closes."
     },
     {
       "id": "dynamics-short-03",
       "type": "short",
       "question": "Explain the purpose of makeup gain in compression and why it is needed.",
-      "sampleAnswer": "Compression reduces the level of signals above the threshold, which lowers the overall peak level of the processed signal. Makeup gain (also called output gain) is applied after the gain reduction stage to restore the overall level. Without makeup gain, a compressed signal would sound quieter than the unprocessed original, making it difficult to make fair comparisons or achieve the correct level in a mix. By applying makeup gain, the producer brings the compressed signal back up so that its loudest peaks match the original, meaning the perceptual effect of compression — increased average loudness and density — becomes more apparent on A/B comparison.",
+      "sampleAnswer": "Compression reduces the level of signals above the threshold, which lowers the overall peak level of the processed signal. Makeup gain (also called output gain) is applied after the gain reduction stage to restore the overall level. Without makeup gain, a compressed signal would sound quieter than the unprocessed original, making it difficult to make fair comparisons or achieve the correct level in a mix. By applying makeup gain, the producer brings the compressed signal back up so that its loudest peaks match the original, meaning the perceptual effect of compression (increased average loudness and density) becomes more apparent on A/B comparison.",
       "keyPoints": [
         "Compression reduces peak levels, lowering the overall output level",
         "Makeup gain compensates by boosting the output after gain reduction",
@@ -171,7 +171,7 @@
         "A multiband expander isolating the vocal fundamental"
       ],
       "correctIndex": 1,
-      "explanation": "A de-esser is essentially a compressor with a side-chain filter tuned to the sibilant frequency range (typically 4–10 kHz). When the level in that frequency band exceeds the threshold, gain reduction is applied — either to the full signal (wideband mode) or only to the sibilant band (split-band mode). This tames harsh 's' and 'sh' sounds without affecting the rest of the vocal."
+      "explanation": "A de-esser is essentially a compressor with a side-chain filter tuned to the sibilant frequency range (typically 4–10 kHz). When the level in that frequency band exceeds the threshold, gain reduction is applied: either to the full signal (wideband mode) or only to the sibilant band (split-band mode). This tames harsh 's' and 'sh' sounds without affecting the rest of the vocal."
     },
     {
       "id": "dynamics-mcq-10",
@@ -210,13 +210,13 @@
       "question": "Explain how ducking works in broadcast and podcast production, identifying the dynamics processor used and the signal routing involved.",
       "sampleAnswer": "Ducking uses side-chain compression to automatically lower the level of background music when a presenter speaks. The vocal signal is routed to the side-chain input of a compressor inserted on the music track. When the vocal exceeds the compressor's threshold, gain reduction is applied to the music, lowering it beneath the voice. When the presenter stops speaking, the music returns to its original level. The attack, release, and ratio settings determine how smoothly the music dips and recovers.",
       "keyPoints": ["side-chain compression", "vocal triggers gain reduction on music", "music lowers automatically when speech is present", "attack and release control smoothness"],
-      "explanation": "Ducking is one of the most practical applications of side-chain compression. It automates what would otherwise require manual volume rides on the music track. Getting the release time right is critical — too fast and the music pumps unnaturally; too slow and it stays ducked during short pauses in speech."
+      "explanation": "Ducking is one of the most practical applications of side-chain compression. It automates what would otherwise require manual volume rides on the music track. Getting the release time right is critical: too fast and the music pumps unnaturally; too slow and it stays ducked during short pauses in speech."
     },
     {
       "id": "dynamics-short-05",
       "type": "short",
       "question": "Explain what auto-makeup gain does on a compressor and describe one potential problem it can cause when comparing compressed and uncompressed signals.",
-      "sampleAnswer": "Auto-makeup gain automatically increases the output level to compensate for the gain reduction applied by the compressor, so the perceived loudness stays roughly the same after compression. A potential problem is that it can make A/B comparisons misleading — the compressed signal may sound louder than the bypassed signal if the auto-makeup calculation is imprecise, leading the engineer to believe the compression sounds better when in fact the difference is simply a loudness increase. This exploits the psychoacoustic tendency to prefer louder sounds.",
+      "sampleAnswer": "Auto-makeup gain automatically increases the output level to compensate for the gain reduction applied by the compressor, so the perceived loudness stays roughly the same after compression. A potential problem is that it can make A/B comparisons misleading. The compressed signal may sound louder than the bypassed signal if the auto-makeup calculation is imprecise, leading the engineer to believe the compression sounds better when in fact the difference is simply a loudness increase. This exploits the psychoacoustic tendency to prefer louder sounds.",
       "keyPoints": ["automatically compensates for gain reduction", "maintains perceived loudness", "can cause misleading A/B comparisons", "louder is perceived as better"],
       "explanation": "Auto-makeup gain is convenient but can be deceptive. Professional engineers often prefer manual makeup gain so they can precisely level-match the compressed and bypassed signals. This ensures that any preference for the compressed version is genuinely due to the dynamic shaping, not a loudness difference."
     }

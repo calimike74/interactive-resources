@@ -694,7 +694,7 @@ const WaveformExplorer = () => {
                 <p style={styles.eyebrow}>Challenge {currentChallenge + 1} of {challenges.length}</p>
                 <h2 style={styles.title}>{currentChallengeData.description}</h2>
                 <p style={styles.description}>
-                    {currentChallengeData.name} &mdash; {currentChallengeData.originalCycles} cycle{currentChallengeData.originalCycles !== 1 ? 's' : ''} &rarr; {currentChallengeData.targetCycles} cycle{currentChallengeData.targetCycles !== 1 ? 's' : ''}
+                    {currentChallengeData.name}: {currentChallengeData.originalCycles} cycle{currentChallengeData.originalCycles !== 1 ? 's' : ''} &rarr; {currentChallengeData.targetCycles} cycle{currentChallengeData.targetCycles !== 1 ? 's' : ''}
                 </p>
             </div>
 
@@ -705,7 +705,7 @@ const WaveformExplorer = () => {
                     width={canvasWidth}
                     height={canvasHeight}
                     style={styles.canvas}
-                    aria-label="Drawing canvas — use mouse or touch to draw your waveform answer"
+                    aria-label="Drawing canvas: use mouse or touch to draw your waveform answer"
                     role="img"
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}

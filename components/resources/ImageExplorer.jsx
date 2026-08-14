@@ -817,7 +817,7 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                             data-plug="true"
                             tabIndex={0}
                             role="button"
-                            aria-label={kbSelectMode ? 'Selection mode active — press Enter or Space on a zone to connect' : 'Connect cable — drag to a zone, or press Enter to enter keyboard selection mode'}
+                            aria-label={kbSelectMode ? 'Selection mode active: press Enter or Space on a zone to connect' : 'Connect cable: drag to a zone, or press Enter to enter keyboard selection mode'}
                             onMouseDown={handlePlugMouseDown}
                             onTouchStart={handlePlugMouseDown}
                             onKeyDown={handlePlugKeyDown}

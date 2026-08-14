@@ -73,7 +73,7 @@ export default function EnvelopeConcept() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('One fixed value — parked here forever, no matter what note plays', envLeft, 38);
+                ctx.fillText('One fixed value: parked here forever, no matter what note plays', envLeft, 38);
 
                 const staticY = envTop + 0.45 * envH;
                 ctx.setLineDash([4, 4]);
@@ -204,7 +204,7 @@ export default function EnvelopeConcept() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Note gate — triggers the shape once per note', envLeft, gateY - 2);
+                ctx.fillText('Note gate: triggers the shape once per note', envLeft, gateY - 2);
 
                 // Gate step line: high while the key is held, low after
                 ctx.strokeStyle = '#1a1a6e';

@@ -181,7 +181,7 @@ export default function HarmonicSeries() {
                     ctx.fillText('Fundamental (110 Hz)', p2Left, p2Top - 12);
                     ctx.fillStyle = '#9B7530';
                     ctx.textAlign = 'right';
-                    ctx.fillText('3rd harmonic (330 Hz) — 3× as fast', p2Right, p2Top - 12);
+                    ctx.fillText('3rd harmonic (330 Hz): 3× as fast', p2Right, p2Top - 12);
                     ctx.globalAlpha = p2Appear;
                 }
 

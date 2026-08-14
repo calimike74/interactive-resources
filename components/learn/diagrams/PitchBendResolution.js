@@ -71,8 +71,8 @@ export default function PitchBendResolution() {
         const STEPS_FINE = 56;
 
         const PANELS = [
-            { top: 55, bottom: 150, mid: 102.5, labelY: 44, capY: 163, steps: STEPS_COARSE, color: '#f97316', title: '7-bit — one data byte (128 real positions, 0–127)', cap: 'audible steps — the "zipper" effect' },
-            { top: 198, bottom: 250, mid: 224, labelY: 187, capY: 263, steps: STEPS_FINE, color: '#14b8a6', title: '14-bit — status + LSB + MSB (16,384 real positions)', cap: 'far too fine to hear a step — reads as smooth' },
+            { top: 55, bottom: 150, mid: 102.5, labelY: 44, capY: 163, steps: STEPS_COARSE, color: '#f97316', title: '7-bit: one data byte (128 real positions, 0–127)', cap: 'audible steps: the "zipper" effect' },
+            { top: 198, bottom: 250, mid: 224, labelY: 187, capY: 263, steps: STEPS_FINE, color: '#14b8a6', title: '14-bit: status + LSB + MSB (16,384 real positions)', cap: 'far too fine to hear a step: reads as smooth' },
         ];
         const plotY = (panel, norm) => panel.mid - norm * (panel.mid - panel.top);
 

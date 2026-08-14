@@ -111,21 +111,21 @@ const learnSections = [
   { level: 'foundation', title: 'What is a Mix?',
     content: 'A mix is the process of combining many recorded tracks into a coherent stereo (or mono) master. Every track must earn its place: it needs the right volume, the right pan position, the right tone, and the right effects. A great mix is one where every important element can be heard clearly without anything fighting for attention.' },
   { level: 'foundation', title: 'Balance: the volume relationships',
-    content: 'Balance is the relative level of each track. The lead vocal must sit above everything else; the kick and bass form the foundation; supporting parts sit underneath. Engineers set rough balance with faders before doing anything else — if the balance is wrong, no amount of EQ or effects will fix the mix.' },
+    content: 'Balance is the relative level of each track. The lead vocal must sit above everything else; the kick and bass form the foundation; supporting parts sit underneath. Engineers set rough balance with faders before doing anything else: if the balance is wrong, no amount of EQ or effects will fix the mix.' },
   { level: 'foundation', title: 'Panning: placing instruments left to right',
     content: 'Pan positions sound across the stereo field. Low-frequency instruments (kick, bass, low vocal) are kept centre because bass needs equal energy in both speakers to feel solid. Hi-hats, guitars, keys, and supporting elements are panned off-centre to create width and prevent masking.' },
   { level: 'intermediate', title: 'Sends, returns, and busses',
     content: 'A bus is a routing destination that several tracks can be sent to. The classic example is a reverb send: instead of putting a reverb plugin on every track, each track sends a copy of its signal to a single reverb bus. The reverb processes the summed signal once, and its output returns to the mix on a return channel. This saves CPU, glues elements together, and lets you adjust reverb amount per track using the send knob.' },
   { level: 'intermediate', title: 'Pre-fader vs post-fader sends',
-    content: 'A post-fader send follows the channel fader: turn the fader down, the send signal drops too. This is normal for effects — you want the reverb to disappear when the channel does. A pre-fader send is independent of the channel fader, used for headphone mixes or parallel processing where the wet signal must be heard even when the dry channel is muted.' },
+    content: 'A post-fader send follows the channel fader: turn the fader down, the send signal drops too. This is normal for effects: you want the reverb to disappear when the channel does. A pre-fader send is independent of the channel fader, used for headphone mixes or parallel processing where the wet signal must be heard even when the dry channel is muted.' },
   { level: 'intermediate', title: 'Group bussing for sub-mixes',
     content: 'A group (sub-mix) bus combines related tracks under one fader. Drum kit tracks route to a Drums bus; backing vocals route to a BV bus. Now one fader controls the whole group, you can apply compression or EQ across the sub-mix (gluing it), and the main mix becomes simpler to balance.' },
   { level: 'advanced', title: 'Mixdown: the final stereo master',
     content: 'Mixdown is the moment the multitrack session is rendered to a stereo file. The master fader must never clip (peak red on the meters); peaks typically sit around −6 dBFS to leave headroom for mastering. Bounce as a high-resolution WAV (24-bit, the session sample rate). The mixdown is what gets handed to mastering or distributed.' },
   { level: 'advanced', title: 'Headroom and gain staging',
-    content: 'Headroom is the space between the loudest peak and digital 0 dBFS. Modern mixing keeps individual channel peaks around −18 to −12 dBFS and the master around −6 dBFS, leaving room for the mastering engineer to add loudness without distortion. Good gain staging — setting sensible levels at every stage — keeps the noise floor low and the signal clean.' },
+    content: 'Headroom is the space between the loudest peak and digital 0 dBFS. Modern mixing keeps individual channel peaks around −18 to −12 dBFS and the master around −6 dBFS, leaving room for the mastering engineer to add loudness without distortion. Good gain staging (setting sensible levels at every stage) keeps the noise floor low and the signal clean.' },
   { level: 'advanced', title: 'Reference tracks and translation',
-    content: 'Professionals compare their mix to commercially-released reference tracks in the same genre. They listen on multiple systems — studio monitors, headphones, laptop speakers, in a car — to check the mix translates. A mix that sounds good only on one system has a problem; a mix that translates everywhere is a finished mix.' },
+    content: 'Professionals compare their mix to commercially-released reference tracks in the same genre. They listen on multiple systems (studio monitors, headphones, laptop speakers, in a car) to check the mix translates. A mix that sounds good only on one system has a problem; a mix that translates everywhere is a finished mix.' },
 ];
 
 // ============================================
@@ -143,7 +143,7 @@ const quizQuestions = [
   { q: 'A vocalist hears the reverb disappear from their headphones every time their channel fader is pulled down. The send is set to:',
     options: ['Pre-fader', 'Post-fader', 'Pre-send', 'Mono-summed'],
     correct: 1, difficulty: 'intermediate',
-    explanation: 'A post-fader send is dependent on the channel fader — lower the fader and the send signal drops with it, which is exactly what the vocalist is hearing. A pre-fader send is the opposite: it is independent of the fader, so the reverb would stay audible even with the dry channel pulled down (the setup you would choose for a dedicated headphone mix) — but that is not what is happening here.' },
+    explanation: 'A post-fader send is dependent on the channel fader: lower the fader and the send signal drops with it, which is exactly what the vocalist is hearing. A pre-fader send is the opposite: it is independent of the fader, so the reverb would stay audible even with the dry channel pulled down (the setup you would choose for a dedicated headphone mix), but that is not what is happening here.' },
   { q: 'You route every drum track to a single "Drums" channel and put a compressor on it. What is this called?',
     options: ['Send and return', 'Group bus / sub-mix', 'Parallel chain', 'Master strip'],
     correct: 1, difficulty: 'intermediate',
@@ -163,7 +163,7 @@ const quizQuestions = [
   { q: 'An engineer has built a mix where the vocal is buried behind the snare and the bass. What should they address FIRST?',
     options: ['Add a stereo widener to the vocal', 'Re-set the static balance with faders before reaching for EQ or compression', 'Insert a multiband compressor on the master', 'Mute the bass and rebuild from the kick'],
     correct: 1, difficulty: 'intermediate',
-    explanation: 'Static balance with the faders is the first job in any mix. If the level relationships are wrong, no amount of EQ, compression, or effects will resolve the masking — those tools refine a working balance, they do not replace one.' },
+    explanation: 'Static balance with the faders is the first job in any mix. If the level relationships are wrong, no amount of EQ, compression, or effects will resolve the masking: those tools refine a working balance, they do not replace one.' },
   { q: 'Which export format and resolution is appropriate for handing a final mixdown to a mastering engineer?',
     options: ['128 kbps MP3, mono', '24-bit WAV at the session sample rate', '16-bit FLAC down-sampled to 22.05 kHz', '8-bit raw PCM'],
     correct: 1, difficulty: 'foundation',
@@ -171,7 +171,7 @@ const quizQuestions = [
   { q: 'Why might an engineer regularly listen to their in-progress mix on laptop speakers, headphones, and in a car?',
     options: ['It gradually increases the master loudness', 'It checks the mix translates across the systems audiences actually use', 'It compresses the dynamic range', 'It widens the stereo field'],
     correct: 1, difficulty: 'intermediate',
-    explanation: 'A mix must translate — sound balanced on the wide range of systems listeners actually use. Cross-system checking exposes problems (boomy bass on small speakers, harsh vocals in a car) early, before mastering, when they are still easy to fix.' },
+    explanation: 'A mix must translate: sound balanced on the wide range of systems listeners actually use. Cross-system checking exposes problems (boomy bass on small speakers, harsh vocals in a car) early, before mastering, when they are still easy to fix.' },
 ];
 
 // ============================================
@@ -275,7 +275,7 @@ const MixingProduction = () => {
   }, [trackState, masterFader, reverbReturn, reverbPreFader, soloed]);
 
   const masterPeakColor = masterPeakDb > -1 ? '#DC2626' : masterPeakDb > -6 ? '#D97706' : '#059669';
-  const masterPeakLabel = masterPeakDb > -1 ? 'CLIPPING — pull master down' : masterPeakDb > -6 ? 'Hot — leave headroom' : 'Healthy headroom';
+  const masterPeakLabel = masterPeakDb > -1 ? 'CLIPPING: pull master down' : masterPeakDb > -6 ? 'Hot: leave headroom' : 'Healthy headroom';
 
   // Balance comparison
   const balanceFeedback = useMemo(() => {
@@ -543,7 +543,7 @@ const MixingProduction = () => {
                 borderRadius: 'var(--radius-md)', padding: 'var(--space-3)', marginBottom: 'var(--space-4)',
                 color: 'var(--canvas-foreground)', fontSize: 'var(--text-sm)', fontFamily: FONT_BODY, lineHeight: 1.5
               }}>
-                <strong style={{ color: 'var(--error)' }}>Task:</strong> Your session is too loud for mixdown. Pull the master fader down until the meter reads &ldquo;Healthy headroom&rdquo; (aim for around &minus;6 dBFS). Watch the peak meter &mdash; avoid the red.
+                <strong style={{ color: 'var(--error)' }}>Task:</strong> Your session is too loud for mixdown. Pull the master fader down until the meter reads &ldquo;Healthy headroom&rdquo; (aim for around &minus;6 dBFS). Watch the peak meter. Avoid the red.
               </div>
             )}
 
@@ -784,7 +784,7 @@ ${drumBusEnabled ? '\nDrum tracks → Drums Bus → Glue Comp → Master' : ''}`
                 The 1.6 specification is examined in Section B of Component 4. Recent themes include: explaining why a vocal is sent to reverb rather than having one inserted on the channel; describing how pre-fader vs post-fader sends behave when a fader moves; identifying a sensible mixdown peak level; suggesting a routing strategy when the drum kit needs cohesive processing.
               </p>
               <CopyableNote title="Examiner cue" variant="exam" color="var(--moss)">
-                When you describe a routing decision, name the signal path and the reason. Example: <em>&ldquo;Both rhythm guitars send post-fader to a reverb bus so the channel fader controls both the dry guitar and the amount of guitar in the reverb &mdash; this glues them into the same space and saves CPU.&rdquo;</em>
+                When you describe a routing decision, name the signal path and the reason. Example: <em>&ldquo;Both rhythm guitars send post-fader to a reverb bus so the channel fader controls both the dry guitar and the amount of guitar in the reverb. This glues them into the same space and saves CPU.&rdquo;</em>
               </CopyableNote>
             </StudioCard>
           </div>

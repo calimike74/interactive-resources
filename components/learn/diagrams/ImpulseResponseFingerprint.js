@@ -128,7 +128,7 @@ export default function ImpulseResponseFingerprint() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText("Convolution — Capture the Room's Fingerprint, Then Use It", W / 2, 16);
+            ctx.fillText("Convolution: Capture the Room's Fingerprint, Then Use It", W / 2, 16);
             ctx.globalAlpha = 1;
 
             const headP = progress(f, PHASE_HEADERS, 20);
@@ -192,7 +192,7 @@ export default function ImpulseResponseFingerprint() {
                 ctx.fillStyle = '#DCC892';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText("IR — the room's fingerprint", 120, 218);
+                ctx.fillText("IR: the room's fingerprint", 120, 218);
                 ctx.globalAlpha = 1;
             }
 
@@ -247,7 +247,7 @@ export default function ImpulseResponseFingerprint() {
                 ctx.fillStyle = '#e85d75';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText("output — carries the room's character", 360, 218);
+                ctx.fillText("output: carries the room's character", 360, 218);
                 ctx.globalAlpha = 1;
             }
 
@@ -257,7 +257,7 @@ export default function ImpulseResponseFingerprint() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText("Realistic because it's a real space — but that space is now fixed", W / 2, 252);
+                ctx.fillText("Realistic because it's a real space: but that space is now fixed", W / 2, 252);
                 ctx.globalAlpha = 1;
             }
 

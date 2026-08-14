@@ -153,7 +153,7 @@ export default function LimiterCeiling() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Nothing crosses the ceiling — that\'s a limiter', W / 2, 276);
+                ctx.fillText('Nothing crosses the ceiling: that\'s a limiter', W / 2, 276);
                 ctx.globalAlpha = 1;
             }
 

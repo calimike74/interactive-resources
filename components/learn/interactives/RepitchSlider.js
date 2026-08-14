@@ -11,9 +11,9 @@ function repitchWord(st) {
 }
 
 function repitchReadout(st) {
-    if (st === 0) return 'root — as recorded';
+    if (st === 0) return 'root: as recorded';
     const sign = st > 0 ? '+' : '−';
-    return `${sign}${Math.abs(st)} st — ${repitchWord(st)}`;
+    return `${sign}${Math.abs(st)} st: ${repitchWord(st)}`;
 }
 
 export default function RepitchSlider() {
@@ -46,7 +46,7 @@ export default function RepitchSlider() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — repitch
+                    Try it: repitch
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
                     {repitchReadout(semitones)}
@@ -70,7 +70,7 @@ export default function RepitchSlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

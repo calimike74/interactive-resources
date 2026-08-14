@@ -60,8 +60,8 @@ export default function OddEvenHarmonics() {
         // (baseY + 10, drawn in drawPanel below) so the caption's italic text
         // never sits adjacent to the small per-bar tags above it.
         const PANELS = [
-            { includeEven: false, top: 50, h: 66, labelY: 40, capY: 142, name: 'Symmetric clipping — hard or soft' },
-            { includeEven: true, top: 172, h: 66, labelY: 162, capY: 262, name: 'Asymmetric clipping — e.g. tube saturation' },
+            { includeEven: false, top: 50, h: 66, labelY: 40, capY: 142, name: 'Symmetric clipping: hard or soft' },
+            { includeEven: true, top: 172, h: 66, labelY: 162, capY: 262, name: 'Asymmetric clipping: e.g. tube saturation' },
         ];
 
         const PHASE = [
@@ -150,7 +150,7 @@ export default function OddEvenHarmonics() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Odd harmonics only (3rd, 5th, 7th…) — hollow, buzzy character', W / 2, PANELS[0].capY);
+                ctx.fillText('Odd harmonics only (3rd, 5th, 7th…): hollow, buzzy character', W / 2, PANELS[0].capY);
                 ctx.globalAlpha = 1;
             }
 
@@ -160,7 +160,7 @@ export default function OddEvenHarmonics() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Even harmonics (2nd, 4th, 6th…) join in — the "warm" character', W / 2, PANELS[1].capY);
+                ctx.fillText('Even harmonics (2nd, 4th, 6th…) join in: the "warm" character', W / 2, PANELS[1].capY);
                 ctx.globalAlpha = 1;
             }
 

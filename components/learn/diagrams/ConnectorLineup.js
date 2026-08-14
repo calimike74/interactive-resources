@@ -183,7 +183,7 @@ export default function ConnectorLineup() {
                 ctx.fillStyle = item.color;
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(item.name + ' — ' + item.desc, cx, 166);
+                ctx.fillText(item.name + ': ' + item.desc, cx, 166);
                 ctx.fillStyle = '#6b7280';
                 ctx.font = 'italic 7px -apple-system, sans-serif';
                 ctx.fillText(item.where, cx, 178);

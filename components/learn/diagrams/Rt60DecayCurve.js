@@ -206,7 +206,7 @@ export default function Rt60DecayCurve() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Small room and hall both fall 60 dB — the hall just takes over four times longer', W / 2, H - 8);
+                ctx.fillText('Small room and hall both fall 60 dB: the hall just takes over four times longer', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

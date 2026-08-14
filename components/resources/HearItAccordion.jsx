@@ -55,7 +55,7 @@ export default function HearItAccordion({ title, tracks }) {
               fontWeight: 600,
               color: '#1a1a2e',
             }}>
-              {track.title} — {track.artist}
+              {track.title} by {track.artist}
             </h4>
 
             <div style={{

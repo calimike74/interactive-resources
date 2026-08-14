@@ -405,7 +405,7 @@ function DrawTab() {
                         <li style={{ marginBottom: spacing[2] }}>At the threshold the hard knee creates a sharp angle where the slope changes.</li>
                         <li style={{ marginBottom: spacing[2] }}>Above the threshold a higher ratio means a flatter slope.</li>
                         <li style={{ marginBottom: spacing[2] }}>Makeup gain shifts the entire curve upward.</li>
-                        <li>Keep the curve continuous — avoid breaks or jumps.</li>
+                        <li>Keep the curve continuous: avoid breaks or jumps.</li>
                     </ul>
                 </div>
             )}

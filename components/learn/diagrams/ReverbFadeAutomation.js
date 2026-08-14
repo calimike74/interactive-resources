@@ -65,7 +65,7 @@ export default function ReverbFadeAutomation() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('The Reverb-Fade Trick — Dry Falls, Wet Holds', W / 2, 16);
+            ctx.fillText('The Reverb-Fade Trick: Dry Falls, Wet Holds', W / 2, 16);
             ctx.globalAlpha = 1;
 
             const axisP = progress(f, PHASE_AXIS, 20);
@@ -124,7 +124,7 @@ export default function ReverbFadeAutomation() {
                 ctx.fillStyle = '#e85d75';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('DRY — fades to silence', 90, 60);
+                ctx.fillText('DRY: fades to silence', 90, 60);
                 ctx.globalAlpha = 1;
             }
 
@@ -134,7 +134,7 @@ export default function ReverbFadeAutomation() {
                 ctx.fillStyle = '#14b8a6';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('WET — holds constant', 300, 140);
+                ctx.fillText('WET: holds constant', 300, 140);
                 ctx.globalAlpha = 1;
             }
 
@@ -144,7 +144,7 @@ export default function ReverbFadeAutomation() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('The dry voice disappears while the wet room remains — the singer walks away', W / 2, 250);
+                ctx.fillText('The dry voice disappears while the wet room remains: the singer walks away', W / 2, 250);
                 ctx.globalAlpha = 1;
             }
 

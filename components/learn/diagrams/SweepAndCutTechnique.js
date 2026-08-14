@@ -181,9 +181,9 @@ export default function SweepAndCutTechnique() {
             const capY = plotY + plotH + 34;
             let caption = '';
             if (f < SWEEP_END) caption = 'Sweeping a narrow, high-Q boost across the spectrum…';
-            else if (f < LOCK_END) caption = 'Found it — 400 Hz rings out louder than everything around it';
+            else if (f < LOCK_END) caption = 'Found it: 400 Hz rings out louder than everything around it';
             else if (f < FLIP_END) caption = 'Flip the boost into a cut, same frequency';
-            else caption = 'Fixed — the resonance is gone, nothing else touched';
+            else caption = 'Fixed: the resonance is gone, nothing else touched';
 
             const capAlpha = f < HOLD_END ? 1 : clamp(1 - (f - HOLD_END) / (CYCLE - HOLD_END - 40), 0, 1);
             ctx.globalAlpha = capAlpha;

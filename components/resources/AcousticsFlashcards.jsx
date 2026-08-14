@@ -140,7 +140,7 @@ const AcousticsFlashcards = () => {
   // SVG illustrations for acoustic concepts
   const illustrations = {
     "reverb-concept": (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing sound source radiating waves in a room, reaching a listener — room boundaries create reflections">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" className="w-full h-32" role="img" aria-label="Diagram showing sound source radiating waves in a room, reaching a listener: room boundaries create reflections">
         <rect x="0" y="0" width="200" height="100" fill="#f0f9ff" />
         <rect x="20" y="20" width="160" height="60" stroke="#64748b" strokeWidth="2" fill="none" />
         <circle cx="50" cy="50" r="4" fill="#DCC892" />

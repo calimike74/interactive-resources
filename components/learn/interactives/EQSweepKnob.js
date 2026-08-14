@@ -60,10 +60,10 @@ export default function EQSweepKnob() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — EQ sweep
+                    Try it: EQ sweep
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
-                    {formatHz(hz)} — {zoneWord(hz)}
+                    {formatHz(hz)}: {zoneWord(hz)}
                 </span>
             </div>
             <input
@@ -84,7 +84,7 @@ export default function EQSweepKnob() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

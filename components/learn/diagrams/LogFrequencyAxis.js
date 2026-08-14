@@ -131,7 +131,7 @@ export default function LogFrequencyAxis() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Linear axis — equal Hz steps, wildly unequal musical steps', W / 2, axisY + 34);
+                ctx.fillText('Linear axis: equal Hz steps, wildly unequal musical steps', W / 2, axisY + 34);
                 ctx.globalAlpha = 1;
             }
 
@@ -142,7 +142,7 @@ export default function LogFrequencyAxis() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Log axis — every octave doubling gets equal room', W / 2, axisY + 34);
+                ctx.fillText('Log axis: every octave doubling gets equal room', W / 2, axisY + 34);
                 ctx.globalAlpha = 1;
             }
 
@@ -177,7 +177,7 @@ export default function LogFrequencyAxis() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText("Same width, low or high — that's why the axis is drawn this way", W / 2, axisY + 78);
+                ctx.fillText("Same width, low or high: that's why the axis is drawn this way", W / 2, axisY + 78);
                 ctx.globalAlpha = 1;
             }
 

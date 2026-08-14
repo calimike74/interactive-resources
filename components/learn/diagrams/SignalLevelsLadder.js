@@ -93,7 +93,7 @@ export default function SignalLevelsLadder() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = 'italic 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Mic ▸ Instrument ▸ Line — climbing in level', W / 2, 30);
+                ctx.fillText('Mic ▸ Instrument ▸ Line: climbing in level', W / 2, 30);
                 ctx.globalAlpha = 1;
             }
 
@@ -177,7 +177,7 @@ export default function SignalLevelsLadder() {
                 ctx.fillText('DI: instrument level, high-Z, unbalanced ▸ mic-level, low-Z, balanced', W / 2, 240);
                 ctx.fillStyle = '#6b7280';
                 ctx.font = 'italic 8px -apple-system, sans-serif';
-                ctx.fillText('— then a preamp brings it up to line level', W / 2, 252);
+                ctx.fillText('then a preamp brings it up to line level', W / 2, 252);
                 ctx.globalAlpha = 1;
             }
 

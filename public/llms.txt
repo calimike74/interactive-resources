@@ -1,4 +1,4 @@
-# Interactive Resources — A-Level Music Technology
+# Interactive Resources: A-Level Music Technology
 
 > Interactive learning tools for A-Level Music Technology (Pearson Edexcel Component 4) covering synthesis, EQ, compression, audio numeracy, and more.
 
@@ -10,11 +10,11 @@ A collection of interactive, browser-based tools that let students explore music
 
 ### Available Tools
 
-- **Synth Explorer** — Interactive synthesis with oscillator controls, ADSR envelopes, and waveform visualisation
-- **EQ Trainer** — Hands-on equalisation with frequency bands and real-time audio feedback
-- **Compressor Tool** — Dynamic processing with threshold, ratio, attack, and release controls
-- **Octave Period Trainer** — Numeracy tool for calculating frequency, period, and octave relationships (Topic 2.5)
-- **Revision Quizzes** — Topic-based self-assessment with spaced repetition support
+- **Synth Explorer**: Interactive synthesis with oscillator controls, ADSR envelopes, and waveform visualisation
+- **EQ Trainer**: Hands-on equalisation with frequency bands and real-time audio feedback
+- **Compressor Tool**: Dynamic processing with threshold, ratio, attack, and release controls
+- **Octave Period Trainer**: Numeracy tool for calculating frequency, period, and octave relationships (Topic 2.5)
+- **Revision Quizzes**: Topic-based self-assessment with spaced repetition support
 - Additional tools covering delay, sampling, automation, and signal flow
 
 ### How Students Use It
@@ -35,7 +35,7 @@ Next.js, React, Web Audio API, Tailwind CSS, Vercel
 ## Important Context
 
 - Designed for UK A-Level students aged 16-18
-- All audio processing happens in the browser — no server-side audio
+- All audio processing happens in the browser: no server-side audio
 - Resources are pedagogically structured with progressive difficulty
 - Interactive elements follow dual coding principles (visual + audio feedback)
 

@@ -180,7 +180,7 @@ export default function ZeroCrossingCut() {
                 ctx.fillStyle = '#e85d75';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Bad cut — jump to silence', xBad, 185);
+                ctx.fillText('Bad cut: jump to silence', xBad, 185);
                 ctx.globalAlpha = 1;
             }
 
@@ -205,7 +205,7 @@ export default function ZeroCrossingCut() {
                 ctx.fillStyle = '#14b8a6';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Good cut — no jump', xGood, 185);
+                ctx.fillText('Good cut: no jump', xGood, 185);
                 ctx.globalAlpha = 1;
             }
 
@@ -215,7 +215,7 @@ export default function ZeroCrossingCut() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('The click IS the jump — cut off zero and you hear it every time', W / 2, 210);
+                ctx.fillText('The click IS the jump: cut off zero and you hear it every time', W / 2, 210);
                 ctx.globalAlpha = 1;
             }
 

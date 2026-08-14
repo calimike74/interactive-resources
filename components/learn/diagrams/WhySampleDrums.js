@@ -201,7 +201,7 @@ export default function WhySampleDrums() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 7px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('one take — fixed once recorded', 120, 178);
+                ctx.fillText('one take: fixed once recorded', 120, 178);
                 ctx.globalAlpha = 1;
             }
 
@@ -259,7 +259,7 @@ export default function WhySampleDrums() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 7px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('every hit — quantised, retuned, no bleed', 360, 178);
+                ctx.fillText('every hit: quantised, retuned, no bleed', 360, 178);
                 ctx.globalAlpha = 1;
             }
 
@@ -269,11 +269,11 @@ export default function WhySampleDrums() {
                 ctx.fillStyle = '#1a1a2e';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Sampling trades the room for control — no spill, quantised, retuned, identical every time', W / 2, 255);
+                ctx.fillText('Sampling trades the room for control: no spill, quantised, retuned, identical every time', W / 2, 255);
                 ctx.globalAlpha = 1;
             }
 
-            const phase = f < PHASE_DRUMS_L ? 'Live kit — spill'
+            const phase = f < PHASE_DRUMS_L ? 'Live kit: spill'
                 : f < PHASE_PADS_R + 40 ? 'One fixed take'
                 : f < PHASE_GRID ? 'Sample pads'
                 : 'Quantised';

@@ -110,7 +110,7 @@ export default function QuantiseGridSnap() {
                 ctx.fillStyle = PANEL_A.color;
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Hard quantise — before → after', W / 2, PANEL_A.labelY);
+                ctx.fillText('Hard quantise: before → after', W / 2, PANEL_A.labelY);
                 ctx.globalAlpha = 1;
             }
 
@@ -184,7 +184,7 @@ export default function QuantiseGridSnap() {
                 ctx.fillStyle = PANEL_B.color;
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(`Swing — off-beats shifted ${Math.round(SWING_PCT * 100)}%`, W / 2, PANEL_B.labelY);
+                ctx.fillText(`Swing: off-beats shifted ${Math.round(SWING_PCT * 100)}%`, W / 2, PANEL_B.labelY);
                 ctx.globalAlpha = 1;
             }
 
@@ -226,7 +226,7 @@ export default function QuantiseGridSnap() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Off-beat notes shift later — straight time becomes a shuffle', W / 2, PANEL_B.capY);
+                ctx.fillText('Off-beat notes shift later: straight time becomes a shuffle', W / 2, PANEL_B.capY);
                 ctx.globalAlpha = 1;
             }
 

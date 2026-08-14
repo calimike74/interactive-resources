@@ -12,7 +12,7 @@
         "Ability to carry phantom power on a two-conductor connection"
       ],
       "correctIndex": 0,
-      "explanation": "A balanced cable carries the audio signal on two conductors (hot and cold) that are 180° out of phase with each other, plus a shield. Any electromagnetic interference picked up along the cable affects both conductors equally (common-mode noise). At the destination (e.g., a mic preamp), the cold signal is inverted and summed with the hot signal — the audio adds constructively while the noise cancels. This is why balanced XLR connections are used for microphone and long-run studio cables."
+      "explanation": "A balanced cable carries the audio signal on two conductors (hot and cold) that are 180° out of phase with each other, plus a shield. Any electromagnetic interference picked up along the cable affects both conductors equally (common-mode noise). At the destination (e.g., a mic preamp), the cold signal is inverted and summed with the hot signal: the audio adds constructively while the noise cancels. This is why balanced XLR connections are used for microphone and long-run studio cables."
     },
     {
       "id": "software-hardware-short-01",
@@ -40,7 +40,7 @@
         "Digital data passes to the DAW via audio interface",
         "DAW records the data to disk as an audio file"
       ],
-      "explanation": "Understanding signal flow is essential for gain structure decisions. Gain is applied at the preamp stage — too little and the ADC noise floor becomes audible; too much and the ADC clips at 0 dBFS. The goal is to maximise signal level relative to the noise floor while leaving sufficient headroom. Each stage of the chain must be correctly matched to avoid signal degradation."
+      "explanation": "Understanding signal flow is essential for gain structure decisions. Gain is applied at the preamp stage: too little and the ADC noise floor becomes audible; too much and the ADC clips at 0 dBFS. The goal is to maximise signal level relative to the noise floor while leaving sufficient headroom. Each stage of the chain must be correctly matched to avoid signal degradation."
     }
   ]
 }

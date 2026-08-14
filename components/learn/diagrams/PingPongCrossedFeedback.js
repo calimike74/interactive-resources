@@ -98,7 +98,7 @@ export default function PingPongCrossedFeedback() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Ping-Pong — two delay lines, crossed feedback', W / 2, 16);
+            ctx.fillText('Ping-Pong: two delay lines, crossed feedback', W / 2, 16);
             ctx.globalAlpha = 1;
 
             // --- Phase 1: MONO IN ---

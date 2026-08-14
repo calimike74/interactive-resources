@@ -34,7 +34,7 @@ export default function FeedbackDial() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — feedback
+                    Try it: feedback
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
                     one repeat ⇄ long tail
@@ -58,7 +58,7 @@ export default function FeedbackDial() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

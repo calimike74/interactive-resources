@@ -149,7 +149,7 @@ export default function DistanceRdRatio() {
                     ctx.fillStyle = '#374151';
                     ctx.font = 'bold 9px -apple-system, sans-serif';
                     ctx.textAlign = 'left';
-                    ctx.fillText('Direct — falls 6 dB per doubling', pxX(labelD) - 10, pxY(directLevel(labelD)) - 10);
+                    ctx.fillText('Direct: falls 6 dB per doubling', pxX(labelD) - 10, pxY(directLevel(labelD)) - 10);
                 }
                 ctx.globalAlpha = 1;
             }
@@ -172,7 +172,7 @@ export default function DistanceRdRatio() {
                     ctx.fillStyle = '#14b8a6';
                     ctx.font = 'bold 9px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Reverberant — holds steady', pxX(labelD), pxY(reverbLevel()) - 10);
+                    ctx.fillText('Reverberant: holds steady', pxX(labelD), pxY(reverbLevel()) - 10);
                 }
                 ctx.globalAlpha = 1;
             }

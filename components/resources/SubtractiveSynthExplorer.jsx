@@ -77,7 +77,7 @@ const QUIZ_QUESTIONS = [
         question: 'What does a low-pass filter remove from a signal?',
         options: ['Low frequencies', 'High frequencies', 'The fundamental', 'All harmonics equally'],
         correct: 1,
-        explanation: 'A low-pass filter allows frequencies below the cutoff to pass and attenuates frequencies above it — removing high-frequency harmonics.',
+        explanation: 'A low-pass filter allows frequencies below the cutoff to pass and attenuates frequencies above it: removing high-frequency harmonics.',
     },
     {
         question: 'In an ADSR envelope, which stage determines the volume while a key is held down?',
@@ -1145,7 +1145,7 @@ export default function SubtractiveSynthExplorer() {
             <div style={{ paddingTop: spacing[10], marginBottom: spacing[6] }}>
                 <h2 style={h2Style}>Oscillators</h2>
                 <p style={introStyle}>
-                    Every subtractive synth starts with an oscillator. It generates a raw waveform — the
+                    Every subtractive synth starts with an oscillator. It generates a raw waveform: the
                     harmonic content you will later shape with filters. Choose a waveform and press
                     play to hear how they differ.
                 </p>
@@ -1242,7 +1242,7 @@ export default function SubtractiveSynthExplorer() {
             {/* Inline check — interleaved after hands-on exploration */}
             <Callout type="question" title="Which waveform would you start with for subtractive synthesis?">
                 <Callout.Options
-                    options={['Sine — it has the cleanest sound', 'Sawtooth — it has the richest harmonics', 'Square — it sounds the loudest', 'Triangle — it is the most balanced']}
+                    options={['Sine: it has the cleanest sound', 'Sawtooth: it has the richest harmonics', 'Square: it sounds the loudest', 'Triangle: it is the most balanced']}
                     correctIndex={1}
                     explanation="You need harmonics to subtract! A sawtooth contains all harmonics (odd and even), giving you the most material to shape with a filter."
                 />
@@ -1254,25 +1254,25 @@ export default function SubtractiveSynthExplorer() {
                     Understanding waveforms
                 </h3>
                 <KeyConcept label="Sine Wave">
-                    Contains only the fundamental frequency — no harmonics. Produces a pure, smooth tone. This is the simplest waveform.
+                    Contains only the fundamental frequency: no harmonics. Produces a pure, smooth tone. This is the simplest waveform.
                 </KeyConcept>
                 <KeyConcept label="Triangle Wave">
-                    Contains odd harmonics only (1st, 3rd, 5th…), each falling as 1/n² — much faster than a square wave. This is why it sounds warmer and softer.
+                    Contains odd harmonics only (1st, 3rd, 5th…), each falling as 1/n²: much faster than a square wave. This is why it sounds warmer and softer.
                 </KeyConcept>
                 <KeyConcept label="Sawtooth Wave">
-                    Contains ALL harmonics (odd and even) at decreasing amplitude. Sounds bright and buzzy — the most common starting point for subtractive synthesis.
+                    Contains ALL harmonics (odd and even) at decreasing amplitude. Sounds bright and buzzy: the most common starting point for subtractive synthesis.
                 </KeyConcept>
                 <KeyConcept label="Square Wave">
-                    Contains only odd harmonics (1/n amplitude law), each louder than the corresponding triangle harmonic (which fall as 1/n²). Sounds hollow and woody — often used for bass and pad sounds.
+                    Contains only odd harmonics (1/n amplitude law), each louder than the corresponding triangle harmonic (which fall as 1/n²). Sounds hollow and woody: often used for bass and pad sounds.
                 </KeyConcept>
 
                 <CopyAllNotes
                     title="Waveforms"
                     notes={[
-                        { label: 'Sine Wave', text: 'Contains only the fundamental frequency — no harmonics. Produces a pure, smooth tone. This is the simplest waveform.' },
-                        { label: 'Triangle Wave', text: 'Contains odd harmonics only (1st, 3rd, 5th…), each falling as 1/n² — much faster than a square wave. This is why it sounds warmer and softer.' },
-                        { label: 'Sawtooth Wave', text: 'Contains ALL harmonics (odd and even) at decreasing amplitude. Sounds bright and buzzy — the most common starting point for subtractive synthesis.' },
-                        { label: 'Square Wave', text: 'Contains only odd harmonics (1/n amplitude law), each louder than the corresponding triangle harmonic (which fall as 1/n²). Sounds hollow and woody — often used for bass and pad sounds.' },
+                        { label: 'Sine Wave', text: 'Contains only the fundamental frequency: no harmonics. Produces a pure, smooth tone. This is the simplest waveform.' },
+                        { label: 'Triangle Wave', text: 'Contains odd harmonics only (1st, 3rd, 5th…), each falling as 1/n²: much faster than a square wave. This is why it sounds warmer and softer.' },
+                        { label: 'Sawtooth Wave', text: 'Contains ALL harmonics (odd and even) at decreasing amplitude. Sounds bright and buzzy: the most common starting point for subtractive synthesis.' },
+                        { label: 'Square Wave', text: 'Contains only odd harmonics (1/n amplitude law), each louder than the corresponding triangle harmonic (which fall as 1/n²). Sounds hollow and woody: often used for bass and pad sounds.' },
                     ]}
                 />
 
@@ -1298,7 +1298,7 @@ export default function SubtractiveSynthExplorer() {
                 <p style={introStyle}>
                     This is the "subtractive" part. A filter removes frequencies from the oscillator's
                     waveform. Press play, then drag the cutoff down and watch the outer circles shrink
-                    away as you hear the sound get darker — that is the harmonics being taken out.
+                    away as you hear the sound get darker: that is the harmonics being taken out.
                 </p>
             </div>
 
@@ -1374,7 +1374,7 @@ export default function SubtractiveSynthExplorer() {
             <Callout type="definition" title="Cutoff Frequency">
                 The frequency at which the filter begins to attenuate the signal. Below this point (for a low-pass filter), frequencies pass through unchanged. Above it, they are progressively reduced.
                 <Callout type="listen" title="Hear the difference" collapsible={false}>
-                    Set the filter to Low-Pass, press play, then drag the cutoff slowly from 20kHz down to 200Hz. The bright, buzzy harmonics disappear from the sound, the outer circles shrink to nothing, and the bars fall away one by one — three views of the same thing, which is subtractive synthesis in action.
+                    Set the filter to Low-Pass, press play, then drag the cutoff slowly from 20kHz down to 200Hz. The bright, buzzy harmonics disappear from the sound, the outer circles shrink to nothing, and the bars fall away one by one: three views of the same thing, which is subtractive synthesis in action.
                 </Callout>
             </Callout>
 
@@ -1390,12 +1390,12 @@ export default function SubtractiveSynthExplorer() {
                     redraws itself as they read about each type. Moving it also gave
                     the panel back the height it needed to fit a laptop window. */}
                 <div style={{ marginBottom: spacing[5] }}>
-                    <p style={paneLabel}>{FILTER_TYPES.find(f => f.id === filterType)?.label} — the shape of its response</p>
+                    <p style={paneLabel}>{FILTER_TYPES.find(f => f.id === filterType)?.label}: the shape of its response</p>
                     <FilterResponseSVG type={filterType} cutoff={cutoff} resonance={resonance} height={130} accentColor={accent} />
                 </div>
 
                 <KeyConcept label="Low-Pass Filter (LPF)">
-                    Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled — the most common filter in subtractive synthesis. A typical synth LPF rolls off at −12 or −24 dB per octave; steeper slopes remove harmonics faster.
+                    Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled: the most common filter in subtractive synthesis. A typical synth LPF rolls off at −12 or −24 dB per octave; steeper slopes remove harmonics faster.
                 </KeyConcept>
                 <KeyConcept label="High-Pass Filter (HPF)">
                     Passes frequencies above the cutoff and attenuates those below. Makes the sound thinner and brighter. Useful for removing low-end rumble.
@@ -1410,7 +1410,7 @@ export default function SubtractiveSynthExplorer() {
                 <CopyAllNotes
                     title="Filters"
                     notes={[
-                        { label: 'Low-Pass Filter (LPF)', text: 'Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled — the most common filter in subtractive synthesis. A typical synth LPF rolls off at −12 or −24 dB per octave; steeper slopes remove harmonics faster.' },
+                        { label: 'Low-Pass Filter (LPF)', text: 'Passes frequencies below the cutoff and attenuates those above. Sweeping the cutoff down makes the sound darker and more muffled: the most common filter in subtractive synthesis. A typical synth LPF rolls off at −12 or −24 dB per octave; steeper slopes remove harmonics faster.' },
                         { label: 'High-Pass Filter (HPF)', text: 'Passes frequencies above the cutoff and attenuates those below. Makes the sound thinner and brighter. Useful for removing low-end rumble.' },
                         { label: 'Band-Pass Filter (BPF)', text: 'Passes a band of frequencies around the cutoff and attenuates both sides. Creates a "nasal" or "telephone" quality at narrow bandwidth.' },
                         { label: 'Resonance (Q)', text: 'Boosts frequencies at the cutoff point, creating a peak. High resonance produces a whistling or ringing quality. At extreme values, the filter self-oscillates.' },
@@ -1422,7 +1422,7 @@ export default function SubtractiveSynthExplorer() {
                     padding: `${spacing[4]} ${spacing[5]}`, marginTop: spacing[6],
                 }}>
                     <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0 }}>
-                        <strong style={{ color: COLORS.text }}>Exam tip:</strong> The "subtractive" in subtractive synthesis refers to this filtering stage — you start with rich harmonics and subtract what you don't need.
+                        <strong style={{ color: COLORS.text }}>Exam tip:</strong> The "subtractive" in subtractive synthesis refers to this filtering stage: you start with rich harmonics and subtract what you don't need.
                     </p>
                 </div>
             </div>
@@ -1438,7 +1438,7 @@ export default function SubtractiveSynthExplorer() {
                 <h2 style={h2Style}>Amplitude Envelope</h2>
                 <p style={introStyle}>
                     The ADSR envelope controls how the volume changes over time when a note is played.
-                    It gives each sound its characteristic "shape" — from plucky stabs to swelling pads.
+                    It gives each sound its characteristic "shape", from plucky stabs to swelling pads.
                 </p>
             </div>
 
@@ -1477,7 +1477,7 @@ export default function SubtractiveSynthExplorer() {
             }>
             {/* Inline warning — common exam mistake */}
             <Callout type="warning" title="Sustain is a level, not a time">
-                Students often describe sustain as "how long the sound holds." That is wrong — sustain is the <strong>amplitude level</strong> maintained while the key is held. The hold duration depends on how long the player keeps the key pressed, not on the sustain value. Set sustain to 0 above and trigger a note to hear the difference.
+                Students often describe sustain as "how long the sound holds." That is wrong: sustain is the <strong>amplitude level</strong> maintained while the key is held. The hold duration depends on how long the player keeps the key pressed, not on the sustain value. Set sustain to 0 above and trigger a note to hear the difference.
             </Callout>
 
             {/* Educational content */}
@@ -1743,7 +1743,7 @@ export default function SubtractiveSynthExplorer() {
                         </button>
                     ) : (
                         <p style={{ color: quizScore === QUIZ_QUESTIONS.length ? '#059669' : COLORS.patch, fontSize: typography.size.base, fontWeight: typography.weight.semibold }}>
-                            {quizScore}/{QUIZ_QUESTIONS.length} correct{quizScore === QUIZ_QUESTIONS.length && ' — Perfect!'}
+                            {quizScore}/{QUIZ_QUESTIONS.length} correct{quizScore === QUIZ_QUESTIONS.length && ', Perfect!'}
                         </p>
                     )}
                 </div>

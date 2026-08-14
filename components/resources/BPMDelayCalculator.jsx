@@ -1268,36 +1268,36 @@ function refTableMd() {
 }
 
 const COPY_TEXTS = {
-  'theory-text': () => `1.12 DELAY — THEORY
+  'theory-text': () => `1.12 DELAY: THEORY
 
 THE MATHS
-BPM is beats per minute. One minute is 60,000 milliseconds. Divide and you get the duration of one beat — one quarter note in 4/4 time.
+BPM is beats per minute. One minute is 60,000 milliseconds. Divide and you get the duration of one beat: one quarter note in 4/4 time.
 
 DELAY (ms) = 60,000 / BPM x NOTE
 
 Multiply by a note value to scale up or down. Quarter = 1, eighth = 0.5 (twice as fast), half = 2 (twice as slow). A dotted note = its undotted base note × 1.5 (e.g., dotted-eighth = eighth × 1.5). An eighth triplet = quarter ÷ 3 (multiplier 0.333). Three eighth-triplets fill one beat.
 
 THE TAPE CONNECTION
-On a real Echoplex or Roland Space Echo, the formula isn't an abstraction — it's a piece of tape moving past two heads. The physical gap between the record head and the playback head, divided by the tape speed, IS the delay time.
+On a real Echoplex or Roland Space Echo, the formula isn't an abstraction: it's a piece of tape moving past two heads. The physical gap between the record head and the playback head, divided by the tape speed, IS the delay time.
 
-WORKED EXAMPLE — 120 BPM, dotted eighth
+WORKED EXAMPLE: 120 BPM, dotted eighth
 1. Quarter:        60,000 / 120 = 500 ms
 2. Eighth:         500 / 2      = 250 ms
 3. Dotted eighth:  250 x 1.5    = 375 ms
 
-375 ms is the iconic U2 / The Edge guitar delay. Each echo lands a sixteenth before the next eighth — weaving across the beat.
+375 ms is the iconic U2 / The Edge guitar delay. Each echo lands a sixteenth before the next eighth, weaving across the beat.
 
 WATCH OUT FOR
 - Forgetting milliseconds (writing 0.5 for a quarter at 120 BPM)
-- Rounding too early — keep one decimal through the working
+- Rounding too early: keep one decimal through the working
 - Triplet maths: an eighth triplet = quarter / 3, not eighth / 3. Three triplet eighths fit in ONE beat.
 - BPM always refers to the quarter note in 4/4. Always derive the quarter first, then scale.
 `,
-  'theory-md': () => `# Delay (1.12) — Theory
+  'theory-md': () => `# Delay (1.12): Theory
 
 ## The maths
 
-BPM is *beats per minute*. One minute is 60,000 milliseconds. Divide and you get the duration of one beat — one quarter note in 4/4 time.
+BPM is *beats per minute*. One minute is 60,000 milliseconds. Divide and you get the duration of one beat: one quarter note in 4/4 time.
 
 \`\`\`
 DELAY (ms) = 60,000 ÷ BPM × NOTE
@@ -1313,24 +1313,24 @@ Multiply by a note value to scale up or down:
 
 ## The tape connection
 
-On a real Echoplex or Roland Space Echo, the formula isn't an abstraction — it's a piece of tape moving past two heads. The **physical gap** between the record head and the playback head, divided by the tape speed, **is** the delay time.
+On a real Echoplex or Roland Space Echo, the formula isn't an abstraction: it's a piece of tape moving past two heads. The **physical gap** between the record head and the playback head, divided by the tape speed, **is** the delay time.
 
-## Worked example — 120 BPM, dotted eighth
+## Worked example: 120 BPM, dotted eighth
 
 1. **Quarter:** 60,000 ÷ 120 = **500 ms**
 2. **Eighth:** 500 ÷ 2 = **250 ms**
 3. **Dotted eighth:** 250 × 1.5 = **375 ms**
 
-> 375 ms is the iconic U2 / The Edge guitar delay. Each echo lands a sixteenth before the next eighth — weaving across the beat.
+> 375 ms is the iconic U2 / The Edge guitar delay. Each echo lands a sixteenth before the next eighth, weaving across the beat.
 
 ## Watch out for
 
 - Forgetting milliseconds (writing 0.5 for a quarter at 120 BPM).
-- Rounding too early — keep one decimal through the working.
+- Rounding too early: keep one decimal through the working.
 - Triplet maths: an eighth triplet = quarter ÷ 3, not eighth ÷ 3. Three triplet eighths fit in *one* beat.
 - BPM always refers to the quarter note in 4/4. Always derive the quarter first, then scale.
 `,
-  'reference-text': () => `1.12 DELAY — REFERENCE
+  'reference-text': () => `1.12 DELAY: REFERENCE
 
 FORMULA
 DELAY (ms) = 60,000 / BPM x NOTE
@@ -1345,11 +1345,11 @@ Eighth        = 0.5
 1/8 triplet   = 0.333
 Sixteenth     = 0.25
 
-BPM x NOTE VALUE — DELAY TIMES (ms, rounded)
+BPM x NOTE VALUE: DELAY TIMES (ms, rounded)
 
 ${refTableText()}
 `,
-  'reference-md': () => `# Delay (1.12) — Reference
+  'reference-md': () => `# Delay (1.12): Reference
 
 ## Formula
 
@@ -1370,7 +1370,7 @@ DELAY (ms) = 60,000 ÷ BPM × NOTE
 | Eighth triplet | 0.333… |
 | Sixteenth | 0.25 |
 
-## BPM × note value — delay times (ms)
+## BPM × note value: delay times (ms)
 
 ${refTableMd()}
 `,
@@ -1694,7 +1694,7 @@ function BPMDelayCalculator() {
             Tape <span className="tl-amp">&amp;</span> Heads
           </h1>
           <p className="tl-lede">
-            In an Echoplex, the delay isn't a number — it's the gap between the record head and the playback head. The tape carries each hit from one to the other, and the distance is the delay time.
+            In an Echoplex, the delay isn't a number: it's the gap between the record head and the playback head. The tape carries each hit from one to the other, and the distance is the delay time.
           </p>
         </header>
 
@@ -1749,11 +1749,11 @@ function BPMDelayCalculator() {
               </div>
               <div className="tl-margin-note">
                 <span className="tl-margin-term">IPS</span>
-                Inches per second — how fast the tape moves. 7½ IPS is common on tape echo units (Echoplex, Space Echo); professional multi-track recorders typically ran at 15 or 30 IPS.
+                Inches per second: how fast the tape moves. 7½ IPS is common on tape echo units (Echoplex, Space Echo); professional multi-track recorders typically ran at 15 or 30 IPS.
               </div>
               <div className="tl-margin-note">
                 <span className="tl-margin-term">Wow &amp; flutter</span>
-                Pitch wobble caused by tiny speed variations of the tape — the &ldquo;warmth&rdquo; of analogue delay.
+                Pitch wobble caused by tiny speed variations of the tape: the &ldquo;warmth&rdquo; of analogue delay.
               </div>
             </div>
           </aside>
@@ -1763,7 +1763,7 @@ function BPMDelayCalculator() {
         {/* HEAD METER */}
         <div className="tl-gap-meter-frame">
           <div className="tl-gap-meter-stencil">
-            <span>Head distance — what the formula <em>looks like</em></span>
+            <span>Head distance: what the formula <em>looks like</em></span>
             <span className="live">{note.label.toUpperCase()} · {Math.round(ms)} MS</span>
           </div>
           <div className="tl-rail" ref={railRef}>
@@ -1932,7 +1932,7 @@ function BPMDelayCalculator() {
 
         <p className="tl-aside">
           <span className="tl-tag">Try this</span>
-          Hit the <em>snare</em> pad and watch a glowing flux mark fly across the rail from <em>record</em> to <em>playback</em>. Lower the BPM — playback slides right, the bracket widens, the wet hit arrives later. Pick an eighth — the head jumps left, the gap halves. The maths and the geometry are the same idea.
+          Hit the <em>snare</em> pad and watch a glowing flux mark fly across the rail from <em>record</em> to <em>playback</em>. Lower the BPM: playback slides right, the bracket widens, the wet hit arrives later. Pick an eighth: the head jumps left, the gap halves. The maths and the geometry are the same idea.
         </p>
 
           </div>
@@ -2004,12 +2004,12 @@ function TheoryPanel({ onCopy }) {
         <span className="tl-copy-hint">Text → notes · Markdown → AI assistants</span>
       </div>
       <h2>The maths</h2>
-      <p>BPM is <em>beats per minute</em>. One minute is 60,000 milliseconds. Divide and you get the duration of one beat — one quarter note in 4/4 time.</p>
+      <p>BPM is <em>beats per minute</em>. One minute is 60,000 milliseconds. Divide and you get the duration of one beat: one quarter note in 4/4 time.</p>
       <div className="tl-formula-block">DELAY (ms) = 60,000 ÷ BPM × NOTE</div>
       <p>Multiply by a note value to scale up or down. Quarter = 1, eighth = 0.5 (twice as fast), half = 2 (twice as slow). A dotted note = its undotted base note × 1.5 (e.g., dotted-eighth = eighth × 1.5). An eighth triplet = quarter ÷ 3 (multiplier 0.333).</p>
 
       <h3>The tape connection</h3>
-      <p>On a real Echoplex or Roland Space Echo, the formula isn't an abstraction — it's a piece of tape moving past two heads. The <em>physical gap</em> between the record head and the playback head, divided by the tape speed, IS the delay time. That's why the head distance meter slides as you change BPM. The maths and the geometry are one idea.</p>
+      <p>On a real Echoplex or Roland Space Echo, the formula isn't an abstraction: it's a piece of tape moving past two heads. The <em>physical gap</em> between the record head and the playback head, divided by the tape speed, IS the delay time. That's why the head distance meter slides as you change BPM. The maths and the geometry are one idea.</p>
 
       <h3>Worked example</h3>
       <p>120 BPM, dotted eighth.</p>
@@ -2018,12 +2018,12 @@ function TheoryPanel({ onCopy }) {
         <li><strong>Eighth:</strong> 500 ÷ 2 = <span style={{ fontFamily: 'var(--f-mono)' }}>250 ms</span></li>
         <li><strong>Dotted eighth:</strong> 250 × 1.5 = <span style={{ fontFamily: 'var(--f-mono)' }}>375 ms</span></li>
       </ol>
-      <p style={{ fontStyle: 'italic', color: 'var(--ink-faded)' }}>375 ms is the iconic U2/The Edge guitar delay. Each echo lands a sixteenth before the next eighth — weaving across the beat.</p>
+      <p style={{ fontStyle: 'italic', color: 'var(--ink-faded)' }}>375 ms is the iconic U2/The Edge guitar delay. Each echo lands a sixteenth before the next eighth, weaving across the beat.</p>
 
       <h3>Watch out for</h3>
       <ul>
         <li>Forgetting milliseconds (writing 0.5 for a quarter at 120 BPM).</li>
-        <li>Rounding too early — keep one decimal through the working, only round at the end.</li>
+        <li>Rounding too early: keep one decimal through the working, only round at the end.</li>
         <li>Triplet maths: an eighth triplet = quarter ÷ 3, not eighth ÷ 3. Three triplet eighths fit in <em>one</em> beat.</li>
         <li>BPM always refers to the quarter note in 4/4. Always derive the quarter first, then scale.</li>
       </ul>
@@ -2217,7 +2217,7 @@ function VisualiseTab({ bpm, setBpm }) {
     Math.abs(headMs - 15000 / bpm) < 6 ? 'Sixteenth' :
     Math.abs(headMs - 20000 / bpm) < 6 ? 'Eighth Triplet' :
     Math.abs(headMs - 90000 / bpm) < 10 ? 'Dotted ¼' :
-    '—';
+    '–';
 
   // ─── C: Beat grid ──────────────────────────────────────────────────
   const [hovered, setHovered] = useState('quarter');
@@ -2234,7 +2234,7 @@ function VisualiseTab({ bpm, setBpm }) {
             <div className="tl-bx-eyebrow">● Live · TR-1600 · 7½ IPS</div>
             <h2 className="tl-bx-title">The travelling hit</h2>
             <p className="tl-bx-deck">
-              Each tap is recorded by the red head. The tape carries it past the playback head — that gap, in time, <em>is</em> the delay.
+              Each tap is recorded by the red head. The tape carries it past the playback head: that gap, in time, <em>is</em> the delay.
             </p>
           </div>
           <div className="tl-bx-controls">
@@ -2383,7 +2383,7 @@ function VisualiseTab({ bpm, setBpm }) {
               One bar, every <em>subdivision</em>.
             </h2>
             <p className="tl-bc-deck">
-              Hover a note value. Watch where its hits land in the bar — and the same delay drawn onto the oscilloscope.
+              Hover a note value. Watch where its hits land in the bar, and the same delay drawn onto the oscilloscope.
             </p>
           </div>
           <div className="tl-bc-readout">
@@ -2420,7 +2420,7 @@ function VisualiseTab({ bpm, setBpm }) {
         {/* Beat grid */}
         <div className="tl-bc-grid-frame">
           <div className="tl-bc-grid-head">
-            <span className="tl-bc-grid-cap">One bar — 4 beats — {Math.round(barMs)} ms total</span>
+            <span className="tl-bc-grid-cap">One bar, 4 beats, {Math.round(barMs)} ms total</span>
             <span className="tl-bc-grid-cap-r">Hits land where the colour falls</span>
           </div>
 
@@ -2474,7 +2474,7 @@ function VisualiseTab({ bpm, setBpm }) {
         {/* Oscilloscope */}
         <div className="tl-bc-osc-frame">
           <div className="tl-bc-osc-head">
-            <span>OSCILLOSCOPE — DRY ▸ WET</span>
+            <span>OSCILLOSCOPE: DRY ▸ WET</span>
             <span>1 BAR · {Math.round(barMs)} MS</span>
           </div>
           <Oscilloscope barMs={barMs} delayMs={activeMsC} color={activeC.color} />
@@ -2558,12 +2558,12 @@ function Oscilloscope({ barMs, delayMs, color }) {
 // PRACTICE TAB — Worked example, Solve-for-X, Genre presets (D)
 // ════════════════════════════════════════════════════════════════════
 const GENRE_PRESETS = [
-  { id: 'dub',   title: 'Dub',                bpm: 80,  note: 'Dot · ⅛',   n: 0.75,  blurb: 'King Tubby chains a dotted-eighth feedback delay against a slow groove — that off-beat shuffle is the genre.' },
+  { id: 'dub',   title: 'Dub',                bpm: 80,  note: 'Dot · ⅛',   n: 0.75,  blurb: 'King Tubby chains a dotted-eighth feedback delay against a slow groove: that off-beat shuffle is the genre.' },
   { id: 'rocka', title: 'Rockabilly slap',    bpm: 168, note: 'Eighth',    n: 0.5,   blurb: 'Sun Studios slapback: a single short echo, just an eighth behind. Sounds like the room is twice as alive.' },
   { id: 'edge',  title: 'Dotted-⅛ guitar',    bpm: 110, note: 'Dot · ⅛',   n: 0.75,  blurb: 'The Edge / U2: a clean guitar arpeggio with a dotted-eighth delay creates a counter-melody from one part.' },
-  { id: 'gilm',  title: 'Half-time lead',     bpm: 120, note: 'Half',      n: 2,     blurb: 'Long, lyrical solos sit beautifully against a half-note repeat — Gilmour territory.' },
-  { id: 'trip',  title: 'Triplet shuffle',    bpm: 140, note: '⅛ Triplet', n: 1/3,   blurb: 'Triplet eighths against a straight groove pull the rhythm sideways — common in shuffle blues and trap hi-hats.' },
-  { id: 'shoe',  title: 'Shoegaze wash',      bpm: 96,  note: 'Quarter',   n: 1,     blurb: 'A quarter-note delay with high feedback smears notes into a chord — the wall.' },
+  { id: 'gilm',  title: 'Half-time lead',     bpm: 120, note: 'Half',      n: 2,     blurb: 'Long, lyrical solos sit beautifully against a half-note repeat (Gilmour territory).' },
+  { id: 'trip',  title: 'Triplet shuffle',    bpm: 140, note: '⅛ Triplet', n: 1/3,   blurb: 'Triplet eighths against a straight groove pull the rhythm sideways: common in shuffle blues and trap hi-hats.' },
+  { id: 'shoe',  title: 'Shoegaze wash',      bpm: 96,  note: 'Quarter',   n: 1,     blurb: 'A quarter-note delay with high feedback smears notes into a chord (the wall).' },
 ];
 
 function PracticeTab() {
@@ -2611,7 +2611,7 @@ function PracticeTab() {
           </div>
           {mode === 'teacher' && (
             <div className="tl-bd-teach">
-              <strong>Teacher note —</strong> common error: students multiply by 1.5 (the dot adds half), forgetting they started from an <em>eighth</em> (312.5 ms). Both routes give the same answer; check working.
+              <strong>Teacher note.</strong> Common error: students multiply by 1.5 (the dot adds half), forgetting they started from an <em>eighth</em> (312.5 ms). Both routes give the same answer; check working.
             </div>
           )}
         </div>
@@ -2621,7 +2621,7 @@ function PracticeTab() {
 
       {/* Genre presets */}
       <div className="tl-bd-presets-head">
-        <div className="tl-bd-cap" style={{ marginBottom: 0 }}>Where the numbers come from — genre presets</div>
+        <div className="tl-bd-cap" style={{ marginBottom: 0 }}>Where the numbers come from: genre presets</div>
         <span style={{
           fontFamily: 'var(--f-mono)', fontSize: 10, color: 'var(--ink-faded)',
           letterSpacing: '0.14em', textTransform: 'uppercase',
@@ -2701,7 +2701,7 @@ function SolveForX() {
       {reveal && (
         <div className={'tl-bd-feedback ' + (ok ? 'ok' : 'no')}>
           {ok
-            ? <>Correct — at <strong>120 BPM</strong>, a dotted-eighth is exactly 375 ms.</>
+            ? <>Correct: at <strong>120 BPM</strong>, a dotted-eighth is exactly 375 ms.</>
             : <>Not quite. <span className="hint">Hint: rearrange 60,000 ÷ BPM × 0.75 = 375.</span></>
           }
         </div>

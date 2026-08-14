@@ -136,7 +136,7 @@ export default function CompressorTransferCurve() {
                 ctx.fillStyle = '#9ca3af';
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('1:1 — no compression', pxX(-38), pxY(-38) - 8);
+                ctx.fillText('1:1, no compression', pxX(-38), pxY(-38) - 8);
                 ctx.globalAlpha = 1;
             }
 
@@ -273,7 +273,7 @@ export default function CompressorTransferCurve() {
                     ctx.fillStyle = '#2563EB';
                     ctx.font = '8px -apple-system, sans-serif';
                     ctx.textAlign = 'left';
-                    ctx.fillText('(soft knee rounds the corner — optional)', 265, 155);
+                    ctx.fillText('(soft knee rounds the corner: optional)', 265, 155);
                     ctx.globalAlpha = 1;
                 }
             }

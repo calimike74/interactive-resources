@@ -346,7 +346,7 @@ export default function EssayScaffold() {
                                     {section.guidance}
                                 </p>
                             )}
-                            <textarea aria-label={`Your essay response — ${section.label} section`}
+                            <textarea aria-label={`Your essay response: ${section.label} section`}
                                 value={essayContent[section.id] || ''}
                                 onChange={(e) => updateSection(section.id, e.target.value)}
                                 placeholder={section.placeholder}
@@ -430,7 +430,7 @@ function ScaffoldSidebar({ zone, level, zones, theme: t }) {
                 fontSize: typography.size.sm,
                 textAlign: 'center',
             }}>
-                Independent mode — no scaffolds. Use the image to guide your analysis.
+                Independent mode: no scaffolds. Use the image to guide your analysis.
             </div>
         );
     }

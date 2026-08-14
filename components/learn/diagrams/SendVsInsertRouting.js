@@ -106,7 +106,7 @@ export default function SendVsInsertRouting() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Where Reverb Sits — Send/Return vs Insert', W / 2, 16);
+            ctx.fillText('Where Reverb Sits: Send/Return vs Insert', W / 2, 16);
             ctx.globalAlpha = 1;
 
             const headP = progress(f, PHASE_HEADERS, 18);

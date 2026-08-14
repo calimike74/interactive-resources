@@ -117,7 +117,7 @@ export default function BpmToMsFamily() {
                 ctx.fillStyle = '#1a1a2e';
                 ctx.font = 'italic bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('No calculator needed — every family value divides cleanly', W / 2, 245);
+                ctx.fillText('No calculator needed: every family value divides cleanly', W / 2, 245);
                 ctx.globalAlpha = 1;
             }
 

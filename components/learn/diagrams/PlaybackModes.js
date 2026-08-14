@@ -88,7 +88,7 @@ export default function PlaybackModes() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('One-Shot, Gated, Loop — One Time Axis', W / 2, 16);
+            ctx.fillText('One-Shot, Gated, Loop: One Time Axis', W / 2, 16);
             ctx.globalAlpha = 1;
 
             const axisP = progress(f, PHASE_AXIS, 30);
@@ -187,8 +187,8 @@ export default function PlaybackModes() {
                     ctx.font = 'italic 8px -apple-system, sans-serif';
                     ctx.textAlign = 'left';
                     const captions = {
-                        'One-shot': 'plays to the end however briefly tapped — ignores key-up',
-                        'Gated': 'playback tracks the key exactly — release stops it',
+                        'One-shot': 'plays to the end however briefly tapped: ignores key-up',
+                        'Gated': 'playback tracks the key exactly: release stops it',
                         'Loop': `a ${LOOP_WIDTH}-unit region repeats × ${LOOP_REPEATS} while held`,
                     };
                     ctx.fillText(captions[lane.name], axisX0, lane.capY);

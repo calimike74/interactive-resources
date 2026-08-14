@@ -106,7 +106,7 @@ export default function DottedTripletMultipliers() {
                 caption = 'Same ×1.5/×⅔ pattern behind the dotted-eighth shortcut: quarter × 0.75';
                 captionStart = PHASE_CAPTION2;
             } else if (f >= PHASE_CAPTION1) {
-                caption = 'Dotted lengthens the note, triplet shortens it — both checkable by hand';
+                caption = 'Dotted lengthens the note, triplet shortens it: both checkable by hand';
                 captionStart = PHASE_CAPTION1;
             }
             if (caption) {

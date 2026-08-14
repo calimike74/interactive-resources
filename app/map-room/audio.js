@@ -8,14 +8,14 @@
  */
 
 export const SOUND_CAPTIONS = {
-    '1.11': 'noise with one boosted band sweeping upward — the boost moves, the tone follows',
-    '1.9': 'a pad ducking every time the kick lands — side-chain compression pumping',
-    '1.12d': 'one note, then echoes at a fixed gap, each quieter — feedback delay',
-    '1.12r': 'a dry clap, then the same clap inside a large room — the tail is reverb',
-    '1.3': 'a saw wave as the low-pass filter opens — brightness follows the cutoff',
-    '1.12x': 'a clean tone driven into clipping — added harmonics turn it to a rasp',
-    '1.12m': 'one voice made two, drifting apart and together — modulation in motion',
-    '1.10': 'the same note placed left, then right, then centre — panning is position',
+    '1.11': 'noise with one boosted band sweeping upward (the boost moves, the tone follows)',
+    '1.9': 'a pad ducking every time the kick lands (side-chain compression pumping)',
+    '1.12d': 'one note, then echoes at a fixed gap, each quieter (feedback delay)',
+    '1.12r': 'a dry clap, then the same clap inside a large room (the tail is reverb)',
+    '1.3': 'a saw wave as the low-pass filter opens (brightness follows the cutoff)',
+    '1.12x': 'a clean tone driven into clipping (added harmonics turn it to a rasp)',
+    '1.12m': 'one voice made two, drifting apart and together (modulation in motion)',
+    '1.10': 'the same note placed left, then right, then centre (panning is position)',
 };
 
 const noiseBuffer = (ctx, seconds) => {

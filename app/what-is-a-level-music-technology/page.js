@@ -21,7 +21,7 @@
 const HOME = 'https://musictechstudio.co.uk/what-is-a-level-music-technology';
 
 export const metadata = {
-    title: 'Moved — What is A-level Music Technology?',
+    title: 'Moved: What is A-level Music Technology?',
     robots: { index: false, follow: true },
     alternates: { canonical: HOME },
 };

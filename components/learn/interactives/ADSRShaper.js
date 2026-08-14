@@ -45,7 +45,7 @@ export default function ADSRShaper() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — envelope shape
+                    Try it: envelope shape
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
                     plucky ⇄ swelling
@@ -68,7 +68,7 @@ export default function ADSRShaper() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

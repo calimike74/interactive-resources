@@ -251,7 +251,7 @@ export default function BeforeAfterCompression() {
                 ctx.fillStyle = '#16a34a';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Consistent level — sits better in the mix', W / 2, H - 6);
+                ctx.fillText('Consistent level: sits better in the mix', W / 2, H - 6);
                 ctx.globalAlpha = 1;
             }
 

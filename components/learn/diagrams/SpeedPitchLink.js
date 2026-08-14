@@ -164,7 +164,7 @@ export default function SpeedPitchLink() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Large transpositions drag timbre with them — chipmunk up, slow motion down', W / 2, 218);
+                ctx.fillText('Large transpositions drag timbre with them: chipmunk up, slow motion down', W / 2, 218);
                 ctx.globalAlpha = 1;
             }
 

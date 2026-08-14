@@ -82,7 +82,7 @@ export default function MCQPhase({ questions, scaffoldLevel, questionOffset, onC
                 color: t.text.tertiary,
                 marginBottom: spacing[2],
             }}>
-                Question {questionOffset + currentIndex + 1} of {questionOffset + questions.length} — Multiple Choice
+                Question {questionOffset + currentIndex + 1} of {questionOffset + questions.length}: Multiple Choice
             </p>
 
             <h3 style={{

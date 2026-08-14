@@ -952,7 +952,7 @@ function ResultsSummary({ responses, questions, topic, token, t }) {
                     {shortCount > 0 && ` · ${shortCount} self-assessed`}
                 </p>
                 <p style={{ color: t.text.tertiary, fontSize: typography.size.xs, marginTop: spacing[1] }}>
-                    {questions.length} questions from a bank of {getQuestions(topic.id).length} — try again for different questions
+                    {questions.length} questions from a bank of {getQuestions(topic.id).length}: try again for different questions
                 </p>
             </div>
 
@@ -1060,7 +1060,7 @@ function ResultsSummary({ responses, questions, topic, token, t }) {
                         const response = responses[i];
                         const icon = response?.correct === true ? '✓'
                             : response?.correct === false ? '✗'
-                            : '—';
+                            : '–';
                         const color = response?.correct === true ? t.accent.success
                             : response?.correct === false ? t.accent.error
                             : t.accent.info;

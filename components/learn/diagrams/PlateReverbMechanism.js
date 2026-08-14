@@ -57,7 +57,7 @@ export default function PlateReverbMechanism() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Plate Reverb — the EMT 140', W / 2, 16);
+            ctx.fillText('Plate Reverb: the EMT 140', W / 2, 16);
             ctx.globalAlpha = 1;
 
             // Plate rectangle
@@ -161,7 +161,7 @@ export default function PlateReverbMechanism() {
                 ctx.font = '8px -apple-system, sans-serif';
                 ctx.fillStyle = '#374151';
                 ctx.textAlign = 'center';
-                ctx.fillText('damping plate (EMT 140) — decay control', (trackX0 + trackX1) / 2, 226);
+                ctx.fillText('damping plate (EMT 140): decay control', (trackX0 + trackX1) / 2, 226);
                 ctx.globalAlpha = 1;
             }
 
@@ -171,13 +171,13 @@ export default function PlateReverbMechanism() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Dense, bright, non-spatial — no room geometry to imprint on it', W / 2, 252);
+                ctx.fillText('Dense, bright, non-spatial: no room geometry to imprint on it', W / 2, 252);
                 ctx.globalAlpha = 1;
             }
 
             const phase = f < PHASE_RIPPLE_START ? 'Plate'
                 : f < PHASE_PLATE + 60 ? 'Ripples fuse densely'
-                : 'Damping plate — decay control';
+                : 'Damping plate: decay control';
             ctx.fillStyle = '#9ca3af';
             ctx.font = '8px -apple-system, sans-serif';
             ctx.textAlign = 'right';

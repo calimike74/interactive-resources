@@ -151,7 +151,7 @@ export default function FmConcept() {
                 ctx.fillStyle = drive < 0.5 ? VIOLET : AMBER;
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText(drive < 0.5 ? 'Slow modulation — heard as vibrato' : 'Audio-rate modulation — a new, denser waveform', waveLeft - 4, waveTop - 22);
+                ctx.fillText(drive < 0.5 ? 'Slow modulation: heard as vibrato' : 'Audio-rate modulation: a new, denser waveform', waveLeft - 4, waveTop - 22);
 
                 ctx.globalAlpha = 1;
             }
@@ -177,7 +177,7 @@ export default function FmConcept() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Spectrum — no filter used', specLeft - 4, specTop - 22);
+                ctx.fillText('Spectrum: no filter used', specLeft - 4, specTop - 22);
 
                 const slots = 9;
                 const slotW = specW / slots;

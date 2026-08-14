@@ -12,7 +12,7 @@ function depthWord(bits) {
 
 function depthReadout(bits) {
     const word = depthWord(bits);
-    return bits >= 12 ? `${bits} bits — ${word} (~${bits * 6} dB range)` : `${bits} bits — ${word}`;
+    return bits >= 12 ? `${bits} bits: ${word} (~${bits * 6} dB range)` : `${bits} bits: ${word}`;
 }
 
 export default function BitDepthSlider() {
@@ -45,7 +45,7 @@ export default function BitDepthSlider() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — bit depth
+                    Try it: bit depth
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
                     {depthReadout(bits)}
@@ -69,7 +69,7 @@ export default function BitDepthSlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

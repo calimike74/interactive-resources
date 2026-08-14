@@ -70,13 +70,13 @@ const QUIZ_QUESTIONS = [
     question: 'How many data bytes does a MIDI pitch bend message use to carry its value?',
     options: ['1', '2', '3', '14'],
     correct: 1,
-    explanation: 'Two data bytes — an LSB and an MSB — carry the 14-bit value, after a single status byte (E0h–EFh) identifies the message as pitch bend on a given channel.',
+    explanation: 'Two data bytes (an LSB and an MSB) carry the 14-bit value, after a single status byte (E0h–EFh) identifies the message as pitch bend on a given channel.',
   },
   {
     question: 'What is the pitch bend value at its centre, no-bend, position?',
     options: ['0', '127', '8192', '16383'],
     correct: 2,
-    explanation: '8192 is exactly half of 16,384 (2¹⁴) — the middle of the 0–16,383 range, where the wheel sits at rest.',
+    explanation: '8192 is exactly half of 16,384 (2¹⁴): the middle of the 0–16,383 range, where the wheel sits at rest.',
   },
   {
     question: 'Pitch bend uses 14-bit resolution rather than the usual 7-bit. Why?',
@@ -87,7 +87,7 @@ const QUIZ_QUESTIONS = [
       'Because filter sweeps need 14-bit precision',
     ],
     correct: 1,
-    explanation: 'Human hearing is sensitive to small pitch changes. 7-bit gives only 128 steps, which produces an audible "zipper" as the pitch glides; 14-bit gives 16,384 steps — fine enough to sound continuous.',
+    explanation: 'Human hearing is sensitive to small pitch changes. 7-bit gives only 128 steps, which produces an audible "zipper" as the pitch glides; 14-bit gives 16,384 steps: fine enough to sound continuous.',
   },
   {
     question: 'A synthesiser’s Pitch Bend Range is set to 7 semitones. What does this allow?',
@@ -98,11 +98,11 @@ const QUIZ_QUESTIONS = [
       'Seven different pitch bend curves to choose between',
     ],
     correct: 0,
-    explanation: 'The range value is symmetric — it sets the maximum bend in either direction from the held note. At 7 semitones, pushing the wheel fully up bends a perfect fifth sharp; pulling it fully down bends a perfect fifth flat.',
+    explanation: 'The range value is symmetric: it sets the maximum bend in either direction from the held note. At 7 semitones, pushing the wheel fully up bends a perfect fifth sharp; pulling it fully down bends a perfect fifth flat.',
   },
   {
     question: 'Which of these is NOT a standard General MIDI CC assignment?',
-    options: ['CC1 — Modulation', 'CC7 — Volume', 'CC64 — Sustain', 'CC100 — Reverb Depth'],
+    options: ['CC1: Modulation', 'CC7: Volume', 'CC64: Sustain', 'CC100: Reverb Depth'],
     correct: 3,
     explanation: 'CC100 isn’t one of the standard controller assignments covered here. CC1 (modulation), CC7 (volume) and CC64 (sustain) are fixed General MIDI assignments worth memorising alongside CC10 (pan), CC11 (expression) and CC74 (filter cutoff).',
   },
@@ -163,7 +163,7 @@ function RetrievalQuiz() {
           </button>
         ) : (
           <p className={`text-base font-semibold ${score === QUIZ_QUESTIONS.length ? 'text-field-700' : 'text-sienna-700'}`}>
-            {score}/{QUIZ_QUESTIONS.length} correct{score === QUIZ_QUESTIONS.length && ' — every one.'}
+            {score}/{QUIZ_QUESTIONS.length} correct{score === QUIZ_QUESTIONS.length && ', every one.'}
           </p>
         )}
       </div>
@@ -289,7 +289,7 @@ export default function MIDIPitchBendController() {
         <section className="pt-2">
           <SectionHeader eyebrow="1.5 Sequencing" title="Pitch Bend Data">
             A pitch wheel lets a performer bend a note's pitch smoothly, in real time. To keep that glide
-            free of audible steps, MIDI gives pitch bend its own message type — and 14 bits of resolution
+            free of audible steps, MIDI gives pitch bend its own message type, and 14 bits of resolution
             instead of the usual 7.
           </SectionHeader>
 
@@ -353,7 +353,7 @@ export default function MIDIPitchBendController() {
                     Pitch bend range (semitones)
                   </label>
                   <p className="mb-3 text-xs text-ink/60">
-                    This is the setting you would change on your synthesiser's global settings page —
+                    This is the setting you would change on your synthesiser's global settings page:
                     see Range &amp; Bending below.
                   </p>
                   <input aria-label="Pitch Bend Range"
@@ -414,10 +414,10 @@ export default function MIDIPitchBendController() {
             <Callout type="definition" title="Pitch bend resolution">
               Pitch bend is the one common MIDI message that uses 14-bit resolution instead of the usual
               7-bit. 2<sup>14</sup> = 16,384 possible values (0–16,383), giving a smooth glide with no
-              audible "steps". The centre — no bend at all — sits exactly halfway, at 8192.
+              audible "steps". The centre (no bend at all) sits exactly halfway, at 8192.
             </Callout>
 
-            <Callout type="question" title="A pitch bend message carries the value 16383 — full bend up. What are its LSB and MSB bytes?">
+            <Callout type="question" title="A pitch bend message carries the value 16383: full bend up. What are its LSB and MSB bytes?">
               <Callout.Options
                 options={['LSB 127, MSB 127', 'LSB 0, MSB 127', 'LSB 127, MSB 0', 'LSB 255, MSB 255']}
                 correctIndex={0}
@@ -428,13 +428,13 @@ export default function MIDIPitchBendController() {
             <Callout type="tip" title="2024 Q1(b)">
               2024's Q1(b) asked exactly this, across three one-mark parts: how many bytes MIDI uses for
               pitch bend, the value at the centre position, and how 16383 is transmitted as LSB/MSB. All
-              three are questions about representation, not musicality — get the numbers automatic and
+              three are questions about representation, not musicality: get the numbers automatic and
               they're free marks.
             </Callout>
 
             <Callout type="tip" title="The signed-range version" defaultOpen={false}>
               Some mark schemes describe this same 14-bit space as running from −8192 to +8191 rather
-              than 0 to 16,383 (2023 Q2(b)). It's the identical 16,384 values — just counted outward from
+              than 0 to 16,383 (2023 Q2(b)). It's the identical 16,384 values: just counted outward from
               centre instead of up from zero. Recognise both framings.
             </Callout>
           </div>
@@ -446,13 +446,13 @@ export default function MIDIPitchBendController() {
         <section>
           <SectionHeader eyebrow="1.5 Sequencing" title="Range & Bending">
             The 14-bit value above is only half the story. What it actually does to the pitch depends on
-            a separate setting — the pitch bend range — configured on the synthesiser or plugin, not
+            a separate setting (the pitch bend range) configured on the synthesiser or plugin, not
             inside the MIDI data itself.
           </SectionHeader>
 
           <Callout type="definition" title="Pitch bend range">
             The number of semitones the wheel's full travel represents. It's a setting on the instrument,
-            usually shown in semitones (2 is a common default) — not part of the pitch bend message
+            usually shown in semitones (2 is a common default), not part of the pitch bend message
             itself. The same value from the simulator above (say, full-up at 16383) means a small nudge
             at a 2-semitone range and a full octave leap at a 12-semitone range.
           </Callout>
@@ -498,13 +498,13 @@ export default function MIDIPitchBendController() {
               <Callout.Options
                 options={['+2 semitones', '+6 semitones', '+12 semitones', '+24 semitones']}
                 correctIndex={2}
-                explanation="The range setting defines what the wheel's extremes mean. 16383 is the top of the wheel's travel, so at a 12-semitone range it bends the full 12 semitones — one octave up."
+                explanation="The range setting defines what the wheel's extremes mean. 16383 is the top of the wheel's travel, so at a 12-semitone range it bends the full 12 semitones: one octave up."
               />
             </Callout>
 
             <Callout type="listen" title="Try it yourself" collapsible={false}>
               Set the range slider in the simulator above to 12, then drag the bend wheel to its maximum.
-              Watch the note readout jump a full octave — then bring the range back down to 2 and repeat
+              Watch the note readout jump a full octave. Then bring the range back down to 2 and repeat
               the same wheel movement.
             </Callout>
           </div>
@@ -515,14 +515,14 @@ export default function MIDIPitchBendController() {
         {/* ─── Section 3: MIDI Controllers ────────────────────────────────── */}
         <section>
           <SectionHeader eyebrow="1.5 Sequencing" title="MIDI Controllers">
-            Beyond pitch bend, MIDI Control Change (CC) messages report a continuous parameter — a
+            Beyond pitch bend, MIDI Control Change (CC) messages report a continuous parameter: a
             controller number identifying which control, and a value showing its position. Unlike pitch
             bend, CC data is 7-bit: coarser resolution than pitch bend needs, but plenty for something
             like a mod wheel or a volume fader.
           </SectionHeader>
 
           <Callout type="definition" title="MIDI CC (Control Change)">
-            A Control Change message carries a controller number (0–127, identifying which control —
+            A Control Change message carries a controller number (0–127, identifying which control:
             modulation, volume, pan…) and a value (0–127, its current position). CC data is always 7-bit:
             128 steps is fine for something like a mod wheel, but too coarse for pitch bend, which is why
             pitch bend has its own 14-bit message type instead.
@@ -531,25 +531,25 @@ export default function MIDIPitchBendController() {
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <ControllerCard
               accent="field"
-              name="CC 1 — Modulation Wheel"
+              name="CC 1: Modulation Wheel"
               ccLabel="CC 1"
-              controls="Usually adds vibrato (pitch wobble) or another modulation effect to the sound — the exact effect depends on how the instrument is programmed."
+              controls="Usually adds vibrato (pitch wobble) or another modulation effect to the sound: the exact effect depends on how the instrument is programmed."
               range="0–127 (7-bit)"
-              example="Expressive lead synth: draw a gradual increase in CC1 during a held note to add vibrato that builds intensity — clean at first, then wobbling in, the way a singer or guitarist would do it naturally."
+              example="Expressive lead synth: draw a gradual increase in CC1 during a held note to add vibrato that builds intensity: clean at first, then wobbling in, the way a singer or guitarist would do it naturally."
               uses={['Adding vibrato to synth leads', 'Wobbly LFO-style effects', 'Filter modulation depth']}
             />
             <ControllerCard
               accent="sienna"
-              name="CC 7 — Volume"
+              name="CC 7: Volume"
               ccLabel="CC 7"
-              controls="Sets the overall volume of the MIDI channel. Different from velocity — this affects every note on the track, not just the one it's attached to."
+              controls="Sets the overall volume of the MIDI channel. Different from velocity: this affects every note on the track, not just the one it's attached to."
               range="0–127 (0 = silent, 127 = full volume)"
               example="Dynamic string swells: automate CC7 from 30 up to 110 over four bars for a crescendo. This is smoother than clip-volume automation because it happens at the MIDI level, ahead of the instrument."
               uses={['Volume swells and fades', 'Balancing instrument layers', 'Ducking effects']}
             />
             <ControllerCard
               accent="mustard"
-              name="CC 10 — Pan"
+              name="CC 10: Pan"
               ccLabel="CC 10"
               controls="Sets the stereo position (left/right) of the sound, adding width and space to a mix."
               range="0–127 (0 = hard left, 64 = centre, 127 = hard right)"
@@ -558,30 +558,30 @@ export default function MIDIPitchBendController() {
             />
             <ControllerCard
               accent="field"
-              name="CC 11 — Expression"
+              name="CC 11: Expression"
               ccLabel="CC 11"
-              controls="Similar to volume, but designed for real-time performance changes on top of the track's base level — a 'performance intensity' control, like bow pressure on a violin."
+              controls="Similar to volume, but designed for real-time performance changes on top of the track's base level: a 'performance intensity' control, like bow pressure on a violin."
               range="0–127, affects volume separately from CC7"
-              example="Realistic orchestral dynamics: draw CC11 higher for forte phrases and lower for piano ones — more realistic than velocity alone, which only sets loudness at the start of each note."
+              example="Realistic orchestral dynamics: draw CC11 higher for forte phrases and lower for piano ones: more realistic than velocity alone, which only sets loudness at the start of each note."
               uses={['Orchestral library dynamics', 'Real-time performance intensity', 'Breath-controller simulation']}
             />
             <ControllerCard
               accent="sienna"
-              name="CC 74 — Filter Cutoff / Brightness"
+              name="CC 74: Filter Cutoff / Brightness"
               ccLabel="CC 74"
               controls="Sets the filter cutoff frequency, which controls how bright or dark the sound is. Lower values are darker; higher values are brighter."
               range="0–127 (0 = dark/closed filter, 127 = bright/open filter)"
-              example="Filter sweep build-up: start CC74 at 20 (dark, muffled) and automate it up to 110 over eight bars as a breakdown builds toward the drop — a classic EDM/house technique."
+              example="Filter sweep build-up: start CC74 at 20 (dark, muffled) and automate it up to 110 over eight bars as a breakdown builds toward the drop: a classic EDM/house technique."
               uses={['Filter sweep effects', 'Build-ups and drops', 'Controlling synth brightness']}
             />
             <ControllerCard
               accent="mustard"
               plain
-              name="Velocity — not a CC"
+              name="Velocity: not a CC"
               ccLabel="0–127"
-              controls="Velocity is not a Control Change message — it's carried inside the Note On message itself, representing how hard a key was struck."
+              controls="Velocity is not a Control Change message: it's carried inside the Note On message itself, representing how hard a key was struck."
               range="0–127 (0 = softest, 127 = hardest)"
-              example="Unlike CC data, velocity is set once when the note starts and doesn't change while the note sounds — though some DAWs let you edit velocity per note after the fact."
+              example="Unlike CC data, velocity is set once when the note starts and doesn't change while the note sounds, though some DAWs let you edit velocity per note after the fact."
               uses={null}
             />
           </div>
@@ -591,12 +591,12 @@ export default function MIDIPitchBendController() {
               <Callout.Options
                 options={['CC1', 'CC7', 'CC64', 'CC74']}
                 correctIndex={2}
-                explanation="CC64 is the General MIDI sustain pedal assignment — values 64–127 hold the sustain on, 0–63 release it. CC1 is modulation, CC7 is volume, CC74 is filter cutoff."
+                explanation="CC64 is the General MIDI sustain pedal assignment: values 64–127 hold the sustain on, 0–63 release it. CC1 is modulation, CC7 is volume, CC74 is filter cutoff."
               />
             </Callout>
 
             <Callout type="tip" title="7-bit velocity">
-              Note velocity uses the same logic in miniature: 7 bits, 2⁷ = 128 values, 0–127 — which is
+              Note velocity uses the same logic in miniature: 7 bits, 2⁷ = 128 values, 0–127, which is
               why a fact like "127 is the loudest a note can be struck" (2021 Q2(b), 2 marks) always
               traces back to the bit count, not a musical decision.
             </Callout>

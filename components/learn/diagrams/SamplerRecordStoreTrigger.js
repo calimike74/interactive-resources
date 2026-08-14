@@ -161,14 +161,14 @@ export default function SamplerRecordStoreTrigger() {
                 ctx.fillStyle = '#14b8a6';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('a digital recording — 1 mark', (b1x0 + b1x1) / 2, boxBottom + 30);
+                ctx.fillText('a digital recording: 1 mark', (b1x0 + b1x1) / 2, boxBottom + 30);
 
                 const b2x0 = boxes[2].x;
                 const b2x1 = boxes[3].x + boxes[3].w;
                 ctx.strokeStyle = '#e85d75';
                 path([[b2x0, boxBottom + 8], [b2x0, boxBottom + 16], [b2x1, boxBottom + 16], [b2x1, boxBottom + 8]]);
                 ctx.fillStyle = '#e85d75';
-                ctx.fillText('triggered using a MIDI keyboard — 1 mark', (b2x0 + b2x1) / 2, boxBottom + 30);
+                ctx.fillText('triggered using a MIDI keyboard: 1 mark', (b2x0 + b2x1) / 2, boxBottom + 30);
                 ctx.globalAlpha = 1;
             }
 
@@ -178,7 +178,7 @@ export default function SamplerRecordStoreTrigger() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Both halves earn a mark — a recording alone, or a trigger alone, is not enough', W / 2, boxBottom + 60);
+                ctx.fillText('Both halves earn a mark: a recording alone, or a trigger alone, is not enough', W / 2, boxBottom + 60);
                 ctx.globalAlpha = 1;
             }
 

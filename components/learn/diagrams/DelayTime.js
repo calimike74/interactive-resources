@@ -192,7 +192,7 @@ export default function DelayTime() {
 
             // Perceptual description strip (bottom) — updates with zone
             const descTextMap = {
-                'thickening': 'repeat fuses with dry — heard as a thicker, phasey tone',
+                'thickening': 'repeat fuses with dry: heard as a thicker, phasey tone',
                 'slapback': 'one distinct slap heard close to the dry',
                 'echo': 'repeats clearly heard as separate events',
             };

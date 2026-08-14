@@ -121,7 +121,7 @@ export default function MakeupGain() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '8px -apple-system, sans-serif';
                 ctx.textAlign = 'right';
-                ctx.fillText('Peaks tamed — but quieter overall', W - margin.right, y2);
+                ctx.fillText('Peaks tamed: but quieter overall', W - margin.right, y2);
                 ctx.globalAlpha = 1;
             }
 
@@ -173,7 +173,7 @@ export default function MakeupGain() {
                 ctx.fillStyle = '#16a34a';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Quiet parts louder — peaks still controlled — sounds "louder"', W / 2, H - 8);
+                ctx.fillText('Quiet parts louder, peaks still controlled: sounds "louder"', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

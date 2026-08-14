@@ -89,7 +89,7 @@ const DistortionLab = () => {
       shortName: 'Soft',
       color: '#EA580C',
       description: 'Gradual saturation with smoother harmonic content. The signal is progressively compressed as it approaches the threshold.',
-      characteristics: ['Overdrive pedals', 'Analog tape', 'Warm compression', 'Odd harmonics with faster decay — softer tone than hard clip'],
+      characteristics: ['Overdrive pedals', 'Analog tape', 'Warm compression', 'Odd harmonics with faster decay: softer tone than hard clip'],
       technicalDetail: 'Uses a hyperbolic tangent or similar curve to gradually reduce gain as signal increases. Preserves more of the original dynamics.',
       apply: (x, d = DRIVE_THRESHOLD) => {
         const normalized = x / d;
@@ -281,10 +281,10 @@ const DistortionLab = () => {
     },
     {
       difficulty: 'intermediate',
-      question: 'Bonus (Ableton Live users) — which device would you use for hard clipping?',
+      question: 'Bonus (Ableton Live users): which device would you use for hard clipping?',
       options: ['Saturator (Digital Clip)', 'Dynamic Tube', 'Erosion', 'Reverb'],
       correct: 0,
-      explanation: 'The Saturator device in Digital Clip mode provides hard clipping distortion in Ableton Live. This is not required Edexcel spec knowledge — other DAWs use different device names for the same concept.'
+      explanation: 'The Saturator device in Digital Clip mode provides hard clipping distortion in Ableton Live. This is not required Edexcel spec knowledge: other DAWs use different device names for the same concept.'
     },
 
     // Advanced level
@@ -1080,7 +1080,7 @@ const DistortionLab = () => {
                   </li>
                 </ul>
                 <p className="text-xs text-gray-500 mt-3">
-                  The Edexcel spec does not require DAW-specific device knowledge — the Ableton Live Device Reference above is a bonus if that&apos;s what you use.
+                  The Edexcel spec does not require DAW-specific device knowledge: the Ableton Live Device Reference above is a bonus if that&apos;s what you use.
                 </p>
               </div>
 
@@ -1399,7 +1399,7 @@ const DistortionLab = () => {
                       <div className="mt-4 text-gray-600">
                         {score === answeredQuestions.length && "Perfect score! Excellent work!"}
                         {score >= answeredQuestions.length * 0.8 && score < answeredQuestions.length && "Great job!"}
-                        {score >= answeredQuestions.length * 0.6 && score < answeredQuestions.length * 0.8 && "Good effort! Keep practicing!"}
+                        {score >= answeredQuestions.length * 0.6 && score < answeredQuestions.length * 0.8 && "Good effort! Keep practising!"}
                         {score < answeredQuestions.length * 0.6 && "Review the material and try again!"}
                       </div>
                     </CardContent>

@@ -38,10 +38,10 @@ export default function FilterSlopeDbOctave() {
         const floorDb = 60; // plot bottom = -60 dB
 
         const stages = [
-            { slope: 6, label: '6 dB/octave', desc: 'one pole — the gentlest standard slope', color: '#2563EB', start: 30 },
-            { slope: 12, label: '12 dB/octave', desc: 'two poles — a standard slope', color: '#9B7530', start: 130 },
-            { slope: 24, label: '24 dB/octave', desc: 'four poles — steep', color: '#f97316', start: 230 },
-            { slope: 48, label: '48 dB/octave', desc: 'eight poles — close to a brick wall', color: '#DC2626', start: 330 },
+            { slope: 6, label: '6 dB/octave', desc: 'one pole: the gentlest standard slope', color: '#2563EB', start: 30 },
+            { slope: 12, label: '12 dB/octave', desc: 'two poles: a standard slope', color: '#9B7530', start: 130 },
+            { slope: 24, label: '24 dB/octave', desc: 'four poles: steep', color: '#f97316', start: 230 },
+            { slope: 48, label: '48 dB/octave', desc: 'eight poles: close to a brick wall', color: '#DC2626', start: 330 },
         ];
 
         const dbToY = (db) => originY + clamp(db / floorDb, 0, 1) * plotH;

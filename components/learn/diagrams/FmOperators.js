@@ -190,8 +190,8 @@ export default function FmOperators() {
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
                 const caption = rearrangeP < 0.5
-                    ? 'Stacked algorithm — A modulates B modulates C modulates D'
-                    : 'Parallel algorithm — each operator adds straight to the output';
+                    ? 'Stacked algorithm: A modulates B modulates C modulates D'
+                    : 'Parallel algorithm: each operator adds straight to the output';
                 ctx.fillText(caption, W / 2, H - 20);
                 ctx.globalAlpha = 1;
             }

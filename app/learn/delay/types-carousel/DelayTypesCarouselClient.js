@@ -29,7 +29,7 @@ const NEXT_STEPS = [
     href: '/delay-flashcards',
   },
   {
-    title: 'Learn — Delay',
+    title: 'Learn: Delay',
     desc: 'Back to the topic hub for delay lessons, assessments and study tools.',
     href: '/learn/delay',
   },
@@ -63,8 +63,8 @@ export default function DelayTypesCarouselClient() {
             maxWidth: '54ch',
           }}>
             A visual orientation to the six delay forms in the 1.12 specification.
-            Each card carries the technical takeaway — the parameter values, the shape
-            of the echo, the era. Browse with ←/→ before drilling into any one type.
+            Each card carries the technical takeaway (the parameter values, the shape
+            of the echo, the era). Browse with ←/→ before drilling into any one type.
           </p>
         </header>
 

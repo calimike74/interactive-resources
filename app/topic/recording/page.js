@@ -37,7 +37,7 @@
 const DESTINATION = 'https://resources.musictechstudio.co.uk/topic/microphones';
 
 export const metadata = {
-    title: 'Moved — C4 · 1.2 Microphones',
+    title: 'Moved: C4 · 1.2 Microphones',
     robots: { index: false, follow: true },
     alternates: { canonical: DESTINATION },
 };

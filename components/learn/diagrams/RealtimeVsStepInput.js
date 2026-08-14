@@ -67,8 +67,8 @@ export default function RealtimeVsStepInput() {
         const stepT = (i) => GRID_T[i];
 
         const LANES = {
-            real: { y: 58, labelY: 44, capY: 86, color: '#14b8a6', name: 'Real-time — play the keyboard' },
-            step: { y: 168, labelY: 154, capY: 196, color: '#f97316', name: 'Step input — grid / pencil' },
+            real: { y: 58, labelY: 44, capY: 86, color: '#14b8a6', name: 'Real-time: play the keyboard' },
+            step: { y: 168, labelY: 154, capY: 196, color: '#f97316', name: 'Step input: grid / pencil' },
         };
         const markerR = 4;
 
@@ -124,7 +124,7 @@ export default function RealtimeVsStepInput() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('captures natural feel — as fast/accurate as you can play', axisX0, LANES.real.capY);
+                ctx.fillText('captures natural feel: as fast/accurate as you can play', axisX0, LANES.real.capY);
                 ctx.globalAlpha = 1;
             }
 
@@ -154,7 +154,7 @@ export default function RealtimeVsStepInput() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('note-perfect, built one click at a time — however fast or complex', axisX0, LANES.step.capY);
+                ctx.fillText('note-perfect, built one click at a time: however fast or complex', axisX0, LANES.step.capY);
                 ctx.globalAlpha = 1;
             }
 
@@ -190,7 +190,7 @@ export default function RealtimeVsStepInput() {
                 ctx.fillStyle = '#1a1a2e';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Same 8 notes, two different ways in — with a different trade-off each time', W / 2, 256);
+                ctx.fillText('Same 8 notes, two different ways in: with a different trade-off each time', W / 2, 256);
                 ctx.globalAlpha = 1;
             }
 

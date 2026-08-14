@@ -20,7 +20,7 @@
 const TARGET = 'https://resources.musictechstudio.co.uk/topic/leads-and-signals';
 
 export const metadata = {
-    title: 'Retired — Patch Bay Simulator',
+    title: 'Retired: Patch Bay Simulator',
     robots: { index: false, follow: true },
     alternates: { canonical: TARGET },
 };

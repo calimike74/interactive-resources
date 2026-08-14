@@ -30,13 +30,13 @@ export default function TimbreComparison() {
                 name: 'Flute-like',
                 color: '#0891b2',
                 amps: [1, 0.32, 0.14, 0.05, 0.02],
-                caption: 'Few harmonics — thin, pure',
+                caption: 'Few harmonics: thin, pure',
             },
             {
                 name: 'Violin-like',
                 color: '#9B7530',
                 amps: [1, 0.72, 0.56, 0.42, 0.3],
-                caption: 'Many harmonics — rich, dense',
+                caption: 'Many harmonics: rich, dense',
             },
         ];
 

@@ -108,13 +108,13 @@ const learnSections = [
   { level: 'foundation', title: 'What Section C asks',
     content: 'Section C of Component 4 plays you a short unfamiliar production extract and asks you to analyse what you hear. Typical question stems include: identify the production processes used; describe how a particular element changes between two sections of the extract; explain why a producer might have made a particular creative decision. The extract is usually played three times.' },
   { level: 'foundation', title: 'The Section C habit: listen, label, explain',
-    content: 'On every play, you do one job. First play — write down what you hear (instruments, broad sections, anything striking). Second play — focus on production: reverb, delay, distortion, panning, EQ moves, dynamics. Third play — verify, fill gaps, and look for things that change between sections. The third pass is the one most students waste; treat it as evidence-gathering, not relistening.' },
+    content: 'On every play, you do one job. First play: write down what you hear (instruments, broad sections, anything striking). Second play: focus on production (reverb, delay, distortion, panning, EQ moves, dynamics). Third play: verify, fill gaps, and look for things that change between sections. The third pass is the one most students waste; treat it as evidence-gathering, not relistening.' },
   { level: 'intermediate', title: 'The evidence → technique → effect framework',
     content: 'Every analytical sentence has three parts. The evidence is what the listener can hear (a precise moment or section). The technique is the production process you identify (e.g. reverb send, hard panning, ducking, distortion). The effect is what it does for the music (creates space, glues the kit, suggests a chorus arrival). Drop any one of the three and the sentence loses marks: pure description is unrewarded, technique without effect is incomplete.' },
   { level: 'intermediate', title: 'Comparing sections (verse vs. chorus)',
-    content: 'Many Section C questions compare two sections — usually the verse and the chorus, the intro and the drop, or the bridge with the rest. The producer almost always changes something deliberate: the drum kit gets bigger, the vocal gets doubled or widened, the bass becomes more saturated, the reverb opens up. Your job is to name the change precisely and explain its effect on the arrangement.' },
+    content: 'Many Section C questions compare two sections: usually the verse and the chorus, the intro and the drop, or the bridge with the rest. The producer almost always changes something deliberate: the drum kit gets bigger, the vocal gets doubled or widened, the bass becomes more saturated, the reverb opens up. Your job is to name the change precisely and explain its effect on the arrangement.' },
   { level: 'advanced', title: 'Linking choices to genre conventions',
-    content: 'Top-band answers locate a production decision in genre context. A heavily side-chain-compressed bass is a marker of EDM and house; a slap-back delay on the lead vocal is a marker of rockabilly and surf; mid/side widening on a synth pad is a marker of trance and stadium pop. You do not need to name the artist — but if you can name the convention, the examiner sees that you understand the choice rather than guessing.' },
+    content: 'Top-band answers locate a production decision in genre context. A heavily side-chain-compressed bass is a marker of EDM and house; a slap-back delay on the lead vocal is a marker of rockabilly and surf; mid/side widening on a synth pad is a marker of trance and stadium pop. You do not need to name the artist, but if you can name the convention, the examiner sees that you understand the choice rather than guessing.' },
   { level: 'advanced', title: 'What examiners reward (and what they don\'t)',
     content: 'Reward: specific timestamps or section labels (&ldquo;in the chorus from 0:42&rdquo;), correct technical vocabulary (compression ratio, dotted-eighth delay, side-chain, parallel compression), and a clear effect statement. No reward: emotional adjectives without technical anchor (&ldquo;it sounds cool&rdquo;), guessed effect names (&ldquo;some kind of reverb&rdquo;), or descriptions of the song lyrics. The examiner is listening with you; they want your technical reading, not your reaction.' },
 ];
@@ -125,7 +125,7 @@ const learnSections = [
 const workedExamples = [
   {
     id: 'extract-a',
-    title: 'Extract A — pop ballad, verse into chorus',
+    title: 'Extract A: pop ballad, verse into chorus',
     scenario: 'A pop ballad opens with a single piano and a close-miked lead vocal. At 0:48 the chorus enters: the drum kit comes in, two guitar parts arrive, and the vocal sound changes noticeably.',
     questions: [
       {
@@ -144,32 +144,32 @@ const workedExamples = [
   },
   {
     id: 'extract-b',
-    title: 'Extract B — synth-led indie, build into drop',
+    title: 'Extract B: synth-led indie, build into drop',
     scenario: 'A synth-led indie track builds for eight bars over a low-pass-filtered drum loop and a wide synth pad. At 1:04 the filter opens, the drums become full-band, and a side-chain effect on the bass is audible.',
     questions: [
       {
         q: 'Identify TWO production techniques used in the eight-bar build (1:00 to 1:04).',
         marks: 4,
-        modelAnswer: 'First, a low-pass filter automation on the drum bus — across the eight bars the cutoff opens from around 1 kHz to fully open, removing then restoring the high-frequency content of the kit. Second, a stereo widening on the synth pad (sounds Mid/Side processed or chorused), which creates a sense of expanding space as the build progresses.',
+        modelAnswer: 'First, a low-pass filter automation on the drum bus: across the eight bars the cutoff opens from around 1 kHz to fully open, removing then restoring the high-frequency content of the kit. Second, a stereo widening on the synth pad (sounds Mid/Side processed or chorused), which creates a sense of expanding space as the build progresses.',
         rubricCheck: ['Names two distinct techniques', 'Names each technique with a precise term', 'Anchors each technique to evidence in the extract'],
       },
       {
         q: 'Explain why a producer would side-chain the bass to the kick at the drop (1:04 onwards).',
         marks: 3,
-        modelAnswer: 'Side-chain compression keys a compressor on the bass channel from the kick — every kick hit ducks the bass momentarily. The effect is to keep the low end audible on small speakers (only one bass element occupies the sub frequencies at any moment) and to give the drop a pulsing groove that locks the bass to the kick rhythm.',
+        modelAnswer: 'Side-chain compression keys a compressor on the bass channel from the kick: every kick hit ducks the bass momentarily. The effect is to keep the low end audible on small speakers (only one bass element occupies the sub frequencies at any moment) and to give the drop a pulsing groove that locks the bass to the kick rhythm.',
         rubricCheck: ['Names side-chain compression as the process', 'Describes the technical action (duck the bass on each kick hit)', 'Explains the musical effect (low-end clarity + pulsing groove)'],
       },
     ],
   },
   {
     id: 'extract-c',
-    title: 'Extract C — alt-rock, bridge and outro',
+    title: 'Extract C: alt-rock, bridge and outro',
     scenario: 'An alt-rock song reaches a bridge at 2:10. The dense full-band texture drops away to a single distorted electric guitar with a long pre-delayed reverb. The outro at 2:35 brings the full band back, this time with heavy parallel compression on the drums.',
     questions: [
       {
         q: 'Comment on the effect used on the bridge guitar.',
         marks: 3,
-        modelAnswer: 'The guitar is heavily overdriven (medium-saturation distortion, audible even-harmonic content) and runs into a long-tail plate or hall reverb with noticeable pre-delay (roughly 80–120 ms — the dry attack is audible before the reverb arrives). The effect is dramatic isolation: the bridge feels suspended in a much bigger room than the verse and chorus did.',
+        modelAnswer: 'The guitar is heavily overdriven (medium-saturation distortion, audible even-harmonic content) and runs into a long-tail plate or hall reverb with noticeable pre-delay (roughly 80–120 ms, the dry attack is audible before the reverb arrives). The effect is dramatic isolation: the bridge feels suspended in a much bigger room than the verse and chorus did.',
         rubricCheck: ['Names the distortion type/character', 'Names the reverb type and a parameter (pre-delay)', 'Connects to arrangement effect (isolation/space)'],
       },
       {
@@ -250,7 +250,7 @@ const ProductionAnalysis = () => {
     const techNames = practiceTechniques.map(id => PROCESS_LIBRARY.find(p => p.id === id)?.label).filter(Boolean);
     const techPhrase = techNames.length === 1 ? techNames[0] : techNames.slice(0, -1).join(', ') + ' and ' + techNames.slice(-1);
     setGeneratedAnswer(
-      `${practiceEvidence.trim().replace(/\.$/, '')} — the technique is ${techPhrase.toLowerCase()}. The effect is ${practiceEffect.trim().replace(/\.$/, '').toLowerCase()}.`
+      `${practiceEvidence.trim().replace(/\.$/, '')}: the technique is ${techPhrase.toLowerCase()}. The effect is ${practiceEffect.trim().replace(/\.$/, '').toLowerCase()}.`
     );
   };
 
@@ -289,7 +289,7 @@ const ProductionAnalysis = () => {
             }}>Component 4 · Section C</span>
           </div>
           <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-lg)' }}>
-            A scaffold for analysing unfamiliar production extracts. Listen, label, explain — backed by the evidence/technique/effect framework.
+            A scaffold for analysing unfamiliar production extracts. Listen, label, explain: backed by the evidence/technique/effect framework.
           </p>
         </header>
 
@@ -344,7 +344,7 @@ const ProductionAnalysis = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
                 {[
                   { label: 'EVIDENCE', color: 'var(--accent)', body: 'A specific moment in the extract: a section, a timestamp, a phrase, an element you can point at.', stem: '“In the chorus at around 0:48…”' },
-                  { label: 'TECHNIQUE', color: 'var(--sienna)', body: 'The production process you identify — named precisely with the correct technical vocabulary.', stem: '“…the vocal is sent post-fader to a short hall reverb…”' },
+                  { label: 'TECHNIQUE', color: 'var(--sienna)', body: 'The production process you identify: named precisely with the correct technical vocabulary.', stem: '“…the vocal is sent post-fader to a short hall reverb…”' },
                   { label: 'EFFECT', color: 'var(--moss)', body: 'What it does for the music: arrangement, listener experience, genre convention. Connect process to outcome.', stem: '“…creating arrival impact while keeping the vocal intelligible.”' },
                 ].map(card => (
                   <div key={card.label} style={{
@@ -387,7 +387,7 @@ const ProductionAnalysis = () => {
                     color: activeExample === ex.id ? '#fff' : 'var(--foreground-secondary)',
                     border: '1px solid var(--border)', borderRadius: 'var(--radius-md)',
                     cursor: 'pointer', fontFamily: FONT_BODY, fontSize: 'var(--text-sm)', fontWeight: 600
-                  }}>{ex.title.split(' — ')[0]}</button>
+                  }}>{ex.title.split(': ')[0]}</button>
               ))}
             </div>
 
@@ -444,12 +444,12 @@ const ProductionAnalysis = () => {
             <StudioCard>
               <h3 style={{ fontFamily: FONT_HEADING, fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>Build a Section C sentence</h3>
               <p style={{ color: 'var(--foreground-secondary)', marginBottom: 'var(--space-4)', lineHeight: 1.6 }}>
-                Take any extract — a Section C clip, a song you know, the latest single you produced. Fill in the three boxes; the tool stitches them into a sentence and grades the structure.
+                Take any extract: a Section C clip, a song you know, the latest single you produced. Fill in the three boxes; the tool stitches them into a sentence and grades the structure.
               </p>
 
               <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
                 <div>
-                  <label htmlFor="practice-evidence" style={{ display: 'block', fontWeight: 700, color: 'var(--accent)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>1. Evidence — what you can hear, with a section or timestamp</label>
+                  <label htmlFor="practice-evidence" style={{ display: 'block', fontWeight: 700, color: 'var(--accent)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>1. Evidence: what you can hear, with a section or timestamp</label>
                   <textarea id="practice-evidence" value={practiceEvidence} onChange={e => setPracticeEvidence(e.target.value)}
                     placeholder="e.g. In the chorus from 0:48, the lead vocal sits in a wider, more reverberant space than in the verse…"
                     style={{
@@ -460,7 +460,7 @@ const ProductionAnalysis = () => {
                     }} />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontWeight: 700, color: 'var(--sienna)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>2. Technique(s) — name the production processes</label>
+                  <label style={{ display: 'block', fontWeight: 700, color: 'var(--sienna)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>2. Technique(s): name the production processes</label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
                     {PROCESS_LIBRARY.map(p => {
                       const active = practiceTechniques.includes(p.id);
@@ -478,7 +478,7 @@ const ProductionAnalysis = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="practice-effect" style={{ display: 'block', fontWeight: 700, color: 'var(--moss)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>3. Effect — what the technique does for the music</label>
+                  <label htmlFor="practice-effect" style={{ display: 'block', fontWeight: 700, color: 'var(--moss)', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>3. Effect: what the technique does for the music</label>
                   <textarea id="practice-effect" value={practiceEffect} onChange={e => setPracticeEffect(e.target.value)}
                     placeholder="e.g. it pushes the vocal into a shared space with the rest of the band, signalling the chorus arrival without losing intelligibility…"
                     style={{
@@ -538,7 +538,7 @@ const ProductionAnalysis = () => {
         {activeTab === 'reference' && (
           <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
             <StudioCard>
-              <h3 style={{ fontFamily: FONT_HEADING, fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>Process cues — what to listen for</h3>
+              <h3 style={{ fontFamily: FONT_HEADING, fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>Process cues: what to listen for</h3>
               <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
                 {PROCESS_LIBRARY.map(p => (
                   <div key={p.id} style={{

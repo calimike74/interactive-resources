@@ -89,10 +89,10 @@ export default function PrePostFaderTap() {
                 ctx.fillStyle = '#14b8a6';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('● PRE — before the fader, always full', 20, 35);
+                ctx.fillText('● PRE: before the fader, always full', 20, 35);
                 ctx.fillStyle = '#e85d75';
                 ctx.textAlign = 'right';
-                ctx.fillText('POST — after the fader, follows it down ●', 460, 35);
+                ctx.fillText('POST: after the fader, follows it down ●', 460, 35);
                 ctx.globalAlpha = 1;
             }
 
@@ -183,13 +183,13 @@ export default function PrePostFaderTap() {
             let caption = '';
             let captionStart = 0;
             if (f >= HOLD_END) {
-                caption = 'The pre-fader send never noticed — it keeps feeding the reverb regardless';
+                caption = 'The pre-fader send never noticed: it keeps feeding the reverb regardless';
                 captionStart = HOLD_END;
             } else if (f >= PULL_END) {
                 caption = 'At the bottom, the post-fader send has followed the fader to nothing';
                 captionStart = PULL_END;
             } else if (f >= PULL_START) {
-                caption = 'Pull the fader down — the post-fader send follows it toward silence';
+                caption = 'Pull the fader down: the post-fader send follows it toward silence';
                 captionStart = PULL_START;
             } else if (f >= PHASE_METERS + 10) {
                 caption = 'Pre-fader taps before the fader; post-fader taps after it';

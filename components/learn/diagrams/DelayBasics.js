@@ -182,7 +182,7 @@ export default function DelayBasics() {
                     ctx.fillStyle = '#374151';
                     ctx.font = 'italic 9px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('dry is not replaced — repeat sits alongside it', W / 2, wetY + 40);
+                    ctx.fillText('dry is not replaced: repeat sits alongside it', W / 2, wetY + 40);
                     ctx.globalAlpha = 1;
                 }
             }
@@ -276,7 +276,7 @@ export default function DelayBasics() {
                 ctx.font = '8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText(
-                    bypassOn ? 'effect off — only dry is heard' : 'effect on — hearing both',
+                    bypassOn ? 'effect off: only dry is heard' : 'effect on: hearing both',
                     bX + bW / 2,
                     bY + bH + 12
                 );

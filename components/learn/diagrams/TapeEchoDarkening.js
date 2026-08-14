@@ -90,7 +90,7 @@ export default function TapeEchoDarkening() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Tape Echo — why old repeats get darker', W / 2, 16);
+            ctx.fillText('Tape Echo: why old repeats get darker', W / 2, 16);
             ctx.globalAlpha = 1;
 
             // --- Tape mechanism: REC head — tape line — PB head ---
@@ -224,11 +224,11 @@ export default function TapeEchoDarkening() {
             // --- Dynamic caption slot (single row, text changes with phase) ---
             let caption = '';
             if (f >= PHASE_CLOSE) {
-                caption = 'Quieter AND darker, together — the tape signature';
+                caption = 'Quieter AND darker, together: the tape signature';
             } else if (f >= PHASE_SPECTRUM) {
-                caption = 'Highs ↓ — each pass loses top-end content fastest';
+                caption = 'Highs ↓: each pass loses top-end content fastest';
             } else if (f >= PHASE_TIMELINE + REPEAT_STEP) {
-                caption = 'Level ↓ — each pass is quieter than the last';
+                caption = 'Level ↓: each pass is quieter than the last';
             }
             if (caption) {
                 const capP = progress(f, f >= PHASE_CLOSE ? PHASE_CLOSE : f >= PHASE_SPECTRUM ? PHASE_SPECTRUM : PHASE_TIMELINE + REPEAT_STEP, 20);

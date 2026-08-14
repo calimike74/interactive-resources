@@ -221,7 +221,7 @@ export default function HarmonicSpectrum({
                 >
                     <strong style={{ color: '#23201B', fontWeight: 600 }}>H1</strong> is the note you
                     played. <strong style={{ color: '#23201B', fontWeight: 600 }}>H2–H8</strong> are the
-                    harmonics stacked above it — the part that makes a sawtooth sound different from a
+                    harmonics stacked above it: the part that makes a sawtooth sound different from a
                     sine.
                 </p>
             )}

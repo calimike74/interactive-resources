@@ -122,7 +122,7 @@ export default function FileSizeArithmetic() {
                 ctx.font = 'bold 10px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
                 const line = i === 0
-                    ? `${row.label}  —  ${row.mb} MB`
+                    ? `${row.label}: ${row.mb} MB`
                     : `${row.label}  →  ${row.mb} MB`;
                 ctx.fillText(line, barX0, top + 9);
 
@@ -148,7 +148,7 @@ export default function FileSizeArithmetic() {
                 ctx.fillStyle = '#1a1a2e';
                 ctx.font = 'italic bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Each multiplier applied in turn — no calculator needed', W / 2, 245);
+                ctx.fillText('Each multiplier applied in turn: no calculator needed', W / 2, 245);
                 ctx.globalAlpha = 1;
             }
 

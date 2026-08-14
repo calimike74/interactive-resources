@@ -40,7 +40,7 @@ export default function SynthSignalFlow() {
             ctx.fillStyle = '#1a1a6e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Subtractive Synth — Signal Flow', W / 2, 18);
+            ctx.fillText('Subtractive Synth: Signal Flow', W / 2, 18);
             ctx.globalAlpha = 1;
 
             // Main chain layout

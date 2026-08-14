@@ -86,7 +86,7 @@ const QUESTIONS = [
         prompt: 'Which of the following is NOT a MIDI message?',
         options: ['Velocity', 'Pitch Bend', 'Program Change', 'Aftertouch'],
         correctIndex: 0,
-        explanation: 'Velocity is a parameter inside a Note On message — not a message type in its own right.',
+        explanation: 'Velocity is a parameter inside a Note On message: not a message type in its own right.',
     },
     {
         id: 'q9-three-other-midi-messages',
@@ -95,8 +95,8 @@ const QUESTIONS = [
         instruction: 'Pick exactly three. Any three valid messages from the list will be marked correct.',
         options: [
             { id: 'pitch-bend', label: 'Pitch Bend', valid: true },
-            { id: 'cc1-mod', label: 'Control Change — CC1 Modulation', valid: true },
-            { id: 'cc64-sustain', label: 'Control Change — CC64 Sustain', valid: true },
+            { id: 'cc1-mod', label: 'Control Change: CC1 Modulation', valid: true },
+            { id: 'cc64-sustain', label: 'Control Change: CC64 Sustain', valid: true },
             { id: 'program-change', label: 'Program Change', valid: true },
             { id: 'aftertouch', label: 'Aftertouch', valid: true },
             { id: 'tempo', label: 'Tempo', valid: true },
@@ -108,7 +108,7 @@ const QUESTIONS = [
             { id: 'note-on', label: 'Note On', valid: false },
         ],
         requiredCount: 3,
-        explanation: 'Velocity and Note On are traps — velocity is a parameter inside Note On, and the question excludes Note On / Note Off. Any three of: Pitch Bend, CC1, CC64, Program Change, Aftertouch (channel-voice messages sent live over the MIDI cable) — or Tempo, Time Signature, Key Signature, Track Name (meta-events stored inside a Standard MIDI File rather than transmitted live). At A-Level all count as MIDI data, but it is worth knowing that the meta-events live in the file, not on the wire.',
+        explanation: 'Velocity and Note On are traps: velocity is a parameter inside Note On, and the question excludes Note On / Note Off. Any three of: Pitch Bend, CC1, CC64, Program Change, Aftertouch (channel-voice messages sent live over the MIDI cable), or Tempo, Time Signature, Key Signature, Track Name (meta-events stored inside a Standard MIDI File rather than transmitted live). At A-Level all count as MIDI data, but it is worth knowing that the meta-events live in the file, not on the wire.',
     },
     {
         id: 'q10-drum-note-length',
@@ -121,7 +121,7 @@ const QUESTIONS = [
             'Sample rate handles it',
         ],
         correctIndex: 1,
-        explanation: 'Drum hits are one-shot samples — once triggered, they play to their natural length and ignore Note Off.',
+        explanation: 'Drum hits are one-shot samples: once triggered, they play to their natural length and ignore Note Off.',
     },
 ];
 
@@ -306,7 +306,7 @@ export default function MIDIBinaryAssessment() {
             <div className="min-h-[60vh] bg-cream py-10 px-4 sm:px-6">
             <div className="mx-auto max-w-3xl text-ink">
                 <header className="mb-6">
-                    <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-medium text-ink">MIDI, Binary & Numeracy — Results</h1>
+                    <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-medium text-ink">MIDI, Binary & Numeracy: Results</h1>
                     <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">1.5 Sequencing + 2.5 Numeracy</p>
                 </header>
 
@@ -380,7 +380,7 @@ export default function MIDIBinaryAssessment() {
                     MIDI, Binary & Numeracy Assessment
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">
-                    1.5 Sequencing + 2.5 Numeracy — exam-style practice questions
+                    1.5 Sequencing + 2.5 Numeracy: exam-style practice questions
                 </p>
             </header>
 
@@ -551,7 +551,7 @@ export default function MIDIBinaryAssessment() {
                                     {decimalToBinary7Bit(current.decimal)}
                                 </span>
                                 . Worked example: start from 64 and subtract each place value that
-                                fits — anything that doesn't fit becomes a 0.
+                                fits: anything that doesn't fit becomes a 0.
                             </p>
                         )}
                         {!isCorrect && current.type !== 'trainer' && current.canonicalAnswer && (

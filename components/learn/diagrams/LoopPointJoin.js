@@ -70,8 +70,8 @@ export default function LoopPointJoin() {
         const GOOD_L2 = findZeroCrossingAfter(BAD_L2, wave); // solves to 0.75
 
         const PANELS = [
-            { midY: 85, amp: 28, labelY: 38, calloutY: 128, L1: BAD_L1, L2: BAD_L2, color: '#e85d75', label: 'Bad join — end value ≠ start value', callout: 'step — end doesn’t match start' },
-            { midY: 198, amp: 28, labelY: 155, calloutY: 241, L1: GOOD_L1, L2: GOOD_L2, color: '#14b8a6', label: 'Good join — both on a zero crossing', callout: 'no step — same value, same direction' },
+            { midY: 85, amp: 28, labelY: 38, calloutY: 128, L1: BAD_L1, L2: BAD_L2, color: '#e85d75', label: 'Bad join: end value ≠ start value', callout: 'step: end doesn’t match start' },
+            { midY: 198, amp: 28, labelY: 155, calloutY: 241, L1: GOOD_L1, L2: GOOD_L2, color: '#14b8a6', label: 'Good join: both on a zero crossing', callout: 'no step: same value, same direction' },
         ];
 
         const loopWave = (u, L1, L2) => {

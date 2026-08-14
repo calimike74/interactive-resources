@@ -116,7 +116,7 @@ export default function SpringReverbMechanism() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Spring Reverb — Dispersion Smears the Twang', W / 2, 16);
+            ctx.fillText('Spring Reverb: Dispersion Smears the Twang', W / 2, 16);
             ctx.globalAlpha = 1;
 
             // --- Panel A: mechanism ---
@@ -223,7 +223,7 @@ export default function SpringReverbMechanism() {
                 : f < PHASE_MECH_CAPTION ? 'Reflecting'
                 : f < PHASE_INPUT ? 'Passing the pickup'
                 : f < PHASE_OUTPUT ? 'Input'
-                : 'Output — the twang';
+                : 'Output: the twang';
             ctx.fillStyle = '#9ca3af';
             ctx.font = '8px -apple-system, sans-serif';
             ctx.textAlign = 'right';

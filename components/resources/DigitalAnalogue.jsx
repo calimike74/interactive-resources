@@ -170,17 +170,17 @@ const learnSections = [
   {
     level: 'foundation',
     title: 'Analogue vs Digital: The Basic Difference',
-    content: 'An analogue audio signal is continuous \u2014 it varies smoothly and without interruption, just like a sound wave in the air. A vinyl record stores music as a continuous groove that mirrors the original waveform. A digital audio signal, by contrast, is discrete \u2014 it represents the sound as a series of individual numerical snapshots taken at regular intervals. Think of it as the difference between a smooth ramp (analogue) and a staircase (digital). Neither is inherently better; they have different characteristics and trade-offs.'
+    content: 'An analogue audio signal is continuous: it varies smoothly and without interruption, just like a sound wave in the air. A vinyl record stores music as a continuous groove that mirrors the original waveform. A digital audio signal, by contrast, is discrete: it represents the sound as a series of individual numerical snapshots taken at regular intervals. Think of it as the difference between a smooth ramp (analogue) and a staircase (digital). Neither is inherently better; they have different characteristics and trade-offs.'
   },
   {
     level: 'foundation',
     title: 'A/D and D/A Conversion',
-    content: 'A/D (analogue-to-digital) conversion is the process of turning a continuous analogue signal into digital data. This happens every time you record audio into a computer or digital device \u2014 a microphone captures sound as an analogue electrical signal, and the A/D converter transforms it into numbers. D/A (digital-to-analogue) conversion is the reverse: it takes digital data and reconstructs it as a continuous analogue signal for playback through speakers or headphones. Every digital audio system relies on both processes.'
+    content: 'A/D (analogue-to-digital) conversion is the process of turning a continuous analogue signal into digital data. This happens every time you record audio into a computer or digital device: a microphone captures sound as an analogue electrical signal, and the A/D converter transforms it into numbers. D/A (digital-to-analogue) conversion is the reverse: it takes digital data and reconstructs it as a continuous analogue signal for playback through speakers or headphones. Every digital audio system relies on both processes.'
   },
   {
     level: 'intermediate',
     title: 'How Digital Recording Works: Sampling and Quantisation',
-    content: 'Digital recording involves two key processes. Sampling measures the amplitude of the analogue signal at regular time intervals \u2014 the number of measurements per second is the sample rate (measured in Hz or kHz). Quantisation assigns each sample to the nearest available digital value \u2014 the number of possible values is determined by the bit depth. Together, sample rate controls the frequency range that can be captured, and bit depth controls the amplitude resolution (dynamic range and noise floor). Higher values in both mean more accurate digital representation of the original analogue signal.'
+    content: 'Digital recording involves two key processes. Sampling measures the amplitude of the analogue signal at regular time intervals: the number of measurements per second is the sample rate (measured in Hz or kHz). Quantisation assigns each sample to the nearest available digital value: the number of possible values is determined by the bit depth. Together, sample rate controls the frequency range that can be captured, and bit depth controls the amplitude resolution (dynamic range and noise floor). Higher values in both mean more accurate digital representation of the original analogue signal.'
   },
   {
     level: 'intermediate',
@@ -195,22 +195,22 @@ const learnSections = [
   {
     level: 'intermediate',
     title: 'Digital vs Analogue Clipping',
-    content: 'When an analogue signal is pushed beyond a system\'s capacity (e.g., through valves or tape), it clips gradually \u2014 the waveform is gently rounded, producing soft saturation and harmonic distortion that often sounds musically pleasing ("warmth"). Digital clipping occurs when the signal exceeds 0 dBFS (the absolute maximum digital level) \u2014 the waveform is brutally chopped flat, creating harsh, unpleasant distortion with no musical character. This is why digital systems require careful gain staging and headroom management.'
+    content: 'When an analogue signal is pushed beyond a system\'s capacity (e.g., through valves or tape), it clips gradually: the waveform is gently rounded, producing soft saturation and harmonic distortion that often sounds musically pleasing ("warmth"). Digital clipping occurs when the signal exceeds 0 dBFS (the absolute maximum digital level): the waveform is brutally chopped flat, creating harsh, unpleasant distortion with no musical character. This is why digital systems require careful gain staging and headroom management.'
   },
   {
     level: 'intermediate',
     title: 'Audio Formats: Lossy vs Lossless',
-    content: 'Uncompressed lossless formats (WAV, AIFF) store every sample as PCM (Pulse Code Modulation) without any data loss, resulting in large file sizes but perfect audio fidelity. Compressed lossless formats (FLAC, ALAC) reduce file size without losing any data \u2014 the original audio can be perfectly reconstructed. Lossy formats (MP3, AAC, OGG Vorbis) use psychoacoustic models to permanently discard audio information deemed inaudible, achieving much smaller file sizes at the cost of some quality. Higher bit rates in lossy formats (e.g., 320 kbps vs 128 kbps) retain more detail.'
+    content: 'Uncompressed lossless formats (WAV, AIFF) store every sample as PCM (Pulse Code Modulation) without any data loss, resulting in large file sizes but perfect audio fidelity. Compressed lossless formats (FLAC, ALAC) reduce file size without losing any data: the original audio can be perfectly reconstructed. Lossy formats (MP3, AAC, OGG Vorbis) use psychoacoustic models to permanently discard audio information deemed inaudible, achieving much smaller file sizes at the cost of some quality. Higher bit rates in lossy formats (e.g., 320 kbps vs 128 kbps) retain more detail.'
   },
   {
     level: 'advanced',
     title: 'Valves vs Transistors',
-    content: 'Valve (vacuum tube) circuits and transistor (solid-state) circuits behave differently when processing audio. Valves introduce gentle, gradual distortion when driven hard, producing predominantly even-order harmonics (2nd, 4th, 6th) that are musically consonant and perceived as "warm" or "rich". Transistors tend to clip more abruptly, producing odd-order harmonics (3rd, 5th, 7th) that can sound harsher. Many engineers and musicians prize valve preamps, compressors, and guitar amplifiers for their sonic character. Modern recording often combines both technologies \u2014 valve warmth with digital precision.'
+    content: 'Valve (vacuum tube) circuits and transistor (solid-state) circuits behave differently when processing audio. Valves introduce gentle, gradual distortion when driven hard, producing predominantly even-order harmonics (2nd, 4th, 6th) that are musically consonant and perceived as "warm" or "rich". Transistors tend to clip more abruptly, producing odd-order harmonics (3rd, 5th, 7th) that can sound harsher. Many engineers and musicians prize valve preamps, compressors, and guitar amplifiers for their sonic character. Modern recording often combines both technologies: valve warmth with digital precision.'
   },
   {
     level: 'advanced',
     title: 'Streaming Bit Rates and Perceptual Coding',
-    content: 'Streaming services deliver audio at various bit rates depending on the subscription tier and platform. Typical rates include: 128 kbps (basic quality), 256 kbps (standard quality), 320 kbps (high quality), and some services now offer lossless streaming (e.g., CD-quality 1,411 kbps or hi-res). Lossy codecs like AAC and OGG Vorbis use perceptual coding \u2014 psychoacoustic models that exploit the limitations of human hearing (such as auditory masking) to discard sounds we are unlikely to notice. The effectiveness of this approach depends heavily on the bit rate and the complexity of the audio material.'
+    content: 'Streaming services deliver audio at various bit rates depending on the subscription tier and platform. Typical rates include: 128 kbps (basic quality), 256 kbps (standard quality), 320 kbps (high quality), and some services now offer lossless streaming (e.g., CD-quality 1,411 kbps or hi-res). Lossy codecs like AAC and OGG Vorbis use perceptual coding: psychoacoustic models that exploit the limitations of human hearing (such as auditory masking) to discard sounds we are unlikely to notice. The effectiveness of this approach depends heavily on the bit rate and the complexity of the audio material.'
   },
 ];
 
@@ -437,7 +437,7 @@ const DigitalAnalogue = () => {
     ctx.fillStyle = 'rgba(255, 107, 53, 0.6)';
     ctx.font = "10px 'Inter', system-ui, sans-serif";
     ctx.textAlign = 'right';
-    ctx.fillText(`${(sampleRate / 1000).toFixed(1)} kHz \u2014 ${clampedSamples} steps shown across 3 cycles`, w - padding.right, padding.top + 14);
+    ctx.fillText(`${(sampleRate / 1000).toFixed(1)} kHz: ${clampedSamples} steps shown across 3 cycles`, w - padding.right, padding.top + 14);
 
   }, [sampleRate, bitDepth]);
 
@@ -701,12 +701,12 @@ const DigitalAnalogue = () => {
               </h3>
               {[
                 { artist: 'Vinyl vs CD', track: 'General Comparison', note: 'Vinyl records reproduce sound from a continuous groove (analogue), offering characteristic warmth and subtle harmonic colouration. CDs store audio digitally at 44.1 kHz/16-bit, providing cleaner reproduction with greater dynamic range and no surface noise.' },
-                { artist: 'Daft Punk', track: 'Get Lucky', note: 'Recorded largely through analogue equipment \u2014 vintage Neve console, valve preamps, and tape machines \u2014 to achieve warmth and character before being mixed in the digital domain. A textbook example of combining analogue and digital workflows.' },
+                { artist: 'Daft Punk', track: 'Get Lucky', note: 'Recorded largely through analogue equipment (vintage Neve console, valve preamps, and tape machines) to achieve warmth and character before being mixed in the digital domain. A textbook example of combining analogue and digital workflows.' },
                 { artist: 'Bon Iver', track: 'Woods', note: 'Uses digital vocal processing extensively, layering Auto-Tune as a deliberate creative tool rather than a corrective one. The digitally processed, heavily quantised vocal sound is central to the track\'s aesthetic.' },
-                { artist: 'Jack White', track: 'Various', note: 'Deliberately records using analogue equipment and lo-fi techniques \u2014 valve amps, tape machines, limited track counts. His approach embraces the imperfections and character of analogue recording as a creative choice.' }
+                { artist: 'Jack White', track: 'Various', note: 'Deliberately records using analogue equipment and lo-fi techniques: valve amps, tape machines, limited track counts. His approach embraces the imperfections and character of analogue recording as a creative choice.' }
               ].map((ex, i) => (
                 <div key={i} style={{ padding: 'var(--space-3) 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
-                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &mdash; &ldquo;{ex.track}&rdquo;
+                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &ndash; &ldquo;{ex.track}&rdquo;
                   <p style={{ margin: 'var(--space-1) 0 0', color: 'var(--foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: '1.5' }}>{ex.note}</p>
                 </div>
               ))}
@@ -1023,7 +1023,7 @@ const DigitalAnalogue = () => {
                   {score} / {quizQuestions.length}
                 </div>
                 <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)' }}>
-                  {score >= 6 ? 'Excellent understanding of digital and analogue audio!' : score >= 4 ? 'Good foundation \u2014 review the areas you found challenging.' : 'Revisit the Learn tab and try again.'}
+                  {score >= 6 ? 'Excellent understanding of digital and analogue audio!' : score >= 4 ? 'Good foundation: review the areas you found challenging.' : 'Revisit the Learn tab and try again.'}
                 </p>
                 <PressButton onClick={resetQuiz} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
@@ -1127,7 +1127,7 @@ const DigitalAnalogue = () => {
                 { term: 'Bit Depth', def: 'The number of bits used to represent each sample. Determines the number of possible amplitude levels (2\u207F) and the dynamic range (~6 dB per bit).' },
                 { term: 'PCM (Pulse Code Modulation)', def: 'The standard method of digitally encoding audio. Each sample is represented as a binary number. WAV and AIFF files store PCM data.' },
                 { term: 'Lossy Compression', def: 'Audio compression that permanently discards data using psychoacoustic models (perceptual coding) to reduce file size. Examples: MP3, AAC, OGG Vorbis.' },
-                { term: 'Lossless Compression', def: 'Audio compression that reduces file size without discarding any data \u2014 the original can be perfectly reconstructed. Examples: FLAC, ALAC.' },
+                { term: 'Lossless Compression', def: 'Audio compression that reduces file size without discarding any data: the original can be perfectly reconstructed. Examples: FLAC, ALAC.' },
                 { term: 'Valve (Vacuum Tube)', def: 'An electronic component that amplifies audio signals. When overdriven, produces predominantly even-order harmonics (2nd, 4th, 6th) perceived as "warm" and musically pleasing.' },
                 { term: 'Transistor (Solid-State)', def: 'An electronic component that replaced valves in most modern equipment. When overdriven, tends to produce odd-order harmonics (3rd, 5th, 7th) that can sound harsher.' },
                 { term: 'Harmonic Distortion', def: 'Additional frequencies (harmonics) added to the original signal when a system is overdriven. Character depends on the type of harmonics: even-order (warm) vs odd-order (harsh).' }
@@ -1145,7 +1145,7 @@ const DigitalAnalogue = () => {
               </h3>
               {[
                 'For file size calculations, always show your full working: (Sample Rate \u00D7 Bit Depth \u00D7 Channels \u00D7 Duration) \u00F7 8 \u00F7 1,048,576. Convert the final answer to MB. This is a very common exam question.',
-                'Know the difference between lossy and lossless formats. Be able to name examples of each and explain when you would choose one over the other \u2014 always relate your answer to the context given in the question.',
+                'Know the difference between lossy and lossless formats. Be able to name examples of each and explain when you would choose one over the other: always relate your answer to the context given in the question.',
                 'When comparing analogue and digital clipping, describe both the waveform shape (soft curve vs hard flat-top) AND the sonic character (warm saturation vs harsh distortion). Include the term "harmonic distortion" in your answer.',
                 'If asked about valves vs transistors, explain the harmonic content: valves produce predominantly even-order harmonics (warm, musical), whilst transistors produce odd-order harmonics (harsher). Always link this to real-world examples of equipment.'
               ].map((tip, i) => (
@@ -1161,13 +1161,13 @@ const DigitalAnalogue = () => {
                 {'\u{1F3B5}'} Music Examples for Exam Reference
               </h3>
               {[
-                { artist: 'Daft Punk', track: 'Get Lucky', context: 'Listen for the warmth in the rhythm guitar and bass — recorded through vintage Neve console and valve preamps to tape before digital mixing. Compare the opening bars to any fully digital pop production.' },
+                { artist: 'Daft Punk', track: 'Get Lucky', context: 'Listen for the warmth in the rhythm guitar and bass: recorded through vintage Neve console and valve preamps to tape before digital mixing. Compare the opening bars to any fully digital pop production.' },
                 { artist: 'Radiohead', track: 'Everything In Its Right Place', context: 'Listen to how the heavily processed vocals sit in the mix. The digital artefacts from pitch-shifting and granular processing are deliberately exposed rather than hidden.' },
                 { artist: 'Amy Winehouse', track: 'Back to Black', context: 'Recorded at Daptone Studios using analogue tape and vintage equipment. Listen for the tape saturation on the drums and the natural compression from the valve signal chain.' },
                 { artist: 'Billie Eilish', track: 'Bad Guy', context: 'Recorded entirely in a bedroom using a digital setup (Logic Pro, audio interface). Compare the clean digital bass and crisp high frequencies with the analogue warmth of the Winehouse track.' }
               ].map((ex, i) => (
                 <div key={i} style={{ padding: 'var(--space-3) 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
-                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &mdash; &ldquo;{ex.track}&rdquo;
+                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &ndash; &ldquo;{ex.track}&rdquo;
                   <p style={{ margin: 'var(--space-1) 0 0', color: 'var(--foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: '1.5' }}>{ex.context}</p>
                 </div>
               ))}

@@ -51,7 +51,7 @@ export default function PingPong() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Ping-Pong — repeats alternate between channels', W / 2, 20);
+            ctx.fillText('Ping-Pong: repeats alternate between channels', W / 2, 20);
             ctx.globalAlpha = 1;
 
             // Channel baselines + labels

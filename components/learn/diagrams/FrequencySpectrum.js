@@ -83,7 +83,7 @@ export default function FrequencySpectrum() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '10px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Original signal — flat response', margin.left + 4, zeroY - 12);
+                ctx.fillText('Original signal: flat response', margin.left + 4, zeroY - 12);
                 ctx.globalAlpha = 1;
             }
 

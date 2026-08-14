@@ -88,7 +88,7 @@ export default function RootNoteMap() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('One Sample, Every Key — If the Root Is Right', W / 2, 16);
+            ctx.fillText('One Sample, Every Key: If the Root Is Right', W / 2, 16);
             ctx.globalAlpha = 1;
 
             const subP = progress(f, 15, 20);
@@ -190,7 +190,7 @@ export default function RootNoteMap() {
                 ctx.fillStyle = '#e85d75';
                 ctx.font = 'italic 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('2022 error: G3 recorded, root left at C3 — the whole part came out wrong', W / 2, 222);
+                ctx.fillText('2022 error: G3 recorded, root left at C3. The whole part came out wrong.', W / 2, 222);
                 ctx.globalAlpha = 1;
             }
 

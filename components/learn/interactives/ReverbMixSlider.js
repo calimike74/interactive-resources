@@ -5,9 +5,9 @@ import { startPreset } from '@/lib/learn/audio-presets';
 import { editorial as ED } from '@/lib/theme';
 
 function distanceWord(pct) {
-    if (pct <= 33) return 'mostly direct — up close';
-    if (pct <= 66) return 'even blend — mid-distance';
-    return 'mostly room — far away';
+    if (pct <= 33) return 'mostly direct: up close';
+    if (pct <= 66) return 'even blend: mid-distance';
+    return 'mostly room: far away';
 }
 
 export default function ReverbMixSlider() {
@@ -40,10 +40,10 @@ export default function ReverbMixSlider() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — reverb mix
+                    Try it: reverb mix
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
-                    {pct}% wet — {distanceWord(pct)}
+                    {pct}% wet: {distanceWord(pct)}
                 </span>
             </div>
             <input
@@ -64,7 +64,7 @@ export default function ReverbMixSlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

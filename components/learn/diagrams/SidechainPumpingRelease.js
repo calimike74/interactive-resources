@@ -97,7 +97,7 @@ export default function SidechainPumpingRelease() {
                 ctx.fillStyle = '#16a34a';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Short release — 60 ms', margin.left, laneA_top - 8);
+                ctx.fillText('Short release: 60 ms', margin.left, laneA_top - 8);
                 ctx.globalAlpha = 1;
                 drawKicks(laneA_top, laneH, introP);
             }
@@ -120,7 +120,7 @@ export default function SidechainPumpingRelease() {
                 ctx.fillStyle = '#DC2626';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Long release — 400 ms', margin.left, laneB_top - 8);
+                ctx.fillText('Long release: 400 ms', margin.left, laneB_top - 8);
                 ctx.globalAlpha = 1;
                 drawKicks(laneB_top, laneH, introBP);
             }
@@ -132,7 +132,7 @@ export default function SidechainPumpingRelease() {
                 ctx.fillStyle = '#DC2626';
                 ctx.font = '8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('barely recovers — holds low almost permanently', margin.left, laneB_top + laneH + 26);
+                ctx.fillText('barely recovers: holds low almost permanently', margin.left, laneB_top + laneH + 26);
                 ctx.globalAlpha = 1;
             }
 
@@ -142,7 +142,7 @@ export default function SidechainPumpingRelease() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Same trigger, same target — the release dial writes the groove', W / 2, 272);
+                ctx.fillText('Same trigger, same target: the release dial writes the groove', W / 2, 272);
                 ctx.globalAlpha = 1;
             }
 

@@ -1,11 +1,11 @@
 {
-  "note": "Each route is a real Component 4 Question 6, drawn from the Principal Examiner's report for that year (Professional/Exemplar-Work/Analysis-Documents/C4-Examiner-Report-Extracts-2019-2025.md). A step is { focus, caption, note } — focus ids accumulate as the route advances, so the finished question is a lit path across the room. Captions teach the move; notes quote or tightly paraphrase the examiner.",
+  "note": "Each route is a real Component 4 Question 6, drawn from the Principal Examiner's report for that year (Professional/Exemplar-Work/Analysis-Documents/C4-Examiner-Report-Extracts-2019-2025.md). A step is { focus, caption, note }: focus ids accumulate as the route advances, so the finished question is a lit path across the room. Captions teach the move; notes quote or tightly paraphrase the examiner.",
   "routes": [
     {
       "id": "q6-2023",
       "year": "2023",
       "title": "The vocal chain",
-      "stem": "A rock vocal through three processors — compression, EQ, then delay. Evaluate the settings.",
+      "stem": "A rock vocal through three processors: compression, EQ, then delay. Evaluate the settings.",
       "marks": 20,
       "steps": [
         {
@@ -14,7 +14,7 @@
             "c-threshold-ratio",
             "c-compression"
           ],
-          "caption": "First stop: a very high ratio means a heavily compressed vocal — say what that does.",
+          "caption": "First stop: a very high ratio means a heavily compressed vocal: say what that does.",
           "note": "Examiner, 2023: the make-up gain's job was often confused and misunderstood."
         },
         {
@@ -41,7 +41,7 @@
             "c-haas-effect",
             "c-itd-iid"
           ],
-          "caption": "The two delay times differ on purpose — offset repeats build a stereo image.",
+          "caption": "The two delay times differ on purpose: offset repeats build a stereo image.",
           "note": "Examiner, 2023: some argued the offset was a mistake and would have removed it."
         },
         {
@@ -69,7 +69,7 @@
             "c-waveforms",
             "c-harmonic-content"
           ],
-          "caption": "Name what you see first — oscillators, sub-oscillator, waveforms. Naming alone caps at five marks.",
+          "caption": "Name what you see first: oscillators, sub-oscillator, waveforms. Naming alone caps at five marks.",
           "note": "Examiner, 2019: candidates who only listed parameters maxed out at 5 AO3 marks."
         },
         {
@@ -86,7 +86,7 @@
             "c-lfo-modulation",
             "c-lfo-rate-depth-waveform"
           ],
-          "caption": "The LFO is a control signal, not an audible bass note — a mark-losing confusion.",
+          "caption": "The LFO is a control signal, not an audible bass note: a mark-losing confusion.",
           "note": "Examiner, 2019: a surprising number thought the LFO was for audible bass."
         },
         {
@@ -94,7 +94,7 @@
             "t-modulation"
           ],
           "caption": "Chorus on the pad earned marks when its effect on the sound was described, not named.",
-          "note": "Examiner, 2019: pulse width moved by the LFO adds movement — very few explained it."
+          "note": "Examiner, 2019: pulse width moved by the LFO adds movement: very few explained it."
         },
         {
           "focus": [
@@ -102,7 +102,7 @@
             "t-eq",
             "t-modulation"
           ],
-          "caption": "A synthesis question that lives in three rooms — the marks sit in the connections.",
+          "caption": "A synthesis question that lives in three rooms: the marks sit in the connections.",
           "note": "Examiner, 2019: understanding how the sections interact received a lot of credit."
         }
       ]
@@ -111,7 +111,7 @@
       "id": "q6-2022",
       "year": "2022",
       "title": "Bass pedals for funk",
-      "stem": "Four bass guitar pedals — overdrive, EQ, compression, wah. Evaluate them for a funk track.",
+      "stem": "Four bass guitar pedals: overdrive, EQ, compression, wah. Evaluate them for a funk track.",
       "marks": 20,
       "steps": [
         {
@@ -128,7 +128,7 @@
             "t-eq",
             "c-gain-cut-off-frequency"
           ],
-          "caption": "EQ was the best-answered pedal — describing how a boost muddies the bass earned marks.",
+          "caption": "EQ was the best-answered pedal: describing how a boost muddies the bass earned marks.",
           "note": "Examiner, 2022: EQ best answered, then overdrive, then compression, then wah."
         },
         {
@@ -137,8 +137,8 @@
             "c-attack-release",
             "c-threshold-ratio"
           ],
-          "caption": "Compression on bass evens the level and adds sustain — say why funk wants that.",
-          "note": "Examiner, 2022: many scored 8–12 — full AO3 plus only a few applied points."
+          "caption": "Compression on bass evens the level and adds sustain: say why funk wants that.",
+          "note": "Examiner, 2022: many scored 8–12: full AO3 plus only a few applied points."
         },
         {
           "focus": [
@@ -155,7 +155,7 @@
             "t-dynamic-processing",
             "t-signals"
           ],
-          "caption": "Highest scorers evaluated how the pedals interact in the chain — order matters.",
+          "caption": "Highest scorers evaluated how the pedals interact in the chain: order matters.",
           "note": "Examiner, 2022: apply knowledge to the scenario; a page of generic revision scored one mark."
         }
       ]
@@ -173,8 +173,8 @@
             "c-parametric-graphic-eq",
             "c-high-pass-filter"
           ],
-          "caption": "Precision first: it is a parametric EQ — calling it a notch filter lost marks.",
-          "note": "Examiner, 2020: much incorrect terminology — parametric EQs called notch filters or BPFs."
+          "caption": "Precision first: it is a parametric EQ: calling it a notch filter lost marks.",
+          "note": "Examiner, 2020: much incorrect terminology: parametric EQs called notch filters or BPFs."
         },
         {
           "focus": [
@@ -183,14 +183,14 @@
             "c-gating"
           ],
           "caption": "Read settings against consequence: this gate threshold would silence the rhythm guitars entirely.",
-          "note": "Examiner, 2020: the gate would yield silence — only a few students noticed."
+          "note": "Examiner, 2020: the gate would yield silence: only a few students noticed."
         },
         {
           "focus": [
             "t-reverb",
             "c-pre-fader-post-fader-sends"
           ],
-          "caption": "Routing is knowledge too — reverb placed as an insert changes what the chain does.",
+          "caption": "Routing is knowledge too: reverb placed as an insert changes what the chain does.",
           "note": "Examiner, 2020: very few candidates commented on the routing at all."
         },
         {
@@ -199,7 +199,7 @@
             "c-panning-conventions",
             "c-itd-iid"
           ],
-          "caption": "The guitars are hard-panned, so the stereo picture is wide — the easiest applied mark.",
+          "caption": "The guitars are hard-panned, so the stereo picture is wide: the easiest applied mark.",
           "note": "Examiner, 2020: noting the wide stereo picture was the easiest AO4 mark to score."
         },
         {
@@ -210,7 +210,7 @@
             "t-stereo"
           ],
           "caption": "Four topics in one diagram. The best answers compared the two guitars' opposite settings.",
-          "note": "Examiner, 2020: state which guitar you mean — unattributed points could not be credited."
+          "note": "Examiner, 2020: state which guitar you mean: unattributed points could not be credited."
         }
       ]
     }

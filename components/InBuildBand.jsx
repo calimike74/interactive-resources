@@ -51,7 +51,7 @@ export default function InBuildBand({ topic }) {
                 }}
             >
                 <span aria-hidden="true" style={{ fontSize: '13px', lineHeight: 1 }}>●</span>
-                In build — arriving this term
+                In build: arriving this term
             </span>
 
             {topic.specSummary && topic.specSummary.length > 0 && (
@@ -109,7 +109,7 @@ export default function InBuildBand({ topic }) {
                 }}
             >
                 The interactive tools for this topic are still being built. The exam content above is the
-                real spec — nothing here is a placeholder for the sake of it.
+                real spec: nothing here is a placeholder for the sake of it.
                 {nearest && (
                     <>
                         {' '}Meanwhile,{' '}

@@ -573,7 +573,7 @@ export default function PatchBaySimulator() {
             }
 
             const ariaLabel = isSource
-                ? `${connectorLabel(id)}${isConnectedSource ? ', connected' : ''}${isPending ? ', selected — press Enter on a PB8 input to complete patch' : ', press Enter to select'}`
+                ? `${connectorLabel(id)}${isConnectedSource ? ', connected' : ''}${isPending ? ', selected: press Enter on a PB8 input to complete patch' : ', press Enter to select'}`
                 : `PB8 input ${i}${targetColour ? ', connected' : ''}${pendingSource ? ', press Enter to patch here' : ''}`;
 
             items.push(
@@ -622,7 +622,7 @@ export default function PatchBaySimulator() {
                         key={id}
                         role="button"
                         tabIndex={0}
-                        aria-label={`${extra.label}${isConnectedSource ? ', connected' : ''}${isPending ? ', selected — press Enter on a PB8 input to complete patch' : ', press Enter to select'}`}
+                        aria-label={`${extra.label}${isConnectedSource ? ', connected' : ''}${isPending ? ', selected: press Enter on a PB8 input to complete patch' : ', press Enter to select'}`}
                         data-connector-id={id}
                         ref={(el) => setConnectorRef(id, el)}
                         style={extraStyle}
@@ -819,7 +819,7 @@ export default function PatchBaySimulator() {
                             return (
                                 <div key={bayId} style={styles.baySection}>
                                     <div style={styles.bayLabel}>
-                                        {bayId} &mdash; {bay.label}
+                                        {bayId}: {bay.label}
                                     </div>
                                     <div style={styles.connectorGrid}>
                                         {renderConnectors(bayId, bay.connectors, colour, bay.extras, 'room')}
@@ -831,7 +831,7 @@ export default function PatchBaySimulator() {
 
                     {/* Column 2: PB8 (Central Router) */}
                     <div style={styles.panel}>
-                        <div style={styles.panelTitle}>PB8 &mdash; Central Router</div>
+                        <div style={styles.panelTitle}>PB8: Central Router</div>
                         <div style={{ ...styles.connectionCount, textAlign: 'center', marginTop: `-${spacing[2]}`, marginBottom: spacing[2] }}>
                             {connectionCount}/{PB8_INPUTS} inputs patched
                         </div>
@@ -851,7 +851,7 @@ export default function PatchBaySimulator() {
 
                     {/* Column 3: PB9 (Expansion / Returns) */}
                     <div style={styles.panel}>
-                        <div style={styles.panelTitle}>PB9 &mdash; Expansion</div>
+                        <div style={styles.panelTitle}>PB9: Expansion</div>
                         <div style={styles.baySection}>
                             <div style={styles.bayLabel}>Outputs (24 channels)</div>
                             <div style={styles.connectorGrid}>
@@ -885,7 +885,7 @@ export default function PatchBaySimulator() {
             <div style={styles.voltWrapper}>
                 {/* Unit 1 */}
                 <div style={styles.voltUnit}>
-                    <span style={styles.voltLabel}>Volt 876 &mdash; Unit 1 (IN 1-8)</span>
+                    <span style={styles.voltLabel}>Volt 876: Unit 1 (IN 1-8)</span>
                     {voltUnit1Inputs.length > 0 && (
                         <div style={styles.voltIndicators}>
                             {voltUnit1Inputs.map((vi, idx) => (
@@ -900,7 +900,7 @@ export default function PatchBaySimulator() {
                 </div>
                 {/* Unit 2 */}
                 <div style={styles.voltUnit}>
-                    <span style={styles.voltLabel}>Volt 876 &mdash; Unit 2 (IN 1-8)</span>
+                    <span style={styles.voltLabel}>Volt 876: Unit 2 (IN 1-8)</span>
                     {voltUnit2Inputs.length > 0 && (
                         <div style={styles.voltIndicators}>
                             {voltUnit2Inputs.map((vi, idx) => (

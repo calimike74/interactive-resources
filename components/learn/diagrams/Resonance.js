@@ -51,10 +51,10 @@ export default function Resonance() {
         };
 
         const stages = [
-            { q: 0.7, label: 'Q = 0.7', desc: 'No resonance — smooth roll-off, no peak', start: 30, color: '#1a1a6e' },
-            { q: 2, label: 'Q = 2.0', desc: 'Light resonance — subtle peak at cutoff', start: 120, color: '#9B7530' },
-            { q: 6, label: 'Q = 6.0', desc: 'High resonance — pronounced, vocal peak', start: 210, color: '#f97316' },
-            { q: 15, label: 'Q = 15', desc: 'Self-oscillation — the filter rings on its own', start: 300, color: '#DC2626' },
+            { q: 0.7, label: 'Q = 0.7', desc: 'No resonance: smooth roll-off, no peak', start: 30, color: '#1a1a6e' },
+            { q: 2, label: 'Q = 2.0', desc: 'Light resonance: subtle peak at cutoff', start: 120, color: '#9B7530' },
+            { q: 6, label: 'Q = 6.0', desc: 'High resonance: pronounced, vocal peak', start: 210, color: '#f97316' },
+            { q: 15, label: 'Q = 15', desc: 'Self-oscillation: the filter rings on its own', start: 300, color: '#DC2626' },
         ];
 
         const draw = () => {

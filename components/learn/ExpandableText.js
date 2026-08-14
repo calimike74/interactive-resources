@@ -304,7 +304,7 @@ export default function ExpandableText({ text, topicColor = '#1a1a6e', topicId, 
                                     onClick={() => !isExpanding && toggleExpansion(seg.id)}
                                     onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && !isExpanding && toggleExpansion(seg.id)}
                                     aria-expanded={isOpen}
-                                    aria-label={`${seg.originalText} — ${isOpen ? 'collapse' : 'expand'} explanation`}
+                                    aria-label={`${seg.originalText}: ${isOpen ? 'collapse' : 'expand'} explanation`}
                                     style={{
                                         padding: '1px 6px',
                                         borderRadius: '4px',

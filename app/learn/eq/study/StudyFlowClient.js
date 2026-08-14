@@ -7,21 +7,21 @@ import { theme, typography, borderRadius, spacing, transitions } from '@/lib/the
 
 // ─── Study content ─────────────────────────────────────────────────────────────
 
-const STUDY_TEXT = `Equalisation — or EQ — is the process of adjusting the balance between frequency components within an audio signal. Every sound you hear is made up of multiple frequencies, and EQ gives you the tools to shape which frequencies are louder or quieter.
+const STUDY_TEXT = `Equalisation (or EQ) is the process of adjusting the balance between frequency components within an audio signal. Every sound you hear is made up of multiple frequencies, and EQ gives you the tools to shape which frequencies are louder or quieter.
 
-The foundation of EQ lies in four filter types. A lowpass filter allows frequencies below a cutoff point to pass through while attenuating everything above it — creating warmer, darker sounds by removing high-frequency content. A highpass filter does the opposite, letting high frequencies through while cutting the lows — useful for removing rumble and mud from a recording.
+The foundation of EQ lies in four filter types. A lowpass filter allows frequencies below a cutoff point to pass through while attenuating everything above it: creating warmer, darker sounds by removing high-frequency content. A highpass filter does the opposite, letting high frequencies through while cutting the lows: useful for removing rumble and mud from a recording.
 
-A bandpass filter isolates a specific range of frequencies, attenuating everything above and below its passband. This creates focused, vocal-like tones. The bandreject or notch filter is its inverse — it removes a narrow band of frequencies while leaving the rest untouched. This is essential for eliminating electrical hum at 50Hz or 60Hz.
+A bandpass filter isolates a specific range of frequencies, attenuating everything above and below its passband. This creates focused, vocal-like tones. The bandreject or notch filter is its inverse: it removes a narrow band of frequencies while leaving the rest untouched. This is essential for eliminating electrical hum at 50Hz or 60Hz.
 
 The cutoff frequency is where the filter begins to take effect. The filter slope, measured in dB per octave, determines how aggressively frequencies are attenuated beyond that point. A gentle 6dB/octave slope creates subtle transitions, while a steep 24dB/octave slope creates near-total removal.
 
-Q factor — the quality factor — defines how narrow or wide a filter's effect is. It is calculated as the centre frequency divided by the bandwidth. A high Q creates a narrow, surgical cut or boost. A low Q creates a broad, gentle adjustment. Q and bandwidth are inversely proportional — as Q goes up, bandwidth narrows.
+Q factor (the quality factor) defines how narrow or wide a filter's effect is. It is calculated as the centre frequency divided by the bandwidth. A high Q creates a narrow, surgical cut or boost. A low Q creates a broad, gentle adjustment. Q and bandwidth are inversely proportional: as Q goes up, bandwidth narrows.
 
-There are two main EQ architectures. A graphic equaliser splits the spectrum into fixed bands — typically 10 or 31 — each with its own gain slider. The bands are spaced at octave or third-octave intervals, and filters are routed in parallel. You get a visual "graph" of your frequency curve, but the frequencies are locked. You can only adjust gain, not frequency or Q.
+There are two main EQ architectures. A graphic equaliser splits the spectrum into fixed bands (typically 10 or 31) each with its own gain slider. The bands are spaced at octave or third-octave intervals, and filters are routed in parallel. You get a visual "graph" of your frequency curve, but the frequencies are locked. You can only adjust gain, not frequency or Q.
 
-A parametric equaliser takes a different approach. It offers fewer bands — typically 4 to 7 — but each band gives you full control over three parameters: centre frequency, gain, and Q. Filters are routed in series, cascading through each band. This gives you surgical precision for targeting specific frequency problems.
+A parametric equaliser takes a different approach. It offers fewer bands (typically 4 to 7) but each band gives you full control over three parameters: centre frequency, gain, and Q. Filters are routed in series, cascading through each band. This gives you surgical precision for targeting specific frequency problems.
 
-Shelving filters complete the toolkit. A high shelf boosts or cuts all frequencies above its shelf point by an equal amount — unlike a lowpass filter where attenuation increases with frequency. A low shelf does the same for frequencies below its point. Peak and notch filters boost or cut around a centre frequency while leaving surrounding frequencies untouched. These shelving filters are the building blocks of most parametric EQ designs.`;
+Shelving filters complete the toolkit. A high shelf boosts or cuts all frequencies above its shelf point by an equal amount, unlike a lowpass filter where attenuation increases with frequency. A low shelf does the same for frequencies below its point. Peak and notch filters boost or cut around a centre frequency while leaving surrounding frequencies untouched. These shelving filters are the building blocks of most parametric EQ designs.`;
 
 // ─── Diagram SVG generators ────────────────────────────────────────────────────
 
@@ -74,7 +74,7 @@ function graphicEqSVG(w, h) {
     const bw = (w - 40) / bands.length;
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
     <rect width="${w}" height="${h}" fill="#0f172a" rx="10"/>
-    <text x="${w/2}" y="18" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.35)" font-family="system-ui">GRAPHIC EQ — 10 BAND</text>
+    <text x="${w/2}" y="18" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.35)" font-family="system-ui">GRAPHIC EQ: 10 BAND</text>
     <line x1="20" y1="${mid}" x2="${w-20}" y2="${mid}" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
     ${bands.map((g, i) => {
         const x = 20 + i * bw + bw/2;

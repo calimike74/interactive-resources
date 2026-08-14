@@ -316,7 +316,7 @@
     if (state.chain.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'rack-empty';
-      empty.innerHTML = `<div>Empty rack &mdash; <em>add a module from the inventory below</em></div>`;
+      empty.innerHTML = `<div>Empty rack: <em>add a module from the inventory below</em></div>`;
       row.appendChild(empty);
     } else {
       state.chain.forEach((key, i) => {
@@ -441,7 +441,7 @@
 
     let detailHTML = '';
     if (state.selectedIdx === null || !state.chain[state.selectedIdx]) {
-      detailHTML = `<div class="detail empty"><p>Click a module in the rack to read what it does — and why it sits where it sits.</p></div>`;
+      detailHTML = `<div class="detail empty"><p>Click a module in the rack to read what it does, and why it sits where it sits.</p></div>`;
     } else {
       const key = state.chain[state.selectedIdx];
       const eff = EFFECTS[key];
@@ -484,7 +484,7 @@
     if (state.activePreset && PRESETS[state.activePreset]) {
       const p = PRESETS[state.activePreset];
       narrationEl.classList.add('shown');
-      narrationEl.innerHTML = `<div class="rack-foot-inner"><div class="accent-bar"></div><h3>${esc(p.name)} — why this order</h3><p>${esc(p.narration)}</p></div>`;
+      narrationEl.innerHTML = `<div class="rack-foot-inner"><div class="accent-bar"></div><h3>${esc(p.name)}: why this order</h3><p>${esc(p.narration)}</p></div>`;
     }
     diagEl.className = 'rack-foot';
     diagEl.innerHTML = '';

@@ -25,17 +25,17 @@ const CHECKPOINTS = [
             'Augmented Doubling Time',
         ],
         correctIndex: 1,
-        explanation: 'ADT = Automatic Double Tracking — a way to simulate the sound of a singer recording the same vocal twice without the singer having to do it.',
+        explanation: 'ADT = Automatic Double Tracking: a way to simulate the sound of a singer recording the same vocal twice without the singer having to do it.',
     },
     {
         id: 'q2-abbey-road-origin',
         timestamp: 100,
         question: 'Where and by whom was ADT invented in 1966?',
         options: [
-            'Sun Studios — Sam Phillips',
-            'Motown — Berry Gordy',
-            'Abbey Road — Ken Townsend',
-            'Decca Studios — George Martin',
+            'Sun Studios: Sam Phillips',
+            'Motown: Berry Gordy',
+            'Abbey Road: Ken Townsend',
+            'Decca Studios: George Martin',
         ],
         correctIndex: 2,
         explanation: 'Engineer Ken Townsend developed ADT at Abbey Road in 1966, reportedly because John Lennon disliked the labour of recording his vocals twice.',
@@ -51,7 +51,7 @@ const CHECKPOINTS = [
             '250 ms or more',
         ],
         correctIndex: 1,
-        explanation: 'ADT uses a short delay (~30–50 ms) — long enough to feel like a separate take, short enough that the brain still fuses it with the original rather than hearing a distinct echo.',
+        explanation: 'ADT uses a short delay (~30–50 ms): long enough to feel like a separate take, short enough that the brain still fuses it with the original rather than hearing a distinct echo.',
     },
     {
         id: 'q4-chorus-descendant',
@@ -64,7 +64,7 @@ const CHECKPOINTS = [
             'Distortion',
         ],
         correctIndex: 2,
-        explanation: 'Chorus is essentially ADT with modulation — a short delay whose time is varied by an LFO, producing the same thickening/widening character on a wider scale.',
+        explanation: 'Chorus is essentially ADT with modulation: a short delay whose time is varied by an LFO, producing the same thickening/widening character on a wider scale.',
     },
     {
         id: 'q5-musical-use-case',
@@ -77,7 +77,7 @@ const CHECKPOINTS = [
             'To compress the dynamic range of the vocal',
         ],
         correctIndex: 1,
-        explanation: 'ADT thickens and widens the vocal — it sits inside the fusion window, so the listener hears one bigger, fuller voice rather than two separate ones.',
+        explanation: 'ADT thickens and widens the vocal: it sits inside the fusion window, so the listener hears one bigger, fuller voice rather than two separate ones.',
     },
 ];
 
@@ -148,7 +148,7 @@ export default function ADTVideoOverviewClient() {
                         marginTop: '0.5rem',
                         lineHeight: 1.2,
                     }}>
-                        Automatic Double Tracking — Video Overview
+                        Automatic Double Tracking: Video Overview
                     </h1>
                     <p style={{
                         fontSize: typography.size.base,
@@ -157,7 +157,7 @@ export default function ADTVideoOverviewClient() {
                         lineHeight: 1.5,
                         maxWidth: '640px',
                     }}>
-                        Watch the video. It will pause to ask a few quick questions — answer and the video continues.
+                        Watch the video. It will pause to ask a few quick questions: answer and the video continues.
                         This is not a test; it's so I can see you've engaged with the material before our next lesson.
                     </p>
                 </div>

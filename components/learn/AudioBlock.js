@@ -41,7 +41,7 @@ export default function AudioBlock({ preset, params, label = 'Play to listen' })
                 }}
             >
                 <span aria-hidden="true" style={{ fontSize: '0.7rem' }}>{playing ? '■' : '▸'}</span>
-                {playing ? 'Playing — tap to stop' : label}
+                {playing ? 'Playing: tap to stop' : label}
             </button>
         </div>
     );

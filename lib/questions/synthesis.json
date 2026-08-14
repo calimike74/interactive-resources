@@ -7,7 +7,7 @@
       "question": "Which waveform contains only the fundamental frequency with no harmonics?",
       "options": ["Sine wave", "Sawtooth wave", "Square wave", "Triangle wave"],
       "correctIndex": 0,
-      "explanation": "A sine wave is the purest waveform — it contains only the fundamental frequency and no harmonic content. All other common waveforms (sawtooth, square, triangle) are combinations of multiple sine waves at different harmonics."
+      "explanation": "A sine wave is the purest waveform: it contains only the fundamental frequency and no harmonic content. All other common waveforms (sawtooth, square, triangle) are combinations of multiple sine waves at different harmonics."
     },
     {
       "id": "synthesis-mcq-02",
@@ -20,7 +20,7 @@
         "The fundamental only"
       ],
       "correctIndex": 0,
-      "explanation": "A sawtooth wave is harmonically the richest common waveform — it contains all harmonics (both odd and even) at decreasing amplitudes. This gives it a bright, buzzy character ideal as a starting point for subtractive synthesis."
+      "explanation": "A sawtooth wave is harmonically the richest common waveform: it contains all harmonics (both odd and even) at decreasing amplitudes. This gives it a bright, buzzy character ideal as a starting point for subtractive synthesis."
     },
     {
       "id": "synthesis-mcq-03",
@@ -59,7 +59,7 @@
         "The filter cutoff shifts one octave lower"
       ],
       "correctIndex": 0,
-      "explanation": "When resonance is increased to the point of self-oscillation, the filter feedback becomes so strong that it generates its own pitched tone — a sine wave at the cutoff frequency — even without any input signal."
+      "explanation": "When resonance is increased to the point of self-oscillation, the filter feedback becomes so strong that it generates its own pitched tone (a sine wave at the cutoff frequency) even without any input signal."
     },
     {
       "id": "synthesis-mcq-06",
@@ -72,7 +72,7 @@
         "Reverb"
       ],
       "correctIndex": 0,
-      "explanation": "An LFO (Low Frequency Oscillator) below 20Hz modulates a parameter cyclically. At 5Hz applied to pitch, it creates vibrato — a periodic wobble in pitch. Applied to amplitude it would create tremolo instead."
+      "explanation": "An LFO (Low Frequency Oscillator) below 20Hz modulates a parameter cyclically. At 5Hz applied to pitch, it creates vibrato: a periodic wobble in pitch. Applied to amplitude it would create tremolo instead."
     },
     {
       "id": "synthesis-num-01",
@@ -90,7 +90,7 @@
       "answer": 4,
       "tolerance": 0,
       "unit": "stages",
-      "explanation": "ADSR stands for Attack, Decay, Sustain, Release — four discrete stages. Each stage has a distinct role: Attack (time to peak), Decay (time to sustain level), Sustain (held level), Release (time to silence after note off)."
+      "explanation": "ADSR stands for Attack, Decay, Sustain, Release: four discrete stages. Each stage has a distinct role: Attack (time to peak), Decay (time to sustain level), Sustain (held level), Release (time to silence after note off)."
     },
     {
       "id": "synthesis-num-03",
@@ -107,7 +107,7 @@
       "question": "Explain the difference between additive and subtractive synthesis.",
       "sampleAnswer": "Additive synthesis builds a sound by adding together individual sine waves (harmonics) to create a complex tone. Subtractive synthesis starts with a harmonically rich waveform and removes unwanted harmonics using a filter to shape the timbre.",
       "keyPoints": ["additive builds up", "sine waves", "subtractive starts rich", "filter removes harmonics", "timbre"],
-      "explanation": "Additive synthesis works bottom-up — construct complexity from simple parts. Subtractive synthesis works top-down — start with complexity (sawtooth, square) and carve it down with filters. Subtractive is far more common in hardware and virtual synths because it is computationally cheaper and more intuitive to sculpt."
+      "explanation": "Additive synthesis works bottom-up: construct complexity from simple parts. Subtractive synthesis works top-down: start with complexity (sawtooth, square) and carve it down with filters. Subtractive is far more common in hardware and virtual synths because it is computationally cheaper and more intuitive to sculpt."
     },
     {
       "id": "synthesis-short-02",
@@ -123,7 +123,7 @@
       "question": "What is resonance on a filter, and how does it affect the sound?",
       "sampleAnswer": "Resonance boosts the frequencies around the filter's cutoff point, creating a peak in the frequency response. As resonance increases, this peak becomes more pronounced, giving the sound a ringing, nasal quality. At extreme settings, the filter can self-oscillate.",
       "keyPoints": ["boost at cutoff", "peak", "ringing", "nasal", "self-oscillation"],
-      "explanation": "Resonance (also called Q or emphasis) feeds some of the filter's output back into its input, amplifying the frequencies near the cutoff. This creates the characteristic 'wah' sweep sound when the cutoff is automated. At maximum resonance, the feedback sustains indefinitely — self-oscillation — generating a pure sine tone."
+      "explanation": "Resonance (also called Q or emphasis) feeds some of the filter's output back into its input, amplifying the frequencies near the cutoff. This creates the characteristic 'wah' sweep sound when the cutoff is automated. At maximum resonance, the feedback sustains indefinitely (self-oscillation) generating a pure sine tone."
     },
     {
       "id": "synthesis-mcq-07",
@@ -136,7 +136,7 @@
         "The number of harmonics from odd-only to all harmonics"
       ],
       "correctIndex": 1,
-      "explanation": "Pulse width (or duty cycle) is the ratio of time the waveform spends in its high state versus its low state. A 50% pulse width is a standard square wave. Narrowing the pulse width changes the harmonic content — introducing even harmonics and creating a thinner, more nasal timbre. Modulating the pulse width over time (PWM) produces the classic animated, chorus-like movement heard in many analogue synthesiser pads."
+      "explanation": "Pulse width (or duty cycle) is the ratio of time the waveform spends in its high state versus its low state. A 50% pulse width is a standard square wave. Narrowing the pulse width changes the harmonic content: introducing even harmonics and creating a thinner, more nasal timbre. Modulating the pulse width over time (PWM) produces the classic animated, chorus-like movement heard in many analogue synthesiser pads."
     },
     {
       "id": "synthesis-mcq-08",
@@ -149,7 +149,7 @@
         "To apply vibrato from an internal LFO"
       ],
       "correctIndex": 0,
-      "explanation": "Unison mode duplicates the oscillator voice multiple times and detunes each copy by a small amount (typically measured in cents). The slight pitch differences create phasing and beating between the copies, resulting in a thicker, fatter, wider sound. The more voices and greater detune amount, the bigger the effect — though at the cost of increased CPU usage and potential tuning vagueness."
+      "explanation": "Unison mode duplicates the oscillator voice multiple times and detunes each copy by a small amount (typically measured in cents). The slight pitch differences create phasing and beating between the copies, resulting in a thicker, fatter, wider sound. The more voices and greater detune amount, the bigger the effect: though at the cost of increased CPU usage and potential tuning vagueness."
     },
     {
       "id": "synthesis-mcq-09",
@@ -207,7 +207,7 @@
       "id": "synthesis-short-05",
       "type": "short",
       "question": "Describe what envelope retriggering means and explain how it affects a monophonic synthesiser patch when playing legato (overlapping notes).",
-      "sampleAnswer": "Envelope retriggering determines whether the ADSR envelope restarts from the beginning of the attack stage each time a new note is played. With retriggering enabled, every new note starts a fresh envelope regardless of whether the previous note is still held. With retriggering disabled (legato mode), playing overlapping notes causes the envelope to continue from its current position — only the pitch changes. This produces a smoother, more connected playing style because subsequent notes skip the attack stage and glide into the new pitch.",
+      "sampleAnswer": "Envelope retriggering determines whether the ADSR envelope restarts from the beginning of the attack stage each time a new note is played. With retriggering enabled, every new note starts a fresh envelope regardless of whether the previous note is still held. With retriggering disabled (legato mode), playing overlapping notes causes the envelope to continue from its current position: only the pitch changes. This produces a smoother, more connected playing style because subsequent notes skip the attack stage and glide into the new pitch.",
       "keyPoints": ["retrigger restarts envelope from attack", "legato mode continues envelope", "pitch changes but envelope does not restart", "smoother connected phrasing"],
       "explanation": "Retriggering behaviour is critical for expressive monophonic patches. Lead synth sounds often disable retriggering so that fast legato passages sound fluid rather than stuttered. Combined with portamento, this creates the classic sliding monosynth lead heard in many genres."
     }

@@ -480,7 +480,7 @@ export default function TopicPageClient({ topic, resources, reviseResources = []
                                                         fontSize: typography.size.xs,
                                                         color: t.text.tertiary,
                                                     }}>
-                                                        Answer every question once under timed conditions — you can&apos;t return to change answers.
+                                                        Answer every question once under timed conditions: you can&apos;t return to change answers.
                                                     </p>
                                                 </div>
                                             </div>
@@ -665,7 +665,7 @@ function ProgressCard({ progress, t }) {
                         lineHeight: 1,
                         marginBottom: spacing[1],
                     }}>
-                        {hasBestScore ? `${progress.bestScore}%` : '—'}
+                        {hasBestScore ? `${progress.bestScore}%` : '–'}
                     </p>
                     <p style={{
                         fontSize: typography.size.xs,
@@ -722,7 +722,7 @@ function ProgressCard({ progress, t }) {
                         lineHeight: 1,
                         marginBottom: spacing[1],
                     }}>
-                        {progress.lastScore !== null && progress.lastScore !== undefined ? `${progress.lastScore}%` : '—'}
+                        {progress.lastScore !== null && progress.lastScore !== undefined ? `${progress.lastScore}%` : '–'}
                     </p>
                     <p style={{
                         fontSize: typography.size.xs,

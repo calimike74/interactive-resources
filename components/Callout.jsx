@@ -138,7 +138,7 @@ export default function Callout({
                                 marginLeft: spacing[2],
                             }}
                         >
-                            — {title}
+                            : {title}
                         </span>
                     )}
                 </div>

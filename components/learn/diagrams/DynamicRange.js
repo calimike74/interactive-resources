@@ -171,7 +171,7 @@ export default function DynamicRange() {
                 ctx.fillStyle = '#16a34a';
                 ctx.font = 'bold 10px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('More consistent — smaller dynamic range', W / 2, H - 10);
+                ctx.fillText('More consistent: smaller dynamic range', W / 2, H - 10);
                 ctx.globalAlpha = 1;
             }
 

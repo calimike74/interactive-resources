@@ -44,7 +44,7 @@ const QUIZ_QUESTIONS = [
         question: 'In a 10-band graphic EQ, what interval separates each band?',
         options: ['Half octave', 'Third octave', 'One octave', 'Two octaves'],
         correct: 2,
-        explanation: 'Bands are separated by approximately one octave — each band is roughly double the previous one (31 → 63 → 125 Hz uses ISO standard centre frequencies).',
+        explanation: 'Bands are separated by approximately one octave: each band is roughly double the previous one (31 → 63 → 125 Hz uses ISO standard centre frequencies).',
     },
     {
         question: 'What can you adjust on each band of a graphic EQ?',

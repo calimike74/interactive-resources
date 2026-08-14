@@ -182,7 +182,7 @@ export default function HighPassLowPassFilters() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('The name says what passes — cut-off is already 3 dB down, not the start of the cut', W / 2, H - 8);
+                ctx.fillText('The name says what passes: cut-off is already 3 dB down, not the start of the cut', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

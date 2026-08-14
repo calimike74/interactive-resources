@@ -239,7 +239,7 @@ export default function ExamModeClient({ topic }) {
                                 color: t.text.secondary,
                                 lineHeight: typography.lineHeight.relaxed,
                             }}>
-                                Unanswered questions are submitted automatically when time runs out — you cannot revisit earlier questions.
+                                Unanswered questions are submitted automatically when time runs out: you cannot revisit earlier questions.
                             </p>
                         </div>
                         <button type="button"
@@ -520,7 +520,7 @@ export default function ExamModeClient({ topic }) {
                                 fontSize: typography.size.base,
                                 color: t.accent.info,
                             }}>
-                                Your answer is saved — compare it with the sample answer in your results.
+                                Your answer is saved: compare it with the sample answer in your results.
                             </p>
                         </div>
                     )}
@@ -712,8 +712,8 @@ function MCQOptions({ options, correctIndex, selectedIndex, showFeedback, onSele
                     borderColor = ED.accent;
                 }
 
-                const feedbackLabel = showFeedback && i === correctIndex ? ' — Correct answer'
-                    : showFeedback && i === selectedIndex && i !== correctIndex ? ' — Your answer (incorrect)'
+                const feedbackLabel = showFeedback && i === correctIndex ? ': Correct answer'
+                    : showFeedback && i === selectedIndex && i !== correctIndex ? ': Your answer (incorrect)'
                     : '';
 
                 // Roving tabindex: only the focused option (or selected, or first) is in tab order
@@ -1035,7 +1035,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                         const isSlow = timeTaken != null && avgTime > 0 && timeTaken > avgTime * 2;
                         const icon = response?.correct === true ? '✓'
                             : response?.correct === false ? '✗'
-                            : response ? '—' : '⊘';
+                            : response ? '–' : '⊘';
                         const color = response?.correct === true ? t.accent.success
                             : response?.correct === false ? t.accent.error
                             : response ? t.accent.info : t.text.tertiary;

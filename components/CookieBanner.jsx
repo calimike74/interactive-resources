@@ -66,7 +66,7 @@ export default function CookieBanner() {
                 Cookies on this site
             </p>
             <p style={{ margin: 0, marginBottom: 16, fontSize: 13, color: t.text.secondary, lineHeight: 1.5 }}>
-                One analytics cookie. No third parties. No personal info captured — the only thing we track is which tools get used.{' '}
+                One analytics cookie. No third parties. No personal info captured: the only thing we track is which tools get used.{' '}
                 <Link href="/privacy" style={{ color: t.text.link, textDecoration: 'underline' }}>
                     Read more
                 </Link>.

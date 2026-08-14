@@ -15,7 +15,7 @@ const CORRECT_ORDER = [
     { id: 'sound', text: 'Acoustic Sound', domain: 'acoustic', hint: 'Sound waves travel through the air from the source' },
     { id: 'mic', text: 'Microphone', domain: 'transducer', hint: 'Transducer: converts air pressure variations into an analogue electrical signal' },
     { id: 'adc', text: 'ADC', domain: 'conversion', hint: 'Analogue-to-Digital Converter: samples the signal and converts to binary data' },
-    { id: 'digital', text: 'Digital Processing (DAW)', domain: 'digital', hint: 'Editing, effects, mixing — all in the digital domain' },
+    { id: 'digital', text: 'Digital Processing (DAW)', domain: 'digital', hint: 'Editing, effects, mixing: all in the digital domain' },
     { id: 'dac', text: 'DAC', domain: 'conversion', hint: 'Digital-to-Analogue Converter: converts binary data back to a varying voltage' },
     { id: 'amp', text: 'Amplifier & Speakers', domain: 'transducer', hint: 'Transducer: converts electrical signal back into acoustic sound' },
 ];
@@ -350,7 +350,7 @@ export default function SignalChainBuilder() {
                     </KeyConcept>
                 ))}
                 <CopyAllNotes
-                    title="Signal Chain — Key Definitions (Section 2.4)"
+                    title="Signal Chain: Key Definitions (Section 2.4)"
                     notes={SIGNAL_CHAIN_DEFINITIONS}
                 />
             </div>
@@ -373,8 +373,8 @@ export default function SignalChainBuilder() {
                     lineHeight: typography.lineHeight.relaxed,
                 }}>
                     Signal chain ordering questions appear regularly in Edexcel papers. You need to know
-                    the <strong style={{ color: t.text.primary }}>six-stage sequence</strong> — acoustic sound,
-                    microphone, ADC, digital processing, DAC, amplifier and speakers — and understand where
+                    the <strong style={{ color: t.text.primary }}>six-stage sequence</strong> (acoustic sound,
+                    microphone, ADC, digital processing, DAC, amplifier and speakers) and understand where
                     each conversion happens. Remember: a digital signal <strong style={{ color: t.text.primary }}>must
                     always</strong> be converted back to analogue before you can hear it.
                 </p>

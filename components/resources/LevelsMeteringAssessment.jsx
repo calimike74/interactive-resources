@@ -17,7 +17,7 @@ const QUESTIONS = [
         question: 'Why are the numbers on a dB scale not evenly spaced?',
         options: [
             'The meter is broken.',
-            'The scale is logarithmic — each step represents a ratio, not an addition.',
+            'The scale is logarithmic: each step represents a ratio, not an addition.',
             'The numbers are random.',
             'To save space.',
         ],
@@ -35,7 +35,7 @@ const QUESTIONS = [
             'Multiplying by 10.',
         ],
         correctIndex: 1,
-        explanation: '+6 dB always doubles voltage, because 20 × log₁₀(2) ≈ 6. The ratio is what matters — doubling 0.1 V to 0.2 V is the same +6 dB as 1 V to 2 V.',
+        explanation: '+6 dB always doubles voltage, because 20 × log₁₀(2) ≈ 6. The ratio is what matters: doubling 0.1 V to 0.2 V is the same +6 dB as 1 V to 2 V.',
     },
     {
         id: 'lm-q3-rms-clipping',
@@ -61,7 +61,7 @@ const QUESTIONS = [
             'Only on vinyl.',
         ],
         correctIndex: 1,
-        explanation: 'Anything above 0 dBFS clips, regardless of the RMS level. The RMS sitting at -12 dBFS is irrelevant — the 5 ms transient at +2 dBFS chops the waveform flat at the digital ceiling.',
+        explanation: 'Anything above 0 dBFS clips, regardless of the RMS level. The RMS sitting at -12 dBFS is irrelevant: the 5 ms transient at +2 dBFS chops the waveform flat at the digital ceiling.',
     },
     {
         id: 'lm-q5-zero-vu-dbfs',
@@ -110,7 +110,7 @@ const QUESTIONS = [
             '×100',
         ],
         correctIndex: 2,
-        explanation: '+20 dB = ×10 voltage (because 20 × log₁₀(10) = 20). For comparison, +20 dB power = ×100. The voltage and power ratios are different — learn the shortcuts.',
+        explanation: '+20 dB = ×10 voltage (because 20 × log₁₀(10) = 20). For comparison, +20 dB power = ×100. The voltage and power ratios are different: learn the shortcuts.',
     },
     {
         id: 'lm-q9-rms-perceived-loudness',
@@ -132,7 +132,7 @@ const QUESTIONS = [
         // matching tick mark on the scale.
         question: 'The needle on the VU meter is pointing here. What dB value does it indicate? Click the matching tick on the scale.',
         correctDb: -3,
-        explanation: 'The needle is sitting on -3 dB. Remember: 0 VU is calibrated to around -18 dBFS, leaving headroom above it. -6 dB halves voltage (amplitude); -3 dB halves power — do not confuse them.',
+        explanation: 'The needle is sitting on -3 dB. Remember: 0 VU is calibrated to around -18 dBFS, leaving headroom above it. -6 dB halves voltage (amplitude); -3 dB halves power: do not confuse them.',
     },
 ];
 
@@ -298,7 +298,7 @@ export default function LevelsMeteringAssessment() {
                         Go to revision sign-in
                     </a>
                     <p className="mt-4 text-xs text-stone-500">
-                        (You can still try the quiz without signing in — but your results won&apos;t be saved.)
+                        (You can still try the quiz without signing in, but your results won&apos;t be saved.)
                     </p>
                     <button
                         type="button"
@@ -526,14 +526,14 @@ function ShortAnswer({ showFeedback, onSubmit, sampleAnswer, keyPoints, shortSel
                                     onClick={() => onSelfMark(true)}
                                     className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
                                 >
-                                    Yes — got it
+                                    Yes: got it
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => onSelfMark(false)}
                                     className="rounded-md bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700"
                                 >
-                                    No — needs review
+                                    No: needs review
                                 </button>
                             </div>
                         </div>
@@ -708,7 +708,7 @@ function ResultsScreen({ responses, questions, student, onRestart }) {
                         {scored.length < responses.length && ` · ${responses.length - scored.length} self-assessed`}
                     </p>
                     {student?.studentName === 'Guest' && (
-                        <p className="mt-1 text-xs text-stone-500">Guest mode — results were not saved.</p>
+                        <p className="mt-1 text-xs text-stone-500">Guest mode: results were not saved.</p>
                     )}
                 </div>
 
@@ -718,7 +718,7 @@ function ResultsScreen({ responses, questions, student, onRestart }) {
                         const r = responses[i];
                         const ok = r?.correct === true;
                         const wrong = r?.correct === false;
-                        const icon = ok ? '✓' : wrong ? '✗' : '—';
+                        const icon = ok ? '✓' : wrong ? '✗' : '–';
                         const badge = ok ? 'bg-emerald-100 text-emerald-700'
                             : wrong ? 'bg-rose-100 text-rose-700'
                             : 'bg-sky-100 text-sky-700';

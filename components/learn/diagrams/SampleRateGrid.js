@@ -52,8 +52,8 @@ export default function SampleRateGrid() {
         const sampleTs = (n) => Array.from({ length: n }, (_, i) => i / (n - 1));
 
         const PANELS = [
-            { midY: 95, amp: 32, labelY: 48, capY: 150, n: 25, label: 'High rate — dense samples', color: '#14b8a6', cap: '25 samples trace the fast wiggle faithfully' },
-            { midY: 215, amp: 32, labelY: 168, capY: 262, n: 7, label: 'Low rate — sparse samples', color: '#e85d75', cap: 'Only 7 samples — the wiggle is lost between them' },
+            { midY: 95, amp: 32, labelY: 48, capY: 150, n: 25, label: 'High rate: dense samples', color: '#14b8a6', cap: '25 samples trace the fast wiggle faithfully' },
+            { midY: 215, amp: 32, labelY: 168, capY: 262, n: 7, label: 'Low rate: sparse samples', color: '#e85d75', cap: 'Only 7 samples: the wiggle is lost between them' },
         ];
 
         const drawSmoothCurve = (midY, amp, alpha) => {

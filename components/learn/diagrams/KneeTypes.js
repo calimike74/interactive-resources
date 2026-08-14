@@ -147,7 +147,7 @@ export default function KneeTypes() {
                     ctx.font = '9px -apple-system, sans-serif';
                     ctx.fillText('Sharp angle', originX + plotW * 0.6, margin.top + 32);
                     ctx.fillStyle = '#6b7280';
-                    ctx.fillText('Precise — can sound obvious', originX + plotW * 0.6, margin.top + 44);
+                    ctx.fillText('Precise: can sound obvious', originX + plotW * 0.6, margin.top + 44);
 
                     // Circle at knee point
                     ctx.strokeStyle = '#e85d75';
@@ -184,7 +184,7 @@ export default function KneeTypes() {
                     ctx.font = '9px -apple-system, sans-serif';
                     ctx.fillText('Gradual curve', originX + plotW * 0.05, margin.top + 32);
                     ctx.fillStyle = '#6b7280';
-                    ctx.fillText('Musical — more transparent', originX + plotW * 0.05, margin.top + 44);
+                    ctx.fillText('Musical: more transparent', originX + plotW * 0.05, margin.top + 44);
 
                     // Bracket showing knee region
                     ctx.strokeStyle = 'rgba(37, 99, 235, 0.3)';
@@ -208,7 +208,7 @@ export default function KneeTypes() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Same ratio (4:1) — different transition', W / 2, H - 18);
+                ctx.fillText('Same ratio (4:1), different transition', W / 2, H - 18);
                 ctx.globalAlpha = 1;
             }
 

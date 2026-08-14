@@ -137,7 +137,7 @@ export default function ShelvingFilters() {
                     ctx.fillStyle = '#9B7530';
                     ctx.font = 'bold 9px -apple-system, sans-serif';
                     ctx.textAlign = 'left';
-                    ctx.fillText('Low Shelf — corner 200 Hz', margin.left, plotY - 4);
+                    ctx.fillText('Low Shelf: corner 200 Hz', margin.left, plotY - 4);
                     ctx.font = '8px -apple-system, sans-serif';
                     ctx.textAlign = 'left';
                     ctx.fillText('plateau below · flat 0 dB above', margin.left, plotY + plotH + 30);
@@ -163,7 +163,7 @@ export default function ShelvingFilters() {
                     ctx.fillStyle = '#0891b2';
                     ctx.font = 'bold 9px -apple-system, sans-serif';
                     ctx.textAlign = 'right';
-                    ctx.fillText('High Shelf — corner 8 kHz', W - margin.right, plotY - 4);
+                    ctx.fillText('High Shelf: corner 8 kHz', W - margin.right, plotY - 4);
                     ctx.font = '8px -apple-system, sans-serif';
                     ctx.textAlign = 'right';
                     ctx.fillText('flat 0 dB below · plateau above', W - margin.right, plotY + plotH + 30);
@@ -178,7 +178,7 @@ export default function ShelvingFilters() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('A shelf holds its new level flat — a filter keeps removing', W / 2, H - 8);
+                ctx.fillText('A shelf holds its new level flat: a filter keeps removing', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

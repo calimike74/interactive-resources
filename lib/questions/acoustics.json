@@ -29,7 +29,7 @@
       "id": "acoustics-short-02",
       "type": "short",
       "question": "A student is recording an acoustic guitar in a home studio and notices the recording sounds thin and boxy. Explain two likely causes of this problem and suggest a practical solution for each.",
-      "sampleAnswer": "First cause: the microphone may be pointed directly at the sound hole, which produces a boomy, resonant low-mid frequency (the Helmholtz resonance of the guitar body) that masks the natural tonal balance — the perceived 'boxiness'. Solution: reposition the microphone to aim at the 12th fret area, where the string overtones and body resonance are more balanced, producing a fuller, more natural sound. Second cause: the untreated room is producing strong early reflections from nearby walls that combine with the direct sound, causing comb filtering (frequency cancellation) that thins out the tone. Solution: add absorption panels or even a duvet behind the microphone position and to the sides to reduce first reflections reaching the mic.",
+      "sampleAnswer": "First cause: the microphone may be pointed directly at the sound hole, which produces a boomy, resonant low-mid frequency (the Helmholtz resonance of the guitar body) that masks the natural tonal balance: the perceived 'boxiness'. Solution: reposition the microphone to aim at the 12th fret area, where the string overtones and body resonance are more balanced, producing a fuller, more natural sound. Second cause: the untreated room is producing strong early reflections from nearby walls that combine with the direct sound, causing comb filtering (frequency cancellation) that thins out the tone. Solution: add absorption panels or even a duvet behind the microphone position and to the sides to reduce first reflections reaching the mic.",
       "keyPoints": [
         "mic aimed at sound hole captures boomy Helmholtz resonance",
         "repositioning to 12th fret gives a more balanced tone",
@@ -37,7 +37,7 @@
         "adding absorption reduces problematic reflections",
         "distance from walls affects reflection timing and severity"
       ],
-      "explanation": "Home studio acoustics are the most common source of recording problems. The guitar's sound hole radiates strong low-mid energy that can overwhelm close microphones — pointing slightly away captures a more balanced frequency spectrum. Room reflections arriving within a few milliseconds of the direct sound create destructive interference at certain frequencies, thinning the tone. Simple treatment (absorption at first reflection points) dramatically improves recording quality without expensive studio construction."
+      "explanation": "Home studio acoustics are the most common source of recording problems. The guitar's sound hole radiates strong low-mid energy that can overwhelm close microphones: pointing slightly away captures a more balanced frequency spectrum. Room reflections arriving within a few milliseconds of the direct sound create destructive interference at certain frequencies, thinning the tone. Simple treatment (absorption at first reflection points) dramatically improves recording quality without expensive studio construction."
     }
   ]
 }

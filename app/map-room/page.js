@@ -7,7 +7,7 @@ import MapRoomClient from './MapRoomClient';
 
 export const metadata = {
     title: 'The Map Room',
-    description: 'The whole of Component 4 drawn as one map — every concept in its place.',
+    description: 'The whole of Component 4 drawn as one map: every concept in its place.',
     robots: { index: true, follow: true },
 };
 

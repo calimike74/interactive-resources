@@ -118,7 +118,7 @@ export default function ClippingShapes() {
                     ctx.font = 'bold 9px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
                     ctx.fillText(
-                        panel.name === 'hard' ? 'Hard clipping — threshold at ±1.0' : 'Soft clipping — the same driven sine',
+                        panel.name === 'hard' ? 'Hard clipping: threshold at ±1.0' : 'Soft clipping: the same driven sine',
                         W / 2,
                         panel.labelY
                     );
@@ -178,8 +178,8 @@ export default function ClippingShapes() {
                     ctx.font = 'italic 8.5px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
                     const cap = panel.name === 'hard'
-                        ? 'Flat tops — everything past the threshold is simply cut off'
-                        : 'Rounded shoulders — the peak is gently compressed, never sliced flat';
+                        ? 'Flat tops: everything past the threshold is simply cut off'
+                        : 'Rounded shoulders: the peak is gently compressed, never sliced flat';
                     ctx.fillText(cap, W / 2, panel.capY);
                     ctx.globalAlpha = 1;
                 }

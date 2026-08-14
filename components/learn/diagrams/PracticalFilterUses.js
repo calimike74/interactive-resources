@@ -33,9 +33,9 @@ export default function PracticalFilterUses() {
         const topY = 26;
 
         const panels = [
-            { x: 20, y: topY, w: panelW, h: panelH, kind: 'hpf', color: '#9B7530', title: 'Vocal Rumble — HPF', sub: '80–120 Hz cut-off, plosives too', start: 20 },
-            { x: 20, y: topY + panelH + gap, w: panelW, h: panelH, kind: 'notch', color: '#DC2626', title: 'Mains Hum — Notches', sub: '50 Hz + harmonics (100, 150 Hz)', start: 200 },
-            { x: 20, y: topY + (panelH + gap) * 2, w: panelW, h: panelH, kind: 'bandpass', color: '#0891b2', title: 'Telephone Effect — Band-Pass', sub: 'creative — breakdowns & transitions', start: 380 },
+            { x: 20, y: topY, w: panelW, h: panelH, kind: 'hpf', color: '#9B7530', title: 'Vocal Rumble: HPF', sub: '80–120 Hz cut-off, plosives too', start: 20 },
+            { x: 20, y: topY + panelH + gap, w: panelW, h: panelH, kind: 'notch', color: '#DC2626', title: 'Mains Hum: Notches', sub: '50 Hz + harmonics (100, 150 Hz)', start: 200 },
+            { x: 20, y: topY + (panelH + gap) * 2, w: panelW, h: panelH, kind: 'bandpass', color: '#0891b2', title: 'Telephone Effect: Band-Pass', sub: 'creative: breakdowns & transitions', start: 380 },
         ];
 
         const drawPanel = (panel, appear) => {
@@ -153,7 +153,7 @@ export default function PracticalFilterUses() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Same filter shapes, different jobs — corrective and creative', W / 2, H - 8);
+                ctx.fillText('Same filter shapes, different jobs: corrective and creative', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

@@ -12,7 +12,7 @@
         "Note number, bit depth, and tempo"
       ],
       "correctIndex": 0,
-      "explanation": "A MIDI Note On message carries three pieces of data: the note number (0–127, identifying pitch), the velocity (0–127, indicating how hard the key was struck), and the channel (1–16, routing the message to the correct instrument). MIDI transmits performance data — not audio — so concepts like sample rate and bit depth do not apply."
+      "explanation": "A MIDI Note On message carries three pieces of data: the note number (0–127, identifying pitch), the velocity (0–127, indicating how hard the key was struck), and the channel (1–16, routing the message to the correct instrument). MIDI transmits performance data (not audio) so concepts like sample rate and bit depth do not apply."
     },
     {
       "id": "midi-mcq-02",
@@ -38,7 +38,7 @@
         "MIDI can only be used with hardware synthesisers, not software"
       ],
       "correctIndex": 1,
-      "explanation": "MIDI is a performance protocol — it records what was played (note number, when, how hard) but contains no sound itself. Audio records the actual waveform of a sound. Because MIDI files only store instructions rather than waveform data, they are typically much smaller than audio files. The sound produced from MIDI depends entirely on the playback device or software instrument."
+      "explanation": "MIDI is a performance protocol: it records what was played (note number, when, how hard) but contains no sound itself. Audio records the actual waveform of a sound. Because MIDI files only store instructions rather than waveform data, they are typically much smaller than audio files. The sound produced from MIDI depends entirely on the playback device or software instrument."
     },
     {
       "id": "midi-mcq-04",
@@ -51,7 +51,7 @@
         "Converts MIDI data into an audio waveform"
       ],
       "correctIndex": 2,
-      "explanation": "Quantisation moves the timing of MIDI notes so they fall on (or closer to) a rhythmic grid — for example, the nearest 16th note. It corrects timing imprecision from live playing. Pitch correction is a separate process. Velocity editing affects dynamics. Rendering MIDI to audio is called 'bouncing' or 'freezing'."
+      "explanation": "Quantisation moves the timing of MIDI notes so they fall on (or closer to) a rhythmic grid: for example, the nearest 16th note. It corrects timing imprecision from live playing. Pitch correction is a separate process. Velocity editing affects dynamics. Rendering MIDI to audio is called 'bouncing' or 'freezing'."
     },
     {
       "id": "midi-mcq-05",
@@ -104,7 +104,7 @@
       "answer": 1,
       "tolerance": 0,
       "unit": "CC number",
-      "explanation": "CC1 is the General MIDI standard assignment for the modulation wheel. It is one of the most commonly used continuous controllers, typically mapped to vibrato depth or filter modulation on synthesisers. Remembering key CC assignments — CC1 (mod wheel), CC7 (volume), CC11 (expression), CC64 (sustain) — is important for A-Level."
+      "explanation": "CC1 is the General MIDI standard assignment for the modulation wheel. It is one of the most commonly used continuous controllers, typically mapped to vibrato depth or filter modulation on synthesisers. Remembering key CC assignments (CC1 (mod wheel), CC7 (volume), CC11 (expression), CC64 (sustain)) is important for A-Level."
     },
     {
       "id": "midi-short-01",
@@ -117,7 +117,7 @@
         "Higher resolution than standard CC messages prevents audible 'stepping' in the pitch glide",
         "The centre value (no bend) is 8192 in 14-bit; the wheel returns to this position when released"
       ],
-      "explanation": "Pitch Bend is a dedicated MIDI message type separate from Control Change. Its 14-bit resolution (2^14 = 16,384 steps) is essential because pitch perception is highly sensitive — 7-bit resolution would produce audible stepped artefacts when bending smoothly between notes. This is why it has its own message status byte rather than sharing the CC format."
+      "explanation": "Pitch Bend is a dedicated MIDI message type separate from Control Change. Its 14-bit resolution (2^14 = 16,384 steps) is essential because pitch perception is highly sensitive. 7-bit resolution would produce audible stepped artefacts when bending smoothly between notes. This is why it has its own message status byte rather than sharing the CC format."
     },
     {
       "id": "midi-short-02",
@@ -141,7 +141,7 @@
         "1/16 note quantisation snaps note start times to the nearest sixteenth-note grid position",
         "This corrects timing inaccuracies from the live performance",
         "Swing offsets alternate grid positions (typically the 'off-beat' 16th notes) later in time",
-        "The result is a less rigid, more groove-based feel — higher swing = stronger shuffle"
+        "The result is a less rigid, more groove-based feel, higher swing = stronger shuffle"
       ],
       "explanation": "Straight quantisation alone can make a performance sound mechanical by placing all notes on perfectly even grid positions. Swing (sometimes called 'groove') reintroduces rhythmic feel by pushing alternate notes back in time by a percentage of the grid interval. A 50% swing value produces an exact triplet feel; values between 50–75% produce varying degrees of shuffle. This is widely used in hip-hop, jazz, and funk production."
     },
@@ -156,7 +156,7 @@
         "CC7 is only used in General MIDI; CC11 works in any MIDI specification"
       ],
       "correctIndex": 0,
-      "explanation": "CC7 sets the baseline volume level for a channel — think of it as the channel fader. CC11 (Expression) operates within that ceiling to add real-time dynamic shaping, such as swells and fades in an orchestral part. Using both together gives fine-grained control: CC7 sets the overall balance between instruments, and CC11 adds musical expression without disrupting the mix balance."
+      "explanation": "CC7 sets the baseline volume level for a channel: think of it as the channel fader. CC11 (Expression) operates within that ceiling to add real-time dynamic shaping, such as swells and fades in an orchestral part. Using both together gives fine-grained control: CC7 sets the overall balance between instruments, and CC11 adds musical expression without disrupting the mix balance."
     },
     {
       "id": "midi-mcq-08",
@@ -169,7 +169,7 @@
         "Channel aftertouch is a System Exclusive message; polyphonic aftertouch is a Channel Voice message"
       ],
       "correctIndex": 0,
-      "explanation": "Channel aftertouch transmits a single pressure value that affects all held notes on that channel equally — if you press harder, every sounding note responds. Polyphonic (key) aftertouch sends individual pressure data for each note, so pressing harder on one key in a chord can add vibrato to that note alone. Polyphonic aftertouch generates significantly more MIDI data and is less commonly supported on standard keyboards."
+      "explanation": "Channel aftertouch transmits a single pressure value that affects all held notes on that channel equally: if you press harder, every sounding note responds. Polyphonic (key) aftertouch sends individual pressure data for each note, so pressing harder on one key in a chord can add vibrato to that note alone. Polyphonic aftertouch generates significantly more MIDI data and is less commonly supported on standard keyboards."
     },
     {
       "id": "midi-mcq-09",
@@ -195,7 +195,7 @@
         "Type 0 files include audio data alongside MIDI; Type 1 files are MIDI-only"
       ],
       "correctIndex": 2,
-      "explanation": "A Type 0 SMF stores all MIDI data merged into one track, making it simple but harder to edit individual parts. A Type 1 SMF stores data on separate tracks (typically one per channel), preserving the multi-track arrangement from the DAW. Type 1 is preferred for editing and production work. Type 2 exists but is rarely used — it stores multiple independent patterns."
+      "explanation": "A Type 0 SMF stores all MIDI data merged into one track, making it simple but harder to edit individual parts. A Type 1 SMF stores data on separate tracks (typically one per channel), preserving the multi-track arrangement from the DAW. Type 1 is preferred for editing and production work. Type 2 exists but is rarely used: it stores multiple independent patterns."
     },
     {
       "id": "midi-num-04",
@@ -213,7 +213,7 @@
       "answer": 15,
       "tolerance": 0,
       "unit": "channels",
-      "explanation": "MPE reserves one channel as the master (for global messages like sustain pedal) and assigns the remaining channels as member channels — one per active note. With channel 1 as master, channels 2–16 provide 15 member channels. This means up to 15 notes can each have independent pitch bend, slide, and pressure data simultaneously. Some MPE implementations use two zones (upper and lower), reducing the available members per zone."
+      "explanation": "MPE reserves one channel as the master (for global messages like sustain pedal) and assigns the remaining channels as member channels, one per active note. With channel 1 as master, channels 2–16 provide 15 member channels. This means up to 15 notes can each have independent pitch bend, slide, and pressure data simultaneously. Some MPE implementations use two zones (upper and lower), reducing the available members per zone."
     },
     {
       "id": "midi-short-04",
@@ -221,27 +221,27 @@
       "question": "Explain what MIDI 2.0 improves over the original MIDI 1.0 specification, and why these improvements matter for modern music production.",
       "sampleAnswer": "MIDI 2.0 increases resolution from 7-bit (128 values) to up to 32-bit for velocity and controller data, virtually eliminating audible stepping in parameter changes. It introduces bidirectional communication so devices can query each other's capabilities and auto-configure. It also adds per-note controllers (building on MPE concepts) and backwards compatibility with MIDI 1.0 devices.",
       "keyPoints": [
-        "Higher resolution — up to 32-bit for velocity and CC data (vs 7-bit in MIDI 1.0)",
-        "Bidirectional communication — devices negotiate capabilities automatically",
+        "Higher resolution: up to 32-bit for velocity and CC data (vs 7-bit in MIDI 1.0)",
+        "Bidirectional communication: devices negotiate capabilities automatically",
         "Per-note controllers natively supported (pitch bend, pressure per note)",
         "Backwards compatible with MIDI 1.0 devices and software",
         "Eliminates audible stepping artefacts in fine controller movements"
       ],
-      "explanation": "MIDI 1.0 was designed in 1983 and its 7-bit resolution (128 steps) is a limitation for expressive performance — subtle fader moves or pitch bends can sound 'stepped'. MIDI 2.0 (ratified in 2020) addresses this with vastly higher resolution. Bidirectional communication means a controller can ask a synthesiser what parameters it supports and map them automatically, reducing manual setup. Per-note articulation is now a core feature rather than a workaround (as MPE was)."
+      "explanation": "MIDI 1.0 was designed in 1983 and its 7-bit resolution (128 steps) is a limitation for expressive performance: subtle fader moves or pitch bends can sound 'stepped'. MIDI 2.0 (ratified in 2020) addresses this with vastly higher resolution. Bidirectional communication means a controller can ask a synthesiser what parameters it supports and map them automatically, reducing manual setup. Per-note articulation is now a core feature rather than a workaround (as MPE was)."
     },
     {
       "id": "midi-short-05",
       "type": "short",
       "question": "A keyboard player notices that when they strike keys with varying force, the synthesiser responds differently depending on the selected velocity curve. Explain what a velocity curve is and describe how linear, logarithmic, and fixed curves differ in their musical effect.",
-      "sampleAnswer": "A velocity curve maps the physical force of a key strike to the MIDI velocity value sent. A linear curve provides a directly proportional response — medium force produces medium velocity. A logarithmic curve reaches higher velocity values more quickly with less force, making it easier to play loudly and suiting players with a lighter touch. A fixed curve ignores the physical force entirely and sends the same velocity value for every note, which is useful for parts that require uniform dynamics such as sequenced synthesiser lines.",
+      "sampleAnswer": "A velocity curve maps the physical force of a key strike to the MIDI velocity value sent. A linear curve provides a directly proportional response: medium force produces medium velocity. A logarithmic curve reaches higher velocity values more quickly with less force, making it easier to play loudly and suiting players with a lighter touch. A fixed curve ignores the physical force entirely and sends the same velocity value for every note, which is useful for parts that require uniform dynamics such as sequenced synthesiser lines.",
       "keyPoints": [
         "Velocity curve maps physical key force to MIDI velocity value",
-        "Linear: proportional — medium force = medium velocity",
+        "Linear: proportional, medium force = medium velocity",
         "Logarithmic: reaches higher values quickly with lighter touch",
         "Fixed: constant velocity regardless of how hard the key is struck",
         "Choice depends on playing style and musical context"
       ],
-      "explanation": "Velocity curves are set on the controller (keyboard), not the receiving instrument. They do not change the MIDI data format — they change the relationship between physical gesture and transmitted value. An exponential curve (opposite of logarithmic) requires harder playing to reach high velocities, suiting heavy-handed players. Understanding velocity curves helps students troubleshoot why the same keyboard can feel very different with different settings or when connected to different software instruments."
+      "explanation": "Velocity curves are set on the controller (keyboard), not the receiving instrument. They do not change the MIDI data format: they change the relationship between physical gesture and transmitted value. An exponential curve (opposite of logarithmic) requires harder playing to reach high velocities, suiting heavy-handed players. Understanding velocity curves helps students troubleshoot why the same keyboard can feel very different with different settings or when connected to different software instruments."
     }
   ]
 }

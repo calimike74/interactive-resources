@@ -159,7 +159,7 @@ function ReadThenQuizInner() {
                     lineHeight: typography.lineHeight.relaxed,
                     marginBottom: spacing[6],
                 }}>
-                    You&apos;ll read a short passage about {topic.title.toLowerCase()}, then answer questions from memory. The passage will disappear before the questions appear — so read carefully!
+                    You&apos;ll read a short passage about {topic.title.toLowerCase()}, then answer questions from memory. The passage will disappear before the questions appear, so read carefully!
                 </p>
 
                 <div style={{

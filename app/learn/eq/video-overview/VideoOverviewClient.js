@@ -119,7 +119,7 @@ export default function VideoOverviewClient() {
                         marginTop: '0.5rem',
                         lineHeight: 1.2,
                     }}>
-                        EQ &amp; Filters — Video Overview
+                        EQ &amp; Filters: Video Overview
                     </h1>
                     <p style={{
                         fontSize: typography.size.base,
@@ -157,7 +157,7 @@ export default function VideoOverviewClient() {
                     }}>
                         <iframe
                             src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?rel=0&modestbranding=1`}
-                            title="EQ & Filters — Video Overview"
+                            title="EQ & Filters: Video Overview"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                             style={{
@@ -197,7 +197,7 @@ export default function VideoOverviewClient() {
                                 fontWeight: typography.weight.semibold,
                                 color: t.text.secondary,
                             }}>
-                                Key Terms — tap each one as you hear it discussed
+                                Key Terms: tap each one as you hear it discussed
                             </span>
                         </div>
                         <span style={{

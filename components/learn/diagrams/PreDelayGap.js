@@ -109,10 +109,10 @@ export default function PreDelayGap() {
                 ctx.fillStyle = '#14b8a6';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('80 ms — pre-delay', (dryX + wetX0) / 2, timelineY + 44);
+                ctx.fillText('80 ms: pre-delay', (dryX + wetX0) / 2, timelineY + 44);
                 ctx.fillStyle = '#9ca3af';
                 ctx.font = 'italic 8px -apple-system, sans-serif';
-                ctx.fillText('silence — nothing repeats here', (dryX + wetX0) / 2, timelineY + 56);
+                ctx.fillText('silence: nothing repeats here', (dryX + wetX0) / 2, timelineY + 56);
                 ctx.globalAlpha = 1;
             }
 
@@ -145,7 +145,7 @@ export default function PreDelayGap() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Not an echo — the onset is a wash, not a repeat spike', W / 2, timelineY + 78);
+                ctx.fillText('Not an echo: the onset is a wash, not a repeat spike', W / 2, timelineY + 78);
                 ctx.globalAlpha = 1;
             }
 

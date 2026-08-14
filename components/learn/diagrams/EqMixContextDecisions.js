@@ -179,7 +179,7 @@ export default function EqMixContextDecisions() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('A mix-context decision — each part earns its own room', W / 2, H - 8);
+                ctx.fillText('A mix-context decision: each part earns its own room', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

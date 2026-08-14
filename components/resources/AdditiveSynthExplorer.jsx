@@ -560,7 +560,7 @@ export default function AdditiveSynthExplorer() {
                                 margin: 0,
                             }}
                         >
-                            Each harmonic keeps its own colour — here as a spinning circle, and in the
+                            Each harmonic keeps its own colour: here as a spinning circle, and in the
                             spectrum below as a matching bar. Stack the circles and the last point traces
                             out the wave across the screen.
                         </p>
@@ -666,7 +666,7 @@ export default function AdditiveSynthExplorer() {
                                 textAlign: 'right',
                             }}
                         >
-                            Same note every time — only the timbre changes.
+                            Same note every time: only the timbre changes.
                         </span>
                     </div>
                 </section>
@@ -738,11 +738,11 @@ export default function AdditiveSynthExplorer() {
                         >
                             {recipe ? (
                                 <>
-                                    <strong style={{ color: C.text }}>{recipe.label}</strong> — {recipe.desc}
+                                    <strong style={{ color: C.text }}>{recipe.label}</strong>: {recipe.desc}
                                 </>
                             ) : (
                                 <>
-                                    <strong style={{ color: C.text }}>Your own blend</strong> — mixed from the
+                                    <strong style={{ color: C.text }}>Your own blend</strong>: mixed from the
                                     eight harmonic sliders below.
                                 </>
                             )}
@@ -766,7 +766,7 @@ export default function AdditiveSynthExplorer() {
                             />
                         </div>
                         <p style={{ margin: '10px 0 0', color: C.muted, fontSize: '0.84rem', maxWidth: '64ch' }}>
-                            Each bar is one harmonic&apos;s strength — the same colour as its circle above.
+                            Each bar is one harmonic&apos;s strength: the same colour as its circle above.
                             This bar-code <strong style={{ color: C.text, fontWeight: 600 }}>is</strong>{' '}
                             the timbre; a DAW&apos;s spectrum analyser shows you the same thing for any
                             recording.
@@ -776,7 +776,7 @@ export default function AdditiveSynthExplorer() {
 
                 {/* ── build your own ───────────────────────────────────────── */}
                 <section style={{ ...card, marginBottom: '18px' }}>
-                    <h2 style={h2}>Build your own — nudge the eight harmonics</h2>
+                    <h2 style={h2}>Build your own: nudge the eight harmonics</h2>
                     <div
                         style={{
                             display: 'grid',
@@ -869,7 +869,7 @@ export default function AdditiveSynthExplorer() {
                             }}
                         >
                             <strong style={{ color: C.text, display: 'block', marginBottom: '3px' }}>
-                                1.3 Synthesis — additive
+                                1.3 Synthesis: additive
                             </strong>
                             This whole page is additive synthesis: build a rich timbre by stacking simple
                             tones above the base note, one slider per harmonic.
@@ -887,7 +887,7 @@ export default function AdditiveSynthExplorer() {
                             <strong style={{ color: C.text, display: 'block', marginBottom: '3px' }}>
                                 1.11 EQ
                             </strong>
-                            Every EQ move — cut, boost, shelf — changes the height of certain bars on this
+                            Every EQ move (cut, boost, shelf) changes the height of certain bars on this
                             spectrum. Brighter means taller bars on the right; warmer means shorter ones.
                         </li>
                         <li
@@ -904,7 +904,7 @@ export default function AdditiveSynthExplorer() {
                                 The spectrum analyser
                             </strong>
                             Every DAW has one. Point it at any recording and it shows this same bar-chart of
-                            what is in the sound — the picture you are building here, read the other way
+                            what is in the sound: the picture you are building here, read the other way
                             round.
                         </li>
                     </ul>

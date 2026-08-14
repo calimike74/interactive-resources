@@ -153,7 +153,7 @@ export default function BalancedNoiseRejection() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('On the cable — hot and cold both pick up the same noise', W / 2, PANEL_A.labelY);
+                ctx.fillText('On the cable: hot and cold both pick up the same noise', W / 2, PANEL_A.labelY);
                 ctx.globalAlpha = 1;
             }
             drawZero(PANEL_A, progress(f, PHASE.zeroA, 15));
@@ -184,7 +184,7 @@ export default function BalancedNoiseRejection() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('At the receiver — flip cold back, then add it to hot', W / 2, PANEL_B.labelY);
+                ctx.fillText('At the receiver: flip cold back, then add it to hot', W / 2, PANEL_B.labelY);
                 ctx.globalAlpha = 1;
             }
             drawZero(PANEL_B, labelBP);
@@ -202,7 +202,7 @@ export default function BalancedNoiseRejection() {
                 ctx.fillStyle = '#16a34a';
                 ctx.font = 'italic bold 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Noise cancels, signal doubles — the green trace is hot + flipped cold', W / 2, PANEL_B.capY);
+                ctx.fillText('Noise cancels, signal doubles: the green trace is hot + flipped cold', W / 2, PANEL_B.capY);
                 ctx.globalAlpha = 1;
             }
 

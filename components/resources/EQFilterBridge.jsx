@@ -226,7 +226,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
         <div
             role="button"
             tabIndex={0}
-            aria-label={`${concept.term} — press to reveal definition`}
+            aria-label={`${concept.term}: press to reveal definition`}
             aria-pressed={isFlipped}
             onClick={onFlip}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onFlip()}
@@ -1225,7 +1225,7 @@ const Part4Practice = () => {
             setFeedback("Excellent! Your curve shape is very accurate. You clearly understand this filter type.");
         } else if (accuracy >= 70) {
             if (challenge.type === 'bell' || challenge.type === 'notch') {
-                setFeedback(`Good work! The overall shape is right. Check how wide your curve is — Q = ${challenge.q} means a ${challenge.q > 2 ? 'narrow' : 'wide'} peak.`);
+                setFeedback(`Good work! The overall shape is right. Check how wide your curve is: Q = ${challenge.q} means a ${challenge.q > 2 ? 'narrow' : 'wide'} peak.`);
             } else {
                 setFeedback("Good work! The overall shape is right. Check the steepness of the slope.");
             }
@@ -1700,10 +1700,10 @@ const Part4Practice = () => {
                                 color: score >= 70 ? '#34d399' : score >= 50 ? '#fbbf24' : '#ef4444',
                                 fontFamily: 'monospace'
                             }}>
-                                {score !== null ? `${score}%` : '—'}
+                                {score !== null ? `${score}%` : '–'}
                             </div>
                             <div style={{ fontSize: '1rem', fontWeight: '600', color: '#f8f9fa' }}>
-                                {score >= 85 ? 'Excellent!' : score >= 70 ? 'Good work!' : score >= 50 ? 'Getting there!' : 'Keep practicing!'}
+                                {score >= 85 ? 'Excellent!' : score >= 70 ? 'Good work!' : score >= 50 ? 'Getting there!' : 'Keep practising!'}
                             </div>
                         </div>
                         {feedback && (

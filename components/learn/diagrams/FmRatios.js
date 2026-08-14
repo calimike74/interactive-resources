@@ -90,7 +90,7 @@ export default function FmRatios() {
                 ctx.textAlign = 'center';
                 ctx.fillText(`ratio ${ratio.toFixed(2)}`, W / 2, 42);
                 ctx.font = '10px -apple-system, sans-serif';
-                ctx.fillText(isHarmonic ? 'harmonic — musical' : 'inharmonic — bell-like, metallic', W / 2, 56);
+                ctx.fillText(isHarmonic ? 'harmonic: musical' : 'inharmonic: bell-like, metallic', W / 2, 56);
 
                 // Track
                 const trackY = 74;
@@ -154,7 +154,7 @@ export default function FmRatios() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Spectrum — sideband positions around the carrier', specLeft, specTop - 16);
+                ctx.fillText('Spectrum: sideband positions around the carrier', specLeft, specTop - 16);
 
                 // Dashed harmonic grid — every whole-number position
                 ctx.strokeStyle = '#e5e7eb';

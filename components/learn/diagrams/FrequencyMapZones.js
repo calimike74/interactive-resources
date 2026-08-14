@@ -144,7 +144,7 @@ export default function FrequencyMapZones() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Approximate zones, not hard lines — sources disagree on the exact edges', W / 2, stripY + stripH + 44);
+                ctx.fillText('Approximate zones, not hard lines: sources disagree on the exact edges', W / 2, stripY + stripH + 44);
                 ctx.globalAlpha = 1;
             }
 

@@ -40,10 +40,10 @@ function TopicWayOut({ dest }) {
                 <p className="text-[12px] leading-snug" style={{ color: '#55594A' }}>
                     <span aria-hidden style={{ color: '#9B7530' }}>⬦ </span>
                     {hasCounts
-                        ? <>The full topic — {chapters} chapters, {papers} past-paper questions
-                            with mark schemes and {traps} examiner traps — is part of membership.</>
-                        : <>The full topic — past-paper questions with mark schemes and examiner
-                            traps — is part of membership.</>}
+                        ? <>The full topic ({chapters} chapters, {papers} past-paper questions
+                            with mark schemes and {traps} examiner traps) is part of membership.</>
+                        : <>The full topic (past-paper questions with mark schemes and examiner
+                            traps) is part of membership.</>}
                 </p>
                 <a href="https://member.musictechstudio.co.uk/"
                     className="mt-1.5 inline-block text-[13px] font-medium"
@@ -371,7 +371,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                         The Map Room
                     </h1>
                     <p className="mt-1 text-[13px] leading-snug" style={{ color: ROOM.inkSoft }}>
-                        The whole of Component&nbsp;4, hung in one room — every concept in its place.
+                        The whole of Component&nbsp;4, hung in one room: every concept in its place.
                     </p>
                     {!bottomRail && (
                         <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -445,7 +445,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                 <div className="absolute right-6 top-20 w-[min(320px,calc(100vw-48px))] rounded-xl border p-4 shadow-lg"
                     style={{ background: ROOM.paper, borderColor: ROOM.line }}>
                     <div className="text-[11px] uppercase tracking-wide" style={{ color: '#6B6F5C' }}>
-                        Exam routes — real Question 6s
+                        Exam routes: real Question 6s
                     </div>
                     <p className="mt-1 text-[12px] leading-snug" style={{ color: '#6B6F5C' }}>
                         Every 20-marker is a journey across the room, not a visit to one island.
@@ -457,7 +457,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                                 className="block w-full py-2.5 text-left">
                                 <div className="text-[14px] font-semibold"
                                     style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', color: ROOM.paperInk }}>
-                                    {r.year} — {r.title}
+                                    {r.year}: {r.title}
                                 </div>
                                 <div className="mt-0.5 text-[11.5px] leading-snug" style={{ color: '#6B6F5C' }}>
                                     {r.stem}
@@ -484,7 +484,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                     ) : (
                         <>
                             drag to turn the room · scroll to zoom · ← → walk the spec<br />
-                            grab any node and pull — the map moves with it
+                            grab any node and pull: the map moves with it
                             {soundOn && <><br />hover a green, gold or blue topic to hear it</>}
                         </>
                     )}
@@ -510,7 +510,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                         {cardNode.kind === 'topic'
                             ? `Topic ${cardNode.parent} · ${cardFamily?.label ?? ''}`
                             : cardNode.hub
-                                ? 'Shared idea — lives in more than one topic'
+                                ? 'Shared idea: lives in more than one topic'
                                 : `Inside ${cardNode.parent} ${cardTopic?.label ?? ''}`}
                     </div>
                     <div className={cardNode.kind === 'topic' ? 'mt-1 text-[21px] font-semibold leading-tight' : 'mt-0.5 text-[16px] font-semibold'}
@@ -669,7 +669,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                             </p>
                             <div className="mt-1 text-[10.5px] tracking-wide"
                                 style={{ color: '#6B6F5C', fontFamily: 'var(--font-geist-mono), monospace' }}>
-                                Step {routeState.step + 1} of {route.steps.length} · {route.year} — {route.title} · {route.marks} marks
+                                Step {routeState.step + 1} of {route.steps.length} · {route.year}: {route.title} · {route.marks} marks
                             </div>
                         </div>
                         <button type="button" aria-label="Next step"

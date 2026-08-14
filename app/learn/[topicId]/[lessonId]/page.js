@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-        title: `${lesson.title} — ${lesson.subtitle}`,
+        title: `${lesson.title}: ${lesson.subtitle}`,
         description: lesson.description,
     };
 }

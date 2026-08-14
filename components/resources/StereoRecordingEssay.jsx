@@ -49,7 +49,7 @@ const EXTENSION_TOPICS = [
     {
         id: 'phase-cancellation',
         label: 'Phase Cancellation',
-        description: 'When two microphones pick up the same source at different distances, the signals arrive at different times. If the peaks of one waveform align with the troughs of another, frequencies cancel out — thinning the sound. This is why checking phase relationships between overheads and close mics is critical.',
+        description: 'When two microphones pick up the same source at different distances, the signals arrive at different times. If the peaks of one waveform align with the troughs of another, frequencies cancel out, thinning the sound. This is why checking phase relationships between overheads and close mics is critical.',
     },
 ];
 
@@ -74,7 +74,7 @@ const SELF_ASSESSMENT = [
 
 const MIN_CHECKED_TO_REVEAL = 4;
 
-const MODEL_ANSWER = 'Spaced pair (AB) uses two microphones positioned apart from each other, so the stereo image is created by tiny time-of-arrival differences as sound reaches each capsule. This produces a wide, spacious image with a strong sense of the room, making it well suited to orchestral or large-ensemble recording where ambience matters. However, because the image relies on timing rather than level, summing the signal to mono can cause phase cancellation, thinning or colouring the sound — a real risk in broadcast or streaming contexts where mono playback is still common.\n\nCoincident pair (XY) places two directional microphones with their capsules as close together as possible, angled apart so the stereo image is created by intensity differences alone rather than timing. Because both capsules receive the sound at effectively the same moment, XY collapses to mono with excellent phase coherence and no cancellation. The trade-off is a narrower, less enveloping image than a spaced pair, so XY suits situations demanding mono compatibility and accurate localisation — close-miked ensembles or broadcast interviews — more than it suits capturing room ambience.\n\nMid-side (MS) combines a forward-facing cardioid microphone (the mid signal) with a sideways-facing figure-of-eight microphone (the side signal). The stereo image is not fixed at the point of recording: after capture, the engineer decodes it by creating Left = Mid + Side and Right = Mid − Side, so stereo width can be adjusted, or collapsed entirely, during mixing. Removing the side signal leaves a pure mono mid signal with no phase issues at all, which is exactly why mid-side is particularly valued in broadcast work, where mono compatibility and post-recording flexibility both matter more than a fixed, maximally wide image.\n\nOverall, spaced pair prioritises width and ambience at the cost of mono safety; XY prioritises mono compatibility and accuracy at the cost of width; and mid-side offers both by deferring the width decision to the mix, at the cost of a slightly more complex setup and decoding stage. The right choice depends on the scenario: spaced pair for spacious orchestral capture where mono playback is unlikely, XY for broadcast or close-miked work needing guaranteed mono compatibility, and mid-side wherever post-production flexibility matters, such as any release that needs both stereo and mono versions.';
+const MODEL_ANSWER = 'Spaced pair (AB) uses two microphones positioned apart from each other, so the stereo image is created by tiny time-of-arrival differences as sound reaches each capsule. This produces a wide, spacious image with a strong sense of the room, making it well suited to orchestral or large-ensemble recording where ambience matters. However, because the image relies on timing rather than level, summing the signal to mono can cause phase cancellation, thinning or colouring the sound: a real risk in broadcast or streaming contexts where mono playback is still common.\n\nCoincident pair (XY) places two directional microphones with their capsules as close together as possible, angled apart so the stereo image is created by intensity differences alone rather than timing. Because both capsules receive the sound at effectively the same moment, XY collapses to mono with excellent phase coherence and no cancellation. The trade-off is a narrower, less enveloping image than a spaced pair, so XY suits situations demanding mono compatibility and accurate localisation (close-miked ensembles or broadcast interviews) more than it suits capturing room ambience.\n\nMid-side (MS) combines a forward-facing cardioid microphone (the mid signal) with a sideways-facing figure-of-eight microphone (the side signal). The stereo image is not fixed at the point of recording: after capture, the engineer decodes it by creating Left = Mid + Side and Right = Mid − Side, so stereo width can be adjusted, or collapsed entirely, during mixing. Removing the side signal leaves a pure mono mid signal with no phase issues at all, which is exactly why mid-side is particularly valued in broadcast work, where mono compatibility and post-recording flexibility both matter more than a fixed, maximally wide image.\n\nOverall, spaced pair prioritises width and ambience at the cost of mono safety; XY prioritises mono compatibility and accuracy at the cost of width; and mid-side offers both by deferring the width decision to the mix, at the cost of a slightly more complex setup and decoding stage. The right choice depends on the scenario: spaced pair for spacious orchestral capture where mono playback is unlikely, XY for broadcast or close-miked work needing guaranteed mono compatibility, and mid-side wherever post-production flexibility matters, such as any release that needs both stereo and mono versions.';
 
 export default function StereoRecordingEssay() {
     const t = theme.light;
@@ -189,7 +189,7 @@ export default function StereoRecordingEssay() {
                         lineHeight: typography.lineHeight.relaxed,
                         maxWidth: '480px', margin: '0 auto',
                     }}>
-                        16-mark extended response — AO3 &amp; AO4
+                        16-mark extended response: AO3 &amp; AO4
                     </p>
                 </div>
             </div>
@@ -291,7 +291,7 @@ export default function StereoRecordingEssay() {
                     color: t.text.tertiary,
                     margin: `${spacing[3]} 0 0`,
                 }}>
-                    Total: 16 marks — AO3 (5 marks) + AO4 (11 marks)
+                    Total: 16 marks, AO3 (5 marks) + AO4 (11 marks)
                 </p>
             </div>
 
@@ -342,7 +342,7 @@ export default function StereoRecordingEssay() {
                                 fontWeight: typography.weight.semibold,
                                 color: t.accent.warning,
                             }}>
-                                Extension — Advanced Techniques
+                                Extension: Advanced Techniques
                             </span>
                             <span style={{
                                 fontSize: typography.size.xs,
@@ -449,7 +449,7 @@ export default function StereoRecordingEssay() {
                                         {section.guidance}
                                     </p>
                                 )}
-                                <textarea aria-label={`Your essay response — ${section.label}`}
+                                <textarea aria-label={`Your essay response: ${section.label}`}
                                     value={essayContent[section.id] || ''}
                                     onChange={(e) => updateSection(section.id, e.target.value)}
                                     placeholder={section.placeholder}

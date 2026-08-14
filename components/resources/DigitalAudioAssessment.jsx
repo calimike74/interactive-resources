@@ -26,7 +26,7 @@ const QUESTIONS = [
     {
         id: 'da-q1',
         type: 'numeric',
-        section: 'File size — ratio shortcut',
+        section: 'File size: ratio shortcut',
         question: 'A 10 MB mono 44.1 kHz 16-bit .wav file is converted to stereo (everything else unchanged). What is the new file size in MB?',
         answer: 20,
         tolerance: 0,
@@ -36,7 +36,7 @@ const QUESTIONS = [
     {
         id: 'da-q2',
         type: 'numeric',
-        section: 'File size — multi-property ratio',
+        section: 'File size: multi-property ratio',
         question: 'Starting from the same 10 MB mono 44.1 kHz 16-bit .wav, convert to stereo, 88.2 kHz, 24-bit. New file size in MB?',
         answer: 60,
         tolerance: 0,
@@ -55,7 +55,7 @@ const QUESTIONS = [
             'B, C, A, D',
         ],
         correctIndex: 0,
-        explanation: 'CD (C) is uncompressed PCM at full bandwidth — best. AAC at 320 kbps (A) is near-transparent lossy. mp3 at 160 kbps (D) has audible artefacts. AIFF at 4-bit (B) is worst because bit depth destroys dynamic range — uncompressed does NOT guarantee best.',
+        explanation: 'CD (C) is uncompressed PCM at full bandwidth: best. AAC at 320 kbps (A) is near-transparent lossy. mp3 at 160 kbps (D) has audible artefacts. AIFF at 4-bit (B) is worst because bit depth destroys dynamic range: uncompressed does NOT guarantee best.',
     },
     {
         id: 'da-q4',
@@ -69,7 +69,7 @@ const QUESTIONS = [
             'Lossy compression',
         ],
         correctIndex: 3,
-        explanation: 'AAC (along with mp3 and Ogg Vorbis) uses a psychoacoustic model to discard data deemed inaudible — this is lossy compression. Dynamic compression is a mix tool, not a file-format process.',
+        explanation: 'AAC (along with mp3 and Ogg Vorbis) uses a psychoacoustic model to discard data deemed inaudible: this is lossy compression. Dynamic compression is a mix tool, not a file-format process.',
     },
     {
         id: 'da-q5',
@@ -90,9 +90,9 @@ const QUESTIONS = [
         type: 'short',
         section: 'Audio artefacts',
         question: 'Define what an audio artefact is.',
-        sampleAnswer: 'An unwanted sonic material caused by editing, processing or a digital process — a sound introduced into the signal that was not present in the original. Aliasing is an example.',
+        sampleAnswer: 'An unwanted sonic material caused by editing, processing or a digital process: a sound introduced into the signal that was not present in the original. Aliasing is an example.',
         keyPoints: ['unwanted', 'caused by editing/processing/digital process', 'not in original signal', 'aliasing accepted as example'],
-        explanation: 'Marker note: do NOT write "noise picked up from the room" — that is capture noise, not an artefact. Examples accepted in the mark scheme include aliasing, pre-echo and warbling from mp3 compression.',
+        explanation: 'Marker note: do NOT write "noise picked up from the room": that is capture noise, not an artefact. Examples accepted in the mark scheme include aliasing, pre-echo and warbling from mp3 compression.',
     },
     {
         id: 'da-q7',
@@ -111,7 +111,7 @@ const QUESTIONS = [
     {
         id: 'da-q8',
         type: 'cloze',
-        section: 'Lossy compression — define',
+        section: 'Lossy compression: define',
         question: 'Complete the sentence: "Lossy compression ___ some of the data, so there is a ___ in sound quality. A benefit of lossy compression is that the file size would be ___ than an uncompressed file."',
         blanks: [
             { id: 'b1', options: ['removes', 'discards', 'adds', 'amplifies'], correctIndex: 1, accept: [0] },
@@ -146,12 +146,12 @@ const QUESTIONS = [
             'Lossy compression',
         ],
         correctIndex: 1,
-        explanation: 'Tape hiss is the classic analogue feature — a constant high-frequency noise floor. Wow, flutter and tape saturation are also acceptable in the mark scheme. Aliasing and quantisation are DIGITAL artefacts; lossy compression is a digital file process.',
+        explanation: 'Tape hiss is the classic analogue feature: a constant high-frequency noise floor. Wow, flutter and tape saturation are also acceptable in the mark scheme. Aliasing and quantisation are DIGITAL artefacts; lossy compression is a digital file process.',
     },
     {
         id: 'da-q11',
         type: 'numeric',
-        section: 'File size — from scratch (after the mini-tool)',
+        section: 'File size: from scratch (after the mini-tool)',
         question: 'A 60-second mono .wav at 44.1 kHz, 16-bit. Calculate the file size in MB. (Use 1 MB = 1,000,000 bytes.)',
         answer: 5.292,
         tolerance: 0.1,
@@ -305,7 +305,7 @@ export default function DigitalAudioAssessment() {
                     </p>
                     {!token && (
                         <p className="mt-3 text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-md px-3 py-2">
-                            Not signed in — your answers will not be saved. Sign in on the revision dashboard first if you want this attempt logged.
+                            Not signed in: your answers will not be saved. Sign in on the revision dashboard first if you want this attempt logged.
                         </p>
                     )}
                 </header>
@@ -491,7 +491,7 @@ function FileSizeCalculator({ onClose }) {
                 onClick={onClose}
                 className="mt-4 w-full py-2.5 px-4 bg-amber-700 hover:bg-amber-800 text-white rounded-lg font-semibold transition-colors"
             >
-                Got it — try the question
+                Got it, try the question
             </button>
         </div>
     );
@@ -806,7 +806,7 @@ function ResultsScreen({ responses, questions, onRestart }) {
                     <div className="space-y-2">
                         {questions.map((q, i) => {
                             const r = responses[i];
-                            const icon = r?.correct === true ? '✓' : r?.correct === false ? '✗' : '—';
+                            const icon = r?.correct === true ? '✓' : r?.correct === false ? '✗' : '–';
                             const colour = r?.correct === true ? 'bg-emerald-100 text-emerald-700'
                                 : r?.correct === false ? 'bg-rose-100 text-rose-700'
                                 : 'bg-sky-100 text-sky-700';

@@ -67,7 +67,7 @@ export default function DelayPanEQ() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('PAN — stereo field', fieldX, fieldY - 12);
+                ctx.fillText('PAN: stereo field', fieldX, fieldY - 12);
 
                 // Field rectangle
                 ctx.strokeStyle = '#e5e7eb';
@@ -170,7 +170,7 @@ export default function DelayPanEQ() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('EQ — frequency response', specX, specY - 12);
+                ctx.fillText('EQ: frequency response', specX, specY - 12);
 
                 // Axis
                 ctx.strokeStyle = '#e5e7eb';

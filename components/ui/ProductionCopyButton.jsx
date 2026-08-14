@@ -172,7 +172,7 @@ export default function ProductionCopyButton({ buildContent, accent = '#2563EB' 
                         Copy for AI
                     </p>
                     <p style={{ fontSize: 11, color: '#6B7280', margin: 0, lineHeight: 1.5 }}>
-                        Copies your current settings to paste into ChatGPT or similar — get help recreating this in your DAW.
+                        Copies your current settings to paste into ChatGPT or similar: get help recreating this in your DAW.
                     </p>
                     {/* Arrow */}
                     <div style={{

@@ -183,7 +183,7 @@ export default function AutomaticFaderConcept() {
                 ctx.font = '8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
                 ctx.fillText('Above the chosen level, the fader', margin.left, faderTop + 12);
-                ctx.fillText('pulls itself down — automatically.', margin.left, faderTop + 24);
+                ctx.fillText('pulls itself down: automatically.', margin.left, faderTop + 24);
                 ctx.fillText('Below it, the fader stays put.', margin.left, faderTop + 36);
                 ctx.globalAlpha = 1;
             }

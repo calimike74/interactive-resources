@@ -111,7 +111,7 @@ export default function BoostVsCutPhilosophy() {
                     ctx.fillStyle = '#f97316';
                     ctx.font = 'bold 10px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Boost — adds energy', bellCenter, baseY - maxAmp - 24);
+                    ctx.fillText('Boost: adds energy', bellCenter, baseY - maxAmp - 24);
                     ctx.font = '9px -apple-system, sans-serif';
                     ctx.fillText('can create a new problem', bellCenter, baseY - maxAmp - 10);
                     ctx.globalAlpha = 1;
@@ -128,7 +128,7 @@ export default function BoostVsCutPhilosophy() {
                     ctx.fillStyle = '#2563EB';
                     ctx.font = 'bold 10px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Cut — removes energy', bellCenter, baseY + maxAmp + 26);
+                    ctx.fillText('Cut: removes energy', bellCenter, baseY + maxAmp + 26);
                     ctx.font = '9px -apple-system, sans-serif';
                     ctx.fillText('the safer corrective move', bellCenter, baseY + maxAmp + 40);
                     ctx.globalAlpha = 1;

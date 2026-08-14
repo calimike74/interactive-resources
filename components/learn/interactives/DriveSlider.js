@@ -19,7 +19,7 @@ function driveDetail(drive) {
 }
 
 function driveReadout(drive) {
-    return `drive ${drive} — ${driveZone(drive)} (${driveDetail(drive)})`;
+    return `drive ${drive}: ${driveZone(drive)} (${driveDetail(drive)})`;
 }
 
 export default function DriveSlider() {
@@ -52,7 +52,7 @@ export default function DriveSlider() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — drive
+                    Try it: drive
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
                     {driveReadout(drive)}
@@ -76,7 +76,7 @@ export default function DriveSlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

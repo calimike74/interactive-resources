@@ -68,13 +68,13 @@ export default function LfoBasics({ title = 'What Is an LFO?', cycles = 2, lfoAm
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Audible — heard as pitch (e.g. a 220 Hz oscillator)', zoneLeft + 6, audibleTop + 13);
+                ctx.fillText('Audible: heard as pitch (e.g. a 220 Hz oscillator)', zoneLeft + 6, audibleTop + 13);
 
                 ctx.fillStyle = 'rgba(124, 58, 237, 0.06)';
                 ctx.fillRect(zoneLeft, lfoTop, zoneW, lfoH);
                 ctx.fillStyle = VIOLET;
                 ctx.font = 'bold 8px -apple-system, sans-serif';
-                ctx.fillText('LFO — under ~20 Hz, too slow to hear as pitch', zoneLeft + 6, lfoTop + 12);
+                ctx.fillText('LFO: under ~20 Hz, too slow to hear as pitch', zoneLeft + 6, lfoTop + 12);
 
                 ctx.strokeStyle = '#9ca3af';
                 ctx.setLineDash([3, 3]);
@@ -128,7 +128,7 @@ export default function LfoBasics({ title = 'What Is an LFO?', cycles = 2, lfoAm
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Target parameter — moved by the LFO, not heard itself', W / 2, dialY - 16);
+                ctx.fillText('Target parameter: moved by the LFO, not heard itself', W / 2, dialY - 16);
 
                 ctx.strokeStyle = '#d1d5db';
                 ctx.lineWidth = 3;

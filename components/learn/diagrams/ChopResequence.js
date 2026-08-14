@@ -100,7 +100,7 @@ export default function ChopResequence() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Original break — one bar, 8 hits', W / 2, 44);
+                ctx.fillText('Original break: one bar, 8 hits', W / 2, 44);
                 ctx.globalAlpha = 1;
             }
 
@@ -136,7 +136,7 @@ export default function ChopResequence() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Resequenced — a pattern its drummer never played', W / 2, 155);
+                ctx.fillText('Resequenced: a pattern its drummer never played', W / 2, 155);
                 ctx.globalAlpha = 1;
             }
 
@@ -162,7 +162,7 @@ export default function ChopResequence() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Same 8 slices, same widths and colours — only the order has changed', W / 2, 228);
+                ctx.fillText('Same 8 slices, same widths and colours: only the order has changed', W / 2, 228);
                 ctx.globalAlpha = 1;
             }
 

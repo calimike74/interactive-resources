@@ -202,7 +202,7 @@ export default function DynamicRangeGap() {
                 ctx.fillStyle = '#16a34a';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Same two levels — compression narrows the gap between them', W / 2, H - 8);
+                ctx.fillText('Same two levels: compression narrows the gap between them', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

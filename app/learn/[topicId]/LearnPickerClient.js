@@ -110,7 +110,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [], rati
                         maxWidth: '560px',
                     }}>
                         {isCourse
-                            ? 'Work through the chapters in order — each builds on the last.'
+                            ? 'Work through the chapters in order: each builds on the last.'
                             : (rationale ?? 'Choose a lesson to work through. Each one builds understanding step by step with animated diagrams and knowledge checks. Each lesson takes about 10–15 minutes and ends with a quick knowledge check.')}
                     </p>
 
@@ -168,13 +168,13 @@ export default function LearnPickerClient({ topic, lessons, resources = [], rati
                                     color: t.text.primary,
                                     marginBottom: spacing[1],
                                 }}>
-                                    {allComplete ? 'Start again' : 'Continue'} — Chapter {continueLesson.chapterNumber ?? chapterIds.indexOf(continueId) + 1}: {continueLesson.title}
+                                    {allComplete ? 'Start again' : 'Continue'}, Chapter {continueLesson.chapterNumber ?? chapterIds.indexOf(continueId) + 1}: {continueLesson.title}
                                 </h3>
                                 <p style={{
                                     fontSize: typography.size.sm,
                                     color: t.text.secondary,
                                 }}>
-                                    {allComplete ? 'You\'ve completed every chapter — revisit from the start.' : 'Pick up where you left off.'}
+                                    {allComplete ? 'You\'ve completed every chapter: revisit from the start.' : 'Pick up where you left off.'}
                                 </p>
                             </div>
                             <span style={{

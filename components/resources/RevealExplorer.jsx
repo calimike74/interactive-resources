@@ -506,7 +506,7 @@ const SpotlightRevealCanvas = ({
             onKeyDown={handleKeyDown}
             tabIndex={0}
             role="img"
-            aria-label="Spotlight reveal — hover, touch, or use arrow keys to reveal the hidden layer"
+            aria-label="Spotlight reveal: hover, touch, or use arrow keys to reveal the hidden layer"
             style={{
                 position: 'relative',
                 cursor: 'none',

@@ -129,7 +129,7 @@ export default function ParameterBridge() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Every acoustic idea becomes a knob — same measurement, now adjustable', W / 2, 240);
+                ctx.fillText('Every acoustic idea becomes a knob: same measurement, now adjustable', W / 2, 240);
                 ctx.globalAlpha = 1;
             }
 

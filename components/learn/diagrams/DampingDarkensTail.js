@@ -76,7 +76,7 @@ export default function DampingDarkensTail() {
                 ctx.fillStyle = '#9ca3af';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Same clap, later in the tail — which frequencies survive?', W / 2, 36);
+                ctx.fillText('Same clap, later in the tail: which frequencies survive?', W / 2, 36);
                 ctx.globalAlpha = 1;
             }
 
@@ -112,11 +112,11 @@ export default function DampingDarkensTail() {
             // --- Rotating caption ---
             let caption = '';
             if (f >= PHASE_CAPTION_LATE) {
-                caption = 'Tone changes, not loudness — the tail’s overall length barely moves';
+                caption = 'Tone changes, not loudness: the tail’s overall length barely moves';
             } else if (f >= PHASE_CAPTION_MID) {
-                caption = 'Highs are already fading fastest — the tail is darkening';
+                caption = 'Highs are already fading fastest: the tail is darkening';
             } else if (f >= PHASE_BARS) {
-                caption = 'All bands present — like the very start of the wash';
+                caption = 'All bands present: like the very start of the wash';
             }
             if (caption) {
                 const capStart = f >= PHASE_CAPTION_LATE ? PHASE_CAPTION_LATE : f >= PHASE_CAPTION_MID ? PHASE_CAPTION_MID : PHASE_BARS;

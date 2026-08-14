@@ -122,7 +122,7 @@ export default function ResultsPhase({ results, questions, scaffoldLevel, studen
                         textTransform: 'uppercase',
                         letterSpacing: typography.letterSpacing.wide,
                     }}>
-                        Key concepts mentioned — {keyTermsFound}/{keyTermsTotal}
+                        Key concepts mentioned: {keyTermsFound}/{keyTermsTotal}
                     </p>
                     <div style={{
                         display: 'flex',

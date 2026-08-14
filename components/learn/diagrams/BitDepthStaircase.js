@@ -162,16 +162,16 @@ export default function BitDepthStaircase() {
                     ctx.font = 'italic 8.5px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
                     const cap = panel.bits === 3
-                        ? 'The wave snaps to the nearest of 8 levels — a coarse staircase'
-                        : 'Fewer levels still — even coarser, more audible quantisation noise';
+                        ? 'The wave snaps to the nearest of 8 levels: a coarse staircase'
+                        : 'Fewer levels still: even coarser, more audible quantisation noise';
                     ctx.fillText(cap, W / 2, panel.capY);
                     ctx.globalAlpha = 1;
                 }
             });
 
-            const phase = f < PHASE[0].cap ? '3 bits — 8 levels'
+            const phase = f < PHASE[0].cap ? '3 bits: 8 levels'
                 : f < PHASE[1].stair ? 'Compare'
-                : '2 bits — 4 levels';
+                : '2 bits: 4 levels';
             ctx.fillStyle = '#9ca3af';
             ctx.font = '8px -apple-system, sans-serif';
             ctx.textAlign = 'right';

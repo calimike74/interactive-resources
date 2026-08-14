@@ -20,7 +20,7 @@
         "A graphic EQ offers wider frequency range"
       ],
       "correctIndex": 0,
-      "explanation": "A parametric EQ provides three adjustable parameters per band — centre frequency, gain, and Q (bandwidth). A graphic EQ has fixed frequencies and fixed Q; only gain is adjustable per band."
+      "explanation": "A parametric EQ provides three adjustable parameters per band: centre frequency, gain, and Q (bandwidth). A graphic EQ has fixed frequencies and fixed Q; only gain is adjustable per band."
     },
     {
       "id": "eq-mcq-03",
@@ -49,7 +49,7 @@
       "question": "A notch filter is the opposite of which filter type?",
       "options": ["Band-pass filter", "Low-pass filter", "High-pass filter", "High-shelf filter"],
       "correctIndex": 0,
-      "explanation": "A notch filter removes a narrow band of frequencies at the cutoff point, while a band-pass filter passes only that narrow band — they are inverse operations."
+      "explanation": "A notch filter removes a narrow band of frequencies at the cutoff point, while a band-pass filter passes only that narrow band: they are inverse operations."
     },
     {
       "id": "eq-mcq-06",
@@ -100,7 +100,7 @@
       "question": "Describe one advantage and one disadvantage of a graphic EQ compared to a parametric EQ.",
       "sampleAnswer": "Advantage: the slider positions visually show the EQ curve, making it intuitive to read. Disadvantage: you cannot adjust the Q or centre frequency of each band, limiting precision.",
       "keyPoints": ["visual", "intuitive", "fixed frequency", "fixed Q", "less flexible", "less precise"],
-      "explanation": "A graphic EQ's strength is visual clarity — slider positions match the frequency response curve. Its weakness is inflexibility — fixed bands and Q values mean you can't surgically target a specific problem frequency."
+      "explanation": "A graphic EQ's strength is visual clarity: slider positions match the frequency response curve. Its weakness is inflexibility: fixed bands and Q values mean you can't surgically target a specific problem frequency."
     },
     {
       "id": "eq-short-03",
@@ -147,7 +147,7 @@
         "An analogue EQ introduces phase distortion at the cutoff frequency"
       ],
       "correctIndex": 0,
-      "explanation": "Frequency masking is a psychoacoustic phenomenon where one sound makes another in the same frequency range harder to hear. In mixing, this commonly occurs between bass and kick drum, or between rhythm guitar and vocals. EQ is the primary tool for resolving masking — by cutting the competing frequency range in one instrument, the other becomes clearer."
+      "explanation": "Frequency masking is a psychoacoustic phenomenon where one sound makes another in the same frequency range harder to hear. In mixing, this commonly occurs between bass and kick drum, or between rhythm guitar and vocals. EQ is the primary tool for resolving masking: by cutting the competing frequency range in one instrument, the other becomes clearer."
     },
     {
       "id": "eq-mcq-10",

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
 
     return {
         title: `Exam: ${topic.name}`,
-        description: `Timed exam mode for ${topic.name} — test under pressure with a countdown timer.`,
+        description: `Timed exam mode for ${topic.name}: test under pressure with a countdown timer.`,
     };
 }
 

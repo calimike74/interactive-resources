@@ -46,31 +46,31 @@ export default function PrivacyPage() {
                 <Section title="What we collect" t={t}>
                     <ul>
                         <li>Your student token (pseudonymous identifier, set when you log in via member.musictechstudio.co.uk)</li>
-                        <li>Resource progress — which interactive resources you've used and engagement with them</li>
-                        <li>Anonymous analytics events (page views, interaction events) — only with your consent</li>
+                        <li>Resource progress: which interactive resources you've used and engagement with them</li>
+                        <li>Anonymous analytics events (page views, interaction events): only with your consent</li>
                     </ul>
                 </Section>
 
                 <Section title="Why we collect it (legal basis)" t={t}>
                     <ul>
-                        <li><strong>Legitimate interests</strong> — running curriculum-aligned learning resources and tracking your progress.</li>
-                        <li><strong>Consent</strong> — for optional analytics cookies.</li>
+                        <li><strong>Legitimate interests</strong>: running curriculum-aligned learning resources and tracking your progress.</li>
+                        <li><strong>Consent</strong>: for optional analytics cookies.</li>
                     </ul>
                 </Section>
 
                 <Section title="Who we share it with (sub-processors)" t={t}>
                     <ul>
-                        <li><strong>Vercel</strong> (Frankfurt, EU) — hosting</li>
-                        <li><strong>Supabase</strong> (EU region) — data sync via grades-dashboard</li>
-                        <li><strong>PostHog</strong> (Frankfurt, EU) — anonymous analytics, only with your consent</li>
+                        <li><strong>Vercel</strong> (Frankfurt, EU): hosting</li>
+                        <li><strong>Supabase</strong> (EU region): data sync via grades-dashboard</li>
+                        <li><strong>PostHog</strong> (Frankfurt, EU): anonymous analytics, only with your consent</li>
                     </ul>
                     <p>We do not sell or rent your personal data, and we do not share it with advertisers.</p>
                 </Section>
 
                 <Section title="How long we keep it" t={t}>
                     <ul>
-                        <li>Progress data — kept while you have an active student account</li>
-                        <li>Anonymous analytics — 12 months</li>
+                        <li>Progress data: kept while you have an active student account</li>
+                        <li>Anonymous analytics: 12 months</li>
                     </ul>
                 </Section>
 
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
                 </Section>
 
                 <Section title="Cookies" t={t}>
-                    <p><strong>Optional (with consent)</strong> — PostHog analytics cookie.</p>
+                    <p><strong>Optional (with consent)</strong>: PostHog analytics cookie.</p>
                     <p>Any consent given on member.musictechstudio.co.uk applies here too (and vice versa) because the consent cookie is set at the parent domain.</p>
                     <p>
                         <button

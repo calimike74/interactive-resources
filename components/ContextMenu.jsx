@@ -818,7 +818,7 @@ const QuizPopup = forwardRef(function QuizPopup({ data, x, y, onClose, onNext },
                             margin: 0,
                         }}>
                             {selected !== null && data.options[selected]?.correct && '✓ Correct!'}
-                            {selected !== null && !data.options[selected]?.correct && '✗ Not quite — see the green option'}
+                            {selected !== null && !data.options[selected]?.correct && '✗ Not quite: see the green option'}
                             {mode === 'recall' && revealed && 'How did you do?'}
                         </p>
                         <div style={{ display: 'flex', gap: spacing[2] }}>

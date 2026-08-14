@@ -109,7 +109,7 @@ export default function ReverseEnvelope() {
                     ctx.fillStyle = '#14b8a6';
                     ctx.font = 'bold 9px -apple-system, sans-serif';
                     ctx.textAlign = 'left';
-                    ctx.fillText('Forward — decay', X0, 48);
+                    ctx.fillText('Forward: decay', X0, 48);
                     ctx.globalAlpha = 1;
                 }
                 const capP = progress(f, 50, 25);
@@ -139,7 +139,7 @@ export default function ReverseEnvelope() {
                     ctx.fillStyle = '#2563EB';
                     ctx.font = 'bold 9px -apple-system, sans-serif';
                     ctx.textAlign = 'left';
-                    ctx.fillText('Reversed — swell', X0, 60);
+                    ctx.fillText('Reversed: swell', X0, 60);
                     ctx.globalAlpha = 1;
                 }
             }
@@ -162,7 +162,7 @@ export default function ReverseEnvelope() {
                     ctx.fillStyle = '#374151';
                     ctx.font = 'italic 9px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Same sample, same duration — only the shape is mirrored', W / 2, 252);
+                    ctx.fillText('Same sample, same duration: only the shape is mirrored', W / 2, 252);
                     ctx.globalAlpha = 1;
                 }
             }

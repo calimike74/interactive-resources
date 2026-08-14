@@ -88,9 +88,9 @@ export default function SidechainTriggerTarget() {
                 ctx.fillStyle = '#9B7530';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('trigger — what the compressor listens to', kick.x, kick.y + kick.h + 14);
+                ctx.fillText('trigger: what the compressor listens to', kick.x, kick.y + kick.h + 14);
                 ctx.fillStyle = '#e85d75';
-                ctx.fillText('target — what gets turned down', bass.x, bass.y + bass.h + 14);
+                ctx.fillText('target: what gets turned down', bass.x, bass.y + bass.h + 14);
                 ctx.globalAlpha = 1;
             }
 
@@ -184,7 +184,7 @@ export default function SidechainTriggerTarget() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Trigger and target are different signals — that\'s the side-chain', W / 2, H - 8);
+                ctx.fillText('Trigger and target are different signals: that\'s the side-chain', W / 2, H - 8);
                 ctx.globalAlpha = 1;
             }
 

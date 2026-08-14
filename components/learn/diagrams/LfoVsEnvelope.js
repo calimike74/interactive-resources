@@ -83,7 +83,7 @@ export default function LfoVsEnvelope() {
                 ctx.fillStyle = VIOLET;
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('LFO — cycles continuously, ignores the gate', timelineLeft, lfoTop - 4);
+                ctx.fillText('LFO: cycles continuously, ignores the gate', timelineLeft, lfoTop - 4);
                 ctx.strokeStyle = '#e5e7eb';
                 ctx.lineWidth = 0.5;
                 ctx.beginPath();
@@ -117,7 +117,7 @@ export default function LfoVsEnvelope() {
                 ctx.fillStyle = '#1a1a6e';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Envelope — one shot per note, then done', timelineLeft, envTop - 4);
+                ctx.fillText('Envelope: one shot per note, then done', timelineLeft, envTop - 4);
                 ctx.globalAlpha = 1;
             }
 
@@ -186,7 +186,7 @@ export default function LfoVsEnvelope() {
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Shared timeline — same key-press for both traces above', timelineLeft, gateY - 2);
+                ctx.fillText('Shared timeline: same key-press for both traces above', timelineLeft, gateY - 2);
 
                 ctx.strokeStyle = '#1a1a6e';
                 ctx.lineWidth = 2;

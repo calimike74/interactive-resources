@@ -25,7 +25,7 @@
         "Modulates the delayed signal to add chorus-like movement"
       ],
       "correctIndex": 0,
-      "explanation": "Convolution reverb works by capturing an impulse response (IR) — a recording of a real space's acoustic response to a brief burst of sound. The dry signal is then convolved with that IR mathematically, placing the audio into the real acoustic environment. Algorithmic reverb instead uses DSP to simulate reflections without a real-space recording."
+      "explanation": "Convolution reverb works by capturing an impulse response (IR): a recording of a real space's acoustic response to a brief burst of sound. The dry signal is then convolved with that IR mathematically, placing the audio into the real acoustic environment. Algorithmic reverb instead uses DSP to simulate reflections without a real-space recording."
     },
     {
       "id": "reverb-mcq-03",
@@ -51,7 +51,7 @@
         "Perceive the second sound as louder than the first"
       ],
       "correctIndex": 0,
-      "explanation": "The Haas effect (also called the precedence effect) describes how delays under ~40ms are fused perceptually with the direct sound — the brain hears a single event but interprets the delay as spatial width or depth. Delays above ~40ms start to be perceived as a separate echo. This is exploited in stereo widening and sound design."
+      "explanation": "The Haas effect (also called the precedence effect) describes how delays under ~40ms are fused perceptually with the direct sound: the brain hears a single event but interprets the delay as spatial width or depth. Delays above ~40ms start to be perceived as a separate echo. This is exploited in stereo widening and sound design."
     },
     {
       "id": "reverb-mcq-05",
@@ -118,7 +118,7 @@
         "tail indicates decay time and space character",
         "two distinct perceptual stages"
       ],
-      "explanation": "Reverberation has two distinct phases. Early reflections (the first ~50–80ms) are discrete bounces from the nearest surfaces — the brain uses them to judge room size and source localisation. The diffuse tail that follows is a dense blend of thousands of reflections that has lost its discrete nature; it conveys the acoustic character of the space and its RT60. Reverb plug-ins often allow independent control of early and late portions."
+      "explanation": "Reverberation has two distinct phases. Early reflections (the first ~50–80ms) are discrete bounces from the nearest surfaces. The brain uses them to judge room size and source localisation. The diffuse tail that follows is a dense blend of thousands of reflections that has lost its discrete nature; it conveys the acoustic character of the space and its RT60. Reverb plug-ins often allow independent control of early and late portions."
     },
     {
       "id": "reverb-short-02",
@@ -132,7 +132,7 @@
         "sweeping notches produce the effect",
         "feedback intensifies the effect"
       ],
-      "explanation": "Flanging was originally achieved by pressing a thumb on the flange of a tape reel to vary its speed. Digitally, it mixes a dry signal with a short (1–20ms) delay whose time is swept by an LFO. The interaction between direct and delayed signals creates comb filtering — a series of notches in the frequency response. As the delay time changes, these notches sweep through the spectrum, producing the swooping sound. Increasing feedback reinforces the resonance at each notch."
+      "explanation": "Flanging was originally achieved by pressing a thumb on the flange of a tape reel to vary its speed. Digitally, it mixes a dry signal with a short (1–20ms) delay whose time is swept by an LFO. The interaction between direct and delayed signals creates comb filtering: a series of notches in the frequency response. As the delay time changes, these notches sweep through the spectrum, producing the swooping sound. Increasing feedback reinforces the resonance at each notch."
     },
     {
       "id": "reverb-short-03",
@@ -146,7 +146,7 @@
         "shorter decay time reduces buildup",
         "high-frequency damping can warm the reverb so it sits behind the vocal"
       ],
-      "explanation": "The main challenge is adding space without sacrificing intelligibility. Pre-delay (20–40ms) lets the vocal attack land cleanly before the reverb arrives — exploiting the Haas effect to maintain presence. A lower wet signal level in the mix keeps reverb as a background texture. A shorter decay time prevents the reverb tail from masking the next syllable. Damping high frequencies in the tail also pushes the reverb perceptually further back, leaving spectral space for the bright vocal."
+      "explanation": "The main challenge is adding space without sacrificing intelligibility. Pre-delay (20–40ms) lets the vocal attack land cleanly before the reverb arrives: exploiting the Haas effect to maintain presence. A lower wet signal level in the mix keeps reverb as a background texture. A shorter decay time prevents the reverb tail from masking the next syllable. Damping high frequencies in the tail also pushes the reverb perceptually further back, leaving spectral space for the bright vocal."
     },
     {
       "id": "reverb-mcq-07",
@@ -172,7 +172,7 @@
         "The feedback path includes a pitch shifter to create ascending repeats"
       ],
       "correctIndex": 0,
-      "explanation": "Ping-pong delay routes each successive repeat to the opposite stereo channel — left, right, left, right — creating a bouncing spatial effect. This is widely used on guitars, synths, and vocals to add rhythmic stereo movement. The delay time, feedback, and panning width can usually be adjusted independently."
+      "explanation": "Ping-pong delay routes each successive repeat to the opposite stereo channel (left, right, left, right) creating a bouncing spatial effect. This is widely used on guitars, synths, and vocals to add rhythmic stereo movement. The delay time, feedback, and panning width can usually be adjusted independently."
     },
     {
       "id": "reverb-mcq-09",
@@ -207,7 +207,7 @@
       "answer": 643,
       "tolerance": 1,
       "unit": "ms",
-      "explanation": "One beat at 140 BPM = 60,000 ÷ 140 = 428.57ms. A dotted crotchet = 1.5 beats, so delay time = 428.57 × 1.5 = 642.86ms ≈ 643ms. Dotted subdivisions create a syncopated, rolling feel because the repeats fall between the main beats — a very common creative choice in electronic and pop production."
+      "explanation": "One beat at 140 BPM = 60,000 ÷ 140 = 428.57ms. A dotted crotchet = 1.5 beats, so delay time = 428.57 × 1.5 = 642.86ms ≈ 643ms. Dotted subdivisions create a syncopated, rolling feel because the repeats fall between the main beats: a very common creative choice in electronic and pop production."
     },
     {
       "id": "reverb-num-05",
@@ -222,7 +222,7 @@
       "id": "reverb-short-04",
       "type": "short",
       "question": "Explain what the 'diffusion' parameter controls on a reverb unit and describe how low and high diffusion settings affect the reverb character.",
-      "sampleAnswer": "Diffusion controls how quickly the individual early reflections smear together into a smooth, dense reverb tail. At high diffusion, reflections blend rapidly into a thick, smooth wash — ideal for vocals and pads where a seamless reverb is desired. At low diffusion, individual reflections remain more distinct and audible, creating a more granular, echoey texture where discrete bounces can be heard. Low diffusion can sound more realistic for certain room simulations but may be distracting on busy arrangements.",
+      "sampleAnswer": "Diffusion controls how quickly the individual early reflections smear together into a smooth, dense reverb tail. At high diffusion, reflections blend rapidly into a thick, smooth wash: ideal for vocals and pads where a continuous reverb is desired. At low diffusion, individual reflections remain more distinct and audible, creating a more granular, echoey texture where discrete bounces can be heard. Low diffusion can sound more realistic for certain room simulations but may be distracting on busy arrangements.",
       "keyPoints": [
         "diffusion controls how rapidly reflections blend into a smooth tail",
         "high diffusion = smooth, dense reverb wash",
@@ -236,15 +236,15 @@
       "id": "reverb-short-05",
       "type": "short",
       "question": "Describe how a convolution reverb captures the acoustic character of a real space using an impulse response, and explain one limitation of convolution reverb compared to algorithmic reverb.",
-      "sampleAnswer": "To capture an impulse response (IR), a short, broadband sound (such as a starter pistol, a balloon pop, or a sine sweep) is played in the target space and the room's acoustic response is recorded. This recording — containing the full pattern of reflections, decay, and frequency absorption — becomes the IR file. Convolution reverb then mathematically convolves the dry input signal with this IR, effectively placing the audio into that space. A key limitation is that convolution reverb is static: the IR captures only one fixed state of the room, so parameters like decay time and room size cannot be freely adjusted in real time the way algorithmic reverb allows.",
+      "sampleAnswer": "To capture an impulse response (IR), a short, broadband sound (such as a starter pistol, a balloon pop, or a sine sweep) is played in the target space and the room's acoustic response is recorded. This recording (containing the full pattern of reflections, decay, and frequency absorption) becomes the IR file. Convolution reverb then mathematically convolves the dry input signal with this IR, effectively placing the audio into that space. A key limitation is that convolution reverb is static: the IR captures only one fixed state of the room, so parameters like decay time and room size cannot be freely adjusted in real time the way algorithmic reverb allows.",
       "keyPoints": [
         "impulse response captured by playing a short broadband sound in the space",
         "room's acoustic response is recorded as the IR",
         "dry signal is mathematically convolved with the IR",
         "produces highly realistic reverb based on a real space",
-        "limitation: parameters are fixed — cannot freely adjust decay time or room size"
+        "limitation: parameters are fixed: cannot freely adjust decay time or room size"
       ],
-      "explanation": "Convolution reverb is prized for realism — you can place a vocal in the Sydney Opera House or a medieval cathedral using an IR recorded there. However, because the IR is a snapshot of one specific acoustic state, you cannot independently adjust parameters like early/late balance or decay time without artefacts. Algorithmic reverbs, while less realistic, offer full parametric control, making them more flexible for creative sound design."
+      "explanation": "Convolution reverb is prized for realism: you can place a vocal in the Sydney Opera House or a medieval cathedral using an IR recorded there. However, because the IR is a snapshot of one specific acoustic state, you cannot independently adjust parameters like early/late balance or decay time without artefacts. Algorithmic reverbs, while less realistic, offer full parametric control, making them more flexible for creative sound design."
     }
   ]
 }

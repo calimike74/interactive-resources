@@ -130,8 +130,8 @@ const quizQuestions = [
   { q: 'In an X-Y (coincident) stereo microphone technique, how are the capsules arranged?', options: ['Spaced apart by at least 30 cm', 'Angled apart with capsules as close as possible, at the same point', 'Facing the same direction side by side', 'One behind the other'], correct: 1, explanation: 'X-Y uses two directional microphones angled apart (typically 90\u2013135\u00B0) with their capsules positioned as close together as possible at the same point. This ensures excellent mono compatibility because both capsules capture sound at virtually the same time.', difficulty: 'intermediate' },
   { q: 'What is the main advantage of the A-B (spaced pair) technique over X-Y?', options: ['Better mono compatibility', 'Wider, more natural stereo image', 'Less phase cancellation', 'Lower noise floor'], correct: 1, explanation: 'A-B spaced pairs create a wider, more natural-sounding stereo image because the distance between capsules introduces time-of-arrival differences. However, this spacing can cause phase issues when summed to mono.', difficulty: 'intermediate' },
   { q: 'What happens when a stereo signal with phase differences is collapsed to mono?', options: ['The signal becomes louder', 'Nothing changes', 'Some frequencies may cancel out, causing a thin or hollow sound', 'The stereo width increases'], correct: 2, explanation: 'When stereo is summed to mono, any out-of-phase content between left and right channels cancels. This can make elements sound thin, hollow, or disappear entirely. Mono compatibility checking is essential because many real-world playback systems (phones, PA systems, Bluetooth speakers) sum to mono.', difficulty: 'advanced' },
-  { q: 'What is the LCR panning approach?', options: ['Panning instruments only to Left, Centre, or Right \u2014 avoiding in-between positions', 'Using three speakers instead of two', 'A surround sound technique', 'Panning in a circular motion'], correct: 0, explanation: 'LCR (Left, Centre, Right) is a mixing strategy where instruments are panned hard left, dead centre, or hard right \u2014 with minimal use of in-between positions. This creates a bold, wide mix with clear separation, famously used in classic recordings.', difficulty: 'intermediate' },
-  { q: 'In Mid-Side (M-S) processing, what does the "Side" signal contain?', options: ['The mono centre information', 'The difference between left and right channels (stereo width)', 'Only the bass frequencies', 'The reverb signal'], correct: 1, explanation: 'The Side signal is derived by subtracting right from left (L\u2013R), capturing only the difference information \u2014 the stereo width content. The Mid signal (L+R) captures the centre/mono content. Adjusting the Side level controls stereo width independently.', difficulty: 'advanced' },
+  { q: 'What is the LCR panning approach?', options: ['Panning instruments only to Left, Centre, or Right, avoiding in-between positions', 'Using three speakers instead of two', 'A surround sound technique', 'Panning in a circular motion'], correct: 0, explanation: 'LCR (Left, Centre, Right) is a mixing strategy where instruments are panned hard left, dead centre, or hard right, with minimal use of in-between positions. This creates a bold, wide mix with clear separation, famously used in classic recordings.', difficulty: 'intermediate' },
+  { q: 'In Mid-Side (M-S) processing, what does the "Side" signal contain?', options: ['The mono centre information', 'The difference between left and right channels (stereo width)', 'Only the bass frequencies', 'The reverb signal'], correct: 1, explanation: 'The Side signal is derived by subtracting right from left (L\u2013R), capturing only the difference information (the stereo width content). The Mid signal (L+R) captures the centre/mono content. Adjusting the Side level controls stereo width independently.', difficulty: 'advanced' },
   { q: 'Which stereo mic technique has the best mono compatibility?', options: ['A-B (spaced pair)', 'X-Y (coincident pair)', 'Decca Tree', 'Room microphones'], correct: 1, explanation: 'X-Y has the best mono compatibility of common stereo techniques because the capsules are at essentially the same point in space. This means there are no significant time-of-arrival differences between channels, so minimal phase cancellation occurs when summed to mono.', difficulty: 'intermediate' },
   { q: 'What is the Haas effect and how does it relate to stereo?', options: ['A type of distortion in stereo recordings', 'A short delay (1\u201335 ms) applied to one channel creating a perceived shift in stereo position without obvious echo', 'A reverb technique for widening stereo', 'The effect of panning on perceived loudness'], correct: 1, explanation: 'The Haas effect (precedence effect) uses a short delay (1\u201335 ms) between left and right channels. The brain perceives the sound as coming from the earlier (undelayed) side, creating apparent stereo width from a mono source. Care is needed as it can cause phase issues in mono.', difficulty: 'advanced' },
   { q: 'A mix engineer pans the hi-hat to 40% right and the ride cymbal to 40% left. What mixing principle does this demonstrate?', options: ['Frequency masking', 'Stereo balance through complementary panning', 'Mid-Side processing', 'The proximity effect'], correct: 1, explanation: 'Placing similar-sounding instruments on opposite sides of the stereo field creates balance and separation. This complementary panning approach prevents frequency masking and gives each element its own space, making the mix wider and clearer.', difficulty: 'foundation' }
@@ -141,16 +141,16 @@ const quizQuestions = [
 // LEARN CONTENT
 // ============================================
 const learnSections = [
-  { level: 'foundation', title: 'What Is Stereo?', content: 'Stereo audio uses two channels (left and right) to create a sense of width and spatial positioning. Unlike mono, which plays the same signal through all speakers, stereo allows the listener to perceive sounds as coming from different positions between the speakers. This mimics how we naturally hear \u2014 with two ears detecting subtle differences in timing and level.' },
-  { level: 'foundation', title: 'Mono vs Stereo', content: 'A mono signal is a single channel played equally through both speakers \u2014 the sound appears to come from the centre. A stereo signal has independent left and right channels, enabling sounds to be placed across the stereo field. Mono is still important: bass instruments are typically kept in mono for power, and many playback systems (phone speakers, PA systems) sum to mono.' },
+  { level: 'foundation', title: 'What Is Stereo?', content: 'Stereo audio uses two channels (left and right) to create a sense of width and spatial positioning. Unlike mono, which plays the same signal through all speakers, stereo allows the listener to perceive sounds as coming from different positions between the speakers. This mimics how we naturally hear, with two ears detecting subtle differences in timing and level.' },
+  { level: 'foundation', title: 'Mono vs Stereo', content: 'A mono signal is a single channel played equally through both speakers: the sound appears to come from the centre. A stereo signal has independent left and right channels, enabling sounds to be placed across the stereo field. Mono is still important: bass instruments are typically kept in mono for power, and many playback systems (phone speakers, PA systems) sum to mono.' },
   { level: 'foundation', title: 'Basic Panning Positions', content: 'Pan (panorama) controls place a signal anywhere from hard left to hard right, with centre in the middle. Standard positions: kick drum, bass, lead vocal, and snare are typically panned centre. Hi-hats, guitars, keyboards, and backing vocals are panned off-centre to create width. Overhead drum microphones are panned left and right to capture the kit\'s stereo spread.' },
-  { level: 'intermediate', title: 'Creating Width: Panning Strategy', content: 'Effective panning creates a balanced, wide mix. The LCR approach pans instruments only to hard left, centre, or hard right for bold separation. Complementary panning places similar instruments on opposite sides (e.g., two guitars, one left, one right). Consider frequency balance across the stereo field \u2014 avoid clustering all bright instruments on one side.' },
+  { level: 'intermediate', title: 'Creating Width: Panning Strategy', content: 'Effective panning creates a balanced, wide mix. The LCR approach pans instruments only to hard left, centre, or hard right for bold separation. Complementary panning places similar instruments on opposite sides (e.g., two guitars, one left, one right). Consider frequency balance across the stereo field: avoid clustering all bright instruments on one side.' },
   { level: 'intermediate', title: 'Stereo Microphone Techniques', content: 'X-Y (coincident pair): Two directional mics angled at 90\u2013135\u00B0, capsules at the same point. Excellent mono compatibility, moderate width. A-B (spaced pair): Two mics spaced 30\u2013300 cm apart. Wider, more natural image but potential phase issues in mono. Both techniques are fundamental to capturing acoustic instruments and ensembles in stereo.' },
-  { level: 'intermediate', title: 'Stereo and the Perception of Space', content: 'Stereo panning affects perceived depth and width. Wider-panned instruments feel further to the side; centre-panned elements feel closer and more intimate. Reverb and delay further enhance spatial perception \u2014 a dry, centre-panned vocal feels intimate, whilst a reverb-heavy, wide-panned pad feels distant. The interaction of panning, level, and effects creates the three-dimensional soundstage.' },
+  { level: 'intermediate', title: 'Stereo and the Perception of Space', content: 'Stereo panning affects perceived depth and width. Wider-panned instruments feel further to the side; centre-panned elements feel closer and more intimate. Reverb and delay further enhance spatial perception: a dry, centre-panned vocal feels intimate, whilst a reverb-heavy, wide-panned pad feels distant. The interaction of panning, level, and effects creates the three-dimensional soundstage.' },
   { level: 'intermediate', title: 'Mid-Side Concept', content: 'Mid-Side (M-S) separates a stereo signal into Mid (centre/mono content, L+R) and Side (stereo width content, L\u2013R). By adjusting the balance between Mid and Side, you can control stereo width independently. Boosting Side increases width; reducing Side narrows the image towards mono. M-S is used in both recording (with dedicated M-S mic setups) and mixing/mastering.' },
   { level: 'advanced', title: 'Phase Issues with Stereo Techniques', content: 'Spaced microphone techniques (A-B) introduce time-of-arrival differences that create phase cancellation at specific frequencies when summed to mono. The affected frequencies depend on the spacing: f = speed of sound / (2 \u00D7 distance). This gives the lowest affected frequency; comb filtering then repeats at every integer multiple, creating a series of peaks and dips across the spectrum. Coincident techniques (X-Y) avoid this because both capsules are at the same point. Always check stereo recordings in mono to identify phase problems.' },
-  { level: 'advanced', title: 'Mono Compatibility', content: 'Many real-world playback systems are mono or near-mono: phone speakers, Bluetooth speakers, club PA systems, and AM radio. When stereo is collapsed to mono, any out-of-phase content cancels. Mix engineers must regularly check mixes in mono. Instruments that disappear or become thin in mono indicate phase issues that need addressing \u2014 often by narrowing the stereo width or adjusting timing.' },
-  { level: 'advanced', title: 'Stereo Automation and Movement', content: 'Pan automation moves instruments across the stereo field over time, creating dynamic spatial interest. Examples include auto-panning effects on guitars, gradual widening during a chorus, or dramatic left-to-right sweeps. Automation must be purposeful \u2014 excessive movement is distracting. Subtle automation (e.g., slightly widening backing vocals in the chorus) is more effective than extreme panning changes.' },
+  { level: 'advanced', title: 'Mono Compatibility', content: 'Many real-world playback systems are mono or near-mono: phone speakers, Bluetooth speakers, club PA systems, and AM radio. When stereo is collapsed to mono, any out-of-phase content cancels. Mix engineers must regularly check mixes in mono. Instruments that disappear or become thin in mono indicate phase issues that need addressing, often by narrowing the stereo width or adjusting timing.' },
+  { level: 'advanced', title: 'Stereo Automation and Movement', content: 'Pan automation moves instruments across the stereo field over time, creating dynamic spatial interest. Examples include auto-panning effects on guitars, gradual widening during a chorus, or dramatic left-to-right sweeps. Automation must be purposeful: excessive movement is distracting. Subtle automation (e.g., slightly widening backing vocals in the chorus) is more effective than extreme panning changes.' },
   { level: 'advanced', title: 'Haas Effect for Stereo Widening', content: 'The Haas effect (precedence effect) uses a short delay (1\u201335 ms) on one channel of a duplicated mono signal. The brain perceives the sound as coming from the undelayed side, creating apparent stereo width without an obvious echo. This widens mono sources effectively but requires careful mono compatibility checking, as the delayed signal will partially cancel when summed.' }
 ];
 
@@ -339,7 +339,7 @@ const StereoPanning = () => {
       ctx.fillStyle = '#EF4444';
       ctx.font = "bold 12px system-ui, sans-serif";
       ctx.textAlign = 'center';
-      ctx.fillText('MONO CHECK \u2014 All sources collapse to centre', w / 2, h - 24);
+      ctx.fillText('MONO CHECK: All sources collapse to centre', w / 2, h - 24);
     }
 
     // Draw instruments
@@ -446,7 +446,7 @@ const StereoPanning = () => {
       ctx.fillStyle = '#C9B87A';
       ctx.font = "10px system-ui, sans-serif";
       ctx.textAlign = 'center';
-      ctx.fillText(`X-Y Coincident \u2014 ${micAngle}\u00B0`, cx, 20);
+      ctx.fillText(`X-Y Coincident: ${micAngle}\u00B0`, cx, 20);
       ctx.fillStyle = 'rgba(232, 228, 223, 0.5)';
       ctx.font = "9px system-ui, sans-serif";
       ctx.fillText('Capsules at same point', cx, 36);
@@ -476,7 +476,7 @@ const StereoPanning = () => {
       ctx.fillStyle = '#C9B87A';
       ctx.font = "10px system-ui, sans-serif";
       ctx.textAlign = 'center';
-      ctx.fillText(`A-B Spaced \u2014 ${micSpacing} cm`, cx, 20);
+      ctx.fillText(`A-B Spaced: ${micSpacing} cm`, cx, 20);
       ctx.fillStyle = 'rgba(232, 228, 223, 0.5)';
       ctx.font = "9px system-ui, sans-serif";
       ctx.fillText('Capsules spaced apart', cx, 36);
@@ -681,13 +681,13 @@ const StereoPanning = () => {
                 {'\u{1F3B5}'} Real-World Examples
               </h3>
               {[
-                { artist: 'The Beatles', track: 'A Day in the Life', note: 'Early stereo experimentation with extreme panning \u2014 instruments hard left or right with little centre content, showcasing 1960s stereo mixing conventions.' },
-                { artist: 'Pink Floyd', track: 'Money', note: 'Creative stereo movement and automation \u2014 sounds pan across the stereo field dynamically, demonstrating how spatial effects can serve the musical arrangement.' },
+                { artist: 'The Beatles', track: 'A Day in the Life', note: 'Early stereo experimentation with extreme panning: instruments hard left or right with little centre content, showcasing 1960s stereo mixing conventions.' },
+                { artist: 'Pink Floyd', track: 'Money', note: 'Creative stereo movement and automation: sounds pan across the stereo field dynamically, demonstrating how spatial effects can serve the musical arrangement.' },
                 { artist: 'Billie Eilish', track: 'Everything I Wanted', note: 'An intimate, narrow stereo field keeps the vocal close and centred, using subtle width for atmosphere whilst maintaining a modern, focused mix.' },
                 { artist: 'Fleetwood Mac', track: 'Dreams', note: 'Classic rock stereo drum panning with overheads spread wide, hi-hat and ride placed off-centre, and kick/snare anchored in the middle.' }
               ].map((ex, i) => (
                 <div key={i} style={{ padding: 'var(--space-3) 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
-                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &mdash; &ldquo;{ex.track}&rdquo;
+                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &ndash; &ldquo;{ex.track}&rdquo;
                   <p style={{ margin: 'var(--space-1) 0 0', color: 'var(--foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: '1.5' }}>{ex.note}</p>
                 </div>
               ))}
@@ -718,7 +718,7 @@ const StereoPanning = () => {
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
                 <div style={{ fontSize: 'var(--text-xs)', fontWeight: '300', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--canvas-highlight)' }}>
-                  Stereo Field {challengeActive ? '\u2014 Challenge Mode' : `\u2014 ${INSTRUMENT_PRESETS[activePreset].name}`}
+                  Stereo Field {challengeActive ? ': Challenge Mode' : `: ${INSTRUMENT_PRESETS[activePreset].name}`}
                 </div>
                 <button type="button" data-press onClick={() => setMonoCheck(m => !m)} style={{
                   padding: 'var(--space-1) var(--space-3)', borderRadius: 'var(--radius-sm)',
@@ -726,7 +726,7 @@ const StereoPanning = () => {
                   background: monoCheck ? 'rgba(239, 68, 68, 0.15)' : 'var(--canvas-surface)',
                   color: monoCheck ? '#EF4444' : 'var(--canvas-foreground-tertiary)',
                   cursor: 'pointer', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY, fontWeight: '600'
-                }} title="Simulates how your mix sounds when collapsed to mono — your pan positions are not changed.">{monoCheck ? '\u{1F50A} Mono Check: ON' : '\u{1F50A} Mono Check: OFF'}</button>
+                }} title="Simulates how your mix sounds when collapsed to mono: your pan positions are not changed.">{monoCheck ? '\u{1F50A} Mono Check: ON' : '\u{1F50A} Mono Check: OFF'}</button>
               </div>
               <canvas
                 ref={attachStage}
@@ -887,7 +887,7 @@ const StereoPanning = () => {
                         const target = challengeTargets[i];
                         const isCorrect = Math.abs(inst.pan - target.correctPan) <= target.tolerance;
                         const reason = target.id === 'hihat' && !isCorrect
-                          ? ' \u2014 Hi-hat is conventionally placed right from the audience\'s perspective, mirroring the drummer\'s right hand.'
+                          ? ': Hi-hat is conventionally placed right from the audience\'s perspective, mirroring the drummer\'s right hand.'
                           : '';
                         return (
                           <div key={i} style={{ fontSize: 'var(--text-xs)', color: isCorrect ? 'var(--success)' : '#EF4444', marginTop: 'var(--space-1)' }}>
@@ -986,7 +986,7 @@ const StereoPanning = () => {
                   {score} / {quizQuestions.length}
                 </div>
                 <p style={{ color: 'var(--foreground-secondary)', fontSize: 'var(--text-base)', marginBottom: 'var(--space-6)' }}>
-                  {score >= 8 ? 'Excellent understanding of stereo and panning!' : score >= 5 ? 'Good foundation \u2014 review stereo mic techniques and phase concepts.' : 'Revisit the Learn tab and try again.'}
+                  {score >= 8 ? 'Excellent understanding of stereo and panning!' : score >= 5 ? 'Good foundation: review stereo mic techniques and phase concepts.' : 'Revisit the Learn tab and try again.'}
                 </p>
                 <button type="button" data-press onClick={resetQuiz} style={{
                   padding: 'var(--space-3) var(--space-6)', background: 'var(--accent)',
@@ -1053,9 +1053,9 @@ const StereoPanning = () => {
                     {[
                       ['Capsule Placement', 'Angled apart, capsules at the same point (coincident)', 'Spaced apart, typically 30\u2013300 cm'],
                       ['Typical Angle / Spacing', '90\u2013135\u00B0 between capsules', '30\u2013300 cm spacing (commonly 40\u201360 cm)'],
-                      ['Stereo Width', 'Moderate \u2014 controlled by angle between microphones', 'Wide \u2014 natural-sounding spatial image'],
-                      ['Mono Compatibility', 'Excellent \u2014 no time-of-arrival differences', 'Poor to moderate \u2014 phase cancellation risk when summed'],
-                      ['Phase Issues', 'Minimal \u2014 capsules at same point eliminates timing differences', 'Possible \u2014 spacing introduces time-of-arrival differences'],
+                      ['Stereo Width', 'Moderate: controlled by angle between microphones', 'Wide: natural-sounding spatial image'],
+                      ['Mono Compatibility', 'Excellent: no time-of-arrival differences', 'Poor to moderate: phase cancellation risk when summed'],
+                      ['Phase Issues', 'Minimal: capsules at same point eliminates timing differences', 'Possible: spacing introduces time-of-arrival differences'],
                       ['Best Used For', 'Ensembles, choirs, acoustic instruments where mono compatibility matters', 'Orchestras, ambient recordings, situations where width is priority'],
                       ['Advantages', 'Reliable mono compatibility; easy to set up; consistent imaging', 'Wide, natural stereo image; sense of space and depth; immersive sound'],
                       ['Disadvantages', 'Narrower stereo image; less sense of natural space', 'Phase cancellation in mono; less precise imaging; requires careful placement']
@@ -1095,10 +1095,10 @@ const StereoPanning = () => {
             <StudioCard style={{ marginBottom: 'var(--space-6)' }}>
               <h3 style={{ fontFamily: FONT_HEADING, fontWeight: 700, fontSize: 'var(--text-xl)', margin: '0 0 var(--space-4)', color: 'var(--foreground)' }}>Exam Tips</h3>
               {[
-                'When describing a stereo mix, always specify the pan position AND the reason \u2014 e.g., "The bass is panned centre to maintain a solid low-frequency foundation." Examiners want both the observation and the justification.',
+                'When describing a stereo mix, always specify the pan position AND the reason, e.g., "The bass is panned centre to maintain a solid low-frequency foundation." Examiners want both the observation and the justification.',
                 'Know the difference between X-Y and A-B stereo techniques. For comparison questions, mention: capsule placement (coincident vs spaced), stereo width (moderate vs wide), and mono compatibility (good vs problematic).',
                 'If asked about mono compatibility, explain WHAT happens (phase cancellation when L+R are summed) and WHY it matters (phone speakers, PA systems, Bluetooth speakers sum to mono). Give real-world examples.',
-                'For questions about stereo panning in a mix, always consider frequency balance across the stereo field. Avoid clustering all high-frequency instruments on one side \u2014 maintain a balanced spectral image.',
+                'For questions about stereo panning in a mix, always consider frequency balance across the stereo field. Avoid clustering all high-frequency instruments on one side: maintain a balanced spectral image.',
                 'The Haas effect is a common extended-response topic. Explain the mechanism (short delay, 1\u201335 ms), the perceptual result (sound shifts to the undelayed side), AND the limitation (phase cancellation in mono).'
               ].map((tip, i) => (
                 <CopyableNote key={i} title={`Tip ${i + 1}`} color="var(--secondary)" variant="exam">
@@ -1113,13 +1113,13 @@ const StereoPanning = () => {
                 {'\u{1F3B5}'} Real-World Examples
               </h3>
               {[
-                { artist: 'The Beatles', track: 'A Day in the Life', note: 'Extreme stereo panning typical of 1960s mixes \u2014 instruments placed hard left or hard right with minimal centre content. Demonstrates early experimentation with stereo as a creative tool.' },
+                { artist: 'The Beatles', track: 'A Day in the Life', note: 'Extreme stereo panning typical of 1960s mixes: instruments placed hard left or hard right with minimal centre content. Demonstrates early experimentation with stereo as a creative tool.' },
                 { artist: 'Pink Floyd', track: 'Money', note: 'Dynamic stereo automation moves sound effects and instruments across the stereo field, using panning as an integral part of the artistic arrangement.' },
                 { artist: 'Billie Eilish', track: 'Everything I Wanted', note: 'A deliberately narrow stereo field creates intimacy. The vocal sits close and central whilst subtle width is used sparingly for atmospheric elements.' },
                 { artist: 'Fleetwood Mac', track: 'Dreams', note: 'Classic rock stereo panning: drum overheads spread wide, hi-hat and ride off-centre, kick and snare anchored centre. A template for balanced drum imaging.' }
               ].map((ex, i) => (
                 <div key={i} style={{ padding: 'var(--space-3) 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none' }}>
-                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &mdash; &ldquo;{ex.track}&rdquo;
+                  <strong style={{ color: 'var(--accent)' }}>{ex.artist}</strong> &ndash; &ldquo;{ex.track}&rdquo;
                   <p style={{ margin: 'var(--space-1) 0 0', color: 'var(--foreground-secondary)', fontSize: 'var(--text-sm)', lineHeight: '1.5' }}>{ex.note}</p>
                 </div>
               ))}

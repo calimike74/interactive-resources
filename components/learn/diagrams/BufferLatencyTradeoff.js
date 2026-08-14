@@ -71,14 +71,14 @@ export default function BufferLatencyTradeoff() {
             {
                 headerY: 44, trackY: 58, trackH: 22, statsY: 95, capY: 112,
                 color: '#e85d75', period: 60,
-                header: 'Small buffer — 64 samples', latency: 'Latency ≈ 1.3 ms',
+                header: 'Small buffer: 64 samples', latency: 'Latency ≈ 1.3 ms',
                 caption: 'More refills per second → higher CPU load', cpuFrac: 0.82,
                 headerStart: 40, trackStart: 60, fillStart: 90, statsStart: 160, capStart: 190,
             },
             {
                 headerY: 154, trackY: 168, trackH: 22, statsY: 205, capY: 222,
                 color: '#2563EB', period: 240,
-                header: 'Large buffer — 1024 samples', latency: 'Latency ≈ 21.3 ms',
+                header: 'Large buffer: 1024 samples', latency: 'Latency ≈ 21.3 ms',
                 caption: 'Fewer refills per second → lower CPU load', cpuFrac: 0.22,
                 headerStart: 220, trackStart: 240, fillStart: 270, statsStart: 340, capStart: 370,
             },
@@ -175,7 +175,7 @@ export default function BufferLatencyTradeoff() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 8.5px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Direct monitoring bypasses the buffer entirely — input routed straight to your headphones', W / 2, 245);
+                ctx.fillText('Direct monitoring bypasses the buffer entirely: input routed straight to your headphones', W / 2, 245);
                 ctx.globalAlpha = 1;
             }
 

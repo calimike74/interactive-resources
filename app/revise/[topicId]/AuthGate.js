@@ -92,7 +92,7 @@ export default function AuthGate({ onAuthenticated, submitLabel = 'Start Quiz' }
                     lineHeight: typography.lineHeight.relaxed,
                     marginTop: spacing[3],
                 }}>
-                    Joined on your own? Your progress lives in your studio — sign in at{' '}
+                    Joined on your own? Your progress lives in your studio: sign in at{' '}
                     <a
                         href="https://member.musictechstudio.co.uk"
                         style={{ color: ED.accent }}

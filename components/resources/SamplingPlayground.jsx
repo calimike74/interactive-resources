@@ -300,7 +300,7 @@ function SamplingExplorer() {
               width: '16px', height: '16px', borderRadius: '50%', background: T.text, transition: 'left 0.2s', display: 'block',
             }} />
           </button>
-          <span style={{ fontSize: '12px', color: 'rgba(232, 228, 223, 0.6)' }}>Show reconstructed signal <span style={{ color: T.textTertiary, fontSize: '11px' }}>(linear interpolation — real reconstruction is smoother)</span></span>
+          <span style={{ fontSize: '12px', color: 'rgba(232, 228, 223, 0.6)' }}>Show reconstructed signal <span style={{ color: T.textTertiary, fontSize: '11px' }}>(linear interpolation, real reconstruction is smoother)</span></span>
         </div>
       </div>
 
@@ -311,7 +311,7 @@ function SamplingExplorer() {
           fontSize: '13px', color: T.textSecondary, lineHeight: 1.55,
         }}>
           <span style={{ color: T.error, fontWeight: 700 }}>Aliasing territory. </span>
-          Only {samplesPerCycle} sample{samplesPerCycle !== 1 ? 's' : ''} per cycle — below the Nyquist minimum of {waveFrequency * 2} per cycle.
+          Only {samplesPerCycle} sample{samplesPerCycle !== 1 ? 's' : ''} per cycle: below the Nyquist minimum of {waveFrequency * 2} per cycle.
           The reconstructed signal no longer matches the original.
         </div>
       )}
@@ -481,9 +481,9 @@ function getAccuracy(guess, correct) {
   return 'over25';
 }
 const ACC_CFG = {
-  within10: { label: 'Within 10% — excellent!', colour: T.success, bg: 'rgba(5,150,105,0.1)', border: 'rgba(5,150,105,0.3)' },
-  within25: { label: 'Within 25% — close!', colour: '#D97706', bg: 'rgba(217,119,6,0.1)', border: 'rgba(217,119,6,0.3)' },
-  over25: { label: 'More than 25% out — check your working', colour: '#DC2626', bg: 'rgba(220,38,38,0.1)', border: 'rgba(220,38,38,0.3)' },
+  within10: { label: 'Within 10%: excellent!', colour: T.success, bg: 'rgba(5,150,105,0.1)', border: 'rgba(5,150,105,0.3)' },
+  within25: { label: 'Within 25%: close!', colour: '#D97706', bg: 'rgba(217,119,6,0.1)', border: 'rgba(217,119,6,0.3)' },
+  over25: { label: 'More than 25% out: check your working', colour: '#DC2626', bg: 'rgba(220,38,38,0.1)', border: 'rgba(220,38,38,0.3)' },
 };
 
 function FileSizeChallenge() {
@@ -553,7 +553,7 @@ function FileSizeChallenge() {
   return (
     <div>
       <SectionHeader label="File Size Challenge" title="Estimate the File Size"
-        description="Type your estimate in MB before revealing the answer. Commit first — no hints." />
+        description="Type your estimate in MB before revealing the answer. Commit first: no hints." />
 
       {/* Progress */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
@@ -687,7 +687,7 @@ const CHECKLIST_ITEMS = [
   'I used correct technical vocabulary (e.g., Nyquist, quantisation, dynamic range)',
 ];
 
-const MODEL_ANSWER = 'For a podcast, I would recommend recording at 24-bit/48kHz. The 48kHz sample rate captures frequencies up to 24kHz (Nyquist frequency), which exceeds the range of human hearing at approximately 20kHz. This is appropriate for speech-based content where the fundamental frequencies are typically between 85Hz and 300Hz, with harmonics extending higher. The 24-bit depth provides a dynamic range of approximately 144dB (24 × 6), meaning the noise floor sits far below any audible signal — significantly reducing the risk of quantisation noise during quiet passages. Note: the file size calculation in Section 3 uses 16-bit/44.1kHz — that represents a typical distribution format. Professional recording at 24-bit/48kHz is then converted down for delivery. For streaming distribution, the final file would typically be converted to a compressed format such as MP3 or AAC, reducing the file size significantly from the uncompressed original. Recording at higher quality than the delivery format preserves detail during editing and processing — this is standard professional practice.';
+const MODEL_ANSWER = 'For a podcast, I would recommend recording at 24-bit/48kHz. The 48kHz sample rate captures frequencies up to 24kHz (Nyquist frequency), which exceeds the range of human hearing at approximately 20kHz. This is appropriate for speech-based content where the fundamental frequencies are typically between 85Hz and 300Hz, with harmonics extending higher. The 24-bit depth provides a dynamic range of approximately 144dB (24 × 6), meaning the noise floor sits far below any audible signal: significantly reducing the risk of quantisation noise during quiet passages. Note: the file size calculation in Section 3 uses 16-bit/44.1kHz. That represents a typical distribution format. Professional recording at 24-bit/48kHz is then converted down for delivery. For streaming distribution, the final file would typically be converted to a compressed format such as MP3 or AAC, reducing the file size significantly from the uncompressed original. Recording at higher quality than the delivery format preserves detail during editing and processing: this is standard professional practice.';
 
 function EvaluateResponse() {
   const [response, setResponse] = useState('');
@@ -699,7 +699,7 @@ function EvaluateResponse() {
 
   return (
     <div>
-      <SectionHeader label="AO3 / AO4 — Your Turn" title="Extended Response Practice"
+      <SectionHeader label="AO3 / AO4: Your Turn" title="Extended Response Practice"
         description="Apply what you've explored. Write a short response to the scenario below." />
 
       {/* Scenario */}
@@ -717,11 +717,11 @@ function EvaluateResponse() {
         <CardLabel>How to answer well</CardLabel>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
           <div style={{ background: T.surfaceHover, border: `1px solid rgba(74, 127, 212, 0.08)`, borderRadius: '10px', padding: '14px 16px' }}>
-            <span style={{ color: T.gold, fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em' }}>AO3 — DESCRIBE</span>
+            <span style={{ color: T.gold, fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em' }}>AO3: DESCRIBE</span>
             <p style={{ color: T.textSecondary, fontSize: '13px', lineHeight: 1.5, margin: '6px 0 0' }}>Identify the technical detail → explain what it does</p>
           </div>
           <div style={{ background: T.surfaceHover, border: `1px solid rgba(74, 127, 212, 0.08)`, borderRadius: '10px', padding: '14px 16px' }}>
-            <span style={{ color: T.gold, fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em' }}>AO4 — EVALUATE</span>
+            <span style={{ color: T.gold, fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em' }}>AO4: EVALUATE</span>
             <p style={{ color: T.textSecondary, fontSize: '13px', lineHeight: 1.5, margin: '6px 0 0' }}>Why is this the right choice? What are the trade-offs?</p>
           </div>
         </div>
@@ -752,7 +752,7 @@ function EvaluateResponse() {
 
       {/* Self-check */}
       <Card>
-        <CardLabel>Self-Check — tick after writing</CardLabel>
+        <CardLabel>Self-Check: tick after writing</CardLabel>
         {CHECKLIST_ITEMS.map((item, i) => (
           <div key={i} onClick={() => setChecked(prev => prev.map((v, j) => j === i ? !v : v))}
             role="checkbox" aria-checked={checked[i]} tabIndex={0}
@@ -943,13 +943,13 @@ export default function SamplingPlayground() {
         {/* Hero */}
         <div style={{ textAlign: 'center', marginBottom: '40px', paddingTop: '16px' }}>
           <div style={{ fontSize: '11px', color: T.gold, fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '12px' }}>
-            Topic 2.4 — Digital and Analogue
+            Topic 2.4: Digital and Analogue
           </div>
           <h1 style={{ fontFamily: FONT_HEADING, fontSize: '32px', fontWeight: 900, color: T.text, margin: '0 0 10px', letterSpacing: '-0.02em' }}>
             Sampling Playground
           </h1>
           <p style={{ color: T.textTertiary, fontSize: '15px', lineHeight: 1.6, maxWidth: '520px', margin: '0 auto' }}>
-            Explore how digital audio captures analogue sound. Play with sample rate, bit depth, and file sizes — then put it all together.
+            Explore how digital audio captures analogue sound. Play with sample rate, bit depth, and file sizes. Then put it all together.
           </p>
         </div>
 
@@ -975,7 +975,7 @@ export default function SamplingPlayground() {
         {/* Footer */}
         <div style={{ textAlign: 'center', padding: '24px 0 32px', borderTop: `1px solid ${T.border}` }}>
           <p style={{ color: T.textTertiary, fontSize: '12px', margin: 0 }}>
-            A-Level Music Technology — Component 4: Producing and Analysing — Section 2.4: Digital Audio
+            A-Level Music Technology | Component 4: Producing and Analysing | Section 2.4: Digital Audio
           </p>
         </div>
       </div>

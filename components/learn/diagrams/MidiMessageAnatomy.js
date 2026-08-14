@@ -187,7 +187,7 @@ export default function MidiMessageAnatomy() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Three small bytes — why a MIDI file can be kilobytes,', W / 2, 232);
+                ctx.fillText('Three small bytes: why a MIDI file can be kilobytes,', W / 2, 232);
                 ctx.fillText('not megabytes, and every note stays editable', W / 2, 245);
                 ctx.globalAlpha = 1;
             }

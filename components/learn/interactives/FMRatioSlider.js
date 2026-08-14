@@ -36,10 +36,10 @@ export default function FMRatioSlider() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — FM ratio
+                    Try it: FM ratio
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
-                    ratio {ratio.toFixed(2)} — {isHarmonic ? 'harmonic' : 'inharmonic/bell-like'}
+                    ratio {ratio.toFixed(2)}: {isHarmonic ? 'harmonic' : 'inharmonic/bell-like'}
                 </span>
             </div>
             <input
@@ -59,7 +59,7 @@ export default function FMRatioSlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

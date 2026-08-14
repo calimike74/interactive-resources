@@ -69,8 +69,8 @@ export default function ContinuousVsDiscrete() {
         const sampleTs = (n) => Array.from({ length: n }, (_, i) => i / (n - 1));
         const ts = sampleTs(N);
 
-        const PANEL_A = { midY: 95, amp: 32, labelY: 48, capY: 150, color: '#374151', label: 'Analogue — continuous voltage', cap: 'One unbroken line — a value exists at every instant' };
-        const PANEL_B = { midY: 215, amp: 32, labelY: 168, capY: 262, color: '#14b8a6', label: `Digital — ${N} discrete samples`, cap: 'Only these measurements exist — held flat until the next one' };
+        const PANEL_A = { midY: 95, amp: 32, labelY: 48, capY: 150, color: '#374151', label: 'Analogue: continuous voltage', cap: 'One unbroken line: a value exists at every instant' };
+        const PANEL_B = { midY: 215, amp: 32, labelY: 168, capY: 262, color: '#14b8a6', label: `Digital: ${N} discrete samples`, cap: 'Only these measurements exist: held flat until the next one' };
 
         const drawSmoothCurve = (panel, alpha, faint) => {
             ctx.globalAlpha = faint ? alpha * 0.35 : alpha;

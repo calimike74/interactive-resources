@@ -28,7 +28,7 @@ const SECTIONS = [
                     'EQ',
                 ],
                 correctIndex: 1,
-                explanation: 'Robotic warbling is the signature artefact of an over-aggressive pitch correction plug-in snapping rapidly between scale degrees. Reject "pitch shift" — that is a different processor.',
+                explanation: 'Robotic warbling is the signature artefact of an over-aggressive pitch correction plug-in snapping rapidly between scale degrees. Reject "pitch shift": that is a different processor.',
             },
             {
                 id: 'psm-pitch-2',
@@ -38,7 +38,7 @@ const SECTIONS = [
                     'Very fast (≈ 0 ms)',
                     'Slow (≈ 400 ms)',
                     'Medium (≈ 200 ms)',
-                    'None — it is always natural',
+                    'None: it is always natural',
                 ],
                 correctIndex: 0,
                 explanation: 'A response time near zero snaps every pitch deviation instantly, producing the stepped robotic effect heard in Cher\'s "Believe" and T-Pain\'s vocal style. Slower settings (200–400 ms) preserve natural pitch movement.',
@@ -69,7 +69,7 @@ const SECTIONS = [
                 question: 'An LFO is creating a continuous pitch wobble on a synth lead. What is it routed to?',
                 options: ['Cutoff frequency', 'Pitch', 'Pulse width', 'Volume'],
                 correctIndex: 1,
-                explanation: 'LFO → pitch produces vibrato (a continuous pitch wobble). Memorise the routing table — these are pure recall marks in the exam.',
+                explanation: 'LFO → pitch produces vibrato (a continuous pitch wobble). Memorise the routing table: these are pure recall marks in the exam.',
             },
             {
                 id: 'psm-synth-2',
@@ -98,7 +98,7 @@ const SECTIONS = [
                     'Attack, Delay, Sustain, Release',
                 ],
                 correctIndex: 1,
-                explanation: 'Attack (rise to peak), Decay (fall to sustain level), Sustain (held level while note is pressed — note this is a level, not a time), Release (fade to silence after note off).',
+                explanation: 'Attack (rise to peak), Decay (fall to sustain level), Sustain (held level while note is pressed, note this is a level, not a time), Release (fade to silence after note off).',
             },
             {
                 id: 'psm-synth-5',
@@ -111,7 +111,7 @@ const SECTIONS = [
                     'A long sustain',
                 ],
                 correctIndex: 0,
-                explanation: 'Zero attack means the amplitude jumps instantly from silence to peak — an abrupt discontinuity heard as a click. With sustain = 0 and zero decay, it then jumps straight back to silence, creating a second click. Both note edges click.',
+                explanation: 'Zero attack means the amplitude jumps instantly from silence to peak: an abrupt discontinuity heard as a click. With sustain = 0 and zero decay, it then jumps straight back to silence, creating a second click. Both note edges click.',
             },
             // Numeric drill is inserted here at runtime — see LFO_DRILL_PLACEHOLDER below
         ],
@@ -132,7 +132,7 @@ const SECTIONS = [
                     'mp3 compression removes bass',
                 ],
                 correctIndex: 1,
-                explanation: 'A small driver physically cannot move enough air to reproduce frequencies below ~300–500 Hz. The listener may only hear the bass harmonics, not the fundamental — so the bass sounds thin or absent.',
+                explanation: 'A small driver physically cannot move enough air to reproduce frequencies below ~300–500 Hz. The listener may only hear the bass harmonics, not the fundamental, so the bass sounds thin or absent.',
             },
             {
                 id: 'psm-mon-2',
@@ -158,7 +158,7 @@ const SECTIONS = [
                     'It is a legal requirement',
                 ],
                 correctIndex: 1,
-                explanation: 'Around 60–80% of listeners consume music through phone speakers, earbuds or laptop speakers. If the vocal disappears or the kick vanishes on a phone, the mix has failed to translate — and you fix it before bouncing.',
+                explanation: 'Around 60–80% of listeners consume music through phone speakers, earbuds or laptop speakers. If the vocal disappears or the kick vanishes on a phone, the mix has failed to translate, and you fix it before bouncing.',
             },
         ],
     },
@@ -341,11 +341,11 @@ export default function PitchSynthMonitorsAssessment() {
                         {sectionMeta?.label} · {sectionMeta?.topic}
                     </p>
                     <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
-                        Pitch, Synthesis & Monitors — Revision
+                        Pitch, Synthesis & Monitors: Revision
                     </h1>
                     {!token && (
                         <p className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800 ring-1 ring-amber-200">
-                            Not signed in — your answers will not be saved to your dashboard. Use a /revise link from your teacher to track progress.
+                            Not signed in: your answers will not be saved to your dashboard. Use a /revise link from your teacher to track progress.
                         </p>
                     )}
                 </header>
@@ -564,7 +564,7 @@ function ResultsScreen({ responses, questions, onRestart, hasToken }) {
                         </p>
                         {!hasToken && (
                             <p className="mt-2 text-xs text-amber-700">
-                                Not saved — sign in via /revise next time to track progress.
+                                Not saved: sign in via /revise next time to track progress.
                             </p>
                         )}
                     </div>

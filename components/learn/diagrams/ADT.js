@@ -50,7 +50,7 @@ export default function ADT() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('ADT — short delay + LFO pitch modulation', W / 2, 20);
+            ctx.fillText('ADT: short delay + LFO pitch modulation', W / 2, 20);
             ctx.globalAlpha = 1;
 
             // Row labels (appear progressively)

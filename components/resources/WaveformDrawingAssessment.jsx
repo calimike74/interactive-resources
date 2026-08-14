@@ -32,12 +32,12 @@ const QUESTIONS = [
         prompt: 'What happens when a wave is added to a copy of itself with polarity inverted?',
         options: [
             'Volume doubles',
-            'Phase cancellation — the two waves cancel to silence',
+            'Phase cancellation: the two waves cancel to silence',
             'The wave shifts in time',
             'The wave becomes louder',
         ],
         correctIndex: 1,
-        explanation: 'A polarity-inverted copy is mirrored across the zero line. Every positive sample meets a matching negative sample, so the sum is zero — total phase cancellation.',
+        explanation: 'A polarity-inverted copy is mirrored across the zero line. Every positive sample meets a matching negative sample, so the sum is zero: total phase cancellation.',
     },
     {
         id: 'wd-q4-octave-up',
@@ -58,7 +58,7 @@ const QUESTIONS = [
             'stereo room', 'room mic',
         ],
         explanationKeywords: ['cancel', 'cancellation', 'phase', 'polarity', 'out of phase', 'thin', 'comb'],
-        sampleAnswer: 'Multi-mic recording of one source — e.g. a snare drum captured with a top mic and a bottom mic. The two mics see the drumhead moving in opposite directions, so the bottom mic must be polarity-flipped or the low end cancels out.',
+        sampleAnswer: 'Multi-mic recording of one source, e.g. a snare drum captured with a top mic and a bottom mic. The two mics see the drumhead moving in opposite directions, so the bottom mic must be polarity-flipped or the low end cancels out.',
         explanation: 'Accept any multi-mic scenario: snare top + bottom, kick in + out, DI + mic\'d amp, drum overheads, stereo room mics. The mark is for naming a realistic scenario AND explaining that the signals can cancel low-end if polarity is wrong.',
     },
     {
@@ -69,7 +69,7 @@ const QUESTIONS = [
             'Vertical (y)',
             'Horizontal (x)',
             'Diagonal',
-            'Either — it depends on the DAW',
+            'Either: it depends on the DAW',
         ],
         correctIndex: 1,
         explanation: 'Time always runs along the horizontal (x) axis. Amplitude (voltage / displacement / level / dB) is on the vertical (y) axis. Always include units in your axis labels.',
@@ -605,7 +605,7 @@ function FeedbackPanel({ correct, type, explanation, sampleAnswer }) {
         : 'border-rose-300 bg-rose-50';
     const headingTone = correct ? 'text-emerald-800' : 'text-rose-800';
     const heading = type === 'short'
-        ? 'Keywords matched — compare with the sample answer below'
+        ? 'Keywords matched: compare with the sample answer below'
         : correct ? 'Correct' : 'Not quite';
 
     return (
@@ -635,9 +635,9 @@ function ResultsScreen({ responses, questions, onRestart }) {
         : percentage >= 60 ? 'text-amber-700 border-amber-500'
         : 'text-rose-700 border-rose-500';
 
-    const headlineLabel = percentage >= 80 ? 'Strong — bank these marks in the exam.'
-        : percentage >= 60 ? 'Getting there — review the missed questions below.'
-        : 'Needs work — revisit the worksheet and try again.';
+    const headlineLabel = percentage >= 80 ? 'Strong: bank these marks in the exam.'
+        : percentage >= 60 ? 'Getting there: review the missed questions below.'
+        : 'Needs work: revisit the worksheet and try again.';
 
     return (
         <div className="min-h-[60vh] bg-cream py-8 px-4 sm:px-6">

@@ -151,7 +151,7 @@ export default function ProgressDashboard() {
                     t={t}
                 />
                 <StatCard
-                    value={totalAttempts > 0 ? `${avgScore}%` : '—'}
+                    value={totalAttempts > 0 ? `${avgScore}%` : '–'}
                     label="Average score"
                     valueColor={totalAttempts > 0
                         ? (avgScore >= 70 ? t.accent.success : avgScore >= 40 ? t.accent.warning : t.accent.error)

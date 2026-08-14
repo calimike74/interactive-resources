@@ -41,10 +41,10 @@ export default function ReverbDecaySlider() {
                     fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
-                    Try it — reverb decay
+                    Try it: reverb decay
                 </span>
                 <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
-                    {decay.toFixed(1)} s — {spaceWord(decay)}
+                    {decay.toFixed(1)} s: {spaceWord(decay)}
                 </span>
             </div>
             <input
@@ -65,7 +65,7 @@ export default function ReverbDecaySlider() {
                     cursor: 'pointer', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none',
                 }}
             >
-                {playing ? '■ playing — tap to stop' : '▸ play it'}
+                {playing ? '■ playing: tap to stop' : '▸ play it'}
             </button>
         </div>
     );

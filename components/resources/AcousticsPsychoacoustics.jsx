@@ -106,15 +106,15 @@ const DiffBadge = ({ level }) => {
 // ============================================
 const learnSections = [
   { level: 'foundation', title: 'The ear as a transducer',
-    content: 'Sound waves enter the outer ear and push the eardrum back and forth. Three tiny bones (the ossicles) lever those movements into the cochlea, a fluid-filled spiral. Inside the cochlea, the basilar membrane vibrates in different places for different frequencies — and hair cells convert those vibrations into nerve impulses. The ear is a mechanical-to-electrical transducer, the inverse of a loudspeaker.' },
+    content: 'Sound waves enter the outer ear and push the eardrum back and forth. Three tiny bones (the ossicles) lever those movements into the cochlea, a fluid-filled spiral. Inside the cochlea, the basilar membrane vibrates in different places for different frequencies, and hair cells convert those vibrations into nerve impulses. The ear is a mechanical-to-electrical transducer, the inverse of a loudspeaker.' },
   { level: 'foundation', title: 'Human hearing range',
-    content: 'A young, healthy listener hears roughly 20 Hz to 20 kHz. The lower end is felt as much as heard; the upper end fades with age and exposure to loud sound. Most musical content sits between 50 Hz and 8 kHz — bass weight, presence, air. The two octaves around 1–4 kHz are where the ear is most sensitive and where speech intelligibility lives.' },
+    content: 'A young, healthy listener hears roughly 20 Hz to 20 kHz. The lower end is felt as much as heard; the upper end fades with age and exposure to loud sound. Most musical content sits between 50 Hz and 8 kHz: bass weight, presence, air. The two octaves around 1–4 kHz are where the ear is most sensitive and where speech intelligibility lives.' },
   { level: 'foundation', title: 'Threshold of hearing & threshold of pain',
-    content: 'At 1 kHz, the quietest sound a young ear can detect is around 0 dB SPL. The threshold of pain sits around 120 dB SPL — sustained exposure above 85 dB SPL causes permanent damage. The decibel scale is logarithmic: each 6 dB doubles the sound pressure, and each 10 dB roughly doubles perceived loudness.' },
+    content: 'At 1 kHz, the quietest sound a young ear can detect is around 0 dB SPL. The threshold of pain sits around 120 dB SPL. Sustained exposure above 85 dB SPL causes permanent damage. The decibel scale is logarithmic: each 6 dB doubles the sound pressure, and each 10 dB roughly doubles perceived loudness.' },
   { level: 'intermediate', title: 'Equal-loudness contours (Fletcher–Munson)',
-    content: 'The ear is not equally sensitive across frequencies. At low listening levels we need much more energy at the extremes (20 Hz, 16 kHz) to perceive them as equally loud as a 1 kHz tone. As volume rises, the contours flatten — mixes feel more balanced loud than quiet. This is why engineers reference at a consistent monitoring level: a mix balanced quietly will feel bass-heavy when played loud, and vice versa.' },
+    content: 'The ear is not equally sensitive across frequencies. At low listening levels we need much more energy at the extremes (20 Hz, 16 kHz) to perceive them as equally loud as a 1 kHz tone. As volume rises, the contours flatten: mixes feel more balanced loud than quiet. This is why engineers reference at a consistent monitoring level: a mix balanced quietly will feel bass-heavy when played loud, and vice versa.' },
   { level: 'intermediate', title: 'Frequency masking',
-    content: 'A louder sound at one frequency hides quieter sounds at nearby frequencies. A loud kick around 60 Hz masks a quieter bass guitar fundamental at 80 Hz; a bright cymbal at 8 kHz masks a vocal sibilant at 7 kHz. Mixing is, in large part, an exercise in unmasking — carving frequency space so each instrument is heard. EQ subtractions and panning both relieve masking.' },
+    content: 'A louder sound at one frequency hides quieter sounds at nearby frequencies. A loud kick around 60 Hz masks a quieter bass guitar fundamental at 80 Hz; a bright cymbal at 8 kHz masks a vocal sibilant at 7 kHz. Mixing is, in large part, an exercise in unmasking: carving frequency space so each instrument is heard. EQ subtractions and panning both relieve masking.' },
   { level: 'intermediate', title: 'Temporal masking',
     content: 'A loud sound masks quieter sounds immediately before and after it. Pre-masking is about 20 ms; post-masking can last 100–200 ms. This is why a snare hit can hide a quiet hi-hat ghost note that follows it, and why MP3 encoders aggressively discard data hidden behind transients without listeners noticing.' },
   { level: 'advanced', title: 'Reflection, absorption, diffusion',
@@ -136,7 +136,7 @@ const quizQuestions = [
   { q: 'The two octaves where the ear is MOST sensitive are roughly:',
     options: ['50–200 Hz', '1–4 kHz', '8–16 kHz', '12–48 kHz'],
     correct: 1, difficulty: 'foundation',
-    explanation: 'The equal-loudness contours dip lowest around 1–4 kHz — this is where the ear needs the least sound energy to perceive a sound, and the band that carries speech intelligibility and vocal presence.' },
+    explanation: 'The equal-loudness contours dip lowest around 1–4 kHz: this is where the ear needs the least sound energy to perceive a sound, and the band that carries speech intelligibility and vocal presence.' },
   { q: 'At low listening levels, what change in perceived spectral balance do the Fletcher–Munson contours predict?',
     options: ['Bass and treble appear louder than midrange', 'Bass and treble appear quieter relative to midrange', 'The whole frequency range appears flat', 'High frequencies become inaudible'],
     correct: 1, difficulty: 'intermediate',
@@ -180,7 +180,7 @@ const quizQuestions = [
               'The car has poor speakers',
               'The mix bus is clipping'],
     correct: 1, difficulty: 'advanced',
-    explanation: 'Untreated small rooms have strong modal behaviour — at the listening position, certain low frequencies cancel (or peak) by many decibels. The bedroom is misleading the producer about what is in the mix; the car is closer to a neutral playback.' },
+    explanation: 'Untreated small rooms have strong modal behaviour: at the listening position, certain low frequencies cancel (or peak) by many decibels. The bedroom is misleading the producer about what is in the mix; the car is closer to a neutral playback.' },
 ];
 
 // ============================================
@@ -268,14 +268,14 @@ const AcousticsPsychoacoustics = () => {
   const [diffusers, setDiffusers] = useState(0);
   const roomScore = useMemo(() => {
     const treatments = absorbers + bassTraps + diffusers;
-    if (treatments === 0) return { rt60: 0.95, lowEvenness: 25, balance: 'Untreated — long ragged decay; bass piles up in corners.' };
+    if (treatments === 0) return { rt60: 0.95, lowEvenness: 25, balance: 'Untreated: long ragged decay; bass piles up in corners.' };
     const baseRt = Math.max(0.18, 0.95 - absorbers * 0.07 - bassTraps * 0.04 - diffusers * 0.02);
     const lowEven = Math.min(95, 25 + bassTraps * 12 + absorbers * 3);
     let balance;
-    if (bassTraps === 0 && absorbers > 4) balance = 'Mid/high deadened, bass still wild — over-absorbed.';
-    else if (bassTraps >= 2 && absorbers >= 2 && diffusers >= 1) balance = 'Balanced — even decay, modal energy tamed, liveliness retained.';
+    if (bassTraps === 0 && absorbers > 4) balance = 'Mid/high deadened, bass still wild: over-absorbed.';
+    else if (bassTraps >= 2 && absorbers >= 2 && diffusers >= 1) balance = 'Balanced: even decay, modal energy tamed, liveliness retained.';
     else if (absorbers === 0 && bassTraps > 0) balance = 'Bass under control but flutter still rings on the highs.';
-    else balance = 'Improving — keep adding absorbers and consider diffusion to avoid a dead room.';
+    else balance = 'Improving: keep adding absorbers and consider diffusion to avoid a dead room.';
     return { rt60: baseRt, lowEvenness: lowEven, balance };
   }, [absorbers, bassTraps, diffusers]);
 
@@ -415,7 +415,7 @@ const AcousticsPsychoacoustics = () => {
             </div>
 
             <CopyableNote title="Watch the contour flatten" variant="key" color="var(--canvas-highlight)">
-              At <strong>20 phon</strong> the curve bows enormously at the extremes — quiet mixes feel bass-light and dull. As you push to <strong>80–100 phon</strong>, the contour straightens; the same instruments now feel balanced. <em>Mix at a consistent monitoring level.</em>
+              At <strong>20 phon</strong> the curve bows enormously at the extremes: quiet mixes feel bass-light and dull. As you push to <strong>80–100 phon</strong>, the contour straightens; the same instruments now feel balanced. <em>Mix at a consistent monitoring level.</em>
             </CopyableNote>
           </div>
         )}
@@ -425,7 +425,7 @@ const AcousticsPsychoacoustics = () => {
           <div style={{ background: 'var(--canvas-background)', borderRadius: 'var(--radius-xl)', padding: 'var(--space-5)' }}>
             <h3 style={{ fontFamily: FONT_HEADING, color: 'var(--canvas-foreground)', fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>Frequency masking</h3>
             <p style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-4)' }}>
-              Drag the masker tone and target tone. The masker raises the threshold of audibility around its frequency — a target sitting below the threshold disappears.
+              Drag the masker tone and target tone. The masker raises the threshold of audibility around its frequency: a target sitting below the threshold disappears.
             </p>
 
             <svg viewBox="0 0 600 220" style={{ width: '100%', maxWidth: 720, background: 'var(--canvas-surface)', borderRadius: 'var(--radius-md)' }}>
@@ -495,7 +495,7 @@ const AcousticsPsychoacoustics = () => {
               </div>
             </div>
 
-            <CopyableNote title={targetMasked ? 'Target is MASKED — listener hears the masker only.' : 'Target is AUDIBLE — sits above the threshold.'}
+            <CopyableNote title={targetMasked ? 'Target is MASKED: listener hears the masker only.' : 'Target is AUDIBLE: sits above the threshold.'}
               variant={targetMasked ? 'warning' : 'key'}
               color={targetMasked ? 'var(--error)' : 'var(--success)'}>
               Notice the threshold-bend is asymmetric: a masker raises the threshold less for frequencies <em>below</em> it (about 30 dB/octave roll-off downwards) and more for frequencies <em>above</em> (about 15 dB/octave upwards). That asymmetry is why <strong>upward masking</strong> (loud lows hiding mids and highs) is the dominant problem in mixing.

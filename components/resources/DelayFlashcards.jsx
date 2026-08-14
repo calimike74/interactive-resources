@@ -1470,7 +1470,7 @@ const DelayFlashcards = () => {
 
         {showSummary ? (
           <>
-            <h2 className="dfc-summary-title">Delay &amp; Echo — Summary</h2>
+            <h2 className="dfc-summary-title">Delay &amp; Echo: Summary</h2>
 
             <div className="dfc-meter" aria-label={`${Math.round(masteryScore)}% ready`}>
               <div className="dfc-meter-fill" style={{ width: `${masteryScore}%` }} />
@@ -1497,7 +1497,7 @@ const DelayFlashcards = () => {
                 {Object.entries(needsReviewByCategory).map(([category, cards], idx) => (
                   <div key={idx} className="dfc-summary-subgroup">
                     <div className="dfc-control-label" style={{ marginBottom: '0.45rem' }}>
-                      {category} — {cards.length} card{cards.length === 1 ? '' : 's'}
+                      {category}: {cards.length} card{cards.length === 1 ? '' : 's'}
                     </div>
                     {cards.map((card, cardIdx) => (
                       <div key={cardIdx} className="dfc-summary-item" data-tone="needs-review">
@@ -1522,7 +1522,7 @@ const DelayFlashcards = () => {
                 {Object.entries(masteredByCategory).map(([category, cards], idx) => (
                   <div key={idx} className="dfc-summary-subgroup">
                     <div className="dfc-control-label" style={{ marginBottom: '0.45rem' }}>
-                      {category} — {cards.length} card{cards.length === 1 ? '' : 's'}
+                      {category}: {cards.length} card{cards.length === 1 ? '' : 's'}
                     </div>
                     {cards.map((card, cardIdx) => (
                       <div key={cardIdx} className="dfc-summary-item" data-tone="mastered">
@@ -1583,16 +1583,16 @@ const DelayFlashcards = () => {
                     <ol>
                       <li>Read the question and try to recall the answer before flipping.</li>
                       <li>Use the diagram only after you have attempted an answer.</li>
-                      <li>Rate yourself honestly &mdash; the card schedules itself accordingly.</li>
+                      <li>Rate yourself honestly: the card schedules itself accordingly.</li>
                       <li>Your progress is saved locally between sessions.</li>
                     </ol>
                   </div>
                   <div>
                     <h4>Specification coverage</h4>
                     <ul>
-                      <li>Foundation &mdash; core parameters and terminology.</li>
-                      <li>Standard &mdash; A-Level expected content for Component 4.</li>
-                      <li>Advanced &mdash; extension material for higher-band responses.</li>
+                      <li>Foundation: core parameters and terminology.</li>
+                      <li>Standard: A-Level expected content for Component 4.</li>
+                      <li>Advanced: extension material for higher-band responses.</li>
                       <li>All cards link to Ableton Live practical applications.</li>
                     </ul>
                   </div>
@@ -1699,7 +1699,7 @@ const DelayFlashcards = () => {
                           className="dfc-tool-btn"
                           data-copied={copyStatus === 'notes'}
                           onClick={() => copyCurrentCard('notes')}
-                          title="Copy this card as clean markdown — paste into OneNote or any notes app"
+                          title="Copy this card as clean markdown: paste into OneNote or any notes app"
                         >
                           {copyStatus === 'notes' ? 'Copied' : 'Copy for notes'}
                         </button>
@@ -1737,7 +1737,7 @@ const DelayFlashcards = () => {
                                   checked={learnMode}
                                   onChange={toggleLearnMode}
                                 />
-                                <span>Tutor mode — AI asks questions, doesn't give answers</span>
+                                <span>Tutor mode: AI asks questions, doesn't give answers</span>
                               </label>
                             </div>
                           )}

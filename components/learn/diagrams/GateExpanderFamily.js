@@ -91,9 +91,9 @@ export default function GateExpanderFamily() {
 
             const panelH = 54;
             const lanes = [
-                { top: 42, label: 'Original — noise floor + two phrases', dbFn: originalDb, color: '#6b7280', start: 30 },
-                { top: 124, label: 'Gate — below threshold: silence', dbFn: gateDb, color: '#DC2626', start: 190 },
-                { top: 206, label: 'Expander — below threshold: reduced, not silenced', dbFn: expanderDb, color: '#2563EB', start: 350 },
+                { top: 42, label: 'Original: noise floor + two phrases', dbFn: originalDb, color: '#6b7280', start: 30 },
+                { top: 124, label: 'Gate: below threshold, silence', dbFn: gateDb, color: '#DC2626', start: 190 },
+                { top: 206, label: 'Expander: below threshold, reduced, not silenced', dbFn: expanderDb, color: '#2563EB', start: 350 },
             ];
 
             lanes.forEach((lane) => {
@@ -138,7 +138,7 @@ export default function GateExpanderFamily() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Both act below the threshold — a compressor acts above it', W / 2, 276);
+                ctx.fillText('Both act below the threshold: a compressor acts above it', W / 2, 276);
                 ctx.globalAlpha = 1;
             }
 

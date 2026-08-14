@@ -286,7 +286,7 @@ function DescriptionStrip({ threshold, ratio, attack, release, knee, makeupGain,
                 <span key={i}>
                     {i > 0 && <span style={{ color: COLORS.textHint, margin: `0 ${spacing[2]}` }}>&middot;</span>}
                     <strong style={{ color: colorMap[p.type] || COLORS.text }}>{p.text}</strong>
-                    {p.detail && ` — ${p.detail}`}
+                    {p.detail && `: ${p.detail}`}
                 </span>
             ))}
         </div>
@@ -1154,12 +1154,12 @@ export default function CompressorExplorer() {
             <div style={{ paddingTop: spacing[12], marginBottom: spacing[10] }}>
                 <h2 style={h2Style}>What is Compression?</h2>
                 <p style={bodyStyle}>
-                    A compressor reduces the dynamic range of a signal — making loud parts quieter and (with makeup gain)
+                    A compressor reduces the dynamic range of a signal, making loud parts quieter and (with makeup gain)
                     quiet parts relatively louder. The two fundamental controls are <strong>threshold</strong> and <strong>ratio</strong>.
                 </p>
             </div>
 
-            <InteractiveBox hint="Drag the threshold and ratio sliders — or drag directly on the transfer curve to adjust">
+            <InteractiveBox hint="Drag the threshold and ratio sliders, or drag directly on the transfer curve to adjust">
                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 1fr) minmax(300px, 1.4fr)', gap: spacing[6] }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                         <div style={{ paddingBottom: spacing[5] }}>
@@ -1218,7 +1218,7 @@ export default function CompressorExplorer() {
                     padding: `${spacing[4]} ${spacing[5]}`, marginTop: spacing[6],
                 }}>
                     <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0 }}>
-                        <strong style={{ color: COLORS.text }}>Exam tip:</strong> A ratio of ∞:1 is called <em>limiting</em> — no signal can exceed the threshold. This is the most extreme form of compression.
+                        <strong style={{ color: COLORS.text }}>Exam tip:</strong> A ratio of ∞:1 is called <em>limiting</em>: no signal can exceed the threshold. This is the most extreme form of compression.
                     </p>
                 </div>
             </div>
@@ -1326,7 +1326,7 @@ export default function CompressorExplorer() {
                         <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: spacing[5], paddingBottom: spacing[5] }}>
                             <CompressorControl label="Makeup Gain" value={makeupGain} min={0} max={24} step={0.5} onChange={setMakeupGain} unit=" dB" color={accent} tierColor={COLORS.advanced} />
                             <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0, marginTop: spacing[3] }}>
-                                Boosts the output after compression. Restores perceived loudness — making quiet parts relatively louder.
+                                Boosts the output after compression. Restores perceived loudness, making quiet parts relatively louder.
                             </p>
                         </div>
                         <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: spacing[4] }}>
@@ -1349,21 +1349,21 @@ export default function CompressorExplorer() {
                     Advanced controls
                 </h3>
                 <KeyConcept label="Hard Knee">
-                    Compression engages abruptly at the threshold — the transfer curve has a sharp angle. More aggressive and audible. Good for limiting and parallel compression.
+                    Compression engages abruptly at the threshold: the transfer curve has a sharp angle. More aggressive and audible. Good for limiting and parallel compression.
                 </KeyConcept>
                 <KeyConcept label="Soft Knee">
-                    Compression engages gradually as the signal approaches the threshold — the transfer curve has a smooth curve. More transparent and musical. Good for vocals and mix bus.
+                    Compression engages gradually as the signal approaches the threshold: the transfer curve has a smooth curve. More transparent and musical. Good for vocals and mix bus.
                 </KeyConcept>
                 <KeyConcept label="Makeup Gain">
-                    A gain stage after the compressor that boosts the overall output. Since compression reduces peaks, makeup gain restores perceived loudness — making quiet parts relatively louder.
+                    A gain stage after the compressor that boosts the overall output. Since compression reduces peaks, makeup gain restores perceived loudness, making quiet parts relatively louder.
                 </KeyConcept>
 
                 <CopyAllNotes
                     title="Knee & Makeup Gain"
                     notes={[
-                        { label: 'Hard Knee', text: 'Compression engages abruptly at the threshold — the transfer curve has a sharp angle. More aggressive and audible. Good for limiting and parallel compression.' },
-                        { label: 'Soft Knee', text: 'Compression engages gradually as the signal approaches the threshold — the transfer curve has a smooth curve. More transparent and musical. Good for vocals and mix bus.' },
-                        { label: 'Makeup Gain', text: 'A gain stage after the compressor that boosts the overall output. Since compression reduces peaks, makeup gain restores perceived loudness — making quiet parts relatively louder.' },
+                        { label: 'Hard Knee', text: 'Compression engages abruptly at the threshold: the transfer curve has a sharp angle. More aggressive and audible. Good for limiting and parallel compression.' },
+                        { label: 'Soft Knee', text: 'Compression engages gradually as the signal approaches the threshold: the transfer curve has a smooth curve. More transparent and musical. Good for vocals and mix bus.' },
+                        { label: 'Makeup Gain', text: 'A gain stage after the compressor that boosts the overall output. Since compression reduces peaks, makeup gain restores perceived loudness, making quiet parts relatively louder.' },
                     ]}
                 />
 
@@ -1372,7 +1372,7 @@ export default function CompressorExplorer() {
                     padding: `${spacing[4]} ${spacing[5]}`, marginTop: spacing[6],
                 }}>
                     <p style={{ color: COLORS.textSecondary, fontSize: typography.size.sm, lineHeight: typography.lineHeight.relaxed, margin: 0 }}>
-                        <strong style={{ color: COLORS.text }}>Exam tip:</strong> Soft knee is often described as "more musical" or "transparent" — use this language in your answers when comparing compression approaches.
+                        <strong style={{ color: COLORS.text }}>Exam tip:</strong> Soft knee is often described as "more musical" or "transparent": use this language in your answers when comparing compression approaches.
                     </p>
                 </div>
             </div>
@@ -1548,7 +1548,7 @@ export default function CompressorExplorer() {
                         </button>
                     ) : (
                         <p style={{ color: quizScore === QUIZ_QUESTIONS.length ? '#059669' : accent, fontSize: typography.size.base, fontWeight: typography.weight.semibold }}>
-                            {quizScore}/{QUIZ_QUESTIONS.length} correct{quizScore === QUIZ_QUESTIONS.length && ' — Perfect!'}
+                            {quizScore}/{QUIZ_QUESTIONS.length} correct{quizScore === QUIZ_QUESTIONS.length && ', Perfect!'}
                         </p>
                     )}
                 </div>
@@ -1687,7 +1687,7 @@ export default function CompressorExplorer() {
                         maxWidth: '480px', margin: '0 auto',
                         textShadow: '0 1px 4px rgba(0,0,0,0.2)',
                     }}>
-                        Learn how compressors control dynamics. Adjust threshold, ratio, attack, release, knee and makeup gain — hear and see the results in real-time.
+                        Learn how compressors control dynamics. Adjust threshold, ratio, attack, release, knee and makeup gain: hear and see the results in real-time.
                     </p>
                 </div>
             </div>

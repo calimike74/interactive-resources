@@ -81,7 +81,7 @@ export default function AliasingFoldback() {
             ctx.fillText('Aliasing: Folding Back Around Nyquist', W / 2, 16);
             ctx.font = 'italic 8px -apple-system, sans-serif';
             ctx.fillStyle = '#9ca3af';
-            ctx.fillText('(illustrative 40 kHz grid — not a real recording format)', W / 2, 30);
+            ctx.fillText('(illustrative 40 kHz grid: not a real recording format)', W / 2, 30);
             ctx.globalAlpha = 1;
 
             const zoneP = progress(f, PHASE_ZONES, 30);
@@ -131,7 +131,7 @@ export default function AliasingFoldback() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(`Nyquist — ${NYQUIST} kHz (rate ÷ 2)`, pxX(NYQUIST), 54);
+                ctx.fillText(`Nyquist: ${NYQUIST} kHz (rate ÷ 2)`, pxX(NYQUIST), 54);
                 ctx.globalAlpha = 1;
             }
 
@@ -150,7 +150,7 @@ export default function AliasingFoldback() {
                 ctx.fill();
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(`Source — ${SOURCE} kHz`, pxX(SOURCE), 110);
+                ctx.fillText(`Source: ${SOURCE} kHz`, pxX(SOURCE), 110);
                 ctx.globalAlpha = 1;
             }
 
@@ -193,7 +193,7 @@ export default function AliasingFoldback() {
                 ctx.fill();
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(`Alias — ${ALIAS} kHz`, pxX(ALIAS), 110);
+                ctx.fillText(`Alias: ${ALIAS} kHz`, pxX(ALIAS), 110);
                 ctx.globalAlpha = 1;
             }
 
@@ -220,7 +220,7 @@ export default function AliasingFoldback() {
                 ctx.fillStyle = '#374151';
                 ctx.font = 'italic 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Content above Nyquist doesn’t vanish — it folds back in at a false, lower pitch', W / 2, 225);
+                ctx.fillText('Content above Nyquist doesn’t vanish: it folds back in at a false, lower pitch', W / 2, 225);
                 ctx.globalAlpha = 1;
             }
 

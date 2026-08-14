@@ -240,7 +240,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
             onMouseLeave={() => setIsHovered(false)}
             tabIndex={0}
             role="button"
-            aria-label={`${concept.term} flashcard — ${isFlipped ? 'click to hide' : 'click to reveal'}`}
+            aria-label={`${concept.term} flashcard: ${isFlipped ? 'click to hide' : 'click to reveal'}`}
             style={{ perspective: '1000px', cursor: 'pointer', width: '100%', height: '200px' }}
         >
             <div style={{
@@ -887,7 +887,7 @@ const Part3Explore = () => {
                             {[
                                 { shift: '2 Octaves Lower', freq: '÷ 4', period: '× 4', cycles: '÷ 4', color: '#DCC892' },
                                 { shift: '1 Octave Lower', freq: '÷ 2', period: '× 2', cycles: '÷ 2', color: '#22c55e' },
-                                { shift: 'Original', freq: '—', period: '—', cycles: '—', color: '#8b909a' },
+                                { shift: 'Original', freq: '–', period: '–', cycles: '–', color: '#8b909a' },
                                 { shift: '1 Octave Higher', freq: '× 2', period: '÷ 2', cycles: '× 2', color: '#DCC892' },
                                 { shift: '2 Octaves Higher', freq: '× 4', period: '÷ 4', cycles: '× 4', color: '#ef4444' },
                             ].map((row, idx) => (
@@ -1035,7 +1035,7 @@ export default function OctavePeriodTrainer() {
                         <line x1="0" y1="0" x2="280" y2="0" stroke="#f8f9fa" strokeWidth="1.5" />
                         <line x1="0" y1="-5" x2="0" y2="5" stroke="#f8f9fa" strokeWidth="1.5" />
                         <line x1="280" y1="-5" x2="280" y2="5" stroke="#f8f9fa" strokeWidth="1.5" />
-                        <text x="140" y="24" fill="#f8f9fa" fontSize="13" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle" fontWeight="700">2T — twice the period</text>
+                        <text x="140" y="24" fill="#f8f9fa" fontSize="13" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle" fontWeight="700">2T: twice the period</text>
                     </g>
                 </svg>
             </div>

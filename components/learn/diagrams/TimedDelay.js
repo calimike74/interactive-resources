@@ -51,7 +51,7 @@ export default function TimedDelay() {
             ctx.fillStyle = '#1a1a2e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Timed Delay — locked to tempo', W / 2, 20);
+            ctx.fillText('Timed Delay: locked to tempo', W / 2, 20);
             ctx.globalAlpha = 1;
 
             // ===== Both grids fade in during phase 1 =====
@@ -118,7 +118,7 @@ export default function TimedDelay() {
                 ctx.fillText('DOTTED-EIGHTH (1/8D)', margin.left, dottedY - 36);
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '9px -apple-system, sans-serif';
-                ctx.fillText('syncopated — The Edge pattern', margin.left, dottedY - 24);
+                ctx.fillText('syncopated: The Edge pattern', margin.left, dottedY - 24);
                 ctx.globalAlpha = 1;
             }
 

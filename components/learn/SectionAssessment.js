@@ -56,7 +56,7 @@ export default function SectionAssessment({
       }}>
         {correct
           ? 'You answered this correctly on a previous visit.'
-          : 'You answered this incorrectly on a previous visit — re-read the section above.'}
+          : 'You answered this incorrectly on a previous visit: re-read the section above.'}
       </div>
     );
   }
@@ -72,7 +72,7 @@ export default function SectionAssessment({
         color: result.correct ? t.accent.success : t.accent.error,
         fontWeight: typography.weight.medium,
       }}>
-        {result.correct ? 'Well done — you applied that concept correctly.' : 'Not quite — re-read the explanation above, then move on; the question stays open for another try.'}
+        {result.correct ? 'Well done: you applied that concept correctly.' : 'Not quite: re-read the explanation above, then move on; the question stays open for another try.'}
       </div>
     );
   }

@@ -159,7 +159,7 @@ function SamplingTab() {
                 <p style={bodyText}>
                     When sound enters a microphone, it produces a <strong style={strongText}>continuously varying electrical signal</strong> (the
                     blue wave below). To store this digitally, the ADC takes <strong style={strongText}>measurements at regular
-                    intervals</strong> — each measurement is called a <strong style={strongText}>sample</strong>.
+                    intervals</strong>: each measurement is called a <strong style={strongText}>sample</strong>.
                     Use the slider to change how many samples are taken.
                 </p>
             </div>
@@ -194,9 +194,9 @@ function SamplingTab() {
                     The ADC is taking <strong style={strongText}>{sampleRate} samples</strong> across
                     this wave, giving <strong style={strongText}>{samplesPerCycle} samples per cycle</strong>.
                     {Number(samplesPerCycle) < 2
-                        ? ' Below the Nyquist minimum — aliasing occurs and the original signal cannot be recovered.'
+                        ? ' Below the Nyquist minimum: aliasing occurs and the original signal cannot be recovered.'
                         : Number(samplesPerCycle) < 4
-                            ? ' Borderline — some detail is lost between samples. The Nyquist theorem requires at least 2 samples per cycle.'
+                            ? ' Borderline: some detail is lost between samples. The Nyquist theorem requires at least 2 samples per cycle.'
                             : ' The wave shape is captured well. More samples means a more accurate digital copy of the original sound.'
                     }
                 </p>
@@ -209,14 +209,14 @@ function SamplingTab() {
                 }}>
                     <p style={{ ...bodyText, fontSize: typography.size.xs, fontStyle: 'italic' }}>
                         In real audio: CD quality uses 44,100 samples per second. Professional recording uses 48,000 or 96,000.
-                        The slider above is simplified — but the principle is identical.
+                        The slider above is simplified, but the principle is identical.
                     </p>
                 </div>
             </div>
 
             {/* Key Definitions */}
             <DefinitionsSection
-                title="Sampling — Key Definitions (Section 2.4)"
+                title="Sampling: Key Definitions (Section 2.4)"
                 definitions={SAMPLING_DEFINITIONS}
             />
         </div>
@@ -286,7 +286,7 @@ function BitDepthTab() {
                     <p style={{ ...bodyText, marginTop: spacing[2] }}>
                         2<sup>{bitDepth}</sup> = {levels} possible amplitude values.
                         {bitDepth <= 3
-                            ? ' Very coarse — you can see the steps clearly. This would sound distorted.'
+                            ? ' Very coarse: you can see the steps clearly. This would sound distorted.'
                             : bitDepth <= 5
                                 ? ' The steps are getting finer. Sound quality improves noticeably.'
                                 : ' Fine enough for clean audio. CD uses 16-bit (65,536 levels).'
@@ -307,7 +307,7 @@ function BitDepthTab() {
                     <p style={{ ...bodyText, marginTop: spacing[2] }}>
                         Bit depth &times; 6 = dynamic range in dB.
                         {dynamicRange < 24
-                            ? ' Very limited — the difference between quiet and loud is tiny.'
+                            ? ' Very limited: the difference between quiet and loud is tiny.'
                             : dynamicRange < 48
                                 ? ' Moderate range. Quiet passages would still have audible noise.'
                                 : ' Good range. CD quality (96 dB) can capture whispers to loud drums.'
@@ -345,7 +345,7 @@ function BitDepthTab() {
 
             {/* Key Definitions */}
             <DefinitionsSection
-                title="Bit Depth & Dynamic Range — Key Definitions (Section 2.4)"
+                title="Bit Depth & Dynamic Range: Key Definitions (Section 2.4)"
                 definitions={BITDEPTH_DEFINITIONS}
             />
         </div>
@@ -356,7 +356,7 @@ function BitDepthTab() {
 const SAMPLING_DEFINITIONS = [
     { label: 'Sampling', text: 'The process of measuring the amplitude of an analogue signal at regular intervals in time. Each measurement is called a sample.' },
     { label: 'Sample Rate', text: 'The number of samples taken per second, measured in Hertz (Hz). CD quality = 44,100 Hz. Professional = 48,000 Hz or 96,000 Hz.' },
-    { label: 'Nyquist Theorem', text: 'The sample rate must be at least twice the highest frequency to be captured. Below this limit, aliasing occurs and the original signal cannot be recovered. This is why CD quality (44,100 Hz) can capture frequencies up to approximately 20,000 Hz — the limit of human hearing.' },
+    { label: 'Nyquist Theorem', text: 'The sample rate must be at least twice the highest frequency to be captured. Below this limit, aliasing occurs and the original signal cannot be recovered. This is why CD quality (44,100 Hz) can capture frequencies up to approximately 20,000 Hz: the limit of human hearing.' },
     { label: 'ADC (Analogue-to-Digital Converter)', text: 'A device that converts a continuously varying analogue electrical signal into a stream of binary numerical data by sampling the signal at regular intervals.' },
     { label: 'Analogue Signal', text: 'A continuously varying electrical signal whose voltage is proportional to the original sound wave. Produced by microphones.' },
     { label: 'Digital Signal', text: 'A signal represented as a series of discrete binary numbers, each encoding the amplitude of the sound at a specific moment in time.' },

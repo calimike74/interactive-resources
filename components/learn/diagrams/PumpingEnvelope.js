@@ -100,7 +100,7 @@ export default function PumpingEnvelope() {
                 ctx.fillStyle = '#DC2626';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Release too slow — never recovers', margin.left, laneA_top - 8);
+                ctx.fillText('Release too slow: never recovers', margin.left, laneA_top - 8);
                 ctx.globalAlpha = 1;
 
                 drawKicks(laneA_top, laneH, introP);
@@ -126,7 +126,7 @@ export default function PumpingEnvelope() {
                 ctx.fillStyle = '#16a34a';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Tuned to tempo — recovers before the next kick', margin.left, laneB_top - 8);
+                ctx.fillText('Tuned to tempo: recovers before the next kick', margin.left, laneB_top - 8);
                 ctx.globalAlpha = 1;
 
                 drawKicks(laneB_top, laneH, introBP);
@@ -144,8 +144,8 @@ export default function PumpingEnvelope() {
                 ctx.fillStyle = '#9B7530';
                 ctx.font = 'bold 8px -apple-system, sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText('Grab — the sudden drop at each kick', margin.left, laneB_top + laneH + 24);
-                ctx.fillText('Release — the recovery back to baseline', margin.left, laneB_top + laneH + 36);
+                ctx.fillText('Grab: the sudden drop at each kick', margin.left, laneB_top + laneH + 24);
+                ctx.fillText('Release: the recovery back to baseline', margin.left, laneB_top + laneH + 36);
                 ctx.globalAlpha = 1;
             }
 

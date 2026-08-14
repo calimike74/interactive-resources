@@ -27,9 +27,9 @@ export default function AmpEnvelope() {
 
         // Presets: { attack, decay, sustain, release } (durations as fractions, sustain as level)
         const presets = [
-            { name: 'Percussive', sub: 'Fast attack, no sustain — drums, hits', a: 0.02, d: 0.25, s: 0, sustainDur: 0.05, r: 0.15, color: '#DC2626' },
-            { name: 'Pad', sub: 'Slow attack, long release — strings, pads', a: 0.25, d: 0.1, s: 0.7, sustainDur: 0.3, r: 0.3, color: '#1a1a6e' },
-            { name: 'Pluck', sub: 'Fast attack, medium decay — guitar, keys', a: 0.02, d: 0.35, s: 0.15, sustainDur: 0.15, r: 0.25, color: '#059669' },
+            { name: 'Percussive', sub: 'Fast attack, no sustain: drums, hits', a: 0.02, d: 0.25, s: 0, sustainDur: 0.05, r: 0.15, color: '#DC2626' },
+            { name: 'Pad', sub: 'Slow attack, long release: strings, pads', a: 0.25, d: 0.1, s: 0.7, sustainDur: 0.3, r: 0.3, color: '#1a1a6e' },
+            { name: 'Pluck', sub: 'Fast attack, medium decay: guitar, keys', a: 0.02, d: 0.35, s: 0.15, sustainDur: 0.15, r: 0.25, color: '#059669' },
         ];
 
         // Get envelope value for a preset at time t (0-1)
@@ -62,7 +62,7 @@ export default function AmpEnvelope() {
             ctx.fillStyle = '#1a1a6e';
             ctx.font = 'bold 11px -apple-system, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Amplitude Envelope — Presets', W / 2, 18);
+            ctx.fillText('Amplitude Envelope: Presets', W / 2, 18);
             ctx.globalAlpha = 1;
 
             // Base line

@@ -34,7 +34,7 @@ const ROOMS = [
     {
         name: 'The Map Room',
         href: '/map-room',
-        desc: 'The whole of Component 4 drawn as one map — every concept in its place.',
+        desc: 'The whole of Component 4 drawn as one map: every concept in its place.',
     },
     {
         name: 'The Library',
@@ -44,7 +44,7 @@ const ROOMS = [
     {
         name: 'The Reading Room',
         href: 'https://member.musictechstudio.co.uk/reading-room',
-        desc: 'The reading list as a real shelf — take a volume down, turn it over.',
+        desc: 'The reading list as a real shelf: take a volume down, turn it over.',
     },
 ];
 

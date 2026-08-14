@@ -117,7 +117,7 @@ export default function ClapTimeline() {
                 ctx.fillStyle = '#14b8a6';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Early reflections — ~50–80 ms', (bx0 + bx1) / 2, by - 8);
+                ctx.fillText('Early reflections: ~50–80 ms', (bx0 + bx1) / 2, by - 8);
                 ctx.globalAlpha = 1;
             }
 

@@ -15,8 +15,8 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-        title: `Practice quiz — ${topic.name}`,
-        description: `Practice quiz for ${topic.name} — test your knowledge with multiple choice, numeric, and short answer questions.`,
+        title: `Practice quiz: ${topic.name}`,
+        description: `Practice quiz for ${topic.name}: test your knowledge with multiple choice, numeric, and short answer questions.`,
     };
 }
 

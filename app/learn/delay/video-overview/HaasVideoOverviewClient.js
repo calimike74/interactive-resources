@@ -47,7 +47,7 @@ const CHECKPOINTS = [
         question: 'How much louder must a delayed signal be to override the precedence effect and steal the perceived source position?',
         options: ['3 dB', '6 dB', '10 dB', '15 dB'],
         correctIndex: 3,
-        explanation: 'Below this threshold, timing wins over loudness — the brain trusts the first arrival even if a later signal is significantly louder.',
+        explanation: 'Below this threshold, timing wins over loudness: the brain trusts the first arrival even if a later signal is significantly louder.',
     },
     {
         id: 'q5-worked-example-20ms-12db',
@@ -60,7 +60,7 @@ const CHECKPOINTS = [
             'The two cancel each other out',
         ],
         correctIndex: 1,
-        explanation: '20 ms is well under the 40 ms vocal fusion limit AND 12 dB is under the 15 dB override threshold — so timing wins.',
+        explanation: '20 ms is well under the 40 ms vocal fusion limit AND 12 dB is under the 15 dB override threshold, so timing wins.',
     },
     {
         id: 'q6-stereo-width-25ms',
@@ -73,7 +73,7 @@ const CHECKPOINTS = [
             'Phase cancellation / silence',
         ],
         correctIndex: 1,
-        explanation: '25 ms is within the fusion window, so the brain merges them into one wide-feeling vocal — this is artificial stereo width.',
+        explanation: '25 ms is within the fusion window, so the brain merges them into one wide-feeling vocal: this is artificial stereo width.',
     },
 ];
 
@@ -144,7 +144,7 @@ export default function HaasVideoOverviewClient() {
                         marginTop: '0.5rem',
                         lineHeight: 1.2,
                     }}>
-                        The Haas Effect — Video Overview
+                        The Haas Effect: Video Overview
                     </h1>
                     <p style={{
                         fontSize: typography.size.base,
@@ -153,7 +153,7 @@ export default function HaasVideoOverviewClient() {
                         lineHeight: 1.5,
                         maxWidth: '640px',
                     }}>
-                        Watch the video. It will pause six times to ask you a quick question — answer and the video continues.
+                        Watch the video. It will pause six times to ask you a quick question: answer and the video continues.
                         This is not a test; it's so I can see you've engaged with the material before our next lesson.
                     </p>
                 </div>

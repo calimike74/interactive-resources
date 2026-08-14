@@ -141,7 +141,7 @@ export default function GraphicEQ() {
                 ctx.fillStyle = '#f97316';
                 ctx.font = 'bold 9px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Fixed frequency positions — you get what you get', W / 2, y - 4);
+                ctx.fillText('Fixed frequency positions: you get what you get', W / 2, y - 4);
 
                 ctx.globalAlpha = 1;
             }

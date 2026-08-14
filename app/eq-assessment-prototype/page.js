@@ -18,7 +18,7 @@
 const TARGET = 'https://resources.musictechstudio.co.uk/topic/eq';
 
 export const metadata = {
-    title: 'Retired — EQ Assessment (Prototype)',
+    title: 'Retired: EQ Assessment (Prototype)',
     robots: { index: false, follow: true },
     alternates: { canonical: TARGET },
 };

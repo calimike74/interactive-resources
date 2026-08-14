@@ -168,7 +168,7 @@ export default function SubtractiveConcept() {
                     ctx.fillStyle = '#1a1a6e';
                     ctx.font = 'bold 11px -apple-system, sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText('Filter Sweeps Down — Removing Harmonics', W / 2, 22);
+                    ctx.fillText('Filter Sweeps Down: Removing Harmonics', W / 2, 22);
                     ctx.globalAlpha = 1;
                 }
             }
@@ -183,7 +183,7 @@ export default function SubtractiveConcept() {
                 ctx.fillStyle = '#1a1a6e';
                 ctx.font = 'bold 11px -apple-system, sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('Result — Darker, Simpler Tone', W / 2, 22);
+                ctx.fillText('Result: Darker, Simpler Tone', W / 2, 22);
 
                 // Result label
                 ctx.fillStyle = '#059669';

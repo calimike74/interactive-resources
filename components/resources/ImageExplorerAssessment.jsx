@@ -291,8 +291,8 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                 lineHeight: typography.lineHeight.relaxed,
             }}>
                 {stage === 1
-                    ? 'Drag each control name from the bank below and drop it onto the matching coloured zone. You\'ll get immediate feedback — use hints if you\'re stuck.'
-                    : 'Now match each description to the correct control. Drop descriptions onto the named zones — the Submit button will appear once you start placing.'}
+                    ? 'Drag each control name from the bank below and drop it onto the matching coloured zone. You\'ll get immediate feedback: use hints if you\'re stuck.'
+                    : 'Now match each description to the correct control. Drop descriptions onto the named zones: the Submit button will appear once you start placing.'}
             </p>
 
             {/* Image with zones */}
@@ -493,7 +493,7 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                     letterSpacing: '0.05em',
                     marginBottom: spacing[3],
                 }}>
-                    {stage === 1 ? 'Control Names' : 'Descriptions'} — drag to zones above
+                    {stage === 1 ? 'Control Names' : 'Descriptions'}: drag to zones above
                 </div>
 
                 {availableItems.length === 0 && !stageComplete && (
