@@ -98,8 +98,11 @@ test('free-set resources are exempt from the gate', () => {
 });
 
 test('non-free resources are not exempt', () => {
+    // Since the 2026-08-14 ceiling ruling every live registry resource is
+    // free, so the non-exempt examples are the two retired ids — still the
+    // behaviour that matters: an unknown/retired id never unlocks anything.
     assert.equal(isResourceExempt('patch-bay-simulator'), false);
-    assert.equal(isResourceExempt('compressor-explorer'), false);
+    assert.equal(isResourceExempt('eq-assessment-prototype'), false);
 });
 
 test('digestPasscode is deterministic and hex-encoded SHA-256 (64 hex chars)', async () => {

@@ -2,6 +2,7 @@ import graph from '@/lib/map-room/graph.json';
 import wholeCourse from '@/lib/map-room/tours/whole-course.json';
 import examRoutes from '@/lib/map-room/routes/exam-routes.json';
 import { getLearnRationale } from '@/lib/learn/topics';
+import GateKeeper from '@/components/GateKeeper';
 import MapRoomClient from './MapRoomClient';
 
 export const metadata = {
@@ -27,12 +28,18 @@ function rationales() {
 }
 
 export default function MapRoomPage() {
+    // The Map Room is ceiling-tier (2026-08-14 ruling): the one gated surface
+    // on this site. The page itself stays indexable; the gate wraps only the
+    // interactive, same as every resource page. Members arrive unlocked via
+    // the silent handoff; the passcode path covers the classroom.
     return (
-        <MapRoomClient
-            graph={graph}
-            tour={wholeCourse}
-            examRoutes={examRoutes.routes}
-            lightlyExamined={rationales()}
-        />
+        <GateKeeper title="The Map Room" free={false}>
+            <MapRoomClient
+                graph={graph}
+                tour={wholeCourse}
+                examRoutes={examRoutes.routes}
+                lightlyExamined={rationales()}
+            />
+        </GateKeeper>
     );
 }
