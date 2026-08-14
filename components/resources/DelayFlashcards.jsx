@@ -712,7 +712,7 @@ const DelayFlashcards = () => {
       {
         id: "a5",
         question: "How do you calculate tempo-synced delay times for A-Level coursework? (Component 4 Essential)",
-        answer: "Formula: Delay Time (ms) = 60,000 ÷ BPM × Note Value. Essential for Component 4: Quarter note at 120 BPM = 60,000 ÷ 120 × 1 = 500ms. Dotted eighth = 500ms × 1.5 = 750ms.",
+        answer: "Formula: Delay Time (ms) = 60,000 ÷ BPM × Note Value. Essential for Component 4: Quarter note at 120 BPM = 60,000 ÷ 120 × 1 = 500ms. Eighth = 250ms, so a dotted eighth = 250ms × 1.5 = 375ms.",
         furtherLearning: "In Ableton Echo, use 'Sync' mode and select note values. Practice calculating: eighth notes at 100 BPM, dotted quarters at 80 BPM. Essential exam skill.",
         practicalExample: "A-Level Assessment: Must demonstrate understanding of musical time relationships. Used in U2-style guitar parts, electronic music, and dub production for coursework projects.",
         difficulty: 3,
