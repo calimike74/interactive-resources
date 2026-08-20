@@ -1,8 +1,16 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { getAllTopicDefs } from '@/lib/topics';
+import { resourceExists } from '@/lib/resources';
 import { editorial } from '@/lib/theme';
+import {
+    MEMBER_SLUGS,
+    RAIL_DISMISSED_KEY,
+    STUDIO_URL,
+    topicIdFromPath,
+    useStudioArrival,
+} from '@/lib/studio-return';
 
 // The member thread (Mike, 2026-08-06/07). Members arriving from the
 // grades dashboard carry ?from=studio on the URL; this small rail is their
@@ -13,68 +21,37 @@ import { editorial } from '@/lib/theme';
 // studio landing), Map (the topic wall), and — when this page belongs to a
 // topic that exists in the member course — that topic's own studio page.
 //
-// The marker is captured into sessionStorage (per-tab: it follows the
-// member around the site for this visit, and a fresh public visit never
-// sees it) and then stripped from the address bar so a copied or shared
-// link doesn't spread it. Dismissing clears the flag for the tab.
+// The arrival marker is captured and stripped in lib/studio-return.js.
+// Dismissing hides the rail for the tab and nothing more: it must not also
+// forget that this tab belongs to a member, or the next bench they open
+// would offer them the public front door instead of their own topic page.
+//
+// The rail stands down on resource pages (2026-08-20). Those now carry
+// their own return button in the header, and two ways home a thumb apart
+// is one more than a bench needs.
 //
 // Fixed positioning on purpose: the explorers are built to a strict
 // no-scroll viewport, so the rail must never take part in page layout.
 // z-index sits below the cookie banner (1000) — consent keeps priority.
-const STUDIO_URL = 'https://member.musictechstudio.co.uk';
-const KEY = 'mts-from-studio';
-
-// This site's topic ids → the member course's topic slugs. Topics with no
-// member page (general, recording) are simply absent — the rail shows
-// Today · Map alone there.
-const MEMBER_SLUGS = {
-    delay: 'delay',
-    'digital-analogue': 'digital-analogue',
-    distortion: 'distortion',
-    dynamics: 'dynamic-processing',
-    eq: 'eq-filters',
-    'leads-and-signals': 'signals',
-    midi: 'sequencing',
-    numeracy: 'numeracy',
-    reverb: 'reverb',
-    sampling: 'sampling',
-    synthesis: 'synthesis',
-};
-
-// Which topic is this page about? Topic routes name it directly; explorer
-// pages are looked up through the topic registry's resourceIds.
-function topicIdFromPath(pathname) {
+function isResourcePage(pathname) {
     const parts = (pathname || '').replace(/\.html$/, '').split('/').filter(Boolean);
-    if (parts.length === 2 && ['topic', 'learn', 'revise'].includes(parts[0])) {
-        return parts[1];
-    }
-    if (parts.length === 1) {
-        const hit = getAllTopicDefs().find((t) => t.resourceIds.includes(parts[0]));
-        return hit ? hit.id : null;
-    }
-    return null;
+    return parts.length === 1 && resourceExists(parts[0]);
 }
 
 export default function ReturnRail() {
-    const [show, setShow] = useState(false);
+    // Dismissal from an earlier page this visit comes back with the arrival
+    // (one read, after mount — a static export has no sessionStorage at build
+    // time); `justDismissed` covers the click on this page.
+    const [justDismissed, setJustDismissed] = useState(false);
     const pathname = usePathname();
+    const { fromStudio, railDismissed } = useStudioArrival();
 
-    useEffect(() => {
-        try {
-            const url = new URL(window.location.href);
-            if (url.searchParams.get('from') === 'studio') {
-                sessionStorage.setItem(KEY, '1');
-                url.searchParams.delete('from');
-                window.history.replaceState(null, '', url.pathname + url.search + url.hash);
-            }
-            setShow(sessionStorage.getItem(KEY) === '1');
-        } catch {
-            /* storage unavailable — no rail */
-        }
-    }, []);
+    if (!fromStudio || railDismissed || justDismissed || isResourcePage(pathname)) return null;
 
-    if (!show) return null;
-
+    // The rail only renders on this site's own topic / learn / revise routes,
+    // where the path names the topic outright — so the registry lookup is
+    // exact here, and the member link's ?back= slug (which names where they
+    // came FROM, not what this page is about) is deliberately not used.
     const topicId = topicIdFromPath(pathname);
     const memberSlug = topicId ? MEMBER_SLUGS[topicId] : null;
     const topicName = memberSlug
@@ -83,9 +60,9 @@ export default function ReturnRail() {
 
     const dismiss = () => {
         try {
-            sessionStorage.removeItem(KEY);
+            sessionStorage.setItem(RAIL_DISMISSED_KEY, '1');
         } catch {}
-        setShow(false);
+        setJustDismissed(true);
     };
 
     const linkStyle = {

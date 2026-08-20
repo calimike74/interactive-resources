@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import { saveQuizResponse, getNextAttemptNumber } from '@/lib/quiz-persistence';
+import { useStudioReturn } from '@/lib/studio-return';
 
 const TOPIC_ID = 'levels-metering-assessment';
 
@@ -137,6 +139,11 @@ const QUESTIONS = [
 ];
 
 export default function LevelsMeteringAssessment() {
+    // A member opening this bench from their topic's Explore band is signed in
+    // on the member site, not here — the old revision sign-in below is not a
+    // door they can open, and it used to land them on /revise/numeracy, which
+    // still carries this site's Home crumb. See lib/studio-return.js.
+    const { fromStudio } = useStudioReturn(usePathname());
     const [student, setStudent] = useState(null);
     const [authChecked, setAuthChecked] = useState(false);
     const [attemptNumber, setAttemptNumber] = useState(null);
@@ -287,26 +294,44 @@ export default function LevelsMeteringAssessment() {
             <div className="min-h-screen bg-stone-50 px-4 py-12">
                 <div className="mx-auto max-w-2xl rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
                     <h1 className="text-2xl font-semibold text-stone-900">Levels & Metering Assessment</h1>
-                    <p className="mt-3 text-stone-600">
-                        This quiz saves your responses so your teacher can see what to revise with you.
-                        Sign in via the revision page first, then return to this assessment.
-                    </p>
-                    <a
-                        href="/revise/numeracy"
-                        className="mt-6 inline-block rounded-lg bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-800"
-                    >
-                        Go to revision sign-in
-                    </a>
-                    <p className="mt-4 text-xs text-stone-500">
-                        (You can still try the quiz without signing in, but your results won&apos;t be saved.)
-                    </p>
-                    <button
-                        type="button"
-                        onClick={() => setStudent({ token: null, studentId: null, studentName: 'Guest' })}
-                        className="mt-2 text-xs text-stone-500 underline"
-                    >
-                        Continue as guest
-                    </button>
+                    {fromStudio ? (
+                        <>
+                            <p className="mt-3 text-stone-600">
+                                Work through the questions and mark yourself as you go. Your answers
+                                stay on this page, so note anything you want to bring back with you.
+                            </p>
+                            <button
+                                type="button"
+                                onClick={() => setStudent({ token: null, studentId: null, studentName: 'Guest' })}
+                                className="mt-6 inline-block rounded-lg bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-800"
+                            >
+                                Start the assessment
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <p className="mt-3 text-stone-600">
+                                This quiz saves your responses so your teacher can see what to revise with you.
+                                Sign in via the revision page first, then return to this assessment.
+                            </p>
+                            <a
+                                href="/revise/numeracy"
+                                className="mt-6 inline-block rounded-lg bg-amber-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-800"
+                            >
+                                Go to revision sign-in
+                            </a>
+                            <p className="mt-4 text-xs text-stone-500">
+                                (You can still try the quiz without signing in, but your results won&apos;t be saved.)
+                            </p>
+                            <button
+                                type="button"
+                                onClick={() => setStudent({ token: null, studentId: null, studentName: 'Guest' })}
+                                className="mt-2 text-xs text-stone-500 underline"
+                            >
+                                Continue as guest
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
         );
@@ -684,6 +709,9 @@ function VuMeterQuestion({ correctDb, selected, showFeedback, onSelect }) {
 }
 
 function ResultsScreen({ responses, questions, student, onRestart }) {
+    // This used to offer "Back to resources" — the Interactive Resources front
+    // page. See lib/studio-return.js: a bench's only way out leads home.
+    const back = useStudioReturn(usePathname());
     const scored = responses.filter(r => r.correct !== null);
     const correctCount = scored.filter(r => r.correct === true).length;
     const totalScored = scored.length;
@@ -735,10 +763,10 @@ function ResultsScreen({ responses, questions, student, onRestart }) {
 
                 <div className="flex gap-3">
                     <a
-                        href="/"
+                        href={back.href}
                         className="flex-1 rounded-lg bg-stone-100 px-5 py-3 text-center text-base font-medium text-stone-700 hover:bg-stone-200"
                     >
-                        Back to resources
+                        {back.label}
                     </a>
                     <button
                         type="button"

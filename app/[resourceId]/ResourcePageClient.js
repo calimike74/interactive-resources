@@ -1,11 +1,11 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { getResource, resourceExists } from '@/lib/resources';
 import { getTopicForResource, withComponentPrefix } from '@/lib/topics';
 import { theme, typography, borderRadius, spacing, transitions, glass } from '@/lib/theme';
-import Breadcrumbs from '@/components/Breadcrumbs';
+import { useStudioReturn } from '@/lib/studio-return';
 import ExaminerHintBadge from '@/components/ui/ExaminerHintBadge';
 import GateKeeper from '@/components/GateKeeper';
 
@@ -125,18 +125,23 @@ const resourceComponents = {
 // Loads the appropriate resource component based on URL
 export default function ResourcePageClient() {
     const params = useParams();
+    const pathname = usePathname();
     const resourceId = params.resourceId;
     const t = theme.light;
 
+    // The one way out of a bench (Mike, 2026-08-20). It used to be this
+    // site's own topic index, with a Home crumb beside it — see
+    // lib/studio-return.js for why both are gone. Hooks run before the
+    // resourceExists bail-out below, as the rules of hooks require.
+    const back = useStudioReturn(pathname);
+
     // Check if resource exists
     if (!resourceExists(resourceId)) {
-        return <ResourceNotFound resourceId={resourceId} theme={t} />;
+        return <ResourceNotFound resourceId={resourceId} theme={t} back={back} />;
     }
 
     const resource = getResource(resourceId);
     const parentTopic = getTopicForResource(resourceId);
-    const backHref = parentTopic ? `/topic/${parentTopic.id}` : '/';
-    const backLabel = parentTopic ? `← ${parentTopic.name}` : '← Back to Resources';
     const ResourceComponent = resourceComponents[resource.component];
 
     // Related assessment: link internally, and only when the prepFor slug
@@ -148,7 +153,7 @@ export default function ResourcePageClient() {
 
     // Handle missing component
     if (!ResourceComponent) {
-        return <ComponentNotFound resource={resource} theme={t} />;
+        return <ComponentNotFound resource={resource} theme={t} back={back} />;
     }
 
     return (
@@ -184,10 +189,10 @@ export default function ResourcePageClient() {
                         gap: spacing[4],
                     }}
                 >
-                    {/* Back link and breadcrumb */}
+                    {/* The way out: home to the studio, never into this site */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: spacing[4] }}>
-                        <Link
-                            href={backHref}
+                        <a
+                            href={back.href}
                             style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -205,8 +210,8 @@ export default function ResourcePageClient() {
                                 transition: `all ${transitions.fast}`,
                             }}
                         >
-                            {backLabel}
-                        </Link>
+                            {back.label}
+                        </a>
 
                         {/* Topic badge + examiner hint */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
@@ -253,7 +258,9 @@ export default function ResourcePageClient() {
                 </div>
             </header>
 
-            <Breadcrumbs />
+            {/* No breadcrumb here on purpose: its Home crumb led to the
+                Interactive Resources front page, and its topic crumb to that
+                site's resource index. See lib/studio-return.js. */}
 
             {/* Resource Content — gated when the September soft gate is on and
                 this resource is not in the free set; see lib/gate.js. */}
@@ -329,8 +336,8 @@ export default function ResourcePageClient() {
                             flexWrap: 'wrap',
                         }}
                     >
-                        <Link
-                            href={backHref}
+                        <a
+                            href={back.href}
                             style={{
                                 padding: `${spacing[3]} ${spacing[5]}`,
                                 background: glass.bg,
@@ -345,8 +352,8 @@ export default function ResourcePageClient() {
                                 fontWeight: typography.weight.medium,
                             }}
                         >
-                            {backLabel}
-                        </Link>
+                            {back.label}
+                        </a>
 
                         {assessmentHref && (
                             <Link
@@ -376,7 +383,7 @@ export default function ResourcePageClient() {
 }
 
 // 404 - Resource not found
-function ResourceNotFound({ resourceId, theme: t }) {
+function ResourceNotFound({ resourceId, theme: t, back }) {
     return (
         <div
             style={{
@@ -420,8 +427,8 @@ function ResourceNotFound({ resourceId, theme: t }) {
                 >
                     We couldn't find a resource with ID "{resourceId}".
                 </p>
-                <Link
-                    href="/"
+                <a
+                    href={back.href}
                     style={{
                         display: 'inline-block',
                         padding: `${spacing[3]} ${spacing[6]}`,
@@ -436,15 +443,15 @@ function ResourceNotFound({ resourceId, theme: t }) {
                         fontWeight: typography.weight.medium,
                     }}
                 >
-                    Browse All Resources
-                </Link>
+                    {back.label}
+                </a>
             </div>
         </div>
     );
 }
 
 // Component not yet implemented
-function ComponentNotFound({ resource, theme: t }) {
+function ComponentNotFound({ resource, theme: t, back }) {
     return (
         <div
             style={{
@@ -488,8 +495,8 @@ function ComponentNotFound({ resource, theme: t }) {
                 >
                     "{resource.title}" is being prepared and will be available soon.
                 </p>
-                <Link
-                    href="/"
+                <a
+                    href={back.href}
                     style={{
                         display: 'inline-block',
                         padding: `${spacing[3]} ${spacing[6]}`,
@@ -504,8 +511,8 @@ function ComponentNotFound({ resource, theme: t }) {
                         fontWeight: typography.weight.medium,
                     }}
                 >
-                    Browse Available Resources
-                </Link>
+                    {back.label}
+                </a>
             </div>
         </div>
     );
