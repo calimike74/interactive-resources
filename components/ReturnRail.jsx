@@ -7,7 +7,6 @@ import { editorial } from '@/lib/theme';
 import {
     MEMBER_SLUGS,
     RAIL_DISMISSED_KEY,
-    STUDIO_URL,
     topicIdFromPath,
     useStudioArrival,
 } from '@/lib/studio-return';
@@ -21,7 +20,9 @@ import {
 // studio landing), Map (the topic wall), and — when this page belongs to a
 // topic that exists in the member course — that topic's own studio page.
 //
-// The arrival marker is captured and stripped in lib/studio-return.js.
+// The arrival marker is captured and stripped in lib/studio-return.js, which
+// also decides WHICH member host these three links point at — a session is
+// host-scoped, so a pass student who came from grades. has to go back there.
 // Dismissing hides the rail for the tab and nothing more: it must not also
 // forget that this tab belongs to a member, or the next bench they open
 // would offer them the public front door instead of their own topic page.
@@ -44,7 +45,7 @@ export default function ReturnRail() {
     // time); `justDismissed` covers the click on this page.
     const [justDismissed, setJustDismissed] = useState(false);
     const pathname = usePathname();
-    const { fromStudio, railDismissed } = useStudioArrival();
+    const { fromStudio, railDismissed, studioOrigin } = useStudioArrival();
 
     if (!fromStudio || railDismissed || justDismissed || isResourcePage(pathname)) return null;
 
@@ -91,13 +92,13 @@ export default function ReturnRail() {
             >
                 Your studio
             </span>
-            <a href={`${STUDIO_URL}/member/today`} style={linkStyle}>
+            <a href={`${studioOrigin}/member/today`} style={linkStyle}>
                 Today
             </a>
             <span aria-hidden="true" className="mts-rr-dot">
                 ·
             </span>
-            <a href={`${STUDIO_URL}/member/map`} style={linkStyle}>
+            <a href={`${studioOrigin}/member/map`} style={linkStyle}>
                 Map
             </a>
             {topicName && (
@@ -105,7 +106,7 @@ export default function ReturnRail() {
                     <span aria-hidden="true" className="mts-rr-dot">
                         ·
                     </span>
-                    <a href={`${STUDIO_URL}/member/topics/${memberSlug}`} style={linkStyle}>
+                    <a href={`${studioOrigin}/member/topics/${memberSlug}`} style={linkStyle}>
                         {topicName}
                     </a>
                 </>
