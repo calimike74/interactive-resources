@@ -134,7 +134,13 @@ export default function Popover({ trigger, children, position = 'top' }) {
                 position: 'absolute',
                 top: coords.top,
                 left: coords.left,
-                zIndex: 50,
+                // Above page chrome, not under it (Mike, 2026-08-20). The
+                // examiner badge lives in the bench's sticky header (z-index
+                // 100), so at 50 the panel opened 8px below the badge —
+                // inside the header's own padding — and the header painted
+                // over its title row: "half of it has been cut off". Sits
+                // under the cookie banner (1000), which keeps priority.
+                zIndex: 950,
                 maxWidth: 320,
                 backgroundColor: t.bg.elevated,
                 border: `1px solid ${t.border.medium}`,

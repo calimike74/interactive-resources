@@ -143,6 +143,7 @@ export default function ResourcePageClient() {
     const resource = getResource(resourceId);
     const parentTopic = getTopicForResource(resourceId);
     const ResourceComponent = resourceComponents[resource.component];
+    const hasRecap = Boolean(resource.learningObjectives?.length);
 
     // Related assessment: link internally, and only when the prepFor slug
     // resolves to a real registered resource. No dead pill is better than
@@ -270,7 +271,10 @@ export default function ResourcePageClient() {
                 </GateKeeper>
             </main>
 
-            {/* Footer */}
+            {/* Footer. Only drawn when it has something to say: with the
+                repeated way home gone, a bench with no recap and no
+                assessment would otherwise end on an empty ruled band. */}
+            {(hasRecap || assessmentHref) && (
             <footer
                 style={{
                     background: glass.bg,
@@ -287,8 +291,8 @@ export default function ResourcePageClient() {
                     }}
                 >
                     {/* Learning objectives recap */}
-                    {resource.learningObjectives && resource.learningObjectives.length > 0 && (
-                        <div style={{ marginBottom: spacing[6] }}>
+                    {hasRecap && (
+                        <div style={{ marginBottom: assessmentHref ? spacing[6] : 0 }}>
                             <h3
                                 style={{
                                     fontSize: typography.size.lg,
@@ -328,34 +332,18 @@ export default function ResourcePageClient() {
                         </div>
                     )}
 
-                    {/* Next steps */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            gap: spacing[4],
-                            flexWrap: 'wrap',
-                        }}
-                    >
-                        <a
-                            href={back.href}
+                    {/* Next steps. No way home repeated here (Mike, 2026-08-20):
+                        the header is sticky, so its "Back to your studio" is
+                        already on screen at the bottom of the page. Saying it
+                        twice a scroll apart is one time too many. */}
+                    {assessmentHref && (
+                        <div
                             style={{
-                                padding: `${spacing[3]} ${spacing[5]}`,
-                                background: glass.bg,
-                                backdropFilter: 'blur(8px)',
-                                WebkitBackdropFilter: 'blur(8px)',
-                                border: '1px solid ' + glass.border,
-                                boxShadow: glass.shadow,
-                                color: t.text.primary,
-                                borderRadius: borderRadius.lg,
-                                textDecoration: 'none',
-                                fontSize: typography.size.sm,
-                                fontWeight: typography.weight.medium,
+                                display: 'flex',
+                                gap: spacing[4],
+                                flexWrap: 'wrap',
                             }}
                         >
-                            {back.label}
-                        </a>
-
-                        {assessmentHref && (
                             <Link
                                 href={assessmentHref}
                                 style={{
@@ -374,10 +362,11 @@ export default function ResourcePageClient() {
                             >
                                 Ready? Take the Assessment →
                             </Link>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </footer>
+            )}
         </div>
     );
 }
