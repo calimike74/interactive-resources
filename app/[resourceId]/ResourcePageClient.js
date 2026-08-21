@@ -53,7 +53,7 @@ import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
 import WaveformExplorer from '@/components/resources/WaveformExplorer';
 import WaveformDrawingAssessment from '@/components/resources/WaveformDrawingAssessment';
-import DelayEffects from '@/components/resources/DelayEffects';
+import DelayBench from '@/components/resources/DelayBench';
 import BPMDelayCalculator from '@/components/resources/BPMDelayCalculator';
 import DigitalAudioAssessment from '@/components/resources/DigitalAudioAssessment';
 import PitchSynthMonitorsAssessment from '@/components/resources/PitchSynthMonitorsAssessment';
@@ -107,7 +107,7 @@ const resourceComponents = {
     'ReadThenQuiz': ReadThenQuiz,
     'WaveformExplorer': WaveformExplorer,
     'WaveformDrawingAssessment': WaveformDrawingAssessment,
-    'DelayEffects': DelayEffects,
+    'DelayBench': DelayBench,
     'BPMDelayCalculator': BPMDelayCalculator,
     'DigitalAudioAssessment': DigitalAudioAssessment,
     'PitchSynthMonitorsAssessment': PitchSynthMonitorsAssessment,
@@ -155,6 +155,19 @@ export default function ResourcePageClient() {
     // Handle missing component
     if (!ResourceComponent) {
         return <ComponentNotFound resource={resource} theme={t} back={back} />;
+    }
+
+    // A bench (Bench Standard, 2026-08-21) fills the viewport and draws its
+    // own header strip, with the way home inside it. No site header above
+    // it, no recap footer below: one screen, nothing to scroll to.
+    if (resource.kind === 'bench') {
+        return (
+            <main>
+                <GateKeeper resourceId={resource.id} title={resource.title}>
+                    <ResourceComponent back={back} resource={resource} />
+                </GateKeeper>
+            </main>
+        );
     }
 
     return (

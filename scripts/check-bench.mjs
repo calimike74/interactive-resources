@@ -1,0 +1,190 @@
+// check-bench — the Bench Standard's laws, measured on the rendered page
+// rather than by eye (Planning-and-Admin/Interactive-Resources-Upgrade/
+// BENCH-STANDARD.md §3 and §6). Exits 1 if anything fails, so it can gate
+// a merge.
+//
+//   npm run dev -- -p 3402            # in another terminal
+//   node scripts/check-bench.mjs http://localhost:3402/delay-effects [more urls]
+//
+// Checks, at 1280×700 and 1440×900:
+//   1. no vertical or horizontal page scroll, console does not overflow
+//   2. no site header above the bench, no site footer below it
+//   3. the plate is white, the ground is the greige, no cream, no status reds/greens
+//   4. sentences resolve to Hanken Grotesk, labels to JetBrains Mono
+//   5. no em-dash in rendered text; no "utilise"
+//   6. the drawer opens from its handle, closes on Escape, returns focus
+//   7. Go further, once opened, does not close
+//   8. before the first gesture no AudioContext exists; after Play one does
+//   9. no createOscillator in the page's scripts unless the bench declares synthesis
+
+import { chromium } from 'playwright';
+
+const urls = process.argv.slice(2);
+if (!urls.length) {
+    console.error('usage: node scripts/check-bench.mjs <url> [url…]');
+    process.exit(2);
+}
+
+const SIZES = [
+    { width: 1280, height: 700 },
+    { width: 1440, height: 900 },
+];
+const FORBIDDEN_BG = [
+    'rgb(247, 242, 232)', // Botanical cream
+    'rgb(10, 15, 26)', 'rgb(17, 24, 39)', // the old dark canvas
+];
+const STATUS_HUES = (rgb) => {
+    const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (!m) return false;
+    const [r, g, b] = [Number(m[1]), Number(m[2]), Number(m[3])];
+    const red = r > 170 && g < 90 && b < 90;
+    const amber = r > 200 && g > 120 && g < 190 && b < 60;
+    const green = g > 150 && r < 110 && b < 110;
+    return red || amber || green;
+};
+
+let failures = 0;
+const fail = (url, size, msg) => { failures += 1; console.log(`  ✗ ${size ? `${size.width}×${size.height} ` : ''}${msg}`); };
+const ok = (msg) => console.log(`  ✓ ${msg}`);
+
+const browser = await chromium.launch();
+// The cookie banner would otherwise sit over the bench and swallow clicks;
+// essential-only consent is what a student who dismissed it has.
+async function newPage(viewport, url) {
+    const context = await browser.newContext({ viewport });
+    const u = new URL(url);
+    await context.addCookies([{ name: 'mts_consent', value: 'essential', domain: u.hostname, path: '/' }]);
+    return context.newPage();
+}
+for (const url of urls) {
+    console.log(`\n${url}`);
+    // 9. oscillators in the delivered scripts
+    const page0 = await newPage(SIZES[1], url);
+    const scripts = [];
+    page0.on('response', async (res) => {
+        const ct = res.headers()['content-type'] || '';
+        if (ct.includes('javascript')) {
+            try { scripts.push({ url: res.url(), body: await res.text() }); } catch { /* streamed */ }
+        }
+    });
+    await page0.goto(url, { waitUntil: 'networkidle' });
+    const declaresSynth = await page0.evaluate(() => document.querySelector('[data-bench-frame]')?.dataset.synthesis === 'true');
+    const oscHits = scripts.filter((s) => /createOscillator\(/.test(s.body) && /bench|Bench/.test(s.url));
+    if (oscHits.length && !declaresSynth) fail(url, null, `createOscillator found in ${oscHits.map((s) => s.url.split('/').pop()).join(', ')} and the bench does not declare synthesis`);
+    else ok('no oscillators in the bench bundle');
+    await page0.close();
+
+    for (const size of SIZES) {
+        const page = await newPage(size, url);
+        const errors = [];
+        page.on('pageerror', (e) => errors.push(String(e)));
+        await page.goto(url, { waitUntil: 'networkidle' });
+        await page.waitForSelector('[data-bench-frame]', { timeout: 15000 });
+        await page.waitForTimeout(600);
+
+        const m = await page.evaluate(() => {
+            const de = document.documentElement;
+            const console_ = document.querySelector('[aria-label="Controls"]');
+            const frame = document.querySelector('[data-bench-frame]');
+            const cs = (el) => (el ? getComputedStyle(el) : null);
+            const stage = document.querySelector('[aria-label="Stage"]');
+            const texts = [];
+            const walker = document.createTreeWalker(frame, NodeFilter.SHOW_TEXT);
+            while (walker.nextNode()) texts.push(walker.currentNode.nodeValue);
+            const text = texts.join(' ');
+            const fonts = {};
+            for (const el of frame.querySelectorAll('p, span, label, button, h2, h3, dt, dd, td, th, b, small, summary, li, a')) {
+                const f = getComputedStyle(el).fontFamily;
+                fonts[f] = (fonts[f] || 0) + 1;
+            }
+            const bgs = new Set();
+            for (const el of frame.querySelectorAll('*')) {
+                const s = getComputedStyle(el);
+                if (s.backgroundColor && s.backgroundColor !== 'rgba(0, 0, 0, 0)') bgs.add(s.backgroundColor);
+                if (s.color) bgs.add(`color:${s.color}`);
+            }
+            return {
+                scrollH: de.scrollHeight, innerH: innerHeight, scrollW: de.scrollWidth, innerW: innerWidth,
+                consoleOverflow: console_ ? console_.scrollHeight - console_.clientHeight : null,
+                siteHeader: Boolean(document.querySelector('body > div > header, main ~ header, header:not([data-bench-frame] header)')),
+                siteFooter: Boolean(document.querySelector('footer')),
+                stageBg: cs(stage)?.backgroundColor,
+                frameBg: cs(frame)?.backgroundColor,
+                text,
+                fonts,
+                colours: [...bgs],
+                hasAudioCtx: Boolean(window.__benchAudioContextCreated),
+            };
+        });
+
+        if (m.scrollH > m.innerH) fail(url, size, `page scrolls vertically (${m.scrollH} > ${m.innerH})`); else ok(`${size.width}×${size.height} no vertical scroll`);
+        if (m.scrollW > m.innerW) fail(url, size, `page scrolls horizontally (${m.scrollW} > ${m.innerW})`);
+        if (m.consoleOverflow > 0) fail(url, size, `console overflows by ${m.consoleOverflow}px`);
+        if (m.siteHeader) fail(url, size, 'a site header sits above the bench');
+        if (m.siteFooter) fail(url, size, 'a site footer sits below the bench');
+        if (m.stageBg !== 'rgb(255, 255, 255)') fail(url, size, `stage is not white (${m.stageBg})`);
+        if (m.frameBg !== 'rgb(245, 244, 242)') fail(url, size, `ground is not the greige (${m.frameBg})`);
+        for (const c of m.colours) {
+            const v = c.replace(/^color:/, '');
+            if (FORBIDDEN_BG.includes(v)) fail(url, size, `forbidden colour ${c}`);
+            if (STATUS_HUES(v)) fail(url, size, `status colour in use: ${c}`);
+        }
+        if (/—/.test(m.text)) fail(url, size, 'em-dash in rendered text');
+        if (/\butilise/i.test(m.text)) fail(url, size, '"utilise" in rendered text');
+        const fontNames = Object.keys(m.fonts).join(' | ');
+        if (!/Hanken/i.test(fontNames)) fail(url, size, `sentence face is not Hanken Grotesk (${fontNames.slice(0, 120)})`);
+        if (!/JetBrains/i.test(fontNames)) fail(url, size, `label face is not JetBrains Mono (${fontNames.slice(0, 120)})`);
+        if (/Space Mono/i.test(fontNames)) fail(url, size, 'Space Mono is present');
+
+        // 6. drawer
+        const handle = page.locator('[data-drawer-handle]').first();
+        await handle.focus();
+        await handle.click();
+        await page.waitForTimeout(350);
+        const openState = await page.evaluate(() => document.getElementById('bench-drawer')?.dataset.open);
+        if (openState !== 'true') fail(url, size, 'drawer did not open from its handle');
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(350);
+        const afterEsc = await page.evaluate(() => ({ open: document.getElementById('bench-drawer')?.dataset.open, focus: document.activeElement?.getAttribute('data-drawer-handle') }));
+        if (afterEsc.open !== 'false') fail(url, size, 'Escape did not close the drawer');
+        if (!afterEsc.focus) fail(url, size, 'focus did not return to the handle after closing');
+        else ok('drawer opens, closes on Escape, returns focus');
+
+        // 7. Go further never re-hides
+        const further = page.locator('details summary', { hasText: /Go further/i }).first();
+        if (await further.count()) {
+            await further.click();
+            await page.waitForTimeout(200);
+            const summaryAfter = page.locator('details[open] summary').first();
+            await summaryAfter.click();
+            await page.waitForTimeout(200);
+            const stillOpen = await page.evaluate(() => Boolean(document.querySelector('[aria-label="Controls"] details[open]')));
+            if (!stillOpen) fail(url, size, 'Go further closed again after opening');
+            else ok('Go further stays open');
+            const m2 = await page.evaluate(() => { const c = document.querySelector('[aria-label="Controls"]'); return { over: c.scrollHeight - c.clientHeight, scrollH: document.documentElement.scrollHeight, innerH: innerHeight }; });
+            if (m2.over > 0) fail(url, size, `console overflows by ${m2.over}px with Go further open`);
+            if (m2.scrollH > m2.innerH) fail(url, size, 'page scrolls with Go further open');
+        }
+
+        // 8. audio only after a gesture
+        const ctxBefore = await page.evaluate(() => window.__benchAudioContexts || 0);
+        const play = page.locator('button', { hasText: /Play the bench/ }).first();
+        if (await play.count()) {
+            await play.click();
+            await page.waitForTimeout(800);
+            const ctxAfter = await page.evaluate(() => window.__benchAudioContexts || 0);
+            if (ctxBefore !== 0) fail(url, size, `an AudioContext existed before any gesture (${ctxBefore})`);
+            if (ctxAfter < 1) fail(url, size, 'no AudioContext after Play');
+            else ok('AudioContext only after Play');
+            const stop = page.locator('[aria-label="Stop"]');
+            if (!(await stop.count())) fail(url, size, 'transport did not switch to Stop after Play');
+        }
+
+        if (errors.length) fail(url, size, `page errors: ${errors.join(' | ').slice(0, 200)}`);
+        await page.close();
+    }
+}
+await browser.close();
+
+console.log(failures ? `\n${failures} failure(s)` : '\nall clear');
+process.exit(failures ? 1 : 0);

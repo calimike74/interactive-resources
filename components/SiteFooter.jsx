@@ -1,10 +1,22 @@
 'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { theme } from '@/lib/theme';
 import { openCookiePreferences } from '@/lib/consent';
+import { getResource, resourceExists } from '@/lib/resources';
+
+// A bench page (resource kind 'bench', BENCH-STANDARD §3 law 1) is one
+// viewport with nothing below it; it carries these two links in its own
+// transport strip instead, so the footer steps aside there.
+function isBenchPath(pathname) {
+    const id = (pathname || '').replace(/^\/+|\/+$/g, '');
+    return Boolean(id) && !id.includes('/') && resourceExists(id) && getResource(id).kind === 'bench';
+}
 
 export default function SiteFooter() {
     const t = theme.light;
+    const pathname = usePathname();
+    if (isBenchPath(pathname)) return null;
     return (
         <footer
             style={{

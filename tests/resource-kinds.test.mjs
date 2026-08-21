@@ -2,7 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { getAllResources } from '../lib/resources/index.js';
 
-const VALID_KINDS = ['sandbox', 'interface', 'retrieval', 'practice'];
+// 'bench' = the Bench Standard (2026-08-21): one viewport, real sound,
+// drawn from the same numbers that make it. Rendered full-bleed by
+// ResourcePageClient with no site header or footer.
+const VALID_KINDS = ['sandbox', 'interface', 'retrieval', 'practice', 'bench'];
 
 test('every registered resource declares a valid kind', () => {
     const resources = getAllResources();
