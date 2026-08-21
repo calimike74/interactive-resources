@@ -34,6 +34,7 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
     const bpmRef = useRef(bpm);
     const pendingBpmRef = useRef(null);
     const eventsRef = useRef([]);
+    const liveRef = useRef(new Set());
     const onScheduleRef = useRef(onSchedule);
     const [ready, setReady] = useState(false);
     const [playing, setPlaying] = useState(false);
@@ -119,6 +120,9 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
         src.connect(g);
         g.connect(destination || nodesRef.current.input);
         src.start(when);
+        const live = { src, g };
+        liveRef.current.add(live);
+        src.onended = () => liveRef.current.delete(live);
         eventsRef.current.push({ name, time: when, duration: buf.duration, level: gain });
         // keep the last 12 seconds only
         const cutoff = ctx.currentTime - 12;
@@ -154,6 +158,28 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
         setPlaying(true);
     }, [begin, tick]);
 
+    // Start again from bar one, now: everything already booked is cut, the
+    // loop is emptied, and the next tick books the new pattern (Mike, 21 Aug
+    // walk: switching source should retrigger straight away and cut the
+    // old one, not wait for the bar to come round).
+    const restart = useCallback(() => {
+        const ctx = ctxRef.current;
+        if (!ctx || !timerRef.current) return;
+        const t = ctx.currentTime;
+        for (const { src, g } of liveRef.current) {
+            try {
+                g.gain.setTargetAtTime(0, t, 0.004);
+                src.stop(t + 0.03);
+            } catch { /* already ended */ }
+        }
+        liveRef.current.clear();
+        nodesRef.current.graph?.clear?.();
+        eventsRef.current = [];
+        nextBarRef.current = { bar: 0, time: ctx.currentTime + 0.03 };
+        if (pendingBpmRef.current != null) { bpmRef.current = pendingBpmRef.current; pendingBpmRef.current = null; }
+        tick();
+    }, [tick]);
+
     const stop = useCallback(() => {
         if (timerRef.current) window.clearInterval(timerRef.current);
         timerRef.current = null;
@@ -186,6 +212,7 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
         begin,
         start,
         stop,
+        restart,
         playBuffer,
         getBuffer,
     };

@@ -9,11 +9,14 @@ import styles from './bench.module.css';
 // lifted from BPMDelayCalculator.jsx's .tl-drawer; re-skinned to the bench
 // tokens. Tabs in the fixed order Reference · Teacher notes · Connections.
 //
-// Props: tabs = [{ id, label, render }], open = tab id or null,
+// Props: tabs = [{ id, label, render, dot }], open = tab id or null,
 // onChange(tabId|null). Escape closes; focus goes into the panel on open
-// and back to the handle button that opened it on close.
+// and back to the handle button that opened it on close. The handle is
+// three compact pills down the stage's right edge (21 Aug walk, note 7:
+// "not a full-height column"), each carrying its tab's colour dot.
 
 export const DRAWER_TABS = ['reference', 'teacher', 'connections'];
+const DOTS = { reference: 'var(--gold)', teacher: 'var(--green)', connections: 'var(--purple)' };
 
 export function DrawerHandle({ tabs, open, onChange }) {
     return (
@@ -26,6 +29,7 @@ export function DrawerHandle({ tabs, open, onChange }) {
                     aria-expanded={open === t.id}
                     aria-controls="bench-drawer"
                     data-drawer-handle={t.id}
+                    style={{ '--dot': t.dot || DOTS[t.id] }}
                     onClick={(e) => onChange(open === t.id ? null : t.id, e.currentTarget)}
                 >
                     {t.label}
@@ -82,6 +86,7 @@ export function BenchDrawer({ tabs, open, onChange, opener }) {
                             role="tab"
                             className={styles.tab}
                             aria-selected={open === t.id}
+                            style={{ '--dot': t.dot || DOTS[t.id] }}
                             onClick={() => onChange(t.id)}
                             tabIndex={isOpen ? 0 : -1}
                         >

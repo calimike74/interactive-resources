@@ -9,13 +9,15 @@
 // Checks, at 1280×700 and 1440×900:
 //   1. no vertical or horizontal page scroll, console does not overflow
 //   2. no site header above the bench, no site footer below it
-//   3. the plate is white, the ground is the greige, no cream, no status reds/greens
-//   4. sentences resolve to Hanken Grotesk, labels to JetBrains Mono
+//   3. the plate is white, the stage is the dark panel, no cream, no status reds/greens
+//   4. sentences resolve to Manrope, the title to Playfair Display, labels to JetBrains Mono
+//      (Mike's Fonts-Try note, 21 Aug 2026)
 //   5. no em-dash in rendered text; no "utilise"
 //   6. the drawer opens from its handle, closes on Escape, returns focus
-//   7. Go further, once opened, does not close
+//   7. More, once opened, does not close
 //   8. before the first gesture no AudioContext exists; after Play one does
 //   9. no createOscillator in the page's scripts unless the bench declares synthesis
+//  10. the space bar stops and starts the bench
 
 import { chromium } from 'playwright';
 
@@ -122,7 +124,10 @@ for (const url of urls) {
         if (m.consoleOverflow > 0) fail(url, size, `console overflows by ${m.consoleOverflow}px`);
         if (m.siteHeader) fail(url, size, 'a site header sits above the bench');
         if (m.siteFooter) fail(url, size, 'a site footer sits below the bench');
-        if (m.stageBg !== 'rgb(255, 255, 255)') fail(url, size, `stage is not white (${m.stageBg})`);
+        // The look Mike chose from Claude Design on 21 Aug 2026 (3A): the
+        // stage is a dark navy panel on the white plate; the ground stays
+        // the greige.
+        if (m.stageBg !== 'rgb(23, 23, 43)') fail(url, size, `stage is not the dark panel (${m.stageBg})`);
         if (m.frameBg !== 'rgb(245, 244, 242)') fail(url, size, `ground is not the greige (${m.frameBg})`);
         for (const c of m.colours) {
             const v = c.replace(/^color:/, '');
@@ -132,8 +137,10 @@ for (const url of urls) {
         if (/—/.test(m.text)) fail(url, size, 'em-dash in rendered text');
         if (/\butilise/i.test(m.text)) fail(url, size, '"utilise" in rendered text');
         const fontNames = Object.keys(m.fonts).join(' | ');
-        if (!/Hanken/i.test(fontNames)) fail(url, size, `sentence face is not Hanken Grotesk (${fontNames.slice(0, 120)})`);
+        if (!/Manrope/i.test(fontNames)) fail(url, size, `sentence face is not Manrope (${fontNames.slice(0, 120)})`);
+        if (!/Playfair/i.test(fontNames)) fail(url, size, `title face is not Playfair Display (${fontNames.slice(0, 120)})`);
         if (!/JetBrains/i.test(fontNames)) fail(url, size, `label face is not JetBrains Mono (${fontNames.slice(0, 120)})`);
+        if (/Hanken|Inter\b|Geist/i.test(fontNames)) fail(url, size, `a retired face is present (${fontNames.slice(0, 120)})`);
         if (/Space Mono/i.test(fontNames)) fail(url, size, 'Space Mono is present');
 
         // 6. drawer
@@ -150,20 +157,18 @@ for (const url of urls) {
         if (!afterEsc.focus) fail(url, size, 'focus did not return to the handle after closing');
         else ok('drawer opens, closes on Escape, returns focus');
 
-        // 7. Go further never re-hides
-        const further = page.locator('details summary', { hasText: /Go further/i }).first();
-        if (await further.count()) {
-            await further.click();
+        // 7. More never re-hides: the row it opens stays, the button goes
+        const more = page.locator('[data-more]').first();
+        if (await more.count()) {
+            await more.click();
             await page.waitForTimeout(200);
-            const summaryAfter = page.locator('details[open] summary').first();
-            await summaryAfter.click();
-            await page.waitForTimeout(200);
-            const stillOpen = await page.evaluate(() => Boolean(document.querySelector('[aria-label="Controls"] details[open]')));
-            if (!stillOpen) fail(url, size, 'Go further closed again after opening');
-            else ok('Go further stays open');
+            const after = await page.evaluate(() => ({ row: Boolean(document.querySelector('[data-more-row]')), btn: Boolean(document.querySelector('[data-more]')) }));
+            if (!after.row) fail(url, size, 'More did not open its row');
+            else if (after.btn) fail(url, size, 'More could be pressed again (it must not be able to close)');
+            else ok('More stays open');
             const m2 = await page.evaluate(() => { const c = document.querySelector('[aria-label="Controls"]'); return { over: c.scrollHeight - c.clientHeight, scrollH: document.documentElement.scrollHeight, innerH: innerHeight }; });
-            if (m2.over > 0) fail(url, size, `console overflows by ${m2.over}px with Go further open`);
-            if (m2.scrollH > m2.innerH) fail(url, size, 'page scrolls with Go further open');
+            if (m2.over > 0) fail(url, size, `console overflows by ${m2.over}px with More open`);
+            if (m2.scrollH > m2.innerH) fail(url, size, 'page scrolls with More open');
         }
 
         // 8. audio only after a gesture
@@ -178,6 +183,16 @@ for (const url of urls) {
             else ok('AudioContext only after Play');
             const stop = page.locator('[aria-label="Stop"]');
             if (!(await stop.count())) fail(url, size, 'transport did not switch to Stop after Play');
+            // 10. the space bar stops and starts it (21 Aug walk, note 1)
+            await page.mouse.click(5, 5);
+            await page.keyboard.press('Space');
+            await page.waitForTimeout(200);
+            const stopped = await page.locator('[aria-label="Play"]').count();
+            await page.keyboard.press('Space');
+            await page.waitForTimeout(200);
+            const restarted = await page.locator('[aria-label="Stop"]').count();
+            if (!stopped || !restarted) fail(url, size, 'space bar does not stop and start the bench');
+            else ok('space bar stops and starts');
         }
 
         if (errors.length) fail(url, size, `page errors: ${errors.join(' | ').slice(0, 200)}`);
