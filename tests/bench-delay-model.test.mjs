@@ -93,7 +93,7 @@ test('high cut maps 0..100 onto a log sweep from tape-dark 1.5 kHz to open 20 kH
 });
 
 test('presets are musical names, each resolves to a full state, and the first-load preset is audible', () => {
-    assert.deepEqual(PRESETS.map((p) => p.name), ['Slapback', 'Rhythmic 1/8', 'Long tail', 'Ping-pong']);
+    assert.deepEqual(PRESETS.map((p) => p.name), ['Slapback', 'Rhythmic 1/8', 'Long tail', 'Ping-pong', '2023 paper']);
     for (const p of PRESETS) {
         const s = applyPreset(DEFAULT_STATE, p.id);
         for (const key of ['sync', 'noteId', 'timeMs', 'feedback', 'mix', 'bpm', 'highCut', 'stereo']) {

@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import BenchFrame from '@/components/bench/BenchFrame';
 import { Dial, DragNumber, Chips, Why, MoreButton } from '@/components/bench/controls';
-import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth } from '@/components/bench/BenchBits';
+import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth, DEPTHS } from '@/components/bench/BenchBits';
 import { useBenchAudio, glide, envelopeOf } from '@/components/bench/useBenchAudio';
 import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
+import { DEPTH_LINES, DEPTH_TEACH, judge, open as openMachine } from '@/lib/bench/delay-depth';
 import {
     NOTE_VALUES,
     CORE_NOTE_IDS,
@@ -190,6 +191,10 @@ export default function DelayBench({ back }) {
     const [mode, setMode] = useBenchMode();
     const [depth, setDepth] = useBenchDepth();
     const [hover, setHover] = useState(null);
+    // The control the student touched last: what A-level judges and what
+    // Extension opens. A level change announces itself until the next touch.
+    const [last, setLast] = useState('preset');
+    const [announce, setAnnounce] = useState(null);
     const stateRef = useRef(state);
     stateRef.current = state;
     const hoverRef = useRef(null);
@@ -233,13 +238,33 @@ export default function DelayBench({ back }) {
         if (ctx && nodes) glide(nodes.level.gain, state.level, ctx);
     }, [state.level, began, ctxRef, nodesRef]);
 
-    const update = (patch) => setState((s) => ({ ...s, ...patch, presetId: null }));
+    const touch = (what) => { setLast(what); setAnnounce(null); };
+    const chooseDepth = (id) => { setDepth(id); setAnnounce(id); };
+    const update = (patch) => {
+        setState((s) => ({ ...s, ...patch, presetId: null }));
+        if ('feedback' in patch) touch('feedback');
+        else if ('mix' in patch) touch('mix');
+        else if ('highCut' in patch) touch('highCut');
+        else if ('stereo' in patch) touch('stereo');
+        else if ('bpm' in patch) touch('bpm');
+        else if ('noteId' in patch || patch.sync === true) touch('sync');
+        else if ('timeMs' in patch || patch.sync === false) touch('time');
+    };
     const choosePreset = (id) => {
         const preset = PRESETS.find((p) => p.id === id);
+        if (!preset) return;
         // A preset that reaches a further control opens that section, so
         // the student can see which control made the difference.
-        if (preset && (preset.state.highCut < 100 || preset.state.stereo === 'pingpong')) setFurther(true);
-        setState((s) => applyPreset(s, id));
+        if (preset.state.highCut < 100 || preset.state.stereo === 'pingpong') setFurther(true);
+        // A preset that brings its own source or tempo (the 2023 paper's
+        // vocal at 120) starts from bar one at that tempo straight away, as
+        // choosing the source would; a tempo drag waits for the bar instead.
+        const next = applyPreset(stateRef.current, id);
+        const fresh = next.source !== stateRef.current.source || next.bpm !== stateRef.current.bpm;
+        stateRef.current = next;
+        setState(next);
+        touch('preset');
+        if (fresh && playingRef.current) { bpmRef.current = next.bpm; audio.restart(); }
     };
     const chooseNote = (id) => {
         if (id === 'off') update({ sync: false });
@@ -251,6 +276,7 @@ export default function DelayBench({ back }) {
     const chooseSource = (id) => {
         stateRef.current = { ...stateRef.current, source: id, presetId: null };
         update({ source: id });
+        touch('source');
         if (playingRef.current) audio.restart();
     };
     const { start, stop } = audio;
@@ -558,6 +584,7 @@ export default function DelayBench({ back }) {
                     if (depthRef.current === 'core') label = `${ms} later, the first repeat`;
                     else if (s.sync) label = `${perBeat} ms per beat × ${fractionOf(s.noteId)} = ${ms}`;
                     else label = `${ms} = ${(d / (60 / bpmNow)).toFixed(2)} beats at ${bpmNow} BPM`;
+                    if (depthRef.current === 'extension') label += ` · ${d < 0.03 ? 'fused' : d < 0.12 ? 'slapback' : 'echo'}`;
                     ctx2d.fillText(label, xa, y - 8);
                 }
             }
@@ -658,6 +685,13 @@ export default function DelayBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>Control names as they appear in Live 12 and Logic Pro 11 device panels. Check against your own version if they move.</p>
+                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <dl>
+                        <dt>Precedence (Haas) window</dt><dd>Under about 30 ms a repeat fuses with the original: the ear hears one sound, placed where the first arrival came from. Doubling and ADT live here; slapback starts above it.</dd>
+                        <dt>Multitap</dt><dd>Several delays in parallel from one input, each with its own time and level. Feed them from one line and the taps share its feedback; give each its own line and each can feed back on its own.</dd>
+                        <dt>Ping-pong, inside</dt><dd>Two delay lines with the feedback crossed: left feeds right, right feeds left, each panned to its side. Matched times bounce; offset times walk.</dd>
+                    </dl>
+                    <p className={styles.source}>Cipriani and Giri, Electronic Music and Sound Design vol. 2, ch. 6 (delay lines), the reading behind the A* tier at Sherborne.</p>
                 </>
             ),
         },
@@ -674,6 +708,7 @@ export default function DelayBench({ back }) {
                     <p>Those three mistakes are your three moves on this bench: raise Feedback and count the repeats; switch Sync to 1/8 and watch them land on the beat; set Ping-pong and hear why two different-sided delay times are the point, not a mistake.</p>
                     <h3>Do these now</h3>
                     <ul>
+                        <li>Press <b>2023 paper</b>, switch the bench to A-level, and judge all six settings from what you hear before you read the examiner&apos;s three complaints above. Then fix it.</li>
                         <li>Hold the dry button while it plays, let go, and say out loud what came back.</li>
                         <li>Set Time by ear until the repeats sit on the beat at 110 BPM, then switch Sync on and compare your number with the bench&apos;s.</li>
                         <li>Push Feedback to 100% and decide when you would turn it down. Then ask what the limiter is doing for you.</li>
@@ -744,9 +779,35 @@ export default function DelayBench({ back }) {
         : state.feedback >= 100
             ? 'Feedback is at 100%, so nothing decays: the loop is running away and only the limiter is holding it.'
             : `Each repeat is ${state.feedback}% as loud as the one before, so about ${audible} of them are loud enough to hear.`;
-    const say = teach
-        ? <>{hearing} {loop} <b>Try:</b> {next}.</>
-        : <><b>Try:</b> {next.charAt(0).toUpperCase() + next.slice(1)}.</>;
+    // Core shows, A-level judges, Extension opens the machine
+    // (lib/bench/delay-depth.js). A level change announces itself once.
+    let say;
+    if (announce) {
+        say = <><b>{DEPTHS.find((d) => d.id === announce)?.label}:</b> {DEPTH_LINES[announce]}</>;
+    } else if (depth === 'alevel') {
+        const segs = judge({ state, last, part: pattern.said });
+        // the setting's name in bold, when the sentence opens with one
+        const colon = segs[0].text.indexOf(':');
+        const lead = colon > 0 && colon < 44 ? segs[0].text.slice(0, colon + 1) : null;
+        say = (
+            <>
+                {segs.map((sg, i) => (
+                    <span key={i}>
+                        {i === 0 && lead ? <b>{lead}</b> : null}
+                        {i === 0 && lead ? sg.text.slice(colon + 1) : sg.text}
+                        <i className={styles.ao} data-ao={sg.ao}>AO{sg.ao}</i>
+                    </span>
+                ))}
+                {teach ? DEPTH_TEACH.alevel : null}
+            </>
+        );
+    } else if (depth === 'extension') {
+        say = <>{openMachine({ state, last, part: pattern.said })}{teach ? <> {DEPTH_TEACH.extension}</> : null}</>;
+    } else {
+        say = teach
+            ? <>{hearing} {loop} <b>Try:</b> {next}.</>
+            : <><b>Try:</b> {next.charAt(0).toUpperCase() + next.slice(1)}.</>;
+    }
 
     // ---- console ----
     const syncOptions = [
@@ -892,7 +953,7 @@ export default function DelayBench({ back }) {
     const bar = (
         <>
             <Presets presets={PRESETS} presetId={state.presetId} onPreset={choosePreset} />
-            <div className={styles.say} data-mode={mode}>{say}</div>
+            <div className={styles.say} data-mode={mode} data-depth={depth}>{say}</div>
             <MoreButton open={further} onOpen={() => setFurther(true)} />
         </>
     );
@@ -985,7 +1046,7 @@ export default function DelayBench({ back }) {
             mode={mode}
             onMode={setMode}
             depth={depth}
-            onDepth={setDepth}
+            onDepth={chooseDepth}
             stage={stage}
             bar={bar}
             more={more}

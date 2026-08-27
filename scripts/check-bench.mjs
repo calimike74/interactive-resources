@@ -22,6 +22,9 @@
 //  12. the start button's two lines share a left edge
 //  13. the stage draws a hit as a bar however long its sample rings; only the
 //      vocal (a phrase) keeps an envelope. Read from the canvas's data-shapes.
+//  14. the three levels are three jobs: each announces itself when chosen;
+//      A-level's line judges a setting and tags AO3 / AO4; Extension's line
+//      is a different sentence with no tags; the 2023 paper preset sets 120 BPM
 //
 //   BENCH_ENGINE=webkit node scripts/check-bench.mjs <url>   # Safari's engine
 //   (27 Aug 2026: an open-hat envelope showed only in Safari, whose decoder
@@ -254,6 +257,41 @@ for (const url of urls) {
                     else ok(`stage keeps the vocal's envelope (${onVocal})`);
                 }
             }
+        }
+
+        // 14. three levels, three jobs (27 Aug 2026)
+        const depthBtn = (label) => page.locator('[aria-label="What the bench does for you"] button', { hasText: new RegExp('^' + label + '$') });
+        if (await depthBtn('Core').count()) {
+            const sayText = () => page.evaluate(() => document.querySelector('[data-bench-frame] [data-depth]')?.textContent?.trim() || '');
+            const preset = (name) => page.locator('[aria-label="Presets"] button', { hasText: name });
+            await depthBtn('Core').click();
+            const coreSays = await sayText();
+            await depthBtn('A-level').click();
+            const alevelSays = await sayText();
+            await preset('Rhythmic 1/8').click();
+            await page.waitForTimeout(100);
+            const alevelJudges = await sayText();
+            await depthBtn('Extension').click();
+            const extSays = await sayText();
+            await preset('Slapback').click();
+            await page.waitForTimeout(100);
+            const extOpens = await sayText();
+            if (!/^Core:/.test(coreSays) || !/^A-level:/.test(alevelSays) || !/^Extension:/.test(extSays)) fail(url, size, `a level did not announce itself (core "${coreSays.slice(0, 30)}", a-level "${alevelSays.slice(0, 30)}", extension "${extSays.slice(0, 30)}")`);
+            else ok('each level announces what it does');
+            if (!/AO3/.test(alevelJudges) || !/AO4/.test(alevelJudges)) fail(url, size, `A-level does not judge with AO3 and AO4 tags: "${alevelJudges.slice(0, 80)}"`);
+            else ok('A-level judges the setting and tags the mark');
+            if (/AO[34]/.test(extOpens) || extOpens === alevelJudges || extOpens.length < 40) fail(url, size, `Extension is not its own sentence: "${extOpens.slice(0, 80)}"`);
+            else ok('Extension opens the machine in its own words');
+            if (await preset('2023 paper').count()) {
+                await preset('2023 paper').click();
+                await page.waitForTimeout(150);
+                const tempo = await page.evaluate(() => document.querySelector('[aria-label="Tempo"]')?.getAttribute('aria-valuenow'));
+                const paperSays = await sayText();
+                if (tempo !== '120') fail(url, size, `the 2023 paper preset did not set 120 BPM (got ${tempo})`);
+                else if (paperSays === extOpens) fail(url, size, 'the 2023 paper preset did not change the line');
+                else ok('the 2023 paper preset loads at 120 BPM');
+            } else fail(url, size, 'no 2023 paper preset');
+            await depthBtn('A-level').click();
         }
 
         if (errors.length) fail(url, size, `page errors: ${errors.join(' | ').slice(0, 200)}`);

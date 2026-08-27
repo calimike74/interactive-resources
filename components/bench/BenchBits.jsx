@@ -32,10 +32,12 @@ export function useBenchMode() {
     return [mode, choose];
 }
 
+// Three jobs, not three lengths (Mike, 27 Aug 2026): Core shows, A-level
+// judges the way the paper does, Extension opens the machine.
 export const DEPTHS = [
-    { id: 'core', label: 'Core', dot: 'var(--teal)' },
-    { id: 'alevel', label: 'A-level', dot: 'var(--gold)' },
-    { id: 'extension', label: 'Extension', dot: 'var(--purple)' },
+    { id: 'core', label: 'Core', dot: 'var(--teal)', does: 'Core: the bench names what you hear and says what to try' },
+    { id: 'alevel', label: 'A-level', dot: 'var(--gold)', does: 'A-level: the bench judges every setting the way the paper does, and tags the half of the mark' },
+    { id: 'extension', label: 'Extension', dot: 'var(--purple)', does: 'Extension: the bench opens the machine, beyond the paper' },
 ];
 
 export function useBenchDepth() {
@@ -67,9 +69,9 @@ export function ModeToggle({ mode, onChange }) {
 
 export function DepthToggle({ depth, onChange }) {
     return (
-        <div className={styles.depth} role="group" aria-label="How deep the numbers go">
+        <div className={styles.depth} role="group" aria-label="What the bench does for you">
             {DEPTHS.map((d) => (
-                <button key={d.id} type="button" className={styles.depthBtn} aria-pressed={depth === d.id} style={{ '--dot': d.dot }} onClick={() => onChange(d.id)}>
+                <button key={d.id} type="button" className={styles.depthBtn} aria-pressed={depth === d.id} style={{ '--dot': d.dot }} title={d.does} onClick={() => onChange(d.id)}>
                     {d.label}
                 </button>
             ))}

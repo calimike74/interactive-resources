@@ -268,6 +268,24 @@
 .say b { color: var(--ink); font-weight: 600; }
 .say[data-mode='teacher'] { color: var(--ink); }
 .say[data-mode='teacher'] b { color: var(--green); }
+/* A-level: which half of the mark a sentence belongs to (AO3 names, AO4 judges) */
+.ao {
+    display: inline-block;
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    padding: 2px 4px 1px;
+    margin: 0 6px 0 5px;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    color: var(--ink-3);
+    vertical-align: 1px;
+}
+.ao[data-ao='4'] { color: var(--ink); border-color: var(--ink-3); }
+.say[data-depth='extension'] { color: var(--ink); }
 
 /* More: adds controls, never takes them away */
 .more {
