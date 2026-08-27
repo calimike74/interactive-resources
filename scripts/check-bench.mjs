@@ -18,6 +18,8 @@
 //   8. before the first gesture no AudioContext exists; after Play one does
 //   9. no createOscillator in the page's scripts unless the bench declares synthesis
 //  10. the space bar stops and starts the bench
+//  11. every console label fits inside its own box (no text under a slider)
+//  12. the start button's two lines share a left edge
 
 import { chromium } from 'playwright';
 
@@ -142,6 +144,40 @@ for (const url of urls) {
         if (!/JetBrains/i.test(fontNames)) fail(url, size, `label face is not JetBrains Mono (${fontNames.slice(0, 120)})`);
         if (/Hanken|Inter\b|Geist/i.test(fontNames)) fail(url, size, `a retired face is present (${fontNames.slice(0, 120)})`);
         if (/Space Mono/i.test(fontNames)) fail(url, size, 'Space Mono is present');
+
+        // 11. words stay inside their box: no console label paints under a
+        //     neighbour (27 Aug 2026: LEVEL sat under its own slider)
+        // 12. the start button's two lines share a left edge (27 Aug 2026)
+        const t = await page.evaluate(() => {
+            const out = { spill: [], begin: null };
+            const console_ = document.querySelector('[aria-label="Controls"]');
+            const walker = document.createTreeWalker(console_, NodeFilter.SHOW_TEXT);
+            while (walker.nextNode()) {
+                const node = walker.currentNode;
+                if (!node.nodeValue.trim()) continue;
+                const el = node.parentElement;
+                const rg = document.createRange();
+                rg.selectNodeContents(node);
+                const tr = rg.getBoundingClientRect();
+                const er = el.getBoundingClientRect();
+                if (tr.width === 0) continue;
+                if (tr.right > er.right + 1 || tr.left < er.left - 1) out.spill.push(`"${node.nodeValue.trim().slice(0, 24)}" ${Math.round(tr.width)}px in a ${Math.round(er.width)}px box`);
+            }
+            const begin = [...document.querySelectorAll('button')].find((b) => /Play the bench/.test(b.textContent));
+            if (begin) {
+                const span = begin.querySelector('span');
+                const small = begin.querySelector('small');
+                const title = [...span.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
+                const rg = document.createRange();
+                rg.selectNodeContents(title);
+                out.begin = { title: Math.round(rg.getBoundingClientRect().left), small: Math.round(small.getBoundingClientRect().left) };
+            }
+            return out;
+        });
+        if (t.spill.length) fail(url, size, `label text paints outside its box: ${t.spill.join('; ')}`);
+        else ok('every console label fits its box');
+        if (t.begin && Math.abs(t.begin.title - t.begin.small) > 1) fail(url, size, `start button lines do not share a left edge (title ${t.begin.title}, line two ${t.begin.small})`);
+        else if (t.begin) ok('start button lines share a left edge');
 
         // 6. drawer
         const handle = page.locator('[data-drawer-handle]').first();
