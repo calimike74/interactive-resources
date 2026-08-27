@@ -140,3 +140,24 @@ test('a 24 dB/oct high-pass turns the phase through a full circle, unwrapped int
     for (let i = 1; i < pts.length; i += 1) assert.ok(Math.abs(pts[i].phase - pts[i - 1].phase) < Math.PI, `no jump at ${pts[i].hz}`);
     near(pts[0].phase - pts[pts.length - 1].phase, 2 * Math.PI, 0.25, 'about 360 degrees from bottom to top');
 });
+
+test('48 dB/oct is four sections, 12 dB down at the cutoff, and steeper than 45 degrees on the stage', () => {
+    const s = setBand(DEFAULT_STATE, 'hpf', { on: true, hz: 400, slope: 48 });
+    assert.equal(sectionsOf(s, 'hpf').length, 4);
+    const f = slopeFacts('hpf', s);
+    near(f.atCutoffDb, -12, 0.4, 'cutoff');
+    assert.ok(f.octaveDb < -40, `an octave below is far down (${f.octaveDb.toFixed(1)})`);
+    assert.equal(f.order, 8);
+});
+
+test('the 2023 paper preset boosts every band on the vocal; the 2024 preset is the 48 dB high-pass on the 808', () => {
+    const p23 = applyPreset(DEFAULT_STATE, 'paper2023');
+    assert.equal(p23.source, 'vocal');
+    assert.ok(p23.low.on && p23.low.gain > 0 && p23.mid.on && p23.mid.gain > 0 && p23.high.on && p23.high.gain > 0);
+    assert.ok(peakOf(p23).minDb > -0.5, 'nothing is cut anywhere');
+    const p24 = applyPreset(DEFAULT_STATE, 'paper2024');
+    assert.equal(p24.source, 'electronic');
+    assert.ok(p24.hpf.on && p24.hpf.slope === 48 && p24.hpf.hz >= 200 && p24.hpf.hz <= 1000, 'the mark scheme: cutoff between 200 Hz and 1 kHz');
+    assert.ok(response(p24, [p24.hpf.hz / 4])[0].db < -20, 'reaches -20 dB, as the mark scheme asks');
+    for (const id of ['low', 'mid', 'high', 'lpf']) assert.equal(p24[id].on, false, 'no other boosts or cuts');
+});
