@@ -21,6 +21,7 @@ import {
     DEFAULT_STATE,
     BPM_MIN,
     BPM_MAX,
+    stageShape,
 } from '@/lib/bench/delay-model';
 
 // The Delay bench (1.12) — the reference bench for BENCH-STANDARD.md.
@@ -50,6 +51,10 @@ const FILES = {
 
 // Patterns in 16ths over two bars. The same arrays feed the scheduler and
 // the stage, so what is drawn is what is booked.
+// Bar widths on the stage, in px: a hit and one of its repeats. Mike, 27
+// Aug 2026: 7 and 5 were too thin to tell what they were.
+const BAR_W = { hit: 10, repeat: 7 };
+
 const PATTERNS = {
     drums: {
         label: 'Drums',
@@ -74,7 +79,7 @@ const PATTERNS = {
             { s: 30, name: '808-openhat', g: 0.5 },
         ],
     },
-    vocal: { label: 'Vocal', said: 'the vocal', bars: 4, steps: [{ s: 0, name: 'vocal', g: 1 }] },
+    vocal: { label: 'Vocal', said: 'the vocal', bars: 4, steps: [{ s: 0, name: 'vocal', g: 1, phrase: true }] },
     stab: { label: 'Stab', said: 'the stabs', bars: 2, steps: [{ s: 0, name: 'stab-brass', g: 1 }, { s: 16, name: 'stab-guitar', g: 1 }] },
 };
 const SOURCE_IDS = ['drums', 'electronic', 'vocal', 'stab'];
@@ -395,21 +400,26 @@ export default function DelayBench({ back }) {
             const genColour = (n) => col.gens[Math.min(n - 1, col.gens.length - 1)];
             // A hit is a slim pale bar whose height is its level; a repeat
             // the same in its generation's colour, fainter as it decays.
-            // Only a long phrase (the vocal) keeps its envelope shape, drawn
+            // Only a step the pattern marks as a phrase (the vocal) keeps its
+            // envelope shape (stageShape: never the sample's length), drawn
             // light so the repeats behind it still read. Nothing here is
             // decoration: x is the time the graph plays it, height is the
             // gain it plays it at.
             const pxPerSec = plotW / win;
-            function drawShape(t0, level, lane, buffer, n, sounding, ghostLevel = 0) {
+            // What this frame drew, told to the canvas for check-bench (law 13).
+            let nBars = 0;
+            let nEnvelopes = 0;
+            function drawShape(t0, level, lane, buffer, n, sounding, ghostLevel = 0, envelope = false) {
                 const lane_ = lanes[lane] || lanes.C;
                 const laneH = lane_.y1 - lane_.y0;
                 const maxH = laneH * 0.9;
                 const x0 = xOf(t0);
                 const baseline = lane_.y1;
-                const long = buffer && buffer.duration > 1.5;
+                const long = envelope && buffer;
                 const isRepeat = n > 0;
                 ctx2d.fillStyle = sounding ? '#ffffff' : isRepeat ? genColour(n) : col.hit;
                 if (long) {
+                    nEnvelopes += 1;
                     const env = envelopeOf(buffer, 160);
                     const wpx = Math.min(buffer.duration * pxPerSec, plotW);
                     const cnt = env.length;
@@ -428,7 +438,8 @@ export default function DelayBench({ back }) {
                     ctx2d.globalAlpha = 1;
                     return;
                 }
-                const wpx = isRepeat ? 5 : 7;
+                nBars += 1;
+                const wpx = isRepeat ? BAR_W.repeat : BAR_W.hit;
                 if (ghostLevel > 0) {
                     ctx2d.globalAlpha = 0.5;
                     ctx2d.fillStyle = col.ghost;
@@ -462,8 +473,8 @@ export default function DelayBench({ back }) {
             for (const { step, tLocal, buffer } of hits) {
                 const level = step.g * gains.dry;
                 const sounding = isSounding(loopOrigin + tLocal);
-                if (buffer && buffer.duration > 1.5) {
-                    drawShape(tLocal, level, 'C', buffer, 0, sounding, step.g);
+                if (stageShape(step) === 'envelope') {
+                    drawShape(tLocal, level, 'C', buffer, 0, sounding, step.g, true);
                 } else {
                     add('C', tLocal, { level, ghost: step.g, n: 0, sounding });
                     if (pp) { add('L', tLocal, { level: 0, ghost: 0, n: 0, sounding: false, spacer: true }); }
@@ -475,8 +486,8 @@ export default function DelayBench({ back }) {
                     const level = Math.min(1, m.level * gains.wet);
                     const lane = pp ? m.lane : 'C';
                     const sounding = isSounding(loopOrigin + m.t);
-                    if (buffer && buffer.duration > 1.5) {
-                        drawShape(m.t, level, lane, buffer, m.n, sounding);
+                    if (stageShape(step) === 'envelope') {
+                        drawShape(m.t, level, lane, buffer, m.n, sounding, 0, true);
                         continue;
                     }
                     add(lane, m.t, { level, n: m.n, sounding, step, key: `${lane}:${step.s}:${step.name}:${m.n}` });
@@ -488,6 +499,7 @@ export default function DelayBench({ back }) {
                 const maxH = laneH * 0.9;
                 const items = col_.items.filter((i) => !i.spacer);
                 if (!items.length) continue;
+                nBars += items.length;
                 const heights = items.map((i) => Math.max(2, i.level * maxH));
                 const total = heights.reduce((a, b) => a + b, 0) + GAP * (items.length - 1);
                 const scale = total > maxH ? maxH / total : 1;
@@ -501,7 +513,7 @@ export default function DelayBench({ back }) {
                 }
                 items.forEach((it, i) => {
                     const hh = heights[i] * scale;
-                    const bw = it.n > 0 ? 5 : 7;
+                    const bw = it.n > 0 ? BAR_W.repeat : BAR_W.hit;
                     const isHover = it.key && it.key === hovered;
                     ctx2d.fillStyle = it.sounding ? '#ffffff' : it.n > 0 ? genColour(it.n) : col.hit;
                     ctx2d.globalAlpha = it.n > 0 ? Math.min(1, 0.35 + 0.65 * it.level) : 1;
@@ -521,6 +533,8 @@ export default function DelayBench({ back }) {
                 ctx2d.globalAlpha = 1;
             }
             rectsRef.current = rects;
+            const shapes = `bars:${nBars} envelopes:${nEnvelopes}`;
+            if (canvas.dataset.shapes !== shapes) canvas.dataset.shapes = shapes;
 
             // the delay-time bracket on the first hit, labelled for the depth
             const first = pat.steps[0];

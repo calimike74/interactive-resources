@@ -20,8 +20,14 @@
 //  10. the space bar stops and starts the bench
 //  11. every console label fits inside its own box (no text under a slider)
 //  12. the start button's two lines share a left edge
+//  13. the stage draws a hit as a bar however long its sample rings; only the
+//      vocal (a phrase) keeps an envelope. Read from the canvas's data-shapes.
+//
+//   BENCH_ENGINE=webkit node scripts/check-bench.mjs <url>   # Safari's engine
+//   (27 Aug 2026: an open-hat envelope showed only in Safari, whose decoder
+//   reads the sample 40 ms longer; the laws now run in both engines)
 
-import { chromium } from 'playwright';
+import { chromium, webkit } from 'playwright';
 
 const urls = process.argv.slice(2);
 if (!urls.length) {
@@ -51,7 +57,9 @@ let failures = 0;
 const fail = (url, size, msg) => { failures += 1; console.log(`  ✗ ${size ? `${size.width}×${size.height} ` : ''}${msg}`); };
 const ok = (msg) => console.log(`  ✓ ${msg}`);
 
-const browser = await chromium.launch();
+const ENGINE = process.env.BENCH_ENGINE === 'webkit' ? webkit : chromium;
+console.log(`engine: ${process.env.BENCH_ENGINE === 'webkit' ? 'webkit' : 'chromium'}`);
+const browser = await ENGINE.launch();
 // The cookie banner would otherwise sit over the bench and swallow clicks;
 // essential-only consent is what a student who dismissed it has.
 async function newPage(viewport, url) {
@@ -229,6 +237,23 @@ for (const url of urls) {
             const restarted = await page.locator('[aria-label="Stop"]').count();
             if (!stopped || !restarted) fail(url, size, 'space bar does not stop and start the bench');
             else ok('space bar stops and starts');
+
+            // 13. hits are bars, only the phrase is an envelope
+            const stageCanvas = '[aria-label="Stage"] canvas';
+            if (await page.locator(stageCanvas).count()) {
+                await page.waitForTimeout(300);
+                const onDrums = await page.evaluate((sel) => document.querySelector(sel)?.dataset.shapes || '', stageCanvas);
+                if (!/bars:[1-9]/.test(onDrums) || !/envelopes:0\b/.test(onDrums)) fail(url, size, `stage on the default source drew ${onDrums || 'nothing readable'} (every hit must be a bar)`);
+                else ok(`stage draws hits as bars (${onDrums})`);
+                const vocal = page.locator('[aria-label="Source"] button', { hasText: /^Vocal$/ });
+                if (await vocal.count()) {
+                    await vocal.click();
+                    await page.waitForTimeout(600);
+                    const onVocal = await page.evaluate((sel) => document.querySelector(sel)?.dataset.shapes || '', stageCanvas);
+                    if (!/envelopes:[1-9]/.test(onVocal)) fail(url, size, `stage on the vocal drew ${onVocal || 'nothing readable'} (the phrase keeps its envelope)`);
+                    else ok(`stage keeps the vocal's envelope (${onVocal})`);
+                }
+            }
         }
 
         if (errors.length) fail(url, size, `page errors: ${errors.join(' | ').slice(0, 200)}`);
