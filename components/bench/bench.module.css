@@ -233,6 +233,7 @@
     min-width: 0;
 }
 .presets { display: flex; align-items: center; gap: 6px; flex: none; }
+.presets[data-wrap='true'] { flex-wrap: wrap; max-width: 470px; row-gap: 6px; }
 .presetLabel {
     font-family: var(--mono);
     font-size: 11px;

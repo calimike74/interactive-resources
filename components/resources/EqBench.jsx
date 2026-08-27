@@ -407,7 +407,7 @@ export default function EqBench({ back }) {
                     const half = Math.pow(2, bandwidthOctaves(s.graphic ? 1.41 : b.q) / 2);
                     label += ` · half power at ${fmtHz(chosen.hz / half)} and ${fmtHz(chosen.hz * half)}`;
                 }
-                if (depthRef.current === 'extension' && hasSlope(s.band)) label += ` · order ${b.slope === 24 ? 4 : 2}`;
+                if (depthRef.current === 'extension' && hasSlope(s.band)) label += ` · order ${Math.round(b.slope / 6)}`;
                 g.font = mono;
                 g.fillStyle = col.gold;
                 const above = chosen.y > top + 40;
@@ -808,7 +808,7 @@ export default function EqBench({ back }) {
 
     const bar = (
         <>
-            <Presets presets={PRESETS} presetId={state.presetId} onPreset={choosePreset} />
+            <Presets presets={PRESETS} presetId={state.presetId} onPreset={choosePreset} wrap />
             <div className={styles.say} data-mode={mode} data-depth={depth}>{say}</div>
             <MoreButton open={further} onOpen={() => setFurther(true)} />
         </>

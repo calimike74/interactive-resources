@@ -155,9 +155,11 @@ export function Legal() {
     );
 }
 
-export function Presets({ presets, presetId, onPreset }) {
+// `wrap` lets a bench with many presets fold them into two rows, so the
+// bench's one line keeps its width (EQ bench, seven presets).
+export function Presets({ presets, presetId, onPreset, wrap = false }) {
     return (
-        <div className={styles.presets} role="group" aria-label="Presets">
+        <div className={styles.presets} role="group" aria-label="Presets" data-wrap={wrap || undefined}>
             <span className={styles.presetLabel}>Presets</span>
             {presets.map((p) => (
                 <button key={p.id} type="button" className={styles.preset} aria-pressed={presetId === p.id} onClick={() => onPreset(p.id)} title={p.blurb}>
