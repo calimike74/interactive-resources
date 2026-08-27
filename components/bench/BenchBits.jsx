@@ -81,7 +81,7 @@ export function DepthToggle({ depth, onChange }) {
 
 // The play column at the left of the console band: Play / Stop, hold for
 // dry, the output level.
-export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, teach }) {
+export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, teach, holdTitle = "Hold to hear the source with no delay", holdWhy = "mutes the repeats while you hold it, so you can hear what the delay is adding" }) {
     const [held, setHeld] = useState(false);
     function down(e) {
         e.preventDefault();
@@ -120,7 +120,7 @@ export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, t
                 onPointerCancel={up}
                 onKeyDown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!held) down(e); } }}
                 onKeyUp={(e) => { if (e.key === ' ' || e.key === 'Enter') up(); }}
-                title="Hold to hear the source with no delay"
+                title={holdTitle}
             >
                 hold: dry
             </button>
@@ -138,7 +138,7 @@ export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, t
                 />
             </div>
             <div className={styles.why}>
-                <b>Play</b> runs the pattern round two bars. <b>Hold: dry</b> mutes the repeats while you hold it, so you can hear what the delay is adding. The space bar plays and stops.
+                <b>Play</b> runs the pattern round two bars. <b>Hold: dry</b> {holdWhy}. The space bar plays and stops.
             </div>
         </div>
     );

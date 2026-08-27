@@ -12,3 +12,7 @@ Every sound a bench plays is listed here with where it came from. The Bench Stan
 | `stab-brass.mp3`, `stab-guitar.mp3`, `stab-vox.mp3` | One-second one-shots, dry | Generated with ElevenLabs sound generation for Inside the Echo, August 2026; envelope-verified dry | Inside the Echo; Delay bench |
 
 All of it was generated on Mike's own ElevenLabs account; nothing here is a third-party recording with a licence to track. Commercial use rights follow that account's plan terms, which Mike holds. If a file is replaced, update this table in the same commit.
+
+## eq/ (no folder: the EQ bench reads `delay/`)
+
+The EQ bench (2026-08-27) plays the same four sources as the Delay bench, straight from `delay/` above: the funk kit, the 808 kit, the vocal phrase and the brass and guitar stabs. Nothing new was generated for it.

@@ -24,7 +24,15 @@
 //      vocal (a phrase) keeps an envelope. Read from the canvas's data-shapes.
 //  14. the three levels are three jobs: each announces itself when chosen;
 //      A-level's line judges a setting and tags AO3 / AO4; Extension's line
-//      is a different sentence with no tags; the 2023 paper preset sets 120 BPM
+//      is a different sentence with no tags; the bench's "judge it" preset
+//      lands its numbers (Delay: the 2023 paper sets 120 BPM; EQ: Too much
+//      sets +12 dB)
+//  15. (EQ bench) the dot on the stage is the dial: the canvas reports the
+//      chosen band's frequency and gain, they equal the console's, and
+//      dragging the dot moves the dial
+//
+//  Laws 13 to 15 read the bench's fixtures from BENCHES below, keyed by the
+//  URL's last path segment; a bench with no entry skips them.
 //
 //   BENCH_ENGINE=webkit node scripts/check-bench.mjs <url>   # Safari's engine
 //   (27 Aug 2026: an open-hat envelope showed only in Safari, whose decoder
@@ -56,6 +64,21 @@ const STATUS_HUES = (rgb) => {
     return red || amber || green;
 };
 
+// Per-bench fixtures for the laws that must name a preset or a control.
+const BENCHES = {
+    'delay-effects': {
+        shapes: true,
+        presets: { first: 'Rhythmic 1/8', second: 'Slapback', judge: '2023 paper' },
+        judgeLands: { selector: '[aria-label="Tempo"]', attr: 'aria-valuenow', value: '120', says: 'sets 120 BPM' },
+    },
+    'eq-bench': {
+        curve: true,
+        presets: { first: 'Vocal clean-up', second: 'Telephone', judge: 'Too much' },
+        judgeLands: { selector: '[aria-label="Gain"]', attr: 'aria-valuenow', value: '12', says: 'sets +12 dB' },
+    },
+};
+const fixtureOf = (url) => BENCHES[new URL(url).pathname.split('/').filter(Boolean).pop()] || {};
+
 let failures = 0;
 const fail = (url, size, msg) => { failures += 1; console.log(`  ✗ ${size ? `${size.width}×${size.height} ` : ''}${msg}`); };
 const ok = (msg) => console.log(`  ✓ ${msg}`);
@@ -73,6 +96,7 @@ async function newPage(viewport, url) {
 }
 for (const url of urls) {
     console.log(`\n${url}`);
+    const fx = fixtureOf(url);
     // 9. oscillators in the delivered scripts
     const page0 = await newPage(SIZES[1], url);
     const scripts = [];
@@ -243,7 +267,7 @@ for (const url of urls) {
 
             // 13. hits are bars, only the phrase is an envelope
             const stageCanvas = '[aria-label="Stage"] canvas';
-            if (await page.locator(stageCanvas).count()) {
+            if (fx.shapes && await page.locator(stageCanvas).count()) {
                 await page.waitForTimeout(300);
                 const onDrums = await page.evaluate((sel) => document.querySelector(sel)?.dataset.shapes || '', stageCanvas);
                 if (!/bars:[1-9]/.test(onDrums) || !/envelopes:0\b/.test(onDrums)) fail(url, size, `stage on the default source drew ${onDrums || 'nothing readable'} (every hit must be a bar)`);
@@ -261,19 +285,19 @@ for (const url of urls) {
 
         // 14. three levels, three jobs (27 Aug 2026)
         const depthBtn = (label) => page.locator('[aria-label="What the bench does for you"] button', { hasText: new RegExp('^' + label + '$') });
-        if (await depthBtn('Core').count()) {
+        if (fx.presets && await depthBtn('Core').count()) {
             const sayText = () => page.evaluate(() => document.querySelector('[data-bench-frame] [data-depth]')?.textContent?.trim() || '');
             const preset = (name) => page.locator('[aria-label="Presets"] button', { hasText: name });
             await depthBtn('Core').click();
             const coreSays = await sayText();
             await depthBtn('A-level').click();
             const alevelSays = await sayText();
-            await preset('Rhythmic 1/8').click();
+            await preset(fx.presets.first).click();
             await page.waitForTimeout(100);
             const alevelJudges = await sayText();
             await depthBtn('Extension').click();
             const extSays = await sayText();
-            await preset('Slapback').click();
+            await preset(fx.presets.second).click();
             await page.waitForTimeout(100);
             const extOpens = await sayText();
             if (!/^Core:/.test(coreSays) || !/^A-level:/.test(alevelSays) || !/^Extension:/.test(extSays)) fail(url, size, `a level did not announce itself (core "${coreSays.slice(0, 30)}", a-level "${alevelSays.slice(0, 30)}", extension "${extSays.slice(0, 30)}")`);
@@ -282,16 +306,55 @@ for (const url of urls) {
             else ok('A-level judges the setting and tags the mark');
             if (/AO[34]/.test(extOpens) || extOpens === alevelJudges || extOpens.length < 40) fail(url, size, `Extension is not its own sentence: "${extOpens.slice(0, 80)}"`);
             else ok('Extension opens the machine in its own words');
-            if (await preset('2023 paper').count()) {
-                await preset('2023 paper').click();
+            if (await preset(fx.presets.judge).count()) {
+                await preset(fx.presets.judge).click();
                 await page.waitForTimeout(150);
-                const tempo = await page.evaluate(() => document.querySelector('[aria-label="Tempo"]')?.getAttribute('aria-valuenow'));
-                const paperSays = await sayText();
-                if (tempo !== '120') fail(url, size, `the 2023 paper preset did not set 120 BPM (got ${tempo})`);
-                else if (paperSays === extOpens) fail(url, size, 'the 2023 paper preset did not change the line');
-                else ok('the 2023 paper preset loads at 120 BPM');
-            } else fail(url, size, 'no 2023 paper preset');
+                const landed = await page.evaluate(({ selector, attr }) => document.querySelector(selector)?.getAttribute(attr), fx.judgeLands);
+                const judgeSays = await sayText();
+                if (landed !== fx.judgeLands.value) fail(url, size, `the ${fx.presets.judge} preset did not land (${fx.judgeLands.selector} ${fx.judgeLands.attr} = ${landed}, wanted ${fx.judgeLands.value})`);
+                else if (judgeSays === extOpens) fail(url, size, `the ${fx.presets.judge} preset did not change the line`);
+                else ok(`the ${fx.presets.judge} preset ${fx.judgeLands.says}`);
+            } else fail(url, size, `no ${fx.presets.judge} preset`);
             await depthBtn('A-level').click();
+        }
+
+        // 15. (EQ) the dot on the stage is the dial
+        if (fx.curve) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readBand = () => page.evaluate((sel) => document.querySelector(sel)?.dataset.band || '', canvasSel);
+            const dial = async (label) => page.evaluate((l) => { const d = document.querySelector(`[aria-label="${l}"]`); return { now: d?.getAttribute('aria-valuenow'), text: d?.getAttribute('aria-valuetext') }; }, label);
+            await page.waitForTimeout(200);
+            const before = await readBand();
+            const [id, hzStr, gainStr] = before.split(':');
+            const freq = await dial('Frequency');
+            const gain = await dial('Gain');
+            const hz = Number(hzStr);
+            const hzText = hz >= 1000 ? `${(hz / 1000).toFixed(hz >= 10000 ? 0 : 1).replace(/\.0$/, '')} kHz` : `${hz} Hz`;
+            if (!id || Number.isNaN(hz)) fail(url, size, `the stage does not report the chosen band (data-band="${before}")`);
+            else if (freq.text !== hzText || gain.now !== gainStr) fail(url, size, `the stage's band (${before}) is not the console's (Frequency "${freq.text}", Gain ${gain.now})`);
+            else ok(`the stage reports the chosen band and it matches the dials (${before})`);
+            // drag the chosen dot to the right: the frequency must rise on both
+            const box = await page.locator(canvasSel).boundingBox();
+            const dot = await page.evaluate((sel) => {
+                // the canvas keeps no DOM for its dots; find it by walking the pixels is
+                // overkill, so the bench exposes the chosen dot's position too
+                return document.querySelector(sel)?.dataset.dot || '';
+            }, canvasSel);
+            const [dx, dy] = dot.split(':').map(Number);
+            if (box && dot) {
+                await page.mouse.move(box.x + dx, box.y + dy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + dx + 40, box.y + dy, { steps: 6 });
+                await page.mouse.move(box.x + dx + 80, box.y + dy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(200);
+                const after = await readBand();
+                const hzAfter = Number(after.split(':')[1]);
+                const freqAfter = await dial('Frequency');
+                if (!(hzAfter > hz)) fail(url, size, `dragging the dot right did not raise the frequency (${before} -> ${after})`);
+                else if (freqAfter.now === freq.now) fail(url, size, 'dragging the dot did not move the Frequency dial');
+                else ok(`dragging the dot moves the dial (${hz} Hz -> ${hzAfter} Hz)`);
+            } else fail(url, size, 'the stage does not expose the chosen dot for the drag test');
         }
 
         if (errors.length) fail(url, size, `page errors: ${errors.join(' | ').slice(0, 200)}`);

@@ -894,3 +894,14 @@
     .sec { border-bottom: 1px solid var(--line); }
     .secHear { flex-basis: 100%; }
 }
+
+/* ---- EQ bench: the Band and Shape sections, the shape micro-diagram ---- */
+.secBand { width: 176px; }
+.secShape { width: 246px; }
+.shapeSvg { position: absolute; inset: 14px 8px 6px; width: calc(100% - 16px); height: calc(100% - 20px); overflow: visible; }
+.shapeSvg line { stroke: var(--hair); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.shapeSvg polyline { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.secBand .chips { flex-wrap: wrap; gap: 4px; }
+
+/* EQ bench: the legend sits under the note at the top right, clear of the frequency axis */
+.legendTop { bottom: auto; top: 36px; }
