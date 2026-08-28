@@ -155,6 +155,7 @@
     min-width: 0;
 }
 .stageNote b {
+    flex: none;
     font-family: var(--mono);
     font-weight: 500;
     font-size: 11.5px;
@@ -919,3 +920,10 @@
 .secKnob { width: 88px; padding: 14px 12px; } /* Attack and Release: one control each, the readout under the dial (28 Aug 2026) */
 .knob { display: flex; flex-direction: column; align-items: center; gap: 7px; }
 .shapeSvg .oneToOne { stroke: var(--hair); stroke-dasharray: 3 3; }
+
+/* ---- Edit bench: the Cut and Fade sections (28 Aug 2026) ---- */
+.secCut { width: 246px; }
+.secFade { width: 262px; }
+.secCut .chips, .secFade .chips { flex-wrap: wrap; gap: 4px; }
+.stepSvg { position: absolute; inset: 14px 8px 6px; width: calc(100% - 16px); height: calc(100% - 20px); overflow: visible; }
+.stepSvg line, .stepSvg polyline { fill: none; vector-effect: non-scaling-stroke; }

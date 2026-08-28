@@ -31,6 +31,10 @@
 //      chosen band's frequency and gain, they equal the console's, and
 //      dragging the dot moves the dial
 //
+//  19. (Edit bench) the cut line on the stage is the Cut dial: the canvas
+//      reports the cut (data-cut) and it equals the dial; dragging the join's
+//      handle to the right moves the cut later on both
+//
 //  Laws 13 to 15 read the bench's fixtures from BENCHES below, keyed by the
 //  URL's last path segment; a bench with no entry skips them.
 //
@@ -76,6 +80,12 @@ const BENCHES = {
         presets: { first: 'Vocal level', second: 'Limiter', judge: '2023 paper' },
         judgeLands: { selector: '[aria-label="Ratio"]', attr: 'aria-valuetext', value: '20:1', says: 'sets 20:1' },
         stages: { core: 'lane', alevel: 'graph', extension: 'machine' },
+    },
+    'edit-bench': {
+        cut: true,
+        presets: { first: 'Repair fade', second: 'Linear, long', judge: '2022 paper' },
+        judgeLands: { selector: '[aria-label="Cut"]', attr: 'aria-valuenow', value: '1000', says: 'sets the cut at 1.000 s' },
+        stages: { core: 'join', alevel: 'drawing', extension: 'machine' },
     },
     'eq-bench': {
         curve: true,
@@ -421,6 +431,34 @@ for (const url of urls) {
             if (wrong.length) fail(url, size, `a level did not draw its own stage: ${wrong.join(', ')}`);
             else ok(`each level draws its own stage (${Object.values(seen).join(', ')})`);
             await depthBtn('A-level').click();
+        }
+
+        // 19. (Edit) the cut line on the stage is the Cut dial
+        if (fx.cut) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readC = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { cut: c?.dataset.cut || '', handle: c?.dataset.handle || '' }; }, canvasSel);
+            const dialC = () => page.evaluate(() => document.querySelector('[aria-label="Cut"]')?.getAttribute('aria-valuenow'));
+            await page.waitForTimeout(200);
+            const before = await readC();
+            const dial = await dialC();
+            if (!before.cut) fail(url, size, 'the stage does not report the cut (data-cut missing)');
+            else if (Math.abs(Number(before.cut) - Number(dial)) > 0.01) fail(url, size, `the stage's cut (${before.cut}) is not the dial's (${dial})`);
+            else ok(`the stage reports the cut and it matches the dial (${before.cut} ms)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx + 20, box.y + hy, { steps: 6 });
+                await page.mouse.move(box.x + hx + 40, box.y + hy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(200);
+                const after = await readC();
+                const dialAfter = await dialC();
+                if (!(Number(after.cut) > Number(before.cut))) fail(url, size, `dragging the join right did not move the cut later (${before.cut} -> ${after.cut})`);
+                else if (Math.abs(Number(dialAfter) - Number(after.cut)) > 0.01) fail(url, size, `the dial did not follow the line (${dialAfter} vs ${after.cut})`);
+                else ok(`dragging the join moves the dial (${before.cut} ms -> ${after.cut} ms)`);
+            } else fail(url, size, 'the stage does not expose the join handle for the drag test');
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

@@ -20,3 +20,7 @@ The EQ bench (2026-08-27) plays the same four sources as the Delay bench, straig
 ## dynamics/ (no folder: the Dynamics bench reads `delay/`)
 
 The Dynamics bench (2026-08-28) plays the same four sources as the Delay and EQ benches, straight from `delay/` above. Nothing new was generated for it.
+
+## edit/ (no folder: the Edit bench reads `delay/`)
+
+The Edit bench (2026-08-28) cuts two of the files above: `vocal-phrase.mp3` (the splice) and `funk-openhat.mp3` (the trim, for its ringing tail). Both are stand-ins until Mike records a sung phrase and a cymbal for it; when they arrive they go in an `edit/` folder and this table names them.

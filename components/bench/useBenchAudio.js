@@ -109,9 +109,12 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
         return ctx;
     }, [files, buildGraph]);
 
-    const playBuffer = useCallback((name, when, { gain = 1, destination } = {}) => {
+    // buffer, offset and duration let a bench play a window of a buffer
+    // it rendered itself (the Edit bench bounces its edit offline, 28 Aug
+    // 2026) instead of a whole decoded file.
+    const playBuffer = useCallback((name, when, { gain = 1, destination, buffer, offset = 0, duration } = {}) => {
         const ctx = ctxRef.current;
-        const buf = buffersRef.current[name];
+        const buf = buffer || buffersRef.current[name];
         if (!ctx || !buf) return null;
         const src = ctx.createBufferSource();
         src.buffer = buf;
@@ -119,11 +122,11 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
         g.gain.value = gain;
         src.connect(g);
         g.connect(destination || nodesRef.current.input);
-        src.start(when);
+        if (duration != null) src.start(when, offset, duration); else if (offset) src.start(when, offset); else src.start(when);
         const live = { src, g };
         liveRef.current.add(live);
         src.onended = () => liveRef.current.delete(live);
-        eventsRef.current.push({ name, time: when, duration: buf.duration, level: gain });
+        eventsRef.current.push({ name, time: when, duration: duration ?? buf.duration - offset, level: gain });
         // keep the last 12 seconds only
         const cutoff = ctx.currentTime - 12;
         if (eventsRef.current.length > 400) eventsRef.current = eventsRef.current.filter((e) => e.time > cutoff);
