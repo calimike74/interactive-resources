@@ -161,3 +161,75 @@ test('the 2023 paper preset boosts every band on the vocal; the 2024 preset is t
     assert.ok(response(p24, [p24.hpf.hz / 4])[0].db < -20, 'reaches -20 dB, as the mark scheme asks');
     for (const id of ['low', 'mid', 'high', 'lpf']) assert.equal(p24[id].on, false, 'no other boosts or cuts');
 });
+
+// ---- up to three bells (28 Aug 2026): boost in one place, cut in another ----
+import { setBells, visibleBands, BELL_IDS, hasGain, hasQ } from '../lib/bench/eq-model.js';
+
+test('the bench starts with one bell; the other two are there but out and hidden', () => {
+    assert.equal(DEFAULT_STATE.bells, 1);
+    assert.deepEqual(BELL_IDS, ['mid', 'mid2', 'mid3']);
+    assert.equal(DEFAULT_STATE.mid2.on, false);
+    assert.equal(DEFAULT_STATE.mid3.on, false);
+    assert.deepEqual(visibleBands(DEFAULT_STATE), ['hpf', 'low', 'mid', 'high', 'lpf']);
+    assert.ok(hasGain('mid2') && hasQ('mid2') && hasGain('mid3') && hasQ('mid3'));
+});
+
+test('choosing 3 bells reveals them, switches them in, and hands the dials to the newest', () => {
+    const s = setBells(DEFAULT_STATE, 3);
+    assert.equal(s.bells, 3);
+    assert.deepEqual(visibleBands(s), ['hpf', 'low', 'mid', 'mid2', 'mid3', 'high', 'lpf']);
+    assert.equal(s.mid2.on, true);
+    assert.equal(s.mid3.on, true);
+    assert.equal(s.band, 'mid3');
+    assert.equal(s.presetId, null);
+    // a bell that comes in at zero changes nothing until it is set
+    for (const p of response(s, [100, 1000, 8000])) near(p.db, 0, 0.01, `still flat at ${p.hz}`);
+});
+
+test('choosing fewer bells puts the hidden ones out and never leaves a hidden band chosen', () => {
+    let s = setBells(DEFAULT_STATE, 3);
+    s = setBand(s, 'mid3', { gain: 6 });
+    s = setBells(s, 1);
+    assert.equal(s.mid2.on, false);
+    assert.equal(s.mid3.on, false);
+    assert.equal(s.band, 'mid');
+    assert.equal(s.mid3.gain, 6, 'its setting is kept for when it comes back');
+    assert.equal(setBells(s, 7).bells, 3, 'clamped');
+    assert.equal(setBells(s, 0).bells, 1, 'clamped');
+});
+
+test('a cut in one bell and a boost in another add in series', () => {
+    let s = setBells(DEFAULT_STATE, 2);
+    s = setBand(s, 'mid', { hz: 350, gain: -4, q: 1.5 });
+    s = setBand(s, 'mid2', { hz: 3000, gain: 3, q: 1 });
+    const r = response(s, [350, 3000]);
+    near(r[0].db, -4, 0.15, 'the cut at 350');
+    near(r[1].db, 3, 0.15, 'the boost at 3k');
+    const pk = peakOf(s);
+    near(pk.maxDb, 3, 0.2, 'peak');
+    near(pk.minDb, -4, 0.2, 'trough');
+});
+
+test('Graphic mode locks every bell to an octave centre, not just the first', () => {
+    let s = setBells(DEFAULT_STATE, 2);
+    s = setBand(s, 'mid2', { hz: 2300, gain: 4 });
+    s = { ...s, graphic: true };
+    const sec = sectionsOf(s, 'mid2')[0];
+    assert.equal(sec.hz, 2000);
+    near(sec.q, 1.41, 0.01, 'octave Q');
+});
+
+test('a preset puts the extra bells away unless it asks for them', () => {
+    let s = setBells(DEFAULT_STATE, 3);
+    s = applyPreset(s, 'vocal');
+    assert.equal(s.bells, 1);
+    assert.equal(s.mid2.on, false);
+    assert.equal(s.mid3.on, false);
+    const cb = applyPreset(DEFAULT_STATE, 'cutboost');
+    assert.equal(cb.bells, 2);
+    assert.equal(cb.mid.on, true);
+    assert.ok(cb.mid.gain < 0, 'the first bell cuts');
+    assert.equal(cb.mid2.on, true);
+    assert.ok(cb.mid2.gain > 0, 'the second boosts');
+    assert.equal(cb.mid3.on, false);
+});

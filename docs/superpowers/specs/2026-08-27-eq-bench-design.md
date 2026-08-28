@@ -25,3 +25,13 @@ Core shows: names the bands that are in and says what to try next. A-level judge
 ## 6 · Member side
 
 `grades-dashboard`: `TOPIC_RESOURCE_MAP['eq-filters'] = '/eq-bench'`; the 1.11 Explore band's first card is the EQ bench (new still `public/explore/eq-filters-1.jpg`, new moves, new preview drawing); the EQ Workshop card stays.
+
+## Addendum, 28 Aug 2026: up to three bells
+
+Mike's walk of the live bench (28 Aug): "a really good benchmark", and one ask: more than one parametric band, so a student can boost in one place and cut in another, chosen as one, two or three bells rather than the eight of a DAW EQ. Built:
+
+- The model carries three peaking bands (`mid`, `mid2`, `mid3`; `BELL_IDS`), in series between the shelves. `state.bells` (1 to 3) says how many the console shows; `setBells()` brings the revealed bells in at once (a bell at zero changes nothing, and a dot on the line answers "where did it go"), puts the hidden ones out but keeps their settings, and hands the dials to the newest bell. `visibleBands()` and `bandLabel()` ("Mid" alone, "Mid 1 / Mid 2 / Mid 3" in company) serve the console.
+- Graphic mode locks every bell to an octave centre, not only the first; a preset puts the extra bells away unless it asks for them.
+- New preset **Cut and boost** (vocal, two bells: −4 dB at 350 Hz Q 1.5, +3 dB at 3 kHz Q 1.0, HPF 100 Hz): the pair every vocal EQ answer is built on. Judged and opened in `eq-depth.js`; A-level also judges the bell count itself (`last: 'bells'`); Core's next move sends the student to a second bell once the first is a cut.
+- Console: the Band section gains a **Bells 1 · 2 · 3** chip group beside In / Out; each bell has its own colour on the stage (`--gen-7` added for the third).
+- Gate: the canvas writes `data-dots`; law 16 asks for three bells and expects two more dots and the dials on `mid3`.

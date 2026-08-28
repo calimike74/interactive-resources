@@ -28,6 +28,7 @@
     --gen-4: #d08fa8;
     --gen-5: #dbb170;
     --gen-6: #d08a80;
+    --gen-7: #7fd6de;
     --gold: #c5a855;
     --gold-bright: #f0d48a;
     --gold-ink: #8a7835;
@@ -897,12 +898,15 @@
 }
 
 /* ---- EQ bench: the Band and Shape sections, the shape micro-diagram ---- */
-.secBand { width: 176px; }
+.secBand { width: 246px; } /* seven chips in two rows, In / Out and Bells on one line (28 Aug 2026) */
 .secShape { width: 246px; }
 .shapeSvg { position: absolute; inset: 14px 8px 6px; width: calc(100% - 16px); height: calc(100% - 20px); overflow: visible; }
 .shapeSvg line { stroke: var(--hair); stroke-width: 1; vector-effect: non-scaling-stroke; }
 .shapeSvg polyline { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .secBand .chips { flex-wrap: wrap; gap: 4px; }
+/* In / Out beside the bell count: two small groups on one line */
+.chipPair { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.chipPair .chips { flex-wrap: nowrap; }
 
 /* EQ bench: the legend sits under the note at the top right, clear of the frequency axis */
 .legendTop { bottom: auto; top: 36px; }

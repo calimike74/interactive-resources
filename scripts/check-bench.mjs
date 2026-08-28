@@ -73,6 +73,7 @@ const BENCHES = {
     },
     'eq-bench': {
         curve: true,
+        bells: { group: 'Bells', chip: '3', adds: 2, band: 'mid3' },
         presets: { first: 'Vocal clean-up', second: 'Telephone', judge: 'Too much' },
         judgeLands: { selector: '[aria-label="Gain"]', attr: 'aria-valuenow', value: '12', says: 'sets +12 dB' },
     },
@@ -355,6 +356,23 @@ for (const url of urls) {
                 else if (freqAfter.now === freq.now) fail(url, size, 'dragging the dot did not move the Frequency dial');
                 else ok(`dragging the dot moves the dial (${hz} Hz -> ${hzAfter} Hz)`);
             } else fail(url, size, 'the stage does not expose the chosen dot for the drag test');
+        }
+
+        // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest
+        if (fx.bells) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readDots = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { dots: Number(c?.dataset.dots || 0), band: c?.dataset.band || '' }; }, canvasSel);
+            const chip = page.locator(`[role="group"][aria-label="${fx.bells.group}"] button`, { hasText: fx.bells.chip }).first();
+            if (!(await chip.count())) fail(url, size, `no "${fx.bells.chip}" chip in the ${fx.bells.group} group`);
+            else {
+                const before = await readDots();
+                await chip.click();
+                await page.waitForTimeout(250);
+                const after = await readDots();
+                if (after.dots !== before.dots + fx.bells.adds) fail(url, size, `${fx.bells.chip} bells drew ${after.dots} dots, expected ${before.dots + fx.bells.adds}`);
+                else if (!after.band.startsWith(`${fx.bells.band}:`)) fail(url, size, `the dials did not go to the newest bell (data-band="${after.band}")`);
+                else ok(`${fx.bells.chip} bells: ${before.dots} dots became ${after.dots}, dials on ${fx.bells.band}`);
+            }
         }
 
         if (errors.length) fail(url, size, `page errors: ${errors.join(' | ').slice(0, 200)}`);

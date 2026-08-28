@@ -16,6 +16,10 @@ import {
     PRESETS,
     applyPreset,
     setBand,
+    setBells,
+    visibleBands,
+    bellsShown,
+    bandLabel,
     sectionsOf,
     response,
     logFreqs,
@@ -70,6 +74,8 @@ function buildEqGraph(ctx, input, master) {
         hpf: [mk('highpass'), mk('highpass'), mk('highpass'), mk('highpass')],
         low: [mk('lowshelf')],
         mid: [mk('peaking')],
+        mid2: [mk('peaking')],
+        mid3: [mk('peaking')],
         high: [mk('highshelf')],
         lpf: [mk('lowpass'), mk('lowpass'), mk('lowpass'), mk('lowpass')],
     };
@@ -105,7 +111,7 @@ function buildEqGraph(ctx, input, master) {
                 }
                 glide(node.frequency, sec.hz, ctx);
                 if (id === 'hpf' || id === 'lpf') glide(node.Q, BUTTERWORTH_Q_DB, ctx);
-                else if (id === 'mid') { glide(node.Q, sec.q, ctx); glide(node.gain, sec.gain, ctx); }
+                else if (hasQ(id)) { glide(node.Q, sec.q, ctx); glide(node.gain, sec.gain, ctx); }
                 else glide(node.gain, sec.gain, ctx);
             });
         }
@@ -166,6 +172,7 @@ export default function EqBench({ back }) {
         touch(what);
     };
     const chooseBand = (id) => { setState((s) => ({ ...s, band: id })); touch('band'); };
+    const chooseBells = (n) => { setState((s) => setBells(s, n)); touch('bells'); };
     const choosePreset = (id) => {
         const preset = PRESETS.find((p) => p.id === id);
         if (!preset) return;
@@ -206,7 +213,8 @@ export default function EqBench({ back }) {
     // Numbers the console and the line read, from the model once.
     const peak = peakOf(state);
     const bandOn = band.on;
-    const midHz = bandId === 'mid' && state.graphic ? snapOctave(band.hz, def.hzMin, def.hzMax) : band.hz;
+    const bells = bellsShown(state);
+    const midHz = hasQ(bandId) && state.graphic ? snapOctave(band.hz, def.hzMin, def.hzMax) : band.hz;
     const bw = hasQ(bandId) ? bandwidthOctaves(state.graphic ? 1.41 : band.q) : null;
     const slope = hasSlope(bandId) ? slopeFacts(bandId, { ...state, [bandId]: { ...band, on: true } }) : null;
     const region = regionOf(midHz);
@@ -369,7 +377,7 @@ export default function EqBench({ back }) {
             for (const id of BAND_IDS) {
                 const b = s[id];
                 if (!b.on) continue;
-                const hz = id === 'mid' && s.graphic ? snapOctave(b.hz, BANDS.mid.hzMin, BANDS.mid.hzMax) : b.hz;
+                const hz = hasQ(id) && s.graphic ? snapOctave(b.hz, BANDS[id].hzMin, BANDS[id].hzMax) : b.hz;
                 let db;
                 if (hasGain(id)) db = b.gain;
                 else db = response(s, [hz], { only: id })[0].db;
@@ -397,7 +405,7 @@ export default function EqBench({ back }) {
             if (chosen) {
                 const b = s[s.band];
                 const d = BANDS[s.band];
-                let label = `${d.label} · ${fmtHz(chosen.hz)}`;
+                let label = `${bandLabel(s, s.band)} · ${fmtHz(chosen.hz)}`;
                 if (hasGain(s.band)) label += ` · ${fmtDb(b.gain)}`;
                 if (hasSlope(s.band)) label += ` · ${b.slope} dB/oct`;
                 if (depthRef.current === 'core') label += ` · ${regionOf(chosen.hz).name}`;
@@ -427,6 +435,8 @@ export default function EqBench({ back }) {
             if (canvas.dataset.curve !== curve) canvas.dataset.curve = curve;
             const dot = chosen ? `${Math.round(chosen.x)}:${Math.round(chosen.y)}` : "";
             if (canvas.dataset.dot !== dot) canvas.dataset.dot = dot;
+            const dots = String(handles.length);
+            if (canvas.dataset.dots !== dots) canvas.dataset.dots = dots;
 
             raf = requestAnimationFrame(draw);
         }
@@ -496,7 +506,7 @@ export default function EqBench({ back }) {
             render: () => (
                 <>
                     <h2>EQ, in the spec&apos;s words</h2>
-                    <p>The five bands on this bench are the five things an exam answer about EQ is built from: two filters, two shelves and a parametric band.</p>
+                    <p>The bands on this bench are the five things an exam answer about EQ is built from: two filters, two shelves and the parametric bell, of which you can have up to three: one to cut where a part is muddy, another to boost where it is missing.</p>
                     <h3>Terms</h3>
                     <dl>
                         <dt>High-pass filter</dt><dd>Lets the highs through and rolls the lows off below its cutoff. The cutoff is where the level is 3 dB down, not where the sound stops.</dd>
@@ -514,7 +524,7 @@ export default function EqBench({ back }) {
                         <tbody>
                             <tr><td>HPF, LPF and slope</td><td>EQ Eight: filter type, 12 / 24 / 48 dB</td><td>Channel EQ: the two outer bands, slope menu</td></tr>
                             <tr><td>Low and high shelf</td><td>EQ Eight: shelf types</td><td>Channel EQ: bands 2 and 7</td></tr>
-                            <tr><td>Parametric band</td><td>EQ Eight: bell, with Freq / Gain / Q</td><td>Channel EQ: bands 3 to 6</td></tr>
+                            <tr><td>Parametric bells</td><td>EQ Eight: bell, with Freq / Gain / Q, on any of its eight bands</td><td>Channel EQ: bands 3 to 6</td></tr>
                             <tr><td>Graphic mode</td><td>No graphic EQ in Live: use fixed frequencies on EQ Eight</td><td>Linear Phase EQ or a Channel EQ with fixed bands; Logic has no graphic EQ either</td></tr>
                             <tr><td>Level match</td><td>EQ Eight: Gain (output)</td><td>Channel EQ: Gain (master)</td></tr>
                         </tbody>
@@ -550,6 +560,7 @@ export default function EqBench({ back }) {
                         <li>Press <b>Too much</b>, still at A-level, and judge the band from what you hear before you read the line. Then fix it, and say what you changed and why.</li>
                         <li>Choose the 808, press In on the HPF, and drag its dot up until the kick loses its weight. Note the frequency. Then do the same on the vocal and note where the voice thins.</li>
                         <li>On the vocal, set the Mid band to +8 dB, Q 8, and sweep the frequency slowly across the mids. The place it honks is the place a cut goes. Turn the gain to −4 and leave it there.</li>
+                        <li>Press <b>Cut and boost</b> and hold dry against it. Then choose 2 bells on the drums and make the same pair yourself: cut the boxiness at about 400 Hz, lift the snare at about 3 kHz, and say why the two go together.</li>
                         <li>Press <b>Telephone</b>, then read the two filters off the stage and say what the pair is called.</li>
                         <li>Open More, switch the Mid band to Graphic, and try to put a cut at 350 Hz. Say what a graphic EQ cannot do.</li>
                     </ul>
@@ -633,10 +644,10 @@ export default function EqBench({ back }) {
     const hzPos = Math.round(posFromHz(band.hz, def.hzMin, def.hzMax) * 1000);
     const qShown = hasQ(bandId) ? (state.graphic ? 1.41 : band.q) : null;
     const qPos = qShown != null ? Math.round(posFromHz(qShown, Q_MIN, Q_MAX) * 100) : 50;
-    const bandOptions = BAND_IDS.map((id) => ({ id, label: BANDS[id].label, title: BANDS[id].name }));
+    const bandOptions = visibleBands(state).map((id) => ({ id, label: bandLabel(state, id), title: BANDS[id].name }));
     // the Frequency diagram: the regions, and where every band that is in sits
     const regionTicks = [60, 250, 500, 2000, 5000, 8000].map((hz) => posFromHz(hz, HZ_MIN, HZ_MAX) * 100);
-    const bandMarks = BAND_IDS.filter((id) => state[id].on).map((id) => ({ id, x: posFromHz(id === 'mid' && state.graphic ? snapOctave(state[id].hz) : state[id].hz, HZ_MIN, HZ_MAX) * 100 }));
+    const bandMarks = BAND_IDS.filter((id) => state[id].on).map((id) => ({ id, x: posFromHz(hasQ(id) && state.graphic ? snapOctave(state[id].hz) : state[id].hz, HZ_MIN, HZ_MAX) * 100 }));
     // the Shape diagram: the chosen band's own curve
     const shapePts = useMemo(() => {
         const s = { ...state, [bandId]: { ...band, on: true } };
@@ -675,14 +686,24 @@ export default function EqBench({ back }) {
                     <span className={styles.value} data-tone={bandOn ? 'green' : undefined}>{bandOn ? 'in' : 'out'}</span>
                 </div>
                 <Chips label="Band" options={bandOptions} value={bandId} onChange={chooseBand} />
-                <Chips
-                    label="In or out"
-                    options={[{ id: 'in', label: 'In' }, { id: 'out', label: 'Out' }]}
-                    value={bandOn ? 'in' : 'out'}
-                    onChange={(id) => patchBand({ on: id === 'in' }, 'in')}
-                />
+                <div className={styles.chipPair}>
+                    <Chips
+                        label="In or out"
+                        options={[{ id: 'in', label: 'In' }, { id: 'out', label: 'Out' }]}
+                        value={bandOn ? 'in' : 'out'}
+                        onChange={(id) => patchBand({ on: id === 'in' }, 'in')}
+                    />
+                    <Chips
+                        label="Bells"
+                        options={[1, 2, 3].map((n) => ({ id: String(n), label: String(n), title: `${n} parametric ${n === 1 ? 'bell' : 'bells'}` }))}
+                        value={String(bells)}
+                        onChange={(id) => chooseBells(Number(id))}
+                    >
+                        <span className={styles.chipNote}>bells</span>
+                    </Chips>
+                </div>
                 <div className={styles.meaning}>{def.name}{hasSlope(bandId) ? `, ${band.slope} dB/oct` : ''}</div>
-                <Why>Five bands in the order the signal meets them: a high-pass, a low shelf, one parametric bell, a high shelf, a low-pass. Choose one and the dials belong to it. In and Out is the bypass for that band alone.</Why>
+                <Why>The bands in the order the signal meets them: a high-pass, a low shelf, the parametric bells, a high shelf, a low-pass. Choose one and the dials belong to it; In and Out is the bypass for that band alone. Bells is how many parametric bands you have: one to find a problem, two to cut in one place and boost in another.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secTime}`} data-teach={teach || undefined}>
@@ -722,11 +743,11 @@ export default function EqBench({ back }) {
                 <div className={styles.meaning} data-ext={maths && hasSlope(bandId) ? 'true' : undefined}>
                     {maths && hasSlope(bandId) && slope
                         ? `${fmtDb(slope.atCutoffDb)} at the cutoff, ${fmtDb(slope.octaveDb)} an octave ${bandId === 'hpf' ? 'below' : 'above'}`
-                        : hasSlope(bandId) ? 'where the roll-off starts' : `the ${bandId === 'mid' ? 'centre' : 'corner'} of the band`}
+                        : hasSlope(bandId) ? 'where the roll-off starts' : `the ${hasQ(bandId) ? 'centre' : 'corner'} of the band`}
                 </div>
                 <Why>{hasSlope(bandId)
                     ? 'The cutoff is the frequency where the filter is already 3 dB down; the slope is how fast it falls beyond that, in dB for every octave. Drag the dial, or drag the band’s dot on the stage.'
-                    : bandId === 'mid'
+                    : hasQ(bandId)
                         ? 'The centre of the bell. Sweep it while the gain is up to find where a sound honks or rings, then cut there. The scale is logarithmic, like the ear.'
                         : 'The corner of the shelf: below it (low shelf) or above it (high shelf) the whole range moves by the gain.'}</Why>
             </div>
@@ -765,7 +786,7 @@ export default function EqBench({ back }) {
                         title={hasQ(bandId) ? (state.graphic ? 'Locked at an octave in Graphic mode' : 'Q: the width of the bell') : 'Only the parametric band has a Q'}
                     />
                     <div className={styles.diagram} aria-hidden="true">
-                        <small>{def.name}</small>
+                        <small>{hasQ(bandId) ? 'bell' : def.name}</small>
                         <svg viewBox="0 0 100 100" preserveAspectRatio="none" className={styles.shapeSvg}>
                             <line x1="0" y1="50" x2="100" y2="50" />
                             <polyline points={shapePts} style={{ stroke: def.colour }} />
@@ -785,7 +806,7 @@ export default function EqBench({ back }) {
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined}>
                 <div className={styles.secHead}><span className={styles.eyebrow}>What you should hear</span></div>
                 <div className={styles.stats} aria-live="polite">
-                    <div><b>{bandOn ? (hasGain(bandId) ? fmtDb(band.gain) : `${band.slope} dB/oct`) : 'out'}</b><span>{def.label} at {fmtHz(midHz)}</span></div>
+                    <div><b>{bandOn ? (hasGain(bandId) ? fmtDb(band.gain) : `${band.slope} dB/oct`) : 'out'}</b><span>{bandLabel(state, bandId)} at {fmtHz(midHz)}</span></div>
                     <div><b>{hasQ(bandId) && bw != null ? `${bw.toFixed(1)} oct` : hasSlope(bandId) && slope ? fmtDb(slope.atCutoffDb) : region.name}</b><span>{hasQ(bandId) ? 'wide, between half-power points' : hasSlope(bandId) ? 'at the cutoff' : 'the region for the ear'}</span></div>
                     {ext ? (
                         <>
@@ -817,12 +838,12 @@ export default function EqBench({ back }) {
     const more = further ? (
         <>
             <div className={styles.moreItem}>
-                <span className={styles.eyebrow}>Mid band</span>
+                <span className={styles.eyebrow}>Bells</span>
                 <Chips
-                    label="Mid band type"
+                    label="Bell type"
                     options={[{ id: 'parametric', label: 'Parametric' }, { id: 'graphic', label: 'Graphic' }]}
                     value={state.graphic ? 'graphic' : 'parametric'}
-                    onChange={(id) => { setState((s) => ({ ...s, graphic: id === 'graphic', band: 'mid', presetId: null })); touch('graphic'); }}
+                    onChange={(id) => { setState((s) => ({ ...s, graphic: id === 'graphic', band: hasQ(s.band) ? s.band : 'mid', presetId: null })); touch('graphic'); }}
                 />
             </div>
             <div className={styles.moreItem}>
@@ -859,7 +880,7 @@ export default function EqBench({ back }) {
                 <span><i style={{ background: 'var(--gen-1)', opacity: 0.5 }} />after EQ</span>
                 <span><i style={{ background: 'rgba(255,255,255,0.35)' }} />before</span>
                 {BAND_IDS.filter((id) => state[id].on).map((id) => (
-                    <span key={id}><i style={{ background: BANDS[id].colour, borderRadius: '50%' }} />{BANDS[id].label}</span>
+                    <span key={id}><i style={{ background: BANDS[id].colour, borderRadius: '50%' }} />{bandLabel(state, id)}</span>
                 ))}
             </div>
             {hover && teach && hoverDef ? (
@@ -872,7 +893,7 @@ export default function EqBench({ back }) {
                 >
                     <i>{hoverDef.name} · {fmtHz(hover.hz)}</i>
                     <p>
-                        {hasGain(hover.id) ? <>{fmtDb(state[hover.id].gain)} {hover.id === 'mid' ? 'at the centre' : 'past the corner'}.</> : <>{state[hover.id].slope} dB/oct, {fmtDb(hover.db)} here at the cutoff.</>}
+                        {hasGain(hover.id) ? <>{fmtDb(state[hover.id].gain)} {hasQ(hover.id) ? 'at the centre' : 'past the corner'}.</> : <>{state[hover.id].slope} dB/oct, {fmtDb(hover.db)} here at the cutoff.</>}
                         {' '}{regionOf(hover.hz).name}: {regionOf(hover.hz).line}. Drag the dot to move it.
                     </p>
                 </div>
