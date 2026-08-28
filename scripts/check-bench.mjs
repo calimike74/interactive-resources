@@ -71,6 +71,11 @@ const BENCHES = {
         presets: { first: 'Rhythmic 1/8', second: 'Slapback', judge: '2023 paper' },
         judgeLands: { selector: '[aria-label="Tempo"]', attr: 'aria-valuenow', value: '120', says: 'sets 120 BPM' },
     },
+    'dynamics-bench': {
+        threshold: true,
+        presets: { first: 'Vocal level', second: 'Limiter', judge: '2023 paper' },
+        judgeLands: { selector: '[aria-label="Ratio"]', attr: 'aria-valuetext', value: '20:1', says: 'sets 20:1' },
+    },
     'eq-bench': {
         curve: true,
         bells: { group: 'Bells', chip: '3', adds: 2, band: 'mid3' },
@@ -356,6 +361,50 @@ for (const url of urls) {
                 else if (freqAfter.now === freq.now) fail(url, size, 'dragging the dot did not move the Frequency dial');
                 else ok(`dragging the dot moves the dial (${hz} Hz -> ${hzAfter} Hz)`);
             } else fail(url, size, 'the stage does not expose the chosen dot for the drag test');
+        }
+
+        // 17. (Dynamics) the gold line on the stage is the Threshold dial
+        if (fx.threshold) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readT = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { t: c?.dataset.threshold || '', handle: c?.dataset.handle || '' }; }, canvasSel);
+            const dialT = () => page.evaluate(() => document.querySelector('[aria-label="Threshold"]')?.getAttribute('aria-valuenow'));
+            await page.waitForTimeout(200);
+            const before = await readT();
+            const dial = await dialT();
+            if (!before.t) fail(url, size, 'the stage does not report the threshold (data-threshold missing)');
+            else if (Number(before.t) !== Number(dial)) fail(url, size, `the stage's threshold (${before.t}) is not the dial's (${dial})`);
+            else ok(`the stage reports the threshold and it matches the dial (${before.t} dB)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx, box.y + hy + 20, { steps: 6 });
+                await page.mouse.move(box.x + hx, box.y + hy + 40, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(200);
+                const after = await readT();
+                const dialAfter = await dialT();
+                if (!(Number(after.t) < Number(before.t))) fail(url, size, `dragging the line down did not lower the threshold (${before.t} -> ${after.t})`);
+                else if (Number(dialAfter) !== Number(after.t)) fail(url, size, `the dial did not follow the line (${dialAfter} vs ${after.t})`);
+                else ok(`dragging the line moves the dial (${before.t} dB -> ${after.t} dB)`);
+            } else fail(url, size, 'the stage does not expose the threshold handle for the drag test');
+            // 17b. the gain node really follows the drawn series: with the judge preset on and the
+            // loop running, the node must dip well below unity at some point in a second
+            const judgeBtn = fx.presets?.judge ? page.locator('[aria-label="Presets"] button', { hasText: fx.presets.judge }) : null;
+            if (judgeBtn && await judgeBtn.count()) {
+                await judgeBtn.click();
+                const playBtn = page.locator('[aria-label="Play"], [aria-label="Stop"]').first();
+                if ((await playBtn.getAttribute('aria-label')) === 'Play') await playBtn.click();
+                await page.waitForTimeout(900);
+                const samples = [];
+                for (let i = 0; i < 16; i += 1) { samples.push(await page.evaluate(() => (window.__benchGainProbe ? window.__benchGainProbe() : null))); await page.waitForTimeout(90); }
+                const seen = samples.filter((v) => typeof v === 'number');
+                const lo = Math.min(...seen); const hi = Math.max(...seen);
+                if (!seen.length) fail(url, size, 'no gain probe on the page (window.__benchGainProbe)');
+                else if (!(lo < 0.5 && hi - lo > 0.1)) fail(url, size, `the gain node did not follow the series (gain stayed between ${lo.toFixed(2)} and ${hi.toFixed(2)})`);
+                else ok(`the gain node follows the drawn series (gain ${lo.toFixed(2)} to ${hi.toFixed(2)} over a second)`);
+            }
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

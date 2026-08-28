@@ -910,3 +910,12 @@
 
 /* EQ bench: the legend sits under the note at the top right, clear of the frequency axis */
 .legendTop { bottom: auto; top: 36px; }
+
+/* ---- Dynamics bench: the Processor, Threshold, Ratio and Timing sections ---- */
+.secProc { width: 166px; }
+.secProc .chips { flex-wrap: wrap; gap: 4px; }
+.secLevel { width: 198px; }
+.secRatio { width: 198px; }
+.secTiming { width: 176px; }
+.secTiming .eyebrow { flex: none; }
+.shapeSvg .oneToOne { stroke: var(--hair); stroke-dasharray: 3 3; }

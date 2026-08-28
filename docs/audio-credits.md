@@ -16,3 +16,7 @@ All of it was generated on Mike's own ElevenLabs account; nothing here is a thir
 ## eq/ (no folder: the EQ bench reads `delay/`)
 
 The EQ bench (2026-08-27) plays the same four sources as the Delay bench, straight from `delay/` above: the funk kit, the 808 kit, the vocal phrase and the brass and guitar stabs. Nothing new was generated for it.
+
+## dynamics/ (no folder: the Dynamics bench reads `delay/`)
+
+The Dynamics bench (2026-08-28) plays the same four sources as the Delay and EQ benches, straight from `delay/` above. Nothing new was generated for it.

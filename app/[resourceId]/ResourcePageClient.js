@@ -55,6 +55,7 @@ import WaveformExplorer from '@/components/resources/WaveformExplorer';
 import WaveformDrawingAssessment from '@/components/resources/WaveformDrawingAssessment';
 import DelayBench from '@/components/resources/DelayBench';
 import EqBench from '@/components/resources/EqBench';
+import DynamicsBench from '@/components/resources/DynamicsBench';
 import BPMDelayCalculator from '@/components/resources/BPMDelayCalculator';
 import DigitalAudioAssessment from '@/components/resources/DigitalAudioAssessment';
 import PitchSynthMonitorsAssessment from '@/components/resources/PitchSynthMonitorsAssessment';
@@ -110,6 +111,7 @@ const resourceComponents = {
     'WaveformDrawingAssessment': WaveformDrawingAssessment,
     'DelayBench': DelayBench,
     'EqBench': EqBench,
+    'DynamicsBench': DynamicsBench,
     'BPMDelayCalculator': BPMDelayCalculator,
     'DigitalAudioAssessment': DigitalAudioAssessment,
     'PitchSynthMonitorsAssessment': PitchSynthMonitorsAssessment,
