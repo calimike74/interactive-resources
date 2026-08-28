@@ -75,6 +75,7 @@ const BENCHES = {
         threshold: true,
         presets: { first: 'Vocal level', second: 'Limiter', judge: '2023 paper' },
         judgeLands: { selector: '[aria-label="Ratio"]', attr: 'aria-valuetext', value: '20:1', says: 'sets 20:1' },
+        stages: { core: 'lane', alevel: 'graph', extension: 'machine' },
     },
     'eq-bench': {
         curve: true,
@@ -405,6 +406,21 @@ for (const url of urls) {
                 else if (!(lo < 0.5 && hi - lo > 0.1)) fail(url, size, `the gain node did not follow the series (gain stayed between ${lo.toFixed(2)} and ${hi.toFixed(2)})`);
                 else ok(`the gain node follows the drawn series (gain ${lo.toFixed(2)} to ${hi.toFixed(2)} over a second)`);
             }
+        }
+
+        // 18. (Dynamics) three levels, three pictures: the stage says what it drew (data-stage)
+        if (fx.stages && await depthBtn('Core').count()) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const seen = {};
+            for (const [id, name] of [['core', 'Core'], ['alevel', 'A-level'], ['extension', 'Extension']]) {
+                await depthBtn(name).click();
+                await page.waitForTimeout(150);
+                seen[id] = await page.evaluate((sel) => document.querySelector(sel)?.dataset.stage || '', canvasSel);
+            }
+            const wrong = Object.entries(fx.stages).filter(([id, want]) => seen[id] !== want).map(([id, want]) => `${id}=${seen[id] || 'nothing'} (wanted ${want})`);
+            if (wrong.length) fail(url, size, `a level did not draw its own stage: ${wrong.join(', ')}`);
+            else ok(`each level draws its own stage (${Object.values(seen).join(', ')})`);
+            await depthBtn('A-level').click();
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

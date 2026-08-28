@@ -20,6 +20,8 @@ import {
     runLoop,
     gainCurve,
     transferCurve,
+    outputDb,
+    staticGainDb,
     ratioLabel,
     hasRatio,
     hasKnee,
@@ -51,7 +53,12 @@ import {
 
 const CODE = '1.9 Dynamics';
 const TITLE = 'Dynamics bench';
-const ORIENT = 'The filled shape is the sound after the processor; the ghost line is before. The coral band is what is being taken off. Drag the gold threshold line.';
+// What the stage is, for the depth: three levels, three pictures (28 Aug 2026).
+const ORIENTS = {
+    core: 'The filled shape is the sound after the processor; the ghost line is before. The coral band is what is being taken off. Drag the gold threshold line.',
+    alevel: "Before and after against the beat; the paper's drawing beside it, input across, output up, the dot is the loop now. Drag inside it to read a level off.",
+    extension: 'Dotted coral is what the gain computer asks for; the band is what attack and release let it apply. On the drawing, the dot leaves the curve by that lag.',
+};
 const BPM = 110;
 const LANE_MIN = -48; // the lane's floor in dB; 0 dB at the top
 const GRID_DB = [0, -12, -24, -36, -48];
@@ -265,16 +272,35 @@ export default function DynamicsBench({ back }) {
     const dragRef = useRef(null);
     const depthRef = useRef(depth);
     depthRef.current = depth;
-    const geom = (w, h) => {
-        const padL = 44; const padR = 22; const top = 66; const bottom = h - 38;
+    const probeRef = useRef(null); // an input level the student is reading off the drawing
+    const trailRef = useRef({ run: null, pts: [] }); // Extension: where the live dot has been
+    const legendRef = useRef(null); // the legend's width, so the setting label stops short of it
+    const legendWRef = useRef(0);
+    const frameRef = useRef(0);
+    // Three levels, three pictures (Mike, 28 Aug 2026). Core: the lane alone,
+    // the loop against the beat. A-level: the paper's drawing at the left,
+    // input across and output up, sharing the lane's dB axis, with a probe
+    // the student drags to read a level off. Extension: the same, plus what
+    // the gain computer asks for against what attack and release let it
+    // apply, and the dot's trail leaving the curve by that lag.
+    const stageOf = (d) => (d === 'core' ? 'lane' : d === 'alevel' ? 'graph' : 'machine');
+    const geom = (w, h, d) => {
+        const padR = 22; const top = 66; const bottom = h - 38;
         const plotH = bottom - top;
-        const inset = Math.min(plotH, 236);
-        const insetX = w - padR - inset;
-        const laneX0 = padL; const laneX1 = insetX - 56;
-        return { padL, padR, top, bottom, plotH, inset, insetX, laneX0, laneX1, laneW: laneX1 - laneX0 };
+        if (d === 'core') {
+            const padL = 44;
+            return { padR, top, bottom, plotH, graph: null, labelX: padL - 8, laneX0: padL, laneX1: w - padR, laneW: w - padR - padL };
+        }
+        const x0 = 60;
+        const gw = Math.round(Math.max(180, Math.min(plotH * 1.33, 330)));
+        const laneX0 = x0 + gw + 58;
+        return { padR, top, bottom, plotH, graph: { x0, x1: x0 + gw, w: gw }, labelX: x0 - 8, laneX0, laneX1: w - padR, laneW: w - padR - laneX0 };
     };
     const yOfDb = (db, g) => g.top + ((0 - Math.max(LANE_MIN, Math.min(0, db))) / (0 - LANE_MIN)) * g.plotH;
     const dbOfY = (y, g) => 0 - ((y - g.top) / g.plotH) * (0 - LANE_MIN);
+    const xOfIn = (db, g) => g.graph.x0 + ((Math.max(LANE_MIN, Math.min(0, db)) - LANE_MIN) / (0 - LANE_MIN)) * g.graph.w;
+    const inOfX = (x, g) => LANE_MIN + ((x - g.graph.x0) / g.graph.w) * (0 - LANE_MIN);
+    const num = (v) => (Math.abs(v) < 0.05 ? '0' : `${v < 0 ? '−' : ''}${Math.abs(v).toFixed(1).replace(/\.0$/, '')}`);
 
     useEffect(() => {
         const first = canvasRef.current;
@@ -288,6 +314,7 @@ export default function DynamicsBench({ back }) {
             coral: v('--gen-6', '#d08a80'),
             blue: v('--gen-2', '#7fb0c4'),
             purple: '#a395c9',
+            plate: css.backgroundColor && css.backgroundColor !== 'rgba(0, 0, 0, 0)' ? css.backgroundColor : '#17172b',
             inkSoft: 'rgba(255, 255, 255, 0.62)',
             inkFaint: 'rgba(255, 255, 255, 0.38)',
             grid: 'rgba(255, 255, 255, 0.08)',
@@ -306,6 +333,7 @@ export default function DynamicsBench({ back }) {
             const s = stateRef.current;
             const r = runRef.current;
             const lp = loopRef.current;
+            const d = depthRef.current;
             const dpr = window.devicePixelRatio || 1;
             const w = canvas.clientWidth;
             const h = canvas.clientHeight;
@@ -315,13 +343,17 @@ export default function DynamicsBench({ back }) {
             }
             g2.setTransform(dpr, 0, 0, dpr, 0, 0);
             g2.clearRect(0, 0, w, h);
-            const g = geom(w, h);
+            const g = geom(w, h, d);
+            const gp = g.graph;
             const pat = PATTERNS[s.source];
             const bars = pat.bars;
             const xOfFrac = (f) => g.laneX0 + f * g.laneW;
             const yOf = (db) => yOfDb(db, g);
+            const rowY = g.bottom + 15; // the one row of labels under the plot
+            const sDef = MODES[s.mode];
+            const sDown = isDownward(s.mode);
 
-            // the beat, as faint lines; dB lines across the lane
+            // the beat, as faint lines down the lane
             g2.lineWidth = 1;
             g2.font = mono;
             const beats = bars * 4;
@@ -330,27 +362,33 @@ export default function DynamicsBench({ back }) {
                 const downbeat = b % 4 === 0;
                 g2.strokeStyle = downbeat ? col.downbeat : col.beat;
                 g2.beginPath(); g2.moveTo(x, g.top - 6); g2.lineTo(x, g.bottom + 6); g2.stroke();
-                if (downbeat) { g2.fillStyle = col.inkFaint; g2.textAlign = 'left'; g2.fillText(`bar ${b / 4 + 1}`, x + 6, h - 14); }
+                if (downbeat) { g2.fillStyle = col.inkFaint; g2.textAlign = 'left'; g2.fillText(`bar ${b / 4 + 1}`, x + 6, rowY); }
             }
+            // the dB grid across the drawing and the lane: one scale, labelled once
             for (const db of GRID_DB) {
                 const y = Math.round(yOf(db)) + 0.5;
                 g2.strokeStyle = db === 0 ? col.zero : col.grid;
-                g2.beginPath(); g2.moveTo(g.laneX0, y); g2.lineTo(g.laneX1, y); g2.stroke();
+                g2.beginPath();
+                if (gp) { g2.moveTo(gp.x0, y); g2.lineTo(gp.x1, y); }
+                g2.moveTo(g.laneX0, y); g2.lineTo(g.laneX1, y);
+                g2.stroke();
                 g2.fillStyle = col.inkFaint; g2.textAlign = 'right';
-                g2.fillText(String(db), g.padL - 8, y + 4);
+                g2.fillText(String(db), g.labelX, y + 4);
             }
 
             // the loop: input as a ghost line, output filled, from the same series
             if (r && lp) {
                 const n = lp.envDb.length;
                 const cols = Math.max(1, Math.floor(g.laneW));
-                const level = (arr, i) => {
+                const colMax = (arr, i, sign, floor) => {
                     const i0 = Math.floor((i / cols) * n);
                     const i1 = Math.max(i0 + 1, Math.floor(((i + 1) / cols) * n));
-                    let m = LANE_MIN - 10;
-                    for (let k = i0; k < i1 && k < n; k += 1) if (arr[k] > m) m = arr[k];
+                    let m = floor;
+                    for (let k = i0; k < i1 && k < n; k += 1) if (sign * arr[k] > m) m = sign * arr[k];
                     return m;
                 };
+                const level = (arr, i) => colMax(arr, i, 1, LANE_MIN - 10);
+                const grAt = (i) => colMax(r.gainDb, i, -1, 0);
                 g2.beginPath();
                 g2.moveTo(g.laneX0, g.bottom);
                 for (let i = 0; i <= cols; i += 1) g2.lineTo(g.laneX0 + i, yOf(level(r.outDb, i)));
@@ -361,13 +399,6 @@ export default function DynamicsBench({ back }) {
                 for (let i = 0; i <= cols; i += 1) { const y = yOf(level(lp.envDb, i)); if (i === 0) g2.moveTo(g.laneX0 + i, y); else g2.lineTo(g.laneX0 + i, y); }
                 g2.strokeStyle = col.ghost; g2.lineWidth = 1; g2.stroke();
                 // gain reduction, hanging from the top: the same scale, coral
-                const grAt = (i) => {
-                    const i0 = Math.floor((i / cols) * n);
-                    const i1 = Math.max(i0 + 1, Math.floor(((i + 1) / cols) * n));
-                    let m = 0;
-                    for (let k = i0; k < i1 && k < n; k += 1) if (-r.gainDb[k] > m) m = -r.gainDb[k];
-                    return m;
-                };
                 g2.beginPath();
                 g2.moveTo(g.laneX0, g.top);
                 for (let i = 0; i <= cols; i += 1) g2.lineTo(g.laneX0 + i, yOf(-grAt(i)));
@@ -377,6 +408,14 @@ export default function DynamicsBench({ back }) {
                 g2.beginPath();
                 for (let i = 0; i <= cols; i += 1) { const y = yOf(-grAt(i)); if (i === 0) g2.moveTo(g.laneX0 + i, y); else g2.lineTo(g.laneX0 + i, y); }
                 g2.strokeStyle = col.coral; g2.lineWidth = 1.25; g2.stroke(); g2.lineWidth = 1;
+                // Extension: what the gain computer asked for, before attack and release
+                if (d === 'extension' && r.wantDb) {
+                    const wantAt = (i) => colMax(r.wantDb, i, -1, 0);
+                    g2.setLineDash([2, 3]); g2.strokeStyle = col.coral; g2.globalAlpha = 0.9;
+                    g2.beginPath();
+                    for (let i = 0; i <= cols; i += 1) { const y = yOf(-wantAt(i)); if (i === 0) g2.moveTo(g.laneX0 + i, y); else g2.lineTo(g.laneX0 + i, y); }
+                    g2.stroke(); g2.setLineDash([]); g2.globalAlpha = 1;
+                }
             }
 
             // the threshold: the gold line, with its handle at the right
@@ -386,7 +425,7 @@ export default function DynamicsBench({ back }) {
             g2.beginPath(); g2.moveTo(g.laneX0, ty); g2.lineTo(g.laneX1, ty); g2.stroke();
             g2.setLineDash([]); g2.lineWidth = 1;
             const hx = g.laneX1 - 12; const hy = ty;
-            const hovered = hoverRef.current?.id === 'threshold' || dragRef.current;
+            const hovered = hoverRef.current?.id === 'threshold' || dragRef.current?.where === 'lane';
             g2.beginPath(); g2.arc(hx, hy, 7, 0, Math.PI * 2); g2.fillStyle = col.gold; g2.fill();
             g2.beginPath(); g2.arc(hx, hy, hovered ? 12 : 11, 0, Math.PI * 2); g2.strokeStyle = '#ffffff'; g2.lineWidth = hovered ? 1.5 : 1; g2.stroke(); g2.lineWidth = 1;
             handleRef.current = { x: hx, y: hy, ty, g };
@@ -395,8 +434,8 @@ export default function DynamicsBench({ back }) {
             g2.fillText(tLabel, g.laneX0 + 6, ty > g.top + 20 ? ty - 6 : ty + 15);
 
             // the playhead, and where the loop is
-            const gr = graphRef.current;
-            const frac = playingRef.current && gr ? gr.position() : null;
+            const ag = graphRef.current;
+            const frac = playingRef.current && ag ? ag.position() : null;
             let idx = null;
             if (frac != null && r) {
                 const x = Math.round(xOfFrac(frac)) + 0.5;
@@ -405,65 +444,121 @@ export default function DynamicsBench({ back }) {
             }
 
             // the chosen setting, for the depth (read from the state, not the render closure)
-            const sDef = MODES[s.mode];
-            const sDown = isDownward(s.mode);
-            let label = `${sDef.label} · ${fmtDb(s.threshold)}`;
-            if (hasRatio(s.mode) || s.mode === 'limiter') label += ` · ${ratioLabel(s)}`;
-            label += ` · ${fmtMs(s.attack)} in, ${fmtMs(s.release)} out`;
-            if (r && !sDown) label += ` · up to ${fmtDb(-r.stats.maxGr).replace('−', '')} off`;
-            if (r && sDown) label += ` · ${s.mode === 'gate' ? 'open' : 'untouched'} ${Math.round(100 - r.stats.overPct)}% of the loop`;
-            if (depthRef.current === 'extension') label += ` · knee ${hasKnee(s.mode) ? `${s.knee} dB` : 'hard'} · make-up ${fmtDb(s.makeup)}`;
+            // (it stops short of the legend: the last parts go first, and they are on the drawing and the dials anyway)
+            const segs = [`${sDef.label} · ${fmtDb(s.threshold)}`];
+            if (hasRatio(s.mode) || s.mode === 'limiter') segs.push(ratioLabel(s));
+            segs.push(`${fmtMs(s.attack)} in, ${fmtMs(s.release)} out`);
+            if (r && !sDown) segs.push(`up to ${fmtDb(-r.stats.maxGr).replace('−', '')} off`);
+            if (r && sDown) segs.push(`${s.mode === 'gate' ? 'open' : 'untouched'} ${Math.round(100 - r.stats.overPct)}% of the loop`);
+            if (d === 'extension') segs.push(`knee ${hasKnee(s.mode) ? `${s.knee} dB` : 'hard'}`, `make-up ${fmtDb(s.makeup)}`);
             g2.fillStyle = col.gold; g2.font = mono; g2.textAlign = 'left';
+            if (frameRef.current % 20 === 0 && legendRef.current) legendWRef.current = legendRef.current.getBoundingClientRect().width;
+            frameRef.current += 1;
+            const room = w - 18 - legendWRef.current - 16 - (g.laneX0 + 6);
+            let label = segs.join(' · ');
+            while (segs.length > 3 && g2.measureText(label).width > room) { segs.pop(); label = segs.join(' · '); }
             g2.fillText(label, g.laneX0 + 6, g.top - 10);
 
-            // the transfer curve: the paper's drawing, in against out
-            const ix = g.insetX; const iy = g.top; const side = g.inset;
-            const xIn = (db) => ix + ((Math.max(LANE_MIN, Math.min(0, db)) - LANE_MIN) / (0 - LANE_MIN)) * side;
-            const yOut = (db) => iy + side - ((Math.max(LANE_MIN, Math.min(0, db)) - LANE_MIN) / (0 - LANE_MIN)) * side;
-            g2.strokeStyle = col.grid;
-            for (const db of GRID_DB) {
-                const x = Math.round(xIn(db)) + 0.5; const y = Math.round(yOut(db)) + 0.5;
-                g2.beginPath(); g2.moveTo(x, iy); g2.lineTo(x, iy + side); g2.stroke();
-                g2.beginPath(); g2.moveTo(ix, y); g2.lineTo(ix + side, y); g2.stroke();
-            }
-            g2.strokeStyle = col.zero;
-            g2.beginPath(); g2.moveTo(ix + 0.5, iy); g2.lineTo(ix + 0.5, iy + side); g2.lineTo(ix + side, iy + side + 0.5); g2.stroke();
-            g2.setLineDash([3, 4]); g2.strokeStyle = col.ghost;
-            g2.beginPath(); g2.moveTo(xIn(LANE_MIN), yOut(LANE_MIN)); g2.lineTo(xIn(0), yOut(0)); g2.stroke();
-            g2.setLineDash([]);
-            // threshold on both axes
-            g2.strokeStyle = col.gold; g2.globalAlpha = 0.5;
-            g2.beginPath(); g2.moveTo(Math.round(xIn(s.threshold)) + 0.5, iy); g2.lineTo(Math.round(xIn(s.threshold)) + 0.5, iy + side); g2.stroke();
-            g2.globalAlpha = 1;
-            const curve = transferCurve(s, CURVE_N);
-            g2.beginPath();
-            curve.forEach((p, i) => { const x = xIn(p.inDb); const y = yOut(p.outDb); if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y); });
-            g2.strokeStyle = col.gold; g2.lineWidth = 2.5; g2.lineJoin = 'round'; g2.stroke(); g2.lineWidth = 1;
-            if (idx != null && r && lp) {
-                const px = xIn(lp.envDb[idx]); const py = yOut(r.outDb[idx]);
-                g2.beginPath(); g2.arc(px, py, 5, 0, Math.PI * 2); g2.fillStyle = '#ffffff'; g2.fill();
-            }
-            g2.fillStyle = col.inkFaint; g2.font = mono;
-            g2.textAlign = 'left'; g2.fillText('−48', ix, iy + side + 16);
-            g2.textAlign = 'center'; g2.fillText('in →', ix + side / 2, iy + side + 16);
-            g2.textAlign = 'right'; g2.fillText('0', ix + side, iy + side + 16);
-            g2.textAlign = 'left'; g2.fillStyle = col.inkSoft; g2.fillText("the paper's drawing", ix + 4, iy + 14);
-            g2.fillStyle = col.inkFaint; g2.fillText('out ↑', ix + 4, iy + 28);
-            if (depthRef.current === 'extension' && hasKnee(s.mode) && s.knee > 0) {
-                g2.strokeStyle = col.purple; g2.setLineDash([2, 3]);
-                const kx0 = Math.round(xIn(s.threshold - s.knee / 2)) + 0.5; const kx1 = Math.round(xIn(s.threshold + s.knee / 2)) + 0.5;
-                g2.beginPath(); g2.moveTo(kx0, iy); g2.lineTo(kx0, iy + side); g2.moveTo(kx1, iy); g2.lineTo(kx1, iy + side); g2.stroke();
+            // the paper's drawing: input across, output up, on the lane's own dB scale
+            if (gp) {
+                const xIn = (db) => xOfIn(db, g);
+                g2.strokeStyle = col.grid;
+                for (const db of GRID_DB) { const x = Math.round(xIn(db)) + 0.5; g2.beginPath(); g2.moveTo(x, g.top); g2.lineTo(x, g.bottom); g2.stroke(); }
+                g2.strokeStyle = col.zero;
+                g2.beginPath(); g2.moveTo(gp.x0 + 0.5, g.top); g2.lineTo(gp.x0 + 0.5, g.bottom + 0.5); g2.lineTo(gp.x1, g.bottom + 0.5); g2.stroke();
+                // unity, out = in, the line the paper wants drawn first
+                g2.setLineDash([4, 4]); g2.strokeStyle = col.ghost;
+                g2.beginPath(); g2.moveTo(xIn(LANE_MIN), yOf(LANE_MIN)); g2.lineTo(xIn(0), yOf(0)); g2.stroke();
                 g2.setLineDash([]);
-                g2.fillStyle = col.purple; g2.font = `600 9.5px ${monoFace}`; g2.textAlign = 'left'; g2.fillText('knee EXT', kx1 + 4, iy + side - 6); g2.font = mono;
+                g2.save();
+                g2.translate(gp.x0 + gp.w * 0.74, g.bottom - g.plotH * 0.74);
+                g2.rotate(-Math.atan2(g.plotH, gp.w));
+                g2.fillStyle = col.inkFaint; g2.font = `10px ${monoFace}`; g2.textAlign = 'center';
+                g2.fillText('unity · out = in', 0, -7);
+                g2.restore();
+                // the axes, named and ticked
+                g2.fillStyle = col.inkFaint; g2.font = mono; g2.textAlign = 'center';
+                for (const db of GRID_DB) g2.fillText(String(db), xIn(db), rowY);
+                g2.textAlign = 'left'; g2.fillText('in →', gp.x1 + 12, rowY);
+                g2.save(); g2.translate(14, (g.top + g.bottom) / 2); g2.rotate(-Math.PI / 2); g2.textAlign = 'center'; g2.fillText('out (dB) ↑', 0, 4); g2.restore();
+                // the threshold, on the input axis
+                const tx = Math.round(xIn(s.threshold)) + 0.5;
+                const tRight = tx > gp.x0 + gp.w / 2;
+                g2.setLineDash([4, 4]); g2.strokeStyle = col.gold; g2.globalAlpha = 0.6;
+                g2.beginPath(); g2.moveTo(tx, g.top); g2.lineTo(tx, g.bottom); g2.stroke();
+                g2.setLineDash([]); g2.globalAlpha = 1;
+                g2.fillStyle = col.gold; g2.font = `10px ${monoFace}`; g2.textAlign = tRight ? 'right' : 'left';
+                g2.fillText(`thr ${fmtDb(s.threshold)}`, tRight ? tx - 5 : tx + 5, g.top + 13);
+                // Extension: the knee, bracketed
+                if (d === 'extension' && hasKnee(s.mode) && s.knee > 0) {
+                    const kx0 = Math.round(xIn(s.threshold - s.knee / 2)) + 0.5; const kx1 = Math.round(xIn(s.threshold + s.knee / 2)) + 0.5;
+                    g2.strokeStyle = col.purple; g2.setLineDash([2, 3]);
+                    g2.beginPath(); g2.moveTo(kx0, g.top); g2.lineTo(kx0, g.bottom); g2.moveTo(kx1, g.top); g2.lineTo(kx1, g.bottom); g2.stroke();
+                    g2.setLineDash([]);
+                    g2.fillStyle = col.purple; g2.font = `600 9.5px ${monoFace}`;
+                    g2.fillText(`knee ${s.knee} dB EXT`, tRight ? tx - 5 : tx + 5, g.top + 26);
+                }
+                // the processor, the way the paper names it
+                g2.fillStyle = '#ffffff'; g2.font = `600 10.5px ${monoFace}`; g2.textAlign = 'right';
+                g2.fillText(sDef.label.toUpperCase(), gp.x1 - 7, g.bottom - 7);
+                // the curve
+                const curve = transferCurve(s, CURVE_N);
+                g2.beginPath();
+                curve.forEach((p, i) => { const x = xIn(p.inDb); const y = yOf(p.outDb); if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y); });
+                g2.strokeStyle = col.gold; g2.lineWidth = 2.5; g2.lineJoin = 'round'; g2.stroke(); g2.lineWidth = 1;
+                // a point on the drawing: the dot, dotted lines to both axes, the output on its axis
+                const mark = (inDb, outDb, colour, alpha, ring) => {
+                    const px = xIn(inDb); const py = yOf(outDb);
+                    g2.save(); g2.globalAlpha = alpha; g2.strokeStyle = colour; g2.fillStyle = colour; g2.setLineDash([2, 3]);
+                    g2.beginPath(); g2.moveTo(gp.x0, py); g2.lineTo(px, py); g2.lineTo(px, g.bottom); g2.stroke();
+                    g2.setLineDash([]);
+                    g2.beginPath(); g2.arc(gp.x0, py, 3, 0, Math.PI * 2); g2.fill();
+                    g2.restore();
+                    g2.beginPath(); g2.arc(px, py, ring ? 6 : 4.5, 0, Math.PI * 2);
+                    if (ring) { g2.fillStyle = col.plate; g2.fill(); g2.strokeStyle = colour; g2.lineWidth = 2; g2.stroke(); g2.lineWidth = 1; }
+                    else { g2.fillStyle = colour; g2.fill(); }
+                    return { px, py };
+                };
+                // Extension: where the dot has been, which is the lag drawn
+                const tr = trailRef.current;
+                if (d === 'extension') {
+                    if (tr.run !== r) { tr.run = r; tr.pts = []; }
+                    tr.pts.forEach((p, i) => { g2.globalAlpha = 0.08 + (0.5 * i) / tr.pts.length; g2.fillStyle = col.blue; g2.beginPath(); g2.arc(p.x, p.y, 2, 0, Math.PI * 2); g2.fill(); });
+                    g2.globalAlpha = 1;
+                }
+                if (idx != null && r && lp) {
+                    const p = mark(lp.envDb[idx], r.outDb[idx], '#ffffff', 0.35, false);
+                    if (d === 'extension') {
+                        const lastP = tr.pts[tr.pts.length - 1];
+                        if (!lastP || Math.hypot(lastP.x - p.px, lastP.y - p.py) > 1.5) { tr.pts.push({ x: p.px, y: p.py }); if (tr.pts.length > 120) tr.pts.shift(); }
+                    }
+                }
+                // the probe: a level the student is reading off, the 2022 paper's make-up question
+                const probe = probeRef.current;
+                g2.font = mono; g2.textAlign = 'left';
+                if (probe != null) {
+                    const outAt = outputDb(probe, s);
+                    const off = -staticGainDb(probe, s);
+                    mark(probe, outAt, col.gold, 0.85, true);
+                    g2.fillStyle = col.gold;
+                    g2.fillText(`in ${num(probe)} → out ${num(outAt)}${off > 0.05 ? ` · ${num(off)} dB off` : ''}`, gp.x0, g.top - 10);
+                } else {
+                    g2.fillStyle = col.inkSoft;
+                    g2.fillText('drag inside to read a level off', gp.x0, g.top - 10);
+                }
             }
 
-            // what this frame drew, told to the DOM for check-bench (law 17)
+            // what this frame drew, told to the DOM for check-bench (laws 17 and 18)
             const tag = String(s.threshold);
             if (canvas.dataset.threshold !== tag) canvas.dataset.threshold = tag;
             const handle = `${Math.round(hx)}:${Math.round(hy)}`;
             if (canvas.dataset.handle !== handle) canvas.dataset.handle = handle;
             const grTag = r ? r.stats.maxGr.toFixed(1) : '';
             if (canvas.dataset.gr !== grTag) canvas.dataset.gr = grTag;
+            const stageTag = stageOf(d);
+            if (canvas.dataset.stage !== stageTag) canvas.dataset.stage = stageTag;
+            const probeTag = probeRef.current == null ? '' : String(probeRef.current);
+            if (canvas.dataset.probe !== probeTag) canvas.dataset.probe = probeTag;
 
             raf = requestAnimationFrame(draw);
         }
@@ -471,37 +566,41 @@ export default function DynamicsBench({ back }) {
         return () => cancelAnimationFrame(raf);
     }, [ctxRef, nodesRef]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Drag the threshold: the gold line on the lane, or the knee on the drawing.
+    // Drag the threshold (the gold line on the lane, or its handle), or a probe inside the drawing.
     const hitThreshold = (px, py) => {
         const hd = handleRef.current;
         if (!hd) return false;
         const g = hd.g;
         if (Math.hypot(px - hd.x, py - hd.y) < 16) return true;
-        if (px >= g.laneX0 && px <= g.laneX1 && Math.abs(py - hd.ty) < 9) return true;
-        if (px >= g.insetX && px <= g.insetX + g.inset && py >= g.top && py <= g.top + g.inset) {
-            const tx = g.insetX + ((stateRef.current.threshold - LANE_MIN) / (0 - LANE_MIN)) * g.inset;
-            if (Math.abs(px - tx) < 12) return 'inset';
-        }
-        return false;
+        return px >= g.laneX0 && px <= g.laneX1 && Math.abs(py - hd.ty) < 9;
+    };
+    const hitGraph = (px, py) => {
+        const g = handleRef.current?.g;
+        return Boolean(g?.graph) && px >= g.graph.x0 - 4 && px <= g.graph.x1 + 4 && py >= g.top - 4 && py <= g.bottom + 4;
+    };
+    const probeAt = (px) => {
+        const g = handleRef.current?.g;
+        if (!g?.graph) return;
+        probeRef.current = Math.round(Math.max(LANE_MIN, Math.min(0, inOfX(px, g))) * 2) / 2;
     };
     const onStageDown = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const px = e.clientX - rect.left; const py = e.clientY - rect.top;
-        const hit = hitThreshold(px, py);
-        if (!hit) return;
+        let where = null;
+        if (hitThreshold(px, py)) where = 'lane';
+        else if (hitGraph(px, py)) { where = 'probe'; probeAt(px); }
+        if (!where) return;
         e.preventDefault();
         e.currentTarget.setPointerCapture(e.pointerId);
-        dragRef.current = { where: hit === 'inset' ? 'inset' : 'lane' };
+        dragRef.current = { where };
     };
     const onStageMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const px = e.clientX - rect.left; const py = e.clientY - rect.top;
         const hd = handleRef.current;
         if (dragRef.current && hd) {
-            const g = hd.g;
-            let db;
-            if (dragRef.current.where === 'inset') db = LANE_MIN + ((px - g.insetX) / g.inset) * (0 - LANE_MIN);
-            else db = dbOfY(py, g);
+            if (dragRef.current.where === 'probe') { probeAt(px); return; }
+            const db = dbOfY(py, hd.g);
             patch({ threshold: Math.max(THRESH_MIN, Math.min(THRESH_MAX, Math.round(db * 2) / 2)) }, 'threshold');
             return;
         }
@@ -515,6 +614,11 @@ export default function DynamicsBench({ back }) {
         if (!dragRef.current) return;
         dragRef.current = null;
         try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* gone */ }
+    };
+    // A double click inside the drawing clears the probe.
+    const onStageDouble = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        if (hitGraph(e.clientX - rect.left, e.clientY - rect.top)) probeRef.current = null;
     };
 
     // ---- drawer content ----
@@ -757,7 +861,7 @@ export default function DynamicsBench({ back }) {
                         <span className={styles.tick} style={{ left: `calc(${ladderX(state.threshold)}% - 1px)`, background: 'var(--gold)', top: 14 }} />
                     </div>
                 </div>
-                <div className={styles.meaning} data-ext={maths ? 'true' : undefined}>
+                <div className={styles.meaning}>
                     {stats ? `${over}% of the loop ${down ? 'under' : 'over'} it${maths && !down ? `, up to ${fmtDb(-stats.maxGr).replace('−', '')} taken off` : ''}` : 'where the processor starts to work'}
                 </div>
                 <Why>The level at which the {def.name} starts to work: {down ? 'below it' : 'above it'}. The ruler shows the loop&apos;s loudest hit (dark) and its quiet level (grey) against the threshold (gold). Drag the dial, or drag the gold line on the stage.{down ? '' : ' Make-up is added after the compression, to put the level back.'}</Why>
@@ -811,12 +915,9 @@ export default function DynamicsBench({ back }) {
                     : 'For every this-many dB the input goes over the threshold, the output goes over it by one. Infinity is a limiter. The knee is how sharply the ratio arrives; the drawing is the transfer curve the paper asks you to draw.'}</Why>
             </div>
 
-            <div className={`${styles.sec} ${styles.secTiming}`} data-teach={teach || undefined}>
-                <div className={styles.secHead}>
-                    <span className={styles.eyebrow}>Timing</span>
-                    <span className={styles.value}>{fmtMs(state.attack).replace(' ms', '')}<small>/ {fmtMs(state.release)}</small></span>
-                </div>
-                <div className={styles.instrument}>
+            <div className={`${styles.sec} ${styles.secKnob}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>Attack</span></div>
+                <div className={styles.knob}>
                     <Dial
                         label="Attack"
                         value={attackPos}
@@ -829,6 +930,15 @@ export default function DynamicsBench({ back }) {
                         onChange={(v) => patch({ attack: fromPos(v / 1000, ATTACK_MIN, ATTACK_MAX) }, 'attack')}
                         title={`Attack: how fast it ${down ? 'opens' : 'acts'}`}
                     />
+                    <span className={styles.value}>{fmtMs(state.attack)}</span>
+                </div>
+                <div className={styles.meaning}>{attackWord(state.attack)}</div>
+                <Why>Attack is how long the {def.name} takes to {down ? 'open' : 'act'} once the signal crosses the threshold. Slow it and the front of each hit gets through before the level comes down; that is the transient the paper asks about.</Why>
+            </div>
+
+            <div className={`${styles.sec} ${styles.secKnob}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>Release</span></div>
+                <div className={styles.knob}>
                     <Dial
                         label="Release"
                         value={releasePos}
@@ -841,9 +951,10 @@ export default function DynamicsBench({ back }) {
                         onChange={(v) => patch({ release: fromPos(v / 1000, RELEASE_MIN, RELEASE_MAX) }, 'release')}
                         title={`Release: how fast it ${down ? 'closes' : 'lets go'}`}
                     />
+                    <span className={styles.value}>{fmtMs(state.release)}</span>
                 </div>
-                <div className={styles.meaning}>{attackWord(state.attack)} attack, {releaseWord(state.release)} release</div>
-                <Why>Attack is how long the {def.name} takes to {down ? 'open' : 'act'} once the signal crosses the threshold; release is how long it takes to {down ? 'close' : 'let go'} once it falls back. Slow the attack and the front of each hit gets through; shorten the release and the level swings with the beat.</Why>
+                <div className={styles.meaning}>{releaseWord(state.release)}</div>
+                <Why>Release is how long the {def.name} takes to {down ? 'close again' : 'let the level back up'} once the signal falls back under the threshold. Shorten it and the level swings with the beat, which is what pumping is.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined}>
@@ -888,23 +999,27 @@ export default function DynamicsBench({ back }) {
         <>
             <canvas
                 ref={canvasRef}
-                aria-label="The loop before and after the processor, with the threshold and the transfer curve"
+                aria-label={maths ? "The loop before and after the processor, with the threshold, and the paper's drawing of input against output" : 'The loop before and after the processor, with the threshold'}
                 role="img"
                 onPointerDown={onStageDown}
                 onPointerMove={onStageMove}
                 onPointerUp={onStageUp}
                 onPointerCancel={onStageUp}
+                onDoubleClick={onStageDouble}
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
                 <b>{pattern.bars} bars · 0 to −48 dB · {pattern.label}</b>
-                <span>{ORIENT}</span>
+                <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
-            <div className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
+            <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
                 <span><i style={{ background: 'rgba(255,255,255,0.35)' }} />before</span>
                 <span><i style={{ background: 'var(--gen-1)', opacity: 0.5 }} />after</span>
                 <span><i style={{ background: 'var(--gen-6)', opacity: 0.7 }} />taken off</span>
+                {ext ? <span><i style={{ background: 'transparent', borderTop: '2px dotted var(--gen-6)', height: 0, borderRadius: 0 }} />wanted</span> : null}
                 <span><i style={{ background: 'var(--gold-bright)', borderRadius: '50%' }} />threshold</span>
+                {maths ? <span><i style={{ background: 'transparent', border: '2px solid var(--gold-bright)', borderRadius: '50%' }} />probe</span> : null}
+                {ext ? <span><i style={{ background: 'var(--gen-2)', borderRadius: '50%', width: 6, height: 6 }} />trail</span> : null}
             </div>
             {hover && teach ? (
                 <div
@@ -938,7 +1053,7 @@ export default function DynamicsBench({ back }) {
         <BenchFrame
             code={CODE}
             title={TITLE}
-            orientation={ORIENT}
+            orientation={ORIENTS[depth] || ORIENTS.core}
             back={back}
             mode={mode}
             onMode={setMode}

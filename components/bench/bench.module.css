@@ -916,6 +916,6 @@
 .secProc .chips { flex-wrap: wrap; gap: 4px; }
 .secLevel { width: 198px; }
 .secRatio { width: 198px; }
-.secTiming { width: 176px; }
-.secTiming .eyebrow { flex: none; }
+.secKnob { width: 88px; padding: 14px 12px; } /* Attack and Release: one control each, the readout under the dial (28 Aug 2026) */
+.knob { display: flex; flex-direction: column; align-items: center; gap: 7px; }
 .shapeSvg .oneToOne { stroke: var(--hair); stroke-dasharray: 3 3; }

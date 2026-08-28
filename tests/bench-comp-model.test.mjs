@@ -148,3 +148,12 @@ test('setParam clamps and clears the preset', () => {
     assert.equal(fmtRatio(4), '4:1');
     assert.equal(fmtDb(-7.5), '−7.5 dB');
 });
+
+test('runLoop returns what the gain computer asked for beside what attack and release let it apply', () => {
+    const env = Float32Array.from({ length: 400 }, (_, i) => (i > 100 && i < 300 ? -6 : -40));
+    const s = applyPreset(DEFAULT_STATE, 'punch');
+    const run = runLoop(s, env, 0.5);
+    assert.equal(run.wantDb.length, env.length);
+    assert.equal(run.wantDb[200], staticGainDb(-6, s));
+    assert.ok(run.gainDb[101] > run.wantDb[101], 'at the hit the applied gain lags the demand');
+});
