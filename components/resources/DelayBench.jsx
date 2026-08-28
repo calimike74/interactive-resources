@@ -414,6 +414,20 @@ export default function DelayBench({ back }) {
                 ctx2d.stroke();
             }
 
+            // The glass the marks stand on: a hairline floor per lane with a
+            // short fall of light beneath it. Without it the bars float on a
+            // flat field; with it the lane reads as a surface.
+            for (const laneKey of (pp ? ['L', 'R'] : ['C'])) {
+                const l = lanes[laneKey];
+                const gl = ctx2d.createLinearGradient(0, l.y1, 0, l.y1 + 8);
+                gl.addColorStop(0, 'rgba(255, 255, 255, 0.07)');
+                gl.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx2d.fillStyle = gl;
+                ctx2d.fillRect(padL, l.y1, plotW, 8);
+                ctx2d.fillStyle = 'rgba(255, 255, 255, 0.24)';
+                ctx2d.fillRect(padL, Math.round(l.y1) + 0.5, plotW, 1);
+            }
+
             // hits and repeats
             const now = actx && playingRef.current ? actx.currentTime : null;
             const sixteenth = grid.beatSec / 4;
@@ -424,6 +438,69 @@ export default function DelayBench({ back }) {
 
             const gains = mixGains(s.mix);
             const genColour = (n) => col.gens[Math.min(n - 1, col.gens.length - 1)];
+
+            // ---- craft pass, 29 Aug 2026: a mark is a lit object ----
+            // Mike's ruling was that the benches sit below the Eurorack rack
+            // on craft, and the marks were the clearest case: flat rectangles
+            // at a flat alpha. A mark now has a vertical gradient (brightest
+            // at the cap, where the signal peaks, deepening to its base), a
+            // lit crown on the top edge, and a real glow at the moment it
+            // sounds. Nothing here invents data: the height is still the gain
+            // the graph plays it at, the colour is still its trip round the
+            // loop. Gradients are cached for the frame, keyed on colour and
+            // height, because most marks share both.
+            const gradCache = new Map();
+            const rgbOf = (c) => {
+                const h = c.trim();
+                if (h.startsWith('rgb')) { const m = h.match(/\d+/g); return [+m[0], +m[1], +m[2]]; }
+                const n = h.replace('#', '');
+                const f = n.length === 3 ? n.split('').map((ch) => ch + ch).join('') : n;
+                return [parseInt(f.slice(0, 2), 16), parseInt(f.slice(2, 4), 16), parseInt(f.slice(4, 6), 16)];
+            };
+            const lift = (c, k) => {
+                const [r, g, b] = rgbOf(c);
+                return `rgb(${Math.round(r + (255 - r) * k)}, ${Math.round(g + (255 - g) * k)}, ${Math.round(b + (255 - b) * k)})`;
+            };
+            const deepen = (c, k) => {
+                const [r, g, b] = rgbOf(c);
+                return `rgb(${Math.round(r * (1 - k))}, ${Math.round(g * (1 - k))}, ${Math.round(b * (1 - k))})`;
+            };
+            function barPaint(colour, yTop, yBase) {
+                const key = `${colour}|${Math.round(yTop)}|${Math.round(yBase)}`;
+                let g = gradCache.get(key);
+                if (!g) {
+                    g = ctx2d.createLinearGradient(0, yTop, 0, yBase);
+                    // Both the cap highlight and the foot shade are a fixed
+                    // depth in pixels: a tall mark keeps its true colour down
+                    // its whole body and only turns at the ends, instead of
+                    // becoming one long grey fade.
+                    const hPx = Math.max(1, yBase - yTop);
+                    const capStop = Math.min(0.42, 11 / hPx);
+                    const footStop = Math.max(capStop, 1 - Math.min(0.42, 20 / hPx));
+                    g.addColorStop(0, lift(colour, 0.34));
+                    g.addColorStop(capStop, colour);
+                    g.addColorStop(footStop, colour);
+                    g.addColorStop(1, deepen(colour, 0.16));
+                    gradCache.set(key, g);
+                }
+                return g;
+            }
+            function paintBar(x, wpx, yTop, yBase, colour, sounding, radius) {
+                const hh = yBase - yTop;
+                if (hh <= 0) return;
+                if (sounding) { ctx2d.shadowColor = lift(colour, 0.45); ctx2d.shadowBlur = 13; }
+                ctx2d.fillStyle = hh > 3 ? barPaint(colour, yTop, yBase) : colour;
+                ctx2d.beginPath();
+                ctx2d.roundRect(x, yTop, wpx, hh, radius);
+                ctx2d.fill();
+                ctx2d.shadowBlur = 0;
+                if (hh > 5) {
+                    ctx2d.fillStyle = lift(colour, 0.6);
+                    ctx2d.beginPath();
+                    ctx2d.roundRect(x, yTop, wpx, 1.25, [1.25, 1.25, 0, 0]);
+                    ctx2d.fill();
+                }
+            }
             // A hit is a slim pale bar whose height is its level; a repeat
             // the same in its generation's colour, fainter as it decays.
             // Only a step the pattern marks as a phrase (the vocal) keeps its
@@ -474,9 +551,8 @@ export default function DelayBench({ back }) {
                 }
                 ctx2d.globalAlpha = isRepeat ? Math.min(1, 0.35 + 0.65 * level) : 1;
                 const hh = Math.max(2, level * maxH);
-                ctx2d.beginPath();
-                ctx2d.roundRect(x0 - wpx / 2, baseline - hh, wpx, hh, [2, 2, 0, 0]);
-                ctx2d.fill();
+                paintBar(x0 - wpx / 2, wpx, baseline - hh, baseline,
+                    sounding ? '#ffffff' : isRepeat ? genColour(n) : col.hit, sounding, [2, 2, 0, 0]);
                 ctx2d.globalAlpha = 1;
             }
 
@@ -541,11 +617,10 @@ export default function DelayBench({ back }) {
                     const hh = heights[i] * scale;
                     const bw = it.n > 0 ? BAR_W.repeat : BAR_W.hit;
                     const isHover = it.key && it.key === hovered;
-                    ctx2d.fillStyle = it.sounding ? '#ffffff' : it.n > 0 ? genColour(it.n) : col.hit;
                     ctx2d.globalAlpha = it.n > 0 ? Math.min(1, 0.35 + 0.65 * it.level) : 1;
-                    ctx2d.beginPath();
-                    ctx2d.roundRect(x0 - bw / 2, y - hh, bw, hh, i === items.length - 1 ? [2, 2, 0, 0] : 0);
-                    ctx2d.fill();
+                    paintBar(x0 - bw / 2, bw, y - hh, y,
+                        it.sounding ? '#ffffff' : it.n > 0 ? genColour(it.n) : col.hit,
+                        it.sounding, i === items.length - 1 ? [2, 2, 0, 0] : 0);
                     if (isHover) {
                         ctx2d.globalAlpha = 1;
                         ctx2d.strokeStyle = '#ffffff';

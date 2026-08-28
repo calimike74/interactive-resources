@@ -81,7 +81,7 @@ export function Dial({
             data-size={size}
             data-hot={hot || undefined}
             title={title}
-            style={{ '--angle': `${angle}deg`, '--pointer': pointer }}
+            style={{ '--angle': `${angle}deg`, '--sweep': `${pct * 270}deg`, '--pointer': pointer }}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}

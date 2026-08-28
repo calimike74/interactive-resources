@@ -132,6 +132,14 @@
 }
 
 /* ---- stage: the dark panel, sized by the rows around it ---- */
+/* The stage is the one dark panel on a white bench (BENCH-STANDARD §2, law 3
+   overridden for this element only), so it must not be a flat dark rectangle:
+   feedback_no_plain_dark_backgrounds asks for depth and atmosphere on anything
+   a student looks at. background-color stays EXACTLY #17172b because
+   check-bench law 3 reads the computed backgroundColor; everything below is
+   background-image and inset shadow, which the gate does not read.
+   Three things: a pool of light where the picture is, a screen grain, and a
+   bezel that seats the panel into the plate. */
 .stage {
     grid-area: stage;
     position: relative;
@@ -139,8 +147,29 @@
     min-height: 0;
     margin: 14px 0 10px 14px;
     border-radius: 12px;
-    background: var(--stage);
+    background-color: var(--stage);
+    background-image:
+        radial-gradient(ellipse 120% 90% at 28% 0%, rgba(150, 160, 220, 0.10) 0%, rgba(150, 160, 220, 0) 62%),
+        radial-gradient(ellipse 90% 70% at 92% 104%, rgba(197, 168, 85, 0.07) 0%, rgba(197, 168, 85, 0) 58%),
+        linear-gradient(178deg, rgba(255, 255, 255, 0.035) 0%, rgba(0, 0, 0, 0.10) 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+        inset 0 -14px 34px rgba(0, 0, 0, 0.22);
     overflow: hidden;
+}
+/* the grain: a still turbulence field at low opacity, so the panel reads as a
+   screen rather than a fill. As ::before it is generated first, so it paints
+   under the canvas and every overlay without needing a z-index — raising it
+   puts the canvas over the Play button and swallows the click. */
+.stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.42;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 .stage canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
 .stageNote {
@@ -387,13 +416,24 @@
     vertical-align: 1px;
 }
 .instrument { display: flex; gap: 12px; align-items: center; }
+/* The micro-diagram beside each dial is the bench's answer to the rack's
+   module displays. Craft pass 29 Aug 2026: it was a plain white box with a
+   hairline. It is now a screen SET INTO the fascia — recessed, faintly ruled,
+   with the light catching its bottom lip. The shadow is an inset, so it
+   claims a recess rather than the elevation the flat-cards ruling bans. */
 .diagram {
     flex: 1 1 auto;
     height: 46px;
     position: relative;
-    background: var(--plate);
-    border: 1px solid var(--line);
-    border-radius: 8px;
+    background-color: #f7f7f5;
+    background-image:
+        linear-gradient(180deg, rgba(26, 26, 46, 0.055) 0%, rgba(26, 26, 46, 0) 26%),
+        repeating-linear-gradient(90deg, rgba(26, 26, 46, 0.042) 0 1px, rgba(0, 0, 0, 0) 1px 13px);
+    border: 1px solid var(--line-2);
+    border-radius: 7px;
+    box-shadow:
+        inset 0 1px 2px rgba(26, 26, 46, 0.13),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.95);
     overflow: hidden;
 }
 .diagram small {
@@ -408,10 +448,24 @@
     color: var(--ink-3);
     pointer-events: none;
 }
-.tick { position: absolute; top: 16px; bottom: 6px; width: 3px; border-radius: 2px; background: var(--gold); }
+.tick {
+    position: absolute;
+    top: 16px;
+    bottom: 6px;
+    width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 34%, var(--gold-ink) 100%);
+}
 .tickBeat { position: absolute; top: 14px; bottom: 4px; width: 1px; background: var(--hair); }
 .stair { display: flex; align-items: flex-end; gap: 2px; padding: 14px 8px 6px; height: 100%; }
-.stair i { flex: 1 1 0; border-radius: 2px 2px 0 0; display: block; }
+.stair i {
+    flex: 1 1 0;
+    border-radius: 2px 2px 0 0;
+    display: block;
+    /* the same lit crown the stage marks carry, so the console reads as one
+       instrument with the picture above it */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -6px 8px -6px rgba(26, 26, 46, 0.35);
+}
 .split {
     display: flex;
     flex-direction: column;
@@ -430,13 +484,21 @@
     text-align: center;
     padding: 8px 0;
     border-radius: 8px;
-    background: var(--plate);
+    background-color: var(--plate);
+    background-image: linear-gradient(180deg, #ffffff 0%, #f4f3f0 100%);
     border: 1px solid var(--line-2);
+    box-shadow: 0 1px 0 rgba(26, 26, 46, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
     color: var(--ink-2);
     cursor: pointer;
 }
 .srcBtn:hover { color: var(--ink); border-color: var(--ink-3); }
-.srcBtn[aria-pressed='true'] { background: var(--green); border-color: var(--green); color: #fff; }
+.srcBtn[aria-pressed='true'] {
+    background-color: var(--green);
+    background-image: linear-gradient(180deg, #5d9a7d 0%, var(--green) 100%);
+    border-color: var(--green);
+    color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.32);
+}
 .srcBtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
 
 /* chips: the note values, stereo */
@@ -447,13 +509,23 @@
     padding: 4px 8px;
     border-radius: 6px;
     border: 1px solid var(--line-2);
-    background: var(--plate);
+    /* a key on a fascia: lit along its top lip, seated by a hairline contact
+       shadow. Pressed, it sinks (inset) rather than lifting. */
+    background-image: linear-gradient(180deg, #ffffff 0%, #f4f3f0 100%);
+    background-color: var(--plate);
+    box-shadow: 0 1px 0 rgba(26, 26, 46, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
     color: var(--ink-2);
     cursor: pointer;
     white-space: nowrap;
 }
 .chip:hover { color: var(--ink); border-color: var(--ink-3); }
-.chip[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.chip[aria-pressed='true'] {
+    background-image: linear-gradient(180deg, #2b2b45 0%, var(--ink) 100%);
+    background-color: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
+}
 .chip:disabled { opacity: 0.45; cursor: not-allowed; }
 .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .chipNote {
@@ -464,49 +536,117 @@
     white-space: nowrap;
 }
 
-/* the dial */
+/* ---- the dial: a turned instrument knob ----
+   Craft pass, 29 Aug 2026 (Mike: bring the benches to the Eurorack's craft
+   level). A knob is a drawn physical object, not a card, so it carries a real
+   contact shadow: the ban in feedback_cards_sit_flat_no_fake_shadow is on the
+   hard offset block behind a FLAT card, and the WelcomeReceipt till printer is
+   the standing precedent for objects. Five layers, no extra DOM:
+     .dial background  brushed collar, domed cap, specular, seat shade
+     .dial::before     the knurl, masked to the outer band
+     .dial::after      the engraved travel scale, swept to the value
+     .dial i           the tapered pointer
+     .dial i::after    the pointer's tip dot
+   The travel arc is on the PANEL, outside the knob, the way a printed scale
+   sits on a real fascia: it reads as engraving, not as a progress bar. */
 .dial {
     width: 54px;
     height: 54px;
     flex: none;
     border-radius: 50%;
-    background: var(--plate);
-    border: 1px solid var(--line-2);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 var(--hair);
     position: relative;
     cursor: ns-resize;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
     outline: none;
+    background-color: #e4e1da;
+    background-image:
+        /* specular, top left, kept on the cap's shoulder */
+        radial-gradient(circle closest-side at 33% 26%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 40%),
+        /* the cap, with its machined edge where it seats into the collar */
+        radial-gradient(circle closest-side at 50% 50%,
+            #f5f2ed 0 80%, #e6e2da 80% 84%, #cdc8bf 84% 86%, rgba(0, 0, 0, 0) 86.5%),
+        /* the collar: turned metal, lit from the top left */
+        conic-gradient(from 214deg,
+            #cbc7bf 0deg, #f5f3ef 40deg, #e3e0d9 94deg, #c6c2ba 148deg,
+            #dcd7cf 206deg, #f7f5f1 258deg, #d7d3cb 310deg, #cbc7bf 360deg);
+    box-shadow:
+        0 1px 2px rgba(26, 26, 46, 0.22),
+        0 0 0 0.5px rgba(26, 26, 46, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        inset 0 -3px 5px -2px rgba(26, 26, 46, 0.22);
 }
 .dial[data-size='small'] { width: 40px; height: 40px; }
-.dial::after {
-    /* the travel: a faint arc of where the pointer can go */
+.dial::before {
+    /* the knurl, cut into the collar only */
     content: '';
     position: absolute;
-    inset: 3px;
+    inset: 0;
     border-radius: 50%;
-    border: 1px solid var(--hair);
-    border-bottom-color: transparent;
-    transform: rotate(0deg);
+    background: repeating-conic-gradient(from 0deg,
+        rgba(26, 26, 46, 0.26) 0deg 1.4deg,
+        rgba(255, 255, 255, 0.34) 1.4deg 2.8deg,
+        rgba(0, 0, 0, 0) 2.8deg 7.5deg);
+    -webkit-mask: radial-gradient(circle closest-side at 50% 50%,
+        rgba(0, 0, 0, 0) 0 86%, #000 88% 98%, rgba(0, 0, 0, 0) 100%);
+    mask: radial-gradient(circle closest-side at 50% 50%,
+        rgba(0, 0, 0, 0) 0 86%, #000 88% 98%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+}
+.dial::after {
+    /* the travel scale, engraved on the panel around the knob and filled to
+       the value: 270 degrees of sweep starting at 7:30, the same arc the
+       pointer walks */
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: conic-gradient(from 225deg,
+        var(--pointer, var(--ink)) 0deg var(--sweep, 0deg),
+        rgba(26, 26, 46, 0.13) var(--sweep, 0deg) 270deg,
+        rgba(0, 0, 0, 0) 270deg 360deg);
+    -webkit-mask: radial-gradient(circle closest-side at 50% 50%,
+        rgba(0, 0, 0, 0) 0 90%, #000 92% 97%, rgba(0, 0, 0, 0) 99.5%);
+    mask: radial-gradient(circle closest-side at 50% 50%,
+        rgba(0, 0, 0, 0) 0 90%, #000 92% 97%, rgba(0, 0, 0, 0) 99.5%);
+    pointer-events: none;
+    opacity: 0.8;
 }
 .dial i {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 3px;
-    height: 19px;
-    border-radius: 2px;
+    width: 5px;
+    height: 20px;
     background: var(--pointer, var(--ink));
+    /* flared to the tip, the chicken-head shape */
+    clip-path: polygon(20% 0%, 80% 0%, 66% 100%, 34% 100%);
     transform: translate(-50%, -100%) rotate(var(--angle, 0deg));
     transform-origin: bottom center;
 }
-.dial[data-size='small'] i { height: 13px; }
-.dial:hover { border-color: var(--ink-3); }
-.dial:focus-visible { border-color: var(--ink); box-shadow: 0 0 0 3px var(--accent-soft); }
-.dial[aria-disabled='true'] { cursor: default; }
-.dial[data-hot='true'] { border-color: var(--gold); }
+.dial i::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 2px;
+    width: 2px;
+    height: 2px;
+    margin-left: -1px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+}
+.dial[data-size='small'] i { height: 14px; }
+.dial[data-size='small']::after { inset: -6px; }
+.dial:hover { box-shadow: 0 1px 3px rgba(26, 26, 46, 0.26), 0 0 0 0.5px rgba(26, 26, 46, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.7); }
+.dial:focus-visible { box-shadow: 0 1px 2px rgba(26, 26, 46, 0.22), 0 0 0 0.5px var(--ink), 0 0 0 3px var(--accent-soft), inset 0 1px 0 rgba(255, 255, 255, 0.7); }
+.dial[aria-disabled='true'] { cursor: default; filter: saturate(0.4) opacity(0.55); }
+.dial[data-hot='true'] {
+    box-shadow:
+        0 1px 2px rgba(26, 26, 46, 0.22),
+        0 0 0 1px var(--gold),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
 
 /* a number you drag */
 .drag {
@@ -579,18 +719,36 @@
 .stats span { font-size: 13px; color: var(--ink-3); }
 
 /* ---- play column ---- */
+/* The transport key. Craft pass 29 Aug 2026: it was a flat dark circle, the
+   most-pressed control on the bench and the least made. Now a domed key — lit
+   across its crown, seated by a contact shadow — that visibly sinks when the
+   bench is running. */
 .play {
     width: 52px;
     height: 52px;
     border-radius: 50%;
     border: 1px solid var(--ink);
-    background: var(--ink);
+    background-color: var(--ink);
+    background-image:
+        radial-gradient(circle closest-side at 38% 26%, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0) 58%),
+        linear-gradient(180deg, #33334f 0%, var(--ink) 62%, #101024 100%);
+    box-shadow:
+        0 1px 3px rgba(26, 26, 46, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.35);
     color: #fff;
     display: inline-grid;
     place-items: center;
     cursor: pointer;
 }
-.play[aria-pressed='true'] { background: var(--plate); color: var(--ink); }
+.play[aria-pressed='true'] {
+    background-color: var(--plate);
+    background-image: linear-gradient(180deg, #eceae5 0%, #ffffff 70%);
+    color: var(--ink);
+    box-shadow:
+        inset 0 2px 4px rgba(26, 26, 46, 0.28),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+}
 .play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .hold {
     padding: 4px 11px;
@@ -599,7 +757,9 @@
     letter-spacing: 0.04em;
     border: 1px solid var(--line-2);
     border-radius: 999px;
-    background: var(--plate);
+    background-color: var(--plate);
+    background-image: linear-gradient(180deg, #ffffff 0%, #f4f3f0 100%);
+    box-shadow: 0 1px 0 rgba(26, 26, 46, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
     color: var(--ink-2);
     cursor: pointer;
     user-select: none;

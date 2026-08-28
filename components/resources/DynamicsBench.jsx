@@ -394,7 +394,18 @@ export default function DynamicsBench({ back }) {
                 for (let i = 0; i <= cols; i += 1) g2.lineTo(g.laneX0 + i, yOf(level(r.outDb, i)));
                 g2.lineTo(g.laneX0 + cols, g.bottom);
                 g2.closePath();
-                g2.fillStyle = col.green; g2.globalAlpha = 0.32; g2.fill(); g2.globalAlpha = 1;
+                // Craft pass 29 Aug 2026: the body of the sound is a lit
+                // volume, not a flat wash. Densest at the floor where the
+                // level sits, thinning as it rises, with its own top edge
+                // picked out so the shape of the loop reads at a glance.
+                const bodyFill = g2.createLinearGradient(0, g.top, 0, g.bottom);
+                bodyFill.addColorStop(0, 'rgba(127, 179, 155, 0.16)');
+                bodyFill.addColorStop(0.55, 'rgba(127, 179, 155, 0.30)');
+                bodyFill.addColorStop(1, 'rgba(127, 179, 155, 0.46)');
+                g2.fillStyle = bodyFill; g2.fill();
+                g2.beginPath();
+                for (let i = 0; i <= cols; i += 1) { const y = yOf(level(r.outDb, i)); if (i === 0) g2.moveTo(g.laneX0 + i, y); else g2.lineTo(g.laneX0 + i, y); }
+                g2.strokeStyle = 'rgba(178, 221, 203, 0.75)'; g2.lineWidth = 1; g2.stroke();
                 g2.beginPath();
                 for (let i = 0; i <= cols; i += 1) { const y = yOf(level(lp.envDb, i)); if (i === 0) g2.moveTo(g.laneX0 + i, y); else g2.lineTo(g.laneX0 + i, y); }
                 g2.strokeStyle = col.ghost; g2.lineWidth = 1; g2.stroke();
@@ -404,7 +415,10 @@ export default function DynamicsBench({ back }) {
                 for (let i = 0; i <= cols; i += 1) g2.lineTo(g.laneX0 + i, yOf(-grAt(i)));
                 g2.lineTo(g.laneX0 + cols, g.top);
                 g2.closePath();
-                g2.fillStyle = col.coral; g2.globalAlpha = 0.28; g2.fill(); g2.globalAlpha = 1;
+                const grFill = g2.createLinearGradient(0, g.top, 0, g.bottom);
+                grFill.addColorStop(0, 'rgba(208, 138, 128, 0.40)');
+                grFill.addColorStop(1, 'rgba(208, 138, 128, 0.10)');
+                g2.fillStyle = grFill; g2.fill();
                 g2.beginPath();
                 for (let i = 0; i <= cols; i += 1) { const y = yOf(-grAt(i)); if (i === 0) g2.moveTo(g.laneX0 + i, y); else g2.lineTo(g.laneX0 + i, y); }
                 g2.strokeStyle = col.coral; g2.lineWidth = 1.25; g2.stroke(); g2.lineWidth = 1;
@@ -422,7 +436,9 @@ export default function DynamicsBench({ back }) {
             const ty = Math.round(yOf(s.threshold)) + 0.5;
             g2.strokeStyle = col.gold; g2.lineWidth = 1.5;
             g2.setLineDash(s.on ? [] : [4, 4]);
+            if (s.on) { g2.shadowColor = 'rgba(240, 212, 138, 0.55)'; g2.shadowBlur = 8; }
             g2.beginPath(); g2.moveTo(g.laneX0, ty); g2.lineTo(g.laneX1, ty); g2.stroke();
+            g2.shadowBlur = 0;
             g2.setLineDash([]); g2.lineWidth = 1;
             const hx = g.laneX1 - 12; const hy = ty;
             const hovered = hoverRef.current?.id === 'threshold' || dragRef.current?.where === 'lane';
@@ -501,11 +517,36 @@ export default function DynamicsBench({ back }) {
                 // the processor, the way the paper names it
                 g2.fillStyle = '#ffffff'; g2.font = `600 10.5px ${monoFace}`; g2.textAlign = 'right';
                 g2.fillText(sDef.label.toUpperCase(), gp.x1 - 7, g.bottom - 7);
-                // the curve
+                // the curve: the paper's own drawing, so it is the brightest
+                // object on the graph. Craft pass 29 Aug 2026: a wash under
+                // the trace to give the plot a floor, then the trace itself
+                // struck twice, once wide and dim for the glow and once tight
+                // and bright, the way a scope line reads.
                 const curve = transferCurve(s, CURVE_N);
+                const tracePath = () => {
+                    g2.beginPath();
+                    curve.forEach((p, i) => { const x = xIn(p.inDb); const y = yOf(p.outDb); if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y); });
+                };
                 g2.beginPath();
                 curve.forEach((p, i) => { const x = xIn(p.inDb); const y = yOf(p.outDb); if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y); });
-                g2.strokeStyle = col.gold; g2.lineWidth = 2.5; g2.lineJoin = 'round'; g2.stroke(); g2.lineWidth = 1;
+                g2.lineTo(xIn(curve[curve.length - 1].inDb), g.bottom);
+                g2.lineTo(xIn(curve[0].inDb), g.bottom);
+                g2.closePath();
+                const under = g2.createLinearGradient(0, g.top, 0, g.bottom);
+                under.addColorStop(0, 'rgba(240, 212, 138, 0.13)');
+                under.addColorStop(1, 'rgba(240, 212, 138, 0.02)');
+                g2.fillStyle = under; g2.fill();
+                g2.lineJoin = 'round'; g2.lineCap = 'round';
+                // The bloom comes from a shadow on the trace itself, not from
+                // a second wider stroke: a translucent warm stroke over navy
+                // reads as a grey halo, a shadow reads as light.
+                tracePath();
+                g2.shadowColor = 'rgba(240, 212, 138, 0.75)'; g2.shadowBlur = 11;
+                g2.strokeStyle = col.gold; g2.lineWidth = 2.5; g2.stroke();
+                g2.shadowBlur = 0;
+                tracePath();
+                g2.stroke();
+                g2.lineWidth = 1; g2.lineCap = 'butt';
                 // a point on the drawing: the dot, dotted lines to both axes, the output on its axis
                 const mark = (inDb, outDb, colour, alpha, ring) => {
                     const px = xIn(inDb); const py = yOf(outDb);
