@@ -19,7 +19,7 @@ The picture is the one every student already recognises: the part's clip above, 
 - **The point on the lane is the control.** Drag a point (time snapped to the grid and held between its neighbours, value clamped); click the lane to add one; double-click to remove. Two points at the same time are a jump, the later winning, which is how a DAW draws a step inside a line lane. Law 21 in `check-bench`: `data-point` is the handle point's value, dragging the handle up raises it and `data-lane` changes.
 - **Hold the lane off.** The play column's hold button switches the lane off on the same beat (the parameter to rest), so the student hears what the move adds without losing their place. The desk's "hold: reference" pattern, re-aimed.
 - **The engine plays a rule, not the points.** `curveFor` samples the shape once a millisecond in the parameter's units (9,320 values a pass) and `setValueCurveAtTime` books it for every loop pass already scheduled; an edit cancels from now, holds, ramps into the new curve one millisecond later and re-books the remainder (`rebook`). Law 6 (picture and sound are one series) holds by construction, as on the Dynamics bench.
-- **The moving control.** The Value dial in the console follows the lane while the loop runs: the picture of automation in every DAW. Grab it while playing and it writes (`writePoint`, Touch: replaces points within half a grid step of the playhead, stops when you let go). Disabled until Play, so it never does nothing.
+- **The moving control.** The Value dial in the console follows the lane while the loop runs: the picture of automation in every DAW. Grab it while playing and it writes (`writePoint`, Touch: a point every 16th of a beat whatever the grid, `TOUCH_STEP`, replacing what was there; `touchRelease` on letting go returns the lane to what it was, one step on. Mike, 29 Aug: grid-step Touch was too coarse, the points sat on the beats). Disabled until Play, so it never does nothing.
 
 ## 3. Three jobs, three pictures
 
@@ -46,3 +46,25 @@ The second Suno song on the estate: "Dry Groove" (103 bpm, instrumental funk), t
 ## 7. Gates
 
 `node scripts/check-bench.mjs <url>` in Chromium and WebKit at 1280×700 and 1440×900: fixture `automation-lane` (presets Sweep / Filter build / judge Late step landing `data-verdict=placement`; stages lane / paper / machine) and law 21. 285 unit tests across the estate (20 new: model and depth). Console at 1280: Play 104 + Part 150 + Target 166 + Shape 150 + Grid 132 + Value 150 + Hear 426 = 1278.
+
+## 8. After Mike's first listen (29 Aug, late)
+
+Mike, on the live bench: the design is right, but a volume or filter lane should take the part out and did not seem to; pan did; what the send does, and where it goes, was not clear; and the points the Value dial wrote sat on the main beats. Measured before changing anything (`scripts/measure-lane.mjs`: an analyser in front of the destination, one part soloed at the source, mean RMS over one loop):
+
+- The fader and the filter worked. Keys alone, lane on the floor: silence, every window. Filter at 100 Hz: 17.5 dB down.
+- The mix hid it. At unity the bass measured −29.7 dB, the drums −35.1, the keys −35.2, the guitar −40.3: the bass carried six tenths of the power, so the keys vanishing moved the whole mix by 0.9 dB, the filter by 0.8, the send by 0.2. The release's balance is the song's, not the bench's.
+- The room was there but faint: keys with the send full, +1 dB.
+- Touch snapped to the edit grid by design (`snapT(t, state.grid)`), so with the grid on Bar a dial move landed on a barline, half the time the next one, and the dial did nothing audible until the bar came round.
+- A stop then a start within a pass left the old bookings on the parameters: the first pass after a restart threw `NotSupportedError` in `setValueCurveAtTime` (swallowed), the lane off for that pass, and the old stems still sounding under the new ones.
+
+What changed:
+
+- **A bench balance, measured.** `SONG.mixTrim` is now drums −2, bass −7, guitar +13, keys +11 with the bus trim at 0.75: at unity the keys −29.5, bass −30.0, drums −31.4, guitar −32.5 dB, every part within 3 dB. In the mix the keys' fader now moves the whole by 1.5 dB at unity (3.6 to +6 dB), the filter by 1.5.
+- **A room you can hear.** The IR is 2.6 s long, 2.0 s to −60, brighter (one-pole coefficient 0.5), return 1.3. Drums with the send full: +4.6 dB mean, and the gaps between hits rise from −66 to −40 dB. Keys: the gaps from −70 to −42.
+- **Solo.** A `Hear` row under the Part chips, "the mix · solo": a gain per strip before the fader (so the send goes too) that mutes the other three. The DAW's S button, for hearing exactly what a lane does to its part. Keys alone −29.5 dB; lane to the floor, −∞.
+- **The send says where it goes** at every depth: the lane's label reads SEND → ROOM, the Target line "writes to the send, into the room".
+- **Touch at the automation's own resolution.** `TOUCH_STEP` = 1/16 beat (36 ms at 103), whatever the grid; a move within a step replaces the point there; `touchRelease` writes the value the lane had, one step after letting go, so the lane is handed back (Touch, not Latch). Dense lanes draw their points small. A drag over 1.8 s wrote 30 points from beat 3.4 to 6.3 with the return at 6.5.
+- **Restart clean.** The hook's `stop` now stops every live source 120 ms after the fade (the Lane's stems run a whole pass; the other benches' one-shots are unaffected), and the Lane's `clear` cancels every parameter's bookings. Before and after a restart: −23.5 and −23.4 dB, both passes booked.
+- **Extension caption** carries the lit box's words ("· pan, on the channel") so the stored-points line has its own line.
+
+Not changed: the dial's range and the lane's floor (−36 dB then off); the presets' quiet-but-audible floors, which are the stems' words.

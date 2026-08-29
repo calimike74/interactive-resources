@@ -192,6 +192,12 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
             // feedback loop would otherwise still be running when play is
             // pressed again, and a suspended context cannot fade anything.
             glide(nodesRef.current.master.gain, 0, ctx, 0.06);
+            // ...then cut what is still sounding, so a restart does not play
+            // it twice under the new pass (the Lane's stems run a whole pass,
+            // 29 Aug 2026).
+            const t = ctx.currentTime + 0.12;
+            for (const { src } of liveRef.current) { try { src.stop(t); } catch { /* already ended */ } }
+            liveRef.current.clear();
         }
         setPlaying(false);
     }, []);

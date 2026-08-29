@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
     DEFAULT_STATE, PRESETS, TASKS, UNITY, BEATS,
     valueAt, sampleLane, sortPoints, curveFor, toUnit, fromUnit, fmtValue, valueWord,
-    applyPreset, setTarget, setPart, setShape, movePoint, addPoint, removePoint, writePoint, resetLane, flattenLane,
+    applyPreset, setTarget, setPart, setShape, movePoint, addPoint, removePoint, writePoint, touchRelease, TOUCH_STEP, resetLane, flattenLane,
     checks, verdict, crossingAt, beatMs, pointWords, movingBars, listBars, snapT, fmtBeat,
 } from '../lib/bench/lane-model.js';
 
@@ -127,11 +127,34 @@ test('adding, removing and touch-writing points', () => {
     const r = removePoint(a, index);
     assert.deepEqual(r.points, st.points);
     assert.equal(removePoint({ ...st, points: [{ t: 0, v: 0.5 }] }, 0).points.length, 1, 'never below one point');
-    // touch at bar 2 (grid bar) replaces the bar-2 point
+});
+
+test('touch writes at the automation\'s own resolution, whatever the grid, and returns to the lane on release', () => {
+    const st = applyPreset(DEFAULT_STATE, 'pan'); // grid bar
+    assert.equal(TOUCH_STEP, 1 / 16);
+    // a dial move at beat 4.3 lands on the nearest 16th, not the barline
     const w = writePoint(st, 4.3, 0.75);
-    assert.equal(w.points.length, 4);
-    near(w.points[1].v, 0.75);
-    assert.equal(w.points[1].t, 4);
+    assert.equal(w.points.length, 5);
+    const hit = w.points.find((p) => Math.abs(p.t - 4.3125) < 1e-9);
+    assert.ok(hit, 'a point at 4.3125'); near(hit.v, 0.75);
+    assert.ok(w.points.some((p) => p.t === 4 && p.v === 0), 'the barline point is untouched');
+    // a second move within the same step replaces, never stacks
+    const w2 = writePoint(w, 4.33, 0.6);
+    assert.equal(w2.points.length, 5); near(w2.points.find((p) => Math.abs(p.t - 4.3125) < 1e-9).v, 0.6);
+    // the same value at the same step is not a change
+    assert.equal(writePoint(w2, 4.33, 0.6), w2);
+    // a passage of moves writes one point per step it crosses
+    let s = st;
+    for (let t = 5; t < 5.95; t += 1 / 64) s = writePoint(s, t, 0.9);
+    assert.equal(s.points.length, 4 + 16, 'sixteen steps from 5 to 5.9375');
+    // release at 6.02: the lane returns to what it was there (pan hard right after bar 3's start, so 1 at 8; 0 between 4 and 8)
+    const back = touchRelease(s, st, 6.02);
+    const ret = back.points.find((p) => Math.abs(p.t - 6.0625) < 1e-9);
+    assert.ok(ret, 'a return point one step after the release'); near(ret.v, valueAt(st.points, st.shape, 6.0625));
+    near(valueAt(back.points, 'step', 7), 0); // back on the original value after the release
+    near(valueAt(back.points, 'step', 5.5), 0.9); // the passage stands
+    // released off the end of the loop: nothing to return to
+    assert.equal(touchRelease(s, st, 15.99), s);
 });
 
 test('reset returns to the stem\'s lane; flatten returns to rest', () => {

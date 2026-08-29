@@ -31,7 +31,7 @@ import {
     movePoint,
     addPoint,
     removePoint,
-    writePoint,
+    writePoint, touchRelease,
     resetLane,
     flattenLane,
     setLevel,
@@ -79,7 +79,7 @@ const dbToGain = (db) => 10 ** (db / 20);
 // rest.
 function makeIR(ctx) {
     const sr = ctx.sampleRate;
-    const n = Math.round(sr * 1.6);
+    const n = Math.round(sr * 2.6);
     const buf = ctx.createBuffer(2, n, sr);
     let seed = 7654321; // the same room every time
     const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return (seed / 4294967296) * 2 - 1; };
@@ -88,8 +88,8 @@ function makeIR(ctx) {
         let lp = 0;
         for (let i = 0; i < n; i += 1) {
             const t = i / sr;
-            const env = Math.exp((-t * 6.9) / 1.2);
-            lp += 0.22 * (rnd() - lp);
+            const env = Math.exp((-t * 6.9) / 2.0);
+            lp += 0.5 * (rnd() - lp);
             d[i] = lp * env * (i < 48 ? i / 48 : 1);
         }
     }
@@ -99,7 +99,7 @@ function makeIR(ctx) {
 function buildLaneGraph(ctx, input, master, song) {
     const bus = ctx.createGain();
     const trim = ctx.createGain();
-    trim.gain.value = 0.55;
+    trim.gain.value = 0.75;
     bus.connect(trim);
     trim.connect(master);
     input.connect(master);
@@ -107,7 +107,7 @@ function buildLaneGraph(ctx, input, master, song) {
     const conv = ctx.createConvolver();
     conv.buffer = makeIR(ctx);
     const reverbOut = ctx.createGain();
-    reverbOut.gain.value = 0.8;
+    reverbOut.gain.value = 1.3;
     reverbIn.connect(conv);
     conv.connect(reverbOut);
     reverbOut.connect(bus);
@@ -120,18 +120,20 @@ function buildLaneGraph(ctx, input, master, song) {
         filter.Q.value = 0.9;
         const mix = ctx.createGain();
         mix.gain.value = dbToGain(song.mixTrim[id]);
+        const solo = ctx.createGain(); // the DAW's S button: the other parts to 0
         const fader = ctx.createGain();
         const pan = ctx.createStereoPanner();
         const send = ctx.createGain();
         send.gain.value = 0;
         inp.connect(filter);
         filter.connect(mix);
-        mix.connect(fader);
+        mix.connect(solo);
+        solo.connect(fader);
         fader.connect(pan);
         pan.connect(bus);
         fader.connect(send);
         send.connect(reverbIn);
-        strips[id] = { inp, filter, fader, pan, send };
+        strips[id] = { inp, filter, solo, fader, pan, send };
     }
     const paramOf = (id, target) => (target === 'vol' ? strips[id].fader.gain : target === 'pan' ? strips[id].pan.pan : target === 'filter' ? strips[id].filter.frequency : strips[id].send.gain);
     let loops = []; // the loop passes booked so far: { start, dur }
@@ -183,14 +185,28 @@ function buildLaneGraph(ctx, input, master, song) {
         loops = loops.filter((l) => l.start + l.dur > now);
         if (active && !held) bookLoop(paramOf(active.id, active.target), active.curve, at, dur, at);
     }
-    function clear() { loopStart = null; loops = []; }
+    function clear() {
+        loopStart = null; loops = [];
+        const now = ctx.currentTime;
+        for (const id of PART_IDS) {
+            for (const tg of TARGET_IDS) {
+                const p = paramOf(id, tg);
+                p.cancelScheduledValues(now);
+                try { p.cancelAndHoldAtTime(now); } catch { /* older engine */ }
+            }
+        }
+    }
+    function soloPart(id) {
+        const now = ctx.currentTime;
+        for (const sid of PART_IDS) strips[sid].solo.gain.setTargetAtTime(id && id !== sid ? 0 : 1, now, 0.02);
+    }
     function position() {
         if (loopStart == null || !loopDur) return null;
         const pos = ctx.currentTime - loopStart;
         if (pos < 0) return 0;
         return (pos % loopDur) / loopDur;
     }
-    return { strips, apply, hold, schedule, clear, position };
+    return { strips, apply, hold, schedule, clear, position, solo: soloPart };
 }
 
 // A clip's envelope over the loop: peaks at `bins` points, normalised, and
@@ -238,6 +254,9 @@ export default function AutomationLane({ back }) {
     const hoverRef = useRef(null);
     hoverRef.current = hover;
     const heldRef = useRef(false);
+    const [solo, setSolo] = useState(false); // hear the lane's part alone
+    const soloRef = useRef(false);
+    soloRef.current = solo;
     const { studioOrigin } = useStudioArrival();
     const teach = mode === 'teacher';
     const ext = depth === 'extension';
@@ -261,6 +280,7 @@ export default function AutomationLane({ back }) {
         graphRef.current = g;
         g.apply(stateRef.current);
         if (heldRef.current) g.hold(true);
+        if (soloRef.current) g.solo(stateRef.current.part);
         return g;
     }, []);
     const audio = useBenchAudio({ files: FILES, bpm: LOOP_BPM, onSchedule, buildGraph });
@@ -292,6 +312,7 @@ export default function AutomationLane({ back }) {
         const nodes = nodesRef.current;
         if (ctx && nodes) glide(nodes.level.gain, state.level, ctx);
     }, [state.level, began, ctxRef, nodesRef]);
+    useEffect(() => { graphRef.current?.solo(solo ? state.part : null); }, [solo, state.part, began]);
 
     const touch = (what) => { setLast(what); setAnnounce(null); };
     const chooseDepth = (id) => { setDepth(id); setAnnounce(id); };
@@ -306,13 +327,24 @@ export default function AutomationLane({ back }) {
         setHeld(on);
         graphRef.current?.hold(on);
     };
-    // Touch: the dial moved while the loop ran writes a point at the playhead.
+    // Touch: the dial moved while the loop ran writes a point at the
+    // playhead, every 16th of a beat; letting go hands the lane back to
+    // what it was when the touch began.
+    const touchRef = useRef(null);
     const write = (v) => {
         const g = graphRef.current;
         const frac = g?.position();
         if (frac == null || !playingRef.current) return;
+        if (!touchRef.current) touchRef.current = { before: stateRef.current };
         setState((s) => writePoint(s, frac * BEATS, v / 100));
         touch('write');
+    };
+    const release = () => {
+        const before = touchRef.current?.before;
+        touchRef.current = null;
+        const frac = graphRef.current?.position();
+        if (!before || frac == null || !playingRef.current) return;
+        setState((s) => touchRelease(s, before, frac * BEATS));
     };
     const { start, stop } = audio;
     const togglePlay = useCallback(() => (playingRef.current ? stop() : start()), [start, stop]);
@@ -495,7 +527,7 @@ export default function AutomationLane({ back }) {
             const restY = Math.round(yOf(TARGETS[s.target].rest)) + 0.5;
             g2.save(); g2.setLineDash([3, 4]); g2.strokeStyle = col.inkFaint; g2.beginPath(); g2.moveTo(L.x0, restY); g2.lineTo(L.x1, restY); g2.stroke(); g2.restore();
             g2.fillStyle = tcol; g2.textAlign = 'left'; g2.font = monoSmall;
-            g2.fillText(`${TARGETS[s.target].label.toUpperCase()} · ${PARTS[s.part].short.toLowerCase()}`, L.x0 + 6, L.top + 11);
+            g2.fillText(`${(TARGETS[s.target].lane || TARGETS[s.target].label).toUpperCase()} · ${PARTS[s.part].short.toLowerCase()}`, L.x0 + 6, L.top + 11);
 
             // the stem's own lane, dashed, at A-level
             if (d === 'alevel' && tsk && tsk.part === s.part && tsk.target === s.target) {
@@ -522,9 +554,10 @@ export default function AutomationLane({ back }) {
             const handles = pts.map((p, i) => ({ i, x: xOf(p.t), y: yOf(p.v), t: p.t, v: p.v }));
             const dragging = dragRef.current;
             const hv = hoverRef.current;
+            const dense = handles.length > 24; // a touched passage: one point a 16th
             for (const hnd of handles) {
                 const hot = (dragging && dragging.i === hnd.i) || (hv && hv.kind === 'point' && hv.i === hnd.i);
-                g2.beginPath(); g2.arc(hnd.x, hnd.y, hot ? 6.5 : 4.5, 0, Math.PI * 2);
+                g2.beginPath(); g2.arc(hnd.x, hnd.y, hot ? 6.5 : dense ? 2.5 : 4.5, 0, Math.PI * 2);
                 g2.fillStyle = tcol; g2.fill();
                 g2.strokeStyle = '#17172b'; g2.lineWidth = 1.5; g2.stroke(); g2.lineWidth = 1;
             }
@@ -578,7 +611,7 @@ export default function AutomationLane({ back }) {
                 const gapX = (M.x1 - M.x0 - boxW * CHAIN.length) / (CHAIN.length - 1);
                 const y = M.top + 14; const bh = 22;
                 g2.font = monoSmall; g2.textAlign = 'left'; g2.fillStyle = col.inkFaint;
-                g2.fillText('the channel: where this lane writes', M.x0, M.top + 8);
+                g2.fillText(`the channel: where this lane writes · ${lit}, ${lit === 'filter' ? 'inside the insert' : 'on the channel'}`, M.x0, M.top + 8);
                 CHAIN.forEach((name, i) => {
                     const x = M.x0 + i * (boxW + gapX);
                     const on = name === lit;
@@ -592,7 +625,6 @@ export default function AutomationLane({ back }) {
                         g2.strokeStyle = col.line; g2.lineWidth = 1; g2.beginPath(); g2.moveTo(ax, ay); g2.lineTo(ax + gapX - 6, ay); g2.stroke();
                         g2.beginPath(); g2.moveTo(ax + gapX - 6, ay - 3); g2.lineTo(ax + gapX - 2, ay); g2.lineTo(ax + gapX - 6, ay + 3); g2.stroke();
                     }
-                    if (on) { g2.fillStyle = tcol; g2.font = monoSmall; g2.fillText(name === 'filter' ? 'inside the insert' : 'on the channel', x + boxW / 2, y + bh + 11); }
                 });
                 g2.lineWidth = 1;
                 // what the DAW stores, one line
@@ -895,7 +927,8 @@ export default function AutomationLane({ back }) {
     const shapeOptions = SHAPE_IDS.map((id) => ({ id, label: SHAPES[id].label, title: SHAPES[id].does }));
     const gridOptions = GRID_IDS.map((id) => ({ id, label: GRIDS[id].label, title: GRIDS[id].short }));
     const verdictWord = vd.key === 'free' ? 'no stem' : vd.ok ? 'as directed' : 'not yet';
-    const nodeWord = { vol: 'the fader', pan: 'the pan pot', filter: 'the cut-off, inside the insert', send: 'the send' }[state.target];
+    const nodeWord = { vol: 'the fader', pan: 'the pan pot', filter: 'the cut-off, inside the insert', send: 'the send, into the room' }[state.target];
+    const hearOptions = [{ id: 'mix', label: 'the mix', title: 'All four parts, as the examiner hears the move' }, { id: 'solo', label: 'solo', title: 'This part alone: the DAW\'s S button, for hearing exactly what the lane does to it' }];
 
     const consoleSlot = (
         <>
@@ -915,7 +948,8 @@ export default function AutomationLane({ back }) {
             <div className={`${styles.sec} ${styles.secPart}`} data-teach={teach || undefined}>
                 <div className={styles.secHead}><span className={styles.eyebrow}>Part</span><span className={styles.value}>{PARTS[state.part].short}</span></div>
                 <Chips label="Part" options={partOptions} value={state.part} onChange={choosePart} />
-                <div className={styles.meaning}>{task && task.part === state.part ? 'the part the stem names' : 'the lane moves with you'}</div>
+                <Chips label="Hear" options={hearOptions} value={solo ? 'solo' : 'mix'} onChange={(id) => { setSolo(id === 'solo'); touch('solo'); }} />
+                <div className={styles.meaning}>{solo ? `${PARTS[state.part].short.toLowerCase()} alone` : task && task.part === state.part ? 'the part the stem names' : 'the lane moves with you'}</div>
                 <Why>The papers name one part: the keyboards in 2019, a synth riff in 2020, the bass in 2021, a riser in the drums in 2023, a vocal phrase in 2017. The lane belongs to whichever part is chosen here; the other three play as they are.</Why>
             </div>
 
@@ -954,11 +988,12 @@ export default function AutomationLane({ back }) {
                         pixels={160}
                         disabled={!playing}
                         onChange={write}
+                        onRelease={release}
                         title={playing ? 'Moves with the lane. Grab it while the loop runs and the lane records your move (Touch)' : 'Press Play: the dial then moves with the lane, and writes to it when you grab it'}
                     />
                     <span className={styles.readout}>{playing ? (last === 'write' ? 'writing' : 'grab to write') : 'press Play'}</span>
                 </div>
-                <Why>The control the lane is moving, seen moving: the picture of automation in every DAW. While the loop runs, grab it and the lane records what you do at the playhead, point by grid step, and stops when you let go. That is Touch mode.</Why>
+                <Why>The control the lane is moving, seen moving: the picture of automation in every DAW. While the loop runs, grab it and the lane records what you do at the playhead, a point every 16th of a beat whatever the grid, and hands the lane back when you let go. That is Touch mode.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined} data-lane="true">
@@ -969,7 +1004,7 @@ export default function AutomationLane({ back }) {
                     <div><b>{listBars(moving)}</b><span>where it moves</span></div>
                     {maths
                         ? <div><b>{verdictWord}</b><span>the scheme&apos;s checks{ext ? <span className={styles.ext}>EXT</span> : null}</span></div>
-                        : <div><b>{held ? 'lane off' : 'your lane'}</b><span>what is playing</span></div>}
+                        : <div><b>{held ? 'lane off' : solo ? `${PARTS[state.part].short.toLowerCase()} alone` : 'your lane'}</b><span>what is playing</span></div>}
                 </div>
                 {teach ? <div className={styles.meaning}>all from the points, the shape and the stem</div> : null}
                 <Legal />

@@ -21,6 +21,7 @@ export function Dial({
     unit = '',
     format,
     onChange,
+    onRelease,
     disabled = false,
     title,
     size,
@@ -50,6 +51,7 @@ export function Dial({
         if (!drag.current) return;
         drag.current = null;
         try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* already gone */ }
+        onRelease?.();
     }
     function onKeyDown(e) {
         if (disabled) return;
@@ -197,6 +199,7 @@ export function DragNumber({ label, value, min, max, step = 1, unit = '', onChan
         if (!drag.current) return;
         drag.current = null;
         try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* already gone */ }
+        onRelease?.();
     }
     function onKeyDown(e) {
         const fine = e.shiftKey ? step * 10 : step;
