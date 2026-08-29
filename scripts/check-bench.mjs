@@ -87,6 +87,12 @@ const BENCHES = {
         judgeLands: { selector: '[aria-label="Cut"]', attr: 'aria-valuenow', value: '1000', says: 'sets the cut at 1.000 s' },
         stages: { core: 'join', alevel: 'drawing', extension: 'machine' },
     },
+    'automation-lane': {
+        lane: true,
+        presets: { first: 'Sweep', second: 'Filter build', judge: 'Late step' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'placement', says: 'loads the 2020 fault: the step landed off the barline (data-verdict = placement)' },
+        stages: { core: 'lane', alevel: 'paper', extension: 'machine' },
+    },
     'balance-desk': {
         faders: { stem: 'Vocal' },
         presets: { first: 'Drums too quiet', second: 'Synth over the vocal', judge: 'The reference' },
@@ -496,6 +502,32 @@ for (const url of urls) {
                 else ok(`dragging the block raises the fader and the strip follows (${before.fader} dB -> ${after.fader} dB)`);
             } else fail(url, size, 'the stage does not expose the block handle for the drag test');
             if (!before.band) fail(url, size, 'the stage does not report the line the mix sits on (data-band missing)');
+        }
+
+        // 21. (Automation) the point on the lane is the control: the stage
+        // reports the handle point's value, and dragging it up raises it
+        if (fx.lane) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readL = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { point: c?.dataset.point || '', handle: c?.dataset.handle || '', lane: c?.dataset.lane || '', verdict: c?.dataset.verdict || '' }; }, canvasSel);
+            await page.waitForTimeout(200);
+            const before = await readL();
+            if (!before.point) fail(url, size, 'the stage does not report the handle point (data-point missing)');
+            else ok(`the stage reports the handle point (${before.point})`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx, box.y + hy - 15, { steps: 6 });
+                await page.mouse.move(box.x + hx, box.y + hy - 30, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(200);
+                const after = await readL();
+                if (!(Number(after.point) > Number(before.point))) fail(url, size, `dragging the point up did not raise it (${before.point} -> ${after.point})`);
+                else if (after.lane === before.lane) fail(url, size, 'the lane did not change with the point');
+                else ok(`dragging the point raises it on the lane (${before.point} -> ${after.point})`);
+            } else fail(url, size, 'the stage does not expose the point handle for the drag test');
+            if (!before.verdict) fail(url, size, 'the stage does not report the scheme\'s verdict (data-verdict missing)');
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

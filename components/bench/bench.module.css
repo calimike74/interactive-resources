@@ -1114,3 +1114,15 @@
 .secHear[data-desk='true'] .stats { max-width: none; }
 
 .secPlay .hold { white-space: normal; line-height: 1.15; text-align: center; }
+
+/* The Automation Lane (29 Aug 2026): four chip sections and the moving
+   Value dial. Play 104 + Part 150 + Target 166 + Shape 150 + Grid 132 +
+   Value 150 + Hear = 852 before Hear, so Hear keeps its 290 at 1280. */
+.secPart { width: 150px; }
+.secTarget { width: 166px; }
+.secJoin { width: 150px; }
+.secGrid { width: 132px; }
+.secValue { width: 150px; }
+.secPart .chips, .secTarget .chips, .secJoin .chips, .secGrid .chips { flex-wrap: wrap; gap: 4px; }
+.secValue .knob { align-self: center; }
+.secHear[data-lane='true'] .stats { max-width: none; }

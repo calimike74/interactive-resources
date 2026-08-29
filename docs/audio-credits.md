@@ -32,3 +32,11 @@ The Edit bench (2026-08-28) cuts two of the files above: `vocal-phrase.mp3` (the
 | `kites-vocal.mp3`, `kites-bvox.mp3`, `kites-drums.mp3`, `kites-bass.mp3`, `kites-synth.mp3` | Five time-aligned stems, bars 22 to 25 (9.6 s at 100 bpm) of "Paper Kites", indie pop with a female vocal | Generated with Suno on Mike's account for the C3 Aural Trainer, July 2026 (`_sandbox/c3-aural-trainer/SUNO-BRIEF.md`); stems exported from Suno (Lead Vocals, Backing Vocals, Drums, Bass, Synth + Keyboard summed), cut on the drums' beat grid and sealed with 4 ms edge fades on 29 Aug 2026 (scratchpad `balance/cut.py`); one pack-wide gain, so the stems at unity are the track as released | Balance Desk |
 
 Suno's paid plans grant the subscriber commercial-use rights to their generations, which is what the paid site needs. The Balance Desk's "supplied" trims are applied in the bench, not in the files: the files are the release. Mike's next Suno track lands here as a second song.
+
+## lane/
+
+| File | What | Origin | First used |
+|---|---|---|---|
+| `groove-drums.mp3`, `groove-bass.mp3`, `groove-guitar.mp3`, `groove-keys.mp3` | Four time-aligned stems, bars 18 to 21 (9.32 s at 103 bpm) of "Dry Groove", an instrumental funk groove | Generated with Suno on Mike's account for the C3 Aural Trainer, July 2026 (`_sandbox/c3-aural-trainer/SUNO-BRIEF.md`); stems exported from Suno (Drums + Percussion summed, Bass, Guitar, Keyboard), cut on the drums' beat grid and sealed with 4 ms edge fades on 29 Aug 2026 (scratchpad `auto/cut.py`); one pack-wide clip guard, no other processing | Automation Lane |
+
+The second Suno song on the estate, untouched until the Automation Lane needed a loop whose parts all play in every bar. The bench applies its own fixed balance in the graph (`SONG.mixTrim`: the guitar and keys sit 15 dB under the rhythm section in the release, and a lane on a part you cannot hear teaches nothing); the files are the raw stems. The vocal stems of the same generation (a single phrase and a backing-vocal tail) are not used.
