@@ -1087,3 +1087,30 @@
 .secCut .chips, .secFade .chips { flex-wrap: wrap; gap: 4px; }
 .stepSvg { position: absolute; inset: 14px 8px 6px; width: calc(100% - 16px); height: calc(100% - 20px); overflow: visible; }
 .stepSvg line, .stepSvg polyline { fill: none; vector-effect: non-scaling-stroke; }
+
+/* ---- the Balance Desk (1.13), 29 Aug 2026: five channel strips ----
+   A strip is a fader with the part's colour on its cap, a live meter beside
+   it, and the pan and the send as small dials. The fader is the instrument;
+   the block on the stage is the same number. */
+.secStrip { width: 150px; padding: 12px 12px 10px; gap: 6px; }
+.secStrip .secHead { align-items: center; }
+.stripName { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+.stripName i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--stem); flex: none; }
+.stripBody { display: flex; gap: 8px; align-items: stretch; height: 118px; }
+.fader { position: relative; width: 52px; height: 100%; cursor: ns-resize; touch-action: none; outline: none; user-select: none; flex: none; }
+.fader::before { content: ''; position: absolute; left: 14px; top: 7px; bottom: 7px; width: 4px; border-radius: 2px; background: linear-gradient(180deg, var(--line-2), var(--line)); box-shadow: inset 0 1px 1px rgba(26, 26, 46, 0.12); }
+.fader i { position: absolute; left: 2px; width: 28px; height: 14px; border-radius: 3px; background: linear-gradient(180deg, #34344c, var(--ink)); top: calc((1 - var(--pct)) * (100% - 14px)); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18); }
+.fader i::after { content: ''; position: absolute; left: 5px; right: 5px; top: 6px; height: 2px; background: var(--stem, #fff); border-radius: 1px; }
+.fader:focus-visible i { outline: 2px solid var(--accent); outline-offset: 1px; }
+.faderScale { position: absolute; left: 34px; top: 7px; bottom: 7px; width: 18px; font-family: var(--mono); font-size: 8.5px; line-height: 1; color: var(--ink-3); pointer-events: none; }
+.faderScale b { position: absolute; left: 0; transform: translateY(-50%); font-weight: 500; }
+.faderScale b[data-unity='true'] { color: var(--ink); font-weight: 700; }
+.meter { width: 6px; height: 100%; border-radius: 3px; background: var(--line); position: relative; overflow: hidden; flex: none; margin: 4px 0; height: calc(100% - 8px); }
+.meter i { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--fill, 0) * 100%); background: var(--stem); transition: height 60ms linear; }
+.stripDials { display: flex; flex-direction: column; justify-content: space-between; align-items: center; gap: 2px; flex: 1 1 auto; }
+.stripDial { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.stripDial small { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.stripDial .readout { font-family: var(--mono); font-size: 10px; color: var(--ink-2); }
+.secHear[data-desk='true'] .stats { max-width: none; }
+
+.secPlay .hold { white-space: normal; line-height: 1.15; text-align: center; }

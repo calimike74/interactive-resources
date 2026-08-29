@@ -57,6 +57,7 @@ import DelayBench from '@/components/resources/DelayBench';
 import EqBench from '@/components/resources/EqBench';
 import DynamicsBench from '@/components/resources/DynamicsBench';
 import EditBench from '@/components/resources/EditBench';
+import BalanceDesk from '@/components/resources/BalanceDesk';
 import BPMDelayCalculator from '@/components/resources/BPMDelayCalculator';
 import DigitalAudioAssessment from '@/components/resources/DigitalAudioAssessment';
 import PitchSynthMonitorsAssessment from '@/components/resources/PitchSynthMonitorsAssessment';
@@ -114,6 +115,7 @@ const resourceComponents = {
     'EqBench': EqBench,
     'DynamicsBench': DynamicsBench,
     'EditBench': EditBench,
+    'BalanceDesk': BalanceDesk,
     'BPMDelayCalculator': BPMDelayCalculator,
     'DigitalAudioAssessment': DigitalAudioAssessment,
     'PitchSynthMonitorsAssessment': PitchSynthMonitorsAssessment,

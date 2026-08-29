@@ -81,7 +81,7 @@ export function DepthToggle({ depth, onChange }) {
 
 // The play column at the left of the console band: Play / Stop, hold for
 // dry, the output level.
-export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, teach, holdTitle = "Hold to hear the source with no delay", holdWhy = "mutes the repeats while you hold it, so you can hear what the delay is adding" }) {
+export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, teach, holdTitle = "Hold to hear the source with no delay", holdWhy = "mutes the repeats while you hold it, so you can hear what the delay is adding", holdLabel = "hold: dry", playWhy = "runs the pattern round two bars" }) {
     const [held, setHeld] = useState(false);
     function down(e) {
         e.preventDefault();
@@ -122,7 +122,7 @@ export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, t
                 onKeyUp={(e) => { if (e.key === ' ' || e.key === 'Enter') up(); }}
                 title={holdTitle}
             >
-                hold: dry
+                {holdLabel}
             </button>
             <div className={styles.levelWrap}>
                 <span className={styles.eyebrow}>Level</span>
@@ -138,7 +138,7 @@ export function PlayColumn({ playing, onTogglePlay, onHoldDry, level, onLevel, t
                 />
             </div>
             <div className={styles.why}>
-                <b>Play</b> runs the pattern round two bars. <b>Hold: dry</b> {holdWhy}. The space bar plays and stops.
+                <b>Play</b> {playWhy}. <b>{holdLabel.charAt(0).toUpperCase() + holdLabel.slice(1)}</b> {holdWhy}. The space bar plays and stops.
             </div>
         </div>
     );

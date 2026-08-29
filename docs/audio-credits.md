@@ -24,3 +24,11 @@ The Dynamics bench (2026-08-28) plays the same four sources as the Delay and EQ 
 ## edit/ (no folder: the Edit bench reads `delay/`)
 
 The Edit bench (2026-08-28) cuts two of the files above: `vocal-phrase.mp3` (the splice) and `funk-openhat.mp3` (the trim, for its ringing tail). Both are stand-ins until Mike records a sung phrase and a cymbal for it; when they arrive they go in an `edit/` folder and this table names them.
+
+## balance/
+
+| File | What | Origin | First used |
+|---|---|---|---|
+| `kites-vocal.mp3`, `kites-bvox.mp3`, `kites-drums.mp3`, `kites-bass.mp3`, `kites-synth.mp3` | Five time-aligned stems, bars 22 to 25 (9.6 s at 100 bpm) of "Paper Kites", indie pop with a female vocal | Generated with Suno on Mike's account for the C3 Aural Trainer, July 2026 (`_sandbox/c3-aural-trainer/SUNO-BRIEF.md`); stems exported from Suno (Lead Vocals, Backing Vocals, Drums, Bass, Synth + Keyboard summed), cut on the drums' beat grid and sealed with 4 ms edge fades on 29 Aug 2026 (scratchpad `balance/cut.py`); one pack-wide gain, so the stems at unity are the track as released | Balance Desk |
+
+Suno's paid plans grant the subscriber commercial-use rights to their generations, which is what the paid site needs. The Balance Desk's "supplied" trims are applied in the bench, not in the files: the files are the release. Mike's next Suno track lands here as a second song.

@@ -87,6 +87,12 @@ const BENCHES = {
         judgeLands: { selector: '[aria-label="Cut"]', attr: 'aria-valuenow', value: '1000', says: 'sets the cut at 1.000 s' },
         stages: { core: 'join', alevel: 'drawing', extension: 'machine' },
     },
+    'balance-desk': {
+        faders: { stem: 'Vocal' },
+        presets: { first: 'Drums too quiet', second: 'Synth over the vocal', judge: 'The reference' },
+        judgeLands: { selector: '[aria-label="Vocal fader"]', attr: 'aria-valuenow', value: '9', says: 'lands the vocal fader at +9 dB, undoing the trim' },
+        stages: { core: 'plan', alevel: 'spectrum', extension: 'ladder' },
+    },
     'eq-bench': {
         curve: true,
         bells: { group: 'Bells', chip: '3', adds: 2, band: 'mid3' },
@@ -459,6 +465,37 @@ for (const url of urls) {
                 else if (Math.abs(Number(dialAfter) - Number(after.cut)) > 0.01) fail(url, size, `the dial did not follow the line (${dialAfter} vs ${after.cut})`);
                 else ok(`dragging the join moves the dial (${before.cut} ms -> ${after.cut} ms)`);
             } else fail(url, size, 'the stage does not expose the join handle for the drag test');
+        }
+
+        // 20. (Balance) the block on the plan is the fader: the stage reports the
+        // vocal's fader, and dragging its block up moves the strip's fader
+        if (fx.faders) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const faderSel = `[aria-label="${fx.faders.stem} fader"]`;
+            const readF = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { fader: c?.dataset.fader || '', handle: c?.dataset.handle || '', band: c?.dataset.band || '' }; }, canvasSel);
+            const stripF = () => page.evaluate((sel) => document.querySelector(sel)?.getAttribute('aria-valuenow'), faderSel);
+            await page.waitForTimeout(200);
+            const before = await readF();
+            const strip = await stripF();
+            if (!before.fader) fail(url, size, 'the stage does not report the fader (data-fader missing)');
+            else if (Math.abs(Number(before.fader) - Number(strip)) > 0.01) fail(url, size, `the stage's fader (${before.fader}) is not the strip's (${strip})`);
+            else ok(`the stage reports the ${fx.faders.stem.toLowerCase()} fader and it matches the strip (${before.fader} dB)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx, box.y + hy - 15, { steps: 6 });
+                await page.mouse.move(box.x + hx, box.y + hy - 30, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(200);
+                const after = await readF();
+                const stripAfter = await stripF();
+                if (!(Number(after.fader) > Number(before.fader))) fail(url, size, `dragging the block up did not raise the fader (${before.fader} -> ${after.fader})`);
+                else if (Math.abs(Number(stripAfter) - Number(after.fader)) > 0.01) fail(url, size, `the strip did not follow the block (${stripAfter} vs ${after.fader})`);
+                else ok(`dragging the block raises the fader and the strip follows (${before.fader} dB -> ${after.fader} dB)`);
+            } else fail(url, size, 'the stage does not expose the block handle for the drag test');
+            if (!before.band) fail(url, size, 'the stage does not report the line the mix sits on (data-band missing)');
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

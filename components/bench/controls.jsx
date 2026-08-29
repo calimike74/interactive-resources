@@ -93,6 +93,92 @@ export function Dial({
     );
 }
 
+// A channel fader: vertical travel, dragged up for louder, in dB. `pixels`
+// is how far a pointer travels for the whole range (Shift slows it four
+// times). The Balance Desk's instrument (29 Aug 2026); the cap carries the
+// part's colour so the strip, the stage and the legend read as one.
+export function Fader({
+    label,
+    value,
+    min,
+    max,
+    step = 0.5,
+    format,
+    onChange,
+    disabled = false,
+    title,
+    colour,
+    pixels = 110,
+    scale = [],
+}) {
+    const drag = useRef(null);
+    const pct = (value - min) / (max - min);
+    const shown = format ? format(value) : `${value}`;
+    const snap = (v) => clamp(Math.round(v / step) * step, min, max);
+
+    function onPointerDown(e) {
+        if (disabled) return;
+        e.preventDefault();
+        e.currentTarget.setPointerCapture(e.pointerId);
+        e.currentTarget.focus({ preventScroll: true });
+        drag.current = { y: e.clientY, start: value };
+    }
+    function onPointerMove(e) {
+        if (!drag.current) return;
+        const per = (max - min) / pixels / (e.shiftKey ? 4 : 1);
+        onChange(snap(drag.current.start + (drag.current.y - e.clientY) * per));
+    }
+    function onPointerUp(e) {
+        if (!drag.current) return;
+        drag.current = null;
+        try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* already gone */ }
+    }
+    function onKeyDown(e) {
+        if (disabled) return;
+        const big = (max - min) / 10;
+        const fine = e.shiftKey ? step * 10 : step;
+        let next = null;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') next = value + fine;
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') next = value - fine;
+        else if (e.key === 'PageUp') next = value + big;
+        else if (e.key === 'PageDown') next = value - big;
+        else if (e.key === 'Home') next = min;
+        else if (e.key === 'End') next = max;
+        if (next == null) return;
+        e.preventDefault();
+        onChange(snap(next));
+    }
+
+    return (
+        <div
+            className={styles.fader}
+            role="slider"
+            aria-orientation="vertical"
+            tabIndex={disabled ? -1 : 0}
+            aria-label={label}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-valuenow={value}
+            aria-valuetext={shown}
+            aria-disabled={disabled || undefined}
+            title={title}
+            style={{ '--pct': pct, '--stem': colour }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            onKeyDown={onKeyDown}
+        >
+            <span className={styles.faderScale} aria-hidden="true">
+                {scale.map((v) => (
+                    <b key={v} style={{ top: `${(1 - (v - min) / (max - min)) * 100}%` }} data-unity={v === 0 || undefined}>{v > 0 ? `+${v}` : v}</b>
+                ))}
+            </span>
+            <i aria-hidden="true" />
+        </div>
+    );
+}
+
 // A number you drag (tempo). Same keys as the dial.
 export function DragNumber({ label, value, min, max, step = 1, unit = '', onChange, pixels = 4, title }) {
     const drag = useRef(null);
