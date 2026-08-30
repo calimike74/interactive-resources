@@ -749,7 +749,7 @@ export default function Oscilloscope({ back }) {
                 <Why>The time base: how many milliseconds each of the five divisions is. The paper prints one figure at 1 ms a division. The wave never changes when you change this; only how much of it you see. The slow settings are for the LFO.</Why>
             </div>
 
-            <div className={`${styles.sec} ${styles.secLevel}`} data-teach={teach || undefined}>
+            <div className={`${styles.sec} ${styles.secDb}`} data-teach={teach || undefined}>
                 <div className={styles.secHead}><span className={styles.eyebrow}>Level</span><span className={styles.value}>{state.level > 0 ? '+' : ''}{state.level}<small>dB</small></span></div>
                 <div className={styles.knob}>
                     <Dial label="Level" value={state.level} min={LEVEL_MIN} max={LEVEL_MAX} step={0.5} unit="dB" pointer="var(--gold-bright)" pixels={160} onChange={chooseLevel} title="The height of the wave, in dB: +6 is twice, −6 is half" />

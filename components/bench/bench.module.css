@@ -1139,11 +1139,13 @@
 .secNote .knob { align-self: center; }
 .secHear[data-roll='true'] .stats { max-width: none; }
 
-/* ---- the Oscilloscope (30 Aug 2026): Play 104 + Source 200 + Pitch 190 + Screen 170 + Level 120 + Hear = 1278 at 1280 ---- */
+/* ---- the Oscilloscope (30 Aug 2026): Play 104 + Source 200 + Pitch 190 + Screen 170 + Level 120 + Hear = 1278 at 1280.
+   The level section is .secDb, not .secLevel: the Dynamics bench owns .secLevel (198 px) above, and a second rule
+   with the same name shrank it on prod for twenty minutes on 30 Aug. ---- */
 .secSrc { width: 200px; }
 .secPitch { width: 190px; }
 .secScreen { width: 170px; }
-.secLevel { width: 120px; padding: 14px 12px; }
+.secDb { width: 120px; padding: 14px 12px; }
 .secSrc .chips, .secPitch .chips, .secScreen .chips { flex-wrap: wrap; gap: 4px; }
-.secLevel .knob { align-self: center; }
+.secDb .knob { align-self: center; }
 .secHear[data-scope='true'] .stats { max-width: none; }
