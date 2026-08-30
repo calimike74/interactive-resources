@@ -93,6 +93,12 @@ const BENCHES = {
         judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'placement', says: 'loads the 2020 fault: the step landed off the barline (data-verdict = placement)' },
         stages: { core: 'lane', alevel: 'paper', extension: 'machine' },
     },
+    'piano-roll': {
+        roll: true,
+        presets: { first: 'Hi-hat roll', second: 'Bend range', judge: 'Wrong sounds' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'wrong-sounds', says: 'loads the 2019 file with its notes on the wrong sounds (data-verdict = wrong-sounds)' },
+        stages: { core: 'roll', alevel: 'list', extension: 'wire' },
+    },
     'balance-desk': {
         faders: { stem: 'Vocal' },
         presets: { first: 'Drums too quiet', second: 'Synth over the vocal', judge: 'The reference' },
@@ -528,6 +534,46 @@ for (const url of urls) {
                 else ok(`dragging the point raises it on the lane (${before.point} -> ${after.point})`);
             } else fail(url, size, 'the stage does not expose the point handle for the drag test');
             if (!before.verdict) fail(url, size, 'the stage does not report the scheme\'s verdict (data-verdict missing)');
+        }
+
+        // 22. (Piano Roll) the note on the roll is the control: the stage
+        // reports the selected note's number and the console's Note readout
+        // carries the same number; dragging the block up a row raises both
+        if (fx.roll) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readN = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { note: c?.dataset.note || '', handle: c?.dataset.handle || '', roll: c?.dataset.roll || '', verdict: c?.dataset.verdict || '', vel: c?.dataset.vel || '' }; }, canvasSel);
+            const consoleN = () => page.evaluate(() => document.querySelector('[data-note-number]')?.getAttribute('data-note-number') || '');
+            await page.waitForTimeout(200);
+            const before = await readN();
+            const cN = await consoleN();
+            if (!before.note) fail(url, size, 'the stage does not report the selected note (data-note missing)');
+            else if (before.note !== cN) fail(url, size, `the stage's note (${before.note}) is not the console's (${cN})`);
+            else ok(`the stage reports the selected note and the console agrees (${before.note})`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx, box.y + hy - 14, { steps: 6 });
+                await page.mouse.move(box.x + hx, box.y + hy - 28, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(200);
+                const after = await readN();
+                const cAfter = await consoleN();
+                if (!(Number(after.note) > Number(before.note))) fail(url, size, `dragging the note up did not raise it (${before.note} -> ${after.note})`);
+                else if (after.note !== cAfter) fail(url, size, `the console did not follow the note (${cAfter} vs ${after.note})`);
+                else if (after.roll === before.roll) fail(url, size, 'the roll did not change with the note');
+                else ok(`dragging the note up raises it on the roll and the console follows (${before.note} -> ${after.note})`);
+            } else fail(url, size, 'the stage does not expose the note handle for the drag test');
+            if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
+            // the velocity dial is the lane's bar: set the dial, the stage reports the value
+            const velBefore = before.vel;
+            await page.locator('[aria-label="Velocity"]').focus();
+            await page.keyboard.press('End');
+            await page.waitForTimeout(150);
+            const velAfter = (await readN()).vel;
+            if (velAfter !== '127') fail(url, size, `the Velocity dial at End did not land the note at 127 on the stage (${velBefore} -> ${velAfter})`);
+            else ok('the Velocity dial writes the note\'s velocity the stage draws');
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

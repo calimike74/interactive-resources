@@ -1126,3 +1126,15 @@
 .secPart .chips, .secTarget .chips, .secJoin .chips, .secGrid .chips { flex-wrap: wrap; gap: 4px; }
 .secValue .knob { align-self: center; }
 .secHear[data-lane='true'] .stats { max-width: none; }
+
+/* ---- the Piano Roll (30 Aug 2026): Play 104 + Part 150 + Quantise 200 + Note 150 + Sound 190 + Hear = 1278 at 1280 ---- */
+.secKit { width: 150px; }
+.secQuant { width: 200px; }
+.secNote { width: 150px; }
+.secSound { width: 190px; }
+.secKit .chips, .secSound .chips { flex-wrap: wrap; gap: 4px; }
+.secQuant .chips { flex-wrap: wrap; gap: 4px; max-width: 118px; }
+.quantRow { display: flex; align-items: flex-start; gap: 8px; }
+.quantRow .knob { align-self: flex-start; margin-top: 2px; }
+.secNote .knob { align-self: center; }
+.secHear[data-roll='true'] .stats { max-width: none; }
