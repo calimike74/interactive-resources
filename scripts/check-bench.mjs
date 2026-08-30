@@ -99,6 +99,12 @@ const BENCHES = {
         judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'wrong-sounds', says: 'loads the 2019 file with its notes on the wrong sounds (data-verdict = wrong-sounds)' },
         stages: { core: 'roll', alevel: 'list', extension: 'wire' },
     },
+    oscilloscope: {
+        bracket: true,
+        presets: { first: 'Read the period', second: 'Louder', judge: '294 Hz, an octave up' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-hz', value: '294', says: 'loads the 2019 sine at 294 Hz (data-hz = 294)' },
+        stages: { core: 'scope', alevel: 'paper', extension: 'digital' },
+    },
     'balance-desk': {
         faders: { stem: 'Vocal' },
         presets: { first: 'Drums too quiet', second: 'Synth over the vocal', judge: 'The reference' },
@@ -574,6 +580,39 @@ for (const url of urls) {
             const velAfter = (await readN()).vel;
             if (velAfter !== '127') fail(url, size, `the Velocity dial at End did not land the note at 127 on the stage (${velBefore} -> ${velAfter})`);
             else ok('the Velocity dial writes the note\'s velocity the stage draws');
+        }
+
+        // 23. (Oscilloscope) the bracket on the screen is the control: the stage
+        // reports one cycle's period and the console's readout carries the same
+        // number; dragging the bracket's end to the right stretches the wave, so
+        // the period grows and the frequency falls on both
+        if (fx.bracket) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readB = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { period: c?.dataset.period || '', hz: c?.dataset.hz || '', handle: c?.dataset.handle || '', verdict: c?.dataset.verdict || '' }; }, canvasSel);
+            const consoleB = () => page.evaluate(() => ({ period: document.querySelector('[data-period-ms]')?.getAttribute('data-period-ms') || '', hz: document.querySelector('[data-hz]')?.getAttribute('data-hz') || '' }));
+            await page.waitForTimeout(400);
+            const before = await readB();
+            const cB = await consoleB();
+            if (!before.period) fail(url, size, 'the stage does not report the period (data-period missing)');
+            else if (before.period !== cB.period || before.hz !== cB.hz) fail(url, size, `the stage's reading (${before.period} ms, ${before.hz} Hz) is not the console's (${cB.period} ms, ${cB.hz} Hz)`);
+            else ok(`the stage reports one cycle and the console agrees (${before.period} ms, ${before.hz} Hz)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx + 30, box.y + hy, { steps: 6 });
+                await page.mouse.move(box.x + hx + 60, box.y + hy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(250);
+                const after = await readB();
+                const cA = await consoleB();
+                if (!(Number(after.period) > Number(before.period))) fail(url, size, `dragging the bracket right did not stretch the period (${before.period} -> ${after.period})`);
+                else if (!(Number(after.hz) < Number(before.hz))) fail(url, size, `the frequency did not fall with the stretch (${before.hz} -> ${after.hz})`);
+                else if (after.period !== cA.period) fail(url, size, `the console did not follow the bracket (${cA.period} vs ${after.period})`);
+                else ok(`dragging the bracket stretches the wave and the console follows (${before.period} -> ${after.period} ms, ${before.hz} -> ${after.hz} Hz)`);
+            } else fail(url, size, 'the stage does not expose the bracket handle for the drag test (is the bench playing?)');
+            if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

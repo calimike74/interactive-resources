@@ -60,6 +60,7 @@ import EditBench from '@/components/resources/EditBench';
 import BalanceDesk from '@/components/resources/BalanceDesk';
 import AutomationLane from '@/components/resources/AutomationLane';
 import PianoRoll from '@/components/resources/PianoRoll';
+import Oscilloscope from '@/components/resources/Oscilloscope';
 import BPMDelayCalculator from '@/components/resources/BPMDelayCalculator';
 import DigitalAudioAssessment from '@/components/resources/DigitalAudioAssessment';
 import PitchSynthMonitorsAssessment from '@/components/resources/PitchSynthMonitorsAssessment';
@@ -120,6 +121,7 @@ const resourceComponents = {
     'BalanceDesk': BalanceDesk,
     'AutomationLane': AutomationLane,
     'PianoRoll': PianoRoll,
+    'Oscilloscope': Oscilloscope,
     'BPMDelayCalculator': BPMDelayCalculator,
     'DigitalAudioAssessment': DigitalAudioAssessment,
     'PitchSynthMonitorsAssessment': PitchSynthMonitorsAssessment,

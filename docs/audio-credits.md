@@ -49,3 +49,11 @@ The second Suno song on the estate, untouched until the Automation Lane needed a
 | `electronic-kick.mp3`, `electronic-snare.mp3`, `electronic-chat.mp3`, `electronic-ohat.mp3`, `electronic-ride.mp3`, `electronic-crash.mp3`, `electronic-htom.mp3`, `electronic-ltom.mp3` | 1980s drum-machine one-shots, the same eight sounds | Same pipeline and date; the low tom took a second batch | Piano Roll |
 
 A new bench brings its own audio (Mike, 28 Aug 2026), so nothing from `delay/` is reused here. The bass part is not a file: it is the papers' own square-wave synth (2020, 2023 and 2026 Q2: "use a square wave", "match the pitch bend range", "copy the velocity sensitive filtering"), built from an oscillator in the bench with `synthesis` declared, the one place the Bench Standard admits one.
+
+## scope/
+
+| File | What | Origin | First used |
+|---|---|---|---|
+| `cello.mp3`, `bass.mp3`, `voice.mp3` | Three sustained notes, sealed into seamless loops: a bowed cello (173.8 Hz, F3), a plucked electric bass (103.8 Hz, G#2), a sung vowel (260 Hz, C4) | Generated with ElevenLabs sound generation on Mike's account, 30 Aug 2026 (scratchpad `scope/gen.mjs`); pitch measured per 100 ms frame and the take with the steadiest pitch kept (`scope/qc.py`); cut at rising zero crossings to the steady window, the tail crossfaded into the head over 60 ms (equal power), normalised to −3 dBFS (`scope/loop.py`) | Oscilloscope |
+
+The four waveforms (sine, square, saw, triangle) are oscillators, the paper's own object for this topic ("identify the waveform", "draw a saw wave one octave lower"), built in the bench with `synthesis` declared. Nothing from the other folders is reused.
