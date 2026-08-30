@@ -191,6 +191,10 @@
     color: var(--stage-ink-2);
     white-space: nowrap;
 }
+/* A live readout inside the setting (the bar, the position, the period)
+   sits in a slot reserved at its widest (--read, in ch of the mono face),
+   so its digits never move the prose beside it (law 24, 30 Aug 2026). */
+.stageNote b span { display: inline-block; min-width: var(--read, 0); }
 .stageNote span {
     font-size: 13.5px;
     color: var(--stage-ink);

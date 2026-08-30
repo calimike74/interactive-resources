@@ -34,6 +34,9 @@
 //  19. (Edit bench) the cut line on the stage is the Cut dial: the canvas
 //      reports the cut (data-cut) and it equals the dial; dragging the join's
 //      handle to the right moves the cut later on both
+//  24. (every bench) the stage note holds still and reads whole: while the
+//      bench plays, at every level, the prose beside the setting keeps its
+//      left edge (a live readout sits in a reserved slot) and is not clipped
 //
 //  Laws 13 to 15 read the bench's fixtures from BENCHES below, keyed by the
 //  URL's last path segment; a bench with no entry skips them.
@@ -630,6 +633,35 @@ for (const url of urls) {
                 else if (!after.band.startsWith(`${fx.bells.band}:`)) fail(url, size, `the dials did not go to the newest bell (data-band="${after.band}")`);
                 else ok(`${fx.bells.chip} bells: ${before.dots} dots became ${after.dots}, dials on ${fx.bells.band}`);
             }
+        }
+
+        // 24. the stage note holds still and reads whole (30 Aug 2026, Mike:
+        // "the top wording is moving slightly"): the live readout's slot is
+        // reserved at its widest, so the prose beside it never moves while
+        // the bench plays, and at every level the prose fits the line
+        {
+            if (!(await page.locator('[aria-label="Stop"]').count())) { await page.keyboard.press('Space'); await page.waitForTimeout(300); }
+            const levels = (await depthBtn('Core').count()) ? ['Core', 'A-level', 'Extension'] : [null];
+            const readNote = () => page.evaluate(() => {
+                const note = document.querySelector('[aria-label="Stage"] [class*="stageNote"]');
+                const prose = note ? [...note.children].find((c) => c.tagName === 'SPAN') : null;
+                return prose ? { left: Math.round(prose.getBoundingClientRect().left * 10) / 10, over: prose.scrollWidth - prose.clientWidth } : null;
+            });
+            for (const lv of levels) {
+                if (lv) { await depthBtn(lv).click(); await page.waitForTimeout(250); }
+                const lefts = new Set(); let over = 0; let seen = false;
+                for (let i = 0; i < 6; i += 1) {
+                    const r = await readNote();
+                    if (r) { seen = true; lefts.add(r.left); over = Math.max(over, r.over); }
+                    await page.waitForTimeout(220);
+                }
+                const name = lv ? lv.toLowerCase() : 'the stage';
+                if (!seen) { fail(url, size, 'no stage note to read'); break; }
+                if (lefts.size > 1) fail(url, size, `the stage note moves while the bench plays at ${name} (left edge at ${[...lefts].join(', ')})`);
+                else if (over > 0) fail(url, size, `the stage note is clipped at ${name} by ${over} px`);
+                else ok(`the stage note holds still and reads whole at ${name}`);
+            }
+            if (levels[0]) await depthBtn('A-level').click();
         }
 
         if (errors.length) fail(url, size, `page errors: ${errors.join(' | ').slice(0, 200)}`);

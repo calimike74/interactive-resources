@@ -54,3 +54,7 @@ Two analysers in front of the destination: a short one (21 ms) for level, a long
 - **The file is a size, not a sound.** No bit-crusher or downsampler: the sample rate and bit depth change the strip and the dots, and the line says so. Hearing them is 2.4's bench.
 - **The Octave Period Trainer** stays on the resources site and in the 2.5 topic band; the member rail now leads with the Oscilloscope, then Tape & Heads, then the Waveform Drawing Explorer.
 - **The pitch is a constant per source**, measured once; the bench does not track pitch live, so a stretched recording's readout is the arithmetic of the stretch, which the harness confirms within a hertz.
+
+## First look (Mike, 30 Aug 2026, evening)
+
+"You have the text that says 'drag the...' then stops." The Core line (175 characters) was clipped by 424 px at 1280 beside the setting's readout. Fixed the same evening: "the screen ·" dropped from the setting, the readout in a slot reserved at 20ch (31ch with the Hz), the Core and A-level lines cut to 107 characters, and the draw loop now reads the level from `depthRef` (its `maths` was the render's, one closure old, so Core still showed the Hz). Law 24 in `check-bench` holds every bench to it. Otherwise: "this is great".

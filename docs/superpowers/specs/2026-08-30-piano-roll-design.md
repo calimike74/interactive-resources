@@ -55,3 +55,7 @@ An analyser in front of the destination, every buffer source's start and buffer 
 - **The bend lane is read-only.** Its points are the file's; the range is the control. Drawing a bend is the Automation Lane's job and the Connections tab says so.
 - **Swing** is named in the Reference and not built; strength is the percentage quantise the 2025 scheme names.
 - **The Learn chapters** are untouched; the Learn lesson's outro pointer moved from the retired page's id to `piano-roll` so it resolves.
+
+## First look (Mike, 30 Aug 2026, evening)
+
+"The top wording is moving slightly, I think due to the changing of the beats bar div." Confirmed by measurement: the position readout ("1 3 1 89") inside the stage note's setting changed width with its digits and shuffled the prose beside it; the Core and A-level lines were also clipped at 1280 (296 and 336 px). Fixed the same evening: the readout sits in a slot reserved at 12ch (25ch with the bend), the redundant "bar N of 4" went (the position's first number is the bar), the three lines were cut to fit, and law 24 in `check-bench` now holds every bench to it. See the Bench Standard's addendum of 30 Aug, evening.

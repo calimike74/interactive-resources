@@ -49,8 +49,8 @@ const TITLE = 'Edit bench';
 const FILES = { vocal: ALL_FILES.vocal, 'funk-openhat': ALL_FILES['funk-openhat'] };
 // What the stage is, for the depth: three levels, three pictures.
 const ORIENTS = {
-    core: 'Gold is the take up to the cut, blue is what follows it, zoomed until the cycles show. The coral bar at the line is the jump between them: the click. Drag the line, or the marker above.',
-    alevel: "The join above; the paper's drawing below it on the same time axis: fade out and fade in as gain, the crossfade bracketed. Drag inside the drawing to read both gains off.",
+    core: 'Gold is the take up to the cut, blue what follows, zoomed to the cycles. The coral bar at the line is the jump between them: the click. Drag the line or the marker above.',
+    alevel: "The join above; the paper's drawing below on the same time axis: fade out and fade in as gain, the crossfade bracketed. Drag inside the drawing to read both gains.",
     extension: 'Dotted white is the level through the crossfade, the two powers added: linear dips 3 dB in the middle, equal power holds. The ticks on the centre line are zero crossings.',
 };
 const DEFAULT_DUR = { vocal: 7360, cymbal: 1500 };

@@ -33,8 +33,8 @@ const CODE = '2.5 Numeracy';
 const TITLE = 'Oscilloscope';
 const FILES = Object.fromEntries(SOURCE_IDS.filter((id) => SOURCES[id].kind === 'file').map((id) => [id, SOURCES[id].file]));
 const ORIENTS = {
-    core: 'The sound drawn against time in milliseconds, five divisions across, as the paper prints its figures. One cycle is bracketed: drag the bracket\'s end to stretch or squeeze the wave.',
-    alevel: 'Beside the screen, the paper\'s ladder: the period in ms, in s, the frequency it gives, the pitch that sits on. One mark a rung.',
+    core: 'The sound against time in ms, as the paper prints it. Drag the bracket\'s end to stretch or squeeze the wave.',
+    alevel: 'Beside the screen, the paper\'s ladder: the period in ms and in s, the frequency, the pitch. One mark a rung.',
     extension: 'The trace as the samples a converter keeps, dots at the file\'s sample rate; beneath it the file as bytes a second.',
 };
 const OSC_GAIN = { sine: 0.35, triangle: 0.42, square: 0.25, sawtooth: 0.42 }; // measured 30 Aug: every waveform within a decibel of the recordings
@@ -483,7 +483,8 @@ export default function Oscilloscope({ back }) {
             g2.fillText(label, S.x0, g.settingY);
 
             if (readRef.current) {
-                const txt = live ? ` · one cycle ${fmtMs(heardMs)}${maths ? ` · ${fmtHz(heardHz)}` : ''}` : '';
+                // the setting's period is known at rest too, so the slot always reads
+                const txt = ` · one cycle ${fmtMs(heardMs)}${d !== 'core' ? ` · ${fmtHz(heardHz)}` : ''}`; // d, not the render's maths: the draw closure is older than the level
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
 
@@ -813,7 +814,7 @@ export default function Oscilloscope({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>the screen · {DIVS} divisions · {TIME_BASES[state.timeBase].span} ms across<span ref={readRef} /></b>
+                <b>{DIVS} divisions · {TIME_BASES[state.timeBase].span} ms across<span ref={readRef} style={{ '--read': maths ? '31ch' : '20ch' }} /></b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">

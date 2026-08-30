@@ -38,9 +38,9 @@ const TITLE = 'Piano Roll';
 const AUDIO = '/bench-audio/midi';
 const FILES = Object.fromEntries(KIT_IDS.flatMap((kit) => SOUND_IDS.map((id) => [`${kit}-${id}`, `${AUDIO}/${kit}-${id}.mp3`])));
 const ORIENTS = {
-    core: 'The piano roll with its velocity lane, as your DAW draws them. Drag a note in time or onto another row; drag its velocity bar; click an empty cell to add a note; double-click one to remove it.',
-    alevel: 'The list editor beside the roll: every note as a row, its position in bar, beat, division and tick, its velocity in decimal and in binary. Where the file fails the paper\'s check, the fault is marked in coral.',
-    extension: 'Under the roll, the wire: the selected note\'s three bytes, and the last message sent as the loop plays. The first bit of every byte is the flag.',
+    core: 'The piano roll and its velocity lane. Drag a note in time or onto another row; drag its velocity bar; click an empty cell to add a note.',
+    alevel: 'The list editor beside the roll: each note a row, its position in bar, beat, division and tick, and its velocity in binary. Faults in coral.',
+    extension: 'Under the roll, the wire: the selected note\'s three bytes, and the last message sent as it plays. The first bit of every byte is the flag.',
 };
 const ROLL_TOOLS = [{ id: 'reset', label: 'Back to the file' }, { id: 'clear2', label: 'Clear bar 2' }];
 const velGain = (vel) => (vel / 127) ** 1.6;
@@ -242,7 +242,6 @@ export default function PianoRoll({ back }) {
     const legendRef = useRef(null);
     const legendWRef = useRef(0);
     const frameRef = useRef(0);
-    const barRef = useRef(null);
     const readRef = useRef(null);
     const stageOf = (d) => (d === 'core' ? 'roll' : d === 'alevel' ? 'list' : 'wire');
     const rowsOf = (s) => (s.part === 'drums' ? DRUM_NOTES : Array.from({ length: BASS_RANGE[1] - BASS_RANGE[0] + 1 }, (_, i) => BASS_RANGE[0] + i));
@@ -561,7 +560,9 @@ export default function PianoRoll({ back }) {
                 }
             }
             if (readRef.current) {
-                const txt = frac == null ? '' : ` · ${fmtPos(beatNow)}${bendLane ? ` · bend ${Math.round(bendAt(shown.bends, beatNow))}` : ''}`;
+                // at rest the transport reads the loop's start, as a DAW's does
+                const bAt = beatNow == null ? 0 : beatNow;
+                const txt = ` · ${fmtPos(bAt)}${bendLane ? ` · bend ${Math.round(bendAt(shown.bends, bAt))}` : ''}`;
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
 
@@ -577,11 +578,6 @@ export default function PianoRoll({ back }) {
             let label = segs.join(' · ');
             while (segs.length > 2 && g2.measureText(label).width > roomW) { segs.pop(); label = segs.join(' · '); }
             g2.fillText(label, R.x0, g.settingY);
-
-            if (barRef.current) {
-                const txt = frac == null ? '' : ` · bar ${Math.min(BARS, Math.floor(frac * BARS) + 1)} of ${BARS}`;
-                if (barRef.current.textContent !== txt) barRef.current.textContent = txt;
-            }
 
             geomRef.current = { g, handles, laneHandles, xOf, tOf, rowAt, laneV, rowH, yRow };
             // what this frame drew, told to the DOM for check-bench (laws 18 and 22)
@@ -970,7 +966,7 @@ export default function PianoRoll({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{state.part === 'drums' ? 'drums.mid' : 'bass.mid'} · {BPM} bpm<span ref={barRef} /><span ref={readRef} /></b>
+                <b>{state.part === 'drums' ? 'drums.mid' : 'bass.mid'} · {BPM} bpm<span ref={readRef} style={{ '--read': state.part === 'bass' && state.lane === 'bend' ? '25ch' : '12ch' }} /></b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">

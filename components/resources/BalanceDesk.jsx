@@ -564,7 +564,7 @@ export default function BalanceDesk({ back }) {
             const gr2 = graphRef.current;
             const frac = playingRef.current && gr2 ? gr2.position() : null;
             if (barRef.current) {
-                const txt = frac == null ? '' : ` · bar ${Math.min(SONG.bars, Math.floor(frac * SONG.bars) + 1)} of ${SONG.bars}`;
+                const txt = ` · bar ${frac == null ? 1 : Math.min(SONG.bars, Math.floor(frac * SONG.bars) + 1)} of ${SONG.bars}`;
                 if (barRef.current.textContent !== txt) barRef.current.textContent = txt;
             }
 
@@ -914,7 +914,7 @@ export default function BalanceDesk({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{SONG.title} · {SONG.bpm} bpm<span ref={barRef} /></b>
+                <b>{SONG.title} · {SONG.bpm} bpm<span ref={barRef} style={{ '--read': '13ch' }} /></b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">

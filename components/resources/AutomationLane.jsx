@@ -63,9 +63,9 @@ const FILES = SONG.files;
 const LOOP_BPM = 240 / SONG.loopSec; // one scheduler bar is the whole loop
 const CURVE_N = Math.round(SONG.loopSec * 1000); // one value a millisecond
 const ORIENTS = {
-    core: 'The part\'s clip above, its automation lane below, as your DAW draws them. Drag a point; click the lane to add one; double-click a point to remove it.',
-    alevel: 'The stem\'s shape is dashed for you to match and the bars it names are shaded. Where the lane fails a check, the fault is marked in coral.',
-    extension: 'Under the lane, the channel: the lit box is where this lane writes. Grab the Value dial while the loop runs and the lane records the move.',
+    core: 'The part\'s clip above, its automation lane below. Drag a point; click the lane to add one; double-click a point to remove it.',
+    alevel: 'The stem\'s shape is dashed for you to match, the bars it names shaded. Where the lane fails a check, the fault is in coral.',
+    extension: 'Under the lane, the channel: the lit box is where this lane writes. Move the Value dial as the loop runs and the lane records it.',
 };
 const CHAIN = ['file', 'filter', 'fader', 'pan', 'send', 'room', 'bus'];
 const LANE_TOOLS = [{ id: 'reset', label: 'Back to the stem' }, { id: 'flat', label: 'Flatten' }];
@@ -380,7 +380,6 @@ export default function AutomationLane({ back }) {
     const legendRef = useRef(null);
     const legendWRef = useRef(0);
     const frameRef = useRef(0);
-    const barRef = useRef(null);
     const readRef = useRef(null);
     const liveRef = useRef(50);
     const stageOf = (d) => (d === 'core' ? 'lane' : d === 'alevel' ? 'paper' : 'machine');
@@ -644,7 +643,8 @@ export default function AutomationLane({ back }) {
             const liveInt = Math.round(liveV * 100);
             if (liveInt !== liveRef.current && frameRef.current % 4 === 0) { liveRef.current = liveInt; setLive(liveInt); }
             if (readRef.current) {
-                const txt = frac == null ? '' : ` · ${fmtBeat(Math.floor(beatNow * 2) / 2)} · ${fmtValue(s.target, liveV)}`;
+                // at rest the transport reads the loop's start and the lane's first value
+                const txt = ` · ${fmtBeat(Math.floor(beatNow * 2) / 2)} · ${fmtValue(s.target, liveV)}`;
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
 
@@ -662,11 +662,6 @@ export default function AutomationLane({ back }) {
             g2.fillText(label, L.x0, g.settingY);
 
             // the bar counter in the eyebrow
-            if (barRef.current) {
-                const txt = frac == null ? '' : ` · bar ${Math.min(BARS, Math.floor(frac * BARS) + 1)} of ${BARS}`;
-                if (barRef.current.textContent !== txt) barRef.current.textContent = txt;
-            }
-
             geomRef.current = { g, handles, xOf, tOf, yOf, vOf };
             // what this frame drew, told to the DOM for check-bench (laws 18 and 21)
             const hIdx = handles.length > 1 ? 1 : 0;
@@ -1043,7 +1038,7 @@ export default function AutomationLane({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{SONG.title} · {SONG.bpm} bpm<span ref={barRef} /><span ref={readRef} /></b>
+                <b>{SONG.title} · {SONG.bpm} bpm<span ref={readRef} style={{ '--read': '28ch' }} /></b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
