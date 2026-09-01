@@ -299,7 +299,10 @@ export default function SynthBench({ back }) {
     const chooseDepth = (id) => { setDepth(id); setAnnounce(id); };
     const edit = (fn, what) => (v) => { setState((s) => fn(s, v)); touch(what); };
     const choosePart = (id) => { setState((s) => setPart(s, id)); touch('part'); };
-    const choosePreset = (id) => { setState((s) => applyPreset(s, id)); touch('preset'); };
+    // A Judge preset's faults include the voices, and the 2025 lead is mono
+    // with a glide: the row that fixes them opens with the preset, so the
+    // diagnose-then-fix loop closes on the console (critique pass, 1 Sep).
+    const choosePreset = (id) => { setState((s) => applyPreset(s, id)); touch('preset'); const p = PRESETS.find((x) => x.id === id); if (p && (p.task === 'judge' || p.set.glide === 'subtle')) setFurther(true); };
     const holdRaw = (on) => { heldRef.current = on; setHeld(on); };
     const togglePlay = useCallback(() => (playingRef.current ? stop() : start()), [start, stop]);
 

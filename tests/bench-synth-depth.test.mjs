@@ -53,7 +53,7 @@ test('A-level judges a section for the job the way Q6 does, and offers the bette
     const summary = judge({ state: b, last: 'preset' });
     assert.match(summary[0].text, /^A synth bass, judged by section/);
     assert.match(summary[1].text, /Envelope first/);
-    assert.match(summary[1].text, /section by section, under subheadings/);
+    assert.match(summary[1].text, /The 2024 report, on the bass question, credited answers written section by section, under subheadings; the 2019 pad question/);
     const hp = judge({ state: setFilter(b, 'hpf'), last: 'filter' });
     assert.match(hp[1].text, /removes the bass/);
     assert.match(hp[1].text, /Choose LPF/);
