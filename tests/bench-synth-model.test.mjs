@@ -5,7 +5,7 @@ import {
     harmonicAmp, midiHz, noteName, fmtHz, fmtMs, posToLog, logToPos,
     resDb, resQ, nodeQ, filterDb, filterMag, filterCoefficients, adsrAt, lfoValue, lfoSwing,
     applyPreset, setWave, setOctave, setDetune, setOsc2, setFilter, setCutoff, setRes, setAttack, setRelease, setLfoTarget, setLfoDepth, setVoices, setPart, dragDot, rawOf,
-    spectrum, waveShape, timeline, gateMs, homeMidi, readings, verdict, judgeSection, judgeAll, schemePoints,
+    spectrum, waveShape, timeline, gateMs, homeMidi, readings, verdict, judgeSection, judgeAll, schemePoints, osc2Ratio, arpeggiate, setArp,
 } from '../lib/bench/synth-model.js';
 
 const near = (a, b, tol = 1e-6) => assert.ok(Math.abs(a - b) <= tol, `${a} not within ${tol} of ${b}`);
@@ -267,4 +267,34 @@ test('readings: the home note carries the octave, and the words for brightness a
     assert.equal(setPart(s, 'pad').presetId, null);
     assert.equal(schemePoints({ ...s, task: null }).length, 0);
     assert.equal(WAVES.saw.type, 'sawtooth');
+});
+
+test('coarse tuning: Osc 2 at a fifth sits seven semitones up, draws its own lines, and the judge calls it thick, not a bass', () => {
+    near(osc2Ratio({ osc2: 'fifth' }), 2 ** (7 / 12));
+    near(osc2Ratio({ osc2: 'sub' }), 0.5);
+    near(osc2Ratio({ osc2: 'pair' }), 1);
+    const s = setOsc2(applyPreset(DEFAULT_STATE, 'as2023'), 'fifth');
+    const lines = spectrum(s, 100);
+    assert.ok(lines.some((l) => Math.abs(l.hz - 100 * 2 ** (7 / 12)) < 0.01 && l.osc === 2));
+    assert.equal(judgeSection(s, 'osc').grade, 'partly');
+    assert.match(judgeSection(s, 'osc').why, /fifth/);
+    assert.equal(judgeSection(setPart(s, 'pad'), 'osc').grade, 'good');
+    assert.equal(verdict(s).missed[0].id, 'detune');
+    assert.match(verdict(s).missed[0].said, /not a detuned pair/);
+});
+
+test('the arpeggiator steps a chord up in sixteenths over its own length and leaves single notes alone', () => {
+    const pad = { ...applyPreset(DEFAULT_STATE, 'judgePad'), arp: 'up' };
+    const bar = PARTS.pad.notes.filter((e) => e.s < 16);
+    const out = arpeggiate(bar, pad);
+    assert.equal(out.length, 16);
+    assert.deepEqual(out.slice(0, 5).map((e) => e.midi), [45, 48, 52, 57, 45]);
+    assert.ok(out.every((e) => e.len === 1));
+    assert.equal(gateMs(pad), Math.round(1 * (60 / 100 / 4) * 0.94 * 1000));
+    const off = arpeggiate(bar, { ...pad, arp: 'off' });
+    assert.equal(off.length, 4);
+    const bass = arpeggiate(PARTS.bass.notes.filter((e) => e.s < 16), pad);
+    assert.equal(bass.length, 8);
+    assert.equal(setArp(DEFAULT_STATE, 'up').arp, 'up');
+    assert.equal(setArp(DEFAULT_STATE, 'sideways'), DEFAULT_STATE);
 });

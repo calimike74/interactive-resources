@@ -60,5 +60,13 @@ Two analysers in front of the destination: a short one (10.7 ms) for level, a lo
 - **FM is not here.** Operator stays with its own card; a method chip can join the bench later.
 - **Velocity-sensitive filtering** (2020 and 2023: bright on the loud bars, filtered on the quiet ones) is not modelled: the parts carry no velocities. The Fills preset marks wave, envelope and filter, and says so.
 - **Pulse width and PWM** (the Q6 figure's LFO target, the 2019 report's discriminator) are not on the panel: OscillatorNode has no pulse width. The detuned pair is the same movement by another route, and the Reference says so.
-- **Pitch bend** stays on the Piano Roll and the retired MIDI controller.
+- **Pitch bend** stays on the Piano Roll and the retired MIDI controller; the Reference says so and gives the papers' ranges.
+- **Envelope to pitch** (the spec's "mapping envelope ... to ... pitch", the 2025 Q6 tom) is not routed: the envelope reaches the amplifier and the cutoff, the LFO reaches the pitch. The Reference names it as the one routing written, not played.
+- **White noise** (on the spec; the 2025 Q6 snare and hi-hat) is not a source yet. It sits with the console-as-panel proposal of 1 Sep evening (a source mixer: pulse, saw, sub, noise; pulse width with the LFO on it; a VCA Env / Gate switch), which awaits Mike's answer.
+
+## 9. The critique pass (1 Sep evening, three fresh readers on the live bench)
+
+- **Added the same evening:** an arpeggiator (More row, Arp: Off / Up; a chord stepped up in sixteenths, the pad and keys) and coarse tuning (Osc 2: Fifth, seven semitones up), both on the spec's list and both cheap; the Reference now names pitch bend range, envelope to pitch, coarse against fine tuning and the arpeggiator, so every spec bullet is either on the panel or acknowledged in the drawer.
+- **Not changed, on purpose:** the first visit lands on A-level and Teacher (the kit's law for every bench: Teacher-first was Mike's 21 Aug ruling, the level is remembered per browser); the legal links inside the Hear section (the kit carries the site footer's two links because a bench page has no footer; law 2 is about site furniture); "hold: raw" explained by its title and the Teacher drawer, as every bench's hold button is.
+- **The pedagogy reader's findings:** see the section below when it lands.
 - **Unwalked by Mike.** Built to the gate with the critique pass; his walk is owed.
