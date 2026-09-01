@@ -57,3 +57,11 @@ A new bench brings its own audio (Mike, 28 Aug 2026), so nothing from `delay/` i
 | `cello.mp3`, `bass.mp3`, `voice.mp3` | Three sustained notes, sealed into seamless loops: a bowed cello (173.8 Hz, F3), a plucked electric bass (103.8 Hz, G#2), a sung vowel (260 Hz, C4) | Generated with ElevenLabs sound generation on Mike's account, 30 Aug 2026 (scratchpad `scope/gen.mjs`); pitch measured per 100 ms frame and the take with the steadiest pitch kept (`scope/qc.py`); cut at rising zero crossings to the steady window, the tail crossfaded into the head over 60 ms (equal power), normalised to −3 dBFS (`scope/loop.py`) | Oscilloscope |
 
 The four waveforms (sine, square, saw, triangle) are oscillators, the paper's own object for this topic ("identify the waveform", "draw a saw wave one octave lower"), built in the bench with `synthesis` declared. Nothing from the other folders is reused.
+
+## laser/ (workshops `/laser/`: the bench's own `audio/master.wav`, not `public/bench-audio/`)
+
+| File | What | Origin | First used |
+|---|---|---|---|
+| `_sandbox/laser-explorer/audio/master.wav` | 8 bars (15.70 s at 122.28 bpm), bars 16 to 23 of "Glass Arcade", 1980s-style synth-pop with bright hi-hats; 44.1 kHz 16-bit stereo PCM, the CD format itself | Generated with Suno on Mike's account, 1 Sep 2026, from `_sandbox/laser-explorer/SUNO-BRIEF.md`, after Mike heard the previous synthesised loop on the live bench and called it bad; the 48 kHz release cut on its own measured tempo and downbeat, the tail crossfaded 20 ms into the pre-roll so the loop wraps into the downbeat, requantised to 16 bits with TPDF dither (`tools/cut-master.py`, every number in its docstring); shipped at the release's level, the bench normalises to 0.9 peak on load | Inside the Laser |
+
+The third Suno song on the estate, and the first shipped as WAV rather than mp3: a bench about what digital formats throw away cannot start from a lossy file. The full release stays in `audio/source/` (gitignored, 17 MB) and in Mike's Suno library.
