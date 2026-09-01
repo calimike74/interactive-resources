@@ -94,7 +94,7 @@ test('free-set resources are exempt from the gate', () => {
     // Cross-checked against lib/access.js FREE_RESOURCES — this file must
     // never fork its own copy of that list.
     assert.equal(isResourceExempt('octave-period-trainer'), true);
-    assert.equal(isResourceExempt('subtractive-synth-explorer'), true);
+    assert.equal(isResourceExempt('synth-bench'), true);
 });
 
 test('non-free resources are not exempt', () => {

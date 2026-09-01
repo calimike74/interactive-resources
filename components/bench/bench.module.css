@@ -1153,3 +1153,19 @@
 .secSrc .chips, .secPitch .chips, .secScreen .chips { flex-wrap: wrap; gap: 4px; }
 .secDb .knob { align-self: center; }
 .secHear[data-scope='true'] .stats { max-width: none; }
+
+/* ---- the Synth bench (1 Sep 2026): Play 104 + Part 150 (the Lane's rule) + Oscillators 190 + Filter 212 + Envelope 232 + LFO 150 + Hear 240 = 1278 at 1280.
+   Four small dials in a row on the Envelope, the big Cutoff with Resonance and Env beside it; Hear runs two short columns
+   with a shorter eyebrow so the legal links keep their corner. ---- */
+.secOsc { width: 190px; gap: 6px; }
+.secFilter { width: 212px; }
+.secEnv { width: 232px; }
+.secLfo { width: 150px; gap: 6px; }
+.secOsc .chips, .secFilter .chips, .secLfo .chips { flex-wrap: wrap; gap: 4px; }
+.oscRow { display: flex; align-items: center; gap: 12px; }
+.knobRow { display: flex; align-items: flex-start; gap: 12px; }
+.knobSmall { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 40px; }
+.knobSmall .readout, .knob .readout { font-family: var(--mono); font-size: 10px; line-height: 1.1; color: var(--ink-2); white-space: nowrap; }
+.secHear[data-synth='true'] .stats { max-width: none; gap: 8px 10px; }
+.secHear[data-synth='true'] .stats b { font-size: 14px; }
+.secHear[data-synth='true'] .stats span { font-size: 12.5px; }

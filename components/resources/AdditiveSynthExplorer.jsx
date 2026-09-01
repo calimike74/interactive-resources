@@ -24,7 +24,7 @@ import {
  *
  * WHY IT IS CALLED THE ADDITIVE EXPLORER. The lab called it "Waveform & Spectrum",
  * which describes the displays rather than the topic. Named as the additive
- * explorer it pairs with /subtractive-synth-explorer, and the two halves of the
+ * explorer it pairs with /synth-bench, and the two halves of the
  * spec point sit next to each other in the topic list: build a sound up from
  * simple tones, or start with a rich one and filter it down.
  *
@@ -918,7 +918,7 @@ export default function AdditiveSynthExplorer() {
                         all of these harmonics in it, and takes them away with a filter.
                     </p>
                     <Link
-                        href="/subtractive-synth-explorer"
+                        href="/synth-bench"
                         style={{
                             color: '#fff',
                             background: C.accent,

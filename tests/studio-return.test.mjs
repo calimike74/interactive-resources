@@ -65,7 +65,7 @@ test('a refused or absent host falls back to the advertised one', () => {
 // make sure that the page is at the very top." The return used to carry
 // #explore, which dropped him below the topic's hero.
 test('no fragment: a member comes back to the top of their topic page', () => {
-    const href = memberTopicHref('/subtractive-synth-explorer', 'synthesis', null);
+    const href = memberTopicHref('/synth-bench', 'synthesis', null);
     assert.ok(!href.includes('#'), `expected no fragment, got ${href}`);
     assert.equal(href, `${STUDIO_URL}/member/topics/synthesis`);
 });

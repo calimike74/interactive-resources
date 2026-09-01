@@ -34,6 +34,10 @@
 //  19. (Edit bench) the cut line on the stage is the Cut dial: the canvas
 //      reports the cut (data-cut) and it equals the dial; dragging the join's
 //      handle to the right moves the cut later on both
+//  25. (Synth bench) the dot on the harmonics screen is the Cutoff dial: the
+//      canvas reports the cutoff (data-cutoff) and it equals the console's;
+//      dragging the dot right raises it on both; and the keys on the stage
+//      play the voice (pressing the C key makes the stage report a note)
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -107,6 +111,12 @@ const BENCHES = {
         presets: { first: 'Read the period', second: 'Louder', judge: '294 Hz, an octave up' },
         judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-hz', value: '294', says: 'loads the 2019 sine at 294 Hz (data-hz = 294)' },
         stages: { core: 'scope', alevel: 'paper', extension: 'digital' },
+    },
+    'synth-bench': {
+        cutoffDot: true,
+        presets: { first: '2023 paper', second: '2024 paper', judge: 'Judge: a bass' },
+        judgeLands: { selector: '[aria-label="Attack"]', attr: 'aria-valuetext', value: '600 ms', says: 'loads a pad envelope on the bass: a 600 ms attack (Attack = 600 ms)' },
+        stages: { core: 'scope', alevel: 'sections', extension: 'machine' },
     },
     'balance-desk': {
         faders: { stem: 'Vocal' },
@@ -616,6 +626,49 @@ for (const url of urls) {
                 else ok(`dragging the bracket stretches the wave and the console follows (${before.period} -> ${after.period} ms, ${before.hz} -> ${after.hz} Hz)`);
             } else fail(url, size, 'the stage does not expose the bracket handle for the drag test (is the bench playing?)');
             if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
+        }
+
+        // 25. (Synth) the dot on the harmonics screen is the Cutoff dial, and the
+        // keys on the stage play the voice (1 Sep 2026)
+        if (fx.cutoffDot) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            await depthBtn('Core').click();
+            await page.waitForTimeout(300);
+            const readS = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { cutoff: c?.dataset.cutoff || '', handle: c?.dataset.handle || '', key: c?.dataset.key || '', note: c?.dataset.note || '', verdict: c?.dataset.verdict || '' }; }, canvasSel);
+            const consoleC = () => page.evaluate(() => document.querySelector('[aria-label="Controls"] [data-cutoff]')?.getAttribute('data-cutoff') || '');
+            const before = await readS();
+            const cB = await consoleC();
+            if (!before.cutoff) fail(url, size, 'the stage does not report the cutoff (data-cutoff missing)');
+            else if (before.cutoff !== cB) fail(url, size, `the stage's cutoff (${before.cutoff}) is not the console's (${cB})`);
+            else ok(`the stage reports the cutoff and the console agrees (${before.cutoff} Hz)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx + 30, box.y + hy, { steps: 6 });
+                await page.mouse.move(box.x + hx + 60, box.y + hy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(250);
+                const after = await readS();
+                const cA = await consoleC();
+                if (!(Number(after.cutoff) > Number(before.cutoff))) fail(url, size, `dragging the dot right did not raise the cutoff (${before.cutoff} -> ${after.cutoff})`);
+                else if (after.cutoff !== cA) fail(url, size, `the console did not follow the dot (${cA} vs ${after.cutoff})`);
+                else ok(`dragging the dot raises the cutoff and the console follows (${before.cutoff} -> ${after.cutoff} Hz)`);
+            } else fail(url, size, 'the stage does not expose the cutoff dot for the drag test');
+            const [kx, ky] = before.key.split(':').map(Number);
+            if (box && before.key) {
+                await page.mouse.move(box.x + kx, box.y + ky);
+                await page.mouse.down();
+                await page.waitForTimeout(250);
+                const down = await readS();
+                await page.mouse.up();
+                await page.waitForTimeout(400);
+                if (!down.note) fail(url, size, 'pressing the C key on the stage did not make the stage report a note (data-note empty)');
+                else ok(`the keys on the stage play the voice (note ${down.note} while pressed)`);
+            } else fail(url, size, 'the stage does not expose its C key for the press test');
+            if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
+            await depthBtn('A-level').click();
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest

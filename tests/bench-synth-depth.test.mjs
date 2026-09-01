@@ -1,0 +1,93 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { DEFAULT_STATE, applyPreset, setAttack, setLfoDepth, setLfoTarget, setFilter, setOctave, setVoices } from '../lib/bench/synth-model.js';
+import { DEPTH_LINES, DEPTH_TEACH, hearingLine, nextMove, judge, open, sectionOfLast, homeNote } from '../lib/bench/synth-depth.js';
+
+const noDash = (s) => assert.ok(!/—/.test(s) && !/\butilise/i.test(s), `house copy law broken: ${s}`);
+
+test('each level announces its own job in its own words', () => {
+    assert.match(DEPTH_LINES.core, /names what you hear/);
+    assert.match(DEPTH_LINES.alevel, /judges/);
+    assert.match(DEPTH_LINES.extension, /opens the machine/);
+    assert.notEqual(DEPTH_LINES.core, DEPTH_LINES.alevel);
+    for (const l of Object.values(DEPTH_LINES)) noDash(l);
+    for (const l of Object.values(DEPTH_TEACH)) noDash(l);
+    assert.match(DEPTH_TEACH.extension, /control signal/);
+});
+
+test('Core names what is heard and says what to try', () => {
+    const s = applyPreset(DEFAULT_STATE, 'as2023');
+    const line = hearingLine(s);
+    assert.match(line, /^You are hearing the bass part on two square waves 12 cents apart/);
+    assert.match(line, /low-pass filter at 700 Hz/);
+    assert.match(line, /warm/);
+    noDash(line);
+    assert.match(nextMove(s), /Detune/);
+    assert.match(nextMove({ ...s, presetId: null, wave: 'sine' }), /Saw/);
+    const withLfo = setLfoDepth(setLfoTarget({ ...s, presetId: null }, 'pitch'), 20);
+    assert.match(hearingLine(withLfo), /vibrato at 5\.0 Hz/);
+});
+
+test('A-level judges a paper\'s task in the scheme\'s line with its year, AO3 then AO4, and says what is missing', () => {
+    const s = applyPreset(DEFAULT_STATE, 'as2023');
+    const segs = judge({ state: s, last: 'preset' });
+    assert.equal(segs.length, 2);
+    assert.equal(segs[0].ao, 3);
+    assert.equal(segs[1].ao, 4);
+    assert.match(segs[1].text, /^As directed: "Square wave \(1\)/);
+    assert.match(segs[1].text, /2023 AS Q3\(a\)/);
+    const up = setOctave(s, 1);
+    const notYet = judge({ state: up, last: 'octave' });
+    assert.match(notYet[1].text, /^Not yet: an octave too high/);
+    assert.match(notYet[1].text, /one octave too high/);
+    segs.concat(notYet).forEach((sg) => noDash(sg.text));
+});
+
+test('A-level judges a section for the job the way Q6 does, and offers the better setting', () => {
+    const b = applyPreset(DEFAULT_STATE, 'judgeBass');
+    const env = judge({ state: b, last: 'attack' });
+    assert.match(env[0].text, /^ENV, the envelope: attack 600 ms/);
+    assert.match(env[1].text, /^Does not suit a synth bass: a 600 ms attack/);
+    assert.match(env[1].text, /Bring the attack under 20 ms/);
+    assert.match(env[1].text, /fast attack and release/);
+    const summary = judge({ state: b, last: 'preset' });
+    assert.match(summary[0].text, /^A synth bass, judged by section/);
+    assert.match(summary[1].text, /Envelope first/);
+    assert.match(summary[1].text, /section by section, under subheadings/);
+    const hp = judge({ state: setFilter(b, 'hpf'), last: 'filter' });
+    assert.match(hp[1].text, /removes the bass/);
+    assert.match(hp[1].text, /Choose LPF/);
+    const p = applyPreset(DEFAULT_STATE, 'judgePad');
+    const voices = judge({ state: p, last: 'voices' });
+    assert.match(voices[1].text, /complete chords/);
+    assert.match(voices[1].text, /Press Poly/);
+    const fixed = judge({ state: setVoices(p, 'poly'), last: 'voices' });
+    assert.match(fixed[1].text, /^Suits a synth pad/);
+    [env, summary, hp, voices, fixed].flat().forEach((sg) => noDash(sg.text));
+});
+
+test('the LFO is judged as a control signal, with the 2024 report as evidence', () => {
+    const s = setLfoDepth(setLfoTarget({ ...DEFAULT_STATE, task: null, presetId: null }, 'pitch'), 20);
+    const segs = judge({ state: s, last: 'lfoDepth' });
+    assert.match(segs[0].text, /^LFO, the LFO: a triangle wave at 5\.0 Hz on the pitch/);
+    assert.match(segs[1].text, /vibrato/);
+    assert.match(segs[1].text, /something audible rather than a control signal/);
+});
+
+test('Extension opens the machine in its own sentence, with no AO tags, keyed to the section touched', () => {
+    const s = applyPreset(DEFAULT_STATE, 'a2025');
+    const all = open({ state: s, last: 'preset' });
+    assert.match(all, /^The envelope is a control signal/);
+    assert.match(all, /never heard; the amplifier obeys it/);
+    assert.match(all, /too slow to hear/);
+    assert.ok(!/AO[34]/.test(all));
+    const lfo = open({ state: s, last: 'lfoRate' });
+    assert.match(lfo, /^The LFO is a triangle wave at 4\.0 Hz/);
+    const filt = open({ state: setAttack(applyPreset(DEFAULT_STATE, 'judgePad'), 2), last: 'cutoff' });
+    assert.match(filt, /lifts the cutoff 1\.6 octaves/);
+    assert.match(filt, /2019 report/);
+    [all, lfo, filt].forEach(noDash);
+    assert.equal(sectionOfLast('stage'), 'filter');
+    assert.equal(sectionOfLast('part'), null);
+    assert.equal(homeNote(s), 'A4 · 440 Hz');
+});

@@ -21,7 +21,7 @@ import GraphicParametricEQ from '@/components/resources/GraphicParametricEQ';
 import RevealExplorer from '@/components/resources/RevealExplorer';
 import EQAssessmentPrototype from '@/components/resources/EQAssessmentPrototype';
 import EssayScaffold from '@/components/resources/EssayScaffold';
-import SubtractiveSynthExplorer from '@/components/resources/SubtractiveSynthExplorer';
+import SynthBench from '@/components/resources/SynthBench';
 import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
 import CompressorExplorer from '@/components/resources/CompressorExplorer';
 import CompressorCurvePractice from '@/components/resources/CompressorCurvePractice';
@@ -82,7 +82,7 @@ const resourceComponents = {
     'RevealExplorer': RevealExplorer,
     'EQAssessmentPrototype': EQAssessmentPrototype,
     'EssayScaffold': EssayScaffold,
-    'SubtractiveSynthExplorer': SubtractiveSynthExplorer,
+    'SynthBench': SynthBench,
     'StereoRecordingEssay': StereoRecordingEssay,
     'CompressorExplorer': CompressorExplorer,
     'CompressorCurvePractice': CompressorCurvePractice,
