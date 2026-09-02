@@ -4,10 +4,12 @@
 // the real UI driven by Playwright.
 //
 //   node scripts/measure-synth.mjs <url> [scenario]
-//   scenarios: level pitch detune filter envelope release lfo mono   (default: all)
+//   scenarios: level pitch detune filter envelope release lfo mono pwm gate   (default: all)
 //
 // Do not edit the bench while it runs: Fast Refresh resets the page and
-// every reading after that is void. Written 1 Sep 2026 with the bench.
+// every reading after that is void. Written 1 Sep 2026 with the bench;
+// the panel re-cut of 2 Sep (sliders, a source mixer, PW by LFO, the VCA
+// switch) added the pwm and gate scenarios and made level read each source.
 import { chromium } from 'playwright';
 const url = process.argv[2] || 'http://localhost:3402/synth-bench';
 const only = process.argv[3] || '';
@@ -52,6 +54,9 @@ const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const chip = (group, name) => page.locator(`[aria-label="${group}"] button`, { hasText: new RegExp('^' + esc(name) + '$') });
 const preset = (name) => page.locator('[aria-label="Presets"] button', { hasText: name });
 const dial = async (label, key) => { await page.locator(`[aria-label="${label}"]`).focus(); await page.keyboard.press(key); };
+// a source slider to one of its ends; `only` takes the other three to zero
+const source = async (name, key) => { await dial(name, key); };
+const solo = async (name) => { for (const n of ['Pulse', 'Saw', 'Sub', 'Noise']) await source(n, n === name ? 'End' : 'Home'); };
 const dB = (x) => (x <= 1e-7 ? ' -inf' : (20 * Math.log10(x)).toFixed(1).padStart(5));
 const now = () => page.evaluate(() => window.__ctx?.currentTime ?? 0);
 const line = (label, o) => console.log(`${label.padEnd(50)} ${o}`);
@@ -68,8 +73,8 @@ const pitchOf = (buf, sr) => {
   const n = buf.length; const win = buf.map((x, i) => x * (0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1))));
   const mag = (f) => { let re = 0; let im = 0; const w = (2 * Math.PI * f) / sr; for (let i = 0; i < n; i += 1) { re += win[i] * Math.cos(w * i); im -= win[i] * Math.sin(w * i); } return Math.hypot(re, im); };
   let bestF = 0; let best = 0;
-  for (let f = 25; f <= 1200; f += 0.5) { const a = mag(f); if (a > best) { best = a; bestF = f; } }
-  for (const d of [2, 3, 4]) if (bestF / d >= 25 && mag(bestF / d) > best * 0.25) { bestF /= d; break; }
+  for (let f = 14; f <= 1200; f += 0.5) { const a = mag(f); if (a > best) { best = a; bestF = f; } }
+  for (const d of [2, 3, 4]) if (bestF / d >= 14 && mag(bestF / d) > best * 0.25) { bestF /= d; break; }
   return bestF;
 };
 // the pitch while a held key sounds: press A on the stage's keyboard by its data-key
@@ -110,21 +115,26 @@ if (want('level')) {
     line(`LEVEL ${p}`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`);
   }
   await preset('2023 paper').click(); await stopIfPlaying();
-  for (const w of ['Square', 'Saw', 'Triangle', 'Sine']) { await chip('Wave', w).click(); const r = await keyLevel(); line(`LEVEL C2 held on a ${w.toLowerCase()} pair, LPF 700 Hz`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
+  for (const w of ['Pulse', 'Saw', 'Sub', 'Noise']) { await solo(w); const r = await keyLevel(); line(`LEVEL C2 held, ${w.toLowerCase()} alone (paired), LPF 700 Hz`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
   await dial('Cutoff', 'End');
-  for (const w of ['Square', 'Saw', 'Triangle', 'Sine']) { await chip('Wave', w).click(); const r = await keyLevel(); line(`LEVEL C2 held on a ${w.toLowerCase()} pair, filter open`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
-  await chip('Wave', 'Square').click();
+  for (const w of ['Pulse', 'Saw', 'Sub', 'Noise']) { await solo(w); const r = await keyLevel(); line(`LEVEL C2 held, ${w.toLowerCase()} alone (paired), filter open`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
+  await solo('Pulse'); await dial('Pulse width', 'Home'); { const r = await keyLevel(); line('LEVEL C2 held, pulse at 5 % width, filter open', `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
+  await preset('2023 paper').click();
 }
 if (want('pitch')) {
   await preset('2023 paper').click(); await stopIfPlaying();
-  await chip('Octave', '0').click();
   const c2 = await keyPitch();
-  await chip('Octave', '+1').click();
+  await dial('Range', 'End');
   const c3 = await keyPitch();
-  await chip('Octave', '−1').click();
+  await dial('Range', 'Home');
   const c1 = await keyPitch();
-  await chip('Octave', '0').click();
-  line('PITCH the C key on the bass: 0 · +1 · −1', `${c2.toFixed(1)} · ${c3.toFixed(1)} · ${c1.toFixed(1)} Hz (65.4 · 130.8 · 32.7)`);
+  await preset('2023 paper').click();
+  line("PITCH the C key on the bass: 8' · 4' · 16'", `${c2.toFixed(1)} · ${c3.toFixed(1)} · ${c1.toFixed(1)} Hz (65.4 · 130.8 · 32.7)`);
+  await solo('Sub'); const sub1 = await keyPitch();
+  if (await page.locator('[data-more]').count()) await page.locator('[data-more]').click();
+  await chip('Sub octave', '2 oct').click(); const sub2 = await keyPitch(); await chip('Sub octave', '1 oct').click();
+  line('PITCH the sub alone at 1 oct · 2 oct', `${sub1.toFixed(1)} · ${sub2.toFixed(1)} Hz (32.7 · 16.4)`);
+  await preset('2023 paper').click();
   await chip('Part', 'Lead').click();
   const c4 = await keyPitch();
   line('PITCH the C key on the lead (C4)', `${c4.toFixed(1)} Hz (261.6)`);
@@ -243,6 +253,62 @@ if (want('release')) {
   for (let ms = 0; ms <= 1000; ms += 100) { const p = pts.find((q) => q[0] >= tUp + ms / 1000); row.push(p ? (20 * Math.log10(Math.max(1e-6, p[1] / ref))).toFixed(1) : '?'); }
   line('RELEASE 900 ms, dB below the held level at 0..1000 ms after key-up', row.join(' · '));
   line('  the model\'s straight line would give', [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000].map((ms) => (ms >= 900 ? '-inf' : (20 * Math.log10(1 - ms / 900)).toFixed(1))).join(' · '));
+}
+if (want('pwm')) {
+  // a pulse's level follows its width (RMS of a ±1 pulse of duty w is 2·sqrt(w(1−w))): with PW by LFO the
+  // width sweeps 5 to 95 % and the level swings about 7 dB, twice per LFO cycle; by hand it holds still
+  await preset('2023 paper').click(); await stopIfPlaying();
+  await dial('Cutoff', 'End'); await dial('Pulse width', 'Home');
+  if (await page.locator('[data-more]').count()) await page.locator('[data-more]').click();
+  await chip('Osc 2', 'Off').click();
+  await dial('Rate', 'Home'); for (let i = 0; i < 87; i += 1) await page.keyboard.press('ArrowUp'); // 43.5 positions ≈ 1 Hz
+  const rateText = await page.evaluate(() => document.querySelector('[aria-label="Rate"]')?.getAttribute('aria-valuetext'));
+  const canvasSel = '[aria-label="Stage"] canvas';
+  const hold = async (sec) => {
+    const box = await page.locator(canvasSel).boundingBox();
+    const k = await page.evaluate((sel) => document.querySelector(sel)?.dataset.key || '', canvasSel);
+    const [kx, ky] = k.split(':').map(Number);
+    await page.mouse.move(box.x + kx, box.y + ky); await page.mouse.down();
+    const r = await rms(sec, 0.5);
+    await page.mouse.up(); await page.waitForTimeout(400);
+    return r;
+  };
+  // a 10 ms window straddles a narrow pulse, so the level is read in 100 ms bins
+  const bins = (r) => { const out = []; const t0 = r.pts[0][0]; for (const [t, x] of r.pts) { const i = Math.floor((t - t0) / 0.1); (out[i] ||= []).push(x * x); } return out.filter(Boolean).map((a) => Math.sqrt(a.reduce((s2, x) => s2 + x, 0) / a.length)); };
+  await chip('PW by', 'man').click(); const still = bins(await hold(3));
+  await chip('PW by', 'LFO').click(); const moving = bins(await hold(3));
+  const lo = Math.min(...moving); const hi = Math.max(...moving); const mid = (lo + hi) / 2; let ups = 0;
+  for (let i = 1; i < moving.length; i += 1) if (moving[i - 1] < mid && moving[i] >= mid) ups += 1;
+  line(`PWM width 5 % by hand: level swing (100 ms bins)`, `${dB(Math.min(...still))} to ${dB(Math.max(...still))} dB`);
+  line(`PWM width 5 to 95 % by the LFO at ${rateText}: level swing`, `${dB(lo)} to ${dB(hi)} dB, ${ups} swells in 3 s (${(parseFloat(rateText) * 6).toFixed(0)} expected)`);
+  await chip('PW by', 'man').click(); await preset('2023 paper').click();
+}
+if (want('gate')) {
+  // the VCA on Gate: full within 10 ms of key-down whatever the attack, silent within 30 ms of key-up whatever the release
+  const canvasSel = '[aria-label="Stage"] canvas';
+  const trace = async (holdSec, tailSec) => {
+    const box = await page.locator(canvasSel).boundingBox();
+    const k = await page.evaluate((sel) => document.querySelector(sel)?.dataset.key || '', canvasSel);
+    const [kx, ky] = k.split(':').map(Number);
+    await page.mouse.move(box.x + kx, box.y + ky);
+    const t0 = await now();
+    await page.mouse.down();
+    await page.waitForTimeout(holdSec * 1000);
+    const tUp = await now();
+    await page.mouse.up();
+    await page.waitForTimeout(tailSec * 1000);
+    const pts = await page.evaluate((a) => window.__rms.filter((p) => p[0] >= a), t0);
+    const at = (sec, from = t0) => { const p = pts.find((q) => q[0] >= from + sec); return p ? dB(p[1]) : '   ? '; };
+    return { at, tUp };
+  };
+  await preset('Judge: a bass').click(); await stopIfPlaying();
+  await chip('VCA', 'Env').click();
+  let tr = await trace(1.0, 1.0);
+  line('GATE off (A 600 R 900): level at 15 · 100 ms, then +50 · +300 ms after key-up', `${tr.at(0.015)} · ${tr.at(0.1)} dB, then ${tr.at(0.05, tr.tUp)} · ${tr.at(0.3, tr.tUp)} dB`);
+  await chip('VCA', 'Gate').click();
+  tr = await trace(1.0, 1.0);
+  line('GATE on  (A 600 R 900): level at 15 · 100 ms, then +50 · +300 ms after key-up', `${tr.at(0.015)} · ${tr.at(0.1)} dB, then ${tr.at(0.05, tr.tUp)} · ${tr.at(0.3, tr.tUp)} dB`);
+  await chip('VCA', 'Env').click();
 }
 if (errors.length) console.log('page errors:', errors.join(' | '));
 await browser.close();

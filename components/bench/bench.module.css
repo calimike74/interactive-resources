@@ -1154,18 +1154,50 @@
 .secDb .knob { align-self: center; }
 .secHear[data-scope='true'] .stats { max-width: none; }
 
-/* ---- the Synth bench (1 Sep 2026): Play 104 + Part 150 (the Lane's rule) + Oscillators 190 + Filter 212 + Envelope 232 + LFO 150 + Hear 240 = 1278 at 1280.
-   Four small dials in a row on the Envelope, the big Cutoff with Resonance and Env beside it; Hear runs two short columns
-   with a shorter eyebrow so the legal links keep their corner. ---- */
-.secOsc { width: 190px; gap: 6px; }
-.secFilter { width: 212px; }
-.secEnv { width: 232px; }
-.secLfo { width: 150px; gap: 6px; }
-.secOsc .chips, .secFilter .chips, .secLfo .chips { flex-wrap: wrap; gap: 4px; }
-.oscRow { display: flex; align-items: center; gap: 12px; }
-.knobRow { display: flex; align-items: flex-start; gap: 12px; }
-.knobSmall { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 40px; }
-.knobSmall .readout, .knob .readout { font-family: var(--mono); font-size: 10px; line-height: 1.1; color: var(--ink-2); white-space: nowrap; }
-.secHear[data-synth='true'] .stats { max-width: none; gap: 8px 10px; }
-.secHear[data-synth='true'] .stats b { font-size: 14px; }
-.secHear[data-synth='true'] .stats span { font-size: 12.5px; }
+/* ---- the Synth bench (1 Sep 2026; re-cut as the paper's panel 2 Sep 2026 on Mike's steer):
+   Play 104 + LFO 168 + VCO 194 + Source mixer 191 + VCF 160 + VCA 80 + ENV 199 + Hear 184 = 1280 at 1280.
+   The controls are sliders, the paper's panel (and a DAW's): a slim fader with its value above and its name
+   below, in a column 38 px wide; the chips that belong to a slider row stand beside it in a stack. Part moved
+   to the bar beside the presets. Hear runs one column so the legal links keep their corner. ---- */
+.secSynth { padding: 10px 12px 9px; gap: 5px; }
+.secLfo { width: 168px; }
+.secVco { width: 194px; }
+.secMixer { width: 191px; }
+.secVcf { width: 160px; }
+.secVca { width: 80px; align-items: stretch; }
+.secEnv { width: 199px; }
+.secSynth .chips { flex-wrap: wrap; gap: 4px; }
+.slideRow { display: flex; align-items: flex-start; gap: 5px; }
+.slide { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 38px; flex: none; }
+.slide[data-wide='true'] { width: 40px; }
+.slide[data-wide='true'] .fader { width: 26px; }
+.slideVal { font-family: var(--mono); font-size: 9.5px; line-height: 1.15; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.slide[data-off='true'] .slideVal { color: var(--ink-3); }
+.slideName { font-family: var(--mono); font-size: 8.5px; line-height: 1.15; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+.slide .fader { height: 84px; }
+.fader[data-slim='true'] { width: 26px; }
+.fader[data-slim='true']::before { left: 11px; top: 5px; bottom: 5px; width: 4px; }
+.fader[data-slim='true'] i { left: 3px; width: 20px; height: 11px; top: calc((1 - var(--pct)) * (100% - 11px)); }
+.fader[data-slim='true'] i::after { left: 4px; right: 4px; top: 4.5px; height: 2px; }
+.fader[data-slim='true'][data-hot='true']::before { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); }
+.fader[data-slim='true'][aria-disabled='true'] { opacity: 0.4; cursor: default; }
+.chipStack { display: flex; flex-direction: column; align-items: stretch; gap: 2px; padding-top: 6px; }
+.chipStack .chips { flex-direction: column; align-items: stretch; gap: 2px; }
+.chipStack .chip { text-align: center; }
+.chipStack .slideName { text-align: center; }
+.secVca .chipStack { padding-top: 6px; }
+.secSynth .meaning { font-size: 11.5px; line-height: 1.25; }
+.secHear[data-synth='true'] { width: 184px; flex: 1 1 auto; gap: 5px; padding: 10px 12px 9px; }
+.secHear[data-synth='true'] .legal { top: 10px; right: 12px; }
+.secHear[data-synth='true'] .stats { grid-template-columns: 1fr; gap: 4px; max-width: none; }
+.secHear[data-synth='true'] .stats div { line-height: 1.1; }
+.secHear[data-synth='true'] .stats b { font-size: 13px; line-height: 1.1; }
+.secHear[data-synth='true'] .stats span { display: block; }
+.secHear[data-synth='true'] .stats span { font-size: 11px; line-height: 1.1; }
+.secHear[data-synth='true'] .stats b[data-wrap='true'] { white-space: normal; }
+/* Part and the presets share one wrapping block so the bench's line keeps its width (a nine-line
+   line at 400 px squashed the stage, 2 Sep): two rows at 1280, the part's chips small, the presets pills. */
+.barWrap { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; row-gap: 6px; max-width: 504px; flex: none; }
+.barWrap [role='group'] { display: contents; }
+.barWrap .presetLabel { margin-right: 2px; }
+.barWrap .presetLabel + .presetLabel { margin-left: 6px; }

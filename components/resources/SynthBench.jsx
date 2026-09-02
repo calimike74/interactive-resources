@@ -2,28 +2,33 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import BenchFrame from '@/components/bench/BenchFrame';
-import { Dial, Chips, Why, MoreButton } from '@/components/bench/controls';
-import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth, DEPTHS } from '@/components/bench/BenchBits';
+import { Fader, Chips, Why, MoreButton } from '@/components/bench/controls';
+import { PlayColumn, Legal, ExamCallout, useBenchMode, useBenchDepth, DEPTHS } from '@/components/bench/BenchBits';
 import { useBenchAudio, glide } from '@/components/bench/useBenchAudio';
 import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
 import { DEPTH_LINES, DEPTH_TEACH, judge, open as openMachine, hearingLine, nextMove, sectionOfLast, noteLine } from '@/lib/bench/synth-depth';
 import {
-    BPM, WAVE_IDS, WAVES, OCTAVE_IDS, DETUNE_MIN, DETUNE_MAX, OSC2_IDS, OSC2, FILTER_IDS, FILTERS, CUTOFF_MIN, CUTOFF_MAX, RES_MIN, RES_MAX, ENV_AMT_MIN, ENV_AMT_MAX,
+    BPM, OCTAVE_IDS, DETUNE_MIN, DETUNE_MAX, OSC2_IDS, OSC2, FILTER_IDS, FILTERS, CUTOFF_MIN, CUTOFF_MAX, RES_MIN, RES_MAX, ENV_AMT_MIN, ENV_AMT_MAX,
     ATTACK_MIN, ATTACK_MAX, DECAY_MIN, DECAY_MAX, SUSTAIN_MIN, SUSTAIN_MAX, RELEASE_MIN, RELEASE_MAX,
     LFO_TARGET_IDS, LFO_TARGETS, LFO_RATE_MIN, LFO_RATE_MAX, LFO_DEPTH_MIN, LFO_DEPTH_MAX, LFO_SHAPE_IDS, LFO_SHAPES, VOICES_IDS, VOICES, GLIDE_IDS, GLIDES,
-    PART_IDS, PARTS, KEYBOARD_KEYS, PRESETS, DEFAULT_STATE, SECTION_IDS, SECTIONS, GRADE_WORD, RES_DB_MIN, RES_DB_MAX, HZ_LO, HZ_HI, ARP_IDS, ARPS,
-    applyPreset, setPart, setWave, setOctave, setDetune, setOsc2, setFilter, setCutoff, setRes, setEnvAmt, setAttack, setDecay, setSustain, setRelease,
+    PART_IDS, PARTS, KEYBOARD_KEYS, PRESETS, DEFAULT_STATE, SECTION_IDS, SECTIONS, GRADE_WORD, ARP_IDS, ARPS,
+    SOURCE_IDS, SOURCES, SOURCE_GAIN, LEVEL_MIN, LEVEL_MAX, WIDTH_MIN, WIDTH_MAX, PWM_IDS, PWMS, SUB_OCT_IDS, SUB_OCTS, VCA_IDS, VCAS,
+    applyPreset, setPart, setPulse, setSaw, setSub, setNoise, setWidth, setPwm, setSubOct, setVca, setOctave, setDetune, setOsc2, setFilter, setCutoff, setRes, setEnvAmt, setAttack, setDecay, setSustain, setRelease,
     setLfoTarget, setLfoRate, setLfoDepth, setLfoShape, setVoices, setGlide, setArp, setVolume, dragDot, rawOf, osc2Ratio, arpeggiate,
-    midiHz, noteName, fmtHz, fmtMs, fmtRate, posToLog, logToPos, resDb, nodeQ, envOctaves, lfoSwing, lfoOn, adsrAt, octaveSaid, stepSec,
+    midiHz, noteName, fmtHz, fmtMs, fmtRate, posToLog, logToPos, resDb, nodeQ, envOctaves, lfoSwing, lfoOn, adsrAt, octaveSaid, lfoValue, widthAt, pwmOn, isSquare, sourcesShort, harmonicsSaid, noiseLevel,
     spectrum, waveShape, timeline, filterCurve, logFreqs, posOfHz, hzOfPos, readings, verdict, judgeAll,
 } from '@/lib/bench/synth-model';
 
 // The Synth bench (1.3), ninth bench to the Bench Standard and the 2D
 // treatment of Inside the Synthesiser (the 31 Aug 2026 estate verdict: a
 // panel of controls fails the internal / spatial rule). The console is
-// the playable panel: two oscillators, a filter, an envelope, an LFO, each
-// dial a drag target. Three jobs (lib/bench/synth-depth.js): Core shows
+// the paper's panel, LFO · VCO · SOURCE MIXER · VCF · VCA · ENV, re-cut to
+// sliders on 2 Sep 2026 on Mike's steer (his picture of a 1982-style
+// monophonic synthesiser, the kind in the 2024 Q6 figure): a VCO whose
+// pulse width the LFO can move, a source mixer with a sub-oscillator and
+// white noise, a VCA switched between the envelope and the gate, each
+// slider a drag target. Three jobs (lib/bench/synth-depth.js): Core shows
 // the wave and its harmonics with the filter drawn over them, A-level
 // judges the patch as sections the way Q6 does, Extension opens the
 // machine as control signals in time. The gold dot on the harmonics
@@ -43,16 +48,23 @@ const ORIENTS = {
     alevel: 'The synth as sections in signal order, the way the paper draws it, each judged for the part it plays.',
     extension: 'One note in time: the envelope asks, the amplifier and the cutoff obey, the LFO drawn to scale, too slow to hear.',
 };
-const OSC_GAIN = { sine: 0.27, triangle: 0.33, square: 0.25, sawtooth: 0.55 }; // measured 1 Sep (scripts/measure-synth.mjs): the four pairs on the bass within 2 dB of each other
-const PART_GAIN = { bass: 1, pad: 0.6, lead: 0.85, keys: 0.62 };
+const PART_GAIN = { bass: 1, pad: 0.6, lead: 0.85, keys: 0.62 }; // the sources' own gains are SOURCE_GAIN in the model, measured (scripts/measure-synth.mjs)
+const RANGE_WORD = { '-1': "16'", 0: "8'", 1: "4'" }; // the paper's feet: 8' is the part's own octave
+const SHAPE_SHORT = { triangle: 'Tri', sine: 'Sine', square: 'Sq' };
+const SETTER = { pulse: setPulse, saw: setSaw, sub: setSub, noise: setNoise };
+const SOURCE_COLOUR = { pulse: 'var(--gen-3)', saw: 'var(--gen-4)', sub: 'var(--gen-7)', noise: 'var(--gen-7)' };
 const KEY_HOLD_MS = 60000;
 
 // ---- the graph ------------------------------------------------------------
 // One LFO for the bench, three gains for its three targets; a voice per
-// note: osc 1 and osc 2 -> filter -> amp -> tremolo -> the part's gain ->
-// master. The amplitude envelope is booked on amp.gain and the filter
-// envelope on filter.detune (cents), so Cutoff stays free to move live on
-// filter.frequency and the LFO adds into the same detune param.
+// note: VCO (and a second for Pair / Fifth) + sub + noise -> filter -> amp
+// -> tremolo -> the part's gain -> master. One saw oscillator serves a VCO's
+// saw and its pulse: the pulse is the saw minus itself delayed by the
+// width, so both are band-limited and the LFO moves the width by moving
+// the delay (PWM). The amplitude envelope is booked on amp.gain (or the
+// gate is, when the VCA says so) and the filter envelope on filter.detune
+// (cents), so Cutoff stays free to move live on filter.frequency and the
+// LFO adds into the same detune param.
 function buildSynthGraph(ctx, input, master) {
     const bus = ctx.createGain();
     bus.gain.value = 1;
@@ -66,6 +78,10 @@ function buildSynthGraph(ctx, input, master) {
     const lfoAmp = ctx.createGain(); lfoAmp.gain.value = 0;
     lfo.connect(lfoPitch); lfo.connect(lfoCut); lfo.connect(lfoAmp);
     lfo.start();
+    const lfoStart = ctx.currentTime;
+    // one white-noise buffer for the graph; each voice plays it looped
+    const noiseBuf = ctx.createBuffer(1, Math.round(ctx.sampleRate * 2), ctx.sampleRate);
+    { const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i += 1) d[i] = Math.random() * 2 - 1; }
     const voices = new Set();
     let lastSeqHz = null;
     let lastOn = -1;
@@ -99,56 +115,84 @@ function buildSynthGraph(ctx, input, master) {
         const elapsedMs = Math.max(0, (when - v.t0) * 1000);
         const e = adsrAt(h, elapsedMs, elapsedMs + 1);
         const R = h.release / 1000;
-        for (const [param, peak] of [[v.amp.gain, 1], [v.filter.detune, envOctaves(h) * 1200]]) {
-            param.cancelScheduledValues(when);
-            param.setValueAtTime(e * peak, when);
-            param.linearRampToValueAtTime(0, when + R);
-        }
-        const end = when + R + 0.05;
-        try { v.osc1.stop(end); v.osc2?.stop(end); } catch { /* ended */ }
+        const gate = h.vca === 'gate';
+        v.amp.gain.cancelScheduledValues(when);
+        if (gate) { v.amp.gain.setValueAtTime(1, when); v.amp.gain.linearRampToValueAtTime(0, when + 0.006); }
+        else { v.amp.gain.setValueAtTime(e, when); v.amp.gain.linearRampToValueAtTime(0, when + R); }
+        v.filter.detune.cancelScheduledValues(when);
+        v.filter.detune.setValueAtTime(e * envOctaves(h) * 1200, when);
+        v.filter.detune.linearRampToValueAtTime(0, when + R);
+        v.stopAll(when + (gate ? 0.02 : R) + 0.05);
         v.off = when;
     }
     function noteOn(midi, when, gateSec, s, { glideFromHz = null, held = false } = {}) {
         const h = s;
         const f0 = midiHz(midi) * 2 ** h.octave;
         const two = h.osc2 !== 'off';
-        const g = OSC_GAIN[WAVES[h.wave].type] * (two ? 0.62 : 1) * PART_GAIN[h.part];
-        const osc1 = ctx.createOscillator();
-        osc1.type = WAVES[h.wave].type;
+        const pg = PART_GAIN[h.part] * (two ? 0.62 : 1);
         const gl = GLIDES[h.glide].ms / 1000;
-        if (glideFromHz && gl > 0) { osc1.frequency.setValueAtTime(glideFromHz, when); osc1.frequency.exponentialRampToValueAtTime(f0, when + gl); } else osc1.frequency.setValueAtTime(f0, when);
-        osc1.detune.value = h.osc2 === 'pair' ? -h.detune / 2 : 0;
-        lfoPitch.connect(osc1.detune);
-        const g1 = ctx.createGain(); g1.gain.value = g;
         const filter = ctx.createBiquadFilter();
         filter.type = h.bypass ? 'allpass' : FILTERS[h.filter].type;
         filter.frequency.value = h.cutoff;
         filter.Q.value = h.bypass ? 0 : nodeQ(h);
         lfoCut.connect(filter.detune);
         bookEnvelope(filter.detune, when, held ? null : gateSec, h, envOctaves(h) * 1200, 0);
+        const stops = [];
+        const vcos = {};
+        // a VCO: one saw serves the saw and the pulse (the saw minus itself
+        // delayed by the width); the LFO moves that delay when PW is by LFO
+        const vco = (name, freq, detuneCents, fromHz) => {
+            const saw = ctx.createOscillator();
+            saw.type = 'sawtooth';
+            if (fromHz && gl > 0) { saw.frequency.setValueAtTime(fromHz, when); saw.frequency.exponentialRampToValueAtTime(freq, when + gl); } else saw.frequency.setValueAtTime(freq, when);
+            saw.detune.value = detuneCents;
+            lfoPitch.connect(saw.detune);
+            const gSaw = ctx.createGain(); gSaw.gain.value = (h.saw / 100) * SOURCE_GAIN.saw * pg;
+            const gPul = ctx.createGain(); gPul.gain.value = (h.pulse / 100) * SOURCE_GAIN.pulse * pg;
+            const gNeg = ctx.createGain(); gNeg.gain.value = -gPul.gain.value;
+            const delay = ctx.createDelay(0.25);
+            const period = 1 / freq;
+            delay.delayTime.value = (pwmOn(h) ? 0.5 : h.width / 100) * period;
+            const pw = ctx.createGain(); pw.gain.value = pwmOn(h) ? (0.5 - h.width / 100) * period : 0;
+            lfo.connect(pw); pw.connect(delay.delayTime);
+            saw.connect(gSaw); gSaw.connect(filter);
+            saw.connect(gPul); gPul.connect(filter);
+            saw.connect(delay); delay.connect(gNeg); gNeg.connect(filter);
+            saw.start(when);
+            stops.push(saw);
+            vcos[name] = { saw, gSaw, gPul, gNeg, delay, pw };
+            return saw;
+        };
+        const osc1 = vco('a', f0, h.osc2 === 'pair' ? -h.detune / 2 : 0, glideFromHz);
+        let osc2 = null;
+        if (two) { const ratio = osc2Ratio(h); osc2 = vco('b', f0 * ratio, h.osc2 === 'pair' ? h.detune / 2 : 0, glideFromHz ? glideFromHz * ratio : null); }
+        // the sub-oscillator: a square an octave or two down
+        const sub = ctx.createOscillator();
+        sub.type = 'square';
+        const fs = f0 / 2 ** h.subOct;
+        if (glideFromHz && gl > 0) { sub.frequency.setValueAtTime(glideFromHz / 2 ** h.subOct, when); sub.frequency.exponentialRampToValueAtTime(fs, when + gl); } else sub.frequency.setValueAtTime(fs, when);
+        lfoPitch.connect(sub.detune);
+        const gSub = ctx.createGain(); gSub.gain.value = (h.sub / 100) * SOURCE_GAIN.sub * PART_GAIN[h.part];
+        sub.connect(gSub); gSub.connect(filter); sub.start(when); stops.push(sub);
+        // white noise, looped
+        const noise = ctx.createBufferSource(); noise.buffer = noiseBuf; noise.loop = true;
+        const gNoise = ctx.createGain(); gNoise.gain.value = (h.noise / 100) * SOURCE_GAIN.noise * PART_GAIN[h.part];
+        noise.connect(gNoise); gNoise.connect(filter); noise.start(when); stops.push(noise);
+        // the amplifier: the envelope, or the gate (the key alone)
         const amp = ctx.createGain();
-        bookEnvelope(amp.gain, when, held ? null : gateSec, h, 1, 0);
+        if (h.vca === 'gate') {
+            amp.gain.setValueAtTime(0, when); amp.gain.linearRampToValueAtTime(1, when + 0.004);
+            if (!held) { amp.gain.setValueAtTime(1, when + gateSec); amp.gain.linearRampToValueAtTime(0, when + gateSec + 0.006); }
+        } else bookEnvelope(amp.gain, when, held ? null : gateSec, h, 1, 0);
         const trem = ctx.createGain();
         trem.gain.value = 1 - (h.lfoTarget === 'amp' ? lfoSwing(h) / 2 : 0);
         lfoAmp.connect(trem.gain);
-        osc1.connect(g1); g1.connect(filter);
-        let osc2 = null;
-        if (two) {
-            osc2 = ctx.createOscillator();
-            osc2.type = h.osc2 === 'sub' ? 'square' : WAVES[h.wave].type;
-            const ratio = osc2Ratio(h);
-            const f2 = f0 * ratio;
-            if (glideFromHz && gl > 0) { osc2.frequency.setValueAtTime(glideFromHz * ratio, when); osc2.frequency.exponentialRampToValueAtTime(f2, when + gl); } else osc2.frequency.setValueAtTime(f2, when);
-            osc2.detune.value = h.osc2 === 'pair' ? h.detune / 2 : 0;
-            lfoPitch.connect(osc2.detune);
-            const g2 = ctx.createGain(); g2.gain.value = h.osc2 === 'sub' ? OSC_GAIN.square * 0.62 * PART_GAIN[h.part] : g;
-            osc2.connect(g2); g2.connect(filter);
-        }
         filter.connect(amp); amp.connect(trem); trem.connect(bus);
-        osc1.start(when); osc2?.start(when);
-        const v = { midi, f0, osc1, osc2, filter, amp, trem, t0: when, off: held ? when + KEY_HOLD_MS / 1000 : when + gateSec, h, held, released: false, seq: !held };
-        if (!held) { const end = when + gateSec + h.release / 1000 + 0.05; osc1.stop(end); osc2?.stop(end); v.released = true; }
-        else { osc1.stop(when + KEY_HOLD_MS / 1000); osc2?.stop(when + KEY_HOLD_MS / 1000); }
+        const stopAll = (t) => { for (const nd of stops) { try { nd.stop(t); } catch { /* ended */ } } };
+        const tail = h.vca === 'gate' ? 0.02 : h.release / 1000;
+        const v = { midi, f0, osc1, osc2, vcos, sub, gSub, noise, gNoise, filter, amp, trem, t0: when, off: held ? when + KEY_HOLD_MS / 1000 : when + gateSec, tail, h, held, released: false, seq: !held, stopAll };
+        if (!held) { stopAll(when + gateSec + tail + 0.05); v.released = true; }
+        else stopAll(when + KEY_HOLD_MS / 1000);
         voices.add(v);
         osc1.onended = () => voices.delete(v);
         if (when > lastOn) lastOn = when;
@@ -208,10 +252,25 @@ function buildSynthGraph(ctx, input, master) {
             glide(v.filter.frequency, s.cutoff, ctx, 0.02);
             glide(v.filter.Q, s.bypass ? 0 : nodeQ(s), ctx, 0.02);
             const f0 = midiHz(v.midi) * 2 ** s.octave;
-            if (Math.abs(f0 - v.f0) > 0.01 || v.osc2) { glide(v.osc1.frequency, f0, ctx, 0.02); if (v.osc2) glide(v.osc2.frequency, f0 * osc2Ratio(s), ctx, 0.02); v.f0 = f0; }
-            v.osc1.type = WAVES[s.wave].type;
-            v.osc1.detune.value = s.osc2 === 'pair' ? -s.detune / 2 : 0;
-            if (v.osc2) { v.osc2.type = s.osc2 === 'sub' ? 'square' : WAVES[s.wave].type; v.osc2.detune.value = s.osc2 === 'pair' ? s.detune / 2 : 0; }
+            v.f0 = f0;
+            const two = v.osc2 != null;
+            const pg = PART_GAIN[s.part] * (two ? 0.62 : 1);
+            for (const [name, o] of Object.entries(v.vcos)) {
+                const on = name === 'a' || s.osc2 !== 'off' ? 1 : 0;
+                const freq = f0 * (name === 'b' ? osc2Ratio(s) : 1);
+                glide(o.saw.frequency, freq, ctx, 0.02);
+                o.saw.detune.value = s.osc2 === 'pair' ? (name === 'a' ? -s.detune / 2 : s.detune / 2) : 0;
+                const period = 1 / freq;
+                const gp = (s.pulse / 100) * SOURCE_GAIN.pulse * pg * on;
+                glide(o.gSaw.gain, (s.saw / 100) * SOURCE_GAIN.saw * pg * on, ctx, 0.02);
+                glide(o.gPul.gain, gp, ctx, 0.02);
+                glide(o.gNeg.gain, -gp, ctx, 0.02);
+                glide(o.delay.delayTime, (pwmOn(s) ? 0.5 : s.width / 100) * period, ctx, 0.02);
+                glide(o.pw.gain, pwmOn(s) ? (0.5 - s.width / 100) * period : 0, ctx, 0.02);
+            }
+            glide(v.sub.frequency, f0 / 2 ** s.subOct, ctx, 0.02);
+            glide(v.gSub.gain, (s.sub / 100) * SOURCE_GAIN.sub * PART_GAIN[s.part], ctx, 0.02);
+            glide(v.gNoise.gain, (s.noise / 100) * SOURCE_GAIN.noise * PART_GAIN[s.part], ctx, 0.02);
             glide(v.trem.gain, 1 - (s.lfoTarget === 'amp' ? swing / 2 : 0), ctx, 0.02);
         }
     }
@@ -222,7 +281,7 @@ function buildSynthGraph(ctx, input, master) {
         const t = ctx.currentTime;
         for (const v of voices) {
             if (!keys && v.held) continue;
-            try { v.amp.gain.cancelScheduledValues(t); v.amp.gain.setTargetAtTime(0, t, 0.006); v.osc1.stop(t + 0.05); v.osc2?.stop(t + 0.05); } catch { /* ended */ }
+            try { v.amp.gain.cancelScheduledValues(t); v.amp.gain.setTargetAtTime(0, t, 0.006); v.stopAll(t + 0.05); } catch { /* ended */ }
             voices.delete(v);
         }
         if (keys) held.clear();
@@ -232,10 +291,10 @@ function buildSynthGraph(ctx, input, master) {
     function sounding() {
         const t = ctx.currentTime;
         const out = [];
-        for (const v of voices) if (v.t0 <= t && (v.held ? !v.released : v.off + v.h.release / 1000 > t)) out.push(v.midi);
+        for (const v of voices) if (v.t0 <= t && (v.held ? !v.released : v.off + v.tail > t)) out.push(v.midi);
         return out;
     }
-    return { noteOn, bookBar, keyOn, keyOff, allKeysOff, apply, clear, sounding, lastOn: () => lastOn, settings: () => cur };
+    return { noteOn, bookBar, keyOn, keyOff, allKeysOff, apply, clear, sounding, lastOn: () => lastOn, settings: () => cur, lfoTime: () => ctx.currentTime - lfoStart };
 }
 
 // ---- helpers for the stage ---------------------------------------------------
@@ -245,8 +304,17 @@ const BLACK_KEYS = [1, 3, 6, 8, 10];
 const WHITE_LETTERS = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K'];
 const BLACK_LETTERS = ['W', 'E', 'T', 'Y', 'U'];
 const GRADE_TONE = { good: 'gold', partly: 'inkSoft', poor: 'coral' };
-const LogDial = ({ value, min, max, onChange, format, ...rest }) => (
-    <Dial {...rest} value={logToPos(value, min, max)} min={0} max={100} step={0.5} format={(pos) => format(posToLog(pos, min, max))} onChange={(pos) => onChange(posToLog(pos, min, max))} />
+// A panel slider walking a log range (cutoff, the envelope's times, the LFO's rate).
+const LogFader = ({ value, min, max, onChange, format, ...rest }) => (
+    <Fader {...rest} slim value={logToPos(value, min, max)} min={0} max={100} step={0.5} format={(pos) => format(posToLog(pos, min, max))} onChange={(pos) => onChange(posToLog(pos, min, max))} />
+);
+// A slider's column: its value above, the instrument, its name below.
+const Slide = ({ name, shown, off = false, wide = false, children }) => (
+    <div className={styles.slide} data-off={off || undefined} data-wide={wide || undefined}>
+        <span className={styles.slideVal}>{shown}</span>
+        {children}
+        <span className={styles.slideName}>{name}</span>
+    </div>
 );
 
 // ---- the bench ------------------------------------------------------------
@@ -287,7 +355,7 @@ export default function SynthBench({ back }) {
 
     // live edits reach the graph; the part, the voices and hold restart the loop
     useEffect(() => { graphRef.current?.apply(heard(state)); }, [state, held, heard]);
-    useEffect(() => { if (playingRef.current) restart(); }, [state.part, state.voices, state.arp, held]); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => { if (playingRef.current) restart(); }, [state.part, state.voices, state.arp, state.vca, held]); // eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => { if (!playing) graphRef.current?.clear({ keys: false }); }, [playing]);
     useEffect(() => {
         const ctx = ctxRef.current;
@@ -382,6 +450,7 @@ export default function SynthBench({ back }) {
             gold: v('--gold', '#c5a855'),
             goldBright: v('--gold-bright', '#f0d48a'),
             purple: v('--gen-3', '#a395c9'),
+            amber: v('--gen-4', '#d9b26a'),
             green: v('--gen-1', '#7fb39b'),
             teal: v('--gen-7', '#7fd6de'),
             coral: v('--gen-6', '#d08a80'),
@@ -396,7 +465,6 @@ export default function SynthBench({ back }) {
             keyWhite: 'rgba(255, 255, 255, 0.88)',
             keyBlack: '#22223a',
         };
-        const waveCol = (id) => v(WAVES[id].colour.replace(/^var\(|\)$/g, ''), '#a395c9');
         const monoFace = v('--mono', 'monospace');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
@@ -425,6 +493,9 @@ export default function SynthBench({ back }) {
             const gr = graphRef.current;
             const ctx = ctxRef.current;
             const sounding = gr && ctx ? gr.sounding() : [];
+            // the pulse's width this frame: where the LFO has it, when PW is by LFO
+            const lfoT = gr && ctx ? gr.lfoTime() : performance.now() / 1000;
+            const wNow = pwmOn(s) ? widthAt(s, lfoValue(s.lfoShape, s.lfoRate, lfoT)) : s.width / 100;
             const keyC = PARTS[s.part].keyC;
             let handle = null; let keyPos = null; let boxes = null; let lanes = null;
             g2.font = mono; g2.lineWidth = 1; g2.textBaseline = 'alphabetic';
@@ -486,19 +557,19 @@ export default function SynthBench({ back }) {
                 for (const S of [L, R]) { g2.fillStyle = col.screen; g2.fillRect(S.x0, S.top, S.x1 - S.x0, sH); g2.strokeStyle = col.line; g2.strokeRect(S.x0 + 0.5, S.top + 0.5, S.x1 - S.x0 - 1, sH - 1); }
 
                 // the wave leaving the synth
-                const shape = waveShape(s);
+                const shape = waveShape(s, { width: wNow });
                 const mid = (L.top + L.bottom) / 2; const half = sH / 2 - 12; const LW = L.x1 - L.x0;
                 g2.strokeStyle = col.gridDiv; g2.beginPath(); g2.moveTo(L.x0, mid + 0.5); g2.lineTo(L.x1, mid + 0.5); g2.stroke();
                 const trace = (arr) => { g2.beginPath(); for (let i = 0; i < arr.length; i += 1) { const x = L.x0 + (i / (arr.length - 1)) * LW; const y = mid - arr[i] * half; if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y); } };
                 g2.strokeStyle = col.inkFaint; g2.lineWidth = 1; g2.setLineDash([3, 3]); trace(shape.raw); g2.stroke(); g2.setLineDash([]);
-                const wc = waveCol(s.wave);
+                const wc = s.saw > s.pulse ? col.amber : col.purple;
                 g2.lineJoin = 'round'; g2.lineCap = 'round';
                 trace(shape.out); g2.shadowColor = wc; g2.shadowBlur = 9; g2.strokeStyle = wc; g2.lineWidth = 2; g2.stroke(); g2.shadowBlur = 0;
                 g2.lineWidth = 1; g2.lineCap = 'butt';
                 g2.fillStyle = col.inkSoft; g2.font = monoBold; g2.textAlign = 'left';
                 g2.fillText('WAVE', L.x0 + 8, L.top + 14);
                 g2.fillStyle = col.inkFaint; g2.font = monoSmall;
-                g2.fillText(`two cycles at ${fmtHz(shape.f0)} · dotted: before the filter`, L.x0 + 8, L.bottom - 7);
+                g2.fillText(`two cycles at ${fmtHz(shape.f0)}${s.pulse > 0 && (pwmOn(s) || s.width < 50) ? ` · width ${Math.round(wNow * 100)} %` : ''} · dotted: before the filter`, L.x0 + 8, L.bottom - 7);
 
                 // the harmonics, with the filter over them
                 const RW = R.x1 - R.x0; const RH = R.bottom - R.top;
@@ -511,20 +582,33 @@ export default function SynthBench({ back }) {
                 for (const [hz, lab] of [[50, '50'], [100, '100'], [200, '200'], [500, '500'], [1000, '1k'], [2000, '2k'], [5000, '5k'], [10000, '10k']]) g2.fillText(lab, xHz(hz), R.bottom + 12);
                 g2.textAlign = 'left'; g2.fillText('Hz', R.x1 - 14, R.bottom + 12);
                 g2.textAlign = 'left'; g2.fillText('0 dB', R.x0 + 4, yDb(0) - 3); g2.fillText('−24', R.x0 + 4, yDb(-24) - 3);
-                const lines = spectrum(s);
-                const norm = Math.max(...lines.map((l) => l.amp), 1e-6);
+                const lines = spectrum(s, undefined, { width: wNow });
+                const nz = noiseLevel(s);
+                const norm = Math.max(...lines.map((l) => l.amp), nz, 1e-6);
+                const curve = s.bypass ? null : filterCurve(s, FREQS);
+                // the noise: a floor across the screen, shaped by the filter
+                if (nz > 0) {
+                    const nDb = 20 * Math.log10(nz / norm);
+                    const yAt = (i) => yDb(nDb + (curve ? curve[i].db : 0));
+                    g2.beginPath(); g2.moveTo(R.x0, R.bottom);
+                    FREQS.forEach((hz, i) => g2.lineTo(xHz(hz), yAt(i)));
+                    g2.lineTo(R.x1, R.bottom); g2.closePath();
+                    g2.fillStyle = col.teal; g2.globalAlpha = 0.14; g2.fill(); g2.globalAlpha = 1;
+                    g2.beginPath(); FREQS.forEach((hz, i) => { const y = yAt(i); if (i === 0) g2.moveTo(xHz(hz), y); else g2.lineTo(xHz(hz), y); });
+                    g2.strokeStyle = col.teal; g2.globalAlpha = 0.55; g2.stroke(); g2.globalAlpha = 1;
+                    g2.fillStyle = col.teal; g2.font = monoSmall; g2.textAlign = 'left'; g2.fillText('noise', R.x0 + 4, Math.max(R.top + 26, yAt(0) - 4));
+                }
                 for (const l of lines) {
                     const x = xHz(l.hz);
                     const yRaw = yDb(20 * Math.log10(l.amp / norm));
                     const yOut = yDb(20 * Math.log10(Math.max(1e-6, l.out / norm)));
                     g2.strokeStyle = col.inkFaint; g2.globalAlpha = 0.35; g2.beginPath(); g2.moveTo(x, R.bottom); g2.lineTo(x, yRaw); g2.stroke(); g2.globalAlpha = 1;
-                    g2.strokeStyle = l.osc === 2 ? (s.osc2 === 'sub' ? col.teal : col.green) : wc; g2.lineWidth = 2;
+                    g2.strokeStyle = l.src === 'sub' ? col.teal : l.osc === 2 ? col.green : l.src === 'saw' ? col.amber : col.purple; g2.lineWidth = 2;
                     g2.beginPath(); g2.moveTo(x, R.bottom); g2.lineTo(x, yOut); g2.stroke();
                     g2.lineWidth = 1;
                 }
                 // the filter's curve, gold, and its dot
-                if (!s.bypass) {
-                    const curve = filterCurve(s, FREQS);
+                if (curve) {
                     g2.beginPath(); curve.forEach((p, i) => { const x = xHz(p.hz); const y = yDb(p.db); if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y); });
                     g2.shadowColor = 'rgba(240, 212, 138, 0.7)'; g2.shadowBlur = 10; g2.strokeStyle = col.goldBright; g2.lineWidth = 2; g2.lineJoin = 'round'; g2.stroke(); g2.shadowBlur = 0; g2.lineWidth = 1;
                     const dx = xHz(s.cutoff); const dy = yDb(resDb(s.res));
@@ -541,7 +625,13 @@ export default function SynthBench({ back }) {
                 g2.fillStyle = col.inkSoft; g2.font = monoBold; g2.textAlign = 'left';
                 g2.fillText('HARMONICS', R.x0 + 8, R.top + 14);
                 g2.fillStyle = col.inkFaint; g2.font = monoSmall;
-                g2.fillText(`${WAVES[s.wave].harmonics}${s.osc2 === 'pair' ? ` · the pair ${s.detune} ct apart` : s.osc2 === 'sub' ? ' · the sub an octave down' : s.osc2 === 'fifth' ? ' · the second a fifth up' : ''}`, R.x0 + 74, R.top + 14);
+                {
+                    const bits = harmonicsSaid(s).split(' · ');
+                    if (s.osc2 === 'pair') bits.push(`doubled ${s.detune} ct apart`); else if (s.osc2 === 'fifth') bits.push('a second a fifth up');
+                    let head = bits.join(' · ');
+                    while (bits.length > 1 && g2.measureText(head).width > RW - 84) { bits.pop(); head = bits.join(' · '); }
+                    g2.fillText(head, R.x0 + 74, R.top + 14);
+                }
                 geomRef.current = { d, L, R, keys, xHz, yDb, hzOfX: (x) => hzOfPos((x - R.x0) / RW), dbOfY: (y) => DB_TOP - ((y - R.top) / RH) * (DB_TOP - DB_BOT) };
             } else if (d === 'alevel') {
                 // ---- the paper's drawing: sections in signal order ----
@@ -566,9 +656,9 @@ export default function SynthBench({ back }) {
                     env: { x: bx(1), y: row2, w: bw, h: bh },
                 };
                 const lineOf = {
-                    osc: [`${s0.osc2 === 'pair' ? `2 × ${WAVES[s0.wave].label.toLowerCase()}` : s0.osc2 === 'sub' ? `${WAVES[s0.wave].label.toLowerCase()} + sub` : s0.osc2 === 'fifth' ? `${WAVES[s0.wave].label.toLowerCase()} + a fifth` : WAVES[s0.wave].label.toLowerCase()}`, `octave ${s0.octave > 0 ? '+1' : s0.octave < 0 ? '−1' : '0'}${s0.osc2 === 'pair' ? ` · detune ${s0.detune} ct` : ''}`, WAVES[s0.wave].harmonics],
+                    osc: [`${sourcesShort(s0)}${s0.osc2 === 'pair' ? ' × 2' : s0.osc2 === 'fifth' ? ' + a fifth' : ''}`, `range ${RANGE_WORD[s0.octave]}${s0.osc2 === 'pair' ? ` · detune ${s0.detune} ct` : ''}${s0.pulse > 0 ? ` · PW ${pwmOn(s0) ? 'by LFO' : `${s0.width} %`}` : ''}`, harmonicsSaid(s0)],
                     filter: [`${FILTERS[s0.filter].label} · cutoff ${fmtHz(s0.cutoff)}`, `resonance ${s0.res} % (${resDb(s0.res) > 0 ? '+' : ''}${resDb(s0.res).toFixed(0)} dB peak)`, s0.envAmt > 0 ? `env → cutoff ${envOctaves(s0).toFixed(1)} oct` : 'no envelope on the cutoff'],
-                    voices: [`${VOICES[s0.voices].label.toLowerCase()} · ${GLIDES[s0.glide].label.toLowerCase() === 'off' ? 'no glide' : `glide ${GLIDES[s0.glide].ms} ms`}`, `level ${Math.round(s0.volume * 100)} %`, 'the envelope sets its gain'],
+                    voices: [`VCA ${s0.vca} · ${VOICES[s0.voices].label.toLowerCase()}${GLIDES[s0.glide].label.toLowerCase() === 'off' ? '' : ` · glide ${GLIDES[s0.glide].ms} ms`}`, `level ${Math.round(s0.volume * 100)} %`, s0.vca === 'gate' ? 'the key sets its gain: on, then off' : 'the envelope sets its gain'],
                     lfo: lfoOn(s0) ? [`${LFO_SHAPES[s0.lfoShape].label.toLowerCase()} · ${fmtRate(s0.lfoRate)}`, `→ ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()} · depth ${s0.lfoDepth} %`, 'a control signal, never heard'] : ['depth 0 %', 'nothing modulated', 'a control signal, never heard'],
                     env: [`A ${fmtMs(s0.attack)} · D ${fmtMs(s0.decay)}`, `S ${s0.sustain} % · R ${fmtMs(s0.release)}`, 'times, times, a level, a time'],
                 };
@@ -585,10 +675,11 @@ export default function SynthBench({ back }) {
                 g2.fillStyle = col.inkSoft; g2.font = monoSmall; g2.textAlign = 'left'; g2.fillText('OUT', boxes.voices.x + bw + outW - 4, my - 6);
                 // the control routes
                 const envTop = boxes.env.y;
-                arrow(boxes.env.x + bw * 0.62, envTop, boxes.voices.x + bw * 0.3, row1 + bh, col.purple, false);
+                arrow(boxes.env.x + bw * 0.62, envTop, boxes.voices.x + bw * 0.3, row1 + bh, s0.vca === 'gate' ? col.inkFaint : col.purple, s0.vca === 'gate');
                 arrow(boxes.env.x + bw * 0.38, envTop, boxes.filter.x + bw * 0.5, row1 + bh, s0.envAmt > 0 ? col.purple : col.inkFaint, s0.envAmt === 0);
                 const target = s0.lfoTarget === 'pitch' ? boxes.osc : s0.lfoTarget === 'cutoff' ? boxes.filter : boxes.voices;
                 arrow(boxes.lfo.x + bw * 0.5, boxes.lfo.y, target.x + bw * (s0.lfoTarget === 'pitch' ? 0.5 : 0.18), row1 + bh, lfoOn(s0) ? col.purple : col.inkFaint, !lfoOn(s0));
+                if (pwmOn(s0)) { arrow(boxes.lfo.x + bw * 0.22, boxes.lfo.y, boxes.osc.x + bw * 0.22, row1 + bh, col.purple, false); g2.fillStyle = col.purple; g2.font = monoSmall; g2.textAlign = 'left'; g2.fillText('PW', boxes.osc.x + bw * 0.22 + 5, row1 + bh + 12); }
                 g2.fillStyle = col.purple; g2.font = monoSmall; g2.textAlign = 'left';
                 g2.fillText('control, dashed when not routed', boxes.env.x + bw + 10, row2 + bh - 6);
                 // the boxes
@@ -606,7 +697,8 @@ export default function SynthBench({ back }) {
                     g2.fillStyle = col.inkSoft; g2.font = mono;
                     const ls = lineOf[id];
                     const lh = short ? 14 : 16;
-                    ls.slice(0, short ? 2 : 3).forEach((t, i) => { g2.fillStyle = i === 2 ? col.inkFaint : col.inkSoft; g2.font = i === 2 ? monoSmall : mono; g2.fillText(t, b.x + 10, b.y + 36 + i * lh); });
+                    const fit = Math.max(1, Math.min(3, Math.floor((b.h - 36 - 12) / lh)));
+                    ls.slice(0, fit).forEach((t, i) => { g2.fillStyle = i === 2 ? col.inkFaint : col.inkSoft; g2.font = i === 2 ? monoSmall : mono; g2.fillText(t, b.x + 10, b.y + 36 + i * lh); });
                     const tone = GRADE_TONE[gd.grade];
                     g2.fillStyle = tone === 'gold' ? col.goldBright : tone === 'coral' ? col.coral : col.inkSoft; g2.font = monoBold; g2.textAlign = 'right';
                     g2.fillText(gd.grade === 'good' ? `suits ${job}` : gd.grade === 'partly' ? 'partly' : `does not suit ${job}`, b.x + b.w - 10, b.y + b.h - 9);
@@ -625,9 +717,9 @@ export default function SynthBench({ back }) {
                 const lanesDef = [
                     { id: 'gate', name: 'GATE', h: gateH, note: 'the key: down, then up' },
                     { id: 'env', name: 'ENVELOPE', h: LH, note: 'asks: A, D, S, R', colour: col.purple },
-                    { id: 'amp', name: 'AMPLIFIER', h: LH, note: s0.lfoTarget === 'amp' && lfoOn(s0) ? 'obeys; the LFO is tremolo' : 'obeys: the note\'s shape', colour: col.green },
+                    { id: 'amp', name: 'AMPLIFIER', h: LH, note: s0.vca === 'gate' ? 'obeys the gate: on, then off' : s0.lfoTarget === 'amp' && lfoOn(s0) ? 'obeys; the LFO is tremolo' : 'obeys: the note\'s shape', colour: col.green },
                     { id: 'cutoff', name: 'CUTOFF', h: LH, note: s0.envAmt > 0 ? (s0.lfoTarget === 'cutoff' && lfoOn(s0) ? 'obeys env; wobble = LFO' : 'obeys the envelope') : (s0.lfoTarget === 'cutoff' && lfoOn(s0) ? 'the wobble is the LFO' : 'not routed: stays put'), colour: col.goldBright },
-                    { id: 'lfo', name: 'LFO', h: LH, note: lfoOn(s0) ? `→ ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()} ${Math.round(lfoSwing(s0) * (s0.lfoTarget === 'amp' ? 100 : 1))}${s0.lfoTarget === 'amp' ? ' %' : ' ct'}; never heard` : 'depth 0: nothing moves', colour: col.purple },
+                    { id: 'lfo', name: 'LFO', h: LH, note: lfoOn(s0) ? `→ ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()} ${Math.round(lfoSwing(s0) * (s0.lfoTarget === 'amp' ? 100 : 1))}${s0.lfoTarget === 'amp' ? ' %' : ' ct'}${pwmOn(s0) ? ' + PW' : ''}; never heard` : pwmOn(s0) ? `→ pulse width ${s0.width} to ${100 - s0.width} %; never heard` : 'depth 0: nothing moves', colour: col.purple },
                 ];
                 lanes = [];
                 let y = areaTop;
@@ -643,7 +735,7 @@ export default function SynthBench({ back }) {
                     const words = ln.note.split(' '); let l1 = ''; const out = [];
                     for (const wd of words) { const t2 = l1 ? `${l1} ${wd}` : wd; if (g2.measureText(t2).width > 160) { out.push(l1); l1 = wd; } else l1 = t2; }
                     if (l1) out.push(l1);
-                    out.slice(0, ln.h > 40 ? 2 : 1).forEach((t, i) => g2.fillText(t, labX, lane.top + 27 + i * 12));
+                    out.slice(0, ln.h > 44 ? 2 : ln.h >= 30 ? 1 : 0).forEach((t, i) => g2.fillText(t, labX, lane.top + 27 + i * 12)); // a short lane keeps its name and drops its note
                     // the gate line and the ADSR marks on every lane
                     const gx = xOf(tl.gateMs);
                     g2.strokeStyle = col.gridDiv; g2.setLineDash([2, 3]); g2.beginPath(); g2.moveTo(Math.round(gx) + 0.5, lane.top); g2.lineTo(Math.round(gx) + 0.5, lane.bottom); g2.stroke(); g2.setLineDash([]);
@@ -677,7 +769,7 @@ export default function SynthBench({ back }) {
                 g2.fillText(fmtHz(s0.cutoff), X0 + 6, yCut(s0.cutoff) - 4 < cut.top + 10 ? yCut(s0.cutoff) + 12 : yCut(s0.cutoff) - 4);
                 if (s0.envAmt > 0) g2.fillText(`peak ${fmtHz(Math.max(...tl.cutoff))}`, xOf(s0.attack) + 6, cut.top + 11);
                 plot(lfoL, tl.lfo, -1.15, 1.15, col.purple);
-                if (lfoOn(s0)) { g2.fillStyle = col.purple; g2.textAlign = 'left'; g2.fillText(`one cycle ${fmtMs(1000 / s0.lfoRate)}`, X0 + 6, lfoL.top + 11); }
+                if (lfoOn(s0) || pwmOn(s0)) { g2.fillStyle = col.purple; g2.textAlign = 'left'; g2.fillText(`one cycle ${fmtMs(1000 / s0.lfoRate)}`, X0 + 6, lfoL.top + 11); }
                 // the time axis
                 const axisY = bottom - 4;
                 const tick = tl.spanMs > 2500 ? 500 : tl.spanMs > 1200 ? 200 : 100;
@@ -693,8 +785,9 @@ export default function SynthBench({ back }) {
             }
 
             // ---- the setting line, for the depth ----
-            const segs = [PARTS[s0.part].label.toLowerCase(), s0.osc2 === 'pair' ? `2 × ${WAVES[s0.wave].label.toLowerCase()}` : s0.osc2 === 'sub' ? `${WAVES[s0.wave].label.toLowerCase()} + sub` : s0.osc2 === 'fifth' ? `${WAVES[s0.wave].label.toLowerCase()} + 5th` : WAVES[s0.wave].label.toLowerCase(), `${FILTERS[s0.filter].label} ${fmtHz(s0.cutoff)}`];
-            if (lfoOn(s0)) segs.push(`LFO → ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()}`);
+            const segs = [PARTS[s0.part].label.toLowerCase(), `${sourcesShort(s0)}${s0.osc2 === 'pair' ? ' × 2' : s0.osc2 === 'fifth' ? ' + 5th' : ''}`, `${FILTERS[s0.filter].label} ${fmtHz(s0.cutoff)}`];
+            if (s0.vca === 'gate') segs.push('VCA gate');
+            if (lfoOn(s0)) segs.push(`LFO → ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()}${pwmOn(s0) ? ' + PW' : ''}`); else if (pwmOn(s0)) segs.push('LFO → PW');
             segs.push(heldRef.current ? 'raw' : s0.presetId ? PRESETS.find((p) => p.id === s0.presetId)?.name.toLowerCase() : 'your patch');
             if (d !== 'core' && vdd.ok != null) segs.push(vdd.ok ? 'as directed' : 'not as directed');
             g2.fillStyle = col.goldBright; g2.font = mono; g2.textAlign = 'left';
@@ -791,16 +884,19 @@ export default function SynthBench({ back }) {
             render: () => (
                 <>
                     <h2>Synthesis, in the spec&apos;s words</h2>
-                    <p>The spec asks how synthesis is used to create sounds: selecting and mixing sine, triangle, pulse, square and saw waveforms; low-pass and high-pass filters with a cutoff and a resonance; envelopes with an attack, decay, sustain and release; a low frequency oscillator; envelopes and LFOs mapped to the filter cutoff and the pitch; oscillator octave and tuning; monophonic and polyphonic; portamento. This bench is that list as a panel.</p>
+                    <p>The spec asks how synthesis is used to create sounds: selecting and mixing sine, triangle, pulse, square and saw waveforms; low-pass and high-pass filters with a cutoff and a resonance; envelopes with an attack, decay, sustain and release; a low frequency oscillator; envelopes and LFOs mapped to the filter cutoff and the pitch; oscillator octave and tuning; monophonic and polyphonic; portamento. This bench is that list as the paper&apos;s own panel: the 1982 monophonic synthesiser of the 2024 Q6 figure, cut into LFO, VCO, source mixer, VCF, VCA and ENV, the sections the report says many candidates &quot;did not identify&quot;.</p>
                     <h3>Terms</h3>
                     <dl>
-                        <dt>Oscillator</dt><dd>The sound source: a repeating wave at a chosen pitch. Its shape sets the harmonics. Two oscillators a few cents apart beat against each other, which is detune; a sub-oscillator sits an octave below.</dd>
-                        <dt>Waveform</dt><dd>Sine: the fundamental alone. Triangle: odd harmonics, falling fast. Square: odd harmonics at 1/n, hollow. Saw: every harmonic at 1/n, the brightest, the usual start for subtractive synthesis.</dd>
-                        <dt>Octave</dt><dd>The oscillator&apos;s range. The papers mark the octave of the example, and the 2023 AS report&apos;s common fault was an octave too high.</dd>
+                        <dt>VCO</dt><dd>The voltage-controlled oscillator, the sound source: a repeating wave at a chosen pitch. This panel&apos;s VCO gives a pulse and a saw at once, mixed below. A second VCO a few cents from the first beats against it, which is detune.</dd>
+                        <dt>Source mixer</dt><dd>What goes into the filter, each at its own level: the pulse, the saw, a square sub-oscillator an octave or two down, and white noise. The spec&apos;s &quot;selecting and mixing&quot; is this row of sliders.</dd>
+                        <dt>Waveform</dt><dd>Saw: every harmonic at 1/n, the brightest, the usual start for subtractive synthesis. Square: odd harmonics at 1/n, hollow. Pulse: a square whose high and low halves are unequal; as the width narrows the even harmonics come in and it thins. Noise: every frequency at once, no harmonics and no pitch. Sine and triangle are not on this panel; the Oscilloscope bench (2.5) draws all four with sound.</dd>
+                        <dt>Pulse width and PWM</dt><dd>Width is how much of each cycle the pulse is high: 50 % is a square. Pulse-width modulation is the LFO moving that width, so the harmonics shift and the sound moves, like a chorus without one. The 2019 report: &quot;many candidates thought that this was a square wave and did not appreciate that the pulse width was being modulated by the LFO&quot;.</dd>
+                        <dt>Range</dt><dd>The VCO&apos;s octave, in organ feet: 8&apos; the part&apos;s own, 16&apos; an octave down, 4&apos; an octave up. The papers mark the octave of the example, and the 2023 AS report&apos;s common fault was an octave too high.</dd>
                         <dt>Filter</dt><dd>Removes harmonics. Low-pass keeps what is below the cutoff (darker); high-pass keeps what is above (thinner); band-pass keeps a band (nasal). Subtractive synthesis is the filter doing the subtracting.</dd>
                         <dt>Cutoff</dt><dd>Where the filter takes hold: the frequency already 3 dB down. Sweeping it is the classic synthesiser movement. A 2-pole filter falls 12 dB an octave beyond it; this bench&apos;s filter is 2-pole.</dd>
                         <dt>Resonance</dt><dd>A peak at the cutoff. Low: a gentle emphasis. High: a ringing, whistling quality; at the top, the filter sings a note of its own.</dd>
                         <dt>Envelope (ADSR)</dt><dd>Attack: the time to rise to peak. Decay: the time to fall to the sustain. Sustain: the level held while the key is down, a level not a time. Release: the time to fall to silence after the key lifts. Routed to the amplifier it shapes the note; routed to the cutoff it opens and closes the brightness on every note.</dd>
+                        <dt>VCA: Env or Gate</dt><dd>The voltage-controlled amplifier. On Env the envelope sets its gain. On Gate the key does: full while it is down, off when it lifts, the envelope disabled. Not a noise gate; the 2019 report found candidates confusing the two.</dd>
                         <dt>LFO</dt><dd>A low frequency oscillator: a wave below the range of hearing, used to move something. On the pitch it makes vibrato; on the level, tremolo; on the cutoff, a wobble or a sweep. Rate is its speed, depth how far it moves the target. It is a control signal, never heard as a note.</dd>
                         <dt>Mono · poly · portamento</dt><dd>Monophonic plays one note at a time, the usual for bass and lead; polyphonic plays chords, which pads and keyboard parts need. Portamento, or glide, slides the pitch from one note to the next.</dd>
                         <dt>Coarse and fine tuning</dt><dd>Fine tuning is cents, the detune between a pair. Coarse tuning is semitones: Osc 2 set to Fifth sits seven semitones above Osc 1, and Sub an octave below. Octave is the range the papers mark.</dd>
@@ -811,7 +907,9 @@ export default function SynthBench({ back }) {
                     <table>
                         <thead><tr><th>On this bench</th><th>Ableton Live</th><th>Logic Pro</th></tr></thead>
                         <tbody>
-                            <tr><td>Oscillators</td><td>Analog: Osc 1 and Osc 2, each with a shape, an octave and a detune; Operator: the operators&apos; waveforms</td><td>Retro Synth: Osc 1 and Osc 2 with shape, octave and detune; ES2: three oscillators</td></tr>
+                            <tr><td>VCO and source mixer</td><td>Analog: Osc 1 and Osc 2, each with a shape (including a rectangle with a pulse width and white noise), a level, an octave and a detune</td><td>Retro Synth: Osc 1 and Osc 2 with Shape, octave and detune, and a Mix between them</td></tr>
+                            <tr><td>PW by LFO</td><td>Analog: the oscillator&apos;s pulse width with LFO modulation on it</td><td>Retro Synth: Shape Mod from the LFO</td></tr>
+                            <tr><td>VCA Env / Gate</td><td>Analog: Amp Env with its sustain at full and its times at zero is the gate</td><td>Retro Synth: Amp Env set the same way</td></tr>
                             <tr><td>Filter</td><td>Analog: Filter 1, with type, Freq and Res; the Env amount beside it</td><td>Retro Synth: Filter with type, Cutoff and Resonance; the Env Depth beside it</td></tr>
                             <tr><td>Envelope</td><td>Analog: Amp Env and Filter Env, each A D S R</td><td>Retro Synth: Amp Env and Filter Env, each A D S R</td></tr>
                             <tr><td>LFO</td><td>Analog: LFO 1 with shape, Rate and a destination amount on the pitch, the filter or the amp</td><td>Retro Synth: LFO with shape, Rate and a target</td></tr>
@@ -824,7 +922,7 @@ export default function SynthBench({ back }) {
                         <dt>Why a control signal</dt><dd>Inside an analogue synthesiser an audio signal and a control voltage are the same kind of thing: a voltage. What makes one a sound and the other a modulation is only where it is plugged in. The LFO&apos;s output goes to a parameter, not to the speakers.</dd>
                         <dt>Envelope to pitch</dt><dd>The spec also maps an envelope to the pitch: a sweep that starts high and falls on every note, the 2025 Q6 tom. This bench routes its envelope to the amplifier and the cutoff only; the LFO reaches the pitch. A pitch envelope is the one routing here that is written, not played.</dd>
                         <dt>Why the filter is a biquad</dt><dd>The curve on the stage is computed from the same equations the browser&apos;s filter node runs, so what is drawn is what is heard. Resonance is written to the node in decibels for a low-pass and high-pass, and as Q for a band-pass, which is how Web Audio takes it.</dd>
-                        <dt>Two detuned saws</dt><dd>Sum two saws a whisker apart and the result is a pulse wave whose width sweeps: pulse-width modulation by another route, which is why a detuned pair moves the way a chorus does without being one.</dd>
+                        <dt>Two saws make a pulse</dt><dd>A saw minus a copy of itself delayed by part of a cycle is a pulse of that width, and moving the delay moves the width. That is how this bench makes its pulse and its PWM, from two band-limited saws, so the bars on the stage are the harmonics it plays. It is also why two saws detuned a whisker apart move like a chorus: their sum is a pulse whose width sweeps by itself.</dd>
                     </dl>
                     <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters, the vault&apos;s oscillator, filter and envelope notes, and the 9MT0/04 and 9MT0/41 question papers and mark schemes, 2019 to 2025.</p>
                 </>
@@ -836,28 +934,30 @@ export default function SynthBench({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Press Play and the 2023 bass runs on two detuned squares through a low-pass. Turn <b>Detune</b> to zero and the two waves collapse into one; turn it past 30 and detune becomes out of tune. Drag the gold dot left and the harmonics disappear from the top down. Press <b>hold: raw</b> and you hear what the filter and the envelope were taking away. Then switch to A-level and read the sections: that is the Q6 answer, in the order the 2024 report asks for it.</p>
+                    <p>Press Play and the 2023 bass runs on two detuned squares through a low-pass. Pull <b>Detune</b> to zero and the two waves collapse into one; push it past 30 and detune becomes out of tune. Drag the gold dot left and the harmonics disappear from the top down. Set <b>PW by</b> to LFO and watch the WAVE screen breathe: that is pulse-width modulation, and the 2019 report says most candidates called it a square wave. Press <b>hold: raw</b> and you hear what the filter and the envelope were taking away. Then switch to A-level and read the sections: that is the Q6 answer, in the order the 2024 report asks for it.</p>
                     <h3>What the schemes and reports say</h3>
                     <p>2023 AS, the bass: &quot;Square wave (1); Detune added, suitable amount (1); Correct filter setting (1); Correct octave (both oscillators) (1)&quot;. The report&apos;s common issues: no detune, and the wrong octave, one octave too high.</p>
                     <p>2024 AS, the keyboard: &quot;Two sawtooth oscillators&quot;; &quot;Both in same octave and transposed to correct octave (1)&quot;; &quot;Slight detune applied (1)&quot;; &quot;LPF matches example / equal or duller (1)&quot;.</p>
                     <p>2025, the lead: &quot;Monophonic without note overlaps (1)&quot;; &quot;Subtle portamento (1)&quot;; &quot;A=soft, D=max, S=max, R=short&quot;; &quot;Muted sound from low cut off frequency ... resonance isn&apos;t a feature&quot;; &quot;LFO giving subtle Fc wobble&quot;.</p>
                     <p>2023 and 2020, the fills: &quot;A=0, D=max, S=max, R=enough release so that the drop in octave is heard&quot;; and the 2020 report: &quot;Only the best candidates noticed that the release was very short, many leaving an audible tail presumably from a preset&quot;.</p>
-                    <p>2024 Q6, the synth bass: &quot;Candidates who divided up their writing into subheadings, one for each synthesiser section, provided the most concise and structured writing yielding highest marks&quot;; &quot;The most common AO4 marks were for describing the fast attack and release&quot;; &quot;Very commonly, candidates mistakenly thought that the LFO was something audible rather than a control signal&quot;; &quot;many learners misidentified it as a boost/cut rather than an LPF and would discuss what resonance was but didn&apos;t discuss its impact on the sound&quot;.</p>
-                    <p>2019 Q6, the synth pad: &quot;only the top performing candidates noticed that the envelope parameters were routed to the filter cutoff and not the amplitude&quot;; &quot;a surprising number of candidates ... thought that the LFO was for audible bass, rather than a control signal&quot;.</p>
+                    <p>2024 Q6, the synth bass on a 1982 monophonic synthesiser: &quot;Candidates who divided up their writing into subheadings, one for each synthesiser section, provided the most concise and structured writing yielding highest marks&quot;; &quot;Many candidates did not identify what LFO/VCO/VCA/VCF represented and simply used the label from the synth&quot;; &quot;The most common AO4 marks were for describing the fast attack and release&quot;; &quot;Very commonly, candidates mistakenly thought that the LFO was something audible rather than a control signal&quot;; &quot;It was very rare to see candidates that fully understood that the LFO was controlling the pulse width modulation of a pulse wave&quot;; &quot;Candidates were often successful in discussing the sub-oscillator&quot;; &quot;many learners misidentified it as a boost/cut rather than an LPF and would discuss what resonance was but didn&apos;t discuss its impact on the sound&quot;.</p>
+                    <p>2019 Q6, the synth pad on a 1982 polyphonic synthesiser: &quot;only the top performing candidates noticed that the envelope parameters were routed to the filter cutoff and not the amplitude&quot;; candidates confused &quot;the VCA gate (disabling the envelope) with a noise gate designed to cut out background noise&quot;; &quot;a surprising number of candidates ... thought that the LFO was for audible bass, rather than a control signal&quot;; &quot;many candidates thought that this was a square wave and did not appreciate that the pulse width was being modulated by the LFO&quot;.</p>
                     <p className={styles.source}>Source: Edexcel 9MT0/04 and 9MT0/41 mark schemes and Principal Examiner reports, 2019 Q6, 2020 Q2(b), 2022 AS Q2, 2023 Q2(d), 2023 AS Q3(a), 2024 Q6, 2024 AS Q2(c), 2025 Q3(a). The Q6 AO3 and AO4 grids are not in the vault; the sections here are judged from the reports&apos; own words.</p>
                     <h3>Do these now</h3>
                     <ul>
-                        <li>Press <b>2023 paper</b>, then press +1 in Oscillators. Say why the scheme&apos;s fourth mark has gone before the line tells you.</li>
+                        <li>Press <b>2023 paper</b>, then push Range to 4&apos;. Say why the scheme&apos;s fourth mark has gone before the line tells you.</li>
+                        <li>On the same patch set <b>PW by</b> to LFO and watch the WAVE screen. Say what a candidate who called this &quot;a square wave&quot; in 2019 was not seeing.</li>
                         <li>Press <b>Judge: a bass</b>, switch to A-level, and touch each box in signal order. Write one sentence per box: the setting, then its impact, then whether that suits a bass.</li>
                         <li>Press <b>2025 paper</b>, switch to Extension, and count the LFO&apos;s cycles in one note. Then say what you would hear if the LFO were &quot;audible&quot;, and why you do not.</li>
                         <li>Press <b>Fills</b>, turn Release to 10 ms, and listen for the tail that is now missing. Then turn it to 2 s and hear the fills pile up.</li>
-                        <li>Press <b>Judge: a pad</b> and fix it: Poly in the More row, then Attack past 500 ms, then Release past 1 s. Watch the section verdicts change one at a time.</li>
-                        <li>Turn Env in the Filter section to 60 % on the bass and say which report credited noticing that routing.</li>
+                        <li>Press <b>Judge: a pad</b> and fix it: the VCA to Env, Poly in the More row, then Attack past 500 ms, then Release past 1 s. Watch the section verdicts change one at a time, and say which of the 2019 report&apos;s two gates the VCA&apos;s is.</li>
+                        <li>Push Env in the VCF to 60 % on the bass and say which report credited noticing that routing.</li>
+                        <li>Take Pulse and Saw to zero and push Noise up: the HARMONICS screen now shows the filter&apos;s own shape. Say why, and why noise alone cannot play the part.</li>
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
                         prompt="Figure 1 shows a monophonic synthesiser from 1982. Evaluate the suitability of the settings to produce a synth bass. (20 marks, 2024)"
-                        answer="Take it section by section under subheadings. VCO: name the wave and the octave, say what harmonics that gives the filter, and whether the pitch sits where a bass sits. VCF: name it as a low-pass (not a boost or cut), give the cutoff's effect on the harmonics and say what the resonance does to the sound. ENV: fast attack and release suit a bass; say what a slow attack would do to the line. LFO: it is a control signal at a low rate, moving something; say what it moves and whether that suits a bass. Every point is AO3 for the name and the setting, AO4 for the impact and the judgement."
+                        answer="Take it section by section under subheadings. VCO: name the wave, its pulse width and the range, say what harmonics that gives the filter, and whether the pitch sits where a bass sits. SOURCE MIXER: the sub-oscillator is a square an octave down, weight beneath the bass. VCF: name it as a low-pass (not a boost or cut), give the cutoff's effect on the harmonics and say what the resonance does to the sound. VCA: Env or Gate, and what each does to the note. ENV: fast attack and release suit a bass; say what a slow attack would do to the line. LFO: it is a control signal at a low rate, moving something; say what it moves (here the pulse width) and whether that suits a bass. Every point is AO3 for the name and the setting, AO4 for the impact and the judgement."
                     />
                     <ExamCallout
                         prompt="Create a synth bass sound that is similar to the example. Use two square wave oscillators. Ensure the detuning matches, the filter setting matches, and the octave matches. (4 marks, 2023 AS)"
@@ -931,19 +1031,21 @@ export default function SynthBench({ back }) {
             : <><b>Try:</b> {next.charAt(0).toUpperCase() + next.slice(1)}.</>;
     }
 
-    // ---- console ----
-    const partOptions = PART_IDS.map((id) => ({ id, label: PARTS[id].label, title: `${PARTS[id].said}: ${PARTS[id].job}` }));
-    const waveOptions = WAVE_IDS.map((id) => ({ id, label: WAVES[id].label, title: `${WAVES[id].said}: ${WAVES[id].harmonics}` }));
-    const octaveOptions = OCTAVE_IDS.map((o) => ({ id: o, label: o > 0 ? '+1' : o < 0 ? '−1' : '0', title: octaveSaid(o) }));
+    // ---- console: the paper's panel ----
+    const octaveOptions = OCTAVE_IDS.map((o) => ({ id: o, label: RANGE_WORD[o], title: `${RANGE_WORD[o]}: ${octaveSaid(o)}` }));
     const filterOptions = FILTER_IDS.map((id) => ({ id, label: FILTERS[id].label, title: `${FILTERS[id].name}: ${FILTERS[id].does}` }));
     const lfoOptions = LFO_TARGET_IDS.map((id) => ({ id, label: LFO_TARGETS[id].label, title: `${LFO_TARGETS[id].said}: ${LFO_TARGETS[id].effect}` }));
     const voicesOptions = VOICES_IDS.map((id) => ({ id, label: VOICES[id].label, title: VOICES[id].said }));
     const glideOptions = GLIDE_IDS.map((id) => ({ id, label: GLIDES[id].label, title: GLIDES[id].said }));
     const osc2Options = OSC2_IDS.map((id) => ({ id, label: OSC2[id].label, title: OSC2[id].said }));
-    const shapeOptions = LFO_SHAPE_IDS.map((id) => ({ id, label: LFO_SHAPES[id].label, title: `${LFO_SHAPES[id].said} wave` }));
+    const shapeOptions = LFO_SHAPE_IDS.map((id) => ({ id, label: SHAPE_SHORT[id], title: `${LFO_SHAPES[id].said} wave` }));
+    const pwmOptions = PWM_IDS.map((id) => ({ id, label: PWMS[id].label, title: `pulse width ${PWMS[id].said}` }));
+    const subOctOptions = SUB_OCT_IDS.map((id) => ({ id, label: SUB_OCTS[id].label, title: `the sub-oscillator ${SUB_OCTS[id].said}` }));
+    const vcaOptions = VCA_IDS.map((id) => ({ id, label: VCAS[id].label, title: VCAS[id].said }));
     const arpOptions = ARP_IDS.map((id) => ({ id, label: ARPS[id].label, title: ARPS[id].said }));
     const verdictWord = vd.key === 'free' ? 'no stem' : vd.ok == null ? (vd.poor?.length ? 'a fault' : vd.partly?.length ? 'partly' : 'suits') : vd.ok ? 'as directed' : 'not yet';
-    const oscValue = state.osc2 === 'off' ? '1 osc' : state.osc2 === 'sub' ? '1 + sub' : '2 osc';
+    const lfoValue2 = lfoOn(state) || pwmOn(state) ? fmtRate(state.lfoRate) : 'off';
+    const lfoMeaning = `${rd.lfoShort}${pwmOn(state) ? `${rd.lfoShort === 'off' ? '' : ' + '}PW` : ''} · a control signal`;
 
     const consoleSlot = (
         <>
@@ -955,98 +1057,116 @@ export default function SynthBench({ back }) {
                 onLevel={(v2) => setState((s) => setVolume(s, v2))}
                 teach={teach}
                 holdLabel="hold: raw"
-                holdTitle="Hold to hear the oscillators alone: the filter open, the envelope a switch, no LFO"
-                holdWhy="plays the oscillators raw while you hold it, with the filter open, the envelope a switch and the LFO off, so you hear what the rest of the panel takes away"
+                holdTitle="Hold to hear the sources alone: the filter open, the envelope a switch, no LFO"
+                holdWhy="plays the source mixer raw while you hold it, with the filter open, the envelope a switch and the LFO off, so you hear what the rest of the panel takes away"
                 playWhy="runs the part round two bars at 100 bpm in A minor"
             />
 
-            <div className={`${styles.sec} ${styles.secPart}`} data-teach={teach || undefined}>
-                <div className={styles.secHead}><span className={styles.eyebrow}>Part</span><span className={styles.value}>{PARTS[state.part].label}</span></div>
-                <Chips label="Part" options={partOptions} value={state.part} onChange={choosePart} />
-                <div className={styles.meaning}>{BPM} bpm · A minor · {PARTS[state.part].job}</div>
-                <Why>The part the voice plays is the job the paper asks about: a bass, a pad, a lead, a keyboard part. The patch stays when you switch, so a pad patch can be heard on the bass, which is what Q6 asks you to judge.</Why>
-            </div>
-
-            <div className={`${styles.sec} ${styles.secOsc}`} data-teach={teach || undefined}>
-                <div className={styles.secHead}><span className={styles.eyebrow}>Oscillators</span><span className={styles.value}>{oscValue}</span></div>
-                <Chips label="Wave" options={waveOptions} value={state.wave} onChange={edit(setWave, 'wave')} />
-                <div className={styles.oscRow}>
-                    <Chips label="Octave" options={octaveOptions} value={state.octave} onChange={edit(setOctave, 'octave')} />
-                    <div className={styles.knobSmall}>
-                        <Dial label="Detune" value={state.detune} min={DETUNE_MIN} max={DETUNE_MAX} step={1} format={(c) => `${c} ct`} pointer="var(--gold-bright)" size="small" pixels={140} disabled={state.osc2 !== 'pair'} onChange={edit(setDetune, 'detune')} title="How far apart the two oscillators are, in cents" />
-                        <span className={styles.readout}>{state.osc2 === 'pair' ? `${state.detune} ct` : 'detune'}</span>
+            <div className={`${styles.sec} ${styles.secSynth} ${styles.secLfo}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>LFO</span><span className={styles.value}>{lfoValue2}</span></div>
+                <Chips label="LFO wave" options={shapeOptions} value={state.lfoShape} onChange={edit(setLfoShape, 'lfoShape')} />
+                <div className={styles.slideRow}>
+                    <Slide name="Rate" shown={fmtRate(state.lfoRate)}>
+                        <LogFader label="Rate" value={state.lfoRate} min={LFO_RATE_MIN} max={LFO_RATE_MAX} format={fmtRate} colour="var(--purple)" pixels={92} onChange={edit(setLfoRate, 'lfoRate')} title="How fast the LFO cycles: below hearing" />
+                    </Slide>
+                    <Slide name="Depth" shown={`${state.lfoDepth} %`} off={state.lfoDepth === 0}>
+                        <Fader slim label="Depth" value={state.lfoDepth} min={LFO_DEPTH_MIN} max={LFO_DEPTH_MAX} step={1} format={(dp) => `${dp} %`} colour="var(--purple)" pixels={92} onChange={edit(setLfoDepth, 'lfoDepth')} title="How far the LFO moves what it points at" />
+                    </Slide>
+                    <div className={styles.chipStack}>
+                        <span className={styles.slideName}>to</span>
+                        <Chips label="LFO target" options={lfoOptions} value={state.lfoTarget} onChange={edit(setLfoTarget, 'lfoTarget')} />
                     </div>
                 </div>
-                <div className={styles.meaning}>{WAVES[state.wave].short}</div>
-                <Why>The wave sets the harmonics: a saw has every one, a square the odd ones, a triangle the odd ones falling fast, a sine none. Octave is the register the papers mark. Detune spreads the pair a few cents; past 30 it is out of tune. The More row swaps the pair for a sub or a single oscillator.</Why>
+                <div className={styles.meaning}>{lfoMeaning}</div>
+                <Why>A low frequency oscillator is a wave too slow to hear, pointed at a parameter: the pitch for vibrato, the level for tremolo, the cutoff for a wobble. Rate is its speed, depth how far it moves the target; the wave is its shape. It also moves the pulse width when the VCO says PW by LFO. The 2024 report: candidates &quot;mistakenly thought that the LFO was something audible rather than a control signal&quot;.</Why>
             </div>
 
-            <div className={`${styles.sec} ${styles.secFilter}`} data-teach={teach || undefined}>
-                <div className={styles.secHead}><span className={styles.eyebrow}>Filter</span><span className={styles.value} data-cutoff={Math.round(state.cutoff)}>{fmtHz(state.cutoff)}</span></div>
+            <div className={`${styles.sec} ${styles.secSynth} ${styles.secVco}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>VCO</span><span className={styles.value}>{rd.note} · {fmtHz(rd.hz)}</span></div>
+                <div className={styles.slideRow}>
+                    <Slide name="Range" shown={RANGE_WORD[state.octave]}>
+                        <Fader slim label="Range" value={state.octave} min={-1} max={1} step={1} format={(o) => `${RANGE_WORD[o]}, ${octaveSaid(o)}`} colour="var(--gen-3)" pixels={60} onChange={edit(setOctave, 'octave')} title="The octave, in the paper's feet: 8' is the part's own octave, 16' an octave down, 4' up" />
+                    </Slide>
+                    <Slide name="Detune" shown={`${state.detune} ct`} off={state.osc2 !== 'pair'}>
+                        <Fader slim label="Detune" value={state.detune} min={DETUNE_MIN} max={DETUNE_MAX} step={1} format={(c) => `${c} ct`} colour="var(--gen-3)" pixels={92} disabled={state.osc2 !== 'pair'} onChange={edit(setDetune, 'detune')} title="How far apart the two VCOs are, in cents; Osc 2 must be a Pair (the More row)" />
+                    </Slide>
+                    <Slide name="Width" shown={`${state.width} %`} off={state.pulse === 0}>
+                        <Fader slim label="Pulse width" value={state.width} min={WIDTH_MIN} max={WIDTH_MAX} step={1} format={(w2) => `${w2} %`} colour="var(--gen-3)" pixels={92} onChange={edit(setWidth, 'width')} title="The pulse's width: 50 % is a square; narrower, the even harmonics come in. With PW by LFO, how far the LFO swings it" />
+                    </Slide>
+                    <div className={styles.chipStack}>
+                        <span className={styles.slideName}>PW by</span>
+                        <Chips label="PW by" options={pwmOptions} value={state.pwm} onChange={edit(setPwm, 'pwm')} />
+                    </div>
+                </div>
+                <div className={styles.meaning}>{octaveSaid(state.octave)}{pwmOn(state) ? ' · PWM' : state.pulse > 0 && state.width < 45 ? ' · a narrow pulse' : ''}</div>
+                <Why>One oscillator, the paper&apos;s VCO. Range is its octave in organ feet, 8&apos; the part&apos;s own, the setting the papers mark (the 2023 report: one octave too high). Detune spreads a second VCO a few cents from this one; past 30 it is out of tune. Width narrows the pulse from a square, and PW by LFO lets the LFO move it: the pulse-width modulation the 2019 and 2024 reports say very few candidates recognised.</Why>
+            </div>
+
+            <div className={`${styles.sec} ${styles.secSynth} ${styles.secMixer}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>Source mixer</span><span className={styles.value}>{rd.sourceCount ? `${rd.sourceCount} on` : 'none'}</span></div>
+                <div className={styles.slideRow}>
+                    {SOURCE_IDS.map((id) => (
+                        <Slide key={id} name={SOURCES[id].label} shown={`${state[id]} %`} off={state[id] === 0}>
+                            <Fader slim label={SOURCES[id].label} value={state[id]} min={LEVEL_MIN} max={LEVEL_MAX} step={1} format={(l) => `${l} %`} colour={SOURCE_COLOUR[id]} pixels={92} onChange={edit(SETTER[id], id)} title={SOURCES[id].does} />
+                        </Slide>
+                    ))}
+                </div>
+                <div className={styles.meaning}>{rd.sources} → the filter</div>
+                <Why>What goes into the filter, mixed rather than chosen: the VCO&apos;s pulse and saw, a square sub-oscillator an octave or two down (the More row sets which), and white noise. A saw has every harmonic, a square the odd ones, a narrow pulse the even ones too; noise is every frequency and no pitch. The 2024 report: &quot;Candidates were often successful in discussing the sub-oscillator&quot;.</Why>
+            </div>
+
+            <div className={`${styles.sec} ${styles.secSynth} ${styles.secVcf}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>VCF</span><span className={styles.value} data-cutoff={Math.round(state.cutoff)}>{fmtHz(state.cutoff)}</span></div>
                 <Chips label="Filter type" options={filterOptions} value={state.filter} onChange={edit(setFilter, 'filter')} />
-                <div className={styles.knobRow}>
-                    <div className={styles.knob}>
-                        <LogDial label="Cutoff" value={state.cutoff} min={CUTOFF_MIN} max={CUTOFF_MAX} format={fmtHz} pointer="var(--gold-bright)" hot pixels={200} onChange={edit(setCutoff, 'cutoff')} title="Where the filter takes hold: the frequency 3 dB down" />
-                        <span className={styles.readout}>cutoff</span>
-                    </div>
-                    <div className={styles.knobSmall}>
-                        <Dial label="Resonance" value={state.res} min={RES_MIN} max={RES_MAX} step={1} format={(r) => `${r} %`} size="small" pixels={140} onChange={edit(setRes, 'res')} title="The peak at the cutoff: 0 % flat, 100 % ringing" />
-                        <span className={styles.readout}>res {state.res} %</span>
-                    </div>
-                    <div className={styles.knobSmall}>
-                        <Dial label="Env" value={state.envAmt} min={ENV_AMT_MIN} max={ENV_AMT_MAX} step={1} format={(a) => `${a} %`} pointer="var(--purple)" size="small" pixels={140} onChange={edit(setEnvAmt, 'envAmt')} title="How far the envelope lifts the cutoff on every note: 100 % is four octaves" />
-                        <span className={styles.readout}>env {state.envAmt} %</span>
-                    </div>
+                <div className={styles.slideRow}>
+                    <Slide name="Cutoff" shown={fmtHz(state.cutoff)} wide>
+                        <LogFader label="Cutoff" value={state.cutoff} min={CUTOFF_MIN} max={CUTOFF_MAX} format={fmtHz} colour="var(--gold-bright)" hot pixels={110} onChange={edit(setCutoff, 'cutoff')} title="Where the filter takes hold: the frequency 3 dB down. The gold dot on the stage is this slider" />
+                    </Slide>
+                    <Slide name="Res" shown={`${state.res} %`}>
+                        <Fader slim label="Resonance" value={state.res} min={RES_MIN} max={RES_MAX} step={1} format={(r) => `${r} %`} colour="var(--gold-bright)" pixels={92} onChange={edit(setRes, 'res')} title="The peak at the cutoff: 0 % flat, 100 % ringing" />
+                    </Slide>
+                    <Slide name="Env" shown={`${state.envAmt} %`} off={state.envAmt === 0}>
+                        <Fader slim label="Env" value={state.envAmt} min={ENV_AMT_MIN} max={ENV_AMT_MAX} step={1} format={(a) => `${a} %`} colour="var(--purple)" pixels={92} onChange={edit(setEnvAmt, 'envAmt')} title="How far the envelope lifts the cutoff on every note: 100 % is four octaves" />
+                    </Slide>
                 </div>
-                <div className={styles.meaning}>{rd.brightness}{state.envAmt > 0 ? ` · env ${envOctaves(state).toFixed(1)} oct` : ''}</div>
+                <div className={styles.meaning}>{rd.brightness}{state.envAmt > 0 ? ` · env lifts ${envOctaves(state).toFixed(1)} oct` : ''}</div>
                 <Why>Low-pass keeps what is below the cutoff, so lower is darker; high-pass keeps what is above; band-pass keeps a band. Resonance is a peak at the cutoff. Env routes the envelope to the cutoff, so each note opens bright and closes: the routing the 2019 report says only the top candidates noticed.</Why>
             </div>
 
-            <div className={`${styles.sec} ${styles.secEnv}`} data-teach={teach || undefined}>
-                <div className={styles.secHead}><span className={styles.eyebrow}>Envelope</span><span className={styles.value}>{rd.envelope}</span></div>
-                <div className={styles.knobRow}>
-                    <div className={styles.knobSmall}>
-                        <LogDial label="Attack" value={state.attack} min={ATTACK_MIN} max={ATTACK_MAX} format={fmtMs} pointer="var(--purple)" size="small" pixels={140} onChange={edit(setAttack, 'attack')} title="The time to rise to full" />
-                        <span className={styles.readout}>A {fmtMs(state.attack)}</span>
-                    </div>
-                    <div className={styles.knobSmall}>
-                        <LogDial label="Decay" value={state.decay} min={DECAY_MIN} max={DECAY_MAX} format={fmtMs} pointer="var(--purple)" size="small" pixels={140} onChange={edit(setDecay, 'decay')} title="The time to fall to the sustain" />
-                        <span className={styles.readout}>D {fmtMs(state.decay)}</span>
-                    </div>
-                    <div className={styles.knobSmall}>
-                        <Dial label="Sustain" value={state.sustain} min={SUSTAIN_MIN} max={SUSTAIN_MAX} step={1} format={(l) => `${l} %`} pointer="var(--purple)" size="small" pixels={140} onChange={edit(setSustain, 'sustain')} title="The level held while the key is down: a level, not a time" />
-                        <span className={styles.readout}>S {state.sustain} %</span>
-                    </div>
-                    <div className={styles.knobSmall}>
-                        <LogDial label="Release" value={state.release} min={RELEASE_MIN} max={RELEASE_MAX} format={fmtMs} pointer="var(--purple)" size="small" pixels={140} onChange={edit(setRelease, 'release')} title="The time to fall to silence after the key lifts" />
-                        <span className={styles.readout}>R {fmtMs(state.release)}</span>
-                    </div>
+            <div className={`${styles.sec} ${styles.secSynth} ${styles.secVca}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>VCA</span></div>
+                <div className={styles.chipStack}>
+                    <Chips label="VCA" options={vcaOptions} value={state.vca} onChange={edit(setVca, 'vca')} />
                 </div>
-                <div className={styles.meaning}>on the amplifier{state.envAmt > 0 ? ' and the cutoff' : ''}</div>
+                <div className={styles.meaning}>{state.vca === 'gate' ? 'obeys the key' : 'obeys the env'}</div>
+                <Why>The amplifier. On Env it obeys the envelope, so the note has its shape. On Gate it obeys the key alone: full while the key is down, nothing after, the envelope disabled. The 2019 report found candidates confusing &quot;the VCA gate (disabling the envelope) with a noise gate designed to cut out background noise&quot;.</Why>
+            </div>
+
+            <div className={`${styles.sec} ${styles.secSynth} ${styles.secEnv}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>ENV</span><span className={styles.value}>{rd.envelope}</span></div>
+                <div className={styles.slideRow}>
+                    <Slide name="Attack" shown={fmtMs(state.attack)} wide>
+                        <LogFader label="Attack" value={state.attack} min={ATTACK_MIN} max={ATTACK_MAX} format={fmtMs} colour="var(--purple)" pixels={92} onChange={edit(setAttack, 'attack')} title="The time to rise to full" />
+                    </Slide>
+                    <Slide name="Decay" shown={fmtMs(state.decay)} wide>
+                        <LogFader label="Decay" value={state.decay} min={DECAY_MIN} max={DECAY_MAX} format={fmtMs} colour="var(--purple)" pixels={92} onChange={edit(setDecay, 'decay')} title="The time to fall to the sustain" />
+                    </Slide>
+                    <Slide name="Sustain" shown={`${state.sustain} %`} wide>
+                        <Fader slim label="Sustain" value={state.sustain} min={SUSTAIN_MIN} max={SUSTAIN_MAX} step={1} format={(l) => `${l} %`} colour="var(--purple)" pixels={92} onChange={edit(setSustain, 'sustain')} title="The level held while the key is down: a level, not a time" />
+                    </Slide>
+                    <Slide name="Release" shown={fmtMs(state.release)} wide>
+                        <LogFader label="Release" value={state.release} min={RELEASE_MIN} max={RELEASE_MAX} format={fmtMs} colour="var(--purple)" pixels={92} onChange={edit(setRelease, 'release')} title="The time to fall to silence after the key lifts" />
+                    </Slide>
+                </div>
+                <div className={styles.meaning}>{state.vca === 'gate' ? (state.envAmt > 0 ? 'on the cutoff only' : 'reaches nothing: VCA on Gate') : `on the amplifier${state.envAmt > 0 ? ' and the cutoff' : ''}`}</div>
                 <Why>Attack, decay and release are times; sustain is a level. A bass wants a fast attack and a short release, a pad a slow attack and a long release; the 2024 report&apos;s most common AO4 mark was the fast attack and release. The 2020 report: only the best candidates noticed the release was very short.</Why>
             </div>
 
-            <div className={`${styles.sec} ${styles.secLfo}`} data-teach={teach || undefined}>
-                <div className={styles.secHead}><span className={styles.eyebrow}>LFO</span><span className={styles.value}>{lfoOn(state) ? fmtRate(state.lfoRate) : 'off'}</span></div>
-                <Chips label="LFO target" options={lfoOptions} value={state.lfoTarget} onChange={edit(setLfoTarget, 'lfoTarget')} />
-                <div className={styles.knobRow}>
-                    <div className={styles.knobSmall}>
-                        <LogDial label="Rate" value={state.lfoRate} min={LFO_RATE_MIN} max={LFO_RATE_MAX} format={fmtRate} pointer="var(--purple)" size="small" pixels={140} onChange={edit(setLfoRate, 'lfoRate')} title="How fast the LFO cycles: below hearing" />
-                        <span className={styles.readout}>rate</span>
-                    </div>
-                    <div className={styles.knobSmall}>
-                        <Dial label="Depth" value={state.lfoDepth} min={LFO_DEPTH_MIN} max={LFO_DEPTH_MAX} step={1} format={(dp) => `${dp} %`} pointer="var(--purple)" size="small" pixels={140} onChange={edit(setLfoDepth, 'lfoDepth')} title="How far the LFO moves its target" />
-                        <span className={styles.readout}>depth {state.lfoDepth} %</span>
-                    </div>
-                </div>
-                <div className={styles.meaning}>{rd.lfoShort}</div>
-                <Why>A low frequency oscillator is a wave too slow to hear, pointed at a parameter: the pitch for vibrato, the level for tremolo, the cutoff for a wobble. Rate is its speed, depth how far it moves the target. The 2024 report: candidates &quot;mistakenly thought that the LFO was something audible rather than a control signal&quot;.</Why>
-            </div>
-
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined} data-synth="true">
-                <div className={styles.secHead}><span className={styles.eyebrow}>You hear</span></div>
+                <div className={styles.secHead}><span className={styles.eyebrow}>Hear</span></div>
                 <div className={styles.stats} aria-live="polite">
-                    <div><b data-note-number={rd.midi}>{rd.note}</b><span>{fmtHz(rd.hz)} · home note</span></div>
+                    <div><b data-note-number={rd.midi}>{rd.note} · {fmtHz(rd.hz)}</b><span>home note</span></div>
+                    <div><b data-wrap="true">{rd.sources}</b><span>into the filter</span></div>
                     <div><b>{rd.brightness}</b><span>the filter</span></div>
                     <div><b>{rd.envelope}</b><span>the envelope</span></div>
                     {maths
@@ -1054,14 +1174,27 @@ export default function SynthBench({ back }) {
                         : <div><b>{held ? 'raw' : rd.lfoShort}</b><span>{held ? 'what is playing' : 'the LFO'}</span></div>}
                 </div>
                 <Legal />
-                <Why>Every word here comes from the panel: the home note from the part and the octave, the brightness from the filter and its cutoff, the shape from the envelope, and whether the patch matches the question the preset set.</Why>
+                <Why>Every word here comes from the panel: the home note from the part and the range, the sources from the mixer, the brightness from the filter and its cutoff, the shape from the envelope or the gate, and whether the patch matches the question the preset set.</Why>
             </div>
         </>
     );
 
     const bar = (
         <>
-            <Presets presets={PRESETS} presetId={state.presetId} onPreset={choosePreset} wrap />
+            <div className={styles.barWrap}>
+                <span className={styles.presetLabel}>Part</span>
+                <div role="group" aria-label="Part">
+                    {PART_IDS.map((id) => (
+                        <button key={id} type="button" className={styles.chip} aria-pressed={state.part === id} onClick={() => choosePart(id)} title={`${PARTS[id].said}: ${PARTS[id].job}, at ${BPM} bpm in A minor`}>{PARTS[id].label}</button>
+                    ))}
+                </div>
+                <span className={styles.presetLabel}>Presets</span>
+                <div role="group" aria-label="Presets">
+                    {PRESETS.map((pr) => (
+                        <button key={pr.id} type="button" className={styles.preset} aria-pressed={state.presetId === pr.id} onClick={() => choosePreset(pr.id)} title={pr.blurb}>{pr.name}</button>
+                    ))}
+                </div>
+            </div>
             <div className={styles.say} data-mode={mode} data-depth={depth}>{say}</div>
             <MoreButton open={further} onOpen={() => setFurther(true)} />
         </>
@@ -1082,20 +1215,20 @@ export default function SynthBench({ back }) {
                 <Chips label="Osc 2" options={osc2Options} value={state.osc2} onChange={edit(setOsc2, 'osc2')} />
             </div>
             <div className={styles.moreItem}>
-                <span className={styles.eyebrow}>LFO shape</span>
-                <Chips label="LFO shape" options={shapeOptions} value={state.lfoShape} onChange={edit(setLfoShape, 'lfoShape')} />
+                <span className={styles.eyebrow}>Sub</span>
+                <Chips label="Sub octave" options={subOctOptions} value={state.subOct} onChange={edit(setSubOct, 'subOct')} />
             </div>
             <div className={styles.moreItem}>
                 <span className={styles.eyebrow}>Arp</span>
                 <Chips label="Arp" options={arpOptions} value={state.arp} onChange={edit(setArp, 'arp')} />
-                <span className={styles.chipNote}>{state.arp === 'up' ? (state.part === 'pad' || state.part === 'keys' ? 'each chord stepped up in sixteenths' : 'no chords in this part to step through') : `${VOICES[state.voices].label.toLowerCase()}${state.glide !== 'off' ? ` · glide ${GLIDES[state.glide].ms} ms` : ''} · ${OSC2[state.osc2].label.toLowerCase()}`}</span>
+                <span className={styles.chipNote}>{state.arp === 'up' ? (state.part === 'pad' || state.part === 'keys' ? 'each chord stepped up in sixteenths' : 'no chords in this part to step through') : `${VOICES[state.voices].label.toLowerCase()}${state.glide !== 'off' ? ` · glide ${GLIDES[state.glide].ms} ms` : ''} · ${OSC2[state.osc2].label.toLowerCase() === 'off' ? 'one VCO' : `osc 2: ${OSC2[state.osc2].label.toLowerCase()}`}`}</span>
             </div>
         </>
     ) : null;
 
     const hoverTip = () => {
         if (!hover) return null;
-        if (hover.kind === 'dot') return <><i>cutoff · {fmtHz(state.cutoff)}</i><p>Drag across to move the cutoff, up for more resonance. The dial follows.</p></>;
+        if (hover.kind === 'dot') return <><i>cutoff · {fmtHz(state.cutoff)}</i><p>Drag across to move the cutoff, up for more resonance. The Cutoff slider follows.</p></>;
         if (hover.kind === 'key') return <><i>{noteName(hover.midi)} · {fmtHz(midiHz(hover.midi) * 2 ** state.octave)}</i><p>Press to play the voice at this note; {KEYBOARD_KEYS.charAt(hover.midi - PARTS[state.part].keyC).toUpperCase()} on your keyboard does the same.</p></>;
         if (hover.kind === 'box') { const gd = judgeAll(state)[hover.id]; return <><i>{SECTIONS[hover.id].label} · {GRADE_WORD[gd.grade]} {PARTS[state.part].job}</i><p>{gd.why.charAt(0).toUpperCase() + gd.why.slice(1)}.</p></>; }
         if (hover.kind === 'time') { const g = readings(state).gateMs; const e = adsrAt(state, hover.ms, g); return <><i>{fmtMs(hover.ms)} · envelope {Math.round(e * 100)} %</i><p>{hover.ms <= g ? `The key is down: ${hover.ms < state.attack ? 'the attack is rising' : hover.ms < state.attack + state.decay ? 'the decay is falling to the sustain' : 'holding at the sustain'}.` : `The key is up: the release is ${Math.round((1 - Math.min(1, (hover.ms - g) / state.release)) * 100)} % of the way to silence.`}</p></>; }
@@ -1121,8 +1254,10 @@ export default function SynthBench({ back }) {
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
                 {depth === 'core' ? (
                     <>
-                        <span><i style={{ background: WAVES[state.wave].colour }} />osc 1</span>
-                        {state.osc2 !== 'off' ? <span><i style={{ background: state.osc2 === 'sub' ? 'var(--gen-7)' : 'var(--gen-1)' }} />{state.osc2 === 'sub' ? 'sub' : state.osc2 === 'fifth' ? 'a fifth up' : 'osc 2'}</span> : null}
+                        {state.pulse > 0 ? <span><i style={{ background: 'var(--gen-3)' }} />{isSquare(state) ? 'square' : 'pulse'}</span> : null}
+                        {state.saw > 0 ? <span><i style={{ background: 'var(--gen-4)' }} />saw</span> : null}
+                        {state.sub > 0 || state.noise > 0 ? <span><i style={{ background: 'var(--gen-7)' }} />{[state.sub > 0 ? 'sub' : null, state.noise > 0 ? 'noise' : null].filter(Boolean).join(' · ')}</span> : null}
+                        {state.osc2 !== 'off' ? <span><i style={{ background: 'var(--gen-1)' }} />{state.osc2 === 'fifth' ? 'a fifth up' : 'osc 2'}</span> : null}
                         <span><i style={{ background: 'var(--gold-bright)' }} />filter</span>
                     </>
                 ) : depth === 'alevel' ? (

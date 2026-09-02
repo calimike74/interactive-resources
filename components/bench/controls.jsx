@@ -98,7 +98,10 @@ export function Dial({
 // A channel fader: vertical travel, dragged up for louder, in dB. `pixels`
 // is how far a pointer travels for the whole range (Shift slows it four
 // times). The Balance Desk's instrument (29 Aug 2026); the cap carries the
-// part's colour so the strip, the stage and the legend read as one.
+// part's colour so the strip, the stage and the legend read as one. `slim`
+// is the Synth bench's panel slider (2 Sep 2026): the same instrument at
+// 26 px, any unit, the cap's stripe the section's colour; `hot` marks the
+// one the stage's dot also moves.
 export function Fader({
     label,
     value,
@@ -112,6 +115,8 @@ export function Fader({
     colour,
     pixels = 110,
     scale = [],
+    slim = false,
+    hot = false,
 }) {
     const drag = useRef(null);
     const pct = (value - min) / (max - min);
@@ -163,6 +168,8 @@ export function Fader({
             aria-valuenow={value}
             aria-valuetext={shown}
             aria-disabled={disabled || undefined}
+            data-slim={slim || undefined}
+            data-hot={hot || undefined}
             title={title}
             style={{ '--pct': pct, '--stem': colour }}
             onPointerDown={onPointerDown}

@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEFAULT_STATE, applyPreset, setAttack, setLfoDepth, setLfoTarget, setFilter, setOctave, setVoices } from '../lib/bench/synth-model.js';
-import { DEPTH_LINES, DEPTH_TEACH, hearingLine, nextMove, judge, open, sectionOfLast, homeNote } from '../lib/bench/synth-depth.js';
+import { DEFAULT_STATE, applyPreset, setAttack, setLfoDepth, setLfoTarget, setFilter, setOctave, setVoices, setVca, setPwm, setWidth, setSub, setSaw, setOsc2 } from '../lib/bench/synth-model.js';
+import { DEPTH_LINES, DEPTH_TEACH, hearingLine, oscSaid, nextMove, judge, open, sectionOfLast, homeNote } from '../lib/bench/synth-depth.js';
 
 const noDash = (s) => assert.ok(!/—/.test(s) && !/\butilise/i.test(s), `house copy law broken: ${s}`);
 
 test('each level announces its own job in its own words', () => {
     assert.match(DEPTH_LINES.core, /names what you hear/);
+    assert.match(DEPTH_LINES.core, /Cutoff slider follows/);
     assert.match(DEPTH_LINES.alevel, /judges/);
     assert.match(DEPTH_LINES.extension, /opens the machine/);
     assert.notEqual(DEPTH_LINES.core, DEPTH_LINES.alevel);
@@ -15,15 +16,24 @@ test('each level announces its own job in its own words', () => {
     assert.match(DEPTH_TEACH.extension, /control signal/);
 });
 
-test('Core names what is heard and says what to try', () => {
+test('Core names what is heard, in the mixer\'s words, and says what to try', () => {
     const s = applyPreset(DEFAULT_STATE, 'as2023');
     const line = hearingLine(s);
     assert.match(line, /^You are hearing the bass part on two square waves 12 cents apart/);
     assert.match(line, /low-pass filter at 700 Hz/);
     assert.match(line, /warm/);
     noDash(line);
+    assert.equal(oscSaid(setSub(s, 50)), 'a square wave with a square sub-oscillator an octave down, doubled 12 cents apart');
+    assert.equal(oscSaid(setOsc2(setSaw(s, 100), 'off')), 'a square wave and a saw wave');
+    assert.equal(oscSaid(setOsc2(s, 'fifth')), 'two square waves a fifth apart');
+    const gated = hearingLine(setVca(s, 'gate'));
+    assert.match(gated, /VCA is on Gate/);
+    assert.match(gated, /stops dead/);
+    const pw = hearingLine(setPwm(setWidth({ ...s, presetId: null }, 20), 'lfo'));
+    assert.match(pw, /moves the pulse width at 5\.0 Hz/);
     assert.match(nextMove(s), /Detune/);
-    assert.match(nextMove({ ...s, presetId: null, wave: 'sine' }), /Saw/);
+    assert.match(nextMove({ ...s, presetId: null }), /raise Saw/);
+    assert.match(nextMove({ ...s, presetId: null, saw: 100 }), /PW by LFO/);
     const withLfo = setLfoDepth(setLfoTarget({ ...s, presetId: null }, 'pitch'), 20);
     assert.match(hearingLine(withLfo), /vibrato at 5\.0 Hz/);
 });
@@ -54,24 +64,31 @@ test('A-level judges a section for the job the way Q6 does, and offers the bette
     assert.match(summary[0].text, /^A synth bass, judged by section/);
     assert.match(summary[1].text, /Envelope first/);
     assert.match(summary[1].text, /The 2024 report, on the bass question, credited answers written section by section, under subheadings; the 2019 pad question/);
+    const osc = judge({ state: b, last: 'width' });
+    assert.match(osc[0].text, /^VCO, the oscillator and mixer: a saw wave and a pulse wave, its width moved by the LFO, doubled 14 cents apart/);
+    assert.match(osc[1].text, /very rare to see candidates that fully understood/);
     const hp = judge({ state: setFilter(b, 'hpf'), last: 'filter' });
     assert.match(hp[1].text, /removes the bass/);
     assert.match(hp[1].text, /Choose LPF/);
     const p = applyPreset(DEFAULT_STATE, 'judgePad');
-    const voices = judge({ state: p, last: 'voices' });
+    const voices = judge({ state: p, last: 'vca' });
+    assert.match(voices[0].text, /^VCA, the amplifier and voices: the VCA on Gate/);
     assert.match(voices[1].text, /complete chords/);
-    assert.match(voices[1].text, /Press Poly/);
-    const fixed = judge({ state: setVoices(p, 'poly'), last: 'voices' });
+    assert.match(voices[1].text, /Set the VCA to Env, and press Poly/);
+    assert.match(voices[1].text, /noise gate designed to cut out background noise/);
+    const fixed = judge({ state: setVca(setVoices(p, 'poly'), 'env'), last: 'voices' });
     assert.match(fixed[1].text, /^Suits a synth pad/);
-    [env, summary, hp, voices, fixed].flat().forEach((sg) => noDash(sg.text));
+    [env, summary, osc, hp, voices, fixed].flat().forEach((sg) => noDash(sg.text));
 });
 
-test('the LFO is judged as a control signal, with the 2024 report as evidence', () => {
+test('the LFO is judged as a control signal, with the 2024 report as evidence; PWM counts as the LFO at work', () => {
     const s = setLfoDepth(setLfoTarget({ ...DEFAULT_STATE, task: null, presetId: null }, 'pitch'), 20);
     const segs = judge({ state: s, last: 'lfoDepth' });
     assert.match(segs[0].text, /^LFO, the LFO: a triangle wave at 5\.0 Hz on the pitch/);
     assert.match(segs[1].text, /vibrato/);
     assert.match(segs[1].text, /something audible rather than a control signal/);
+    const pw = judge({ state: setPwm(setWidth({ ...DEFAULT_STATE, task: null, presetId: null, lfoDepth: 0 }, 20), 'lfo'), last: 'lfoRate' });
+    assert.match(pw[1].text, /did not appreciate that the pulse width was being modulated by the LFO/);
 });
 
 test('Extension opens the machine in its own sentence, with no AO tags, keyed to the section touched', () => {
@@ -86,8 +103,14 @@ test('Extension opens the machine in its own sentence, with no AO tags, keyed to
     const filt = open({ state: setAttack(applyPreset(DEFAULT_STATE, 'judgePad'), 2), last: 'cutoff' });
     assert.match(filt, /lifts the cutoff 1\.6 octaves/);
     assert.match(filt, /2019 report/);
-    [all, lfo, filt].forEach(noDash);
+    const gated = open({ state: applyPreset(DEFAULT_STATE, 'judgePad'), last: 'preset' });
+    assert.match(gated, /the amplifier ignores it and follows the key alone/);
+    const pw = open({ state: applyPreset(DEFAULT_STATE, 'judgeBass'), last: 'lfoRate' });
+    assert.match(pw, /moves the pulse width between 25 % and 75 %/);
+    [all, lfo, filt, gated, pw].forEach(noDash);
     assert.equal(sectionOfLast('stage'), 'filter');
+    assert.equal(sectionOfLast('width'), 'osc');
+    assert.equal(sectionOfLast('vca'), 'voices');
     assert.equal(sectionOfLast('part'), null);
     assert.equal(homeNote(s), 'A4 · 440 Hz');
 });
