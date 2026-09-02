@@ -1174,6 +1174,11 @@
 .slideVal { font-family: var(--mono); font-size: 9.5px; line-height: 1.15; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .slide[data-off='true'] .slideVal { color: var(--ink-3); }
 .slideName { font-family: var(--mono); font-size: 8.5px; line-height: 1.15; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+/* the wave slider's name is its shape switch: press for the next shape */
+.slideShape { appearance: none; border: 0; border-bottom: 1px dotted var(--ink-3); border-radius: 0; background: none; padding: 0 0 1px; margin: 0; cursor: pointer; color: var(--ink-2); font: inherit; font-family: var(--mono); font-size: 8.5px; line-height: 1.15; letter-spacing: 0.02em; text-transform: uppercase; }
+.slideShape::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 4px solid currentColor; margin-left: 3px; vertical-align: 1px; }
+.slideShape:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.slideShape:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .slide .fader { height: 84px; }
 .fader[data-slim='true'] { width: 26px; }
 .fader[data-slim='true']::before { left: 11px; top: 5px; bottom: 5px; width: 4px; }

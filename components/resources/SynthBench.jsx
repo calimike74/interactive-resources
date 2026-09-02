@@ -13,7 +13,7 @@ import {
     ATTACK_MIN, ATTACK_MAX, DECAY_MIN, DECAY_MAX, SUSTAIN_MIN, SUSTAIN_MAX, RELEASE_MIN, RELEASE_MAX,
     LFO_TARGET_IDS, LFO_TARGETS, LFO_RATE_MIN, LFO_RATE_MAX, LFO_DEPTH_MIN, LFO_DEPTH_MAX, LFO_SHAPE_IDS, LFO_SHAPES, VOICES_IDS, VOICES, GLIDE_IDS, GLIDES,
     PART_IDS, PARTS, KEYBOARD_KEYS, PRESETS, DEFAULT_STATE, SECTION_IDS, SECTIONS, GRADE_WORD, ARP_IDS, ARPS,
-    SOURCE_IDS, SOURCES, SOURCE_GAIN, LEVEL_MIN, LEVEL_MAX, WIDTH_MIN, WIDTH_MAX, PWM_IDS, PWMS, SUB_OCT_IDS, SUB_OCTS, VCA_IDS, VCAS,
+    SOURCE_IDS, SOURCES, SOURCE_GAIN, SHAPE_IDS, SHAPES, setShape, waveGain, presetsFor, LEVEL_MIN, LEVEL_MAX, WIDTH_MIN, WIDTH_MAX, PWM_IDS, PWMS, SUB_OCT_IDS, SUB_OCTS, VCA_IDS, VCAS,
     applyPreset, setPart, setPulse, setSaw, setSub, setNoise, setWidth, setPwm, setSubOct, setVca, setOctave, setDetune, setOsc2, setFilter, setCutoff, setRes, setEnvAmt, setAttack, setDecay, setSustain, setRelease,
     setLfoTarget, setLfoRate, setLfoDepth, setLfoShape, setVoices, setGlide, setArp, setVolume, dragDot, rawOf, osc2Ratio, arpeggiate,
     midiHz, noteName, fmtHz, fmtMs, fmtRate, posToLog, logToPos, resDb, nodeQ, envOctaves, lfoSwing, lfoOn, adsrAt, octaveSaid, lfoValue, widthAt, pwmOn, isSquare, sourcesShort, harmonicsSaid, noiseLevel,
@@ -139,15 +139,20 @@ function buildSynthGraph(ctx, input, master) {
         bookEnvelope(filter.detune, when, held ? null : gateSec, h, envOctaves(h) * 1200, 0);
         const stops = [];
         const vcos = {};
-        // a VCO: one saw serves the saw and the pulse (the saw minus itself
-        // delayed by the width); the LFO moves that delay when PW is by LFO
+        // a VCO: a saw makes the pulse (the saw minus itself delayed by the
+        // width; the LFO moves that delay when PW is by LFO), and a second
+        // oscillator of the chosen shape (saw, triangle or sine) is the wave slider
         const vco = (name, freq, detuneCents, fromHz) => {
             const saw = ctx.createOscillator();
             saw.type = 'sawtooth';
-            if (fromHz && gl > 0) { saw.frequency.setValueAtTime(fromHz, when); saw.frequency.exponentialRampToValueAtTime(freq, when + gl); } else saw.frequency.setValueAtTime(freq, when);
-            saw.detune.value = detuneCents;
-            lfoPitch.connect(saw.detune);
-            const gSaw = ctx.createGain(); gSaw.gain.value = (h.saw / 100) * SOURCE_GAIN.saw * pg;
+            const wave = ctx.createOscillator();
+            wave.type = SHAPES[h.shape].node;
+            for (const o of [saw, wave]) {
+                if (fromHz && gl > 0) { o.frequency.setValueAtTime(fromHz, when); o.frequency.exponentialRampToValueAtTime(freq, when + gl); } else o.frequency.setValueAtTime(freq, when);
+                o.detune.value = detuneCents;
+                lfoPitch.connect(o.detune);
+            }
+            const gSaw = ctx.createGain(); gSaw.gain.value = (h.saw / 100) * waveGain(h) * pg;
             const gPul = ctx.createGain(); gPul.gain.value = (h.pulse / 100) * SOURCE_GAIN.pulse * pg;
             const gNeg = ctx.createGain(); gNeg.gain.value = -gPul.gain.value;
             const delay = ctx.createDelay(0.25);
@@ -155,12 +160,12 @@ function buildSynthGraph(ctx, input, master) {
             delay.delayTime.value = (pwmOn(h) ? 0.5 : h.width / 100) * period;
             const pw = ctx.createGain(); pw.gain.value = pwmOn(h) ? (0.5 - h.width / 100) * period : 0;
             lfo.connect(pw); pw.connect(delay.delayTime);
-            saw.connect(gSaw); gSaw.connect(filter);
+            wave.connect(gSaw); gSaw.connect(filter);
             saw.connect(gPul); gPul.connect(filter);
             saw.connect(delay); delay.connect(gNeg); gNeg.connect(filter);
-            saw.start(when);
-            stops.push(saw);
-            vcos[name] = { saw, gSaw, gPul, gNeg, delay, pw };
+            saw.start(when); wave.start(when);
+            stops.push(saw, wave);
+            vcos[name] = { saw, wave, gSaw, gPul, gNeg, delay, pw };
             return saw;
         };
         const osc1 = vco('a', f0, h.osc2 === 'pair' ? -h.detune / 2 : 0, glideFromHz);
@@ -258,11 +263,11 @@ function buildSynthGraph(ctx, input, master) {
             for (const [name, o] of Object.entries(v.vcos)) {
                 const on = name === 'a' || s.osc2 !== 'off' ? 1 : 0;
                 const freq = f0 * (name === 'b' ? osc2Ratio(s) : 1);
-                glide(o.saw.frequency, freq, ctx, 0.02);
-                o.saw.detune.value = s.osc2 === 'pair' ? (name === 'a' ? -s.detune / 2 : s.detune / 2) : 0;
+                for (const osc of [o.saw, o.wave]) { glide(osc.frequency, freq, ctx, 0.02); osc.detune.value = s.osc2 === 'pair' ? (name === 'a' ? -s.detune / 2 : s.detune / 2) : 0; }
+                if (o.wave.type !== SHAPES[s.shape].node) o.wave.type = SHAPES[s.shape].node;
                 const period = 1 / freq;
                 const gp = (s.pulse / 100) * SOURCE_GAIN.pulse * pg * on;
-                glide(o.gSaw.gain, (s.saw / 100) * SOURCE_GAIN.saw * pg * on, ctx, 0.02);
+                glide(o.gSaw.gain, (s.saw / 100) * waveGain(s) * pg * on, ctx, 0.02);
                 glide(o.gPul.gain, gp, ctx, 0.02);
                 glide(o.gNeg.gain, -gp, ctx, 0.02);
                 glide(o.delay.delayTime, (pwmOn(s) ? 0.5 : s.width / 100) * period, ctx, 0.02);
@@ -305,15 +310,18 @@ const WHITE_LETTERS = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K'];
 const BLACK_LETTERS = ['W', 'E', 'T', 'Y', 'U'];
 const GRADE_TONE = { good: 'gold', partly: 'inkSoft', poor: 'coral' };
 // A panel slider walking a log range (cutoff, the envelope's times, the LFO's rate).
+// The position is rounded: Node's and the browser's Math.log can differ in
+// the last digit, and a 3 ms attack hydrated as two different aria-valuenow
+// strings (2 Sep 2026).
 const LogFader = ({ value, min, max, onChange, format, ...rest }) => (
-    <Fader {...rest} slim value={logToPos(value, min, max)} min={0} max={100} step={0.5} format={(pos) => format(posToLog(pos, min, max))} onChange={(pos) => onChange(posToLog(pos, min, max))} />
+    <Fader {...rest} slim value={Math.round(logToPos(value, min, max) * 1e4) / 1e4} min={0} max={100} step={0.5} format={(pos) => format(posToLog(pos, min, max))} onChange={(pos) => onChange(posToLog(pos, min, max))} />
 );
 // A slider's column: its value above, the instrument, its name below.
 const Slide = ({ name, shown, off = false, wide = false, children }) => (
     <div className={styles.slide} data-off={off || undefined} data-wide={wide || undefined}>
         <span className={styles.slideVal}>{shown}</span>
         {children}
-        <span className={styles.slideName}>{name}</span>
+        {typeof name === 'string' ? <span className={styles.slideName}>{name}</span> : name}
     </div>
 );
 
@@ -887,9 +895,9 @@ export default function SynthBench({ back }) {
                     <p>The spec asks how synthesis is used to create sounds: selecting and mixing sine, triangle, pulse, square and saw waveforms; low-pass and high-pass filters with a cutoff and a resonance; envelopes with an attack, decay, sustain and release; a low frequency oscillator; envelopes and LFOs mapped to the filter cutoff and the pitch; oscillator octave and tuning; monophonic and polyphonic; portamento. This bench is that list as the paper&apos;s own panel: the 1982 monophonic synthesiser of the 2024 Q6 figure, cut into LFO, VCO, source mixer, VCF, VCA and ENV, the sections the report says many candidates &quot;did not identify&quot;.</p>
                     <h3>Terms</h3>
                     <dl>
-                        <dt>VCO</dt><dd>The voltage-controlled oscillator, the sound source: a repeating wave at a chosen pitch. This panel&apos;s VCO gives a pulse and a saw at once, mixed below. A second VCO a few cents from the first beats against it, which is detune.</dd>
-                        <dt>Source mixer</dt><dd>What goes into the filter, each at its own level: the pulse, the saw, a square sub-oscillator an octave or two down, and white noise. The spec&apos;s &quot;selecting and mixing&quot; is this row of sliders.</dd>
-                        <dt>Waveform</dt><dd>Saw: every harmonic at 1/n, the brightest, the usual start for subtractive synthesis. Square: odd harmonics at 1/n, hollow. Pulse: a square whose high and low halves are unequal; as the width narrows the even harmonics come in and it thins. Noise: every frequency at once, no harmonics and no pitch. Sine and triangle are not on this panel; the Oscilloscope bench (2.5) draws all four with sound.</dd>
+                        <dt>VCO</dt><dd>The voltage-controlled oscillator, the sound source: a repeating wave at a chosen pitch. This panel&apos;s VCO gives a pulse and a second wave (saw, triangle or sine) at once, mixed below. A second VCO a few cents from the first beats against it, which is detune.</dd>
+                        <dt>Source mixer</dt><dd>What goes into the filter, each at its own level: the pulse, the second wave (its slider&apos;s name is the switch: Saw, Tri, Sine), a square sub-oscillator an octave or two down, and white noise. The spec&apos;s &quot;selecting and mixing&quot; is this row of sliders.</dd>
+                        <dt>Waveform</dt><dd>Saw: every harmonic at 1/n, the brightest, the usual start for subtractive synthesis. Square: odd harmonics at 1/n, hollow. Pulse: a square whose high and low halves are unequal; as the width narrows the even harmonics come in and it thins. Triangle: odd harmonics falling fast at 1/n², soft. Sine: the fundamental alone, nothing for a filter to remove. Noise: every frequency at once, no harmonics and no pitch. The Oscilloscope bench (2.5) draws the four plain shapes against time.</dd>
                         <dt>Pulse width and PWM</dt><dd>Width is how much of each cycle the pulse is high: 50 % is a square. Pulse-width modulation is the LFO moving that width, so the harmonics shift and the sound moves, like a chorus without one. The 2019 report: &quot;many candidates thought that this was a square wave and did not appreciate that the pulse width was being modulated by the LFO&quot;.</dd>
                         <dt>Range</dt><dd>The VCO&apos;s octave, in organ feet: 8&apos; the part&apos;s own, 16&apos; an octave down, 4&apos; an octave up. The papers mark the octave of the example, and the 2023 AS report&apos;s common fault was an octave too high.</dd>
                         <dt>Filter</dt><dd>Removes harmonics. Low-pass keeps what is below the cutoff (darker); high-pass keeps what is above (thinner); band-pass keeps a band (nasal). Subtractive synthesis is the filter doing the subtracting.</dd>
@@ -1039,13 +1047,17 @@ export default function SynthBench({ back }) {
     const glideOptions = GLIDE_IDS.map((id) => ({ id, label: GLIDES[id].label, title: GLIDES[id].said }));
     const osc2Options = OSC2_IDS.map((id) => ({ id, label: OSC2[id].label, title: OSC2[id].said }));
     const shapeOptions = LFO_SHAPE_IDS.map((id) => ({ id, label: SHAPE_SHORT[id], title: `${LFO_SHAPES[id].said} wave` }));
+    const shapeNext = SHAPE_IDS[(SHAPE_IDS.indexOf(state.shape) + 1) % SHAPE_IDS.length];
+    const shapeSwitch = (
+        <button type="button" className={`${styles.slideName} ${styles.slideShape}`} data-shape={state.shape} aria-label={`Wave shape: ${SHAPES[state.shape].label}. Press for ${SHAPES[shapeNext].label}`} title={`${SHAPES[state.shape].said}, ${SHAPES[state.shape].does}. Press for ${SHAPES[shapeNext].label}`} onClick={() => edit(setShape, 'shape')(shapeNext)}>{SHAPES[state.shape].label}</button>
+    );
     const pwmOptions = PWM_IDS.map((id) => ({ id, label: PWMS[id].label, title: `pulse width ${PWMS[id].said}` }));
     const subOctOptions = SUB_OCT_IDS.map((id) => ({ id, label: SUB_OCTS[id].label, title: `the sub-oscillator ${SUB_OCTS[id].said}` }));
     const vcaOptions = VCA_IDS.map((id) => ({ id, label: VCAS[id].label, title: VCAS[id].said }));
     const arpOptions = ARP_IDS.map((id) => ({ id, label: ARPS[id].label, title: ARPS[id].said }));
     const verdictWord = vd.key === 'free' ? 'no stem' : vd.ok == null ? (vd.poor?.length ? 'a fault' : vd.partly?.length ? 'partly' : 'suits') : vd.ok ? 'as directed' : 'not yet';
     const lfoValue2 = lfoOn(state) || pwmOn(state) ? fmtRate(state.lfoRate) : 'off';
-    const lfoMeaning = `${rd.lfoShort}${pwmOn(state) ? `${rd.lfoShort === 'off' ? '' : ' + '}PW` : ''} · a control signal`;
+    const lfoMeaning = `${pwmOn(state) ? (rd.lfoShort === 'off' ? 'PW' : `${rd.lfoShort} + PW`) : rd.lfoShort} · a control signal`;
 
     const consoleSlot = (
         <>
@@ -1106,13 +1118,13 @@ export default function SynthBench({ back }) {
                 <div className={styles.secHead}><span className={styles.eyebrow}>Source mixer</span><span className={styles.value}>{rd.sourceCount ? `${rd.sourceCount} on` : 'none'}</span></div>
                 <div className={styles.slideRow}>
                     {SOURCE_IDS.map((id) => (
-                        <Slide key={id} name={SOURCES[id].label} shown={`${state[id]} %`} off={state[id] === 0}>
-                            <Fader slim label={SOURCES[id].label} value={state[id]} min={LEVEL_MIN} max={LEVEL_MAX} step={1} format={(l) => `${l} %`} colour={SOURCE_COLOUR[id]} pixels={92} onChange={edit(SETTER[id], id)} title={SOURCES[id].does} />
+                        <Slide key={id} name={id === 'saw' ? shapeSwitch : SOURCES[id].label} shown={`${state[id]} %`} off={state[id] === 0}>
+                            <Fader slim label={id === 'saw' ? SHAPES[state.shape].label : SOURCES[id].label} value={state[id]} min={LEVEL_MIN} max={LEVEL_MAX} step={1} format={(l) => `${l} %`} colour={SOURCE_COLOUR[id]} pixels={92} onChange={edit(SETTER[id], id)} title={id === 'saw' ? SHAPES[state.shape].does : SOURCES[id].does} />
                         </Slide>
                     ))}
                 </div>
                 <div className={styles.meaning}>{rd.sources} → the filter</div>
-                <Why>What goes into the filter, mixed rather than chosen: the VCO&apos;s pulse and saw, a square sub-oscillator an octave or two down (the More row sets which), and white noise. A saw has every harmonic, a square the odd ones, a narrow pulse the even ones too; noise is every frequency and no pitch. The 2024 report: &quot;Candidates were often successful in discussing the sub-oscillator&quot;.</Why>
+                <Why>What goes into the filter, mixed rather than chosen: the VCO&apos;s pulse and its second wave, a square sub-oscillator an octave or two down (the More row sets which), and white noise. The second wave&apos;s name is a switch: press it for Saw, Tri or Sine, the spec&apos;s &quot;selecting and mixing sine, triangle, pulse, square and saw&quot;. A saw has every harmonic, a square the odd ones, a narrow pulse the even ones too, a triangle faint odd ones, a sine one alone; noise is every frequency and no pitch. The 2024 report: &quot;Candidates were often successful in discussing the sub-oscillator&quot;.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secSynth} ${styles.secVcf}`} data-teach={teach || undefined}>
@@ -1190,7 +1202,7 @@ export default function SynthBench({ back }) {
                 </div>
                 <span className={styles.presetLabel}>Presets</span>
                 <div role="group" aria-label="Presets">
-                    {PRESETS.map((pr) => (
+                    {presetsFor(depth).map((pr) => (
                         <button key={pr.id} type="button" className={styles.preset} aria-pressed={state.presetId === pr.id} onClick={() => choosePreset(pr.id)} title={pr.blurb}>{pr.name}</button>
                     ))}
                 </div>
@@ -1255,7 +1267,7 @@ export default function SynthBench({ back }) {
                 {depth === 'core' ? (
                     <>
                         {state.pulse > 0 ? <span><i style={{ background: 'var(--gen-3)' }} />{isSquare(state) ? 'square' : 'pulse'}</span> : null}
-                        {state.saw > 0 ? <span><i style={{ background: 'var(--gen-4)' }} />saw</span> : null}
+                        {state.saw > 0 ? <span><i style={{ background: 'var(--gen-4)' }} />{state.shape}</span> : null}
                         {state.sub > 0 || state.noise > 0 ? <span><i style={{ background: 'var(--gen-7)' }} />{[state.sub > 0 ? 'sub' : null, state.noise > 0 ? 'noise' : null].filter(Boolean).join(' · ')}</span> : null}
                         {state.osc2 !== 'off' ? <span><i style={{ background: 'var(--gen-1)' }} />{state.osc2 === 'fifth' ? 'a fifth up' : 'osc 2'}</span> : null}
                         <span><i style={{ background: 'var(--gold-bright)' }} />filter</span>

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEFAULT_STATE, applyPreset, setAttack, setLfoDepth, setLfoTarget, setFilter, setOctave, setVoices, setVca, setPwm, setWidth, setSub, setSaw, setOsc2 } from '../lib/bench/synth-model.js';
+import { DEFAULT_STATE, applyPreset, setAttack, setLfoDepth, setLfoTarget, setFilter, setOctave, setVoices, setVca, setPwm, setWidth, setSub, setSaw, setOsc2, setShape, setPulse } from '../lib/bench/synth-model.js';
 import { DEPTH_LINES, DEPTH_TEACH, hearingLine, oscSaid, nextMove, judge, open, sectionOfLast, homeNote } from '../lib/bench/synth-depth.js';
 
 const noDash = (s) => assert.ok(!/—/.test(s) && !/\butilise/i.test(s), `house copy law broken: ${s}`);
@@ -82,12 +82,12 @@ test('A-level judges a section for the job the way Q6 does, and offers the bette
 });
 
 test('the LFO is judged as a control signal, with the 2024 report as evidence; PWM counts as the LFO at work', () => {
-    const s = setLfoDepth(setLfoTarget({ ...DEFAULT_STATE, task: null, presetId: null }, 'pitch'), 20);
+    const s = setLfoDepth(setLfoTarget({ ...applyPreset(DEFAULT_STATE, 'as2023'), task: null, presetId: null }, 'pitch'), 20);
     const segs = judge({ state: s, last: 'lfoDepth' });
     assert.match(segs[0].text, /^LFO, the LFO: a triangle wave at 5\.0 Hz on the pitch/);
     assert.match(segs[1].text, /vibrato/);
     assert.match(segs[1].text, /something audible rather than a control signal/);
-    const pw = judge({ state: setPwm(setWidth({ ...DEFAULT_STATE, task: null, presetId: null, lfoDepth: 0 }, 20), 'lfo'), last: 'lfoRate' });
+    const pw = judge({ state: setPwm(setWidth({ ...applyPreset(DEFAULT_STATE, 'as2023'), task: null, presetId: null, lfoDepth: 0 }, 20), 'lfo'), last: 'lfoRate' });
     assert.match(pw[1].text, /did not appreciate that the pulse width was being modulated by the LFO/);
 });
 
@@ -113,4 +113,27 @@ test('Extension opens the machine in its own sentence, with no AO tags, keyed to
     assert.equal(sectionOfLast('vca'), 'voices');
     assert.equal(sectionOfLast('part'), null);
     assert.equal(homeNote(s), 'A4 · 440 Hz');
+});
+
+test('the shape switch reads in every line: two triangle waves, a sine sent back to Saw, the sounds\' own next moves', () => {
+    const keys = applyPreset(DEFAULT_STATE, 'as2024');
+    assert.equal(oscSaid(setShape(keys, 'tri')), 'two triangle waves 7 cents apart');
+    assert.equal(oscSaid(setOsc2(setShape(keys, 'sine'), 'off')), 'a sine wave');
+    assert.match(hearingLine(setShape(keys, 'sine')), /on two sine waves 7 cents apart/);
+    const bassSine = setShape(DEFAULT_STATE, 'sine');
+    const segs = judge({ state: bassSine, last: 'shape' });
+    assert.match(segs[0].text, /^VCO, the oscillator and mixer: a sine wave with a square sub-oscillator an octave down, doubled 10 cents apart/);
+    assert.match(segs[1].text, /^Partly a synth bass: a sine wave with a square sub-oscillator an octave down: one harmonic/);
+    assert.match(segs[1].text, /Press the slider's name to set the wave to Saw/);
+    assert.equal(sectionOfLast('shape'), 'osc');
+    assert.match(nextMove({ ...bassSine, presetId: null }), /set the wave back to Saw/);
+    assert.match(nextMove(DEFAULT_STATE), /^slide Detune to zero/);
+    assert.match(nextMove(applyPreset(DEFAULT_STATE, 'pad')), /become a stab/);
+    assert.match(nextMove(applyPreset(DEFAULT_STATE, 'stab')), /Sustain/);
+    assert.match(nextMove(applyPreset(DEFAULT_STATE, 'lead')), /Tri to Sine/);
+    const suits = judge({ state: applyPreset(DEFAULT_STATE, 'pad'), last: 'preset' });
+    assert.match(suits[0].text, /^A synth pad, judged by section: the oscillator and mixer, filter, envelope, LFO, amplifier and voices suit it\./);
+    assert.match(suits[1].text, /^Every section suits a synth pad/);
+    [segs, suits].flat().forEach((sg) => noDash(sg.text));
+    assert.ok(!/—/.test(hearingLine(setPulse(setShape(keys, 'tri'), 30))));
 });

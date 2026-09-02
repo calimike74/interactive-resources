@@ -9,7 +9,8 @@
 // Do not edit the bench while it runs: Fast Refresh resets the page and
 // every reading after that is void. Written 1 Sep 2026 with the bench;
 // the panel re-cut of 2 Sep (sliders, a source mixer, PW by LFO, the VCA
-// switch) added the pwm and gate scenarios and made level read each source.
+// switch) added the pwm and gate scenarios and made level read each source;
+// 2 Sep PM: the wave slider's shapes (tri, sine) read in level, presets by level.
 import { chromium } from 'playwright';
 const url = process.argv[2] || 'http://localhost:3402/synth-bench';
 const only = process.argv[3] || '';
@@ -52,11 +53,21 @@ await page.locator('[aria-label="What the bench does for you"] button', { hasTex
 await page.waitForTimeout(300);
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const chip = (group, name) => page.locator(`[aria-label="${group}"] button`, { hasText: new RegExp('^' + esc(name) + '$') });
-const preset = (name) => page.locator('[aria-label="Presets"] button', { hasText: name });
+const depthBtn = (label) => page.locator('[aria-label="What the bench does for you"] button', { hasText: new RegExp('^' + label + '$') });
+// Core shows the four sounds; the papers and the Judge patches sit at A-level
+// (2 Sep). A preset the level does not show is pressed at A-level, and the
+// bench comes back to Core, where the keys live; the state carries across.
+const presetBtn = (name) => page.locator('[aria-label="Presets"] button', { hasText: name });
+const preset = (name) => ({ click: async () => { if (await presetBtn(name).count()) await presetBtn(name).click(); else { await depthBtn('A-level').click(); await presetBtn(name).click(); await depthBtn('Core').click(); } await page.waitForTimeout(150); } });
+// the wave slider is named by its shape (the switch under it: Saw, Tri, Sine)
+const shapeNow = () => page.evaluate(() => document.querySelector('[data-shape]')?.dataset.shape || 'saw');
+const SHAPE_LABEL = { saw: 'Saw', tri: 'Tri', sine: 'Sine' };
+const waveLabel = async () => SHAPE_LABEL[await shapeNow()];
+const setShape = async (id) => { for (let i = 0; i < 3 && (await shapeNow()) !== id; i += 1) { await page.locator('[data-shape]').click(); await page.waitForTimeout(80); } };
 const dial = async (label, key) => { await page.locator(`[aria-label="${label}"]`).focus(); await page.keyboard.press(key); };
 // a source slider to one of its ends; `only` takes the other three to zero
 const source = async (name, key) => { await dial(name, key); };
-const solo = async (name) => { for (const n of ['Pulse', 'Saw', 'Sub', 'Noise']) await source(n, n === name ? 'End' : 'Home'); };
+const solo = async (name) => { const wl = await waveLabel(); for (const n of ['Pulse', wl, 'Sub', 'Noise']) await source(n, n === name ? 'End' : 'Home'); };
 const dB = (x) => (x <= 1e-7 ? ' -inf' : (20 * Math.log10(x)).toFixed(1).padStart(5));
 const now = () => page.evaluate(() => window.__ctx?.currentTime ?? 0);
 const line = (label, o) => console.log(`${label.padEnd(50)} ${o}`);
@@ -119,6 +130,8 @@ if (want('level')) {
   await dial('Cutoff', 'End');
   for (const w of ['Pulse', 'Saw', 'Sub', 'Noise']) { await solo(w); const r = await keyLevel(); line(`LEVEL C2 held, ${w.toLowerCase()} alone (paired), filter open`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
   await solo('Pulse'); await dial('Pulse width', 'Home'); { const r = await keyLevel(); line('LEVEL C2 held, pulse at 5 % width, filter open', `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
+  // the wave slider's other shapes, each alone with the filter open, against the saw
+  for (const sh of ['tri', 'sine', 'saw']) { await setShape(sh); await solo(await waveLabel()); const r = await keyLevel(); line(`LEVEL C2 held, ${sh} alone (paired), filter open`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
   await preset('2023 paper').click();
 }
 if (want('pitch')) {

@@ -7,6 +7,7 @@ import {
     applyPreset, setPulse, setSaw, setSub, setNoise, setWidth, setPwm, setSubOct, setVca, setOctave, setDetune, setOsc2, setFilter, setCutoff, setRes, setAttack, setRelease, setLfoTarget, setLfoDepth, setVoices, setPart, dragDot, rawOf,
     spectrum, noiseLevel, waveShape, timeline, gateMs, homeMidi, readings, verdict, judgeSection, judgeAll, schemePoints, osc2Ratio, arpeggiate, setArp,
     sources, waveOf, sourceSaid, sourcesShort, harmonicsSaid, pwmOn, widthAt, isSquare,
+    SHAPES, setShape, triCoef, shapeCoef, waveGain, presetsFor,
 } from '../lib/bench/synth-model.js';
 
 const near = (a, b, tol = 1e-6) => assert.ok(Math.abs(a - b) <= tol, `${a} not within ${tol} of ${b}`);
@@ -30,7 +31,7 @@ test('the waveforms carry the series the spec names, in the amplitude a wave of 
 });
 
 test('the source mixer: what is on names the wave the papers would; a sub is a square; noise alone has no pitch', () => {
-    const s = DEFAULT_STATE;
+    const s = applyPreset(DEFAULT_STATE, 'as2023');
     assert.equal(waveOf(s), 'square');
     assert.equal(sourceSaid(s), 'a square wave');
     assert.equal(sourcesShort(s), 'square');
@@ -154,7 +155,7 @@ test('the presets land the papers\' settings, and an edit drops the preset but k
     for (const p of PRESETS) {
         const st = applyPreset(DEFAULT_STATE, p.id);
         assert.equal(st.presetId, p.id);
-        if (p.task !== 'judge') assert.equal(verdict(st).ok, true, `${p.id} should land as directed`);
+        if (p.task && p.task !== 'judge') assert.equal(verdict(st).ok, true, `${p.id} should land as directed`);
     }
 });
 
@@ -248,7 +249,7 @@ test('the judge: a pad patch on the bass fails on its envelope; a bass patch on 
 });
 
 test('the judge knows the Q6 misconceptions: an LFO is a control signal, a high-pass on a bass removes the bass, PWM is the LFO at work, noise has no pitch', () => {
-    const s = { ...DEFAULT_STATE, task: null, presetId: null };
+    const s = { ...applyPreset(DEFAULT_STATE, 'as2023'), task: null, presetId: null };
     assert.equal(judgeSection(setFilter(s, 'hpf'), 'filter').grade, 'poor');
     assert.equal(judgeSection(setNoise(setPulse(s, 0), 50), 'osc').grade, 'poor');
     assert.equal(judgeSection(setPulse(s, 0), 'osc').grade, 'poor');
@@ -399,4 +400,75 @@ test('the arpeggiator steps a chord up in sixteenths over its own length and lea
     assert.equal(bass.length, 8);
     assert.equal(setArp(DEFAULT_STATE, 'up').arp, 'up');
     assert.equal(setArp(DEFAULT_STATE, 'sideways'), DEFAULT_STATE);
+});
+
+test('the wave slider has a shape, saw, tri or sine, in the words the schemes use; the triangle draws with its alternating series', () => {
+    const s = applyPreset(DEFAULT_STATE, 'as2024'); // two saws
+    assert.equal(waveOf(s), 'saw');
+    const tri = setShape(s, 'tri');
+    assert.equal(tri.presetId, null);
+    assert.equal(tri.task, 'as2024');
+    assert.equal(waveOf(tri), 'tri');
+    assert.equal(sourceSaid(tri), 'a triangle wave');
+    assert.equal(sourcesShort(tri), 'tri');
+    assert.match(harmonicsSaid(tri), /^tri: odd harmonics, 1\/n²/);
+    const sine = setShape(s, 'sine');
+    assert.equal(sourceSaid(sine), 'a sine wave');
+    assert.match(harmonicsSaid(sine), /the fundamental alone/);
+    assert.equal(sourcesShort(setPulse(sine, 100)), 'square + sine');
+    // the bars: a triangle's third harmonic is a ninth of its first; a sine is one line
+    const triLines = spectrum({ ...tri, osc2: 'off' });
+    near(triLines[1].amp / triLines[0].amp, 1 / 9, 1e-9);
+    near(triLines[1].hz / triLines[0].hz, 3, 1e-9);
+    assert.equal(spectrum({ ...sine, osc2: 'off' }).length, 1);
+    // the drawn triangle alternates in sign; the bars only need the size
+    assert.ok(triCoef(3) < 0 && triCoef(5) > 0 && triCoef(2) === 0);
+    near(Math.abs(triCoef(3)), harmonicAmp('triangle', 3));
+    near(shapeCoef('saw', 2), harmonicAmp('saw', 2));
+    const shape = waveShape({ ...tri, osc2: 'off', bypass: true }, { n: 64 });
+    // a triangle before the filter: its peak is a point, not the saw's cliff
+    const raw = Array.from(shape.raw);
+    const iMax = raw.indexOf(Math.max(...raw));
+    near(raw[iMax - 1], raw[iMax + 1], 0.06);
+    // the schemes: the 2024 keyboard wants saws; the 2025 lead allows a triangle and rules out a sine
+    assert.equal(verdict(tri).ok, false);
+    assert.match(verdict(tri).missed[0].said, /^a triangle wave, not the saw/);
+    const lead = applyPreset(DEFAULT_STATE, 'a2025');
+    const leadTri = setShape(setPulse(setSaw(lead, 100), 0), 'tri');
+    assert.equal(verdict(leadTri).points[0].ok, true);
+    const leadSine = setShape(leadTri, 'sine');
+    assert.equal(verdict(leadSine).points[0].ok, false);
+    assert.match(verdict(leadSine).points[0].said, /rules out/);
+    // the judge: a sine leaves the filter nothing to do, whatever the part; a triangle bass is soft
+    assert.equal(judgeSection({ ...leadSine, task: null }, 'osc').grade, 'partly');
+    assert.match(judgeSection({ ...leadSine, task: null }, 'osc').why, /nothing to take away/);
+    assert.equal(judgeSection(setShape(applyPreset(DEFAULT_STATE, 'bass'), 'tri'), 'osc').grade, 'partly');
+    assert.equal(judgeSection(setShape(applyPreset(DEFAULT_STATE, 'pad'), 'tri'), 'osc').grade, 'good');
+    // the graph's gain for the shape is the model's
+    assert.equal(waveGain(tri), SOURCE_GAIN.tri);
+    assert.equal(waveGain(s), SOURCE_GAIN.saw);
+    assert.equal(SHAPES.tri.node, 'triangle');
+});
+
+test('Core presets are the four sounds, each suiting its part in every section; the papers and the Judge patches are the A-level and Extension presets', () => {
+    assert.deepEqual(presetsFor('core').map((p) => p.id), ['bass', 'pad', 'stab', 'lead']);
+    assert.deepEqual(presetsFor('alevel').map((p) => p.id), ['as2023', 'as2024', 'a2025', 'fills2023', 'judgeBass', 'judgePad']);
+    assert.deepEqual(presetsFor('extension'), presetsFor('alevel'));
+    assert.equal(DEFAULT_STATE.presetId, 'bass');
+    assert.equal(DEFAULT_STATE.task, null);
+    for (const p of presetsFor('core')) {
+        const st = applyPreset(DEFAULT_STATE, p.id);
+        assert.equal(st.task, null);
+        assert.equal(verdict(st).key, 'free');
+        for (const [id, v] of Object.entries(judgeAll(st))) assert.equal(v.grade, 'good', `${p.id} ${id}: ${v.why}`);
+    }
+    // a pad and a stab: chords both, opposite envelopes
+    const pad = applyPreset(DEFAULT_STATE, 'pad'); const stab = applyPreset(DEFAULT_STATE, 'stab');
+    assert.ok(pad.attack >= 500 && pad.release >= 1000 && pad.sustain >= 80);
+    assert.ok(stab.attack <= 5 && stab.sustain === 0 && stab.release <= 200);
+    assert.equal(PARTS[pad.part].notes.filter((e) => e.s === 0).length, 4);
+    assert.equal(PARTS[stab.part].notes.filter((e) => e.s === 0).length, 3);
+    // the bass sound is the 2023 paper's move: a detuned pair, so Detune to zero collapses it
+    assert.equal(DEFAULT_STATE.osc2, 'pair');
+    assert.ok(DEFAULT_STATE.detune > 0 && DEFAULT_STATE.sub > 0);
 });
