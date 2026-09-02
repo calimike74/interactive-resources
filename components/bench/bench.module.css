@@ -1206,3 +1206,21 @@
 .barWrap [role='group'] { display: contents; }
 .barWrap .presetLabel { margin-right: 2px; }
 .barWrap .presetLabel + .presetLabel { margin-left: 6px; }
+
+/* ---- the Reverb bench (1.12), 2 Sep 2026 ----
+   The console is the paper's own answer sheet: 2019 C3 Q3(a) drew Type,
+   Pre-delay (ms) and Reverb time (s) as three dials, 2021 C3 Q1(d) added
+   Wet level %. Widths at 1280: Play 104 + Source 130 + Type 200 +
+   Pre-delay 88 + Reverb time 88 + Wet 88 + Hear (at least 290). */
+.secRvSource { width: 130px; }
+.srcCol { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.secRvType { width: 200px; }
+.secRvType .chips { flex-wrap: wrap; gap: 4px; }
+.secRvDial { width: 88px; padding: 14px 8px; }
+.secRvDial .secHead { justify-content: center; }
+.secRvDial .knob { align-self: center; margin-top: 4px; }
+.secRvDial .value { font-size: 14px; }
+.secHear[data-reverb='true'] { min-width: 290px; }
+.secHear[data-reverb='true'] .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
+.secHear[data-reverb='true'] .stats b { font-size: 15px; }
+.secHear[data-reverb='true'] .stats span { font-size: 12px; line-height: 1.25; display: block; }

@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { getResource, resourceExists } from '@/lib/resources';
@@ -21,7 +22,13 @@ import GraphicParametricEQ from '@/components/resources/GraphicParametricEQ';
 import RevealExplorer from '@/components/resources/RevealExplorer';
 import EQAssessmentPrototype from '@/components/resources/EQAssessmentPrototype';
 import EssayScaffold from '@/components/resources/EssayScaffold';
-import SynthBench from '@/components/resources/SynthBench';
+import ReverbBench from '@/components/resources/ReverbBench';
+// The Synth bench is the one resource that builds oscillators. A static
+// import puts createOscillator in the chunk every resource page loads, and
+// check-bench law 9 then fails every bench that does not declare synthesis
+// (found on the Delay bench, 2 Sep 2026). Loaded on demand, it stays in its
+// own chunk and law 9 reads the truth.
+const SynthBench = dynamic(() => import('@/components/resources/SynthBench'));
 import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
 import CompressorExplorer from '@/components/resources/CompressorExplorer';
 import CompressorCurvePractice from '@/components/resources/CompressorCurvePractice';
@@ -83,6 +90,7 @@ const resourceComponents = {
     'EQAssessmentPrototype': EQAssessmentPrototype,
     'EssayScaffold': EssayScaffold,
     'SynthBench': SynthBench,
+    'ReverbBench': ReverbBench,
     'StereoRecordingEssay': StereoRecordingEssay,
     'CompressorExplorer': CompressorExplorer,
     'CompressorCurvePractice': CompressorCurvePractice,

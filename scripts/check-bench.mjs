@@ -38,6 +38,10 @@
 //      canvas reports the cutoff (data-cutoff) and it equals the console's;
 //      dragging the dot right raises it on both; and the keys on the stage
 //      play the voice (pressing the C key makes the stage report a note)
+//  26. (Reverb bench) the tail's end on the stage is the Reverb time dial:
+//      the canvas reports the reverb time (data-rt60) and the pre-delay
+//      (data-predelay), both equal the console's readouts, and dragging the
+//      tail's end to the right lengthens the drawing and the dial together
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -117,6 +121,12 @@ const BENCHES = {
         presets: { first: '2023 paper', second: '2024 paper', judge: 'Judge: a bass' },
         judgeLands: { selector: '[aria-label="Attack"]', attr: 'aria-valuetext', value: '600 ms', says: 'loads a pad envelope on the bass: a 600 ms attack (Attack = 600 ms)' },
         stages: { core: 'scope', alevel: 'sections', extension: 'machine' },
+    },
+    'reverb-bench': {
+        tailHandle: { preset: 'Hall' },
+        presets: { first: '2019 dials', second: '2020 paper', judge: 'Judge: swamped' },
+        judgeLands: { selector: '[aria-label="Wet"]', attr: 'aria-valuetext', value: '70 %', says: 'loads the 2018 report\'s fault, a hall at 70 % wet (Wet = 70 %)' },
+        stages: { core: 'tail', alevel: 'path', extension: 'machine' },
     },
     'balance-desk': {
         faders: { stem: 'Vocal' },
@@ -667,6 +677,50 @@ for (const url of urls) {
                 if (!down.note) fail(url, size, 'pressing the C key on the stage did not make the stage report a note (data-note empty)');
                 else ok(`the keys on the stage play the voice (note ${down.note} while pressed)`);
             } else fail(url, size, 'the stage does not expose its C key for the press test');
+            if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
+            await depthBtn('A-level').click();
+        }
+
+        // 26. (Reverb) the tail's end on the stage is the Reverb time dial: the
+        // canvas reports the reverb time and the pre-delay, both equal the
+        // console's readouts, and dragging the end to the right lengthens both
+        // (2 Sep 2026, the same law the EQ dot and the Synth cutoff carry)
+        if (fx.tailHandle) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            await depthBtn('Core').click();
+            await page.waitForTimeout(200);
+            if (fx.tailHandle.preset) {
+                const p0 = page.locator('[aria-label="Presets"] button', { hasText: fx.tailHandle.preset });
+                if (await p0.count()) await p0.first().click();
+            }
+            await page.waitForTimeout(350);
+            const readT = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { rt: c?.dataset.rt60 || '', pre: c?.dataset.predelay || '', handle: c?.dataset.handle || '', pre_h: c?.dataset.prehandle || '', verdict: c?.dataset.verdict || '' }; }, canvasSel);
+            const consoleT = () => page.evaluate(() => ({
+                rt: document.querySelector('[aria-label="Controls"] [data-rt60]')?.getAttribute('data-rt60') || '',
+                pre: document.querySelector('[aria-label="Controls"] [data-predelay]')?.getAttribute('data-predelay') || '',
+            }));
+            const before = await readT();
+            const cB = await consoleT();
+            if (!before.rt) fail(url, size, 'the stage does not report the reverb time (data-rt60 missing)');
+            else if (Number(before.rt) !== Number(cB.rt)) fail(url, size, `the stage's reverb time (${before.rt}) is not the console's (${cB.rt})`);
+            else if (Number(before.pre) !== Number(cB.pre)) fail(url, size, `the stage's pre-delay (${before.pre}) is not the console's (${cB.pre})`);
+            else ok(`the stage reports the tail and the console agrees (${before.rt} s, ${before.pre} ms)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx + 30, box.y + hy, { steps: 6 });
+                await page.mouse.move(box.x + hx + 60, box.y + hy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(300);
+                const after = await readT();
+                const cA = await consoleT();
+                if (!(Number(after.rt) > Number(before.rt))) fail(url, size, `dragging the tail's end right did not lengthen the reverb time (${before.rt} -> ${after.rt})`);
+                else if (Number(after.rt) !== Number(cA.rt)) fail(url, size, `the dial did not follow the tail (${cA.rt} vs ${after.rt})`);
+                else ok(`dragging the tail's end lengthens the reverb time and the dial follows (${before.rt} -> ${after.rt} s)`);
+            } else fail(url, size, 'the stage does not expose the tail\'s end handle for the drag test');
+            if (!before.pre_h) fail(url, size, 'the stage does not expose the pre-delay handle (data-prehandle missing)');
             if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
             await depthBtn('A-level').click();
         }
