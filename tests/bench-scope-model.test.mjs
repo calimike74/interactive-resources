@@ -34,7 +34,7 @@ test('the octave doubles the frequency and halves the period (2019: 294 to 588)'
 });
 
 test('a real note plays at the file\'s own pitch; a waveform can be set to the paper\'s number', () => {
-    assert.equal(sourceHz(DEFAULT_STATE), SOURCES.cello.hz);
+    assert.equal(sourceHz(DEFAULT_STATE), SOURCES.sine.hz);
     const sq = applyPreset(DEFAULT_STATE, 'lower');
     assert.equal(sq.source, 'square');
     near(frequency(sq), 1000);
@@ -134,8 +134,8 @@ test('readings gather what the console shows', () => {
     assert.equal(r.lfoHz, 0);
     near(r.fileMb, 10);
     const n = readings(DEFAULT_STATE);
-    assert.equal(n.kind, 'file');
-    assert.equal(n.note.name, noteOf(SOURCES.cello.hz).name);
+    assert.equal(n.kind, 'osc'); // the first screen is a sine wave (8 Sep 2026)
+    assert.equal(n.note.name, noteOf(SOURCES.sine.hz).name);
     assert.ok(n.shape.length > 10);
     assert.equal(setTimeBase(DEFAULT_STATE, 7), DEFAULT_STATE, 'an unknown time base is ignored');
     assert.equal(TASKS.period.hz, 500);

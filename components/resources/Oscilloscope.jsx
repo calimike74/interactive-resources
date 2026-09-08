@@ -614,7 +614,7 @@ export default function Oscilloscope({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Press Play and a bowed cello note stands on the screen, one cycle bracketed. Press <b>Octave up</b> and the bracket halves as the note jumps; drag the bracket wider and the note falls as the wave stretches. That one picture is most of the topic: pitch is the length of a cycle, and every question is a reading off it.</p>
+                    <p>Press Play and a sine wave stands on the screen, one cycle bracketed. Switch the source along the row, Square, Saw, Triangle, and the shape changes while the bracket stays a length you can read; press <b>A real note</b> and a bowed cello stands there instead. Press <b>Octave up</b> and the bracket halves as the note jumps; drag the bracket wider and the note falls as the wave stretches. That one picture is most of the topic: pitch is the length of a cycle, and every question is a reading off it.</p>
                     <h3>What the schemes say</h3>
                     <p>2019, the octave: &quot;294 × 2 / 294 + 294 (1); 588 (Hz) (2). Award 2 for 588 with no working.&quot;</p>
                     <p>2023, the drawing: &quot;Saw wave (1); period of 2 ms (1). Accept DC offset. Accept different amplitude.&quot; 2025: &quot;a louder square wave with period of 2 ms and no DC offset (1)&quot;; &quot;a square wave with same amplitude as figure 1 and period of 4 ms and no DC offset (1)&quot;.</p>
