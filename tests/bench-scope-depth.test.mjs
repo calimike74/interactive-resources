@@ -52,7 +52,7 @@ test('an unreadable screen is judged as a screen problem, not a wave problem', (
 
 test('the Core line names the source, the pitch and the period, and the next move is a real instruction', () => {
     const line = hearingLine(DEFAULT_STATE);
-    assert.match(line, /^You are hearing a bowed cello note as played: F3, one cycle every 5\.75 ms/);
+    assert.match(line, /^You are hearing a sine wave as played: between B and C, one cycle every 4\.00 ms/);
     assert.match(hearingLine(setOctave(DEFAULT_STATE, 'up')), /an octave higher/);
     assert.match(hearingLine(stretchTo(DEFAULT_STATE, 1.5)), /stretched to/);
     assert.match(hearingLine(setLfo(DEFAULT_STATE, 'quaver')), /4 times a second/);
