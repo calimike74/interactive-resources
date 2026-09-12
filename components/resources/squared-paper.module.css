@@ -74,7 +74,7 @@
     background: var(--paper);
     border-radius: 4px;
     box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4), 0 2px 0 rgba(0, 0, 0, 0.2);
-    padding: 30px 44px 38px;
+    padding: 26px 44px 32px;
     position: relative;
 }
 .sheetHead {
@@ -98,11 +98,11 @@
 }
 
 /* the figure the paper prints, and its caption */
-.figure { margin: 0 0 26px; display: flex; flex-direction: column; align-items: center; }
+.figure { margin: 0 0 20px; display: flex; flex-direction: column; align-items: center; }
 .figCaption { font-size: 14px; font-weight: 700; color: var(--ink); margin-top: 4px; }
 
 /* the question: the part label hangs at the left, the marks at the right */
-.question { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+.question { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
 .part {
     flex: none;
     min-width: 52px;

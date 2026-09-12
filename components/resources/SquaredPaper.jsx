@@ -38,8 +38,10 @@ const TITLE = 'Squared Paper';
 // The grid as the paper rules it: 25 small squares across (five to a
 // division) and 20 down, the zero line through the middle, "Displacement" up
 // the side and "Time (ms)" along the bottom with the divisions numbered.
-const ANSWER_SQ = 20; // a small square, in pixels, on the answer grid
-const FIGURE_SQ = 13; // the same grid, smaller, for the figure the paper prints
+// 18 px a square keeps a question that prints a figure inside about one and
+// a small scroll at 1280 by 800, which is what a paper page should cost.
+const ANSWER_SQ = 18; // a small square, in pixels, on the answer grid
+const FIGURE_SQ = 11; // the same grid, smaller, for the figure the paper prints
 const PAD = { left: 38, right: 78, top: 10, bottom: 22 };
 
 const gridBox = (sq) => ({
