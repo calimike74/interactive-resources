@@ -71,7 +71,7 @@ const ORIENTS = {
         extension: 'The tone is never taken away. What moves is the level it has to beat before the ear finds it.',
     },
     room: {
-        core: 'Two things a room does: one early copy that colours the sound, and a tail that runs on after it.',
+        core: 'A room adds an early copy that colours the sound, then a tail that runs on after it.',
         alevel: 'The 2024 question is worth sixteen marks, and half of it is the room the mic is standing in.',
         extension: 'The room is an answer the bench writes, then stamps on every sample of the stem.',
     },
@@ -672,7 +672,7 @@ export default function AcousticsBench({ back }) {
                     </button>
                 ))}
             </div>
-            <Why>Three things that happen between a sound and an ear: how loud a tone seems, one sound hiding another, and what a room does on the way. Each one redraws the stage and changes the controls beside it.</Why>
+            <Why>What happens between a sound and an ear: how loud a tone seems, one sound hiding another, and what a room does on the way. Each one redraws the stage and changes the controls beside it.</Why>
         </div>
     );
 
@@ -1198,8 +1198,17 @@ function drawMasking(g, s, box, col, mono, monoSmall, bottom, nodesRef, playingR
     g.closePath();
     g.fill();
     g.font = mono;
-    g.textAlign = 'center';
-    g.fillText(`masker ${fmtHz(sh.masker.hz)} at ${fmtDb(s.masker)}`, sh.masker.x, box.y1 - 16);
+    const mLabel = `masker ${fmtHz(sh.masker.hz)} at ${fmtDb(s.masker)}`;
+    const mW = g.measureText(mLabel).width;
+    const mGap = 10;
+    // 12 Sep 2026: centred on the masker it ran into the target's upright line
+    // and the target cut the "dB" off it. It goes on the side the target is
+    // not on, and On it, where the two share a frequency, it goes left.
+    let mX = sh.target.x >= sh.masker.x ? sh.masker.x - mGap - mW : sh.masker.x + mGap;
+    if (mX < box.x0) mX = sh.masker.x + mGap;
+    if (mX + mW > box.x1) mX = sh.masker.x - mGap - mW;
+    g.textAlign = 'left';
+    g.fillText(mLabel, Math.max(box.x0, Math.min(mX, box.x1 - mW)), box.y1 - 16);
 
     // the target, and whether it clears the skirt
     const r = readings(s);
@@ -1227,10 +1236,24 @@ function drawMasking(g, s, box, col, mono, monoSmall, bottom, nodesRef, playingR
         g.globalAlpha = 1;
         g.fillStyle = col.ink;
         g.font = monoSmall;
-        g.textAlign = 'left';
         // kept clear of the target's own label when the two land together
         const near = Math.abs(sh.target.threshold - sh.target.y) < 22;
-        g.fillText(`needs ${Math.round(r.threshold)} dB`, sh.target.x + 10, sh.target.threshold + (near ? 16 : 4));
+        const needsTxt = `needs ${Math.round(r.threshold)} dB`;
+        const needsY = sh.target.threshold + (near ? 16 : 4);
+        const needsW = g.measureText(needsTxt).width;
+        // and clear of the masker's label, which owns the bottom strip: with the
+        // masker above the target the threshold falls to the floor and the two
+        // ran into each other there (12 Sep 2026). The one that moves is this
+        // one, to the other side of the upright line.
+        const rowShared = Math.abs(needsY - (box.y1 - 16)) < 14;
+        const runsInto = sh.target.x + 10 < mX + mW + 6 && sh.target.x + 10 + needsW > mX - 6;
+        if (rowShared && runsInto && sh.target.x - 10 - needsW > box.x0) {
+            g.textAlign = 'right';
+            g.fillText(needsTxt, sh.target.x - 10, needsY);
+        } else {
+            g.textAlign = 'left';
+            g.fillText(needsTxt, sh.target.x + 10, needsY);
+        }
     }
 }
 
