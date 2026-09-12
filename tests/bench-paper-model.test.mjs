@@ -5,6 +5,7 @@ import {
     applyPreset, fillLine, drawAt, clearLine, setTimeBase, setShape, setPeriod, setHeight, setShowAnswer, setTarget,
     detectPeriod, cycleOf, nameShape, harmonicsOf, idealHarmonics, snapMs, shapeAt,
     read, verdict, marksFor, answerOf, givenOf, spanOf,
+    QUESTION_IDS, QUESTION_COUNT, questionIndex, stemOf, stepQuestion, nextWord, canStep,
     fmtMs, fmtS, fmtHz, fmtDb, noteWord, heightWord, gainToDb, dbToGain,
 } from '../lib/bench/paper-model.js';
 
@@ -334,4 +335,67 @@ test('Show answer and the Hear targets are state, and change nothing about the d
     near(shapeAt('sine', 0.25), 1, 1e-9);
     near(shapeAt('triangle', 0.25), 1, 1e-9);
     assert.equal(SHAPES.saw.osc, 'sawtooth');
+});
+
+test('the seven papers are a numbered walk, and the blank paper sits outside it', () => {
+    // Mike, 12 Sep 2026: "If I get something wrong, how do I go to the next
+    // question?" The presets carry their number, the stage says one of seven.
+    assert.equal(QUESTION_COUNT, 7);
+    assert.deepEqual(PRESETS.filter((p) => p.task).map((p) => p.num), [1, 2, 3, 4, 5, 6, 7]);
+    assert.equal(PRESETS.find((p) => p.id === 'blank').num, undefined);
+    assert.deepEqual(QUESTION_IDS, ['lower2023', 'louder2025', 'lower2025', 'label2024', 'kick2026', 'higher', 'kept']);
+    assert.equal(questionIndex(DEFAULT_STATE), 0);
+    assert.equal(questionIndex(applyPreset(DEFAULT_STATE, 'blank')), -1);
+    // Next walks 1 to 7 and then starts again; Back walks home and stops
+    let s = DEFAULT_STATE;
+    for (let n = 1; n <= QUESTION_COUNT; n += 1) {
+        assert.equal(stemOf(s).n, n);
+        assert.equal(nextWord(s), n === QUESTION_COUNT ? 'Start again' : 'Next question');
+        assert.equal(canStep(s, -1), n > 1);
+        s = stepQuestion(s, 1);
+    }
+    assert.equal(stemOf(s).n, 1, 'after the seventh, Next starts again at one');
+    assert.equal(stepQuestion(s, -1), s, 'Back on the first question changes nothing');
+    // and from the blank paper, Next is the way in to question one
+    const blank = applyPreset(DEFAULT_STATE, 'blank');
+    assert.equal(nextWord(blank), 'Question 1');
+    assert.equal(canStep(blank, -1), false);
+    assert.equal(stemOf(stepQuestion(blank, 1)).n, 1);
+});
+
+test('Next clears the drawing and Show answer, and keeps the output level', () => {
+    const drawn = setShowAnswer(put(applyPreset(DEFAULT_STATE, 'lower2023'), { shape: 'saw', periodMs: 2 }), true);
+    const loud = { ...drawn, volume: 0.8 };
+    const next = stepQuestion(loud, 1);
+    assert.equal(next.task, 'louder2025');
+    assert.equal(next.showAnswer, false);
+    assert.equal(read(next).drawn, 0, 'the answer paper is blank again');
+    assert.equal(next.volume, 0.8, 'the output level is the student\'s, not the preset\'s');
+    assert.equal(next.timeBase, 1);
+    // the third question opens its own paper, 2 ms a division, as its preset does
+    assert.equal(stepQuestion(next, 1).timeBase, 2);
+    // the judge preset arrives with its candidate's answer already drawn
+    const judge = stepQuestion(applyPreset(DEFAULT_STATE, 'higher'), 1);
+    assert.equal(judge.task, 'kept');
+    assert.ok(read(judge).drawn > 0.9, 'the judge question keeps its candidate\'s line');
+});
+
+test('the question is one line, in the paper\'s own words, with the year beside it', () => {
+    for (const p of PRESETS) {
+        const st = applyPreset(DEFAULT_STATE, p.id);
+        const stem = stemOf(st);
+        assert.ok(stem.ask.length > 20 && stem.ask.length <= 104, `${p.id}: the stem runs to ${stem.ask.length} characters`);
+        assert.ok(!/—/.test(stem.ask) && !/\butilise/i.test(stem.ask), `house style: ${stem.ask}`);
+        assert.ok(stem.where.length <= 32, `${p.id}: the reference runs to ${stem.where.length} characters`);
+        if (p.task) {
+            assert.equal(stem.ask, TASKS[p.task].stem, `${p.id}: the stage and the marks panel read one string`);
+            assert.equal(stem.tag, `${p.num}/7`);
+        }
+    }
+    assert.match(stemOf(DEFAULT_STATE).where, /^2023 Q2\(e\)\(ii\)$/);
+    assert.match(stemOf(DEFAULT_STATE).ask, /^On the graph below, draw a saw wave one octave lower\.$/);
+    assert.equal(stemOf(applyPreset(DEFAULT_STATE, 'blank')).where, 'Blank paper');
+    // no question on the paper asks the student to work a sum out (2.5's own
+    // law: the student draws, the bench measures)
+    for (const id of QUESTION_IDS) assert.ok(!/calculat/i.test(TASKS[id].stem), `${id} asks for a calculation`);
 });

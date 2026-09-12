@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
     PRESETS, DEFAULT_STATE, applyPreset, fillLine, clearLine, setShape, setPeriod, setHeight, setTimeBase, spanOf, dbToGain,
+    QUESTION_IDS, presetForTask, stemOf,
 } from '../lib/bench/paper-model.js';
 import { DEPTH_LINES, DEPTH_TEACH, Q, drawingLine, nextMove, judge, open } from '../lib/bench/paper-depth.js';
 
@@ -140,4 +141,28 @@ test('opening the paper to 2 ms a division changes the picture, not the judgemen
     const after = judge({ state: setTimeBase(solved.lower2023, 2), last: 'screen' })[1].text;
     assert.match(before, /^As directed/);
     assert.match(after, /^As directed/);
+});
+
+test('the question printed on the stage and the scheme quoted at A-level name the same paper', () => {
+    // One string for the question (stemOf) and one for the scheme, so the
+    // stage above the grids and the marks panel beside them cannot drift.
+    for (const id of QUESTION_IDS) {
+        const st = applyPreset(DEFAULT_STATE, presetForTask(id).id);
+        const stem = stemOf(st);
+        const said = judge({ state: st, last: 'preset' })[1].text;
+        const year = stem.where.match(/\b(19|20)\d{2}\b/);
+        if (year) assert.match(said, new RegExp(`\\(${year[0]}\\)`), `${id}: the stage says ${stem.where} and A-level quotes ${said.slice(0, 60)}`);
+        else assert.match(said, /Numeracy chapter/, id);
+        assert.ok(stem.ask.endsWith('.'), `${id}: the question is a sentence`);
+    }
+});
+
+test('every question in the walk has a next move to offer at Core, and the blank paper too', () => {
+    for (const p of PRESETS) {
+        const st = applyPreset(DEFAULT_STATE, p.id);
+        const move = nextMove(st);
+        assert.ok(move && move.length > 20, `${p.id}: "${move}"`);
+        noDash(move);
+        noDash(drawingLine(st));
+    }
 });
