@@ -560,8 +560,8 @@ export default function SquaredPaper({ back }) {
 
             if (readRef.current) {
                 const txt = r.periodMs
-                    ? ` · one cycle ${fmtMs(r.periodMs)}${d !== 'core' ? ` · ${fmtHz(1000 / r.periodMs)}` : ''}`
-                    : ' · nothing drawn yet';
+                    ? `\u00a0· one cycle ${fmtMs(r.periodMs)}${d !== 'core' ? ` · ${fmtHz(1000 / r.periodMs)}` : ''}`
+                    : '\u00a0· nothing drawn yet';
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
 
@@ -848,13 +848,13 @@ export default function SquaredPaper({ back }) {
             </div>
 
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined} data-paper="true">
-                <div className={styles.secHead}><span className={styles.eyebrow}>What you should hear</span></div>
+                <div className={styles.secHead}><span className={styles.eyebrow}>What you should hear{ext ? <span className={styles.ext}>EXT</span> : null}</span></div>
                 <Chips label="Hear" options={hearOptions} value={state.target} onChange={chooseTarget} />
                 <div className={styles.stats} aria-live="polite">
                     <div><b data-period-ms={rd.periodMs ? rd.periodMs.toFixed(2) : ''}>{rd.periodMs ? fmtMs(rd.periodMs) : 'no cycle'}</b><span>one cycle</span></div>
                     <div><b>{maths && rd.periodMs ? fmtHz(1000 / rd.periodMs) : shapeShort}</b><span>{maths && rd.periodMs ? 'frequency' : 'the shape'}</span></div>
                     <div><b>{rd.db == null ? (rd.amplitude > 0 ? `${Math.round(rd.amplitude * 100)}%` : rd.drawn > 0 ? 'flat' : 'none') : fmtDb(rd.db)}</b><span>{rd.db == null ? 'of the grid' : 'on the figure'}</span></div>
-                    <div><b>{verdictWord}</b><span>the scheme&apos;s check{ext ? <span className={styles.ext}>EXT</span> : null}</span></div>
+                    <div><b>{verdictWord}</b><span>the scheme&apos;s check</span></div>
                 </div>
                 {teach ? <div className={styles.meaning}>all three play at one level, so the ear compares pitch and shape</div> : null}
                 <Legal />
