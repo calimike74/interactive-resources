@@ -15,10 +15,7 @@
 //   5. no em-dash in rendered text; no "utilise"
 //   6. the drawer opens from its handle, closes on Escape, returns focus
 //   7. More, once opened, does not close
-//   8. before the first gesture no AudioContext exists; after Play one does.
-//      A bench that opens silent (Squared Paper: the written paper has no
-//      tone) has no "Play the bench" overlay, so the gesture is the console's
-//      own Play button
+//   8. before the first gesture no AudioContext exists; after Play one does
 //   9. no createOscillator in the page's scripts unless the bench declares synthesis
 //  10. the space bar stops and starts the bench
 //  11. every console label fits inside its own box (no text under a slider)
@@ -45,12 +42,6 @@
 //      the canvas reports the reverb time (data-rt60) and the pre-delay
 //      (data-predelay), both equal the console's readouts, and dragging the
 //      tail's end to the right lengthens the drawing and the dial together
-//  27. (Squared Paper) the paper is the control: filling it from a Shape chip
-//      makes the canvas report that shape and a period, the console carries
-//      the same numbers, a wave dragged on the answer paper is read back, and
-//      Clear takes the paper back to blank. And the question stands above the
-//      grids at every level, numbered, whole, with Next walking to the one
-//      after it on a clean paper
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -118,12 +109,6 @@ const BENCHES = {
         presets: { first: 'Hi-hat roll', second: 'Bend range', judge: 'Wrong sounds' },
         judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'wrong-sounds', says: 'loads the 2019 file with its notes on the wrong sounds (data-verdict = wrong-sounds)' },
         stages: { core: 'roll', alevel: 'list', extension: 'wire' },
-    },
-    'squared-paper': {
-        paper: true,
-        presets: { first: '2023: an octave lower', second: '2025: louder', judge: 'Judge: the period kept' },
-        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'period-kept', says: 'loads the error the 2023 report names, the right shape at the figure\'s own width (data-verdict = period-kept)' },
-        stages: { core: 'paper', alevel: 'marked', extension: 'harmonics' },
     },
     oscilloscope: {
         bracket: true,
@@ -321,12 +306,9 @@ for (const url of urls) {
             if (m2.scrollH > m2.innerH) fail(url, size, 'page scrolls with More open');
         }
 
-        // 8. audio only after a gesture. Most benches open behind a "Play the
-        // bench" overlay; one that opens silent (Squared Paper, 12 Sep 2026)
-        // has none, and the first gesture is the console's Play button.
+        // 8. audio only after a gesture
         const ctxBefore = await page.evaluate(() => window.__benchAudioContexts || 0);
-        const begin = page.locator('button', { hasText: /Play the bench/ }).first();
-        const play = (await begin.count()) ? begin : page.locator('[aria-label="Play"]').first();
+        const play = page.locator('button', { hasText: /Play the bench/ }).first();
         if (await play.count()) {
             await play.click();
             await page.waitForTimeout(800);
@@ -741,116 +723,6 @@ for (const url of urls) {
             if (!before.pre_h) fail(url, size, 'the stage does not expose the pre-delay handle (data-prehandle missing)');
             if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
             await depthBtn('A-level').click();
-        }
-
-        // 27. (Squared Paper) the paper is the control: a shape chip fills it,
-        // the canvas and the console agree on what is on it, a wave dragged by
-        // hand is read back, and Clear empties it (12 Sep 2026)
-        if (fx.paper) {
-            const canvasSel = '[aria-label="Stage"] canvas';
-            await depthBtn('Core').click();
-            await page.waitForTimeout(200);
-            const readP = () => page.evaluate((sel) => {
-                const c = document.querySelector(sel);
-                return { period: c?.dataset.periodMs || '', hz: c?.dataset.hz || '', shape: c?.dataset.shape || '', verdict: c?.dataset.verdict || '', paper: c?.dataset.paper || '', question: c?.dataset.question || '' };
-            }, canvasSel);
-            const consoleP = () => page.evaluate(() => ({
-                period: document.querySelector('[aria-label="Controls"] [data-period-ms]')?.getAttribute('data-period-ms') || '',
-                hz: document.querySelector('[aria-label="Controls"] [data-hz]')?.getAttribute('data-hz') || '',
-                shape: document.querySelector('[aria-label="Controls"] [data-shape]')?.getAttribute('data-shape') || '',
-            }));
-            const clearBtn = page.locator('[aria-label="Clear the answer paper"]').first();
-            if (await clearBtn.count()) { await clearBtn.click(); await page.waitForTimeout(250); }
-            const empty = await readP();
-            if (empty.verdict !== 'blank') fail(url, size, `a cleared paper does not report itself blank (data-verdict = ${empty.verdict || 'nothing'})`);
-            else ok('Clear takes the answer paper back to blank');
-            const sq = page.locator('[role="group"][aria-label="Shape"] button', { hasText: /^Square$/ }).first();
-            if (!(await sq.count())) fail(url, size, 'no Square chip in the Shape group');
-            else {
-                await sq.click();
-                await page.waitForTimeout(300);
-                const after = await readP();
-                const cA = await consoleP();
-                if (after.shape !== 'square') fail(url, size, `the Square chip did not put a square on the paper (data-shape = ${after.shape || 'nothing'})`);
-                else if (!after.period) fail(url, size, 'the stage does not report a period (data-period-ms missing)');
-                else if (after.period !== cA.period || after.hz !== cA.hz || after.shape !== cA.shape) fail(url, size, `the stage's reading (${after.shape}, ${after.period} ms, ${after.hz} Hz) is not the console's (${cA.shape}, ${cA.period} ms, ${cA.hz} Hz)`);
-                else ok(`the stage reports what is on the paper and the console agrees (${after.shape}, ${after.period} ms, ${after.hz} Hz)`);
-            }
-            // and a wave drawn by hand on the answer paper is read back
-            const box = await page.locator(canvasSel).boundingBox();
-            const p0 = (await readP()).paper;
-            const [ax0, atop, ax1, abottom] = p0.split(':').map(Number);
-            if (box && p0 && ax1 > ax0) {
-                if (await clearBtn.count()) { await clearBtn.click(); await page.waitForTimeout(200); }
-                const mid = (atop + abottom) / 2;
-                const half = (abottom - atop) / 2 - 6;
-                const from = ax0 + 6;
-                const to = ax0 + (ax1 - ax0) * 0.86;
-                const cycles = 4;
-                await page.mouse.move(box.x + from, box.y + mid);
-                await page.mouse.down();
-                for (let i = 1; i <= 72; i += 1) {
-                    const t = i / 72;
-                    const x = from + (to - from) * t;
-                    const y = mid - Math.sin(2 * Math.PI * cycles * t) * half * 0.6;
-                    await page.mouse.move(box.x + x, box.y + y);
-                }
-                await page.mouse.up();
-                await page.waitForTimeout(300);
-                const drawn = await readP();
-                const cD = await consoleP();
-                if (!drawn.period) fail(url, size, `a wave drawn by hand on the answer paper was not read (data-verdict = ${drawn.verdict})`);
-                else if (drawn.period !== cD.period || drawn.hz !== cD.hz) fail(url, size, `the drawn reading (${drawn.period} ms, ${drawn.hz} Hz) is not the console's (${cD.period} ms, ${cD.hz} Hz)`);
-                else ok(`a wave drawn by hand is read back (${drawn.shape || 'no named shape'}, ${drawn.period} ms, ${drawn.hz} Hz)`);
-            } else fail(url, size, 'the stage does not expose the answer paper for the drawing test (data-paper missing)');
-            if (!(await readP()).verdict) fail(url, size, 'the stage does not report the scheme\'s verdict (data-verdict missing)');
-
-            // the question stands above the grids at every level, numbered
-            // and whole, and Next walks to the one after it (Mike, 12 Sep
-            // 2026: "if I get something wrong, how do I go to the next
-            // question?")
-            const stemOf_ = () => page.evaluate(() => {
-                const row = document.querySelector('[aria-label="Stage"] [class*="stageStem"]');
-                const ask = row?.querySelector('[class*="stemAsk"]');
-                const num = row?.querySelector('[class*="stemNum"]');
-                const nav = [...(row?.querySelectorAll('button') || [])].map((b) => ({ text: b.textContent.trim(), off: b.disabled }));
-                return row ? { ask: ask?.textContent.trim() || '', over: ask ? ask.scrollWidth - ask.clientWidth : 0, num: num?.textContent.trim() || '', nav } : null;
-            });
-            const firstPreset = page.locator('[aria-label="Presets"] button', { hasText: fx.presets.first });
-            await firstPreset.click();
-            await page.waitForTimeout(200);
-            for (const lv of ['Core', 'A-level', 'Extension']) {
-                await depthBtn(lv).click();
-                await page.waitForTimeout(200);
-                const st = await stemOf_();
-                const q = (await readP()).question;
-                if (!st) { fail(url, size, `no question above the grids at ${lv.toLowerCase()}`); break; }
-                if (!st.ask || st.ask.length < 20) fail(url, size, `the question above the grids is empty at ${lv.toLowerCase()}`);
-                else if (st.over > 0) fail(url, size, `the question above the grids is clipped at ${lv.toLowerCase()} by ${st.over} px`);
-                else if (!/1 of 7/i.test(st.num) || q !== '1/7') fail(url, size, `the question is not numbered at ${lv.toLowerCase()} ("${st.num}", data-question = ${q || 'nothing'})`);
-                else ok(`the question reads whole above the grids at ${lv.toLowerCase()} (${st.num})`);
-            }
-            const before = await stemOf_();
-            if (!before.nav[0]?.off) fail(url, size, 'Back is not disabled on the first question');
-            const nextBtn = page.locator('[aria-label="Stage"] button', { hasText: /Next question/ }).first();
-            if (!(await nextBtn.count())) fail(url, size, 'no Next question button beside the question');
-            else {
-                await nextBtn.click();
-                await page.waitForTimeout(300);
-                const after = await readP();
-                const st2 = await stemOf_();
-                if (after.question !== '2/7') fail(url, size, `Next did not move to the second question (data-question = ${after.question || 'nothing'})`);
-                else if (after.verdict !== 'blank') fail(url, size, `Next did not clear the answer paper (data-verdict = ${after.verdict})`);
-                else if (st2.ask === before.ask) fail(url, size, 'Next did not change the question above the grids');
-                else ok(`Next walks to the next question on a clean paper (${st2.num})`);
-                const backBtn = page.locator('[aria-label="Stage"] button', { hasText: /Back/ }).first();
-                await backBtn.click();
-                await page.waitForTimeout(300);
-                if ((await readP()).question !== '1/7') fail(url, size, 'Back did not return to the question before');
-                else ok('Back returns to the question before');
-            }
-            await depthBtn('A-level').click();
-            await page.waitForTimeout(150);
         }
 
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest
