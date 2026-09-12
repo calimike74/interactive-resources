@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {
     DIVS, COLS, SHAPE_IDS, SHAPES, QUESTIONS, COUNT, TIME_BASES,
     INITIAL, stateAt, questionAt, questionOf, figureOf, totalMarks, tagOf, isBlank,
-    drawAt, clearLine, setChecked, stepQuestion, canStep, nextWord, spanOf, emptyLine,
+    drawAt, clearLine, setChecked, setLabel, stepQuestion, canStep, nextWord, spanOf, emptyLine,
+    AXIS_WORDS, axisSaid,
     fillLine, detectPeriod, cycleOf, nameShape, snapMs, shapeAt,
     read, answerOf, marksFor, scoreOf, verdict,
     fmtMs, fmtS, fmtHz, fmtDb, heightWord, gainToDb, dbToGain, PERIOD_TOL,
@@ -19,7 +20,10 @@ const at = (n) => stateAt(n - 1); // the question numbered n, on clean paper
 const answered = (n) => {
     const s = at(n);
     const a = answerOf(s);
-    return put(s, { shape: a.shape, periodMs: a.periodMs, amp: a.amp, inverted: a.inverted });
+    const drawn = put(s, { shape: a.shape, periodMs: a.periodMs, amp: a.amp, inverted: a.inverted });
+    // the 2024 question asks for the axes in writing, so a full answer to it
+    // includes what the candidate writes
+    return questionOf(s).blankAxes ? setLabel(setLabel(drawn, 'y', 'Displacement'), 'x', 'Time (ms)') : drawn;
 };
 
 // ---- the paper's own arithmetic --------------------------------------------
@@ -230,10 +234,11 @@ test('the errors the examiner reports name are marked the way the schemes mark t
     // 2026 Q1(d): 200 Hz is 5 ms a cycle, whatever shape it is drawn as
     for (const shape of SHAPE_IDS) assert.equal(verdict(put(at(12), { shape, periodMs: 5 })), 'full', shape);
     assert.equal(verdict(put(at(12), { shape: 'sine', periodMs: 2 })), 'none');
-    // 2024 Q4(a): any square wave, and the printed axes are given
-    const labelled = put(at(11), { shape: 'square', periodMs: 1.5, amp: 0.6 });
+    // 2024 Q4(a): any square wave, and the axes are the student's to write
+    const drawn2024 = put(at(11), { shape: 'square', periodMs: 1.5, amp: 0.6 });
+    assert.deepEqual(scoreOf(drawn2024), { got: 3, total: 5 }, 'the axis marks are not given away');
+    const labelled = setLabel(setLabel(drawn2024, 'y', 'Displacement'), 'x', 'Time (ms)');
     assert.deepEqual(scoreOf(labelled), { got: 5, total: 5 });
-    assert.match(marksFor(labelled).find((m) => m.id === 'axes').note, /printed on this paper/);
 });
 
 test('a mark that is lost says what the page measured, in its own margin', () => {
@@ -319,4 +324,52 @@ test('a period within a tenth of the scheme\'s is credited, as a hand-drawn line
         assert.equal(marksFor(put(s, { shape: 'square', periodMs: per })).find((m) => m.id === 'period').ok, true, `${per} ms`);
     }
     assert.equal(marksFor(put(s, { shape: 'square', periodMs: 1.25 })).find((m) => m.id === 'period').ok, false);
+});
+
+test('2024 Q4(a) asks for the axes in writing, and marks the words the scheme takes', () => {
+    // "Most candidates were able to label both axes correctly although
+    // 'frequency'/'Hz' was a common mistake on the y-axis" (2024 report), so
+    // the page cannot give these two marks away.
+    const q = questionAt(10);
+    assert.equal(q.blankAxes, true, 'the 2024 grid prints bare, as the paper prints it');
+    assert.deepEqual(q.marks.map((m) => m.id), ['shape', 'axisY', 'axisX', 'amplitude', 'period']);
+    assert.deepEqual(q.marks.map((m) => m.worth), [1, 1, 1, 1, 1]);
+    const drawn = put(at(11), { shape: 'square', periodMs: 1.5, amp: 0.6 });
+    const mark = (s2, id) => marksFor(s2).find((m) => m.id === id);
+    assert.equal(mark(drawn, 'axisY').ok, false);
+    assert.match(mark(drawn, 'axisY').note, /not labelled/);
+    // every word the scheme takes, on either axis
+    for (const word of AXIS_WORDS.y) assert.equal(mark(setLabel(drawn, 'y', word), 'axisY').ok, true, word);
+    for (const word of AXIS_WORDS.x) assert.equal(mark(setLabel(drawn, 'x', word), 'axisX').ok, true, word);
+    // written as a candidate writes them, in any case and with the unit
+    for (const said of ['Displacement', 'voltage (V)', 'AMPLITUDE', 'Level in dB']) {
+        assert.equal(mark(setLabel(drawn, 'y', said), 'axisY').ok, true, said);
+    }
+    for (const said of ['Time (ms)', 'time in milliseconds', 'MS', 'seconds']) {
+        assert.equal(mark(setLabel(drawn, 'x', said), 'axisX').ok, true, said);
+    }
+    // and the mistake the report names is not credited
+    for (const wrong of ['frequency', 'Hz', 'pitch', '']) {
+        assert.equal(mark(setLabel(drawn, 'y', wrong), 'axisY').ok, false, wrong || 'nothing');
+    }
+    for (const wrong of ['displacement', 'bars', 'Hz']) {
+        assert.equal(mark(setLabel(drawn, 'x', wrong), 'axisX').ok, false, wrong);
+    }
+    assert.match(mark(setLabel(drawn, 'y', 'Displacement'), 'axisY').note, /you wrote "Displacement"/);
+    assert.equal(axisSaid(null, 'y'), false);
+    // the amplitude and the period are labelled on the drawing for the
+    // student, and say so
+    const full = setLabel(setLabel(drawn, 'y', 'Displacement'), 'x', 'Time (ms)');
+    for (const id of ['amplitude', 'period']) {
+        assert.equal(mark(full, id).ok, true);
+        assert.match(mark(full, id).note, /labelled for you here; on paper you write these in/);
+    }
+    // but only when there is a wave to label
+    const empty = setLabel(setLabel(at(11), 'y', 'Displacement'), 'x', 'Time (ms)');
+    assert.equal(mark(empty, 'period').ok, false);
+    assert.equal(mark(empty, 'amplitude').ok, false);
+    assert.deepEqual(scoreOf(empty), { got: 2, total: 5 });
+    // writing a label takes the marking off, as drawing does
+    assert.equal(setLabel(setChecked(full, true), 'y', 'V').checked, false);
+    assert.deepEqual(stepQuestion(full, 1).labels, { y: '', x: '' }, 'Next carries no labels');
 });

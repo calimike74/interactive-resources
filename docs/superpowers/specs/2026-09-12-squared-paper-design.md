@@ -60,7 +60,7 @@ The four waveforms first, drawn from a blank grid, because that is the practice 
 | 8 | **2024 Q4(b)**, with the figure printed for you | the same wave with the polarity inverted | saw, 2 ms | 1 ms | "Credit graph of the same waveform but in reversed polarity (1)" |
 | 9 | **2023 Q2(e)(ii)** | a saw wave one octave lower | square, 1 ms | 1 ms | "Saw wave (1) (allow inverted saw wave)"; "Period of 2ms (1)" |
 | 10 | **2025 Q3(c)(vii)** | the same wave an octave lower | square, 2 ms | 2 ms | "Award 1 mark for a square wave with same amplitude as figure 1 and period of 4ms and no DC offset" |
-| 11 | **2024 Q4(a)** | draw a square wave, label the axes, the amplitude and the period | none | 1 ms | "Waveshape (1)"; the axes (2); "amplitude (1). Allow peak to peak amplitude"; "Period (1)" |
+| 11 | **2024 Q4(a)** | draw a square wave, label the axes, the amplitude and the period | none, and a bare grid | 1 ms | "Waveshape (1)"; "Voltage / V / displacement (1)"; "s / ms / time (1)"; "amplitude (1). Allow peak to peak amplitude"; "Period (1)" |
 | 12 | **2026 Q1(d)**, drawn rather than calculated | a wave with the period of a 200 Hz wave | none | 2 ms | A wave with a period of 5 ms (1) |
 
 Then **the blank paper**, thirteenth and last: no question, no marking, and Check reads the drawing back ("You drew a triangle wave, one cycle every 1.25 ms, which is 800 Hz").
@@ -82,7 +82,9 @@ Before Check the page is just the paper. Check marks it the way a script comes b
 
 There is no level switch. The marking is the A-level content, and it arrives when the student asks for it.
 
-**One scheme line is one mark entry**, and an entry is earned when every criterion it names is met. That is how a one-mark line which asks for four things at once ("a louder square wave with period of 2ms and no DC offset") is marked the way the scheme marks it, while a two-mark question is marked as two lines that can be lost separately. The criteria are shape, period, polarity, louder, same amplitude, amplitude drawn, no DC offset, and the axes (which the page prints, so the scheme's two axis marks are given and the margin says so).
+**One scheme line is one mark entry**, and an entry is earned when every criterion it names is met. That is how a one-mark line which asks for four things at once ("a louder square wave with period of 2ms and no DC offset") is marked the way the scheme marks it, while a two-mark question is marked as two lines that can be lost separately. The criteria are shape, period, polarity, louder, same amplitude, amplitude drawn, no DC offset, and the two axis labels.
+
+**Question 11 earns its axis marks.** 2024 Q4(a) prints a grid with nothing on it at all, because labelling the axes is two of its five marks, so this question prints the same bare grid: no axis names and no division numbers. Two write-in boxes stand beside the vertical axis and under the horizontal one, and Check reads what the student wrote as words, against the scheme's own list ("Voltage / V / displacement", "s / ms / time", plus the scheme's "Allow volume / level / amplitude / dB" and pressure, which is the same quantity by another name). So "time in ms" scores and "frequency" or "Hz" does not, which is the mistake the 2024 report names on the y-axis. The amplitude and the period cannot be written in with a pointer, so Check labels them on the student's own wave in red, an arrow from the centre line to a peak and a bracket over one cycle, and the margin says "labelled for you here; on paper you write these in". Those two are ticked only when the wave has a readable period and a height to measure.
 
 ## 6. The engine
 
@@ -100,9 +102,11 @@ Gone with the bench: the audio graph, the harmonics (they were Extension's pictu
 
 - `npm test`: **370 tests, all passing**, of which 20 are `tests/squared-paper.test.mjs`. One draws the scheme's own answer on every one of the twelve and asserts the marking passes it; others pin the errors the reports name (the period kept, another square wave, the same height, the upright saw) and the walk.
 - `npx next build`: compiled, 196 static pages, `/squared-paper` prerenders.
-- `node scripts/check-paper.mjs <url>` against the built export: **all clear**. Every question renders with its stem, part label and marks bracket; nothing is clipped at 1280 wide; Back and Next walk 1 to 12 and the blank paper and neither wraps; the scheme's answer drawn with the pointer and checked scores full marks on all twelve; a wrong answer is crossed in the scheme's words with the examiner's line; no em-dash and no "utilise" reach the page.
+- `node scripts/check-paper.mjs <url>` against the built export (served by `scripts/serve-out.mjs`): **all clear**. Every question renders with its stem, part label and marks bracket; nothing is clipped at 1280 wide; Back and Next walk 1 to 12 and the blank paper and neither wraps; the scheme's answer drawn with the pointer and checked scores full marks on all twelve; question 11 scores 3 of 5 with the axes blank, 5 of 5 written in and 4 of 5 with "Hz" on the vertical axis; the marking scrolls clear of the floating strip at 1280 by 700; a wrong answer is crossed in the scheme's words with the examiner's line; no em-dash and no "utilise" reach the page.
 - `node scripts/check-bench.mjs` on the ten remaining benches: **all clear**. Squared Paper's fixture and law 27 are out of that script.
 - Screenshots at 1280 wide of questions 1, 6, 9 and 11, before and after Check, looked at.
+
+**What looking caught on the second pass:** Figure 1's division numbers still sat on the axis line under the square wave's verticals and could not be read, so every grid's numbers now sit a little lower on a paper-white halo and read through a line; and the page's foot is now `the strip's height + its offset + a margin`, measured by the gate at 1280 by 700 so the last mark line and the examiner's box can always scroll clear of the floating strip.
 
 **What looking caught that no gate did:** the figure's division numbers at 8 px sat on the axis line and were buried by the wave crossing them (the labels are drawn last now, and never smaller than 10 px); the bulleted question printed its total bracket in a second column beside the bullets' own, which read as a second set of marks; the model answer was drawn over a question that accepts any period, which made a right answer look wrong; and a period mark that was earned still said "and the scheme wants 2.00 ms".
 

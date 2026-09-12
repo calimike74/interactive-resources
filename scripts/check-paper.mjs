@@ -19,6 +19,9 @@
 //      full marks on every one of the twelve
 //   5. Check marks in the scheme's own words: a tick or a cross a mark, the
 //      total beside the marks bracket, the model answer over the grid
+//   8. question 11 (2024 Q4(a)) prints a bare grid and two boxes, and earns
+//      its two axis marks: unlabelled it scores 3 of 5, labelled 5 of 5
+//   9. the sheet can always scroll clear of the floating strip
 //   6. Back and Next clear the drawing and the marking
 //   7. house style: no em-dash, no "utilise" in anything the page renders
 
@@ -63,6 +66,7 @@ const sheet = () => page.evaluate(() => {
         stem: text('[class*="stem"]'),
         stemOver: over('[class*="stem"]'),
         bullets: [...document.querySelectorAll('[class*="bullets"] li')].map((b) => b.textContent.trim()),
+        boxes: [...document.querySelectorAll('input[data-axis]')].map((i) => i.dataset.axis),
         bracket: text('[class*="marks"]'),
         where: text('[class*="where"]'),
         figure: Boolean(document.querySelectorAll('canvas').length > 1),
@@ -85,6 +89,14 @@ const sheet = () => page.evaluate(() => {
 const btn = (name) => page.locator('[aria-label="The questions"] button', { hasText: new RegExp(`^${name}`) }).first();
 const next = () => btn('Next|Blank paper');
 const back = () => btn('←');
+
+// Write the axes in, where the question asks for them.
+async function labelTheAxes() {
+    for (const [axis, said] of [['y', 'Displacement'], ['x', 'Time (ms)']]) {
+        const box = page.locator(`input[data-axis="${axis}"]`);
+        if (await box.count()) { await box.fill(said); await page.waitForTimeout(60); }
+    }
+}
 
 // Draw the wave the scheme draws, the way a student's pointer would.
 async function answerWithThePointer(s) {
@@ -157,6 +169,7 @@ for (let i = 1; i <= 12; i += 1) {
     if (before.q !== `${i}/12`) fail(`the walk back left the page on ${before.q}, not ${i}/12`);
     if (before.checked !== 'false') fail(`question ${i} opens already marked`);
     await answerWithThePointer(before);
+    await labelTheAxes();
     const drawn = await sheet();
     if (!drawn.period) fail(`question ${i}: the scheme's answer drawn by the pointer was not read (verdict ${drawn.verdict})`);
     await btn('Check').click();
@@ -172,6 +185,59 @@ for (let i = 1; i <= 12; i += 1) {
     if (i < 12) { await next().click(); await page.waitForTimeout(160); }
 }
 
+// ---- 8: the 2024 question earns its axis marks ----
+{
+    // back to question 11, on clean paper
+    await back().click();
+    await page.waitForTimeout(160);
+    const on11 = await sheet();
+    if (on11.q !== '11/12') fail(`the axis test wanted question 11, not ${on11.q}`);
+    else if (on11.boxes.join('') !== 'yx') fail(`question 11 does not print two axis boxes (${on11.boxes.join(', ') || 'none'})`);
+    else {
+        await answerWithThePointer(on11);
+        await btn('Check').click();
+        await page.waitForTimeout(220);
+        const bare = await sheet();
+        if (bare.score !== '3/5') fail(`an unlabelled 2024 answer scored ${bare.score}, not 3/5`);
+        else if (!bare.marks.filter((m) => m.tick === '✗').length) fail('the axis marks are not crossed when the axes are unlabelled');
+        else ok(`the 2024 axes are not given away (${bare.score} with the axes blank)`);
+        await labelTheAxes();
+        await btn('Check').click();
+        await page.waitForTimeout(220);
+        const said = await sheet();
+        if (said.score !== '5/5') fail(`a labelled 2024 answer scored ${said.score}, not 5/5`);
+        else if (!said.marks.some((m) => /labelled for you here/.test(m.note))) fail('the amplitude and period marks do not say the page labelled them');
+        else ok(`writing the axes in earns them (${said.score}, and the wave is labelled in red)`);
+        // and "Hz" on the vertical axis, the mistake the 2024 report names
+        await page.locator('input[data-axis="y"]').fill('Hz');
+        await btn('Check').click();
+        await page.waitForTimeout(220);
+        const wrong = await sheet();
+        if (wrong.score !== '4/5') fail(`"Hz" on the vertical axis scored ${wrong.score}, not 4/5`);
+        else ok('"Hz" on the vertical axis loses its mark, as the 2024 report has it');
+    }
+}
+
+// ---- 9: the sheet scrolls clear of the strip ----
+{
+    await page.setViewportSize({ width: 1280, height: 700 });
+    await page.waitForTimeout(200);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(250);
+    const clear = await page.evaluate(() => {
+        const strip = document.querySelector('[aria-label="The questions"]');
+        const marking = document.querySelector('[class*="marking"]');
+        const last = marking ? marking.lastElementChild : null;
+        if (!strip || !last) return null;
+        return Math.round(strip.getBoundingClientRect().top - last.getBoundingClientRect().bottom);
+    });
+    if (clear == null) fail('nothing to measure against the strip at 1280 by 700');
+    else if (clear < 12) fail(`the last line of the marking sits ${clear} px from the strip at 1280 by 700`);
+    else ok(`the marking scrolls clear of the strip at 1280 by 700 (${clear} px)`);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.waitForTimeout(150);
+}
+
 // ---- 6: Next and Back carry nothing ----
 await back().click();
 await page.waitForTimeout(200);
@@ -180,7 +246,8 @@ if (cleared.checked !== 'false' || cleared.verdict !== 'blank') fail(`Back left 
 else ok('Back clears the drawing and the marking');
 
 // ---- 5 again: a wrong answer is crossed, with the examiner's line ----
-const wrongOn = await sheet(); // question 11 of 12, which wants a square wave
+// Back has left a clean paper on the question before the one just marked.
+const wrongOn = await sheet();
 await page.mouse.move(0, 0);
 const canvas = page.locator('canvas[data-question]');
 await canvas.scrollIntoViewIfNeeded();
@@ -198,7 +265,7 @@ await page.waitForTimeout(150);
 await btn('Check').click();
 await page.waitForTimeout(250);
 const marked = await sheet();
-if (marked.verdict === 'full') fail('a sine wave scored full marks on a question that asks for a square wave');
+if (marked.verdict === 'full') fail(`a sine wave at 1.25 ms scored full marks on question ${marked.q}`);
 else if (!marked.marks.some((m) => m.tick === '✗')) fail('a lost mark is not crossed in the margin');
 else if (!marked.marks.every((m) => m.words && m.note)) fail('a mark line is missing the scheme\'s wording or what the page measured');
 else if (!marked.report) fail('no examiner line under a question with a mark lost');
