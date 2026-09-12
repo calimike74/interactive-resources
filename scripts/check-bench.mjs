@@ -50,6 +50,10 @@
 //      dial: the canvas reports the notch (data-notch-hz) and the reverb time
 //      (data-rt60), both equal the console's readouts, and dragging the marker
 //      to the right raises the notch and shortens the delay on both
+//  29. (Acoustics bench) the picture names itself: at every station and every
+//      level the stage reports a plain-words title and a one-line caption
+//      (data-title, data-caption), and the Room at Core carries two of each
+//      because it draws two pictures
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -138,6 +142,7 @@ const BENCHES = {
     },
     'acoustics-bench': {
         notch: true,
+        captions: { stations: ['Loudness', 'Masking', 'The Room'], two: 'The Room' },
         presets: { first: '2021 paper', second: '2024 AS paper', judge: 'Judge: soundproofing' },
         judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'soundproofing', says: 'loads the trap three reports name: bare walls with soundproofing asked for (data-verdict = soundproofing)' },
         stages: { core: 'ear', alevel: 'paper', extension: 'machine' },
@@ -852,6 +857,36 @@ for (const url of urls) {
             } else fail(url, size, 'the stage does not expose the notch marker for the drag test');
             if (!before.tail) fail(url, size, 'the stage does not expose the tail\'s end handle (data-tailhandle missing)');
             if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
+            await depthBtn('A-level').click();
+        }
+
+        // 29. (Acoustics) the picture names itself (Mike, 12 Sep 2026: "the
+        // visuals, as far as the graphs are concerned, I don't really follow
+        // what that is"). Every station at every level carries a title and a
+        // one-line caption drawn above the picture.
+        if (fx.captions) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readCap = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { title: c?.dataset.title || '', caption: c?.dataset.caption || '' }; }, canvasSel);
+            let named = 0;
+            for (const st of fx.captions.stations) {
+                const chip = page.locator('[aria-label="Station"] button', { hasText: new RegExp(`^${st}$`) }).first();
+                if (!(await chip.count())) { fail(url, size, `no "${st}" station chip`); continue; }
+                await chip.click();
+                await page.waitForTimeout(250);
+                for (const lv of ['Core', 'A-level', 'Extension']) {
+                    await depthBtn(lv).click();
+                    await page.waitForTimeout(250);
+                    const c = await readCap();
+                    const want = st === fx.captions.two && lv === 'Core' ? 2 : 1;
+                    const titles = c.title ? c.title.split(' / ') : [];
+                    const captions = c.caption ? c.caption.split(' / ') : [];
+                    if (!titles.length || titles.some((t) => !t.trim())) fail(url, size, `${st} at ${lv} draws no title (data-title = "${c.title}")`);
+                    else if (!captions.length || captions.some((t) => !t.trim())) fail(url, size, `${st} at ${lv} draws no caption (data-caption = "${c.caption}")`);
+                    else if (titles.length !== want || captions.length !== want) fail(url, size, `${st} at ${lv} names ${titles.length} picture(s), expected ${want}`);
+                    else named += 1;
+                }
+            }
+            if (named === fx.captions.stations.length * 3) ok(`every picture names itself: ${named} title and caption pairs across ${fx.captions.stations.length} stations and three levels`);
             await depthBtn('A-level').click();
         }
 
