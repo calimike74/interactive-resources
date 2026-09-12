@@ -1,0 +1,251 @@
+/* Squared Paper (2.5), rebuilt 12 Sep 2026 as the exam page it models.
+   Mike: "I think it's a really good idea that the resources that the student
+   has are going to reflect the actual task in front of them, rather than
+   this fitting into something that doesn't really make sense." So this is
+   not a bench: no stage, no console, no drawer, no sound. A sheet of the
+   paper's own paper on a dark desk, the question printed on it as Edexcel
+   prints it, the grid drawn on, and one strip of controls underneath.
+   The sheet's proportions and type follow 9MT0/41 2023 Q2(e) and 2025
+   Q3(c), which are in the vault. */
+
+.desk {
+    --ink: #16161d;
+    --ink-2: #4b5060;
+    --ink-3: #767b87;
+    --rule: #d9d9d9;
+    --grid: #dcdcdc;
+    --axis: #16161d;
+    --paper: #ffffff;
+    --desk-bg: #17172b;
+    --pencil: #3f4450;
+    --pen: #c0392b;
+    --pen-soft: rgba(192, 57, 43, 0.1);
+    --sans: var(--bench-sans), 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: var(--font-jbmono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    min-height: 100dvh;
+    background:
+        radial-gradient(ellipse 90% 60% at 50% -10%, rgba(150, 160, 220, 0.10) 0%, rgba(150, 160, 220, 0) 60%),
+        var(--desk-bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px 132px;
+}
+
+/* ---- the desk's own chrome: the way home, the topic, the paper's name ---- */
+.head {
+    width: 100%;
+    max-width: 820px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 18px 2px 14px;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 13px;
+}
+.back {
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+.back:hover { color: #fff; border-color: rgba(255, 255, 255, 0.45); }
+.back:focus-visible { outline: 2px solid #f0d48a; outline-offset: 2px; }
+.code {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+.name { font-size: 15px; font-weight: 600; color: rgba(255, 255, 255, 0.92); }
+
+/* ---- the sheet ---- */
+.sheet {
+    width: 100%;
+    max-width: 820px;
+    background: var(--paper);
+    border-radius: 4px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4), 0 2px 0 rgba(0, 0, 0, 0.2);
+    padding: 26px 44px 32px;
+    position: relative;
+}
+.sheetHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+}
+.sheetHead b {
+    color: var(--ink-2);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+/* the figure the paper prints, and its caption */
+.figure { margin: 0 0 20px; display: flex; flex-direction: column; align-items: center; }
+.figCaption { font-size: 14px; font-weight: 700; color: var(--ink); margin-top: 4px; }
+
+/* the question: the part label hangs at the left, the marks at the right */
+.question { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+.part {
+    flex: none;
+    min-width: 52px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+}
+.stemCol { flex: 1 1 auto; min-width: 0; }
+.stem { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink); }
+.bullets { margin: 8px 0 0; padding: 0; list-style: none; }
+.bullets li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 2px 0;
+}
+.bullets li::before { content: '\2022'; margin-right: 10px; color: var(--ink); }
+.bullets span { flex: 1 1 auto; }
+.bullets i { font-style: normal; font-weight: 700; color: var(--ink-3); font-size: 14px; }
+.marks {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-3);
+    padding-top: 20px;
+}
+.score { font-family: var(--mono); font-size: 16px; color: var(--pen); }
+
+/* ---- the grid the student draws on ---- */
+.grid { display: flex; justify-content: center; margin: 0 0 8px; }
+.grid canvas { display: block; touch-action: none; }
+.answerCanvas { cursor: crosshair; }
+.hint {
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-3);
+    margin: 0 0 4px;
+}
+
+/* ---- the marking, in red pen, the way a script comes back ---- */
+.marking {
+    margin-top: 22px;
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+}
+.markLine {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 2px 6px;
+    margin-bottom: 12px;
+}
+.tick {
+    font-family: var(--mono);
+    font-size: 17px;
+    line-height: 1.2;
+    color: var(--pen);
+    text-align: center;
+}
+.words { font-size: 14.5px; line-height: 1.45; color: var(--pen); }
+.measured { grid-column: 2; font-size: 13px; line-height: 1.4; color: var(--ink-3); }
+.ladder {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--pen);
+    margin: 14px 0 0;
+}
+.accept { font-size: 13px; color: var(--ink-3); margin: 14px 0 0; }
+.report {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    background: var(--pen-soft);
+    border-left: 2px solid var(--pen);
+    padding: 9px 12px;
+    margin: 14px 0 0;
+}
+.reading { font-size: 14.5px; line-height: 1.5; color: var(--ink); margin: 0; }
+
+/* ---- the one strip of controls, held at the foot of the window ---- */
+.strip {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 999px;
+    background: rgba(22, 22, 30, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: opacity 0.12s ease;
+}
+/* while the pointer is drawing, the strip steps out of the way: the grid can
+   run under it on a question that prints a figure */
+.strip[data-drawing] { opacity: 0.12; pointer-events: none; }
+.stripBtn {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.86);
+    cursor: pointer;
+    white-space: nowrap;
+}
+.stripBtn:hover:not(:disabled) { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+.stripBtn:disabled { opacity: 0.32; cursor: default; }
+.stripBtn:focus-visible { outline: 2px solid #f0d48a; outline-offset: 2px; }
+.check {
+    background: #f0f0f2;
+    border-color: #f0f0f2;
+    color: #16161d;
+    font-weight: 600;
+}
+.check:hover:not(:disabled) { background: #fff; border-color: #fff; color: #16161d; }
+.where {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.72);
+    padding: 0 10px;
+    white-space: nowrap;
+    min-width: 132px;
+    text-align: center;
+}
+.stripRule { width: 1px; align-self: stretch; background: rgba(255, 255, 255, 0.16); margin: 0 2px; }
+
+@media (max-width: 880px) {
+    .sheet { padding: 24px 20px 30px; }
+    .strip { gap: 5px; padding: 8px; }
+    .stripBtn { padding: 7px 11px; font-size: 12.5px; }
+    .where { min-width: 0; padding: 0 4px; font-size: 11.5px; }
+}

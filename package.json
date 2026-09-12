@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'tests/**/*.test.mjs'",
-    "check:bench": "node scripts/check-bench.mjs"
+    "check:bench": "node scripts/check-bench.mjs",
+    "check:paper": "node scripts/check-paper.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.1.0",

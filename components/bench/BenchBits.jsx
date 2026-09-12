@@ -156,14 +156,16 @@ export function Legal() {
 }
 
 // `wrap` lets a bench with many presets fold them into two rows, so the
-// bench's one line keeps its width (EQ bench, seven presets).
+// bench's one line keeps its width (EQ bench, seven presets). A preset with
+// a `num` carries it on the chip, for a bench whose presets are a numbered
+// walk through the papers' questions (Squared Paper, 12 Sep 2026).
 export function Presets({ presets, presetId, onPreset, wrap = false }) {
     return (
         <div className={styles.presets} role="group" aria-label="Presets" data-wrap={wrap || undefined}>
             <span className={styles.presetLabel}>Presets</span>
             {presets.map((p) => (
                 <button key={p.id} type="button" className={styles.preset} aria-pressed={presetId === p.id} onClick={() => onPreset(p.id)} title={p.blurb}>
-                    {p.name}
+                    {p.num ? `${p.num} · ` : ''}{p.name}
                 </button>
             ))}
         </div>
