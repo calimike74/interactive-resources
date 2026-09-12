@@ -4,8 +4,8 @@
 // in scripts/check-bench.mjs and its laws are here.
 //
 //   npx next build                       # the page is a static export
-//   (serve out/ with clean URLs, the way the site is served)
-//   node scripts/check-paper.mjs http://localhost:PORT/squared-paper
+//   node scripts/serve-out.mjs &          # clean URLs, the way the site serves
+//   node scripts/check-paper.mjs http://localhost:3416/squared-paper
 //
 // Exits 1 if anything fails, so it can gate a merge.
 //

@@ -3,8 +3,12 @@
 // BENCH-STANDARD.md §3 and §6). Exits 1 if anything fails, so it can gate
 // a merge.
 //
-//   npm run dev -- -p 3402            # in another terminal
-//   node scripts/check-bench.mjs http://localhost:3402/delay-effects [more urls]
+//   npx next build && node scripts/serve-out.mjs &   # the built export
+//   node scripts/check-bench.mjs http://localhost:3416/delay-effects [more urls]
+//
+// Point it at the export, not at a dev server: law 9 reads the delivered
+// bundles, and a dev server fails it. A `.html` URL fails the fixture lookup
+// below (it keys on the last path segment) and the app's own router with it.
 //
 // Checks, at 1280×700 and 1440×900:
 //   1. no vertical or horizontal page scroll, console does not overflow
