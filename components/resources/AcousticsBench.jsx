@@ -812,7 +812,7 @@ export default function AcousticsBench({ back }) {
                 </>
             ) : null}
 
-            <div className={`${styles.sec} ${styles.secHear}`} data-acoustics="true" data-teach={teach || undefined}>
+            <div className={`${styles.sec} ${styles.secHear}`} data-acoustics={station} data-teach={teach || undefined}>
                 <div className={styles.secHead}><span className={styles.eyebrow}>What you should hear</span></div>
                 <div className={styles.stats} aria-live="polite">
                     {station === 'loudness' ? (
@@ -1068,12 +1068,12 @@ function drawContours(g, s, box, col, mono, monoSmall, w, padL, padR, bottom) {
         g.stroke();
         g.setLineDash([]);
         g.save();
-        g.translate(xe - 5, box.y1 - 8);
+        g.translate(xe + 11, box.y1 - 8);
         g.rotate(-Math.PI / 2);
         g.font = monoSmall;
         g.textAlign = 'left';
         g.fillStyle = col.faint;
-        g.fillText('the standard stops here', 0, 0);
+        g.fillText('ISO 226 ends here', 0, 0);
         g.restore();
     }
 
@@ -1406,11 +1406,15 @@ function drawPaper(g, s, box, col, mono, monoSmall, grades, vdd) {
         g.stroke();
         g.setLineDash([]);
         arrow(g, p.outside.x, py, s.proof ? col.two : col.faint);
-        // said to the left of the wall, where there is room for it: the gap
-        // between the wall and the box next door is only a few pixels wide
+        // run up the wall itself: the gap either side of it is narrower than
+        // the words, and across the row the label sat on the MIC box
+        g.save();
+        g.translate(p.divide + 13, box.y1 - 6);
+        g.rotate(-Math.PI / 2);
         g.fillStyle = s.proof ? col.two : col.faint;
-        g.textAlign = 'right';
-        g.fillText(s.proof ? 'stopped by mass' : 'straight through the wall', p.divide - 8, py - 8);
+        g.textAlign = 'left';
+        g.fillText(s.proof ? 'stopped by mass' : 'straight through the wall', 0, 0);
+        g.restore();
     }
     for (const b of p.boxes) {
         const grade = b.section && grades[b.section] ? grades[b.section].grade : null;

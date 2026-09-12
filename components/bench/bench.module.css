@@ -1232,14 +1232,18 @@
    The Room  Play 104 + Station 132 + Source 104 + Reflection 168 +
              Tail 168 + Walls 196 + Hear (at least 290, the worst case)
    A pair section is two dials side by side, each with its value and its
-   name beneath, the Synth bench's slide column applied to a rotary. */
+   name beneath, the Synth bench's slide column applied to a rotary.
+   The Room has six sections and fills the band on its own; Loudness and
+   Masking have four, so their Hear panel takes the readouts across four
+   columns of the whole remaining width rather than stopping at 320 px
+   (Mike, 12 Sep 2026: "the right 40 % of the console is empty"). */
 .secAcStation { width: 132px; }
-.secAcTone { width: 186px; }
+.secAcTone { width: 280px; }
 .secAcTone .chips { flex-wrap: wrap; gap: 4px; }
-.secAcListen { width: 132px; }
-.secAcTarget { width: 158px; }
+.secAcListen { width: 150px; }
+.secAcTarget { width: 196px; }
 .secAcTarget .chips { flex-wrap: wrap; gap: 4px; }
-.secAcMasker { width: 200px; }
+.secAcMasker { width: 250px; }
 .secAcMasker .chips { flex-wrap: wrap; gap: 4px; }
 .secAcMasker .knob { flex-direction: row; align-items: center; gap: 10px; align-self: center; }
 .secAcSource { width: 104px; }
@@ -1253,7 +1257,9 @@
 .pairRow { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding-top: 2px; }
 .pairRow .knob { gap: 4px; width: 62px; }
 .pairRow .slideVal { font-size: 10px; }
-.secHear[data-acoustics='true'] { min-width: 290px; }
-.secHear[data-acoustics='true'] .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 320px; }
-.secHear[data-acoustics='true'] .stats b { font-size: 15px; }
-.secHear[data-acoustics='true'] .stats span { font-size: 12px; line-height: 1.25; display: block; }
+.secHear[data-acoustics] { min-width: 290px; }
+.secHear[data-acoustics] .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 320px; }
+.secHear[data-acoustics] .stats b { font-size: 15px; }
+.secHear[data-acoustics] .stats span { font-size: 12px; line-height: 1.25; display: block; }
+.secHear[data-acoustics='loudness'] .stats,
+.secHear[data-acoustics='masking'] .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: none; column-gap: 18px; }
