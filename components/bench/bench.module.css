@@ -1243,3 +1243,73 @@
 .secHear[data-paper='true'] .stats { max-width: none; gap: 6px 14px; }
 .secHear[data-paper='true'] .stats b { font-size: 17px; }
 .secHear[data-paper='true'] .chips { flex-wrap: wrap; gap: 4px; }
+
+/* ---- Squared Paper: the question above the grids (12 Sep 2026) ----
+   Mike's first look: "I recognise it links into a past paper, but ... it's
+   very difficult to see what this is. If I get something wrong, how do I go
+   to the next question?" So the question stands above the two papers at
+   every level, in the paper's own words with its reference, numbered one of
+   seven, and the walk to the next one is two buttons on the same line. The
+   row is a stage overlay (the canvas draws the papers under it and starts
+   below it), so only the buttons take the pointer: the rest of the row must
+   let a drag through to the paper. */
+.stageStem {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 34px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    pointer-events: none;
+}
+.stemNum {
+    flex: none;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    white-space: nowrap;
+}
+.stemRef {
+    flex: none;
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 11px;
+    color: var(--stage-ink-2);
+    white-space: nowrap;
+}
+.stemAsk {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.92);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.stemNav { flex: none; display: flex; align-items: center; gap: 6px; pointer-events: auto; }
+.stemBtn {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.82);
+    cursor: pointer;
+    white-space: nowrap;
+}
+.stemBtn:hover:not(:disabled) { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+.stemBtn:disabled { opacity: 0.34; cursor: default; }
+.stemBtn:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 1px; }
+/* the legend stays at the foot, beside the setting line, because the
+   question's row has the top right (the canvas leaves it room: the setting
+   line drops segments until it clears the legend) */
+.legendStem { bottom: 3px; right: 18px; }

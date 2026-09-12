@@ -13,6 +13,7 @@ import {
     HEIGHT_MIN, HEIGHT_MAX, HARMONICS, PRESETS, DEFAULT_STATE,
     applyPreset, drawAt, clearLine, setTimeBase, setShape, setPeriod, setHeight, setShowAnswer, setTarget, setVolume,
     givenOf, taskOf, answerOf, read, verdict, marksFor, shapeAt, idealHarmonics,
+    stemOf, stepQuestion, nextWord, canStep,
     fmtHz, fmtMs, fmtS, fmtDb, spanOf,
 } from '@/lib/bench/paper-model';
 
@@ -25,7 +26,11 @@ import {
 //
 // The picture is the paper's own figure: five divisions across,
 // "Displacement" up the side and "Time (ms)" along the bottom, the
-// question's wave printed on the left grid and the right one blank. Three
+// question's wave printed on the left grid and the right one blank, and
+// the question itself in the paper's own words above them both, numbered
+// one of seven with Next and Back beside it (Mike's first look, 12 Sep
+// 2026). It opens silent, as the written paper does: nothing sounds until
+// a Hear target or the hold button is pressed. Three
 // jobs (lib/bench/paper-depth.js): Core draws and names, A-level marks in
 // the scheme's own words with the year, Extension takes the drawn cycle
 // apart into its first eight harmonics.
@@ -152,6 +157,7 @@ export default function SquaredPaper({ back }) {
     const ext = depth === 'extension';
 
     const rd = useMemo(() => read(state), [state]);
+    const stem = useMemo(() => stemOf(state), [state]);
     const vd = useMemo(() => verdict(state), [state]);
     const marks = useMemo(() => marksFor(state), [state]);
     const given = givenOf(state);
@@ -227,7 +233,12 @@ export default function SquaredPaper({ back }) {
     const chooseAnswer = () => { setState((s) => setShowAnswer(s, !s.showAnswer)); touch('answer'); };
     const chooseClear = () => { setState((s) => clearLine(s)); touch('clear'); };
     const choosePreset = (id) => { setState((s) => applyPreset(s, id)); touch('preset'); };
-    const holdGiven = (on) => { heldRef.current = on; setHeld(on); };
+    // Next and Back walk the seven papers: a new question, a blank answer
+    // paper, Show answer off, the level and the output level kept.
+    const stepQ = (by) => { setState((s) => stepQuestion(s, by)); touch('preset'); };
+    // The bench opens silent, like the paper, so the first press of a Hear
+    // target or of the hold button is what starts the context, and it plays.
+    const holdGiven = (on) => { heldRef.current = on; setHeld(on); if (on && !playingRef.current) audio.start(); };
     const { start, stop } = audio;
     const togglePlay = useCallback(() => (playingRef.current ? stop() : start()), [start, stop]);
 
@@ -267,13 +278,16 @@ export default function SquaredPaper({ back }) {
     });
 
     // The stage's rows, top to bottom: the stage note (a DOM element, 12 to
-    // 38), the legend (36 to 53), then the papers with their titles above
-    // them, then the axis numbers, then the setting line at the foot. The
-    // titles need the papers to start below the legend, or the three rows
-    // paint over each other (found by looking, 12 Sep 2026).
+    // 30), the question with Back and Next (34 to 60), then the papers with
+    // their titles above them, then the axis numbers, then the setting line
+    // at the foot with the legend beside it. The titles need the papers to
+    // start below the question's row, or the rows paint over each other
+    // (found by looking, 12 Sep 2026).
     const geom = (w, h2, d) => {
         const short = h2 < 330;
-        const top = short ? 62 : 68;
+        const top = short ? 76 : 82;
+        // the foot carries the setting line and the legend on one row, below
+        // the axis numbers
         const bottom = h2 - (short ? 34 : 40);
         const padR = 16;
         // The marks panel is as wide as the scheme's longest line needs: at
@@ -388,6 +402,7 @@ export default function SquaredPaper({ back }) {
             const gi = givenOf(s);
             const ans = answerOf(s);
             const tk = taskOf(s); // this frame's question, never the first render's
+            const stm = stemOf(s); // its wording and its place in the seven
             const pcol = shapeCol(r.shape);
             g2.lineWidth = 1;
 
@@ -463,7 +478,7 @@ export default function SquaredPaper({ back }) {
                 const P = g.panel;
                 g2.strokeStyle = col.line; g2.strokeRect(P.x0 + 0.5, P.top + 0.5, P.x1 - P.x0 - 1, P.bottom - P.top - 1);
                 g2.fillStyle = col.gold; g2.font = monoSmall; g2.textAlign = 'left';
-                g2.fillText(tk ? `THE MARKS · ${tk.ref.toUpperCase()}` : 'THE MARKS', P.x0 + 8, P.top + 13);
+                g2.fillText(tk ? `THE MARKS · ${stm.where.toUpperCase()}` : 'THE MARKS', P.x0 + 8, P.top + 13);
                 if (vdd.ok != null) {
                     g2.fillStyle = vdd.ok ? col.gold : col.coral; g2.textAlign = 'right';
                     g2.fillText(vdd.ok ? 'as directed' : 'not yet', P.x1 - 8, P.top + 13);
@@ -481,11 +496,15 @@ export default function SquaredPaper({ back }) {
                     return out;
                 };
                 const roomy = P.bottom - P.top > 210;
-                let y = P.top + 29;
-                if (tk) {
-                    g2.fillStyle = col.inkFaint; g2.textAlign = 'left';
-                    for (const l of wrap(tk.stem, monoSmall, roomy ? 3 : 2, 0)) { g2.fillText(l, P.x0 + 8, y); y += 12; }
-                    y += 5;
+                // The question itself is above the papers now (stemOf, the one
+                // place its wording lives), so the panel is the marks alone:
+                // the 2024 question has four of them and the stem was pushing
+                // the last one off the panel.
+                let y = P.top + 30;
+                if (!tk) {
+                    g2.fillStyle = col.inkFaint; g2.font = monoSmall; g2.textAlign = 'left';
+                    g2.fillText('no question is set on the blank paper:', P.x0 + 8, y);
+                    g2.fillText('the bench reads your line back instead', P.x0 + 8, y + 13);
                 }
                 const floor = r.periodMs ? P.bottom - 26 : P.bottom - 10;
                 for (const m of mk) {
@@ -553,7 +572,10 @@ export default function SquaredPaper({ back }) {
             if (d !== 'core' && vdd.ok != null) segs.push(vdd.ok ? 'as directed' : 'not as directed');
             g2.fillStyle = col.gold; g2.font = mono; g2.textAlign = 'left';
             frameRef.current += 1;
-            const roomW = w - 20 - g.given.x0;
+            // the legend sits in the same row at the right, so the setting
+            // drops segments until it clears it
+            const legW = legendRef.current ? Math.ceil(legendRef.current.getBoundingClientRect().width) : 0;
+            const roomW = w - 20 - g.given.x0 - (legW ? legW + 22 : 0);
             let label = segs.join(' · ');
             while (segs.length > 2 && g2.measureText(label).width > roomW) { segs.pop(); label = segs.join(' · '); }
             g2.fillText(label, g.given.x0, g.settingY);
@@ -578,6 +600,7 @@ export default function SquaredPaper({ back }) {
             if (canvas.dataset.stage !== stageTag) canvas.dataset.stage = stageTag;
             const paperTag = `${Math.round(g.answer.x0)}:${Math.round(g.answer.top)}:${Math.round(g.answer.x1)}:${Math.round(g.answer.bottom)}`;
             if (canvas.dataset.paper !== paperTag) canvas.dataset.paper = paperTag;
+            if (canvas.dataset.question !== stm.tag) canvas.dataset.question = stm.tag;
 
             raf = requestAnimationFrame(draw);
         }
@@ -903,7 +926,31 @@ export default function SquaredPaper({ back }) {
                 <b>{DIVS} divisions · {spanOf(state)} ms across<span ref={readRef} style={{ '--read': maths ? '30ch' : '21ch' }} /></b>
                 <span>{orientOf(depth)}</span>
             </div>
-            <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
+            <div className={styles.stageStem}>
+                <b className={styles.stemNum}>{stem.n ? `Question ${stem.n} of ${stem.of}` : 'Blank paper'}</b>
+                {stem.n ? <i className={styles.stemRef}>{stem.where}</i> : null}
+                <span className={styles.stemAsk}>{stem.ask}</span>
+                <span className={styles.stemNav}>
+                    <button
+                        type="button"
+                        className={styles.stemBtn}
+                        onClick={() => stepQ(-1)}
+                        disabled={!canStep(state, -1)}
+                        title="Back to the question before this one, on a blank answer paper"
+                    >
+                        &larr;&nbsp;Back
+                    </button>
+                    <button
+                        type="button"
+                        className={styles.stemBtn}
+                        onClick={() => stepQ(1)}
+                        title={`${nextWord(state)}: a blank answer paper and the next paper's question`}
+                    >
+                        {nextWord(state)}&nbsp;&rarr;
+                    </button>
+                </span>
+            </div>
+            <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendStem}`} aria-hidden="true">
                 <span><i style={{ background: rd.shape ? SHAPES[rd.shape].colour : 'var(--gen-2)' }} />your line</span>
                 <span><i style={{ background: 'var(--gold-bright)' }} />one cycle</span>
                 {state.showAnswer ? <span><i style={{ background: 'var(--gold-bright)' }} />the answer, dashed</span> : null}
@@ -919,17 +966,6 @@ export default function SquaredPaper({ back }) {
                 >
                     <i>{hover.ms} ms</i>
                     <p>Drag across the paper to draw. One height per column, so going back over a stretch replaces it.</p>
-                </div>
-            ) : null}
-            {!began ? (
-                <div className={styles.begin}>
-                    <button type="button" className={styles.beginBtn} onClick={() => audio.start()}>
-                        <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.2v9.6L11 6z" fill="currentColor" /></svg>
-                        <span>
-                            Play the bench
-                            <small>Draw a wave on the paper and hear it. Headphones help.</small>
-                        </span>
-                    </button>
                 </div>
             ) : null}
         </>
