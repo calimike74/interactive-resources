@@ -105,13 +105,45 @@ That middle row is the 2024 scheme's line made audible: "Only reduces mid and hi
 
 The judge writes in the paper's order: what is there tagged AO3, what it does to the sound and whether it suits the job tagged AO4, with the scheme's or the report's own line and its year. Every A-level pair is under 450 characters and every Extension line under 330, both tested across every preset and every control.
 
+### Every picture names itself (12 September 2026)
+
+Mike, looking at the bench for the first time: *"for Acoustics bench I'm not really sure what I'm looking at ... I somewhat get what you're saying about the walls being treated or whatever it is, and I can hear more reverb or less reverb, which is great. The visuals, as far as the graphs are concerned, I don't really follow what that is."*
+
+The three station pictures **are** the textbook figures, and nothing on the stage said so. The fix is the cheapest one available: each picture carries its own name and one line saying how to read it, drawn above the picture itself, in the register of the stage's own lines. Not the drawer, not a tooltip, not the orientation slot at the top corner, which he had already read past.
+
+The copy is `PICTURES` in `lib/bench/acoustics-depth.js`, pinned by `tests/bench-acoustics-depth.test.mjs`; the canvas reports it as `data-title` and `data-caption`, and **check-bench law 29** walks three stations by three levels and fails if any picture is nameless.
+
+| Station | Level | Title | Caption |
+|---|---|---|---|
+| Loudness | Core | Equal-loudness curves | Frequency across, level up the side. Each curve joins the levels that sound equally loud. |
+| Loudness | A-level | Your answer in parts: the tone, the level it is played at, how loud it seems | One box for each thing the examiner can see, with a bar saying how well it suits the job. |
+| Loudness | Extension | The signal path: one oscillator, one gain, one output, then the ear | Each box is one step in the order the sound takes. The last one is not a node, it is you. |
+| Masking | Core | The masker's skirt: what the noise hides | Frequency across, level up the side. Under the skirt nothing is heard. The upright line is your tone. |
+| Masking | A-level | Your answer in parts: the target, the masker, and what is heard | One box for each thing the examiner can see, with a bar saying how well it suits the job. |
+| Masking | Extension | The signal path: a band of noise, a tone, and one output | Each box is one node in the graph, drawn in the order the sound passes through them. |
+| The Room | Core (above) | The comb: what one reflection takes out of the sound | Frequency across, level up the side. Each dip is a frequency the late copy cancels. |
+| The Room | Core (below) | How each band of the room dies away | Time across, level up the side. Each line is one band falling to the marked floor. |
+| The Room | A-level | The session as a plan: the source, the mic, the walls, the room next door | One box for each thing the examiner can see, with a bar saying how well it suits the job. |
+| The Room | Extension | The signal path: split and summed for the comb, then into the convolver | Each box is one node, and the tail drawn beneath is the answer the convolver holds. |
+
+Every title and every caption is under 107 characters, so law 24's bar holds for them as it does for the stage note, and the depth test asserts it. Each Core caption says which way the axes run in words, because a Core student reading "dB SPL" up the side has been told the unit and not the direction. The Masking picture also gained the rotated `level (dB)` the contours already carried.
+
+Four things this cost, and what paid for them:
+
+- **The head is 32 px of the picture's height.** The paper and the machine have no axis strip under them, so at A-level and Extension the drawing takes back the 20 px Core keeps for its frequency labels and ends 12 px off the canvas. Net loss there is about 6 px, which keeps the A-level box height over the 54 px threshold at 1280 and so keeps the verdict word (`suits` / `partly` / `does not suit`) in every box.
+- **The Room at Core is two heads, so it pays twice.** Each picture is now about 53 px rather than 68 and 80. Both still read: the comb's notches are the tallest thing in the top picture and the tail is read across, not up.
+- **Two things came off Core rather than the caption being shrunk** (Mike's rule): the tail's dB gridlines keep every line but label only `0 dB` and the named `-60 dB`, and the Room's colour legend went, because the three band times are already drawn at the right edge of the decay in their own colours. The Room keeps one legend line, the drag hint, which no picture can carry.
+- **The orientation sentence stopped describing the picture.** It said the caption's job in the corner where he had read past it; it now says what the station is about at that level, and the canvas aria-label became the title and caption verbatim, so a screen reader is told exactly what a sighted student reads. The old `ORIENTS` line for A-level at Loudness and Masking also claimed "the paper's axis" and "the paper's graph" for a stage that draws three graded boxes, which was simply wrong.
+
+The old `THE REFLECTION · 5.0 ms behind · heard as a colouration` and `THE TAIL · BARE` head lines are gone: the title is the head now, and the live half of each ran to the right of the same row as a faint tag.
+
 ---
 
 ## 4 · What the gates and the harness measured
 
-**`npm test`: 377 tests pass**, 27 of them this bench's, in two files (the estate stood at 350 before it).
+**`npm test`: all green**, 29 of them this bench's, in two files (the estate stood at 414 on 12 September, after the Squared Paper bench merged alongside).
 
-**`node scripts/check-bench.mjs`: all clear**, in Chromium and WebKit, at 1280×700 and 1440×900, against the built static export. Law 27 is new and belongs to this bench: the first notch's marker on the comb is the Delay dial. The canvas reports `data-notch-hz` and `data-rt60`, both equal the console's readouts, and dragging the marker to the right raises the notch and shortens the delay on both (63 Hz to 102 Hz, 8 ms to 4.9 ms).
+**`node scripts/check-bench.mjs`: all clear**, in Chromium and WebKit, at 1280×700 and 1440×900, against the built static export. Two laws are new and belong to this bench. **Law 28**: the first notch's marker on the comb is the Delay dial; the canvas reports `data-notch-hz` and `data-rt60`, both equal the console's readouts, and dragging the marker to the right raises the notch and shortens the delay on both (63 Hz to 102 Hz, 8 ms to 4.9 ms). **Law 29**, added 12 September: every picture names itself; the canvas reports `data-title` and `data-caption` at each of the three stations at each of the three levels, nine pairs, and the Room at Core reports two of each because it draws two pictures.
 
 Run against the dev server, law 9 fails the *other* benches, because Next.js serves every chunk on every route in development and this bench's chunk contains `createOscillator`. Against the built export all three pass. Gate a bench on the export.
 
