@@ -42,6 +42,10 @@
 //      the canvas reports the reverb time (data-rt60) and the pre-delay
 //      (data-predelay), both equal the console's readouts, and dragging the
 //      tail's end to the right lengthens the drawing and the dial together
+//  27. (Squared Paper) the paper is the control: filling it from a Shape chip
+//      makes the canvas report that shape and a period, the console carries
+//      the same numbers, a wave dragged on the answer paper is read back, and
+//      Clear takes the paper back to blank
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -109,6 +113,12 @@ const BENCHES = {
         presets: { first: 'Hi-hat roll', second: 'Bend range', judge: 'Wrong sounds' },
         judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'wrong-sounds', says: 'loads the 2019 file with its notes on the wrong sounds (data-verdict = wrong-sounds)' },
         stages: { core: 'roll', alevel: 'list', extension: 'wire' },
+    },
+    'squared-paper': {
+        paper: true,
+        presets: { first: '2023: an octave lower', second: '2025: louder', judge: 'Judge: the period kept' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'period-kept', says: 'loads the error the 2023 report names, the right shape at the figure\'s own width (data-verdict = period-kept)' },
+        stages: { core: 'paper', alevel: 'marked', extension: 'harmonics' },
     },
     oscilloscope: {
         bracket: true,
@@ -725,6 +735,71 @@ for (const url of urls) {
             await depthBtn('A-level').click();
         }
 
+        // 27. (Squared Paper) the paper is the control: a shape chip fills it,
+        // the canvas and the console agree on what is on it, a wave dragged by
+        // hand is read back, and Clear empties it (12 Sep 2026)
+        if (fx.paper) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            await depthBtn('Core').click();
+            await page.waitForTimeout(200);
+            const readP = () => page.evaluate((sel) => {
+                const c = document.querySelector(sel);
+                return { period: c?.dataset.periodMs || '', hz: c?.dataset.hz || '', shape: c?.dataset.shape || '', verdict: c?.dataset.verdict || '', paper: c?.dataset.paper || '' };
+            }, canvasSel);
+            const consoleP = () => page.evaluate(() => ({
+                period: document.querySelector('[aria-label="Controls"] [data-period-ms]')?.getAttribute('data-period-ms') || '',
+                hz: document.querySelector('[aria-label="Controls"] [data-hz]')?.getAttribute('data-hz') || '',
+                shape: document.querySelector('[aria-label="Controls"] [data-shape]')?.getAttribute('data-shape') || '',
+            }));
+            const clearBtn = page.locator('[aria-label="Clear the answer paper"]').first();
+            if (await clearBtn.count()) { await clearBtn.click(); await page.waitForTimeout(250); }
+            const empty = await readP();
+            if (empty.verdict !== 'blank') fail(url, size, `a cleared paper does not report itself blank (data-verdict = ${empty.verdict || 'nothing'})`);
+            else ok('Clear takes the answer paper back to blank');
+            const sq = page.locator('[role="group"][aria-label="Shape"] button', { hasText: /^Square$/ }).first();
+            if (!(await sq.count())) fail(url, size, 'no Square chip in the Shape group');
+            else {
+                await sq.click();
+                await page.waitForTimeout(300);
+                const after = await readP();
+                const cA = await consoleP();
+                if (after.shape !== 'square') fail(url, size, `the Square chip did not put a square on the paper (data-shape = ${after.shape || 'nothing'})`);
+                else if (!after.period) fail(url, size, 'the stage does not report a period (data-period-ms missing)');
+                else if (after.period !== cA.period || after.hz !== cA.hz || after.shape !== cA.shape) fail(url, size, `the stage's reading (${after.shape}, ${after.period} ms, ${after.hz} Hz) is not the console's (${cA.shape}, ${cA.period} ms, ${cA.hz} Hz)`);
+                else ok(`the stage reports what is on the paper and the console agrees (${after.shape}, ${after.period} ms, ${after.hz} Hz)`);
+            }
+            // and a wave drawn by hand on the answer paper is read back
+            const box = await page.locator(canvasSel).boundingBox();
+            const p0 = (await readP()).paper;
+            const [ax0, atop, ax1, abottom] = p0.split(':').map(Number);
+            if (box && p0 && ax1 > ax0) {
+                if (await clearBtn.count()) { await clearBtn.click(); await page.waitForTimeout(200); }
+                const mid = (atop + abottom) / 2;
+                const half = (abottom - atop) / 2 - 6;
+                const from = ax0 + 6;
+                const to = ax0 + (ax1 - ax0) * 0.86;
+                const cycles = 4;
+                await page.mouse.move(box.x + from, box.y + mid);
+                await page.mouse.down();
+                for (let i = 1; i <= 72; i += 1) {
+                    const t = i / 72;
+                    const x = from + (to - from) * t;
+                    const y = mid - Math.sin(2 * Math.PI * cycles * t) * half * 0.6;
+                    await page.mouse.move(box.x + x, box.y + y);
+                }
+                await page.mouse.up();
+                await page.waitForTimeout(300);
+                const drawn = await readP();
+                const cD = await consoleP();
+                if (!drawn.period) fail(url, size, `a wave drawn by hand on the answer paper was not read (data-verdict = ${drawn.verdict})`);
+                else if (drawn.period !== cD.period || drawn.hz !== cD.hz) fail(url, size, `the drawn reading (${drawn.period} ms, ${drawn.hz} Hz) is not the console's (${cD.period} ms, ${cD.hz} Hz)`);
+                else ok(`a wave drawn by hand is read back (${drawn.shape || 'no named shape'}, ${drawn.period} ms, ${drawn.hz} Hz)`);
+            } else fail(url, size, 'the stage does not expose the answer paper for the drawing test (data-paper missing)');
+            if (!(await readP()).verdict) fail(url, size, 'the stage does not report the scheme\'s verdict (data-verdict missing)');
+            await depthBtn('A-level').click();
+            await page.waitForTimeout(150);
+        }
+
         // 16. (EQ) asking for three bells puts two more dots on the stage, and the dials go to the newest
         if (fx.bells) {
             const canvasSel = '[aria-label="Stage"] canvas';
@@ -752,19 +827,23 @@ for (const url of urls) {
             const readNote = () => page.evaluate(() => {
                 const note = document.querySelector('[aria-label="Stage"] [class*="stageNote"]');
                 const prose = note ? [...note.children].find((c) => c.tagName === 'SPAN') : null;
-                return prose ? { left: Math.round(prose.getBoundingClientRect().left * 10) / 10, over: prose.scrollWidth - prose.clientWidth } : null;
+                return prose ? { left: Math.round(prose.getBoundingClientRect().left * 10) / 10, over: prose.scrollWidth - prose.clientWidth, text: prose.textContent.trim() } : null;
             });
             for (const lv of levels) {
                 if (lv) { await depthBtn(lv).click(); await page.waitForTimeout(250); }
-                const lefts = new Set(); let over = 0; let seen = false;
+                const lefts = new Set(); let over = 0; let seen = false; let text = '';
                 for (let i = 0; i < 6; i += 1) {
                     const r = await readNote();
-                    if (r) { seen = true; lefts.add(r.left); over = Math.max(over, r.over); }
+                    if (r) { seen = true; lefts.add(r.left); over = Math.max(over, r.over); text = r.text; }
                     await page.waitForTimeout(220);
                 }
                 const name = lv ? lv.toLowerCase() : 'the stage';
                 if (!seen) { fail(url, size, 'no stage note to read'); break; }
-                if (lefts.size > 1) fail(url, size, `the stage note moves while the bench plays at ${name} (left edge at ${[...lefts].join(', ')})`);
+                // 12 Sep 2026: an orientation sentence keyed by the stage's name
+                // rather than the level's came out blank at Core, and the law
+                // read an empty box as a still one.
+                if (!text) fail(url, size, `the stage note has no orientation sentence at ${name}`);
+                else if (lefts.size > 1) fail(url, size, `the stage note moves while the bench plays at ${name} (left edge at ${[...lefts].join(', ')})`);
                 else if (over > 0) fail(url, size, `the stage note is clipped at ${name} by ${over} px`);
                 else ok(`the stage note holds still and reads whole at ${name}`);
             }

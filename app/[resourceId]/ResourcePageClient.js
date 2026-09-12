@@ -29,6 +29,9 @@ import ReverbBench from '@/components/resources/ReverbBench';
 // (found on the Delay bench, 2 Sep 2026). Loaded on demand, it stays in its
 // own chunk and law 9 reads the truth.
 const SynthBench = dynamic(() => import('@/components/resources/SynthBench'));
+// Squared Paper builds oscillators too, so it loads on demand for the same
+// reason and stays in its own chunk.
+const SquaredPaper = dynamic(() => import('@/components/resources/SquaredPaper'));
 import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
 import CompressorExplorer from '@/components/resources/CompressorExplorer';
 import CompressorCurvePractice from '@/components/resources/CompressorCurvePractice';
@@ -58,7 +61,6 @@ import OperatorAssessment from '@/components/resources/OperatorAssessment';
 import PatchBaySimulator from '@/components/resources/PatchBaySimulator';
 import SamplingPlayground from '@/components/resources/SamplingPlayground';
 import ReadThenQuiz from '@/components/resources/ReadThenQuiz/ReadThenQuiz';
-import WaveformExplorer from '@/components/resources/WaveformExplorer';
 import WaveformDrawingAssessment from '@/components/resources/WaveformDrawingAssessment';
 import DelayBench from '@/components/resources/DelayBench';
 import EqBench from '@/components/resources/EqBench';
@@ -120,7 +122,6 @@ const resourceComponents = {
     'PatchBaySimulator': PatchBaySimulator,
     'SamplingPlayground': SamplingPlayground,
     'ReadThenQuiz': ReadThenQuiz,
-    'WaveformExplorer': WaveformExplorer,
     'WaveformDrawingAssessment': WaveformDrawingAssessment,
     'DelayBench': DelayBench,
     'EqBench': EqBench,
@@ -130,6 +131,7 @@ const resourceComponents = {
     'AutomationLane': AutomationLane,
     'PianoRoll': PianoRoll,
     'Oscilloscope': Oscilloscope,
+    'SquaredPaper': SquaredPaper,
     'BPMDelayCalculator': BPMDelayCalculator,
     'DigitalAudioAssessment': DigitalAudioAssessment,
     'PitchSynthMonitorsAssessment': PitchSynthMonitorsAssessment,
