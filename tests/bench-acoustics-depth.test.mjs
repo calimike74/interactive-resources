@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEPTH_LINES, DEPTH_TEACH, hearingLine, nextMove, judge, open, sectionOfLast, paperNumber } from '../lib/bench/acoustics-depth.js';
+import { DEPTH_LINES, DEPTH_TEACH, PICTURES, pictures, hearingLine, nextMove, judge, open, sectionOfLast, paperNumber } from '../lib/bench/acoustics-depth.js';
 import {
     DEFAULT_STATE, applyPreset, PRESETS, STATION_IDS, TASKS, ABSORB,
     setProof, setMasker, setPlace, setListen, setTone, setDelay, setRt60, setAbsorb, setStation,
@@ -149,4 +149,60 @@ test('every line the bench can say, at every station and every control, obeys th
     }
     for (const a of Object.values(ABSORB)) { noDash(a.said); noDash(a.mech); noDash(a.label); }
     for (const t of Object.values(TASKS)) { noDash(t.stem); noDash(t.scheme); noDash(t.report || ''); }
+});
+
+// Mike, 12 September 2026, on his first look: "the visuals, as far as the
+// graphs are concerned, I don't really follow what that is". Each picture
+// carries its own name and one line saying how to read it, and these pin
+// them so a redraw cannot quietly take them off again.
+test('every picture on the stage names itself, at every station and every level', () => {
+    const one = (station, depth) => {
+        const p = pictures(station, depth);
+        assert.equal(p.length, station === 'room' && depth === 'core' ? 2 : 1, `${station}/${depth} draws the wrong number of pictures`);
+        return p;
+    };
+    assert.equal(one('loudness', 'core')[0].title, 'Equal-loudness curves');
+    assert.match(one('loudness', 'core')[0].caption, /^Frequency across, level up the side\./);
+    assert.match(one('loudness', 'core')[0].caption, /sound equally loud/);
+    assert.match(one('loudness', 'alevel')[0].title, /^Your answer in parts: the tone/);
+    assert.match(one('loudness', 'extension')[0].title, /^The signal path:/);
+
+    assert.match(one('masking', 'core')[0].title, /^The masker's skirt:/);
+    assert.match(one('masking', 'core')[0].caption, /Under the skirt nothing is heard/);
+    assert.match(one('masking', 'core')[0].caption, /The upright line is your tone/);
+    assert.match(one('masking', 'alevel')[0].title, /the target, the masker, and what is heard$/);
+    assert.match(one('masking', 'extension')[0].title, /^The signal path:/);
+
+    // the Room is two pictures, so it is two names
+    const room = one('room', 'core');
+    assert.equal(room[0].title, 'The comb: what one reflection takes out of the sound');
+    assert.match(room[0].caption, /Each dip is a frequency the late copy cancels/);
+    assert.equal(room[1].title, 'How each band of the room dies away');
+    assert.match(room[1].caption, /^Time across, level up the side\./);
+    assert.match(one('room', 'alevel')[0].title, /^The session as a plan:/);
+    assert.match(one('room', 'extension')[0].title, /then into the convolver$/);
+
+    // an unknown level falls back to the picture Core draws rather than to nothing
+    assert.deepEqual(pictures('room', 'nonsense'), PICTURES.room.core);
+});
+
+test('a title and a caption obey the house copy laws and law 24\'s bar', () => {
+    for (const [station, levels] of Object.entries(PICTURES)) {
+        for (const [depth, pics] of Object.entries(levels)) {
+            for (const p of pics) {
+                noDash(p.title);
+                noDash(p.caption);
+                assert.ok(p.title.length > 0 && p.title.length < 107, `${station}/${depth} title runs to ${p.title.length} characters`);
+                assert.ok(p.caption.length > 0 && p.caption.length < 107, `${station}/${depth} caption runs to ${p.caption.length} characters`);
+                // Core is the picture and its name: no arithmetic is asked for
+                if (depth === 'core') assert.ok(!/calculate|work out|how many|divide|multiply/i.test(`${p.title} ${p.caption}`), `Core asks the student to compute: ${p.title}`);
+            }
+        }
+    }
+    // every Core caption says which way the axes run, in words
+    for (const station of Object.keys(PICTURES)) {
+        for (const p of PICTURES[station].core) {
+            assert.match(p.caption, /(across|down the side|up the side)/, `${station} Core does not say which way the axes run`);
+        }
+    }
 });
