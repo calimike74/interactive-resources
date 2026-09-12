@@ -7,7 +7,7 @@ import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth, D
 import { useBenchAudio, glide } from '@/components/bench/useBenchAudio';
 import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
-import { DEPTH_LINES, DEPTH_TEACH, hearingLine, judge, open as openMachine, nextMove, sectionOfLast, paperNumber } from '@/lib/bench/acoustics-depth';
+import { DEPTH_LINES, DEPTH_TEACH, hearingLine, judge, open as openMachine, nextMove, sectionOfLast, paperNumber, pictures } from '@/lib/bench/acoustics-depth';
 import {
     STATION_IDS, STATIONS, TONE_IDS, TONES, LEVEL_IDS, LEVELS, CONTOURS,
     TARGET_IDS, TARGETS, PLACE_IDS, PLACES, ABSORB_IDS, ABSORB, SOURCE_IDS, SOURCES,
@@ -55,21 +55,25 @@ const TITLE = 'Acoustics bench';
 
 // Law 24: each of these must read whole at 1280 with the live readout at its
 // widest, so none runs past about 107 characters.
+//
+// 12 Sep 2026: the picture now names itself on the stage (PICTURES in
+// acoustics-depth.js), so this line no longer describes the drawing. It says
+// what the station is about at this level, and nothing is said twice.
 const ORIENTS = {
     loudness: {
-        core: 'The contours the ear really has. The dot is your tone at this level; the curve is what it must reach.',
-        alevel: 'The paper\'s axis, 20 Hz to 20 kHz, with the tone on it and each end named as the range.',
-        extension: 'One oscillator, one gain, one output, and the ear after it doing the only thing that is not flat.',
+        core: 'What a tone measures and how loud it seems are two different things. This is the difference.',
+        alevel: 'The two marks the papers give for the ear: the range it covers, and where it is sensitive.',
+        extension: 'Every tone leaves this bench at one level. The only thing here that is not flat is the ear.',
     },
     masking: {
-        core: 'The masker\'s skirt over the spectrum. The target is the upright line; under the skirt it is gone.',
-        alevel: 'The paper\'s graph: the noise, the thing above it, and whether it is heard at all.',
-        extension: 'Two sources into one output: a band of noise, a tone, and the level the tone has to beat.',
+        core: 'One sound raising the level another one needs. Nothing is taken away, the bar is raised.',
+        alevel: 'The 2020 question: noise buried under one kind of music and plainly audible under another.',
+        extension: 'The tone is never taken away. What moves is the level it has to beat before the ear finds it.',
     },
     room: {
-        core: 'Above, the comb the reflection makes. Below, the tail falling to the marked floor, band by band.',
-        alevel: 'The session read as a plan: the source, the mic, the walls, and the room next door.',
-        extension: 'The stem split and summed for the comb, then sent to the convolver that holds the room.',
+        core: 'Two things a room does: one early copy that colours the sound, and a tail that runs on after it.',
+        alevel: 'The 2024 question is worth sixteen marks, and half of it is the room the mic is standing in.',
+        extension: 'The room is an answer the bench writes, then stamps on every sample of the stem.',
     },
 };
 
@@ -383,31 +387,42 @@ export default function AcousticsBench({ back }) {
 
             const padL = 48;
             const padR = 22;
-            const top = 62;
+            const top = 56;
             const bottom = h - 32;
-            const box = { x0: padL, y0: top, x1: w - padR, y1: bottom };
+            const pics = pictures(s.station, d);
             let handle = null;
             let tailHandle = null;
 
-            if (d === 'core') {
-                if (s.station === 'loudness') drawContours(g, s, box, col, mono, monoSmall, w, padL, padR, bottom);
-                else if (s.station === 'masking') drawMasking(g, s, box, col, mono, monoSmall, bottom, nodesRef, playingRef);
-                else {
-                    // two pictures, because a room does two things: the comb the
-                    // reflection makes, and the tail the walls leave behind
-                    const split = Math.round(top + (bottom - top) * 0.50);
-                    const upper = { x0: padL, y0: top + 4, x1: w - padR, y1: split - 24 };
-                    const lower = { x0: padL, y0: split + 16, x1: w - padR, y1: bottom };
-                    handle = drawComb(g, s, upper, col, mono, monoSmall, nodesRef, playingRef);
-                    tailHandle = drawDecay(g, s, lower, col, mono, monoSmall, bandCol);
-                    geomRef.current = { d, comb: combShape(s, upper), decay: decayShape(s, lower) };
-                }
-            } else if (d === 'alevel') {
-                drawPaper(g, s, box, col, mono, monoSmall, gradesRef.current, vddRef.current);
-                geomRef.current = { d, p: paperBoxes(s, box) };
+            if (d === 'core' && s.station === 'room') {
+                // two pictures, because a room does two things: the comb the
+                // reflection makes, and the tail the walls leave behind. Each
+                // one carries its own name, so neither has to be guessed at.
+                const axis = 22;
+                const half = Math.round((bottom - top - 2 * HEAD - axis) / 2);
+                const upper = { x0: padL, y0: top + HEAD, x1: w - padR, y1: top + HEAD + half };
+                const lowTop = upper.y1 + axis;
+                const lower = { x0: padL, y0: lowTop + HEAD, x1: w - padR, y1: bottom };
+                drawHead(g, padL, w - padR, top, col, monoFace, pics[0], `${fmtMs(s.delay)} behind, ${s.delay <= COLOUR_LIMIT_MS ? 'heard as a colouration' : 'heard as a separate bounce'}`);
+                drawHead(g, padL, w - padR, lowTop, col, monoFace, pics[1], `${ABSORB[s.absorb].label.toLowerCase()}, widest gap ${evenness(s.rt60, s.absorb).toFixed(1)} to 1`);
+                handle = drawComb(g, s, upper, col, mono, monoSmall, nodesRef, playingRef);
+                tailHandle = drawDecay(g, s, lower, col, mono, monoSmall, bandCol);
+                geomRef.current = { d, comb: combShape(s, upper), decay: decayShape(s, lower) };
             } else {
-                drawMachine(g, s, box, col, mono, monoSmall);
-                geomRef.current = { d, m: machineBoxes(s, box) };
+                // the paper and the machine have no axis under them, so they
+                // take back the strip Core keeps for its frequency labels and
+                // the head costs them almost nothing
+                const box = { x0: padL, y0: top + HEAD, x1: w - padR, y1: d === 'core' ? bottom : h - 12 };
+                drawHead(g, padL, w - padR, top, col, monoFace, pics[0]);
+                if (d === 'core') {
+                    if (s.station === 'loudness') drawContours(g, s, box, col, mono, monoSmall, w, padL, padR, bottom);
+                    else drawMasking(g, s, box, col, mono, monoSmall, bottom, nodesRef, playingRef);
+                } else if (d === 'alevel') {
+                    drawPaper(g, s, box, col, mono, monoSmall, gradesRef.current, vddRef.current);
+                    geomRef.current = { d, p: paperBoxes(s, box) };
+                } else {
+                    drawMachine(g, s, box, col, mono, monoSmall);
+                    geomRef.current = { d, m: machineBoxes(s, box) };
+                }
             }
 
             // the live readout in its reserved slot (law 24)
@@ -427,6 +442,8 @@ export default function AcousticsBench({ back }) {
             set('verdict', vddRef.current.key);
             set('handle', handle ? `${Math.round(handle.x)}:${Math.round(handle.y)}` : '');
             set('tailhandle', tailHandle ? `${Math.round(tailHandle.x)}:${Math.round(tailHandle.y)}` : '');
+            set('title', pics.map((pp) => pp.title).join(' / '));
+            set('caption', pics.map((pp) => pp.caption).join(' / '));
 
             raf = requestAnimationFrame(draw);
         }
@@ -914,12 +931,7 @@ export default function AcousticsBench({ back }) {
                     </>
                 ) : null}
                 {depth === 'core' && station === 'room' ? (
-                    <>
-                        <span><i style={{ background: 'var(--gold-bright)' }} />low</span>
-                        <span><i style={{ background: 'var(--gen-1)' }} />mid</span>
-                        <span><i style={{ background: 'var(--gen-2)' }} />high</span>
-                        <em>drag the first notch, or the tail&apos;s end</em>
-                    </>
+                    <em>drag the first notch, or the tail&apos;s end</em>
                 ) : null}
                 {depth === 'alevel' ? <em>click a box for its verdict</em> : null}
                 {depth === 'extension' ? <em>the nodes, in signal order</em> : null}
@@ -980,17 +992,32 @@ export default function AcousticsBench({ back }) {
 }
 
 function stageLabel(station, depth) {
-    if (depth === 'alevel') {
-        return station === 'room'
-            ? 'The session as a plan: the source, the microphone, the treated wall and the room next door, each judged'
-            : station === 'masking'
-                ? 'The paper\'s graph: the target, the masker and whether the target is heard'
-                : 'The paper\'s axis from 20 Hz to 20 kHz with the tone on it, and how loud it seems';
+    return pictures(station, depth).map((p) => `${p.title}. ${p.caption}`).join(' ');
+}
+
+// ---- the picture's own name ------------------------------------------------
+// Mike, 12 Sep 2026: "the visuals, as far as the graphs are concerned, I don't
+// really follow what that is". Every picture now says what it is, above
+// itself, in the register of the stage's own lines: the title bright, the one
+// line under it faint, and the station's own live tag at the right where the
+// old head line used to be. HEAD is what that costs the picture in height.
+const HEAD = 32;
+function drawHead(g, x0, x1, yTop, col, monoFace, picture, tag) {
+    if (!picture) return;
+    g.font = `10px ${monoFace}`;
+    const tagW = tag ? g.measureText(tag).width + 24 : 0;
+    if (tag) {
+        g.textAlign = 'right';
+        g.fillStyle = col.faint;
+        g.fillText(tag, x1, yTop + 11);
     }
-    if (depth === 'extension') return 'The nodes behind this station, in signal order, with what each one is set to';
-    if (station === 'loudness') return 'The equal-loudness contours in decibels against frequency, with the tone marked as a dot on them';
-    if (station === 'masking') return 'The spectrum with the masker\'s skirt shaded over it and the target drawn as an upright line';
-    return 'Above, the comb filter the reflection makes across the spectrum. Below, the three bands of the tail falling to the minus sixty floor';
+    g.textAlign = 'left';
+    g.fillStyle = col.hit;
+    g.font = `600 13px ${monoFace}`;
+    g.fillText(fit(g, picture.title, x1 - x0 - tagW), x0, yTop + 11);
+    g.fillStyle = col.ink;
+    g.font = `11.5px ${monoFace}`;
+    g.fillText(fit(g, picture.caption, x1 - x0), x0, yTop + 26);
 }
 
 // ---- the drawings ----------------------------------------------------------
@@ -1134,6 +1161,13 @@ function drawMasking(g, s, box, col, mono, monoSmall, bottom, nodesRef, playingR
         g.fillStyle = col.faint;
         g.fillText(`${db}`, box.x0 - 8, y + 3.5);
     }
+    g.save();
+    g.translate(14, (box.y0 + box.y1) / 2);
+    g.rotate(-Math.PI / 2);
+    g.textAlign = 'center';
+    g.fillStyle = col.faint;
+    g.fillText('level (dB)', 0, 0);
+    g.restore();
     axisLogHz(g, box, sh.xOf, col, monoSmall, [100, 1000, 10000, 20000]);
 
     // what is really leaving the bench, from the analyser
@@ -1281,11 +1315,6 @@ function drawComb(g, s, box, col, mono, monoSmall, nodesRef, playingRef) {
     g.textAlign = sh.handle.x > box.x1 - 150 ? 'right' : 'left';
     const off = sh.handle.x > box.x1 - 150 ? -10 : 10;
     g.fillText(`first notch ${fmtHz(sh.first)}`, sh.handle.x + off, sh.handle.y + 16);
-    g.fillStyle = col.ink;
-    g.font = monoSmall;
-    g.textAlign = 'left';
-    const head = `THE REFLECTION · ${fmtMs(s.delay)} behind · ${s.delay <= COLOUR_LIMIT_MS ? 'heard as a colouration' : 'heard as a separate bounce'}`;
-    g.fillText(head, box.x0, box.y0 - 6);
     return sh.handle;
 }
 
@@ -1303,8 +1332,10 @@ function drawDecay(g, s, box, col, mono, monoSmall, bandCol) {
         g.lineTo(box.x1, y);
         g.stroke();
         g.setLineDash([]);
-        g.fillStyle = named ? col.ink : col.faint;
-        g.fillText(named ? '-60 dB' : `${db}`, box.x0 - 8, y + 3.5);
+        if (db === 0 || named) {
+            g.fillStyle = named ? col.ink : col.faint;
+            g.fillText(named ? '-60 dB' : '0 dB', box.x0 - 8, y + 3.5);
+        }
     }
     const step = sh.tMax > 2 ? 0.5 : sh.tMax > 1 ? 0.25 : 0.1;
     g.textAlign = 'center';
@@ -1341,13 +1372,6 @@ function drawDecay(g, s, box, col, mono, monoSmall, bandCol) {
     g.strokeStyle = col.white;
     g.lineWidth = 1.5;
     g.stroke();
-    g.fillStyle = col.ink;
-    g.font = monoSmall;
-    g.textAlign = 'left';
-    g.fillText(`THE TAIL · ${ABSORB[s.absorb].label.toUpperCase()}`, box.x0, box.y0 - 6);
-    g.textAlign = 'right';
-    g.fillStyle = col.faint;
-    g.fillText(`widest gap ${evenness(s.rt60, s.absorb).toFixed(1)} to 1`, box.x1, box.y0 - 6);
     return sh.handle;
 }
 
