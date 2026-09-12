@@ -15,7 +15,10 @@
 //   5. no em-dash in rendered text; no "utilise"
 //   6. the drawer opens from its handle, closes on Escape, returns focus
 //   7. More, once opened, does not close
-//   8. before the first gesture no AudioContext exists; after Play one does
+//   8. before the first gesture no AudioContext exists; after Play one does.
+//      A bench that opens silent (Squared Paper: the written paper has no
+//      tone) has no "Play the bench" overlay, so the gesture is the console's
+//      own Play button
 //   9. no createOscillator in the page's scripts unless the bench declares synthesis
 //  10. the space bar stops and starts the bench
 //  11. every console label fits inside its own box (no text under a slider)
@@ -45,7 +48,9 @@
 //  27. (Squared Paper) the paper is the control: filling it from a Shape chip
 //      makes the canvas report that shape and a period, the console carries
 //      the same numbers, a wave dragged on the answer paper is read back, and
-//      Clear takes the paper back to blank
+//      Clear takes the paper back to blank. And the question stands above the
+//      grids at every level, numbered, whole, with Next walking to the one
+//      after it on a clean paper
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -316,9 +321,12 @@ for (const url of urls) {
             if (m2.scrollH > m2.innerH) fail(url, size, 'page scrolls with More open');
         }
 
-        // 8. audio only after a gesture
+        // 8. audio only after a gesture. Most benches open behind a "Play the
+        // bench" overlay; one that opens silent (Squared Paper, 12 Sep 2026)
+        // has none, and the first gesture is the console's Play button.
         const ctxBefore = await page.evaluate(() => window.__benchAudioContexts || 0);
-        const play = page.locator('button', { hasText: /Play the bench/ }).first();
+        const begin = page.locator('button', { hasText: /Play the bench/ }).first();
+        const play = (await begin.count()) ? begin : page.locator('[aria-label="Play"]').first();
         if (await play.count()) {
             await play.click();
             await page.waitForTimeout(800);
@@ -744,7 +752,7 @@ for (const url of urls) {
             await page.waitForTimeout(200);
             const readP = () => page.evaluate((sel) => {
                 const c = document.querySelector(sel);
-                return { period: c?.dataset.periodMs || '', hz: c?.dataset.hz || '', shape: c?.dataset.shape || '', verdict: c?.dataset.verdict || '', paper: c?.dataset.paper || '' };
+                return { period: c?.dataset.periodMs || '', hz: c?.dataset.hz || '', shape: c?.dataset.shape || '', verdict: c?.dataset.verdict || '', paper: c?.dataset.paper || '', question: c?.dataset.question || '' };
             }, canvasSel);
             const consoleP = () => page.evaluate(() => ({
                 period: document.querySelector('[aria-label="Controls"] [data-period-ms]')?.getAttribute('data-period-ms') || '',
@@ -796,6 +804,51 @@ for (const url of urls) {
                 else ok(`a wave drawn by hand is read back (${drawn.shape || 'no named shape'}, ${drawn.period} ms, ${drawn.hz} Hz)`);
             } else fail(url, size, 'the stage does not expose the answer paper for the drawing test (data-paper missing)');
             if (!(await readP()).verdict) fail(url, size, 'the stage does not report the scheme\'s verdict (data-verdict missing)');
+
+            // the question stands above the grids at every level, numbered
+            // and whole, and Next walks to the one after it (Mike, 12 Sep
+            // 2026: "if I get something wrong, how do I go to the next
+            // question?")
+            const stemOf_ = () => page.evaluate(() => {
+                const row = document.querySelector('[aria-label="Stage"] [class*="stageStem"]');
+                const ask = row?.querySelector('[class*="stemAsk"]');
+                const num = row?.querySelector('[class*="stemNum"]');
+                const nav = [...(row?.querySelectorAll('button') || [])].map((b) => ({ text: b.textContent.trim(), off: b.disabled }));
+                return row ? { ask: ask?.textContent.trim() || '', over: ask ? ask.scrollWidth - ask.clientWidth : 0, num: num?.textContent.trim() || '', nav } : null;
+            });
+            const firstPreset = page.locator('[aria-label="Presets"] button', { hasText: fx.presets.first });
+            await firstPreset.click();
+            await page.waitForTimeout(200);
+            for (const lv of ['Core', 'A-level', 'Extension']) {
+                await depthBtn(lv).click();
+                await page.waitForTimeout(200);
+                const st = await stemOf_();
+                const q = (await readP()).question;
+                if (!st) { fail(url, size, `no question above the grids at ${lv.toLowerCase()}`); break; }
+                if (!st.ask || st.ask.length < 20) fail(url, size, `the question above the grids is empty at ${lv.toLowerCase()}`);
+                else if (st.over > 0) fail(url, size, `the question above the grids is clipped at ${lv.toLowerCase()} by ${st.over} px`);
+                else if (!/1 of 7/i.test(st.num) || q !== '1/7') fail(url, size, `the question is not numbered at ${lv.toLowerCase()} ("${st.num}", data-question = ${q || 'nothing'})`);
+                else ok(`the question reads whole above the grids at ${lv.toLowerCase()} (${st.num})`);
+            }
+            const before = await stemOf_();
+            if (!before.nav[0]?.off) fail(url, size, 'Back is not disabled on the first question');
+            const nextBtn = page.locator('[aria-label="Stage"] button', { hasText: /Next question/ }).first();
+            if (!(await nextBtn.count())) fail(url, size, 'no Next question button beside the question');
+            else {
+                await nextBtn.click();
+                await page.waitForTimeout(300);
+                const after = await readP();
+                const st2 = await stemOf_();
+                if (after.question !== '2/7') fail(url, size, `Next did not move to the second question (data-question = ${after.question || 'nothing'})`);
+                else if (after.verdict !== 'blank') fail(url, size, `Next did not clear the answer paper (data-verdict = ${after.verdict})`);
+                else if (st2.ask === before.ask) fail(url, size, 'Next did not change the question above the grids');
+                else ok(`Next walks to the next question on a clean paper (${st2.num})`);
+                const backBtn = page.locator('[aria-label="Stage"] button', { hasText: /Back/ }).first();
+                await backBtn.click();
+                await page.waitForTimeout(300);
+                if ((await readP()).question !== '1/7') fail(url, size, 'Back did not return to the question before');
+                else ok('Back returns to the question before');
+            }
             await depthBtn('A-level').click();
             await page.waitForTimeout(150);
         }

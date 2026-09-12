@@ -13,6 +13,9 @@
 //
 // Do not edit the bench while it runs: Fast Refresh resets the page and
 // every reading after that is void. Written 12 Sep 2026 with the bench.
+//
+// Run it from this worktree's scripts/ folder: Playwright resolves from the
+// node_modules beside it.
 import { chromium } from 'playwright';
 
 const url = process.argv[2] || 'http://localhost:3466/squared-paper';
@@ -51,8 +54,12 @@ page.on('pageerror', (e) => errors.push(String(e)));
 await page.goto(url, { waitUntil: 'networkidle' });
 await page.waitForSelector('[data-bench-frame]', { timeout: 15000 });
 await page.waitForTimeout(700);
+// The bench opens silent, like the written paper, so there is no "Play the
+// bench" overlay to press: the console's own Play button is the gesture that
+// builds the context and the tap in front of the destination (12 Sep 2026).
 const begin = page.locator('button', { hasText: /Play the bench/ }).first();
-if (await begin.count()) { await begin.click(); await page.waitForTimeout(1000); }
+const play = (await begin.count()) ? begin : page.locator('[aria-label="Play"]').first();
+if (await play.count()) { await play.click(); await page.waitForTimeout(1000); }
 
 const chip = (group, name) => page.locator(`[aria-label="${group}"] button`, { hasText: new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`) });
 const preset = (name) => page.locator('[aria-label="Presets"] button', { hasText: name });
