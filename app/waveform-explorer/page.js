@@ -20,7 +20,7 @@ export const metadata = {
 export default function RetiredPage() {
     return (
         <>
-        {/* metadata.other renders name="refresh", which browsers ignore —
+        {/* metadata.other renders name="refresh", which browsers ignore,
             only http-equiv="refresh" fires. App Router hoists this into <head>. */}
         <meta httpEquiv="refresh" content={`0; url=${TARGET}`} />
         <main
