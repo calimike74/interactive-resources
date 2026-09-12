@@ -42,6 +42,10 @@
 //      the canvas reports the reverb time (data-rt60) and the pre-delay
 //      (data-predelay), both equal the console's readouts, and dragging the
 //      tail's end to the right lengthens the drawing and the dial together
+//  27. (Acoustics bench) the first notch's marker on the comb is the Delay
+//      dial: the canvas reports the notch (data-notch-hz) and the reverb time
+//      (data-rt60), both equal the console's readouts, and dragging the marker
+//      to the right raises the notch and shortens the delay on both
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -121,6 +125,12 @@ const BENCHES = {
         presets: { first: '2023 paper', second: '2024 paper', judge: 'Judge: a bass' },
         judgeLands: { selector: '[aria-label="Attack"]', attr: 'aria-valuetext', value: '600 ms', says: 'loads a pad envelope on the bass: a 600 ms attack (Attack = 600 ms)' },
         stages: { core: 'scope', alevel: 'sections', extension: 'machine' },
+    },
+    'acoustics-bench': {
+        notch: true,
+        presets: { first: '2021 paper', second: '2024 AS paper', judge: 'Judge: soundproofing' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'soundproofing', says: 'loads the trap three reports name: bare walls with soundproofing asked for (data-verdict = soundproofing)' },
+        stages: { core: 'ear', alevel: 'paper', extension: 'machine' },
     },
     'reverb-bench': {
         tailHandle: { preset: 'Hall' },
@@ -721,6 +731,51 @@ for (const url of urls) {
                 else ok(`dragging the tail's end lengthens the reverb time and the dial follows (${before.rt} -> ${after.rt} s)`);
             } else fail(url, size, 'the stage does not expose the tail\'s end handle for the drag test');
             if (!before.pre_h) fail(url, size, 'the stage does not expose the pre-delay handle (data-prehandle missing)');
+            if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
+            await depthBtn('A-level').click();
+        }
+
+        // 27. (Acoustics) the first notch's marker on the comb is the Delay dial:
+        // the canvas reports the notch and the reverb time, both match the console,
+        // and dragging the marker right raises the notch and shortens the delay
+        if (fx.notch) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            await depthBtn('Core').click();
+            await page.waitForTimeout(200);
+            const room = page.locator('[aria-label="Station"] button', { hasText: /^The Room$/ });
+            if (await room.count()) { await room.first().click(); await page.waitForTimeout(350); }
+            const readA = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { notch: c?.dataset.notchHz || '', rt: c?.dataset.rt60 || '', station: c?.dataset.station || '', handle: c?.dataset.handle || '', tail: c?.dataset.tailhandle || '', verdict: c?.dataset.verdict || '' }; }, canvasSel);
+            const consoleA = () => page.evaluate(() => ({
+                notch: document.querySelector('[aria-label="Controls"] [data-notch-hz]')?.getAttribute('data-notch-hz') || '',
+                rt: document.querySelector('[aria-label="Controls"] [data-rt60]')?.getAttribute('data-rt60') || '',
+            }));
+            const before = await readA();
+            const cB = await consoleA();
+            if (before.station !== 'room') fail(url, size, `the stage is not on the room station (data-station = ${before.station || 'nothing'})`);
+            if (!before.notch) fail(url, size, 'the stage does not report the first notch (data-notch-hz missing)');
+            else if (Number(before.notch) !== Number(cB.notch)) fail(url, size, `the stage's first notch (${before.notch}) is not the console's (${cB.notch})`);
+            else if (Number(before.rt) !== Number(cB.rt)) fail(url, size, `the stage's reverb time (${before.rt}) is not the console's (${cB.rt})`);
+            else ok(`the stage reports the room and the console agrees (${before.notch} Hz, ${before.rt} s)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            const dialDelay = () => page.evaluate(() => document.querySelector('[aria-label="Delay"]')?.getAttribute('aria-valuenow'));
+            const delayBefore = await dialDelay();
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx + 40, box.y + hy, { steps: 6 });
+                await page.mouse.move(box.x + hx + 80, box.y + hy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(300);
+                const after = await readA();
+                const cA = await consoleA();
+                const delayAfter = await dialDelay();
+                if (!(Number(after.notch) > Number(before.notch))) fail(url, size, `dragging the notch right did not raise its frequency (${before.notch} -> ${after.notch})`);
+                else if (!(Number(delayAfter) < Number(delayBefore))) fail(url, size, `the Delay dial did not shorten with the notch (${delayBefore} -> ${delayAfter} ms)`);
+                else if (Number(after.notch) !== Number(cA.notch)) fail(url, size, `the console did not follow the notch (${cA.notch} vs ${after.notch})`);
+                else ok(`dragging the notch raises it and the Delay dial follows (${before.notch} Hz -> ${after.notch} Hz, ${delayBefore} ms -> ${delayAfter} ms)`);
+            } else fail(url, size, 'the stage does not expose the notch marker for the drag test');
+            if (!before.tail) fail(url, size, 'the stage does not expose the tail\'s end handle (data-tailhandle missing)');
             if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
             await depthBtn('A-level').click();
         }

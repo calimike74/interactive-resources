@@ -1224,3 +1224,36 @@
 .secHear[data-reverb='true'] .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
 .secHear[data-reverb='true'] .stats b { font-size: 15px; }
 .secHear[data-reverb='true'] .stats span { font-size: 12px; line-height: 1.25; display: block; }
+
+/* ---- the Acoustics bench (2.1), 12 Sep 2026 ----
+   Three stations on one console, so the widths are three sums. At 1280:
+   Loudness  Play 104 + Station 132 + Tone 186 + Listening 132 + Hear
+   Masking   Play 104 + Station 132 + Target 158 + Masker 200 + Hear
+   The Room  Play 104 + Station 132 + Source 104 + Reflection 168 +
+             Tail 168 + Walls 196 + Hear (at least 290, the worst case)
+   A pair section is two dials side by side, each with its value and its
+   name beneath, the Synth bench's slide column applied to a rotary. */
+.secAcStation { width: 132px; }
+.secAcTone { width: 186px; }
+.secAcTone .chips { flex-wrap: wrap; gap: 4px; }
+.secAcListen { width: 132px; }
+.secAcTarget { width: 158px; }
+.secAcTarget .chips { flex-wrap: wrap; gap: 4px; }
+.secAcMasker { width: 200px; }
+.secAcMasker .chips { flex-wrap: wrap; gap: 4px; }
+.secAcMasker .knob { flex-direction: row; align-items: center; gap: 10px; align-self: center; }
+.secAcSource { width: 104px; }
+.secAcPair { width: 180px; }
+/* `.scope * { min-width: 0 }` lets a flex head shrink below its own text, so
+   the two words in a pair's head are pinned to their own width. */
+.secAcPair .secHead .eyebrow,
+.secAcPair .secHead .value { flex: none; white-space: nowrap; }
+.secAcWalls { width: 196px; }
+.secAcWalls .chips { flex-wrap: wrap; gap: 4px; }
+.pairRow { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding-top: 2px; }
+.pairRow .knob { gap: 4px; width: 62px; }
+.pairRow .slideVal { font-size: 10px; }
+.secHear[data-acoustics='true'] { min-width: 290px; }
+.secHear[data-acoustics='true'] .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 320px; }
+.secHear[data-acoustics='true'] .stats b { font-size: 15px; }
+.secHear[data-acoustics='true'] .stats span { font-size: 12px; line-height: 1.25; display: block; }

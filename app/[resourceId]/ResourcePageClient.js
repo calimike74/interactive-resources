@@ -73,7 +73,7 @@ import DigitalAudioAssessment from '@/components/resources/DigitalAudioAssessmen
 import PitchSynthMonitorsAssessment from '@/components/resources/PitchSynthMonitorsAssessment';
 import LevelsMeteringAssessment from '@/components/resources/LevelsMeteringAssessment';
 import MIDIBinaryAssessment from '@/components/resources/MIDIBinaryAssessment';
-import AcousticsPsychoacoustics from '@/components/resources/AcousticsPsychoacoustics';
+import AcousticsBench from '@/components/resources/AcousticsBench';
 import MixingProduction from '@/components/resources/MixingProduction';
 import ProductionAnalysis from '@/components/resources/ProductionAnalysis';
 import AdditiveSynthExplorer from '@/components/resources/AdditiveSynthExplorer';
@@ -135,7 +135,7 @@ const resourceComponents = {
     'PitchSynthMonitorsAssessment': PitchSynthMonitorsAssessment,
     'LevelsMeteringAssessment': LevelsMeteringAssessment,
     'MIDIBinaryAssessment': MIDIBinaryAssessment,
-    'AcousticsPsychoacoustics': AcousticsPsychoacoustics,
+    'AcousticsBench': AcousticsBench,
     'MixingProduction': MixingProduction,
     'ProductionAnalysis': ProductionAnalysis,
     'AdditiveSynthExplorer': AdditiveSynthExplorer,
