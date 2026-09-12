@@ -105,15 +105,10 @@
 .figure { margin: 0 0 20px; display: flex; flex-direction: column; align-items: center; }
 .figCaption { font-size: 14px; font-weight: 700; color: var(--ink); margin-top: 4px; }
 
-/* the question: the part label hangs at the left, the marks at the right */
+/* the question: the stem fills the sheet, the marks hang at the right. No
+   part label: "(e) (ii)" is the paper's own numbering and tells a student
+   which sitting the question is from (Mike, 12 Sep 2026). */
 .question { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
-.part {
-    flex: none;
-    min-width: 52px;
-    font-size: 15px;
-    line-height: 1.5;
-    color: var(--ink);
-}
 .stemCol { flex: 1 1 auto; min-width: 0; }
 .stem { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink); }
 .bullets { margin: 8px 0 0; padding: 0; list-style: none; }

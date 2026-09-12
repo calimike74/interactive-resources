@@ -21,10 +21,18 @@ import {
 // make sense." And: "we don't need to hear anything."
 //
 // So this page is a sheet of the paper's own paper on a dark desk. On it, the
-// question as Edexcel prints it (the part label, the stem in the paper's
-// words, Figure 1 where the paper prints one, the marks in brackets at the
-// right), the answer grid ruled the way the paper rules it, and nothing else.
-// Under the sheet, one strip: Back, where you are, Next, Check, Clear.
+// question as Edexcel prints it (the stem in the paper's words, Figure 1
+// where the paper prints one, the marks in brackets at the right), the answer
+// grid ruled the way the paper rules it, and nothing else. Under the sheet,
+// one strip: Back, where you are, Next, Check, Clear.
+//
+// What the sheet does not print is where the question came from. Mike, 12 Sep
+// 2026: "I don't want to see the exam reference. On the right-hand corner,
+// you've got the exam in there. This is going to tip the students off to which
+// exams have this type of question in them, which I don't want." So the
+// question's source and its part label ("(e) (ii)") stay in the model as the
+// teacher's record and never reach the page, the examiner lines are signed
+// without their year, and "Question 7 of 16" is all the sheet's head says.
 //
 // Check marks the drawing the way a script comes back: each scheme point
 // ticked or crossed in the margin in the scheme's own wording, the model
@@ -337,7 +345,6 @@ export default function SquaredPaper({ back }) {
             <main className={styles.sheet} aria-label="The question paper">
                 <div className={styles.sheetHead}>
                     <span><b>{where}</b></span>
-                    <span>{q.source}</span>
                 </div>
 
                 {figure ? (
@@ -348,7 +355,6 @@ export default function SquaredPaper({ back }) {
                 ) : null}
 
                 <div className={styles.question}>
-                    <span className={styles.part}>{q.part}</span>
                     <div className={styles.stemCol}>
                         <p className={styles.stem}>{q.stem}</p>
                         {q.bullets ? (

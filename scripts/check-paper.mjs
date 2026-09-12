@@ -9,21 +9,28 @@
 //
 // Exits 1 if anything fails, so it can gate a merge.
 //
+// How many questions there are is read off the page ("Question 1 of N"), so
+// this script never has to be told when the paper grows.
+//
 // The laws:
-//   1. every question renders: its number, its source, the part label, the
-//      stem in the paper's own words, and the marks in brackets
+//   1. every question renders: its number, the stem in the paper's own words,
+//      and the marks in brackets
 //   2. nothing is clipped at 1280 wide, and the page never scrolls sideways
-//   3. Back and Next walk question 1 to 12 and then the blank paper, and
+//   3. Back and Next walk question 1 to N and then the blank paper, and
 //      neither wraps: Back is dead on the first, Next on the last
 //   4. the scheme's own answer, drawn with the pointer and checked, scores
-//      full marks on every one of the twelve
+//      full marks on every one of them
 //   5. Check marks in the scheme's own words: a tick or a cross a mark, the
 //      total beside the marks bracket, the model answer over the grid
-//   8. question 11 (2024 Q4(a)) prints a bare grid and two boxes, and earns
-//      its two axis marks: unlabelled it scores 3 of 5, labelled 5 of 5
+//   8. the bare-grid question prints two boxes and earns its two axis marks:
+//      unlabelled it scores 3 of 5, labelled 5 of 5
 //   9. the sheet can always scroll clear of the floating strip
 //   6. Back and Next clear the drawing and the marking
 //   7. house style: no em-dash, no "utilise" in anything the page renders
+//  10. the sheet names no exam: no year, no paper question number and no part
+//      label reaches the student, before or after Check (Mike, 12 Sep 2026:
+//      "this is going to tip the students off to which exams have this type
+//      of question in them")
 
 import { chromium } from 'playwright';
 
@@ -62,7 +69,7 @@ const sheet = () => page.evaluate(() => {
     }));
     return {
         head: text('[class*="sheetHead"]'),
-        part: text('[class*="part"]'),
+        paper: el('[aria-label="The question paper"]')?.innerText || '',
         stem: text('[class*="stem"]'),
         stemOver: over('[class*="stem"]'),
         bullets: [...document.querySelectorAll('[class*="bullets"] li')].map((b) => b.textContent.trim()),
@@ -86,6 +93,24 @@ const sheet = () => page.evaluate(() => {
         body: document.body.innerText,
     };
 });
+// Law 10. Anything on the sheet that would tell a student which sitting the
+// question came from. "examiner report" is here without its apostrophe on
+// purpose: the page signs its lines "(examiner's report)", so the old form
+// with a year in front of it is caught the moment it comes back.
+const TELLS = [
+    [/\b20\d\d\b/, 'a four-digit year'],
+    [/\bQ[1-4]\b/, 'a paper question number'],
+    [/\bQ\d\(/, 'a paper question reference'],
+    [/examiner report/i, 'an examiner report named with its year'],
+];
+let told = 0;
+function noExamOnTheSheet(paper, where) {
+    for (const [re, said] of TELLS) {
+        const hit = paper.match(re);
+        if (hit) { fail(`${where}: ${said} is printed on the sheet ("${hit[0]}")`); told += 1; }
+    }
+}
+
 const btn = (name) => page.locator('[aria-label="The questions"] button', { hasText: new RegExp(`^${name}`) }).first();
 const next = () => btn('Next|Blank paper');
 const back = () => btn('←');
@@ -130,43 +155,58 @@ async function answerWithThePointer(s) {
     await page.waitForTimeout(150);
 }
 
-// ---- 1, 2 and 3: the walk, and what every question prints ----
+// ---- how many questions the paper sets, in the page's own words ----
+const first = await sheet();
+const COUNT = Number((first.head.match(/Question 1 of (\d+)/) || [])[1] || 0);
+if (!COUNT) {
+    fail(`the sheet's head does not say how many questions there are ("${first.head}")`);
+    await browser.close();
+    console.log('\n1 failure(s)');
+    process.exit(1);
+}
+ok(`the sheet sets ${COUNT} questions and a blank paper`);
+
+// ---- 1, 2, 3 and 10: the walk, and what every question prints ----
 const seen = [];
-for (let i = 1; i <= 13; i += 1) {
+let axisQ = 0; // the question that prints the two axis boxes, found by walking
+for (let i = 1; i <= COUNT + 1; i += 1) {
     const s = await sheet();
     seen.push(s.q);
     const name = s.q === 'blank' ? 'the blank paper' : `question ${s.q}`;
-    if (i <= 12 && s.q !== `${i}/12`) fail(`${name}: the page is on ${s.q || 'nothing'} after ${i - 1} presses of Next`);
+    if (i <= COUNT && s.q !== `${i}/${COUNT}`) fail(`${name}: the page is on ${s.q || 'nothing'} after ${i - 1} presses of Next`);
     if (!s.stem || s.stem.length < 20) fail(`${name}: no stem printed ("${s.stem}")`);
     if (s.stemOver > 0) fail(`${name}: the stem is clipped by ${s.stemOver} px`);
     if (s.pageW > s.innerW) fail(`${name}: the page scrolls sideways (${s.pageW} > ${s.innerW})`);
-    if (i <= 12) {
-        if (!/Question \d+ of 12/.test(s.head)) fail(`${name}: the sheet's head does not number the question ("${s.head}")`);
+    noExamOnTheSheet(s.paper, `${name}, before Check`);
+    if (s.boxes.length === 2) axisQ = i;
+    if (i <= COUNT) {
+        if (!new RegExp(`Question \\d+ of ${COUNT}`).test(s.head)) fail(`${name}: the sheet's head does not number the question ("${s.head}")`);
         if (!s.bracket && !s.bullets.length) fail(`${name}: no marks in brackets`);
         if (s.bullets.length && !s.bullets.every((b) => /\(\d\)$/.test(b))) fail(`${name}: a bullet carries no marks bracket`);
         if (!s.bullets.length && !/^\(\d\)$/.test(s.bracket.replace(/\s+/g, ''))) fail(`${name}: the marks bracket reads "${s.bracket}"`);
-        if (!s.part) fail(`${name}: no part label`);
         if (!s.answer) fail(`${name}: the page does not expose the scheme's answer for the gate`);
     }
     if (i === 1 && !(await back().isDisabled())) fail('Back is not dead on question 1');
-    if (i === 13 && !(await next().isDisabled())) fail('Next is not dead on the blank paper');
-    if (i < 13) { await next().click(); await page.waitForTimeout(160); }
+    if (i === COUNT + 1 && !(await next().isDisabled())) fail('Next is not dead on the blank paper');
+    if (i < COUNT + 1) { await next().click(); await page.waitForTimeout(160); }
 }
-if (seen.join(' ') === '1/12 2/12 3/12 4/12 5/12 6/12 7/12 8/12 9/12 10/12 11/12 12/12 blank') ok('Next walks question 1 to 12 and then the blank paper, and stops');
+const walked = [...Array(COUNT)].map((_, i) => `${i + 1}/${COUNT}`).concat('blank').join(' ');
+if (seen.join(' ') === walked) ok(`Next walks question 1 to ${COUNT} and then the blank paper, and stops`);
 else fail(`the walk went ${seen.join(' ')}`);
+if (!axisQ) fail('no question prints the two axis boxes');
 const bodyText = (await sheet()).body;
 if (/—/.test(bodyText)) fail('em-dash in the page\'s own text');
 else if (/\butilise/i.test(bodyText)) fail('"utilise" in the page\'s own text');
 else ok('no em-dash and no "utilise" in anything the page prints');
 
 // ---- 4 and 5: the scheme's answer, drawn and checked ----
-for (let i = 12; i >= 1; i -= 1) {
+for (let i = COUNT; i >= 1; i -= 1) {
     await back().click();
     await page.waitForTimeout(160);
 }
-for (let i = 1; i <= 12; i += 1) {
+for (let i = 1; i <= COUNT; i += 1) {
     const before = await sheet();
-    if (before.q !== `${i}/12`) fail(`the walk back left the page on ${before.q}, not ${i}/12`);
+    if (before.q !== `${i}/${COUNT}`) fail(`the walk back left the page on ${before.q}, not ${i}/${COUNT}`);
     if (before.checked !== 'false') fail(`question ${i} opens already marked`);
     await answerWithThePointer(before);
     await labelTheAxes();
@@ -182,30 +222,31 @@ for (let i = 1; i <= 12; i += 1) {
     else if (!after.marks.every((m) => m.tick === '✓')) fail(`question ${i}: a mark is crossed on the scheme's own answer`);
     else if (after.report) fail(`question ${i}: the examiner line shows on full marks`);
     else ok(`question ${i} scores ${after.score} on the scheme's own answer (${after.marks.length} mark line${after.marks.length > 1 ? 's' : ''}, ${after.shape || 'any shape'} at ${after.period} ms)`);
-    if (i < 12) { await next().click(); await page.waitForTimeout(160); }
+    noExamOnTheSheet(after.paper, `question ${i}, after Check`);
+    if (i < COUNT) { await next().click(); await page.waitForTimeout(160); }
 }
 
-// ---- 8: the 2024 question earns its axis marks ----
+// ---- 8: the bare-grid question earns its axis marks ----
 {
-    // back to question 11, on clean paper
-    await back().click();
-    await page.waitForTimeout(160);
+    // back to it, on clean paper
+    for (let i = COUNT; i > axisQ; i -= 1) { await back().click(); await page.waitForTimeout(160); }
     const on11 = await sheet();
-    if (on11.q !== '11/12') fail(`the axis test wanted question 11, not ${on11.q}`);
-    else if (on11.boxes.join('') !== 'yx') fail(`question 11 does not print two axis boxes (${on11.boxes.join(', ') || 'none'})`);
+    if (on11.q !== `${axisQ}/${COUNT}`) fail(`the axis test wanted question ${axisQ}, not ${on11.q}`);
+    else if (on11.boxes.join('') !== 'yx') fail(`question ${axisQ} does not print two axis boxes (${on11.boxes.join(', ') || 'none'})`);
     else {
         await answerWithThePointer(on11);
         await btn('Check').click();
         await page.waitForTimeout(220);
         const bare = await sheet();
-        if (bare.score !== '3/5') fail(`an unlabelled 2024 answer scored ${bare.score}, not 3/5`);
+        noExamOnTheSheet(bare.paper, `question ${axisQ}, after Check with the axes blank`);
+        if (bare.score !== '3/5') fail(`an unlabelled answer to the bare grid scored ${bare.score}, not 3/5`);
         else if (!bare.marks.filter((m) => m.tick === '✗').length) fail('the axis marks are not crossed when the axes are unlabelled');
-        else ok(`the 2024 axes are not given away (${bare.score} with the axes blank)`);
+        else ok(`the axes are not given away (${bare.score} with them blank)`);
         await labelTheAxes();
         await btn('Check').click();
         await page.waitForTimeout(220);
         const said = await sheet();
-        if (said.score !== '5/5') fail(`a labelled 2024 answer scored ${said.score}, not 5/5`);
+        if (said.score !== '5/5') fail(`a labelled answer to the bare grid scored ${said.score}, not 5/5`);
         else if (!said.marks.some((m) => /labelled for you here/.test(m.note))) fail('the amplitude and period marks do not say the page labelled them');
         else ok(`writing the axes in earns them (${said.score}, and the wave is labelled in red)`);
         // and "Hz" on the vertical axis, the mistake the 2024 report names
@@ -214,7 +255,7 @@ for (let i = 1; i <= 12; i += 1) {
         await page.waitForTimeout(220);
         const wrong = await sheet();
         if (wrong.score !== '4/5') fail(`"Hz" on the vertical axis scored ${wrong.score}, not 4/5`);
-        else ok('"Hz" on the vertical axis loses its mark, as the 2024 report has it');
+        else ok('"Hz" on the vertical axis loses its mark, as the examiner report has it');
     }
 }
 
@@ -270,6 +311,9 @@ else if (!marked.marks.some((m) => m.tick === '✗')) fail('a lost mark is not c
 else if (!marked.marks.every((m) => m.words && m.note)) fail('a mark line is missing the scheme\'s wording or what the page measured');
 else if (!marked.report) fail('no examiner line under a question with a mark lost');
 else ok(`a wrong answer is crossed in the scheme's own words, with the examiner's line (${marked.score})`);
+
+noExamOnTheSheet(marked.paper, `question ${marked.q}, after a wrong answer`);
+if (!told) ok('no year, no paper question and no part label reaches the sheet, before or after Check');
 
 if (errors.length) fail(`page errors: ${errors.join(' | ').slice(0, 200)}`);
 await browser.close();

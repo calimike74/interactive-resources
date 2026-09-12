@@ -34,19 +34,21 @@ One sheet of paper, 820 px wide, on a dark desk, and nothing else on the screen 
 
 On the sheet, in the paper's own order:
 
-- **The sheet's head:** "Question 3 of 12" at the left, and at the right where the question comes from ("2023 Q2(e)(ii)", or "Practice, in the shape of 2023 Q2(e)(i)" where it is not a paper question). A question never claims to be a paper question that is not one, and a test pins that.
+- **The sheet's head:** "Question 3 of 16", and nothing else. Where the question comes from is not printed (§4a).
 - **Figure 1**, where the paper prints one: the question's wave on its own grid at 13 px a square, with the caption the paper gives it.
-- **The question:** the part label hanging at the left ("(e) (ii)"), the stem in the paper's own words, and the marks in brackets at the right ("(2)"). A question that is a bulleted list (2024 Q4(a)) is printed as one, with the marks against each bullet, as the paper prints it.
+- **The question:** the stem in the paper's own words, and the marks in brackets at the right ("(2)"). A question that is a bulleted list (2024 Q4(a)) is printed as one, with the marks against each bullet, as the paper prints it. No part label: "(e) (ii)" is the paper's own numbering (§4a).
 - **The answer grid:** 25 small squares across, five to a division, 20 down, the zero line heavy through the middle and the left edge heavy, the divisions numbered 1 to 5 just under the zero line, "Time (ms)" at the end of that line and "Displacement" turned up the side. 20 px a square, so the grid is 500 by 400. The student draws on it with the pointer, one height per column, in pencil grey.
 - **The marking**, after Check (§5).
 
-Under the sheet, one strip, held at the foot of the window: `← Back` · `Question 3 of 12` · `Next →` · `Check` · `Clear`. Nothing else. It fades out of the way while the pointer is drawing, because on a question that prints a figure the grid can run under it.
+Under the sheet, one strip, held at the foot of the window: `← Back` · `Question 3 of 16` · `Next →` · `Check` · `Clear`. Nothing else. It fades out of the way while the pointer is drawing, because on a question that prints a figure the grid can run under it.
 
 The page may run taller than the window and scroll. It is a page, not a bench: that is the point.
 
-## 4. The twelve questions, in teaching order
+## 4. The sixteen questions, in teaching order
 
-The four waveforms first, drawn from a blank grid, because that is the practice Mike asked for ("especially different waveforms, as opposed to the exact same waveform or a waveform that's an octave higher or lower"). Then the changes to a given figure. Then the papers' own questions, in the papers' own words.
+The four waveforms first, drawn from a blank grid, because that is the practice Mike asked for ("especially different waveforms, as opposed to the exact same waveform or a waveform that's an octave higher or lower"). Then the octave, six questions of it: two that keep the shape, then four that change the shape as well, which Mike asked for on the evening of 12 September after looking at the page ("giving them an example of a sine wave and saying to them, can you write this waveform now one octave higher ... what we could also do is now switch this up between sine waves, square waves, and triangle waves ... the ability to understand a waveform and interpret it into another waveform, one octave higher or lower"). Then louder and inverted. Then the papers' own questions, in the papers' own words.
+
+**Never two octaves.** Mike: "Don't go two octaves, only do one octave." A test asserts that every question whose stem says "octave" wants exactly double or exactly half the figure's period, and that the one the stem names is the one the scheme wants.
 
 | # | Source | The question | Figure | Grid | Marks |
 |---|---|---|---|---|---|
@@ -56,18 +58,38 @@ The four waveforms first, drawn from a blank grid, because that is the practice 
 | 4 | Practice, same shape | a triangle wave with a period of 1 ms | none | 1 ms | Triangle wave (1); Period of 1ms (1) |
 | 5 | Practice, in the shape of 2025 Q3(c)(vii) | the same wave an octave higher | sine, 2 ms | 1 ms | Sine wave (1); Period of 1ms (1) |
 | 6 | Practice, same shape | the same wave an octave lower | square, 1 ms | 1 ms | Square wave (1); Period of 2ms (1) |
-| 7 | **2025 Q3(c)(vi)** | the same wave, but louder | square, 2 ms | 1 ms | "Award 1 mark for a louder square wave with period of 2ms and no DC offset" |
-| 8 | **2024 Q4(b)**, with the figure printed for you | the same wave with the polarity inverted | saw, 2 ms | 1 ms | "Credit graph of the same waveform but in reversed polarity (1)" |
-| 9 | **2023 Q2(e)(ii)** | a saw wave one octave lower | square, 1 ms | 1 ms | "Saw wave (1) (allow inverted saw wave)"; "Period of 2ms (1)" |
-| 10 | **2025 Q3(c)(vii)** | the same wave an octave lower | square, 2 ms | 2 ms | "Award 1 mark for a square wave with same amplitude as figure 1 and period of 4ms and no DC offset" |
-| 11 | **2024 Q4(a)** | draw a square wave, label the axes, the amplitude and the period | none, and a bare grid | 1 ms | "Waveshape (1)"; "Voltage / V / displacement (1)"; "s / ms / time (1)"; "amplitude (1). Allow peak to peak amplitude"; "Period (1)" |
-| 12 | **2026 Q1(d)**, drawn rather than calculated | a wave with the period of a 200 Hz wave | none | 2 ms | A wave with a period of 5 ms (1) |
+| 7 | Practice, in the shape of 2023 Q2(e)(ii) | the same wave an octave higher | triangle, 2 ms | 1 ms | Triangle wave (1); Period of 1ms (1) |
+| 8 | Practice, same shape | a **triangle** wave an octave lower than Figure 1 | sine, 1 ms | 1 ms | Triangle wave (1); Period of 2ms (1) |
+| 9 | Practice, same shape | a **sine** wave an octave higher than Figure 1 | square, 2 ms | 1 ms | Sine wave (1); Period of 1ms (1) |
+| 10 | Practice, same shape | a **square** wave an octave lower than Figure 1 | triangle, 1 ms | 1 ms | Square wave (1); Period of 2ms (1) |
+| 11 | **2025 Q3(c)(vi)** | the same wave, but louder | square, 2 ms | 1 ms | "Award 1 mark for a louder square wave with period of 2ms and no DC offset" |
+| 12 | **2024 Q4(b)**, with the figure printed for you | the same wave with the polarity inverted | saw, 2 ms | 1 ms | "Credit graph of the same waveform but in reversed polarity (1)" |
+| 13 | **2023 Q2(e)(ii)** | a saw wave one octave lower | square, 1 ms | 1 ms | "Saw wave (1) (allow inverted saw wave)"; "Period of 2ms (1)" |
+| 14 | **2025 Q3(c)(vii)** | the same wave an octave lower | square, 2 ms | 2 ms | "Award 1 mark for a square wave with same amplitude as figure 1 and period of 4ms and no DC offset" |
+| 15 | **2024 Q4(a)** | draw a square wave, label the axes, the amplitude and the period | none, and a bare grid | 1 ms | "Waveshape (1)"; "Voltage / V / displacement (1)"; "s / ms / time (1)"; "amplitude (1). Allow peak to peak amplitude"; "Period (1)" |
+| 16 | **2026 Q1(d)**, drawn rather than calculated | a wave with the period of a 200 Hz wave | none | 2 ms | A wave with a period of 5 ms (1) |
 
-Then **the blank paper**, thirteenth and last: no question, no marking, and Check reads the drawing back ("You drew a triangle wave, one cycle every 1.25 ms, which is 800 Hz").
+Then **the blank paper**, seventeenth and last: no question, no marking, and Check reads the drawing back ("You drew a triangle wave, one cycle every 1.25 ms, which is 800 Hz").
+
+Questions 7 to 10 are the shape-changing set. On 7 the shape does not change, so copying Figure 1 out unchanged still earns the shape mark and loses the period mark; on 8, 9 and 10 copying it out unchanged loses both. Tests pin all of that, and pin that a candidate who goes two octaves (the period multiplied or divided by four) loses the period mark.
+
+**The count is derived, never written down.** `COUNT` is `QUESTIONS.filter((q) => q.n).length`, the tests read it from the model, and `scripts/check-paper.mjs` reads it off the rendered page ("Question 1 of N") and walks that many. Adding a question is one entry in the array.
 
 Two departures from the papers, both deliberate and both said on the sheet. **2024 Q4(b)** asks for the inversion of the wave the candidate drew in part (a); the page prints a saw at 2 ms as Figure 1 instead, so the question stands on its own. **2026 Q1(d)** asks for the arithmetic (1/200, then 0.005 s, then 5 ms); the page asks for the wave instead, because a resource never asks a student to compute, and prints the paper's own arithmetic under the marking.
 
-The 2 ms grid on questions 10 and 12 is the one thing on the page the written paper does not print. A 4 ms or a 5 ms answer needs two cycles of room to be read, and "some candidates only drew one cycle of the wave so did not score credit" (2025 report). A test asserts every scheme answer has two whole cycles of room on the grid its question sets.
+The 2 ms grid on questions 14 and 16 is the one thing on the page the written paper does not print. A 4 ms or a 5 ms answer needs two cycles of room to be read, and "some candidates only drew one cycle of the wave so did not score credit" (2025 report). A test asserts every scheme answer has two whole cycles of room on the grid its question sets.
+
+## 4a. No exam reference reaches the student
+
+Mike, on the evening of 12 September, looking at the built page: **"I don't want to see the exam reference. On the right-hand corner, you've got the exam in there. This is going to tip the students off to which exams have this type of question in them, which I don't want."**
+
+So three things came off the sheet, and one law went in behind them:
+
+- **The source**, which sat at the right of the sheet's head ("2023 Q2(e)(ii)"). The field stays on every question as the teacher's record and is never rendered.
+- **The part label**, which hung at the left of the stem ("(e) (ii)", "(c) (vii)"). That is the paper's own numbering and gives the sitting away as surely as the year does. The question already says "Question 7 of 16", which is all a student needs. The field stays in the model; the column and its CSS are gone.
+- **The year on every examiner line.** "(2023 examiner report)" now reads "(examiner's report)". The wording of each line is untouched; only the signature changed. The `REPORTS` keys still carry their years, because a teacher reading the file needs to know which report each line is from.
+
+The law: **a unit test** asserts that no stem, bullet, accept line, examiner line, mark wording or figure caption in `QUESTIONS` contains a four-digit year or a paper question number, and **the page's gate** reads the sheet's own visible text on every question, before Check and after Check with a drawn answer, and fails on a four-digit year, on "Q1" to "Q4", on a "Q*n*(" reference, or on the words "examiner report" with a year in front of them. The resource card's description in `lib/resources/squared-paper.js` was rewritten for the same reason: it used to promise questions "marked in the scheme's words with its year".
 
 ## 5. Check, and what the marking says
 
@@ -78,13 +100,13 @@ Before Check the page is just the paper. Check marks it the way a script comes b
 - **The model answer** laid over the grid in red dashes, except where the scheme accepts any period (2024 Q4(a), 2026 Q1(d)), which has no single answer to draw.
 - **The ladder**, once there is a period to read: `T = 2.00 ms = 0.002 s   f = 1 ÷ T = 500 Hz`.
 - **The scheme's own allowances** where it makes them ("Accept DC offset. Accept different amplitude.").
-- **One examiner line, only when a mark is lost**, from the report for that question: "Very few candidates knew that an octave lower was double the period. (2023 examiner report)". Each one is quoted from the report in the vault, and a test asserts every report line names its year.
+- **One examiner line, only when a mark is lost**, from the report for that question: "Very few candidates knew that an octave lower was double the period. (examiner's report)". Each one is quoted from the report in the vault, and a test asserts every report line is signed that way and names no year (§4a).
 
 There is no level switch. The marking is the A-level content, and it arrives when the student asks for it.
 
 **One scheme line is one mark entry**, and an entry is earned when every criterion it names is met. That is how a one-mark line which asks for four things at once ("a louder square wave with period of 2ms and no DC offset") is marked the way the scheme marks it, while a two-mark question is marked as two lines that can be lost separately. The criteria are shape, period, polarity, louder, same amplitude, amplitude drawn, no DC offset, and the two axis labels.
 
-**Question 11 earns its axis marks.** 2024 Q4(a) prints a grid with nothing on it at all, because labelling the axes is two of its five marks, so this question prints the same bare grid: no axis names and no division numbers. Two write-in boxes stand beside the vertical axis and under the horizontal one, and Check reads what the student wrote as words, against the scheme's own list ("Voltage / V / displacement", "s / ms / time", plus the scheme's "Allow volume / level / amplitude / dB" and pressure, which is the same quantity by another name). So "time in ms" scores and "frequency" or "Hz" does not, which is the mistake the 2024 report names on the y-axis. The amplitude and the period cannot be written in with a pointer, so Check labels them on the student's own wave in red, an arrow from the centre line to a peak and a bracket over one cycle, and the margin says "labelled for you here; on paper you write these in". Those two are ticked only when the wave has a readable period and a height to measure.
+**Question 15 earns its axis marks.** 2024 Q4(a) prints a grid with nothing on it at all, because labelling the axes is two of its five marks, so this question prints the same bare grid: no axis names and no division numbers. Two write-in boxes stand beside the vertical axis and under the horizontal one, and Check reads what the student wrote as words, against the scheme's own list ("Voltage / V / displacement", "s / ms / time", plus the scheme's "Allow volume / level / amplitude / dB" and pressure, which is the same quantity by another name). So "time in ms" scores and "frequency" or "Hz" does not, which is the mistake the 2024 report names on the y-axis. The amplitude and the period cannot be written in with a pointer, so Check labels them on the student's own wave in red, an arrow from the centre line to a peak and a bracket over one cycle, and the margin says "labelled for you here; on paper you write these in". Those two are ticked only when the wave has a readable period and a height to measure.
 
 ## 6. The engine
 
@@ -100,11 +122,11 @@ Gone with the bench: the audio graph, the harmonics (they were Extension's pictu
 
 ## 7. Gates
 
-- `npm test`: **370 tests, all passing**, of which 20 are `tests/squared-paper.test.mjs`. One draws the scheme's own answer on every one of the twelve and asserts the marking passes it; others pin the errors the reports name (the period kept, another square wave, the same height, the upright saw) and the walk.
-- `npx next build`: compiled, 196 static pages, `/squared-paper` prerenders.
-- `node scripts/check-paper.mjs <url>` against the built export (served by `scripts/serve-out.mjs`): **all clear**. Every question renders with its stem, part label and marks bracket; nothing is clipped at 1280 wide; Back and Next walk 1 to 12 and the blank paper and neither wraps; the scheme's answer drawn with the pointer and checked scores full marks on all twelve; question 11 scores 3 of 5 with the axes blank, 5 of 5 written in and 4 of 5 with "Hz" on the vertical axis; the marking scrolls clear of the floating strip at 1280 by 700; a wrong answer is crossed in the scheme's words with the examiner's line; no em-dash and no "utilise" reach the page.
+- `npm test`: **403 tests, all passing**, of which 24 are `tests/squared-paper.test.mjs`. One draws the scheme's own answer on every one of the sixteen and asserts the marking passes it; one pins the four shape-changing octaves (full marks for the wanted shape and width, the figure copied out unchanged, and two octaves); one pins that no student-visible string names a year or a paper; others pin the errors the reports name (the period kept, another square wave, the same height, the upright saw) and the walk.
+- `npx next build`: compiled, `/squared-paper` prerenders.
+- `node scripts/check-paper.mjs <url>` against the built export (served by `scripts/serve-out.mjs`): **all clear**. Every question renders with its stem and marks bracket; nothing is clipped at 1280 wide; Back and Next walk 1 to 16 and the blank paper and neither wraps; the scheme's answer drawn with the pointer and checked scores full marks on all sixteen; the bare-grid question scores 3 of 5 with the axes blank, 5 of 5 written in and 4 of 5 with "Hz" on the vertical axis; the marking scrolls clear of the floating strip at 1280 by 700; a wrong answer is crossed in the scheme's words with the examiner's line; no year and no paper reference reaches the sheet; no em-dash and no "utilise" reach the page.
 - `node scripts/check-bench.mjs` on the ten remaining benches: **all clear**. Squared Paper's fixture and law 27 are out of that script.
-- Screenshots at 1280 wide of questions 1, 6, 9 and 11, before and after Check, looked at.
+- Screenshots at 1280 by 700 of question 8 before and after Check, and of question 13 checked, looked at.
 
 **What looking caught on the second pass:** Figure 1's division numbers still sat on the axis line under the square wave's verticals and could not be read, so every grid's numbers now sit a little lower on a paper-white halo and read through a line; and the page's foot is now `the strip's height + its offset + a margin`, measured by the gate at 1280 by 700 so the last mark line and the examiner's box can always scroll clear of the floating strip.
 
@@ -114,7 +136,8 @@ Gone with the bench: the audio graph, the harmonics (they were Extension's pictu
 
 - **The keyboard route is gone.** The bench had Shape, Period and Height chips that filled the grid, which was the route for a student who cannot use a pointer. Mike took the console out on 12 Sep; the drawing is the pointer only for now. If it comes back it belongs on the sheet as a small "fill the grid" control, not as a console.
 - **No sound.** Mike: "we don't need to hear anything." The paper has no tone.
-- **The clipping family is not built.** 2019 Q3 and 2022 Q3(a)(iii) ask a candidate to draw a distorted waveform on top of a printed one, scored 2 for correct clipping and 1 for "clipped at different amplitude levels, rather like a bitcrusher". That is a drawing over a given trace, marked on where it flattens: a thirteenth question, or the Distortion resource the ceiling scan lists as a gap. Mike's call.
-- **2024 Q4(c)** (what happens when a wave and its inversion are added) is a written answer, not a drawing, so it is not a question here. It sits one step beyond question 8.
+- **The clipping family is not built.** 2019 Q3 and 2022 Q3(a)(iii) ask a candidate to draw a distorted waveform on top of a printed one, scored 2 for correct clipping and 1 for "clipped at different amplitude levels, rather like a bitcrusher". That is a drawing over a given trace, marked on where it flattens: a seventeenth question, or the Distortion resource the ceiling scan lists as a gap. Mike's call.
+- **2024 Q4(c)** (what happens when a wave and its inversion are added) is a written answer, not a drawing, so it is not a question here. It sits one step beyond question 12.
+- **The saw is not in the shape-changing octave set.** Mike named sine, square and triangle, so questions 7 to 10 use those three. The saw has its own octave question at 13, which is a paper question.
 - **The resource is still registered as `kind: 'bench'`** in `lib/resources/squared-paper.js`, which is what gives it the whole page with no site header and no footer. The field is the site's word for "this resource draws its own chrome", and changing it would wrap the sheet in furniture. Worth renaming across the site one day; not today.
 - **Not pushed, not deployed.** `resources.musictechstudio.co.uk` is unchanged.
