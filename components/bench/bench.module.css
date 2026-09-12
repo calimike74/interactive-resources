@@ -1263,3 +1263,22 @@
 .secHear[data-acoustics] .stats span { font-size: 12px; line-height: 1.25; display: block; }
 .secHear[data-acoustics='loudness'] .stats,
 .secHear[data-acoustics='masking'] .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: none; column-gap: 18px; }
+
+/* ---- Squared Paper (2.5), 12 Sep 2026 ----
+   The paper's drawing question on the paper's own grid. Widths at 1280:
+   Play 104 + Shape 206 + Period 186 + Height 110 + Paper 192 + Hear (480,
+   at least 290). The Shape and Paper sections each carry one lone chip
+   under their row (Clear, Show answer), so the chip sits in its own .chips
+   line rather than stretching across the column. */
+.secDraw { width: 206px; }
+.secPer { width: 186px; }
+.secHeight { width: 116px; padding: 14px 8px; }
+.secHeight .secHead { justify-content: center; }
+.secHeight .value { font-size: 13.5px; }
+.secPaper { width: 192px; }
+.secDraw .chips, .secPer .chips, .secPaper .chips { flex-wrap: wrap; gap: 4px; }
+.secHeight .knob { align-self: center; margin-top: 2px; }
+.secHear[data-paper='true'] { min-width: 290px; }
+.secHear[data-paper='true'] .stats { max-width: none; gap: 6px 14px; }
+.secHear[data-paper='true'] .stats b { font-size: 17px; }
+.secHear[data-paper='true'] .chips { flex-wrap: wrap; gap: 4px; }
