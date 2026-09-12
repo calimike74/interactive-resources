@@ -93,7 +93,7 @@ test('the flag only reads the literal string "true" — not "1", "yes", truthy s
 test('free-set resources are exempt from the gate', () => {
     // Cross-checked against lib/access.js FREE_RESOURCES — this file must
     // never fork its own copy of that list.
-    assert.equal(isResourceExempt('octave-period-trainer'), true);
+    assert.equal(isResourceExempt('squared-paper'), true);
     assert.equal(isResourceExempt('synth-bench'), true);
 });
 

@@ -13,7 +13,6 @@ import GateKeeper from '@/components/GateKeeper';
 // Resource components registry
 // Add new components here as they're created
 import EQFilterBridge from '@/components/resources/EQFilterBridge';
-import OctavePeriodTrainer from '@/components/resources/OctavePeriodTrainer';
 import MIDIPitchBendController from '@/components/resources/MIDIPitchBendController';
 import FilterRolloffVisualization from '@/components/resources/FilterRolloffVisualization';
 import AcousticsFlashcards from '@/components/resources/AcousticsFlashcards';
@@ -82,7 +81,6 @@ import AdditiveSynthExplorer from '@/components/resources/AdditiveSynthExplorer'
 
 const resourceComponents = {
     'EQFilterBridge': EQFilterBridge,
-    'OctavePeriodTrainer': OctavePeriodTrainer,
     'MIDIPitchBendController': MIDIPitchBendController,
     'FilterRolloffVisualization': FilterRolloffVisualization,
     'AcousticsFlashcards': AcousticsFlashcards,
