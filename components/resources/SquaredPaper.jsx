@@ -6,7 +6,7 @@ import { benchSans } from '@/components/bench/fonts';
 import {
     DIVS, COLS, SQUARES, ROWS, SHAPES, TIME_BASES,
     INITIAL, questionOf, figureOf, isBlank, totalMarks, tagOf, COUNT,
-    drawAt, clearLine, setChecked, stepQuestion, canStep, nextWord, spanOf,
+    drawAt, clearLine, setChecked, setLabel, stepQuestion, canStep, nextWord, spanOf,
     read, answerOf, marksFor, scoreOf, verdict, shapeAt,
     fmtHz, fmtMs, fmtS,
 } from '@/lib/bench/paper-model';
@@ -54,6 +54,7 @@ const gridBox = (sq) => ({
 });
 
 const COL = {
+    paper: '#ffffff',
     grid: '#dcdcdc',
     axis: '#16161d',
     ink: '#16161d',
@@ -66,7 +67,7 @@ const COL = {
 // One grid, drawn the paper's way. `line` is the student's drawing (one
 // height per column), `wave` an ideal wave the paper printed or the scheme
 // draws, `answer` the model answer in red dashes.
-function paint(canvas, { sq, span, line = null, wave = null, answer = null, dpr = 1 }) {
+function paint(canvas, { sq, span, line = null, wave = null, answer = null, bare = false, label = null, dpr = 1 }) {
     const box = gridBox(sq);
     canvas.width = Math.round(box.canvasW * dpr);
     canvas.height = Math.round(box.canvasH * dpr);
@@ -153,26 +154,74 @@ function paint(canvas, { sq, span, line = null, wave = null, answer = null, dpr 
         g.restore();
     }
 
+    // The scheme's own labelling of the wave, drawn on the student's line in
+    // red when the page has marked it: what a candidate writes in by hand.
+    if (label && label.periodMs && label.amplitude > 0.02) {
+        const colW = w / COLS;
+        const from = x0 + (label.run.from + 0.5) * colW;
+        const cycleW = (label.periodMs / span) * w;
+        const top = y0 + 13;
+        g.strokeStyle = COL.pen;
+        g.fillStyle = COL.pen;
+        g.lineWidth = 1.4;
+        const face0 = getComputedStyle(canvas).fontFamily;
+        g.font = `600 12px ${face0}`;
+        // the period, bracketed over one cycle
+        const bx1 = Math.min(x0 + w - 2, from + cycleW);
+        g.beginPath();
+        g.moveTo(from, top + 6); g.lineTo(from, top - 4);
+        g.moveTo(from, top); g.lineTo(bx1, top);
+        g.moveTo(bx1, top - 4); g.lineTo(bx1, top + 6);
+        g.stroke();
+        g.textAlign = 'center';
+        g.fillText('period', (from + bx1) / 2, top - 8);
+        // the amplitude, from the centre line to the peak of the next cycle
+        const ax = Math.min(x0 + w - 14, from + cycleW * 1.5);
+        const yMid = mid - label.offset * half;
+        const yTop = mid - (label.offset + label.amplitude) * half;
+        g.beginPath();
+        g.moveTo(ax, yMid); g.lineTo(ax, yTop);
+        g.moveTo(ax - 4, yTop + 6); g.lineTo(ax, yTop); g.lineTo(ax + 4, yTop + 6);
+        g.moveTo(ax - 5, yMid); g.lineTo(ax + 5, yMid);
+        g.stroke();
+        g.textAlign = 'left';
+        const words = 'amplitude';
+        const wx = ax + 7 + g.measureText(words).width > x0 + w ? ax - 7 - g.measureText(words).width : ax + 7;
+        g.fillText(words, wx, (yTop + yMid) / 2 + 4);
+    }
+
     // the paper's own labels, drawn last so a wave crossing a division number
-    // does not bury it. The smaller grid keeps the type readable rather than
-    // to scale: at 8 px the figure's numbers sat on the axis line.
+    // does not bury it, each numeral on a paper-white halo so it reads
+    // through a line. The smaller grid keeps the type readable rather than to
+    // scale: at 8 px the figure's numbers sat on the axis line. A question
+    // that asks the student to label the axes prints none of this, as the
+    // 2024 paper prints none of it.
     const face = getComputedStyle(canvas).fontFamily;
     const type = Math.max(10, Math.round(sq * 0.62));
-    g.fillStyle = COL.ink;
-    g.font = `700 ${type}px ${face}`;
-    g.textAlign = 'center';
-    for (let i = 1; i <= DIVS; i += 1) {
-        g.fillText(String(i), x0 + (i / DIVS) * w, mid + type + 3);
+    if (!bare) {
+        g.textAlign = 'center';
+        g.lineJoin = 'round';
+        g.lineWidth = 3.5;
+        g.strokeStyle = COL.paper;
+        g.fillStyle = COL.ink;
+        g.font = `700 ${type}px ${face}`;
+        for (let i = 1; i <= DIVS; i += 1) {
+            const x = x0 + (i / DIVS) * w;
+            const y = mid + type + 6;
+            g.strokeText(String(i), x, y);
+            g.fillText(String(i), x, y);
+        }
+        g.lineWidth = 1;
+        g.font = `${type}px ${face}`;
+        g.textAlign = 'left';
+        g.fillText('Time (ms)', x0 + w + 10, mid - 2);
+        g.save();
+        g.translate(x0 - 12, mid);
+        g.rotate(-Math.PI / 2);
+        g.textAlign = 'center';
+        g.fillText('Displacement', 0, 0);
+        g.restore();
     }
-    g.font = `${type}px ${face}`;
-    g.textAlign = 'left';
-    g.fillText('Time (ms)', x0 + w + 10, mid - 2);
-    g.save();
-    g.translate(x0 - 12, mid);
-    g.rotate(-Math.PI / 2);
-    g.textAlign = 'center';
-    g.fillText('Displacement', 0, 0);
-    g.restore();
     return box;
 }
 
@@ -209,6 +258,8 @@ export default function SquaredPaper({ back }) {
             span,
             line: state.line,
             answer: state.checked && answer && !answer.anyPeriod ? answer : null,
+            bare: Boolean(q.blankAxes),
+            label: state.checked && q.blankAxes ? rd : null,
             dpr: window.devicePixelRatio || 1,
         });
         canvas.dataset.question = tagOf(state);
@@ -224,7 +275,7 @@ export default function SquaredPaper({ back }) {
         canvas.dataset.grid = `${box.x0}:${box.y0}:${box.w}:${box.h}`;
         canvas.dataset.span = String(span);
         canvas.dataset.answer = answer ? `${answer.shape}:${answer.periodMs}:${answer.amp.toFixed(2)}:${answer.inverted ? 1 : 0}` : '';
-    }, [state, span, answer, rd.shape, rd.periodMs, score.got, score.total]);
+    }, [state, span, answer, q.blankAxes, rd, score.got, score.total]);
 
     // ---- drawing on the answer grid ----
     const at = (e) => {
@@ -316,7 +367,18 @@ export default function SquaredPaper({ back }) {
                     ) : null}
                 </div>
 
-                <div className={styles.grid}>
+                <div className={styles.grid} data-labelled={q.blankAxes || undefined}>
+                    {q.blankAxes ? (
+                        <input
+                            className={`${styles.axisBox} ${styles.axisY}`}
+                            data-axis="y"
+                            type="text"
+                            placeholder="label"
+                            value={state.labels.y}
+                            aria-label="Label the vertical axis"
+                            onChange={(e) => setState((s2) => setLabel(s2, 'y', e.target.value))}
+                        />
+                    ) : null}
                     <canvas
                         ref={answerRef}
                         className={styles.answerCanvas}
@@ -327,6 +389,17 @@ export default function SquaredPaper({ back }) {
                         onPointerUp={onUp}
                         onPointerCancel={onUp}
                     />
+                    {q.blankAxes ? (
+                        <input
+                            className={`${styles.axisBox} ${styles.axisX}`}
+                            data-axis="x"
+                            type="text"
+                            placeholder="label"
+                            value={state.labels.x}
+                            aria-label="Label the horizontal axis"
+                            onChange={(e) => setState((s2) => setLabel(s2, 'x', e.target.value))}
+                        />
+                    ) : null}
                 </div>
                 {rd.drawn === 0 ? <p className={styles.hint}>Draw the wave on the grid with the pointer.</p> : null}
 
