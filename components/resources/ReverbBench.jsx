@@ -427,22 +427,29 @@ export default function ReverbBench({ back }) {
                     g.setLineDash([]);
                 }
 
-                // the tail: the envelope the noise really runs under
-                const grad = g.createLinearGradient(0, top, 0, bottom);
-                grad.addColorStop(0, 'rgba(127, 179, 155, 0.42)');
-                grad.addColorStop(1, 'rgba(127, 179, 155, 0.04)');
-                g.beginPath();
-                g.moveTo(t.points[0][0], t.baseY);
-                for (const p of t.points) g.lineTo(p[0], p[1]);
-                g.lineTo(t.points[t.points.length - 1][0], t.baseY);
-                g.closePath();
-                g.fillStyle = grad;
-                g.fill();
+                // the tail as the reflections it is made of: the answer's own
+                // samples, one bar per column, under the envelope they run
+                // under. The board draws the late field as a thicket of bars
+                // (16 Sep 2026), and the stage now draws the same picture.
                 g.strokeStyle = col.tail;
-                g.lineWidth = 1.6;
+                g.lineWidth = 1;
+                g.globalAlpha = 0.85;
+                g.beginPath();
+                for (const [bx, by] of t.bars) {
+                    const x = Math.round(bx) + 0.5;
+                    g.moveTo(x, t.baseY);
+                    g.lineTo(x, by);
+                }
+                g.stroke();
+                g.globalAlpha = 1;
+                // the envelope the noise really runs under, dotted over the bars
+                g.strokeStyle = col.tail;
+                g.lineWidth = 1.4;
+                g.setLineDash([2, 5]);
                 g.beginPath();
                 t.points.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])));
                 g.stroke();
+                g.setLineDash([]);
 
                 // the first reflections, as spikes
                 g.strokeStyle = col.gold;
@@ -487,10 +494,18 @@ export default function ReverbBench({ back }) {
                 g.moveTo(t.gapX1, t.floorY + 9); g.lineTo(t.gapX1, t.floorY + 19);
                 g.moveTo(cx, t.floorY + 9); g.lineTo(cx, t.floorY + 19);
                 g.stroke();
-                g.fillStyle = col.tail;
                 g.font = mono;
                 g.textAlign = 'center';
-                g.fillText(s.type === 'gated' ? `gate shuts ${fmtMs(GATE_HOLD * 1000)}` : `reverb time ${rdText(s)}`, (t.gapX1 + cx) / 2, t.floorY + 30);
+                {
+                    // the label sits among the tail's bars now, so it gets a backing
+                    const label = s.type === 'gated' ? `gate shuts ${fmtMs(GATE_HOLD * 1000)}` : `reverb time ${rdText(s)}`;
+                    const lx = (t.gapX1 + cx) / 2;
+                    const lw = g.measureText(label).width;
+                    g.fillStyle = 'rgba(23, 23, 43, 0.88)';
+                    g.fillRect(lx - lw / 2 - 5, t.floorY + 19, lw + 10, 15);
+                    g.fillStyle = col.tail;
+                    g.fillText(label, lx, t.floorY + 30);
+                }
 
                 // the source's own envelope, dotted, while it plays
                 const ctxA = ctxRef.current;
@@ -571,10 +586,23 @@ export default function ReverbBench({ back }) {
                     g.lineTo(ib.x1, ti.baseY + 0.5);
                     g.stroke();
                     g.strokeStyle = col.tail;
+                    g.lineWidth = 1;
+                    g.globalAlpha = 0.85;
+                    g.beginPath();
+                    for (const [bx, by] of ti.bars) {
+                        if (bx >= ib.x1 - 0.5) continue;
+                        const x = Math.round(bx) + 0.5;
+                        g.moveTo(x, ti.baseY);
+                        g.lineTo(x, by);
+                    }
+                    g.stroke();
+                    g.globalAlpha = 1;
                     g.lineWidth = 1.4;
+                    g.setLineDash([2, 4]);
                     g.beginPath();
                     ti.points.filter((pt) => pt[0] < ib.x1 - 0.5).forEach((pt, i) => (i ? g.lineTo(pt[0], pt[1]) : g.moveTo(pt[0], pt[1])));
                     g.stroke();
+                    g.setLineDash([]);
                     g.strokeStyle = col.gold;
                     g.lineWidth = 1.6;
                     for (const tap of ti.taps) {
