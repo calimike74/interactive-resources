@@ -1,0 +1,59 @@
+# The Sequence bench (1.5): design record
+
+**Date:** 16 September 2026. **Status:** built, gated, measured; the eleventh bench to the Bench Standard and the topic's second. Folded into the kit on Mike's "fold it into the kit as the 1.5 Sequencing bench, well done", after he walked the sandbox instrument (`Professional (AI)/_sandbox/sequence-bench`) that answered a competitor's step-sequencer mockup ("PHASE/16, polyphonic sequence instrument": a picture that did not play). His brief for that: "if we can design a step above we'll be better."
+
+## 1. Why a second 1.5 bench, and what each is for
+
+The Piano Roll (30 Aug) is the MIDI file the paper hands over: the roll, the velocity table, the wrong drum sounds, the quantise value, the bend range. It is the paper's Question 1 and 2 on the bench. What it does not do is let a student make a part, which is the other half of the spec's 1.5: "real-time input via MIDI keyboard and non-real-time input via step grid", "quantise: hard values, swing/percentage". The Sequence bench is the instrument: a sixteen-step grid with a synth on the end of it, so step-time input, swing and the filter are things you do rather than read. The two share a topic and a colour set and nothing else; the Connections tab of each points at the other.
+
+Against the standard's "never build a visual for uniformity": the band was asked for by name, the papers set the feel comparison every year in some form (2025's scheme lists swing quantise by name), and the sandbox was walked and approved before the fold.
+
+## 2. The judgement: the grid is the control, the synth is declared
+
+- **The stage is the sequencer.** Five lanes (kick, snare, hi-hat, bass, chord) across sixteen steps, drawn on the canvas with the lane's colour, the note or chord name on every lit bass or chord step, the playhead as a column, and swing as a distance: every second column's true time as a dotted gold line. Click a step to light it; drag along a drum row to paint; drag a Bass or Chord step up or down to change the note or the chord. The model (`lib/bench/seq-model.js`) is pure: lanes, notes, chords, tempo, swing, cutoff, resonance, decay, and how each bass note got there (`bassHow`: stepped or played).
+- **The picture beside the grid changes with the level.** Core: the wave after the filter. A-level: the spectrum under the filter's own curve in gold, the raw saw in grey and what passes in blue, the curve draggable (law 30: `data-cutoff` equals the console's, dragging the handle raises both). Extension: the voice as a chain on four screens, oscillators, filter, amplifier, output, each a tap on the real graph.
+- **The keys are in the console and they are the same voice.** A piano from A0 to E3 (the Bass row's register and the chords' range) with the typing letters printed on the keys (Z to M the C1 octave, A to K the C2 octave with its sharps). Sequenced notes light their keys as they sound, gold for the bass and purple for the chord. **Record** arms real-time input: each key played while the sequencer runs is written to the nearest step of the Bass row as the nearest note of the scale, quantised on entry; arming Record while stopped starts the transport so a key always lands on a step.
+- **The voice is declared.** Two sawtooth oscillators nine cents apart into a low-pass filter of the note's own, into an amplifier envelope: the textbook order, with every filter's frequency and Q driven from one shared `ConstantSourceNode` pair so one Cutoff and one Resonance set every note, and a chord's three notes do not share one cut. `synthesis` is on the frame, on the Piano Roll's precedent (the paper's part is a synth). The drums are the Piano Roll's electronic kit, read from `bench-audio/midi/`, credited. The taps (`osc`, `filt`, `amp`, and the kit's level node into `out`) are what the screens draw, so the Extension chain is the real signal at each point and the envelope is seen to act on the amplifier, not the cutoff (the 2019 report's confusion, kept apart on purpose).
+- **Hold is bypass.** "hold: no filter" glides the shared cutoff to 12 kHz while held and back on release.
+- **The filter sweep is automation on the control.** The Filter sweep preset ramps the shared cutoff from 260 Hz to 6 kHz over four bars, booked at each bar; the Cutoff dial and the console readout follow the live value (measured 459 Hz on the console against 466 Hz on the stage at one instant), and touching the dial ends the sweep, so the console's number is always the graph's.
+
+## 3. Three jobs, three pictures
+
+- **Core, `data-stage=steps`:** the grid and the wave. The line names what the steps are sending (kicks, snares, hats, bass notes and chords in A minor through the filter at its cutoff, the swing in milliseconds) and says what to try.
+- **A-level, `data-stage=spectrum`:** the grid and the spectrum under the gold curve. The judge (`lib/bench/seq-depth.js`) reads three questions: the feel (the 2025 scheme's comparison, read off Swing: straight, gently swung, swung, with the milliseconds every second sixteenth is late), the filter (the 2024 report's "would discuss what resonance was but didn't discuss its impact on the sound", read off the cutoff against the bass line's harmonics), and the way in (the spec's real-time and non-real-time input, read off how many bass notes were played against stepped). AO3 then AO4, the scheme or report line with its year; no numeric marks. With no question set it describes the pattern and names the three presets that set one.
+- **Extension, `data-stage=chain`:** the grid and the four screens. The line opens the machine: a sequencer is a clock, a sixteenth and a bar in milliseconds at the tempo, the 120 ms the bench books ahead, swing as the milliseconds added to every second step, and the chain as taps.
+
+## 4. Presets
+
+Five: **Bass and chords** (the sound, no question), **Hats and swing** (sixteenth hats, swing 45 %, the 2025 comparison's loose side), **Filter sweep** (the 2024 filter, the cutoff moving), **Played in** (a bass line marked as real-time input, quantised on entry), **Judge: straight** (the same hats hard quantised, Swing at 0, the tight side; the gate's judge preset, landing Swing = 0). More opens Pattern: Empty (a bare grid) and Back to the preset.
+
+## 5. Measured (`scripts/measure-seq.mjs`, 16 Sep, headless Chromium at 48 kHz)
+
+An analyser in front of the destination (RMS every 25 ms) with a second reading of the same signal above 1.2 kHz, every buffer source's and oscillator's start recorded, the bench's loop origin exposed as `window.__benchLoopStart`.
+
+- **Level.** Bass and chords −16.2 dB mean over two bars, Hats and swing −16.9, Filter sweep −14.8, Played in −16.6: every preset within 2.1 dB. Peaks −1.7 to −2.1 dBFS, the kit's limiter holding.
+- **Swing.** Judge: straight at 124 bpm: 21 hits booked in a bar, even and odd steps 0.0 ms off the grid. Hats and swing at 45 %: even steps 0.0 ms, odd steps 27.2 ms late, a step being 121.0 ms; the model's number is 121.0 × 0.45 × 0.5 = 27.2.
+- **Filter, on the mix.** Cutoff 80 Hz, 980 Hz and 12 kHz on Bass and chords: −16.0, −16.0, −16.1 dB mean. A low-pass on a bass line takes the top off, not the level: the fundamental holds most of a saw's power, and the hats own the band above 1.2 kHz.
+- **Filter, on the voice alone** (the transport stopped, C2 held): cutoff 80 Hz −30.8 dB mean, −67.8 dB above 1.2 kHz; 980 Hz −21.7 and −36.1; 12 kHz −22.1 and −32.9. Thirty-five dB of difference in the band the filter works on.
+- **Sweep.** The stage's cutoff read every half bar after pressing Filter sweep at 100 bpm: 260, 260, 682, 1012, 1498, 2226, 3296, 4892, then 314 as the fourth bar ends and the climb starts again.
+- **Record.** Z (C1) typed while step 3 sounded, late in the step: written to step 4 as C1; nothing written with Record off (pinned by test).
+- **Restart.** 15 hits and 12 synth notes in a bar before a stop and after a start; −∞ dB while stopped.
+- **Oscillators.** 264 made over eight bars of four presets: two a note, cut 2 × decay + 50 ms after the note.
+
+Two faults the harness found before the gate could: the Cutoff dial's arrow keys did nothing at the bottom of its log travel (one step of 1/1000 rounded back to 80 Hz; the step is now 5), and a key played while the transport was stopped was silent, because the kit fades the master on Stop (a key press opens it again).
+
+## 6. Gates
+
+`node scripts/check-bench.mjs <url>` in Chromium and WebKit at 1280×700 and 1440×900: all clear. Fixture `sequence-bench` (presets Hats and swing / Filter sweep / judge Judge: straight landing Swing = 0; stages steps / spectrum / chain) and law 30 (the grid is the sequencer and the gold curve is the Cutoff dial; the console's keys play the voice). 422 unit tests across the estate (30 new: model and depth). Console at 1280: Play 104 + Time 150 + Filter 214 + Env 88 + Keys 356 + Hear 366 = 1278. The stage at 1280×700 is 313 px tall; at 1440×900 the grid's cells grow to 52 px and the grid centres beside the picture.
+
+## 7. Registration
+
+`lib/resources/sequence-bench.js` (kind `bench`, topic `1.5 Sequencing`, related 1.3, 1.8, 1.11, 2.5), registered in `lib/resources/index.js` and `app/[resourceId]/ResourcePageClient.js` (loaded on demand, like the Synth bench, so its oscillators stay in their own chunk), first on the 1.5 band in `lib/topics.js`, in the free manifest in `lib/access.js`. Credits: `docs/audio-credits.md`, `sequence/`. Held for the member site: the 1.5 Explore band's card and still, after Mike's walk of the live bench.
+
+## 8. Traps for the next bench
+
+- A kit-shaped stage note reads its readout span in the prose face (`.stageNote span`), so a readout inside `<b>` renders larger than its label; the estate does this everywhere, so it is the look, not a fault.
+- A dial on a log scale must step in units that survive rounding at the bottom of its travel: `Math.round` on Hz swallowed a 0.4 Hz arrow step.
+- The kit's `stop()` fades the master gain to 0 and leaves it there; any control that sounds while the transport is stopped (keys, a hold) has to open it.
+- A whole-mix RMS cannot show a low-pass on a bass line. Measure the band the filter works on, and measure the voice alone.
+- A preset that carries automation should still land its start value on load; otherwise the control sits where the last preset left it until the first bar comes round.

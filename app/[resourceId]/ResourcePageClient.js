@@ -31,6 +31,9 @@ const SynthBench = dynamic(() => import('@/components/resources/SynthBench'));
 // Squared Paper builds oscillators too, so it loads on demand for the same
 // reason and stays in its own chunk.
 const SquaredPaper = dynamic(() => import('@/components/resources/SquaredPaper'));
+// The Sequence bench drives a synth voice of its own (the Piano Roll's
+// precedent: the paper's part is a synth), so it loads on demand too.
+const SequenceBench = dynamic(() => import('@/components/resources/SequenceBench'));
 import StereoRecordingEssay from '@/components/resources/StereoRecordingEssay';
 import CompressorExplorer from '@/components/resources/CompressorExplorer';
 import CompressorCurvePractice from '@/components/resources/CompressorCurvePractice';
@@ -128,6 +131,7 @@ const resourceComponents = {
     'BalanceDesk': BalanceDesk,
     'AutomationLane': AutomationLane,
     'PianoRoll': PianoRoll,
+    'SequenceBench': SequenceBench,
     'Oscilloscope': Oscilloscope,
     'SquaredPaper': SquaredPaper,
     'BPMDelayCalculator': BPMDelayCalculator,

@@ -54,6 +54,12 @@
 //      level the stage reports a plain-words title and a one-line caption
 //      (data-title, data-caption), and the Room at Core carries two of each
 //      because it draws two pictures
+//  30. (Sequence bench) the grid on the stage is the sequencer and the gold
+//      curve is the Cutoff dial: the canvas reports the cutoff (data-cutoff)
+//      and it equals the console's; dragging the curve's handle right raises
+//      both; clicking the first dark Snare step lights it (data-lit counts
+//      up, data-pattern changes); and a key in the console plays the voice
+//      (pressing C2 makes the stage report note 48)
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -152,6 +158,12 @@ const BENCHES = {
         presets: { first: 'Drums too quiet', second: 'Synth over the vocal', judge: 'The reference' },
         judgeLands: { selector: '[aria-label="Vocal fader"]', attr: 'aria-valuenow', value: '9', says: 'lands the vocal fader at +9 dB, undoing the trim' },
         stages: { core: 'plan', alevel: 'spectrum', extension: 'ladder' },
+    },
+    'sequence-bench': {
+        seqGrid: true,
+        presets: { first: 'Hats and swing', second: 'Filter sweep', judge: 'Judge: straight' },
+        judgeLands: { selector: '[aria-label="Swing"]', attr: 'aria-valuenow', value: '0', says: 'loads sixteenth hats hard quantised with Swing at 0, the 2025 comparison\'s tight side (Swing = 0)' },
+        stages: { core: 'steps', alevel: 'spectrum', extension: 'chain' },
     },
     'eq-bench': {
         curve: true,
@@ -698,6 +710,61 @@ for (const url of urls) {
             } else fail(url, size, 'the stage does not expose its C key for the press test');
             if (!before.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
             await depthBtn('A-level').click();
+        }
+
+        // 30. (Sequence bench) the grid is the sequencer and the gold curve is the
+        // Cutoff dial; the console's keys play the voice (16 Sep 2026)
+        if (fx.seqGrid) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const presetBtn = (name) => page.locator('[aria-label="Presets"] button', { hasText: name });
+            await presetBtn(fx.presets.first).click(); // no sweep running, so the cutoff holds still
+            await depthBtn('A-level').click();
+            await page.waitForTimeout(350);
+            const readS = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { cutoff: c?.dataset.cutoff || '', handle: c?.dataset.handle || '', cell: c?.dataset.cell || '', lit: Number(c?.dataset.lit || 0), pattern: c?.dataset.pattern || '', note: c?.dataset.note || '', verdict: c?.dataset.verdict || '', stage: c?.dataset.stage || '' }; }, canvasSel);
+            const consoleC = () => page.evaluate(() => document.querySelector('[aria-label="Controls"] [data-cutoff]')?.getAttribute('data-cutoff') || '');
+            const before = await readS();
+            const cB = await consoleC();
+            if (!before.cutoff) fail(url, size, 'the stage does not report the cutoff (data-cutoff missing)');
+            else if (before.cutoff !== cB) fail(url, size, `the stage's cutoff (${before.cutoff}) is not the console's (${cB})`);
+            else ok(`the stage reports the cutoff and the console agrees (${before.cutoff} Hz)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx + 30, box.y + hy, { steps: 6 });
+                await page.mouse.move(box.x + hx + 60, box.y + hy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(250);
+                const after = await readS();
+                const cA = await consoleC();
+                if (!(Number(after.cutoff) > Number(before.cutoff))) fail(url, size, `dragging the curve right did not raise the cutoff (${before.cutoff} -> ${after.cutoff})`);
+                else if (after.cutoff !== cA) fail(url, size, `the console did not follow the curve (${cA} vs ${after.cutoff})`);
+                else ok(`dragging the gold curve raises the cutoff and the console follows (${before.cutoff} -> ${after.cutoff} Hz)`);
+            } else fail(url, size, 'the stage does not expose the cutoff handle for the drag test');
+            const b2 = await readS();
+            const [cx, cy] = b2.cell.split(':').map(Number);
+            if (box && b2.cell) {
+                await page.mouse.click(box.x + cx, box.y + cy);
+                await page.waitForTimeout(250);
+                const a2 = await readS();
+                if (a2.lit !== b2.lit + 1 || a2.pattern === b2.pattern) fail(url, size, `clicking a dark Snare step did not light it (lit ${b2.lit} -> ${a2.lit})`);
+                else ok(`clicking a dark step lights it (${b2.lit} -> ${a2.lit} lit)`);
+            } else fail(url, size, 'the stage does not expose a dark Snare step for the click test');
+            const keyC = page.locator('[aria-label="Controls"] [data-key="48"]');
+            const kb = await keyC.boundingBox();
+            if (kb) {
+                await page.mouse.move(kb.x + kb.width / 2, kb.y + kb.height - 6);
+                await page.mouse.down();
+                await page.waitForTimeout(250);
+                const down = await readS();
+                await page.mouse.up();
+                await page.waitForTimeout(300);
+                if (down.note !== '48') fail(url, size, `pressing the C2 key did not make the stage report note 48 (data-note "${down.note}")`);
+                else ok('the console\'s keys play the voice (note 48 while pressed)');
+            } else fail(url, size, 'the console has no C2 key for the press test');
+            if (!b2.verdict) fail(url, size, 'the stage does not report the paper\'s verdict (data-verdict missing)');
+            if (b2.stage !== 'spectrum') fail(url, size, `the stage at A-level did not report data-stage=spectrum (${b2.stage})`);
         }
 
         // 26. (Reverb) the tail's end on the stage is the Reverb time dial: the

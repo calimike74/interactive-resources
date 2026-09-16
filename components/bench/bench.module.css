@@ -1352,3 +1352,72 @@
    question's row has the top right (the canvas leaves it room: the setting
    line drops segments until it clears the legend) */
 .legendStem { bottom: 3px; right: 18px; }
+
+/* ---- the Sequence bench (1.5), 16 Sep 2026: Time, Filter, Keys ----
+   Play 104 + Time 150 + Filter 214 + Env 88 + Keys 356 = 912 before Hear,
+   so Hear keeps 366 at 1280. The keys are a real piano in the console:
+   sequenced notes light their keys as they sound, gold for the bass and
+   purple for the chord; Record arms real-time input. */
+.secSeqTime { width: 150px; }
+.secSeqFilter { width: 214px; }
+.secKeys { width: 356px; gap: 6px; }
+.seqRow { display: flex; align-items: flex-start; justify-content: space-around; gap: 10px; }
+.seqKbd {
+    position: relative;
+    height: 60px;
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 6px;
+    background: #d9d6ce;
+    box-shadow: inset 0 1px 3px rgba(26, 26, 46, 0.28), inset 0 0 0 1px rgba(26, 26, 46, 0.12);
+}
+.seqWhite {
+    flex: 1;
+    position: relative;
+    border: 0;
+    padding: 0 0 3px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(180deg, #fbfaf7 0%, #f1efe9 88%, #dedbd2 100%);
+    box-shadow: inset 0 -3px 0 rgba(26, 26, 46, 0.10), 0 1px 0 rgba(26, 26, 46, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: var(--ink-3);
+}
+.seqBlack {
+    position: absolute;
+    top: 3px;
+    width: var(--bkw, 5%);
+    height: 58%;
+    margin-left: calc(var(--bkw, 5%) / -2);
+    border: 0;
+    padding: 0;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(180deg, #2c2c44 0%, #1a1a2e 70%, #34344e 100%);
+    box-shadow: 0 2px 2px rgba(26, 26, 46, 0.4), inset 0 -2px 0 rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    z-index: 1;
+}
+.seqWhite[data-down='true'], .seqWhite:active { background: linear-gradient(180deg, #e2e0d9 0%, #eae8e2 100%); box-shadow: inset 0 2px 3px rgba(26, 26, 46, 0.22); }
+.seqBlack[data-down='true'], .seqBlack:active { background: linear-gradient(180deg, #1a1a2e 0%, #24243a 100%); box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.5); height: 56%; }
+.seqWhite[data-lit='bass'] { background: linear-gradient(180deg, #f3e7bf 0%, #e6d28e 100%); }
+.seqWhite[data-lit='chord'] { background: linear-gradient(180deg, #e6dff2 0%, #cfc2e3 100%); }
+.seqBlack[data-lit='bass'] { background: linear-gradient(180deg, #8a7835 0%, #6f6028 100%); }
+.seqBlack[data-lit='chord'] { background: linear-gradient(180deg, #7c6a9e 0%, #5d4d7e 100%); }
+.seqWhite:focus-visible, .seqBlack:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.seqOct { position: absolute; left: 3px; top: 3px; font-family: var(--mono); font-size: 8.5px; color: var(--ink-3); }
+.seqLtr { font-family: var(--mono); font-size: 9px; font-weight: 500; text-transform: uppercase; color: var(--ink-3); }
+.seqBlack .seqLtr { position: absolute; left: 0; right: 0; bottom: 2px; text-align: center; color: rgba(255, 255, 255, 0.55); }
+.seqKeysFoot { display: flex; align-items: center; gap: 10px; }
+.seqKeysFoot .meaning { margin-top: 0; }
+.seqRec { display: inline-flex; align-items: center; gap: 6px; }
+.seqRec::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); box-shadow: inset 0 0 0 1px rgba(26, 26, 46, 0.2); }
+.seqRec[aria-pressed='true'] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.seqRec[aria-pressed='true']::before { background: var(--gold-bright); box-shadow: 0 0 0 2px rgba(240, 212, 138, 0.35); }
+.seqNow { min-width: 20ch; text-align: right; color: var(--gold-bright); }
+@media (prefers-reduced-motion: no-preference) {
+    .seqRec[aria-pressed='true']::before { animation: seqRecPulse 1s ease-in-out infinite; }
+    @keyframes seqRecPulse { 50% { box-shadow: 0 0 0 4px rgba(240, 212, 138, 0.25); } }
+}
