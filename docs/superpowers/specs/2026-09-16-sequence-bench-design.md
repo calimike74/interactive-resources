@@ -48,7 +48,7 @@ Two faults the harness found before the gate could: the Cutoff dial's arrow keys
 
 ## 7. Registration
 
-`lib/resources/sequence-bench.js` (kind `bench`, topic `1.5 Sequencing`, related 1.3, 1.8, 1.11, 2.5), registered in `lib/resources/index.js` and `app/[resourceId]/ResourcePageClient.js` (loaded on demand, like the Synth bench, so its oscillators stay in their own chunk), first on the 1.5 band in `lib/topics.js`, in the free manifest in `lib/access.js`. Credits: `docs/audio-credits.md`, `sequence/`. Held for the member site: the 1.5 Explore band's card and still, after Mike's walk of the live bench.
+`lib/resources/sequence-bench.js` (kind `bench`, topic `1.5 Sequencing`, related 1.3, 1.8, 1.11, 2.5), registered in `lib/resources/index.js` and `app/[resourceId]/ResourcePageClient.js` (loaded on demand, like the Synth bench, so its oscillators stay in their own chunk), first on the 1.5 band in `lib/topics.js`, in the free manifest in `lib/access.js`. Credits: `docs/audio-credits.md`, `sequence/`. Live at `resources.musictechstudio.co.uk/sequence-bench` from interactive-resources @41aee77 (check-bench all clear on production in Chromium and WebKit). Member site (grades-dashboard): the 1.5 Explore band leads with the Sequence bench, the Piano Roll second and the Beat Machine third, the still `public/explore/sequencing-4.jpg` shot from the live bench at A-level, Student, on Bass and chords.
 
 ## 8. Traps for the next bench
 
