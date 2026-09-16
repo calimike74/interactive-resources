@@ -100,7 +100,18 @@ function buildSeqGraph(ctx, input, master, initial) {
         o1.start(when); o2.start(when);
         const item = { o1, o2, env };
         live.add(item);
-        o1.onended = () => live.delete(item);
+        // The shared controls hold every filter they are connected to, so a
+        // voice that is not taken apart when it ends stays in the graph for
+        // good and the render thread drowns within minutes (16 Sep 2026:
+        // Mike found Play and the keys a few seconds late). Everything the
+        // voice made is disconnected once its oscillators end
+        // (scripts/measure-leak.mjs counts the connections).
+        o1.onended = () => {
+            live.delete(item);
+            try { cutoffCtl.disconnect(vf.frequency); } catch { /* gone */ }
+            try { qCtl.disconnect(vf.Q); } catch { /* gone */ }
+            for (const n of [o1, o2, vf, env, tapO, tapF]) { try { n.disconnect(); } catch { /* gone */ } }
+        };
         const stopAt = (at) => { try { o1.stop(at); o2.stop(at); } catch { /* ended */ } };
         if (!hold) stopAt(when + decay * 2 + 0.05);
         return {

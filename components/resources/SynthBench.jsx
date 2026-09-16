@@ -199,7 +199,21 @@ function buildSynthGraph(ctx, input, master) {
         if (!held) { stopAll(when + gateSec + tail + 0.05); v.released = true; }
         else stopAll(when + KEY_HOLD_MS / 1000);
         voices.add(v);
-        osc1.onended = () => voices.delete(v);
+        // The LFOs hold every node they modulate, so a voice not taken apart
+        // when it ends stays in the graph and the render thread drowns within
+        // minutes (the Sequence bench's fault, 16 Sep 2026; the estate
+        // measured with scripts/measure-leak.mjs, and this bench grew faster).
+        osc1.onended = () => {
+            voices.delete(v);
+            const mods = [[lfoCut, filter.detune], [lfoAmp, trem.gain], [lfoPitch, sub.detune]];
+            const parts = [sub, gSub, noise, gNoise, filter, amp, trem];
+            for (const c of Object.values(vcos)) {
+                mods.push([lfoPitch, c.saw.detune], [lfoPitch, c.wave.detune], [lfo, c.pw]);
+                parts.push(c.saw, c.wave, c.gSaw, c.gPul, c.gNeg, c.delay, c.pw);
+            }
+            for (const [src, dst] of mods) { try { src.disconnect(dst); } catch { /* gone */ } }
+            for (const nd of parts) { try { nd.disconnect(); } catch { /* gone */ } }
+        };
         if (when > lastOn) lastOn = when;
         return v;
     }
