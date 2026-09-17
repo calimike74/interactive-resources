@@ -51,6 +51,14 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    // The slapback page: a standalone static HTML page in public/, the See-it
+    // for the member site's Era 1 chapter 3 (spec 2026-09-17).
+    {
+      url: `${baseUrl}/slapback-delay`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
     ...resourceUrls,
   ];
 }

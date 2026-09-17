@@ -66,6 +66,11 @@ const BOOKS = [
         href: '/recording-history',
         desc: 'Five eras as a listening playlist · 21 sourced milestones, every "first" flagged',
     },
+    {
+        name: 'Slapback Delay',
+        href: '/slapback-delay',
+        desc: 'One repeat, loud, and fast enough to fool the ear · the tape echo of the 1950s, with a stab to slide through the zones',
+    },
 ];
 
 // Mode descriptions shown under the hero

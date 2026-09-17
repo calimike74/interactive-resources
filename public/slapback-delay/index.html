@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slapback Delay — Technique Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:oklch(0.18 0.025 260);
+    --bg-2:oklch(0.145 0.028 262);
+    --surface:oklch(0.225 0.026 260);
+    --surface-2:oklch(0.2 0.026 260);
+    --line:oklch(0.46 0.02 260 / .6);
+    --hair:oklch(0.5 0.02 260 / .22);
+    --grid:oklch(0.62 0.02 260 / .12);
+    --ink:oklch(0.94 0.012 250);
+    --ink-2:oklch(0.75 0.016 252);
+    --ink-3:oklch(0.6 0.02 258);
+    --c:oklch(0.78 0.13 70);            /* page accent (timeline swaps it) */
+    --c-soft:oklch(0.78 0.13 70 / .16);
+
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Space Grotesk','Helvetica Neue',sans-serif;
+    --mono:'Space Mono',ui-monospace,monospace;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;min-width:0}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{margin:0;color:var(--ink);font-family:var(--sans);line-height:1.55;
+    background:radial-gradient(120% 90% at 50% -15%, var(--bg), var(--bg-2) 70%), var(--bg-2);
+    padding:clamp(22px,4.5vw,60px) clamp(16px,4vw,52px) 72px}
+  .sheet{max-width:1180px;margin:0 auto}
+
+  /* ---------- hero ---------- */
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink-3);display:flex;gap:14px;flex-wrap:wrap;align-items:center;
+    animation:fade .9s var(--ease) backwards;animation-delay:.05s}
+  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--c);transition:background .45s var(--ease)}
+  h1{font-family:var(--serif);font-weight:900;letter-spacing:-.02em;
+    font-size:clamp(40px,7.4vw,84px);line-height:.92;margin:.18em 0 .2em;max-width:15ch;
+    animation:rise 1s var(--ease) backwards;animation-delay:.12s}
+  h1 em{font-style:italic;font-weight:600;color:var(--ink-2)}
+
+  /* the lead definition callout */
+  .callout{display:flex;flex-direction:column;gap:11px;align-items:flex-start;max-width:62ch;
+    border:1px solid var(--hair);border-left:3px solid var(--c);border-radius:10px;
+    background:linear-gradient(180deg,var(--surface),var(--surface-2));
+    padding:18px 20px;margin:.2em 0 0;
+    animation:rise 1s var(--ease) backwards;animation-delay:.22s;transition:border-color .45s var(--ease)}
+  .callout .k{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--c);white-space:nowrap;transition:color .45s var(--ease)}
+  .callout p{margin:0;font-family:var(--serif);font-size:clamp(17px,2.1vw,21px);line-height:1.42;color:var(--ink)}
+  .callout p b{font-weight:600;color:var(--ink);font-style:normal}
+
+  .dek{font-family:var(--serif);font-style:italic;font-size:clamp(16px,2vw,20px);
+    color:var(--ink-2);max-width:58ch;line-height:1.45;margin:18px 0 0;
+    animation:fade .9s var(--ease) backwards;animation-delay:.32s}
+
+  .flag{display:flex;gap:9px;align-items:flex-start;margin:18px 0 0;padding:9px 13px;max-width:66ch;
+    border:1px solid var(--hair);border-radius:7px;background:var(--surface);line-height:1.5;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);
+    animation:fade .9s var(--ease) backwards;animation-delay:.4s}
+  .flag b{color:oklch(0.78 0.13 75);font-weight:400}
+
+  /* ---------- section scaffolding ---------- */
+  section{margin-top:clamp(40px,6vw,72px)}
+  .sec-no{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-3);display:flex;align-items:center;gap:10px;margin:0 0 18px}
+  .sec-no::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--c);transition:background .45s var(--ease)}
+  .sec-no b{color:var(--ink-2);font-weight:400}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(26px,3.6vw,40px);line-height:1.05;
+    letter-spacing:-.015em;margin:0 0 .5em;max-width:22ch}
+
+  /* ---------- how it's made ---------- */
+  .howgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);
+    gap:clamp(22px,3.4vw,46px);align-items:start}
+  .prose p{font-size:15.5px;color:var(--ink-2);line-height:1.62;max-width:52ch;margin:0 0 14px}
+  .prose p b{color:var(--ink);font-weight:500}
+  .prose p:last-child{margin-bottom:0}
+
+  details.why{margin-top:18px;border:1px solid var(--hair);border-radius:10px;background:var(--surface-2);overflow:hidden}
+  details.why summary{cursor:pointer;list-style:none;padding:13px 16px;font-family:var(--mono);
+    font-size:11.5px;letter-spacing:.06em;color:var(--c);display:flex;align-items:center;gap:10px;
+    transition:color .45s var(--ease)}
+  details.why summary::-webkit-details-marker{display:none}
+  details.why summary .tw{display:inline-flex;width:16px;height:16px;align-items:center;justify-content:center;
+    border:1px solid var(--c-soft);border-radius:4px;font-weight:700;transition:transform .3s var(--ease)}
+  details.why[open] summary .tw{transform:rotate(45deg)}
+  details.why .why-body{padding:2px 18px 18px;border-top:1px solid var(--hair)}
+  details.why .why-body p{font-size:14px;color:var(--ink-2);line-height:1.6;max-width:54ch;margin:14px 0 0}
+  details.why .why-body p:first-child{margin-top:14px}
+  .eqn{font-family:var(--mono);font-size:14px;color:var(--ink);background:var(--bg-2);
+    border:1px solid var(--hair);border-radius:8px;padding:14px 16px;margin:14px 0;text-align:center;letter-spacing:.02em}
+  .eqn .v{color:var(--c);transition:color .45s var(--ease)}
+  .thresh{margin:14px 0 0;border-collapse:collapse;width:100%;font-size:13px}
+  .thresh td{padding:7px 10px;border-top:1px solid var(--hair);vertical-align:top;color:var(--ink-2)}
+  .thresh td:first-child{font-family:var(--mono);color:var(--ink);white-space:nowrap;width:1%}
+
+  .figure{border:1px solid var(--hair);border-radius:12px;
+    background:linear-gradient(180deg,oklch(0.2 0.026 260),oklch(0.17 0.028 262));
+    padding:18px;box-shadow:0 26px 52px -42px oklch(0.05 0.03 260 / .9), inset 0 1px 0 oklch(1 0 0 / .04)}
+  .figcap{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+  .figsvg{display:block;width:100%;height:auto;background:oklch(0.155 0.026 262);border:1px solid var(--hair);border-radius:8px}
+  .figfoot{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--ink-2);margin:12px 2px 0;line-height:1.42}
+
+  .sig-axis{stroke:var(--hair);stroke-width:1}
+  .sig-lbl{fill:var(--ink-3);font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+  .sig-orig{stroke:var(--ink-2);stroke-width:2.6;stroke-linecap:round}
+  .sig-rep{stroke:var(--c);stroke-width:2.6;stroke-linecap:round;transition:stroke .45s var(--ease)}
+  .sig-ghost{stroke:var(--ink-3);stroke-width:1.6;stroke-linecap:round;opacity:.4;stroke-dasharray:2 3}
+  .sig-brace{stroke:var(--c);stroke-width:1;opacity:.55;transition:stroke .45s var(--ease)}
+  .sig-zone{fill:var(--c-soft);transition:fill .45s var(--ease)}
+
+  /* ---------- timeline ---------- */
+  .tl{margin:clamp(8px,2vw,18px) 0 clamp(18px,3vw,26px)}
+  #tlsvg{cursor:default}
+  .tl-base{stroke:var(--line);stroke-width:1.5}
+  .tl-tick{stroke:var(--hair);stroke-width:1}
+  .tl-decade{fill:var(--ink-3);font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-anchor:middle}
+  .node{cursor:pointer}
+  .node .ring{fill:none;stroke-width:2;opacity:0;transition:opacity .3s var(--ease)}
+  .node .core{transition:r .25s var(--ease)}
+  .node .yr{fill:var(--ink-2);font-family:var(--mono);font-size:12px;font-weight:700;text-anchor:middle;letter-spacing:.02em}
+  .node .nm{fill:var(--ink-3);font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;text-anchor:middle;transition:fill .25s var(--ease)}
+  .node:hover .nm{fill:var(--ink)}
+  .node:hover .core{r:9}
+  .node.sel .core{r:10}
+  .node.sel .nm{fill:var(--ink)}
+  .node.sel .ring{opacity:1}
+
+  .detail{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);
+    gap:clamp(20px,3vw,40px);align-items:start;margin-top:8px}
+  .d-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin:0 0 4px}
+  .d-name{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4.4vw,48px);line-height:.96;
+    color:var(--c);letter-spacing:-.02em;transition:color .45s var(--ease)}
+  .d-year{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:.04em}
+  .d-device{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink-3);text-transform:uppercase;width:100%;margin-top:-1px}
+  .d-device::before{content:"made with · ";color:var(--c);transition:color .45s var(--ease)}
+  .blocks{margin-top:20px;display:flex;flex-direction:column;gap:16px}
+  .blk h4{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-3);margin:0 0 6px;display:flex;align-items:center;gap:8px}
+  .blk h4::before{content:"";width:7px;height:2px;border-radius:2px;background:var(--c);transition:background .45s var(--ease)}
+  .blk p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.55;max-width:50ch}
+  .blk p b{color:var(--ink);font-weight:500}
+  .lens-mini{margin-top:16px;border:1px solid var(--c-soft);border-radius:11px;
+    background:linear-gradient(180deg,var(--c-soft),transparent);padding:16px;transition:border-color .45s var(--ease)}
+  .lens-mini h4{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--c);margin:0 0 8px;transition:color .45s var(--ease)}
+  .lens-mini p{margin:0;font-size:13.5px;color:var(--ink);line-height:1.5}
+  .lens-mini p b{font-weight:600}
+
+  /* device photo (cleared-image slot) + era scene + credits */
+  .devphoto{margin:0 0 16px;border:1px solid var(--hair);border-radius:12px;overflow:hidden;
+    background:linear-gradient(180deg,oklch(0.2 0.026 260),oklch(0.165 0.028 262));
+    box-shadow:0 22px 46px -40px oklch(0.05 0.03 260 / .9)}
+  .devphoto[hidden]{display:none}
+  .devimg{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:center}
+  .devcap{font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;color:var(--ink-3);
+    line-height:1.55;padding:9px 12px 11px;border-top:1px solid var(--hair)}
+  .era-scene{margin:0 0 clamp(18px,3vw,26px);border:1px solid var(--hair);border-radius:14px;overflow:hidden;
+    background:linear-gradient(180deg,oklch(0.2 0.026 260),oklch(0.165 0.028 262));
+    box-shadow:0 26px 52px -44px oklch(0.05 0.03 260 / .9)}
+  .era-scene img{display:block;width:100%;max-height:340px;object-fit:cover;object-position:center}
+  .era-scene figcaption{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink-2);
+    line-height:1.45;padding:13px 16px;border-top:1px solid var(--hair)}
+  .era-scene figcaption .cred{font-family:var(--mono);font-style:normal;font-size:9.5px;letter-spacing:.04em;
+    color:var(--ink-3);display:block;margin-top:5px}
+  .credits{font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;color:var(--ink-3);line-height:1.7;margin-top:16px}
+  .credits b{color:var(--ink-2);font-weight:400}
+  .credits a{color:var(--ink-3);text-decoration:underline}
+
+  /* ---------- hear it / demo ---------- */
+  .demo{border:1px solid var(--hair);border-radius:14px;
+    background:linear-gradient(180deg,oklch(0.205 0.026 260),oklch(0.165 0.028 262));
+    padding:clamp(18px,2.4vw,26px);box-shadow:0 30px 60px -48px oklch(0.05 0.03 260 / .9)}
+  .demo-top{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}
+  .btnrow{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:13px;letter-spacing:.04em;cursor:pointer;
+    border:1px solid var(--hair);border-radius:9px;background:var(--surface);color:var(--ink);
+    padding:12px 18px;display:inline-flex;align-items:center;gap:9px;transition:all .2s var(--ease)}
+  .btn:hover{border-color:var(--c);color:var(--ink);transform:translateY(-1px)}
+  .btn.primary{border-color:var(--c);background:var(--c-soft);color:var(--ink)}
+  .btn .gl{width:9px;height:9px;border-radius:50%;background:var(--c)}
+  .btn.ghost .gl{background:var(--ink-3)}
+  .demo-hint{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.04em}
+
+  .demo-svgwrap{margin:20px 0 6px}
+  .demosvg{display:block;width:100%;height:auto;background:oklch(0.15 0.026 262);border:1px solid var(--hair);border-radius:10px}
+
+  .slider-row{margin-top:18px}
+  .slabel{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.04em}
+  .slabel .val{color:var(--c);font-weight:700;font-size:15px;transition:color .45s var(--ease)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:5px;margin:12px 0 6px;
+    background:linear-gradient(90deg,
+      var(--ink-3) 0 var(--z0,21%),
+      var(--c) var(--z0,21%) var(--z1,45%),
+      var(--ink-3) var(--z1,45%) 100%);
+    outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;
+    background:var(--ink);border:3px solid var(--c);cursor:pointer;transition:border-color .45s var(--ease)}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--ink);border:3px solid var(--c);cursor:pointer}
+  .scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;color:var(--ink-3);letter-spacing:.06em}
+  .zone-note{margin-top:14px;font-size:14px;line-height:1.5;color:var(--ink);min-height:2.6em}
+  .zone-note b{color:var(--c);font-weight:600;transition:color .45s var(--ease)}
+
+  .seealso{margin-top:18px;display:flex;gap:13px;align-items:center;flex-wrap:wrap;
+    border-top:1px solid var(--hair);padding-top:16px;font-size:13px;color:var(--ink-2)}
+  .seealso a{color:var(--c);text-decoration:none;border-bottom:1px solid var(--c-soft);transition:color .45s var(--ease)}
+  .seealso a:hover{border-bottom-color:var(--c)}
+  .seealso .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+    border:1px solid var(--hair);border-radius:5px;padding:3px 7px}
+
+  /* ---------- exam lens ---------- */
+  .lensgrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,26px)}
+  .lcard{border:1px solid var(--hair);border-radius:12px;background:var(--surface-2);padding:20px;position:relative}
+  .lcard .ao{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--bg);background:var(--c);border-radius:5px;padding:3px 8px;display:inline-block;margin:0 0 12px;transition:background .45s var(--ease)}
+  .lcard h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:0 0 10px;color:var(--ink);line-height:1.15}
+  .lcard p{font-size:14px;color:var(--ink-2);line-height:1.58;margin:0 0 10px}
+  .lcard p b{color:var(--ink);font-weight:500}
+  .lcard ul{margin:10px 0 0;padding:0;list-style:none}
+  .lcard li{font-size:13px;color:var(--ink-2);line-height:1.5;padding:6px 0 6px 18px;position:relative;border-top:1px solid var(--hair)}
+  .lcard li::before{content:"";position:absolute;left:2px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--c);transition:background .45s var(--ease)}
+  .lcard li b{color:var(--ink);font-weight:600}
+  .ms-note{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--ink-3);margin-top:14px;line-height:1.5}
+
+  /* ---------- retrieve ---------- */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .card{border:1px solid var(--hair);border-radius:11px;background:var(--surface-2);
+    padding:18px 18px 16px;cursor:pointer;transition:border-color .2s var(--ease),transform .2s var(--ease)}
+  .card:hover{border-color:var(--c);transform:translateY(-1px)}
+  .card .cq{font-size:14.5px;color:var(--ink);line-height:1.5;font-weight:500}
+  .card .ca{font-size:13.5px;color:var(--ink-2);line-height:1.56;margin-top:12px;padding-top:12px;border-top:1px dashed var(--hair);
+    max-height:0;overflow:hidden;opacity:0;transition:max-height .35s var(--ease),opacity .3s var(--ease),margin .3s var(--ease),padding .3s var(--ease)}
+  .card .ca b{color:var(--ink);font-weight:500}
+  .card.open .ca{max-height:280px;opacity:1}
+  .card .tap{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:12px;display:block}
+  .card.open .tap{color:var(--c)}
+
+  /* ---------- footer ---------- */
+  footer{margin-top:clamp(40px,5vw,60px);padding-top:22px;border-top:1px solid var(--hair);
+    display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3);line-height:1.6}
+  footer b{color:var(--ink-2);font-weight:400}
+  footer .l{max-width:60ch}
+
+  .noscript{font-family:var(--mono);color:oklch(0.72 0.17 45);font-size:13px;padding:24px;text-align:center}
+
+  /* ---------- sticky section progress ---------- */
+  .progress{position:fixed;top:0;left:0;right:0;z-index:60;
+    transform:translateY(-101%);opacity:0;transition:transform .42s var(--ease),opacity .42s var(--ease);
+    background:oklch(0.155 0.026 262 / .82);-webkit-backdrop-filter:blur(11px);backdrop-filter:blur(11px);
+    border-bottom:1px solid var(--hair)}
+  .progress.show{transform:none;opacity:1}
+  .progress-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;
+    gap:18px;padding:11px clamp(16px,4vw,52px)}
+  .progress-now{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-2);display:flex;align-items:center;gap:10px;min-width:0}
+  .progress-now b{color:var(--ink);font-weight:700}
+  .progress-now .ptitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .progress-now .pdot{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none;transition:background .45s var(--ease)}
+  .progress-steps{display:flex;gap:7px;margin:0;padding:0;list-style:none;flex:none}
+  .progress-steps li{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--ink-3);
+    cursor:pointer;border:1px solid var(--hair);border-radius:6px;padding:4px 8px;transition:color .2s var(--ease),background .3s var(--ease),border-color .2s var(--ease)}
+  .progress-steps li:hover{color:var(--ink);border-color:var(--line)}
+  .progress-steps li.on{color:var(--bg);background:var(--c);border-color:var(--c)}
+  @media (max-width:620px){.progress-steps{display:none}}
+
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  @keyframes swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .swap{animation:swap .5s var(--ease)}
+  @media (max-width:860px){
+    .howgrid,.detail{grid-template-columns:1fr}
+    .lensgrid,.cards{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+
+<div id="studioStrip" hidden style="position:relative;z-index:50;background:#1b1f1a;color:#e8e4d8;font:500 14px/1.4 -apple-system,'Segoe UI',Roboto,sans-serif;padding:10px 20px;border-bottom:1px solid #3a4236;display:flex;gap:16px;align-items:center;justify-content:space-between"><span>Demo page for Era 1, chapter 3</span><a id="studioBack" href="https://member.musictechstudio.co.uk/member/topics/era-1?ch=3" style="color:#e8e4d8;text-decoration:underline">Back to the chapter</a></div>
+<script>
+(function(){try{var q=new URLSearchParams(location.search);if(q.get('from')==='studio'){var b=q.get('back');if(b&&/^[a-z0-9-]{1,40}$/.test(b)){document.getElementById('studioBack').href='https://member.musictechstudio.co.uk/member/topics/'+b+'?ch=3';}document.getElementById('studioStrip').hidden=false;}}catch(e){}})();
+</script>
+
+
+<nav class="progress" id="progress" aria-label="Section progress">
+  <div class="progress-in">
+    <span class="progress-now"><span class="pdot"></span><b id="pNum">01</b>&nbsp;·&nbsp;<span class="ptitle" id="pTitle">How it's made</span></span>
+    <ol class="progress-steps" id="pSteps"></ol>
+  </div>
+</nav>
+
+<div class="sheet">
+
+  <!-- ===================== HERO ===================== -->
+  <div class="eyebrow"><span class="dot"></span>Technique Library · Effects: Delay · C3 AoS 1.11 + 3.2 · C4 1.12</div>
+  <h1>Slapback <em>Delay</em></h1>
+
+  <div class="callout">
+    <span class="k">What it is</span>
+    <p>A <b>single, fast echo</b> — one repeat, no feedback, about <b>75–150&nbsp;ms</b> behind the original. Too quick to hear as a separate echo, so it thickens a sound into a <b>doubling</b> instead.</p>
+  </div>
+
+  <p class="dek">It's the sound of 1950s rock&nbsp;'n'&nbsp;roll — Sam Phillips put it on Elvis at Sun Studios in 1954 — and the exam keeps asking how you'd make it, decade by decade.</p>
+
+  <!-- ===================== 1 · HOW IT'S MADE ===================== -->
+  <section id="s1">
+    <p class="sec-no"><b>01</b> — How it's made</p>
+    <h2>One repeat, loud, and fast enough to fool the ear.</h2>
+    <div class="howgrid">
+      <div class="prose">
+        <p>Any delay works by holding a copy of the sound and playing it back a moment later. Slapback is the <b>simplest possible setting</b>: the copy comes back <b>once</b>, and <b>feedback is off</b>, so it never repeats again.</p>
+        <p>The trick is the timing. At roughly <b>75–150&nbsp;ms</b> the single repeat lands too soon for your ear to register it as a separate event, so your brain fuses the original and the repeat into <b>one bigger sound</b>. That's why slapback <b>fattens</b> a vocal or guitar — it doubles it — rather than echoing it.</p>
+        <p>Push the delay much shorter and the two collapse into a hollow, comb-filtered tone; stretch it past about <b>150&nbsp;ms</b> and the repeat pulls away into an audible <b>slap</b> you hear on its own. Slapback lives in the narrow band in between.</p>
+        <p>Keep the repeat <b>loud</b> (a high wet level) and you get the classic effect: a doubling that adds size and urgency <b>without smearing</b> the words.</p>
+
+        <details class="why">
+          <summary><span class="tw">+</span> The why — the maths (optional)</summary>
+          <div class="why-body">
+            <p>Slapback was born on tape, and the delay time was a <b>physical distance</b>. A tape machine writes the sound with a <b>record head</b>, then reads it back a moment later with a separate <b>playback head</b>. The gap between those heads, divided by how fast the tape moves, <em>is</em> the delay:</p>
+            <div class="eqn">delay&nbsp;time&nbsp;=&nbsp;<span class="v">head&nbsp;gap</span>&nbsp;÷&nbsp;<span class="v">tape&nbsp;speed</span></div>
+            <p>Close the heads up, or run the tape faster, and the echo shortens; widen the gap, or slow the tape, and it lengthens. Slapback is just this set <b>short</b>, with the feedback path switched off so the sound passes the playback head exactly once.</p>
+            <p>The numbers are real. At Sun the tape ran at <b>15&nbsp;ips</b> (inches per second), and the head gap worked out to roughly <b>125&nbsp;ms</b> — the classic Memphis slapback. Halve the speed to <b>7½&nbsp;ips</b> and the same gap doubles the delay to about <b>250&nbsp;ms</b>. With no varispeed, those two tape speeds were effectively your only two slapback times.</p>
+            <p>It also explains the <b>warmth</b>. Tape behaves like a gentle low-pass filter, so the repeat returns a shade <b>darker</b> than the original; <b>wow&nbsp;&amp;&nbsp;flutter</b> (tiny slow and fast speed variations) add a faint pitch wobble; and pushed hard, the tape <b>saturates</b>, adding warm harmonics. A digital delay has none of this — its repeat is a clean, identical copy. <b>That darker repeat is your single best clue the slapback is tape, not digital.</b></p>
+            <p>And the reason the timing <em>window</em> matters is perceptual, not mechanical:</p>
+            <table class="thresh">
+              <tr><td>under ~40&nbsp;ms</td><td>too short to separate — the copy fuses tonally into the original (the <b>Haas / precedence effect</b>), heard as <b>comb-filtering / flanging</b> colour, not a doubling. With feedback it rings at a pitch of about <b>1000&nbsp;÷&nbsp;delay-in-ms</b> Hz.</td></tr>
+              <tr><td>~75–150&nbsp;ms</td><td><b>slapback</b> — one quick repeat the ear can't separate as an event, so it reads as a thicker, doubled sound.</td></tr>
+              <tr><td>over ~150–200&nbsp;ms</td><td>the repeat separates into a distinct <b>echo</b>; add feedback and it becomes a repeating delay.</td></tr>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <div class="figure">
+        <p class="figcap">the slapback fingerprint · level over time</p>
+        <svg class="figsvg" id="mainsig" viewBox="0 0 260 150" role="img" aria-label="A diagram of slapback: one loud original, then a single repeat about 100 milliseconds later, with no further echoes."></svg>
+        <p class="figfoot">One loud original, <em>one</em> repeat — then silence. An echo would keep going (the faint dashes); slapback stops at one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · ERA LINEAGE ===================== -->
+  <section id="s2">
+    <p class="sec-no"><b>02</b> — Era lineage · the device in the decade</p>
+    <h2>The sound stayed the same. The box that made it kept changing.</h2>
+    <p class="prose" style="max-width:62ch;margin-bottom:18px">Slapback is always one short, loud repeat — but <em>how</em> you'd create it tells the examiner the decade. Pick a device:</p>
+
+    <figure class="era-scene">
+      <img src="/slapback-delay/assets/slapback/sun-studio.jpg" alt="The Sun Studio building at 706 Union Avenue, Memphis, with its Gibson-guitar neon sign" loading="lazy">
+      <figcaption>706 Union Avenue, Memphis — Sun Studio, where the slapback sound was born in 1954.<span class="cred">Photo: Carol M. Highsmith / Library of Congress · public domain</span></figcaption>
+    </figure>
+
+    <div class="tl">
+      <svg id="tlsvg" viewBox="0 0 1100 190" role="group" aria-label="A timeline of the devices used to create slapback delay, 1954 to the 1990s. Select one to read about it.">
+        <g id="decades"></g>
+        <line id="tlbase" class="tl-base" x1="60" y1="118" x2="1052" y2="118"/>
+        <g id="nodes"></g>
+      </svg>
+    </div>
+
+    <div class="detail">
+      <div id="dleft">
+        <div class="d-head">
+          <span class="d-name" id="dName">—</span>
+          <span class="d-year" id="dYear"></span>
+          <span class="d-device" id="dDevice"></span>
+        </div>
+        <div class="blocks">
+          <div class="blk"><h4>How you'd make slapback</h4><p id="dHow"></p></div>
+          <div class="blk"><h4>The texture</h4><p id="dTex"></p></div>
+          <div class="blk"><h4>Why it mattered</h4><p id="dWhy"></p></div>
+        </div>
+        <noscript><p class="noscript">Enable JavaScript for the interactive lineage and the audio demo.</p></noscript>
+      </div>
+      <div id="dright">
+        <figure class="devphoto" id="devphotoWrap" hidden>
+          <img class="devimg" id="dImg" alt="" loading="lazy">
+          <figcaption class="devcap" id="dImgCap"></figcaption>
+        </figure>
+        <div class="figure">
+          <p class="figcap">repeat character on this device</p>
+          <svg class="figsvg" id="nodesig" viewBox="0 0 260 150" role="img" aria-label="The slapback repeat as this device renders it."></svg>
+          <p class="figfoot" id="dFoot"></p>
+        </div>
+        <div class="lens-mini">
+          <h4>Spot it</h4>
+          <p id="dLens"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · HEAR IT ===================== -->
+  <section id="s3">
+    <p class="sec-no"><b>03</b> — Hear it</p>
+    <h2>Play a stab dry, then with slapback. Slide the delay through the zone.</h2>
+
+    <div class="demo">
+      <div class="demo-top">
+        <div class="btnrow">
+          <button class="btn ghost" id="bDry"><span class="gl"></span>Play dry</button>
+          <button class="btn primary" id="bSlap"><span class="gl"></span>Play with slapback</button>
+        </div>
+        <span class="demo-hint">a synthesised stab — no recordings, copyright-clean</span>
+      </div>
+
+      <div class="demo-svgwrap">
+        <svg class="demosvg" id="demosig" viewBox="0 0 720 150" role="img" aria-label="A live diagram showing where the slapback repeat falls on a time axis as you move the slider."></svg>
+      </div>
+
+      <div class="slider-row">
+        <div class="slabel"><span>delay time</span><span class="val" id="msVal">110 ms</span></div>
+        <input type="range" id="ms" min="10" max="320" value="110" step="1" aria-label="Delay time in milliseconds">
+        <div class="scale"><span>10</span><span>75</span><span>150</span><span>320 ms</span></div>
+        <p class="zone-note" id="zoneNote"></p>
+      </div>
+
+      <div class="seealso">
+        <span class="tag">see the machine</span>
+        <span>The real multi-head box that made this — the <a href="/delay-effects" target="_blank" rel="noopener">the Delay bench</a>, where you can set the same one repeat yourself.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 4 · EXAM LENS ===================== -->
+  <section id="s4">
+    <p class="sec-no"><b>04</b> — In the exam</p>
+    <h2>Identify it, then place it and judge it.</h2>
+    <p class="prose" style="max-width:64ch;margin-bottom:22px">The 2024 paper (Q6, "Atlantic") asked candidates to <b>evaluate the use of delay</b> <em>and</em> <b>explain how delay was made from the 1940s to today</b> — so the era lineage above isn't decoration, it <em>is</em> the second half of the answer. Name the effect, then walk the decades.</p>
+    <div class="lensgrid">
+      <div class="lcard">
+        <span class="ao">AO3 · identify</span>
+        <h3>What you hear → what you name</h3>
+        <p>A <b>tight, single, fast repeat</b> that thickens a vocal or guitar — one slap, no repeating tail, no wash. Name it <b>slapback delay</b>.</p>
+        <p>The repeat's <b>tone</b> dates it: a warm, slightly <b>darker</b> repeat is <b>tape</b>; a clean, identical one is <b>digital</b> or a plug-in. The darkening is your cleanest tape-vs-digital cue.</p>
+        <ul>
+          <li><b>One</b> repeat — not a train of echoes (that's feedback)</li>
+          <li><b>Short</b> — it fattens, it doesn't echo</li>
+          <li><b>Level varies</b> — loud and obvious (Elvis), or low and subtle (Toto, "Africa")</li>
+        </ul>
+      </div>
+      <div class="lcard">
+        <span class="ao">AO4 · place &amp; judge</span>
+        <h3>Why it's used, and where it sits in time</h3>
+        <p>The marks come from <b>justifying</b> it: slapback is <b>most widely used on vocals</b>, giving a <b>doubling / layered effect without affecting clarity</b> — size and energy without mud.</p>
+        <p>Then walk the decades: <b>tape</b> (1950s) → dedicated <b>tape echo</b> (Copicat, Space Echo, Echoplex, Echorec) → <b>bucket-brigade</b> pedals (1970s) → <b>digital</b> (late 1970s) → <b>plug-in</b> (1990s+).</p>
+        <ul>
+          <li>≈ <b>80–150 ms</b>, single repeat, <b>no feedback</b>, high wet level</li>
+          <li>The defining sound of <b>1950s rock 'n' roll</b> (Elvis, Sun Studios)</li>
+          <li>Tip: the examiner allows <b>max 1 mark</b> per delay type for tying an artist/genre to a technology — so spread your examples across the decades</li>
+        </ul>
+        <p class="ms-note">Calibrated to the 2024 C3 Q6 "Atlantic" mark scheme: <i>"slap back delay… most widely used on vocals; relatively short delay time / 80–150 ms; single repeat / no feedback; high send / wet level; doubling / layered effect without affecting clarity."</i></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5 · RETRIEVE ===================== -->
+  <section id="s5">
+    <p class="sec-no"><b>05</b> — Retrieve</p>
+    <h2>Cover the answers. Tap to check.</h2>
+    <div class="cards" id="cards">
+      <div class="card">
+        <div class="cq">What three things define slapback delay?</div>
+        <div class="ca"><b>One repeat</b> (no feedback), a <b>short</b> delay of roughly <b>75–150 ms</b>, and a <b>loud</b> wet level — heard as a doubling, not a distinct echo.</div>
+        <span class="tap">tap to reveal</span>
+      </div>
+      <div class="card">
+        <div class="cq">Which studio, producer and record launched slapback?</div>
+        <div class="ca"><b>Sun Studios</b>; <b>Sam Phillips</b>; <b>Elvis Presley, "That's All Right" (1954)</b>. It became the defining sound of 1950s rock 'n' roll.</div>
+        <span class="tap">tap to reveal</span>
+      </div>
+      <div class="card">
+        <div class="cq">Why does slapback <i>fatten</i> a sound instead of echoing it?</div>
+        <div class="ca">At ~75–150 ms the single repeat is too fast to hear as a separate event, so the ear <b>fuses</b> original + repeat into one larger, doubled sound. Past ~150 ms it separates into an audible echo.</div>
+        <span class="tap">tap to reveal</span>
+      </div>
+      <div class="card">
+        <div class="cq">Trace the devices that made slapback/echo from the 1950s on.</div>
+        <div class="ca">Tape machine (1954) → dedicated tape echo (<b>Watkins Copicat</b>, 1957) → multi-head tape echo (<b>Roland RE-201</b>, 1973) → <b>bucket-brigade</b> pedals (1970s) → <b>digital</b> delay (late 1970s) → <b>plug-in</b> (1990s+).</div>
+        <span class="tap">tap to reveal</span>
+      </div>
+      <div class="card">
+        <div class="cq">Why does a <i>tape</i> slapback sound warmer than a digital one?</div>
+        <div class="ca">Tape acts as a gentle <b>low-pass filter</b>, so each repeat is <b>darker</b>; <b>wow &amp; flutter</b> add a pitch wobble and <b>saturation</b> adds warm harmonics. A digital delay returns a <b>clean, identical</b> copy — the darkening is the giveaway.</div>
+        <span class="tap">tap to reveal</span>
+      </div>
+      <div class="card">
+        <div class="cq">How is slapback different from ADT?</div>
+        <div class="ca">Both are short delays, but <b>ADT</b> (≈15–40 ms) sits in the <b>Haas zone</b> and adds <b>pitch modulation</b>, so the ear <b>fuses</b> it into one wider voice. Slapback (≈75–150 ms) is longer, unmodulated, and heard as a separate quick repeat.</div>
+        <span class="tap">tap to reveal</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="l"><b>This is the shape of a Technique Library page.</b> Definition callout → how it's made (maths optional) → era lineage → hear it → exam lens → retrieve. Every later technique pours into this mould.</span>
+    <span>OKLCH dark · warm analogue → cool digital · fingerprints generated, not photographed · synthesised audio, no recordings · sourced, draft</span>
+  </footer>
+
+  <div class="credits"><b>Image credits</b> — Sun Studio building: Carol M. Highsmith, Library of Congress (public domain). Ampex recorder: Michael Gaylard, <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>. Watkins Copicat: Wolfgang Stief (CC0). Roland RE-201: Bdjames (public domain). Device photos via Wikimedia Commons.</div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var SVGNS="http://www.w3.org/2000/svg";
+
+  /* ============ device lineage data ============ */
+  var DEV=[
+    { key:'tape', year:'1954', x:1954, name:'Tape machine', accent:'oklch(0.79 0.13 68)',
+      device:'Sun Studios · two Ampex 350 tape machines',
+      how:'Sam Phillips fed the playback head of one Ampex 350 into a second machine and back to the desk. With the tape running fast (15 ips) and the head gap fixed, the sound returned just once — about 125 ms later. No special box: ordinary tape machines used cleverly.',
+      tex:'A warm, slightly darker repeat with a touch of wow-and-flutter wobble. At Sun it made a single voice sound urgent and large — the slap became a rhythmic instrument in itself.',
+      why:'The first slapback. Elvis Presley, "That’s All Right" (1954), then Carl Perkins, Jerry Lee Lewis and Johnny Cash — it defined rockabilly and the 1950s rock vocal.',
+      foot:'One repeat, ~125 ms, a shade darker than the original.',
+      lens:'A tight, warm doubling on a 50s vocal is <b>tape slapback</b>. Place it as the <b>Sun Studios sound, 1954</b> (Sam Phillips).',
+      img:'/slapback-delay/assets/slapback/ampex-sun.jpg', imgAlt:'The Ampex master tape recorder on display at Sun Studio, Memphis',
+      imgCap:'The Ampex master recorder at Sun Studio — the machine Phillips used. Photo: Michael Gaylard · CC BY 2.0',
+      sig:{ delay:0.40, amp:0.72, wobble:true } },
+
+    { key:'copicat', year:'1957', x:1957, name:'Watkins Copicat', accent:'oklch(0.79 0.12 82)',
+      device:'Watkins Copicat · first dedicated tape echo',
+      how:'The Copicat ran its own short tape loop past a playback head. Set it short with the repeats turned down and you have slapback in a box you can switch in and out — and carry to a gig.',
+      tex:'Same warm tape repeat, now a switchable effect rather than a studio rig — and a little noisier as the loop wore.',
+      why:'The first box built just for tape echo (1957). Slapback was no longer a studio trick needing a spare machine — a gigging guitarist could carry it. The examiner credits "Copycat" by name.',
+      foot:'One short tape repeat, on demand.',
+      lens:'Recognise tape slapback used <b>live</b> from the late 1950s. Place the <b>Watkins Copicat, 1957</b>, as the first dedicated unit.',
+      img:'/slapback-delay/assets/slapback/copicat.jpg', imgAlt:'A Watkins Copicat tape echo unit',
+      imgCap:'A Watkins Copicat tape echo. Photo: Wolfgang Stief · CC0 (public domain)',
+      sig:{ delay:0.40, amp:0.74, wobble:true } },
+
+    { key:'re201', year:'1973', x:1973, name:'Roland RE-201', accent:'oklch(0.75 0.13 48)',
+      device:'Roland RE-201 Space Echo · 3 heads + spring reverb',
+      how:'The RE-201 has three playback heads at different spacings, chosen by a mode selector. Pick the nearest head, feedback off, and you get a single short tap — a slapback — from a box really built for long, dubby echoes.',
+      tex:'Lush tape warmth, with a built-in spring reverb tank in the same unit. Capable of slapback, but famous for much more — overload the feedback and it self-oscillates.',
+      why:'The classic multi-head tape echo (1973), workhorse of dub and surf. Its era-mates: the <b>Maestro Echoplex</b> (sliding head; Hendrix, Pink Floyd) and the <b>Binson Echorec</b> oil-can drum delay (Pink Floyd).',
+      foot:'Nearest head selected: one short tap.',
+      lens:'A warm tape slap that could also do long, regenerating echoes points to a <b>multi-head unit</b>. Place the <b>Roland RE-201, 1973</b>.',
+      img:'/slapback-delay/assets/slapback/re201-face.jpg', imgAlt:'The front panel of a Roland RE-201 Space Echo',
+      imgCap:'The Roland RE-201 Space Echo front panel. Photo: Bdjames · public domain',
+      sig:{ delay:0.38, amp:0.78, wobble:true } },
+
+    { key:'bbd', year:'1970s', x:1976, name:'Bucket-brigade', accent:'oklch(0.74 0.12 152)',
+      device:'Bucket-brigade (BBD) analogue pedal',
+      how:'Bucket-brigade chips pass the signal down a chain of tiny capacitors, each handing its sample to the next like a line passing buckets of water. Set the time short with repeats off and you have analogue slapback with no moving parts.',
+      tex:'Warm and analogue, steadier than tape — no wow and flutter, but it rolls off the highs and adds a little clock noise. Good for short delays; struggles past ~600 ms.',
+      why:'Brought analogue slapback into a compact, road-proof pedal in the 1970s, with no tape loop to wear out. Classics: <b>EH Memory Man</b>, <b>Boss DM-2</b>, MXR Carbon Copy.',
+      foot:'One analogue repeat — warm, but steady.',
+      lens:'A warm <b>analogue</b> repeat with none of tape’s pitch wobble suggests a <b>bucket-brigade</b> pedal. Place it in the <b>1970s</b>.',
+      sig:{ delay:0.42, amp:0.76, wobble:false } },
+
+    { key:'digital', year:'late 1970s', x:1980, name:'Digital delay', accent:'oklch(0.74 0.12 205)',
+      device:'Digital delay · exact, repeatable time',
+      how:'A digital delay samples the sound and holds it in memory for an exact number of milliseconds. Slapback becomes a precise figure — set 110 ms and it is 110 ms, every take, with tap-tempo and presets.',
+      tex:'A clean, exact copy of the original — no darkening, no wobble. Precise, but it can sound clinical for a 50s effect.',
+      why:'Made slapback a repeatable, recallable number from the late 1970s — the <b>AMS DMX 15-80</b> (1978) was the first studio digital delay. The exam’s go-to example of creative digital delay is <b>The Edge / U2</b>.',
+      foot:'An exact, clean repeat at a set time.',
+      lens:'A <b>clean, identical</b> repeat (no tape darkening) points to <b>digital</b>. Place it from the <b>late 1970s</b>.',
+      sig:{ delay:0.42, amp:0.88, wobble:false } },
+
+    { key:'plugin', year:'1990s+', x:1994, name:'Plug-in', accent:'oklch(0.73 0.13 292)',
+      device:'DAW plug-in · slapback as a preset',
+      how:'In the DAW, slapback is a recallable preset: type the delay time, set one repeat, no feedback. Tape character — warmth, wow, saturation — is modelled back in by choice, or emulated by convolution.',
+      tex:'Anything you want: surgically clean, or a tape emulation that puts the 1954 darkness and wobble back on purpose.',
+      why:'Made the whole lineage available at once (1990s+) — including <b>emulating</b> tape, because the clean digital repeat can sound too sterile for the original effect.',
+      foot:'A preset repeat — clean, or modelled-warm by choice.',
+      lens:'Modern productions reaching for a <b>retro</b> slap usually use a <b>tape-emulation plug-in</b>. Place it from the <b>1990s</b> on.',
+      sig:{ delay:0.42, amp:0.84, wobble:false } }
+  ];
+
+  /* ============ timeline ============ */
+  var Y0=1948, Y1=2002, TX0=60, TX1=1040, baseY=118;
+  function yearX(y){ return TX0 + (y-Y0)/(Y1-Y0)*(TX1-TX0); }
+
+  var decG=document.getElementById('decades');
+  for(var d=1950; d<=2000; d+=10){
+    var x=yearX(d);
+    var ln=document.createElementNS(SVGNS,'line');
+    ln.setAttribute('class','tl-tick'); ln.setAttribute('x1',x); ln.setAttribute('x2',x);
+    ln.setAttribute('y1',baseY-5); ln.setAttribute('y2',baseY+5); decG.appendChild(ln);
+    var tx=document.createElementNS(SVGNS,'text');
+    tx.setAttribute('class','tl-decade'); tx.setAttribute('x',x); tx.setAttribute('y',baseY+22);
+    tx.textContent="’"+String(d).slice(2); decG.appendChild(tx);
+  }
+
+  var nodesG=document.getElementById('nodes'), nodeEls=[];
+  DEV.forEach(function(dev,idx){
+    var x=yearX(dev.x);
+    var g=document.createElementNS(SVGNS,'g');
+    g.setAttribute('class','node'); g.setAttribute('tabindex','0');
+    g.setAttribute('role','button'); g.setAttribute('aria-label',dev.name+', '+dev.year);
+    var ny=(idx%2===0)?100:80;  // stagger label heights so clustered nodes never collide
+    g.innerHTML=
+      '<text class="nm" x="'+x+'" y="'+ny+'">'+dev.name.toUpperCase()+'</text>'+
+      '<circle class="ring" cx="'+x+'" cy="'+baseY+'" r="14" style="stroke:'+dev.accent+'"/>'+
+      '<circle class="core" cx="'+x+'" cy="'+baseY+'" r="6" fill="'+dev.accent+'"/>'+
+      '<text class="yr" x="'+x+'" y="'+(baseY+40)+'">'+dev.year+'</text>';
+    g.addEventListener('click',function(){ select(idx); });
+    g.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); select(idx); }});
+    nodesG.appendChild(g); nodeEls.push(g);
+  });
+
+  /* ============ signature SVGs ============ */
+  // two-tap fingerprint: original + single repeat (+ optional ghost echo train)
+  function tap(x,y0,y1,cls){ return '<line class="'+cls+'" x1="'+x.toFixed(1)+'" y1="'+y0.toFixed(1)+'" x2="'+x.toFixed(1)+'" y2="'+y1.toFixed(1)+'"/>'; }
+
+  function buildMainSig(){
+    var x0=26,x1=236,base=120,top=26,span=x1-x0,h=base-top;
+    var out='';
+    out+='<line class="sig-axis" x1="'+x0+'" y1="'+base+'" x2="'+x1+'" y2="'+base+'"/>';
+    out+='<text class="sig-lbl" x="'+x0+'" y="'+(base+15)+'">in</text>';
+    out+='<text class="sig-lbl" x="'+x1+'" y="'+(base+15)+'" text-anchor="end">time →</text>';
+    // original
+    var ox=x0+8; out+=tap(ox,base,base-h,'sig-orig');
+    out+='<text class="sig-lbl" x="'+ox+'" y="'+(top-6)+'" text-anchor="middle">original</text>';
+    // single repeat
+    var rx=x0+0.42*span, rh=h*0.74; out+=tap(rx,base,base-rh,'sig-rep');
+    out+='<text class="sig-lbl" x="'+rx+'" y="'+(base-rh-6)+'" text-anchor="middle" style="fill:var(--c)">one repeat</text>';
+    // delay brace
+    out+='<line class="sig-brace" x1="'+ox+'" y1="'+(base+22)+'" x2="'+rx+'" y2="'+(base+22)+'"/>';
+    out+='<text class="sig-lbl" x="'+((ox+rx)/2)+'" y="'+(base+32)+'" text-anchor="middle" style="fill:var(--c)">≈100 ms</text>';
+    // ghost echo train (what slapback is NOT)
+    for(var i=1;i<=5;i++){
+      var gx=rx+i*0.10*span; if(gx>x1) break;
+      var gh=rh*Math.pow(0.6,i);
+      out+=tap(gx,base,base-gh,'sig-ghost');
+    }
+    out+='<text class="sig-lbl" x="'+(rx+0.30*span)+'" y="'+(top+4)+'" text-anchor="middle">(an echo keeps going)</text>';
+    return out;
+  }
+
+  function buildNodeSig(p){
+    var x0=26,x1=236,base=120,top=26,span=x1-x0,h=base-top;
+    var out='';
+    out+='<line class="sig-axis" x1="'+x0+'" y1="'+base+'" x2="'+x1+'" y2="'+base+'"/>';
+    out+='<text class="sig-lbl" x="'+x0+'" y="'+(base+15)+'">in</text>';
+    out+='<text class="sig-lbl" x="'+x1+'" y="'+(base+15)+'" text-anchor="end">time →</text>';
+    var ox=x0+8; out+=tap(ox,base,base-h,'sig-orig');
+    out+='<text class="sig-lbl" x="'+ox+'" y="'+(top-6)+'" text-anchor="middle">original</text>';
+    var rx=x0+p.delay*span, rh=h*p.amp;
+    out+=tap(rx,base,base-rh,'sig-rep');
+    if(p.wobble){
+      // a faint, slightly offset twin = pitch wobble of tape
+      out+='<line class="sig-rep" style="opacity:.4" x1="'+(rx+3).toFixed(1)+'" y1="'+base+'" x2="'+(rx+3).toFixed(1)+'" y2="'+(base-rh*0.9).toFixed(1)+'"/>';
+      out+='<text class="sig-lbl" x="'+rx+'" y="'+(base-rh-6)+'" text-anchor="middle" style="fill:var(--c)">warm · wobble</text>';
+    } else {
+      out+='<text class="sig-lbl" x="'+rx+'" y="'+(base-rh-6)+'" text-anchor="middle" style="fill:var(--c)">'+(p.amp>0.85?'clean · exact':'one repeat')+'</text>';
+    }
+    return out;
+  }
+
+  /* ============ selection ============ */
+  var dName=document.getElementById('dName'), dYear=document.getElementById('dYear'),
+      dDevice=document.getElementById('dDevice'), dHow=document.getElementById('dHow'),
+      dTex=document.getElementById('dTex'), dWhy=document.getElementById('dWhy'),
+      dFoot=document.getElementById('dFoot'), dLens=document.getElementById('dLens'),
+      nodesig=document.getElementById('nodesig'),
+      devphotoWrap=document.getElementById('devphotoWrap'), dImg=document.getElementById('dImg'), dImgCap=document.getElementById('dImgCap'),
+      dleft=document.getElementById('dleft'), dright=document.getElementById('dright');
+
+  function select(idx){
+    var dev=DEV[idx];
+    document.documentElement.style.setProperty('--c',dev.accent);
+    document.documentElement.style.setProperty('--c-soft', dev.accent.replace(')',' / .16)'));
+    nodeEls.forEach(function(g,i){ g.classList.toggle('sel',i===idx); });
+    dName.textContent=dev.name; dYear.textContent=dev.year; dDevice.innerHTML=dev.device;
+    dHow.textContent=dev.how; dTex.textContent=dev.tex; dWhy.innerHTML=dev.why;
+    dFoot.textContent=dev.foot; dLens.innerHTML=dev.lens;
+    if(dev.img){ dImg.src=dev.img; dImg.alt=dev.imgAlt||''; dImgCap.textContent=dev.imgCap||''; devphotoWrap.hidden=false; }
+    else { devphotoWrap.hidden=true; dImg.removeAttribute('src'); }
+    nodesig.innerHTML=buildNodeSig(dev.sig);
+    document.getElementById('mainsig').innerHTML=buildMainSig(); // repaint with new accent
+    [dleft,dright].forEach(function(el){ el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); });
+  }
+
+  /* ============ hear-it demo ============ */
+  var MSMIN=10, MSMAX=320;
+  var msEl=document.getElementById('ms'), msVal=document.getElementById('msVal'),
+      zoneNote=document.getElementById('zoneNote'), demosig=document.getElementById('demosig');
+  var delayMs=110;
+
+  function zonePct(ms){ return ((ms-MSMIN)/(MSMAX-MSMIN)*100); }
+  // shade the 75-150 slapback band on the slider track
+  msEl.style.setProperty('--z0', zonePct(75).toFixed(1)+'%');
+  msEl.style.setProperty('--z1', zonePct(150).toFixed(1)+'%');
+
+  function noteFor(ms){
+    if(ms<40) return 'Under ~40 ms the repeat fuses into the original as <b>comb-filtering / flanging</b> — you hear a tonal colour, not a doubling.';
+    if(ms<75) return 'A very tight doubling — on the edge of slapback; it thickens but barely separates.';
+    if(ms<=150) return '<b>Slapback.</b> One quick repeat the ear can’t separate, so it reads as a thicker, doubled sound. This is the exam answer.';
+    if(ms<=210) return 'The repeat is pulling away — you start to hear it as a <b>separate slap</b> rather than a doubling.';
+    return 'This is a <b>distinct echo</b> now, not slapback. Add feedback here and it would become a repeating delay.';
+  }
+
+  function buildDemoSig(){
+    // time axis 0..MSMAX across the width; original at 0, repeat at delayMs, slapback band shaded
+    var x0=40,x1=690,base=118,top=28,span=x1-x0,h=base-top;
+    function tx(ms){ return x0 + (ms/MSMAX)*span; }
+    var out='';
+    // slapback zone band
+    var zx0=tx(75), zx1=tx(150);
+    out+='<rect class="sig-zone" x="'+zx0.toFixed(1)+'" y="'+top+'" width="'+(zx1-zx0).toFixed(1)+'" height="'+(base-top)+'" rx="3"/>';
+    out+='<text class="sig-lbl" x="'+((zx0+zx1)/2).toFixed(1)+'" y="'+(top-8)+'" text-anchor="middle" style="fill:var(--c)">slapback zone</text>';
+    // axis
+    out+='<line class="sig-axis" x1="'+x0+'" y1="'+base+'" x2="'+x1+'" y2="'+base+'"/>';
+    [0,75,150,225,300].forEach(function(m){
+      var xx=tx(m);
+      out+='<line class="sig-axis" x1="'+xx.toFixed(1)+'" y1="'+base+'" x2="'+xx.toFixed(1)+'" y2="'+(base+5)+'"/>';
+      out+='<text class="sig-lbl" x="'+xx.toFixed(1)+'" y="'+(base+16)+'" text-anchor="middle">'+m+'</text>';
+    });
+    out+='<text class="sig-lbl" x="'+x1+'" y="'+(base+16)+'" text-anchor="end">ms →</text>';
+    // original
+    out+=tap(tx(0)+2,base,base-h,'sig-orig');
+    out+='<text class="sig-lbl" x="'+(tx(0)+2)+'" y="'+(top-8)+'" text-anchor="start">original</text>';
+    // repeat at current delay
+    var rx=tx(delayMs);
+    var inZone = delayMs>=75 && delayMs<=150;
+    out+=tap(rx,base,base-h*0.78,(inZone?'sig-rep':'sig-ghost'));
+    out+='<text class="sig-lbl" x="'+rx.toFixed(1)+'" y="'+(base-h*0.78-7)+'" text-anchor="middle" style="fill:'+(inZone?'var(--c)':'var(--ink-3)')+'">repeat</text>';
+    return out;
+  }
+
+  function refreshDemo(){
+    msVal.textContent=delayMs+' ms';
+    zoneNote.innerHTML=noteFor(delayMs);
+    demosig.innerHTML=buildDemoSig();
+  }
+  msEl.addEventListener('input',function(){ delayMs=parseInt(msEl.value,10); refreshDemo(); });
+
+  /* ---- Web Audio: synthesised stab ---- */
+  var ctx=null;
+  function ac(){ if(!ctx){ var AC=window.AudioContext||window.webkitAudioContext; ctx=new AC(); } if(ctx.state==='suspended'){ ctx.resume(); } return ctx; }
+
+  function makeStab(c,t){
+    // a short, plucky two-note stab through a closing low-pass — guitar/keys flavour, fully synthesised
+    var env=c.createGain(); env.gain.setValueAtTime(0.0001,t);
+    env.gain.exponentialRampToValueAtTime(0.9,t+0.006);
+    env.gain.exponentialRampToValueAtTime(0.0008,t+0.22);
+    var lp=c.createBiquadFilter(); lp.type='lowpass';
+    lp.frequency.setValueAtTime(2600,t); lp.frequency.exponentialRampToValueAtTime(700,t+0.2);
+    lp.Q.value=0.7; lp.connect(env);
+    var freqs=[196.00, 246.94, 392.00]; // G3, B3, G4 — a bright stab
+    freqs.forEach(function(f,i){
+      var o=c.createOscillator(); o.type='sawtooth'; o.frequency.value=f;
+      var g=c.createGain(); g.gain.value=i===0?0.5:(i===1?0.32:0.22);
+      o.connect(g); g.connect(lp); o.start(t); o.stop(t+0.26);
+    });
+    return env;
+  }
+
+  function play(withSlap){
+    var c=ac(), t=c.currentTime+0.02;
+    var master=c.createGain(); master.gain.value=0.85; master.connect(c.destination);
+    var stab=makeStab(c,t);
+    stab.connect(master); // dry
+    if(withSlap){
+      var dl=c.createDelay(0.6); dl.delayTime.value=Math.min(delayMs/1000,0.6);
+      var wet=c.createGain(); wet.gain.value=0.82; // loud repeat, no feedback
+      stab.connect(dl); dl.connect(wet); wet.connect(master);
+    }
+  }
+  document.getElementById('bDry').addEventListener('click',function(){ play(false); });
+  document.getElementById('bSlap').addEventListener('click',function(){ play(true); });
+
+  /* ---- retrieve cards ---- */
+  Array.prototype.forEach.call(document.querySelectorAll('#cards .card'),function(card){
+    card.addEventListener('click',function(){ card.classList.toggle('open');
+      var t=card.querySelector('.tap'); t.textContent=card.classList.contains('open')?'tap to hide':'tap to reveal'; });
+  });
+
+  /* ---- sticky section progress ---- */
+  var SECTIONS=[
+    {id:'s1',n:'01',t:"How it's made"},
+    {id:'s2',n:'02',t:'Era lineage'},
+    {id:'s3',n:'03',t:'Hear it'},
+    {id:'s4',n:'04',t:'In the exam'},
+    {id:'s5',n:'05',t:'Retrieve'}
+  ];
+  var prog=document.getElementById('progress'),
+      pNum=document.getElementById('pNum'), pTitle=document.getElementById('pTitle'),
+      pSteps=document.getElementById('pSteps');
+  SECTIONS.forEach(function(s){
+    var li=document.createElement('li'); li.textContent=s.n;
+    li.setAttribute('role','button'); li.setAttribute('aria-label',s.n+' '+s.t); li.setAttribute('tabindex','0');
+    function go(){ var el=document.getElementById(s.id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+    li.addEventListener('click',go);
+    li.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); }});
+    pSteps.appendChild(li);
+  });
+  var stepEls=pSteps.querySelectorAll('li'), curIdx=-1;
+  function setActive(i){
+    if(i===curIdx) return; curIdx=i;
+    pNum.textContent=SECTIONS[i].n; pTitle.textContent=SECTIONS[i].t;
+    stepEls.forEach(function(el,j){ el.classList.toggle('on',j===i); });
+  }
+  // show the bar once the hero scrolls away
+  var heroAnchor=document.querySelector('.flag')||document.querySelector('.callout');
+  if(heroAnchor && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){ prog.classList.toggle('show', !e.isIntersecting); });
+    },{rootMargin:'-56px 0px 0px 0px'}).observe(heroAnchor);
+    // scroll-spy: a section is "current" when it crosses the upper third
+    var spy=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          for(var k=0;k<SECTIONS.length;k++){ if(SECTIONS[k].id===e.target.id){ setActive(k); break; } }
+        }
+      });
+    },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+    SECTIONS.forEach(function(s){ var el=document.getElementById(s.id); if(el) spy.observe(el); });
+  }
+  setActive(0);
+
+  /* ---- init ---- */
+  select(0);
+  refreshDemo();
+})();
+</script>
+</body>
+</html>
