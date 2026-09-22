@@ -31,6 +31,9 @@
 //      label reaches the student, before or after Check (Mike, 12 Sep 2026:
 //      "this is going to tip the students off to which exams have this type
 //      of question in them")
+//  11. the numbers under the zero line add up to the grid the page measures
+//      on: 1 to 5 on a 5 ms grid, 2 to 10 on a 10 ms grid, and none on the
+//      bare grid (a U6 student, 15 Sep 2026: question 16 printed 1 to 5 over 10 ms)
 
 import { chromium } from 'playwright';
 
@@ -87,6 +90,7 @@ const sheet = () => page.evaluate(() => {
         score: canvas?.dataset.score || '',
         grid: canvas?.dataset.grid || '',
         span: Number(canvas?.dataset.span || 0),
+        divisions: canvas?.dataset.divisions || '',
         answer: canvas?.dataset.answer || '',
         pageW: document.documentElement.scrollWidth,
         innerW: window.innerWidth,
@@ -169,6 +173,7 @@ ok(`the sheet sets ${COUNT} questions and a blank paper`);
 // ---- 1, 2, 3 and 10: the walk, and what every question prints ----
 const seen = [];
 let axisQ = 0; // the question that prints the two axis boxes, found by walking
+let axisRead = 0; // the 10 ms grids whose numbers read 2 to 10
 for (let i = 1; i <= COUNT + 1; i += 1) {
     const s = await sheet();
     seen.push(s.q);
@@ -185,6 +190,14 @@ for (let i = 1; i <= COUNT + 1; i += 1) {
         if (s.bullets.length && !s.bullets.every((b) => /\(\d\)$/.test(b))) fail(`${name}: a bullet carries no marks bracket`);
         if (!s.bullets.length && !/^\(\d\)$/.test(s.bracket.replace(/\s+/g, ''))) fail(`${name}: the marks bracket reads "${s.bracket}"`);
         if (!s.answer) fail(`${name}: the page does not expose the scheme's answer for the gate`);
+        // Law 11: the axis numbers are the grid's own worth
+        if (s.boxes.length === 2) {
+            if (s.divisions) fail(`${name}: the bare grid prints division numbers (${s.divisions})`);
+        } else {
+            const want = [1, 2, 3, 4, 5].map((n) => (n * s.span) / 5).join(',');
+            if (s.divisions !== want) fail(`${name}: the axis reads ${s.divisions || 'nothing'} on a ${s.span} ms grid, not ${want}`);
+            else if (s.span !== 5) axisRead += 1;
+        }
     }
     if (i === 1 && !(await back().isDisabled())) fail('Back is not dead on question 1');
     if (i === COUNT + 1 && !(await next().isDisabled())) fail('Next is not dead on the blank paper');
@@ -194,6 +207,7 @@ const walked = [...Array(COUNT)].map((_, i) => `${i + 1}/${COUNT}`).concat('blan
 if (seen.join(' ') === walked) ok(`Next walks question 1 to ${COUNT} and then the blank paper, and stops`);
 else fail(`the walk went ${seen.join(' ')}`);
 if (!axisQ) fail('no question prints the two axis boxes');
+if (axisRead) ok(`${axisRead} question${axisRead > 1 ? 's' : ''} on the 10 ms grid number the axis 2 to 10, and every 5 ms grid 1 to 5`);
 const bodyText = (await sheet()).body;
 if (/—/.test(bodyText)) fail('em-dash in the page\'s own text');
 else if (/\butilise/i.test(bodyText)) fail('"utilise" in the page\'s own text');

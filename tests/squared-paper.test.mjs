@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-    DIVS, COLS, SHAPE_IDS, SHAPES, QUESTIONS, COUNT, TIME_BASES,
+    DIVS, COLS, SHAPE_IDS, SHAPES, QUESTIONS, COUNT, TIME_BASES, divisionsOf,
     INITIAL, stateAt, questionAt, questionOf, figureOf, totalMarks, tagOf, isBlank,
     drawAt, clearLine, setChecked, setLabel, stepQuestion, canStep, nextWord, spanOf, emptyLine,
     AXIS_WORDS, axisSaid,
@@ -51,6 +51,22 @@ test('the grid is the paper\'s: five divisions, and a division is 1 ms or 2 ms',
     assert.equal(spanOf(at(1)), 5);
     assert.equal(spanOf(at(14)), 10, 'the 2025 octave question opens its grid to 2 ms a division');
     assert.equal(spanOf(at(16)), 10, 'a 5 ms answer needs two cycles of room');
+});
+
+test('the numbers under the zero line say what a division is worth on that question\'s grid', () => {
+    // a U6 student, 15 Sep 2026: question 16 printed 1 to 5 over a 10 ms grid, so
+    // one cycle across the printed "5 ms" read as 10 ms and lost the mark.
+    assert.deepEqual(divisionsOf(5), [1, 2, 3, 4, 5]);
+    assert.deepEqual(divisionsOf(10), [2, 4, 6, 8, 10]);
+    for (const q of QUESTIONS) {
+        const span = TIME_BASES[q.timeBase].span;
+        const numbers = divisionsOf(span);
+        assert.equal(numbers.length, DIVS);
+        assert.equal(numbers[DIVS - 1], span, `${q.id}: the last division must read the grid's full width`);
+        // the scheme's answer, read against the printed numbers, is the period the stem asks for
+        const a = answerOf(stateAt(QUESTIONS.indexOf(q)));
+        if (a && !a.anyPeriod) assert.ok(a.periodMs <= span / 2, `${q.id}: ${a.periodMs} ms does not show two cycles on a grid numbered to ${span}`);
+    }
 });
 
 test('a period is read off the paper to the paper\'s own ruling, so 2 ms is 500 Hz and not 499', () => {

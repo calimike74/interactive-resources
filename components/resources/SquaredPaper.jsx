@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './squared-paper.module.css';
 import { benchSans } from '@/components/bench/fonts';
 import {
-    DIVS, COLS, SQUARES, ROWS, SHAPES, TIME_BASES,
+    DIVS, COLS, SQUARES, ROWS, SHAPES, TIME_BASES, divisionsOf,
     INITIAL, questionOf, figureOf, isBlank, totalMarks, tagOf, COUNT,
     drawAt, clearLine, setChecked, setLabel, stepQuestion, canStep, nextWord, spanOf,
     read, answerOf, marksFor, scoreOf, verdict, shapeAt,
@@ -200,7 +200,9 @@ function paint(canvas, { sq, span, line = null, wave = null, answer = null, bare
 
     // the paper's own labels, drawn last so a wave crossing a division number
     // does not bury it, each numeral on a paper-white halo so it reads
-    // through a line. The smaller grid keeps the type readable rather than to
+    // through a line. The numbers are what a division is worth on this
+    // question's grid (1 to 5 on a 5 ms grid, 2 to 10 on a 10 ms one), so
+    // the axis never says 5 ms where the paper measures 10. The smaller grid keeps the type readable rather than to
     // scale: at 8 px the figure's numbers sat on the axis line. A question
     // that asks the student to label the axes prints none of this, as the
     // 2024 paper prints none of it.
@@ -213,11 +215,12 @@ function paint(canvas, { sq, span, line = null, wave = null, answer = null, bare
         g.strokeStyle = COL.paper;
         g.fillStyle = COL.ink;
         g.font = `700 ${type}px ${face}`;
+        const numbers = divisionsOf(span);
         for (let i = 1; i <= DIVS; i += 1) {
             const x = x0 + (i / DIVS) * w;
             const y = mid + type + 6;
-            g.strokeText(String(i), x, y);
-            g.fillText(String(i), x, y);
+            g.strokeText(String(numbers[i - 1]), x, y);
+            g.fillText(String(numbers[i - 1]), x, y);
         }
         g.lineWidth = 1;
         g.font = `${type}px ${face}`;
@@ -282,6 +285,9 @@ export default function SquaredPaper({ back }) {
         const box = gridBox(ANSWER_SQ);
         canvas.dataset.grid = `${box.x0}:${box.y0}:${box.w}:${box.h}`;
         canvas.dataset.span = String(span);
+        // the numbers printed under the zero line, so the gate can hold the
+        // axis to the grid it measures on
+        canvas.dataset.divisions = q.blankAxes ? '' : divisionsOf(span).join(',');
         canvas.dataset.answer = answer ? `${answer.shape}:${answer.periodMs}:${answer.amp.toFixed(2)}:${answer.inverted ? 1 : 0}` : '';
     }, [state, span, answer, q.blankAxes, rd, score.got, score.total]);
 
