@@ -36,6 +36,8 @@ The trap is the best-evidenced line on the bench: three reports name it in near-
 
 Caveats encoded rather than smoothed over: **2021 A and 2024 AS have no examiner report** (none was published), so their preset's report field is genuinely empty rather than invented.
 
+**27 Sep 2026: the dead line moved.** The tail used to grade anything at or under 0.45 s as too dead and advise "about 0.8 s: neutral, not dead", which is a live room's figure, while The Sweet Spot (workshops `/control-room/`) teaches a control room's 0.2 to 0.4 s (EBU Tech 3276 and ITU-R BS.1116: Tm = 0.25 × (V / 100 m³)^⅓ s). "Completely acoustically dead" now means under 0.15 s (`DEAD_BELOW`). The dial reaches 0.1 s (`RT60_MIN`) and **Judge: too dead** sits there. With the Judge's task on (the 2022 AS control room), the tail is held to 0.2 to 0.4 s, and anything longer reads partly. Pinned by the model test "a control room aims for 0.2 to 0.4 s".
+
 ---
 
 ## 2 · Three stations, one stage, one console

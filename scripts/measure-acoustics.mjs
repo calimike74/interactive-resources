@@ -311,7 +311,7 @@ if (want('rt60')) {
     // division the Reverb bench settled on, 2 Sep 2026.
     const FROM = 0.85;
     for (const target of [1.5, 2, 2.5, 3]) {
-        await setDial('Reverb time', target, 0.3, 3, 0.05);
+        await setDial('Reverb time', target, 0.1, 3, 0.05); // the dial's range, RT60_MIN to RT60_MAX (0.1 since 27 Sep 2026)
         const dial = await readRt60();
         const r = await rms(14, 1.2);
         const ons = onsets(r.pts);

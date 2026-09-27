@@ -69,7 +69,10 @@ test('A-level judges a paper\'s task in the scheme\'s line with its year, and a 
     // the other way the answer goes wrong
     const d = judge({ state: applyPreset(DEFAULT_STATE, 'judgeDead'), last: 'rt60' });
     assert.match(d[1].text, /not the goal/);
-    assert.match(d[1].text, /neutral, not dead/);
+    // the way back is the control-room target, never a live room's 0.8 s (27 Sep 2026)
+    assert.match(d[1].text, /0\.2 to 0\.4 s/);
+    assert.ok(!/0\.8 s|neutral/.test(d[1].text), d[1].text);
+    assert.ok(!/0\.8 s/.test(nextMove(applyPreset(DEFAULT_STATE, 'judgeDead'))), 'the too-dead patch still sends pupils to 0.8 s');
     // a masker above the target is faulted, one below is not
     const above = judge({ state: applyPreset(DEFAULT_STATE, 'fromAbove'), last: 'place' });
     assert.match(above[1].text, /survives any level/);

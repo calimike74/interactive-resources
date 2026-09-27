@@ -275,14 +275,36 @@ test('the papers\' presets are pinned to the exact settings their schemes descri
 });
 
 // ---- 6 · the judge --------------------------------------------------------
+// 27 Sep 2026: the tail used to call anything at or under 0.45 s "poor" and advise about 0.8 s, which is a live
+// room's figure. A control room aims for about 0.2 to 0.4 s (EBU Tech 3276, ITU-R BS.1116), and The Sweet Spot
+// teaches that band, so the two resources must not disagree.
+test('a control room aims for 0.2 to 0.4 s: short is the target, and only next to nothing is too dead', () => {
+    const st = (over) => ({ ...DEFAULT_STATE, ...over });
+    // the dial reaches a dead room, and the too-dead patch sits in it
+    assert.ok(RT60_MIN <= 0.1, `the dial stops at ${RT60_MIN} s, so a dead room cannot be set`);
+    const dead = applyPreset(DEFAULT_STATE, 'judgeDead');
+    assert.ok(dead.rt60 < 0.15, `Judge: too dead sits at ${dead.rt60} s`);
+    // the control-room band is never a fault, and never reads as dead
+    for (const rt60 of [0.2, 0.25, 0.3, 0.35, 0.4]) {
+        assert.notEqual(judgeSection(st({ rt60, absorb: 'treated' }), 'tail').grade, 'poor', `${rt60} s graded poor`);
+        assert.equal(judgeSection(st({ rt60, absorb: 'treated', task: 'judge' }), 'tail').grade, 'good', `${rt60} s in the control room`);
+        assert.notEqual(verdict(st({ rt60, absorb: 'treated', proof: false })).key, 'dead', `${rt60} s read as dead`);
+    }
+    // judged as the control room (2022 AS Q6), a tail past the target is only partly right, and the line says why
+    for (const rt60 of [0.6, 1.1, 2.2]) assert.equal(judgeSection(st({ rt60, absorb: 'treated', task: 'judge' }), 'tail').grade, 'partly', `${rt60} s in the control room`);
+    assert.match(judgeSection(st({ rt60: 1.1, absorb: 'panels', task: 'judge' }), 'tail').why, /0\.2 to 0\.4 s/);
+});
+
+
 test('the judge faults only what a scheme or a report faults, and quotes it with its year', () => {
     const st = (over) => ({ ...DEFAULT_STATE, ...over });
     // the trap: soundproofing is the one thing that is always wrong here
     assert.equal(judgeSection(st({ proof: true }), 'walls').grade, 'poor');
     assert.match(judgeSection(st({ proof: true }), 'walls').cite, /2022 AS report/);
-    // a dead room is a fault the report names, in the other direction
-    assert.equal(judgeSection(st({ rt60: 0.3, absorb: 'treated' }), 'tail').grade, 'poor');
-    assert.match(judgeSection(st({ rt60: 0.3, absorb: 'treated' }), 'tail').cite, /uncomfortable environment/);
+    // a dead room is a fault the report names, in the other direction: "completely acoustically dead", next to
+    // nothing coming back, which is not a control room's short decay
+    assert.equal(judgeSection(st({ rt60: 0.1, absorb: 'treated' }), 'tail').grade, 'poor');
+    assert.match(judgeSection(st({ rt60: 0.1, absorb: 'treated' }), 'tail').cite, /uncomfortable environment/);
     // a treated room is not a fault
     assert.equal(judgeSection(st({ rt60: 0.6, absorb: 'treated', proof: false }), 'walls').grade, 'good');
     // a masker above the target is the one masking setting that cannot work
