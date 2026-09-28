@@ -1,12 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-    RATES, TONES, DEFAULT_STATE, PRESETS, applyPreset, setRateIndex, setBits, setRate, rateFromPeriod,
+    RATES, SOURCES, DEFAULT_STATE, PRESETS, applyPreset, setRateIndex, setBits, setRate, rateFromPeriod,
     makeConverter, converterDelay, hostStep, quantise, codeValue, binaryWord, aliasOf, levels, dynamicRangeDb, nyquist,
-    samplesPerCycle, filterGain, picture, toneSignal, toneWindowMs, readings, FILTER_QS, filterRun,
+    filterGain, picture, foldBand, readings, FILTER_QS, filterRun,
 } from '../lib/bench/adc-model.js';
 
 const HOST = 48000;
+// A sine in, for testing the picture's maths (kHz, ms)
+const sine = (fKhz, amp = 0.8) => ({ signal: (t) => amp * Math.sin(2 * Math.PI * fKhz * t), raw: (t) => amp * Math.sin(2 * Math.PI * fKhz * t) });
 // Run a tone through the converter the worklet runs; return the output
 // after the delay has settled.
 function run(fHz, rateKhz, bits, seconds = 0.25) {
@@ -32,21 +34,14 @@ function peakHz(a, lo = 100, hi = 20000, stepHz = 10) {
     return best;
 }
 
-test('the rates the worksheet walks are on the dial, and 44.1, 48 and 96 kHz are there', () => {
-    for (const r of [6, 20, 80, 44.1, 48, 96]) assert.ok(RATES.includes(r), `${r}`);
-    assert.ok(TONES.includes(3));
+test('the rates on the dial include the formats and the vintage sampler', () => {
+    for (const r of [7.5, 8, 20, 40, 44.1, 48, 96]) assert.ok(RATES.includes(r), `${r}`);
 });
 
-test('samples per cycle: 20 kHz on the 3 kHz tone is 6.7, 80 kHz is 26.7, 6 kHz is exactly two', () => {
-    assert.equal(samplesPerCycle(20, 3).toFixed(1), '6.7');
-    assert.equal(samplesPerCycle(80, 3).toFixed(1), '26.7');
-    assert.equal(samplesPerCycle(6, 3), 2);
-});
-
-test('at exactly two samples a cycle every sample sits on the centre line', () => {
-    const { signal, raw } = toneSignal(3, 6, false, HOST);
-    const p = picture({ signal, raw, windowMs: toneWindowMs(3), rateKhz: 6, bits: 16 });
-    assert.equal(p.inside.length, 11); // five cycles, two a cycle, both ends
+test('at exactly two samples a cycle, sampled on the zeros, every sample sits on the centre line', () => {
+    const { signal, raw } = sine(3);
+    const p = picture({ signal, raw, windowMs: 5 / 3, rateKhz: 6, bits: 16 });
+    assert.equal(p.inside.length, 11);
     for (const s of p.inside) assert.ok(Math.abs(s.v) < 1e-9, `sample at ${s.t} is ${s.v}`);
     assert.ok(Math.max(...p.back.map(Math.abs)) < 1e-6, 'nothing comes back');
 });
@@ -124,8 +119,8 @@ test('the anti-alias filter passes the band and stops the tone above Nyquist', (
 });
 
 test('the picture\'s DAC wave is the alias, drawn through the same dots', () => {
-    const { signal, raw } = toneSignal(3, 4, false, HOST);
-    const p = picture({ signal, raw, windowMs: toneWindowMs(3), rateKhz: 4, bits: 16, points: 600 });
+    const { signal, raw } = sine(3);
+    const p = picture({ signal, raw, windowMs: 5 / 3, rateKhz: 4, bits: 16, points: 600 });
     for (const s of p.inside) {
         const i = Math.round((s.t / p.windowMs) * 600);
         assert.ok(Math.abs(p.back[i] - s.q) < 0.02, `the wave back passes through the sample at ${s.t.toFixed(3)} ms`);
@@ -135,20 +130,27 @@ test('the picture\'s DAC wave is the alias, drawn through the same dots', () => 
     assert.ok(Math.abs(t(0.25) + 0.8) < 0.03 || Math.abs(t(0.25) - 0.8) < 0.03, `quarter cycle of 1 kHz at 0.25 ms: ${t(0.25)}`);
 });
 
+test('the song\'s hi-hats fold down when the filter is off, and are cut when it is on', () => {
+    assert.deepEqual(foldBand(SOURCES.song.band, 8), { lo: 0, hi: 4 });
+    assert.equal(foldBand(SOURCES.song.band, 44.1), null);
+    const alias = readings(applyPreset(DEFAULT_STATE, 'alias'));
+    assert.equal(alias.key, 'alias');
+    assert.deepEqual(alias.fold, { lo: 0, hi: 4 });
+    assert.equal(readings({ ...applyPreset(DEFAULT_STATE, 'alias'), filter: true }).fold, null);
+    assert.equal(readings({ ...applyPreset(DEFAULT_STATE, 'alias'), filter: true }).key, 'dull');
+});
+
 test('readings name what happens', () => {
-    assert.equal(readings(DEFAULT_STATE).key, 'clean');
-    assert.equal(readings(applyPreset(DEFAULT_STATE, 'alias')).key, 'alias');
-    assert.equal(readings(applyPreset(DEFAULT_STATE, 'alias')).alias, 1);
-    assert.equal(readings(applyPreset(DEFAULT_STATE, 'two')).key, 'edge');
+    assert.equal(DEFAULT_STATE.source, 'song');
+    assert.equal(DEFAULT_STATE.rate, 20);
+    assert.equal(readings(DEFAULT_STATE).key, 'dull');
+    assert.equal(readings(applyPreset(DEFAULT_STATE, 'cd')).key, 'clean');
     assert.equal(readings(applyPreset(DEFAULT_STATE, 'grit')).key, 'grit');
+    assert.equal(readings(setBits(applyPreset(DEFAULT_STATE, 'grit'), 2)).key, 'swallowed');
     assert.equal(readings(setRate(setBits(applyPreset(DEFAULT_STATE, 'cd'), 8), 8)).key, 'hiss');
-    assert.equal(readings(setRate(applyPreset(DEFAULT_STATE, 'cd'), 8)).key, 'dull');
     assert.equal(readings(applyPreset(DEFAULT_STATE, 's900low')).key, 'dull');
     assert.equal(readings(applyPreset(DEFAULT_STATE, 's900high')).key, 'clean');
-    assert.ok(RATES.includes(7.5) && RATES.includes(40));
-    assert.equal(readings({ ...applyPreset(DEFAULT_STATE, 'alias'), filter: true }).key, 'filtered');
-    assert.equal(readings(applyPreset(DEFAULT_STATE, 'judge')).alias, 5);
-    assert.equal(readings(applyPreset(DEFAULT_STATE, 'cd')).key, 'clean');
+    assert.ok(!('tone' in SOURCES));
 });
 
 test('edits: the dial walks the steps, a preset lands, the bracket snaps to a step', () => {

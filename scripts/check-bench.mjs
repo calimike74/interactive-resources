@@ -171,8 +171,8 @@ const BENCHES = {
     },
     'adc-explorer': {
         sampleBracket: true,
-        presets: { first: 'Aliasing', second: '4-bit file', judge: 'Judge: 15 kHz at 20k' },
-        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-alias', value: '5', says: 'loads a 15 kHz tone at 20 kHz with no filter, which comes back at 5 kHz (data-alias = 5)' },
+        presets: { first: 'Aliasing', second: '4-bit file', judge: 'Akai S900, 7.5k' },
+        judgeLands: { selector: '[aria-label="Sample rate"]', attr: 'aria-valuetext', value: '7.5 kHz', says: 'loads the vintage sampler at its lowest rate (Sample rate = 7.5 kHz)' },
         stages: { core: 'samples', alevel: 'nyquist', extension: 'chain' },
     },
     'eq-bench': {

@@ -5,15 +5,15 @@
 //
 //   node scripts/measure-adc.mjs <url> [scenario]
 //   scenarios: levels alias hold   (default: all)
+//   (28 Sep 2026: the test tone went; every source is a recording)
 //
 //   levels  each source through a ladder of settings: the level while it
 //           sounds (the 90th centile of 21 ms RMS windows) must sit within
 //           about 2 dB of the source at 44.1 kHz and 16 bit, except where
-//           the sound is meant to vanish (the tone at or above half the
-//           rate with the filter on; a recording at 2 or 3 bits, where
+//           the sound is meant to vanish (a recording at 2 or 3 bits, where
 //           everything under the first step rounds to zero)
-//   alias   the 3 kHz tone at 4 kHz, filter off, comes back at 1 kHz; at
-//           20 kHz it is 3 kHz; the 15 kHz tone at 20 kHz is 5 kHz
+//   alias   the song at 8 kHz: with the filter off the hi-hats fold down,
+//           so there is more energy under 4 kHz than with it on
 //   hold    holding "hold: analogue" plays the source at the same level
 //
 // Do not edit the bench while it runs: Fast Refresh resets the page and
@@ -44,6 +44,15 @@ await ctx.addInitScript(() => {
                     window.__rms.push([c.currentTime, Math.sqrt(s / sbuf.length)]);
                     if (window.__rms.length > 4000) window.__rms.shift();
                 }, 10);
+                // mean power (linear) in a band, from the long tap, for a spectrum reading
+                window.__bandPow = (lo, hi) => {
+                    const f = new Float32Array(an.frequencyBinCount);
+                    an.getFloatFrequencyData(f);
+                    const bin = c.sampleRate / an.fftSize;
+                    let p = 0; let n = 0;
+                    for (let i = Math.ceil(lo / bin); i <= Math.floor(hi / bin); i += 1) { p += 10 ** (f[i] / 10); n += 1; }
+                    return n ? p / n : 0;
+                };
                 // the strongest frequency now, from the long tap (Hz)
                 window.__peakHz = () => {
                     const f = new Float32Array(an.frequencyBinCount);
@@ -89,9 +98,9 @@ const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
 let problems = 0;
 
 if (!only || only === 'levels') {
-    const PASS = { Tone: 2.3, Song: 4.5, Vocal: 6.5, Guitar: 8.7 };
+    const PASS = { Song: 4.5, Vocal: 6.5, Guitar: 8.7 };
     const LADDER = [[44.1, 16], [96, 16], [20, 16], [11.025, 16], [8, 16], [4, 16], [2, 16], [44.1, 12], [44.1, 8], [44.1, 6], [44.1, 4], [44.1, 3], [44.1, 2], [8, 8]];
-    for (const src of ['Tone', 'Song', 'Vocal', 'Guitar']) {
+    for (const src of ['Song', 'Vocal', 'Guitar']) {
         await source(src);
         const rows = [];
         let ref = null;
@@ -99,9 +108,8 @@ if (!only || only === 'levels') {
             await setRate(r); await setBits(b);
             const db = await level(PASS[src]);
             if (ref == null) ref = db;
-            // the 3 kHz tone at or above half the rate, filter on; a quiet
-            // recording at 2 or 3 bits, which rounds mostly to silence
-            const vanish = (src === 'Tone' && r <= 6) || (src !== 'Tone' && b <= 3);
+            // a quiet recording at 2 or 3 bits rounds mostly to silence
+            const vanish = b <= 3;
             const d = db - ref;
             const bad = !vanish && Math.abs(d) > 2;
             if (bad) problems += 1;
@@ -112,25 +120,29 @@ if (!only || only === 'levels') {
 }
 
 if (!only || only === 'alias') {
-    await source('Tone'); await setBits(16); await filter(false);
-    const cases = [[3, 4, 1000], [3, 20, 3000], [3, 5, 2000], [15, 20, 5000]];
-    console.log('\nalias (filter off)');
-    for (const [tone, r, want] of cases) {
-        await page.locator('[aria-label="Tone"] button', { hasText: new RegExp(`^${tone} kHz$`) }).click();
-        await setRate(r);
-        await page.waitForTimeout(900);
-        let hz = 0;
-        for (let i = 0; i < 6 && !hz; i += 1) {
-            const lv = await page.evaluate(() => window.__rms.at(-1)?.[1] || 0);
-            if (lv > 0.01) hz = await page.evaluate(() => window.__peakHz());
-            else await page.waitForTimeout(300);
+    // The trim matches the overall level, so aliasing is read in the
+    // spectrum: the folded hi-hats land between 2.5 and 4 kHz, so that band
+    // rises against the 100 Hz to 1 kHz band when the filter comes off.
+    async function tilt() {
+        await page.waitForTimeout(400);
+        let hi = 0; let low = 0;
+        for (let i = 0; i < 40; i += 1) {
+            hi += await page.evaluate(() => window.__bandPow(2500, 3900));
+            low += await page.evaluate(() => window.__bandPow(100, 1000));
+            await page.waitForTimeout(100);
         }
-        const ok = Math.abs(hz - want) < 40;
-        if (!ok) problems += 1;
-        console.log(`  ${tone} kHz at ${r} kHz: peak ${Math.round(hz)} Hz, want ${want}${ok ? '' : '  <-- wrong'}`);
+        return 10 * Math.log10(hi / low);
     }
+    await source('Song'); await setBits(16); await setRate(8);
     await filter(true);
-    await page.locator('[aria-label="Tone"] button', { hasText: /^3 kHz$/ }).click();
+    const on = await tilt();
+    await filter(false);
+    const off = await tilt();
+    await filter(true);
+    const d = off - on;
+    const ok = d > 3;
+    if (!ok) problems += 1;
+    console.log(`\nalias  song at 8 kHz, 2.5 to 4 kHz against 0.1 to 1 kHz: filter on ${f1(on)} dB, off ${f1(off)} dB, the folded hi-hats add ${f1(d)} dB${ok ? '' : '  <-- nothing folded'}`);
 }
 
 if (!only || only === 'hold') {

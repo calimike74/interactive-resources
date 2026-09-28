@@ -9,10 +9,10 @@ import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
 import { DEPTH_LINES, DEPTH_TEACH, judge, open as openMachine, hearingLine, nextMove } from '@/lib/bench/adc-depth';
 import {
-    RATES, BITS_MIN, BITS_MAX, TONES, TONE_AMP, TONE_ON_S, DIVS, SOURCE_IDS, SOURCES, FILE_WINDOW_MS, PRESETS, DEFAULT_STATE,
+    RATES, BITS_MIN, BITS_MAX, DIVS, SOURCE_IDS, SOURCES, FILE_WINDOW_MS, PRESETS, DEFAULT_STATE,
     FILTER_QS, WORKLET_NAME, workletSource, makeConverter, converterDelay, hostStep, qToDb, filterCutoffHz, filterGain, filterRun,
-    picture, toneSignal, toneWindowMs, readings, binaryWord, rateIndex, rateFromPeriod, fmtKhz, fmtHzKhz, fmtLevels,
-    applyPreset, setSource, setRateIndex, setRate, setBits, setTone, setFilter, setDither, setVolume, nyquist, levels,
+    picture, readings, binaryWord, rateIndex, rateFromPeriod, fmtKhz, fmtHzKhz, fmtLevels,
+    applyPreset, setSource, setRateIndex, setRate, setBits, setFilter, setDither, setVolume, nyquist, levels,
 } from '@/lib/bench/adc-model';
 
 // The ADC Explorer (2.4), rebuilt 28 Sep 2026 to the Bench Standard from a
@@ -28,18 +28,17 @@ import {
 // The sound is the picture: the converter in lib/bench/adc-model.js runs in
 // an AudioWorklet (its source is that function's text), after eight biquads
 // that are the anti-alias filter, so what is heard at a setting is what the
-// stage draws at it. The recordings are real; the test tone is a computed
-// buffer, a probe for aliasing, never programme material.
+// stage draws at it. Every source is a real recording, the song first
+// (Mike, 28 Sep 2026: the test tone went).
 
 const CODE = '2.4 Digital and Analogue';
 const TITLE = 'ADC Explorer';
-const FILES = Object.fromEntries(SOURCE_IDS.filter((id) => SOURCES[id].kind === 'file').map((id) => [id, SOURCES[id].file]));
+const FILES = Object.fromEntries(SOURCE_IDS.map((id) => [id, SOURCES[id].file]));
 const ORIENTS = {
     core: 'Time runs across, voltage up. Blue is the sound going in; each dot is one sample.',
     alevel: 'Beside the samples, the paper\'s two numbers: the highest frequency kept, and the dynamic range.',
     extension: 'Inside the converter: filter, sample and hold, quantiser, then every sample as a binary word.',
 };
-const TONE_GAIN = 0.3; // the probe sits under the recordings (measured with the trim, 28 Sep 2026)
 const TRIM_MIN_DB = -9;
 const TRIM_MAX_DB = 3;
 const GOOD_PEAK = 0.45; // a window worth drawing reaches this share of the file's peak
@@ -148,38 +147,17 @@ function interp(arr, x) {
     const f = x - i;
     return arr[i] + (arr[i + 1] - arr[i]) * f;
 }
-// The test tone as a buffer: a note of TONE_ON_S with 15 ms edges, at the
-// context's rate, TONE_AMP of full scale into the converter.
-function toneBuffer(ctx, fKhz) {
-    const sr = ctx.sampleRate;
-    const n = Math.round(sr * TONE_ON_S);
-    const buf = ctx.createBuffer(1, n, sr);
-    const d = buf.getChannelData(0);
-    const edge = Math.round(sr * 0.015);
-    for (let i = 0; i < n; i += 1) {
-        const e = i < edge ? Math.sin((Math.PI / 2) * (i / edge)) ** 2 : i > n - edge ? Math.sin((Math.PI / 2) * ((n - i) / edge)) ** 2 : 1;
-        d[i] = TONE_AMP * e * Math.sin((2 * Math.PI * fKhz * 1000 * i) / sr);
-    }
-    return buf;
-}
 // The converter's output level against its input's, for a stretch of the
 // source, so turning a dial changes the sound and not the loudness. The
-// same converter the worklet runs; a boost is capped, so a lost tone stays
-// lost.
-function levelMatch(state, getBuffer, hostRate) {
-    let x; let sr;
-    if (state.source === 'tone') {
-        sr = hostRate;
-        x = new Float32Array(Math.round(sr * 0.3));
-        for (let i = 0; i < x.length; i += 1) x[i] = TONE_AMP * Math.sin((2 * Math.PI * state.tone * 1000 * i) / sr);
-    } else {
-        const buf = getBuffer(state.source);
-        if (!buf) return 1;
-        sr = buf.sampleRate;
-        const m = monoOf(buf);
-        const from = Math.round(sr * 0.5);
-        x = m.subarray(from, Math.min(m.length, from + Math.round(sr * 1.6)));
-    }
+// same converter the worklet runs; a boost is capped, so what the rounding
+// swallows stays swallowed.
+function levelMatch(state, getBuffer) {
+    const buf = getBuffer(state.source);
+    if (!buf) return 1;
+    const sr = buf.sampleRate;
+    const m = monoOf(buf);
+    const from = Math.round(sr * 0.5);
+    const x = m.subarray(from, Math.min(m.length, from + Math.round(sr * 1.6)));
     const into = state.filter ? filterRun(x, filterCutoffHz(state.rate, sr), sr) : x;
     const c = makeConverter();
     c.set({ P: hostStep(sr, state.rate), bits: state.bits, dither: state.dither, delay: converterDelay(sr) });
@@ -211,21 +189,10 @@ export default function ADCExplorer({ back }) {
     // ---- audio ----
     const graphRef = useRef(null);
     const passRef = useRef(null);
-    const toneBufs = useRef({});
-    const onSchedule = useCallback(({ barStart, playBuffer, ctx }) => {
+    const onSchedule = useCallback(({ barStart, playBuffer }) => {
         const s = stateRef.current;
-        const src = SOURCES[s.source];
-        let dur;
-        if (src.kind === 'tone') {
-            const key = `tone-${s.tone}`;
-            if (!toneBufs.current[key]) toneBufs.current[key] = toneBuffer(ctx, s.tone);
-            playBuffer(key, barStart, { buffer: toneBufs.current[key], gain: 1 });
-            dur = TONE_ON_S;
-        } else {
-            const node = playBuffer(s.source, barStart, { gain: 1 });
-            if (node) dur = node.buffer.duration;
-        }
-        passRef.current = { start: barStart, dur: dur || 0, source: s.source };
+        const node = playBuffer(s.source, barStart, { gain: 1 });
+        passRef.current = { start: barStart, dur: node ? node.buffer.duration : 0, source: s.source };
     }, []);
     const buildGraph = useCallback((ctx, input, master) => {
         const g = buildAdcGraph(ctx, input, master);
@@ -246,27 +213,25 @@ export default function ADCExplorer({ back }) {
         const g = graphRef.current;
         if (!g) return undefined;
         const id = window.setTimeout(() => {
-            const base = state.source === 'tone' ? TONE_GAIN : 1;
-            g.setTrim(base * levelMatch(stateRef.current, getBuffer, g.sampleRate));
+            g.setTrim(levelMatch(stateRef.current, getBuffer));
         }, 90);
         return () => window.clearTimeout(id);
-    }, [state.source, state.tone, state.rate, state.bits, state.filter, state.dither, began, ready, getBuffer]);
+    }, [state.source, state.rate, state.bits, state.filter, state.dither, began, ready, getBuffer]);
     useEffect(() => { graphRef.current?.hold(held); }, [held, began]);
     useEffect(() => {
         const ctx = ctxRef.current;
         const nodes = nodesRef.current;
         if (ctx && nodes) glide(nodes.level.gain, state.volume, ctx);
     }, [state.volume, began, ctxRef, nodesRef]);
-    // A new source or a new tone starts a new pass straight away.
+    // A new source starts a new pass straight away.
     const { restart } = audio;
-    useEffect(() => { if (playingRef.current) restart(); }, [state.source, state.tone]); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => { if (playingRef.current) restart(); }, [state.source]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const touch = (what) => { setLast(what); setAnnounce(null); };
     const chooseDepth = (id) => { setDepth(id); setAnnounce(id); };
     const chooseSource = (id) => { setState((s) => setSource(s, id)); touch('source'); };
     const chooseRate = (i) => { setState((s) => setRateIndex(s, i)); touch('rate'); };
     const chooseBits = (b) => { setState((s) => setBits(s, b)); touch('bits'); };
-    const chooseTone = (t) => { setState((s) => setTone(s, t)); touch('tone'); };
     const chooseFilter = (on) => { setState((s) => setFilter(s, on === 'on')); touch('filter'); };
     const chooseDither = (on) => { setState((s) => setDither(s, on === 'on')); touch('dither'); };
     const choosePreset = (id) => { setState((s) => applyPreset(s, id)); touch('preset'); };
@@ -331,14 +296,10 @@ export default function ADCExplorer({ back }) {
         const monoBig = `13px ${monoFace}`;
         const monoHuge = `15px ${monoFace}`;
 
-        // The signal the stage draws: the tone from the model, or the
-        // recording's own samples at the playhead, filtered as the nodes
+        // The signal the stage draws: the recording's own samples at the
+        // playhead, filtered as the nodes
         // filter them and triggered on a rising zero so it stands still.
         function signalNow(s, sr) {
-            if (s.source === 'tone') {
-                const t = toneSignal(s.tone, s.rate, s.filter, sr);
-                return { ...t, windowMs: toneWindowMs(s.tone), live: true };
-            }
             const buf = getBuffer(s.source);
             if (!buf) return null;
             const m = monoOf(buf);
@@ -532,25 +493,40 @@ export default function ADCExplorer({ back }) {
             const { x0, x1, top, bottom } = R;
             const W = x1 - x0;
             const hB = Math.max(72, Math.min(96, Math.round((bottom - top) * 0.4)));
-            // (1) the frequency line: 0 to the rate, half of it marked, the tone folding
+            // (1) the frequency line: 0 to the rate, half of it marked, the
+            // source's top band on it: kept, cut by the filter, or folding
             const A = { top, bottom: bottom - hB - 8 };
             g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, A.top + 0.5, W - 1, A.bottom - A.top - 1);
             g2.font = monoSmall; g2.fillStyle = col.gold; g2.textAlign = 'left';
             g2.fillText('SAMPLE RATE → HIGHEST FREQUENCY KEPT', x0 + 10, A.top + 16);
-            const maxK = Math.max(s.rate, rdd.isTone ? s.tone * 1.08 : 22, 4);
+            const maxK = Math.max(s.rate, 22);
             const lx0 = x0 + 18; const lx1 = x1 - 18;
             const ly = Math.round(Math.max(A.top + 64, Math.min(A.bottom - 36, A.top + (A.bottom - A.top) * 0.66)));
-            const xk = (k) => lx0 + (k / maxK) * (lx1 - lx0);
+            const xk = (k) => lx0 + (Math.min(k, maxK) / maxK) * (lx1 - lx0);
             const ny = nyquist(s.rate);
             const band = Math.max(12, Math.min(26, ly - A.top - 44));
             g2.fillStyle = 'rgba(127, 176, 196, 0.16)'; g2.fillRect(xk(0), ly - band, xk(ny) - xk(0), band);
-            if (!rdd.isTone && ny < 20) {
-                g2.fillStyle = 'rgba(208, 138, 128, 0.18)'; g2.fillRect(xk(ny), ly - band, xk(Math.min(20, maxK)) - xk(ny), band);
-                g2.fillStyle = col.coral; g2.textAlign = 'center'; g2.font = monoSmall;
-                g2.fillText('lost', (xk(ny) + xk(Math.min(20, maxK))) / 2, ly - band - 5);
-            }
             g2.fillStyle = col.blue; g2.textAlign = 'center'; g2.font = monoSmall;
             if (xk(ny) - xk(0) > 44) g2.fillText('kept', (xk(0) + xk(ny)) / 2, ly - band - 5);
+            if (ny < 20 && s.filter) {
+                g2.fillStyle = 'rgba(208, 138, 128, 0.18)'; g2.fillRect(xk(ny), ly - band, xk(20) - xk(ny), band);
+                g2.fillStyle = col.coral; g2.fillText('cut', (xk(ny) + xk(20)) / 2, ly - band - 5);
+            }
+            // the source's top band, as a bar on the line
+            const sb = rdd.band;
+            g2.fillStyle = col.blue; g2.globalAlpha = 0.85;
+            g2.fillRect(xk(sb.lo), ly - 7, xk(sb.hi) - xk(sb.lo), 6); g2.globalAlpha = 1;
+            if (rdd.fold) {
+                // folding: the part above half the rate lands back below it
+                const xf = (xk(Math.max(sb.lo, ny)) + xk(sb.hi)) / 2;
+                const xa0 = xk(rdd.fold.lo); const xa1 = xk(rdd.fold.hi);
+                g2.fillStyle = col.coral; g2.fillRect(xa0, ly - 7, Math.max(2, xa1 - xa0), 6);
+                const xa = (xa0 + xa1) / 2;
+                g2.strokeStyle = col.coral; g2.lineWidth = 1.5;
+                const apex = Math.max(A.top + 26, ly - band - 16);
+                g2.beginPath(); g2.moveTo(xf, ly - 10); g2.quadraticCurveTo((xf + xa) / 2, 2 * apex - (ly - 10), xa, ly - 10); g2.stroke(); g2.lineWidth = 1;
+                g2.fillStyle = col.coral; g2.beginPath(); g2.moveTo(xa, ly - 8); g2.lineTo(xa - 5, ly - 17); g2.lineTo(xa + 5, ly - 17); g2.fill();
+            }
             g2.strokeStyle = col.inkSoft; g2.beginPath(); g2.moveTo(lx0, ly + 0.5); g2.lineTo(lx1, ly + 0.5); g2.stroke();
             g2.strokeStyle = col.gold; g2.lineWidth = 2; g2.beginPath(); g2.moveTo(xk(ny), ly - band - 4); g2.lineTo(xk(ny), ly + 4); g2.stroke(); g2.lineWidth = 1;
             // row one under the line: 0, half the rate, the rate
@@ -559,31 +535,12 @@ export default function ADCExplorer({ back }) {
             const halfTxt = `half: ${fmtKhz(ny)}`;
             const hw = g2.measureText(halfTxt).width;
             const hx = Math.max(lx0 + 12 + hw / 2, Math.min(lx1 - hw / 2 - 40, xk(ny)));
-            if (xk(s.rate) - (hx + hw / 2) > 36) { g2.textAlign = 'right'; g2.fillText(fmtKhz(s.rate), lx1 + 3, ly + 14); }
+            if (xk(s.rate) - (hx + hw / 2) > 36 && s.rate <= maxK) { g2.textAlign = 'right'; g2.fillText(fmtKhz(s.rate), Math.min(lx1 + 3, xk(s.rate) + 12), ly + 14); }
             g2.fillStyle = col.gold; g2.textAlign = 'center'; g2.fillText(halfTxt, hx, ly + 14);
-            if (!rdd.isTone && maxK >= 20 && ny < 20) {
-                g2.strokeStyle = col.inkFaint; g2.setLineDash([2, 3]); g2.beginPath(); g2.moveTo(xk(20), ly - band); g2.lineTo(xk(20), ly + 4); g2.stroke(); g2.setLineDash([]);
-                g2.fillStyle = col.inkFaint; g2.textAlign = 'center'; g2.fillText('hearing: 20 kHz', xk(20) - 20, ly + 28);
-            }
-            if (rdd.isTone) {
-                const xf = xk(s.tone);
-                g2.fillStyle = col.blue; g2.beginPath(); g2.moveTo(xf, ly - 1); g2.lineTo(xf - 5, ly - 11); g2.lineTo(xf + 5, ly - 11); g2.fill();
-                g2.font = monoSmall; g2.textAlign = 'center';
-                const folds = rdd.above && rdd.alias != null && !(s.filter && rdd.through < 0.05);
-                const xa = folds ? xk(rdd.alias) : null;
-                const tx = folds && Math.abs(xa - xf) < 90 ? xf + (xf > xa ? 30 : -30) : xf;
-                g2.fillText(`tone ${fmtHzKhz(s.tone)}`, Math.max(lx0 + 30, Math.min(lx1 - 30, tx)), ly + 28);
-                if (folds) {
-                    g2.strokeStyle = col.coral; g2.lineWidth = 1.5;
-                    const apex = Math.max(A.top + 26, ly - band - 16);
-                    g2.beginPath(); g2.moveTo(xf, ly - 13); g2.quadraticCurveTo((xf + xa) / 2, 2 * apex - (ly - 13), xa, ly - 13); g2.stroke(); g2.lineWidth = 1;
-                    g2.fillStyle = col.coral; g2.beginPath(); g2.moveTo(xa, ly - 1); g2.lineTo(xa - 5, ly - 11); g2.lineTo(xa + 5, ly - 11); g2.fill();
-                    const ax = folds && Math.abs(xa - xf) < 90 ? xa + (xa > xf ? 30 : -30) : xa;
-                    g2.fillText(`back as ${fmtHzKhz(rdd.alias)}`, Math.max(lx0 + 44, Math.min(lx1 - 44, ax)), ly + 28);
-                } else if (s.filter && rdd.above) {
-                    g2.fillStyle = col.blue; g2.fillText('filtered out', Math.max(lx0 + 40, Math.min(lx1 - 40, xf)), ly - 16);
-                }
-            }
+            // row two: what the band is, and where it went
+            g2.textAlign = 'left'; g2.fillStyle = col.blue;
+            const what = rdd.fold ? `${sb.name}, ${sb.lo} to ${sb.hi} kHz: fold to ${rdd.fold.lo < 0.1 ? 0 : fmtHzKhz(rdd.fold.lo).replace(' kHz', '')} to ${fmtHzKhz(rdd.fold.hi)}` : `${sb.name}, ${sb.lo} to ${sb.hi} kHz: ${sb.hi <= ny ? 'kept' : sb.lo < ny ? `cut above ${fmtKhz(ny)}` : 'cut by the filter'}`;
+            g2.fillStyle = rdd.fold ? col.coral : col.blue; g2.fillText(what, lx0 - 3, ly + 29);
             // (2) the levels and the range: n bits, 2^n levels, about 6 dB a bit
             const B = { top: bottom - hB, bottom };
             g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, B.top + 0.5, W - 1, B.bottom - B.top - 1);
@@ -650,10 +607,10 @@ export default function ADCExplorer({ back }) {
                 }
             });
             const inner = (b) => ({ x0: b.x0 + 8, x1: b.x1 - 8, top: b.top + 24, bottom: b.bottom - 20 });
-            // 1: the filter's curve over 0 .. the rate, the tone as a line
+            // 1: the filter's curve over 0 .. the rate, the source's top band shaded
             {
                 const I = inner(boxes[0]);
-                const maxK = Math.max(s.rate, rdd.isTone ? s.tone * 1.1 : 0, 4);
+                const maxK = Math.max(s.rate, rdd.band.hi * 1.1, 4);
                 const xk = (k) => I.x0 + (k / maxK) * (I.x1 - I.x0);
                 const yg = (gv) => I.bottom - gv * (I.bottom - I.top);
                 g2.strokeStyle = col.gridDiv; g2.beginPath(); g2.moveTo(I.x0, I.bottom + 0.5); g2.lineTo(I.x1, I.bottom + 0.5); g2.stroke();
@@ -662,7 +619,7 @@ export default function ADCExplorer({ back }) {
                 g2.strokeStyle = s.filter ? col.ink : col.coral; g2.lineWidth = 1.8; g2.beginPath();
                 for (let i = 0; i <= 60; i += 1) { const k = (i / 60) * maxK; const gv = s.filter ? filterGain(k, s.rate, sr) : 1; if (i === 0) g2.moveTo(xk(k), yg(gv)); else g2.lineTo(xk(k), yg(gv)); }
                 g2.stroke(); g2.lineWidth = 1;
-                if (rdd.isTone) { g2.strokeStyle = col.blue; g2.lineWidth = 2; g2.beginPath(); g2.moveTo(xk(s.tone), I.bottom); g2.lineTo(xk(s.tone), yg(s.filter ? filterGain(s.tone, s.rate, sr) : 1)); g2.stroke(); g2.lineWidth = 1; }
+                g2.fillStyle = col.blue; g2.globalAlpha = 0.3; g2.fillRect(xk(rdd.band.lo), I.top, xk(rdd.band.hi) - xk(rdd.band.lo), I.bottom - I.top); g2.globalAlpha = 1;
                 g2.font = monoSmall; g2.fillStyle = s.filter ? col.inkFaint : col.coral; g2.textAlign = 'left';
                 g2.fillText(s.filter ? `cuts at ${fmtHzKhz(filterCutoffHz(s.rate, sr) / 1000)}` : 'off: all passes', I.x0, boxes[0].bottom - 6);
             }
@@ -777,8 +734,7 @@ export default function ADCExplorer({ back }) {
                 // named on the axis (the Edit bench's rule: a DAW zooms both
                 // ways); the levels zoom with it, so a quiet moment shows how
                 // few of them it uses.
-                if (s.source === 'tone') zoomRef.current = 1;
-                else {
+                {
                     let peak = 0;
                     for (const v2 of pic.line) peak = Math.max(peak, Math.abs(v2));
                     let z = zoomRef.current || 1;
@@ -807,23 +763,25 @@ export default function ADCExplorer({ back }) {
                     const px1 = Math.round(56 + (w - 78) * 0.5);
                     // the first eight samples, close up: the rows of the table
                     const zoom = picture({ signal: sig.signal, raw: sig.raw, windowMs: 7.5 / s.rate, rateKhz: s.rate, bits: s.bits, points: 360 });
-                    zoom.zoom = pic.zoom;
+                    // the close-up zooms to its own eight samples, in powers of two
+                    let zp = 0;
+                    for (const v2 of zoom.line) zp = Math.max(zp, Math.abs(v2));
+                    zoom.zoom = Math.max(1, Math.min(64, 2 ** Math.floor(Math.log2(0.95 / Math.max(zp, 1e-4)))));
                     plot = drawPlot(g2, { x0: 56, x1: px1, top: lowTop, bottom: hgt - 30 }, s, zoom, { legend, numbers: 8, compact: true });
                     drawWords(g2, { x0: px1 + 22, x1: w - 22, top: lowTop - 8, bottom: hgt - 10 }, s, zoom);
                 }
                 // what happened, said on the stage where the eye is (Core and A-level)
                 if (plot && (d !== 'extension' || narrow)) {
                     let msg = null; let c = col.coral;
-                    if (rdd.key === 'alias' && rdd.isTone) msg = `comes back as ${fmtHzKhz(rdd.alias)}: aliasing`;
-                    else if (rdd.key === 'alias') msg = 'filter off: highs fold down as false tones';
-                    else if (rdd.key === 'edge') { msg = 'two a cycle: every sample on the centre line'; c = col.gold; }
-                    else if (rdd.key === 'filtered') { msg = 'the filter removed it before sampling'; c = col.blue; }
+                    if (rdd.key === 'alias') msg = `filter off: the ${rdd.band.name} fold down as false tones`;
                     else if (rdd.key === 'swallowed') { msg = `${s.bits} bit: most of it rounds to silence`; c = col.pink; }
                     else if (rdd.key === 'grit') { msg = 'few levels: you hear the rounding as grit'; c = col.pink; }
                     else if (rdd.key === 'hiss') { msg = 'fewer levels: a hiss under the quiet parts'; c = col.pink; }
-                    else if (rdd.key === 'dull') { msg = `nothing above ${fmtKhz(rdd.nyquist)}: the top end has gone`; c = col.blue; }
+                    else if (rdd.key === 'dull') { msg = rdd.nyquist >= 8 ? `nothing above ${fmtKhz(rdd.nyquist)} is kept` : `nothing above ${fmtKhz(rdd.nyquist)}: the top end has gone`; c = col.blue; }
                     if (msg) {
                         g2.font = narrow ? mono : monoBig; g2.textAlign = narrow ? 'left' : 'right';
+                        // on a phone, the part after the colon when the whole will not fit
+                        if (narrow && g2.measureText(msg).width > w - 44 && msg.includes(': ')) msg = msg.slice(msg.indexOf(': ') + 2);
                         const mw = g2.measureText(msg).width;
                         // on a phone the caption sits above the plot, clear of the waves
                         const x1 = narrow ? 20 + mw : d === 'core' ? w - 30 : w - 22 - Math.round(Math.max(250, Math.min(360, w * 0.3))) - 28;
@@ -832,7 +790,6 @@ export default function ADCExplorer({ back }) {
                         g2.fillStyle = c; g2.fillText(msg, narrow ? 20 : x1, y);
                     }
                 }
-                canvas.dataset.spc = rdd.isTone ? rdd.spc.toFixed(1) : '';
                 canvas.dataset.samples = String(pic.inside.length);
             }
             if (heldRef.current) {
@@ -841,7 +798,7 @@ export default function ADCExplorer({ back }) {
             }
 
             if (readRef.current) {
-                const txt = rdd.isTone ? `\u00a0· ${rdd.spc < 10 ? rdd.spc.toFixed(1) : Math.round(rdd.spc)} a cycle` : `\u00a0· up to ${fmtKhz(rdd.nyquist)}`;
+                const txt = `\u00a0· up to ${fmtKhz(rdd.nyquist)}`;
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
             geomRef.current = { handle, plot };
@@ -850,8 +807,8 @@ export default function ADCExplorer({ back }) {
             const rateTag = String(s.rate);
             if (canvas.dataset.rate !== rateTag) canvas.dataset.rate = rateTag;
             if (canvas.dataset.bits !== String(s.bits)) canvas.dataset.bits = String(s.bits);
-            const aliasTag = rdd.alias != null ? String(rdd.alias) : '';
-            if (canvas.dataset.alias !== aliasTag) canvas.dataset.alias = aliasTag;
+            const foldTag = rdd.fold ? `${rdd.fold.lo}-${rdd.fold.hi}` : '';
+            if (canvas.dataset.fold !== foldTag) canvas.dataset.fold = foldTag;
             if (canvas.dataset.key !== rdd.key) canvas.dataset.key = rdd.key;
             const stageTag = narrow ? 'samples' : stageOf(d);
             if (canvas.dataset.stage !== stageTag) canvas.dataset.stage = stageTag;
@@ -945,11 +902,10 @@ export default function ADCExplorer({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Press Play and a 3 kHz tone sounds while the stage draws it: the blue wave going in, a white dot for each sample, the gold wave the DAC gives back on top of the blue. Turn Sample rate down and the dots spread; at 6 kHz there are exactly two a cycle and they all sit on the centre line; below it the gold wave comes apart from the blue, and you hear a lower, false tone. Turn Bit depth down and the levels appear as lines; each dot snaps to one, and the tone gains a gritty edge.</p>
+                    <p>Press Play and the song plays while the stage draws five milliseconds of it: the blue wave going in, a white dot for each sample, the gold wave the DAC gives back on top of the blue. Turn Sample rate down and the dots spread; the filter smooths the blue wave, the dashed wave shows what it took, and the hi-hats lose their shine. Turn the filter off in More and they fold down as false, clangy tones instead. Turn Bit depth down and the levels appear as lines; each dot snaps to one, and the song gains a gritty edge.</p>
                     <h3>Do these now</h3>
                     <ul>
-                        <li>Press <b>Two per cycle</b>. Say why every dot is on the centre line, and what the rule &quot;more than twice&quot; means.</li>
-                        <li>Press <b>Aliasing</b>, then turn Sample rate slowly up to 8 kHz. Say what the false tone does as the rate rises.</li>
+                        <li>Press <b>Aliasing</b>, then turn the filter on in More. Say what went, and why a converter always has that filter.</li>
                         <li>Press <b>CD</b>, then take Sample rate down to 8 kHz. Name what is lost, and why the answer is not &quot;it gets quieter&quot;.</li>
                         <li>Press <b>4-bit file</b> and hold the button in the play column. Say where in the phrase the crunch is worst, and why.</li>
                         <li>Press <b>Akai S900, 7.5k</b>, then <b>Akai S900, 40k</b>. Say what changed and which dial did it; then say what the 12 bits still cost against CD.</li>
@@ -1024,13 +980,10 @@ export default function ADCExplorer({ back }) {
     }
 
     // ---- console ----
-    const sourceOptions = SOURCE_IDS.map((id) => ({ id, label: SOURCES[id].label, title: id === 'tone' ? 'A test tone: a probe for aliasing' : `A real recording: ${SOURCES[id].said}` }));
-    const toneOptions = TONES.map((t) => ({ id: t, label: fmtHzKhz(t), title: `The test tone at ${fmtHzKhz(t)}` }));
+    const sourceOptions = SOURCE_IDS.map((id) => ({ id, label: SOURCES[id].label, title: `A real recording: ${SOURCES[id].said}, its ${SOURCES[id].band.name} at ${SOURCES[id].band.lo} to ${SOURCES[id].band.hi} kHz` }));
     const onOff = [{ id: 'on', label: 'On' }, { id: 'off', label: 'Off' }];
     const hearWord = {
-        clean: 'clean', dull: 'dull', hiss: 'hiss', grit: 'grit', swallowed: 'mostly silence',
-        alias: rd.isTone ? `${fmtHzKhz(rd.alias)}, false` : 'metallic',
-        filtered: 'nothing', edge: 'nothing',
+        clean: 'clean', dull: 'duller', hiss: 'hiss', grit: 'grit', swallowed: 'mostly silence', alias: 'false tones',
     }[rd.key];
     const aLevel = depth !== 'core';
 
@@ -1052,15 +1005,15 @@ export default function ADCExplorer({ back }) {
             <div className={`${styles.sec} ${styles.secSrc}`} data-teach={teach || undefined}>
                 <div className={styles.secHead}><span className={styles.eyebrow}>Source</span><span className={styles.value}>{SOURCES[state.source].label}</span></div>
                 <Chips label="Source" options={sourceOptions} value={state.source} onChange={chooseSource} />
-                <div className={styles.meaning}>{state.source === 'tone' ? `a ${fmtHzKhz(state.tone)} test tone, a probe` : 'a real recording'}</div>
-                <Why>The tone is a probe: one frequency, so you can count samples a cycle and see a false tone appear. The recordings show what a setting does to music. The More row sets the tone&apos;s pitch.</Why>
+                <div className={styles.meaning}>its {SOURCES[state.source].band.name}: {SOURCES[state.source].band.lo} to {SOURCES[state.source].band.hi} kHz</div>
+                <Why>Three real recordings. The song&apos;s hi-hats sit high, so a low sample rate takes them first; the vocal&apos;s quiet tail shows what few bits do.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secAdc}`} data-teach={teach || undefined}>
                 <div className={styles.secHead}><span className={styles.eyebrow}>Sample rate</span><span className={styles.value}>{String(state.rate)}<small>kHz</small></span></div>
                 <div className={styles.adcKnob}>
                     <Dial label="Sample rate" value={rateIndex(state.rate)} min={0} max={RATES.length - 1} step={1} format={(i) => fmtKhz(RATES[i])} pointer="var(--gold-bright)" pixels={220} onChange={chooseRate} title="Samples a second, in kHz: drag up for more" />
-                    <span className={styles.adcRead}>{rd.isTone ? <><b>{rd.spc < 10 ? rd.spc.toFixed(1) : Math.round(rd.spc)}</b> samples per cycle</> : <><b>{fmtKhz(rd.nyquist)}</b> highest kept</>}</span>
+                    <span className={styles.adcRead}><b>{fmtKhz(rd.nyquist)}</b> highest kept</span>
                 </div>
                 <div className={styles.meaning}>{aLevel ? `half the rate: ${fmtKhz(rd.nyquist)}` : 'more dots, finer detail in time'}</div>
                 <Why>How many times a second the converter measures the voltage. Half this number is the highest frequency it can keep; the bracket on the stage is one sample&apos;s time, and dragging its end sets the rate.</Why>
@@ -1100,10 +1053,6 @@ export default function ADCExplorer({ back }) {
 
     const more = further ? (
         <>
-            <div className={styles.moreItem}>
-                <span className={styles.eyebrow}>Tone</span>
-                <Chips label="Tone" options={toneOptions} value={state.tone} onChange={chooseTone} />
-            </div>
             <div className={styles.moreItem}>
                 <span className={styles.eyebrow}>Anti-alias filter</span>
                 <Chips label="Anti-alias filter" options={onOff} value={state.filter ? 'on' : 'off'} onChange={chooseFilter} />
@@ -1172,11 +1121,10 @@ export default function ADCExplorer({ back }) {
 }
 
 // The wave before the anti-alias filter is drawn (dashed) where the filter
-// visibly changes it: the tone once it is cut, a recording once the cut is
-// under 16 kHz. The legend names it by the same rule.
+// visibly changes it: once the cut is under 16 kHz. The legend names it by the same rule.
 function beforeShown(s) {
     if (!s.filter) return false;
-    return s.source === 'tone' ? filterGain(s.tone, s.rate) < 0.97 : filterCutoffHz(s.rate) < 16000;
+    return filterCutoffHz(s.rate) < 16000;
 }
 const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 function sup(n) { return String(n).split('').map((c) => SUP[Number(c)]).join(''); }
