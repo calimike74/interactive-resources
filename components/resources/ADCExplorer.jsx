@@ -399,23 +399,14 @@ export default function ADCExplorer({ back }) {
                 const tag = `bit depth ${s.bits} ↕ 2${sup(s.bits)} = ${fmtLevels(s.bits)} levels${gap < 3.2 ? ', too fine to draw' : ''}`;
                 g2.font = mono; g2.textAlign = 'right';
                 const tw = g2.measureText(tag).width;
-                g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(x1 - tw - 14, bottom - 22, tw + 12, 18);
-                g2.fillStyle = col.lilac; g2.fillText(tag, x1 - 8, bottom - 9);
-                // one step, bracketed up the right-hand edge, where it can be seen
-                if (gap >= 6) {
-                    const sx = x1 - 10; const y0 = yOf(0); const y1 = yOf(step);
-                    g2.strokeStyle = col.lilac; g2.lineWidth = 1.5;
-                    g2.beginPath(); g2.moveTo(sx - 4, y0); g2.lineTo(sx + 4, y0); g2.moveTo(sx, y0); g2.lineTo(sx, y1); g2.moveTo(sx - 4, y1); g2.lineTo(sx + 4, y1); g2.stroke(); g2.lineWidth = 1;
-                    g2.font = monoSmall; g2.textAlign = 'right';
-                    const lw = g2.measureText('one step').width; const ly2 = (y0 + y1) / 2;
-                    g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(sx - lw - 11, ly2 - 8, lw + 6, 15);
-                    g2.fillStyle = col.lilac; g2.fillText('one step', sx - 8, ly2 + 4);
-                }
+                const tx = gap >= 6 ? x1 - 30 : x1 - 8; // clear of the step bracket
+                g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(tx - tw - 6, bottom - 22, tw + 12, 18);
+                g2.fillStyle = col.lilac; g2.fillText(tag, tx, bottom - 9);
                 g2.font = monoSmall;
-            } else if (gap < 3.2 && !opts.compact) {
+            } else if (gap < 3.2 && !opts.compact && !opts.narrow) {
                 g2.textAlign = 'right'; g2.fillStyle = col.lilac;
                 g2.fillText(`${fmtLevels(s.bits)} levels: too fine to draw here`, x1 - 8, bottom - 8);
-            } else if (!opts.compact) {
+            } else if (!opts.compact && !opts.narrow) {
                 g2.textAlign = 'right'; g2.fillStyle = col.lilac;
                 g2.fillText(`${levels(s.bits)} levels`, x1 - 8, bottom - 8);
             }
@@ -423,10 +414,8 @@ export default function ADCExplorer({ back }) {
             g2.save();
             g2.beginPath(); g2.rect(x0, top - 2, W, H + 4); g2.clip();
             // the wave before the filter, where the filter changed it
-            if (pic.before && s.filter) {
-                let diff = 0;
-                for (let i = 0; i < pic.line.length; i += 4) diff = Math.max(diff, Math.abs(pic.line[i] - pic.before[i]));
-                if (diff > 0.03) {
+            if (pic.before && beforeShown(s)) {
+                {
                     g2.strokeStyle = col.blue; g2.globalAlpha = 0.4; g2.setLineDash([4, 4]); g2.lineWidth = 1.2;
                     g2.beginPath();
                     pic.before.forEach((val, i) => { const x = x0 + (i / (pic.before.length - 1)) * W; if (i === 0) g2.moveTo(x, yOf(val)); else g2.lineTo(x, yOf(val)); });
@@ -492,6 +481,17 @@ export default function ADCExplorer({ back }) {
                 if (opts.axes) { g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(bx1 + 6, by - 9, bw + 8, 18); g2.fillStyle = col.gold; }
                 g2.fillText(btxt, bx1 + 10, by + 4);
                 handle = { x: bx1, y: by, x0: bx0 };
+            }
+            // one step (A-level), bracketed below the centre line at the right,
+            // drawn last so the wave never covers it
+            if (opts.axes && gap >= 6) {
+                const sx = x1 - 12; const y0 = yOf(0); const y1 = yOf(-step);
+                g2.strokeStyle = col.lilac; g2.lineWidth = 2;
+                g2.beginPath(); g2.moveTo(sx - 5, y0); g2.lineTo(sx + 5, y0); g2.moveTo(sx, y0); g2.lineTo(sx, y1); g2.moveTo(sx - 5, y1); g2.lineTo(sx + 5, y1); g2.stroke(); g2.lineWidth = 1;
+                g2.font = mono; g2.textAlign = 'right';
+                const lw = g2.measureText('one step').width; const ly2 = (y0 + y1) / 2;
+                g2.fillStyle = 'rgba(23, 23, 43, 0.9)'; g2.fillRect(sx - lw - 14, ly2 - 9, lw + 8, 17);
+                g2.fillStyle = col.lilac; g2.fillText('one step', sx - 10, ly2 + 4);
             }
             return { xOf, yOf, handle, half, mid };
         }
@@ -781,7 +781,7 @@ export default function ADCExplorer({ back }) {
                     drawWords(g2, { x0: px1 + 22, x1: w - 22, top: lowTop - 8, bottom: hgt - 10 }, s, zoom);
                 }
                 // what happened, said on the stage where the eye is (Core and A-level)
-                if (plot && d !== 'extension') {
+                if (plot && (d !== 'extension' || narrow)) {
                     let msg = null; let c = col.coral;
                     if (rdd.key === 'alias' && rdd.isTone) msg = `comes back as ${fmtHzKhz(rdd.alias)}: aliasing`;
                     else if (rdd.key === 'alias') msg = 'filter off: highs fold down as false tones';
@@ -792,12 +792,13 @@ export default function ADCExplorer({ back }) {
                     else if (rdd.key === 'hiss') { msg = 'fewer levels: a hiss under the quiet parts'; c = col.pink; }
                     else if (rdd.key === 'dull') { msg = `nothing above ${fmtKhz(rdd.nyquist)}: the top end has gone`; c = col.blue; }
                     if (msg) {
-                        g2.font = monoBig; g2.textAlign = 'right';
-                        const x1 = d === 'core' || narrow ? w - 30 : w - 22 - Math.round(Math.max(250, Math.min(360, w * 0.3))) - 28;
-                        const y = top + (narrow || d === 'alevel' ? 36 : 16);
+                        g2.font = narrow ? mono : monoBig; g2.textAlign = narrow ? 'left' : 'right';
                         const mw = g2.measureText(msg).width;
+                        // on a phone the caption sits above the plot, clear of the waves
+                        const x1 = narrow ? 20 + mw : d === 'core' ? w - 30 : w - 22 - Math.round(Math.max(250, Math.min(360, w * 0.3))) - 28;
+                        const y = narrow ? top - 14 : top + (d === 'alevel' ? 36 : 16);
                         g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(x1 - mw - 6, y - 13, mw + 12, 19);
-                        g2.fillStyle = c; g2.fillText(msg, x1, y);
+                        g2.fillStyle = c; g2.fillText(msg, narrow ? 20 : x1, y);
                     }
                 }
                 canvas.dataset.spc = rdd.isTone ? rdd.spc.toFixed(1) : '';
@@ -1104,6 +1105,7 @@ export default function ADCExplorer({ back }) {
                 <span><i style={{ background: '#fff', borderRadius: 5 }} />sample</span>
                 <span><i style={{ background: 'var(--gen-3)', height: 2 }} />levels</span>
                 <span><i style={{ background: 'var(--gold-bright)' }} />DAC out</span>
+                {beforeShown(state) ? <span><i style={{ background: 'transparent', borderTop: '2px dashed var(--gen-2)', height: 0, width: 12 }} />before the filter</span> : null}
             </div>
             {!began ? (
                 <div className={styles.begin}>
@@ -1138,6 +1140,13 @@ export default function ADCExplorer({ back }) {
     );
 }
 
+// The wave before the anti-alias filter is drawn (dashed) where the filter
+// visibly changes it: the tone once it is cut, a recording once the cut is
+// under 16 kHz. The legend names it by the same rule.
+function beforeShown(s) {
+    if (!s.filter) return false;
+    return s.source === 'tone' ? filterGain(s.tone, s.rate) < 0.97 : filterCutoffHz(s.rate) < 16000;
+}
 const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 function sup(n) { return String(n).split('').map((c) => SUP[Number(c)]).join(''); }
 function fmtMsShort(ms) {
