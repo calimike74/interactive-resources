@@ -7,6 +7,7 @@ import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth, D
 import { useBenchAudio, glide } from '@/components/bench/useBenchAudio';
 import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
+import { isTextHeld } from '@/lib/bench/held-papers';
 import { DEPTH_LINES, DEPTH_TEACH, judge, open as openMachine, hearingLine, nextMove } from '@/lib/bench/midi-depth';
 import {
     BPM, BARS, BEATS, PPQ,
@@ -18,6 +19,9 @@ import {
     placed, placedTime, selectedNote, verdict, readings, velocityTable, mapFaults, smallestValue, feelWord,
     bendAt, bendSemitones, noteName, toBinary, fmtPos, fmtBeat, velWord, bits8, hex2, noteOnBytes, bendBytes, bendUnsigned, eventList, otherMessages, barOf, snapTo,
 } from '@/lib/bench/midi-model';
+
+// The drum-map task belongs to a held paper: its reading stays out until it is released.
+const mapHeld = isTextHeld('midi', 'map');
 
 // The Piano Roll (1.5), seventh bench to the Bench Standard. The MIDI
 // file the paper hands over, on the bench: four bars of one part on the
@@ -717,10 +721,10 @@ export default function PianoRoll({ back }) {
                     <h3>Terms</h3>
                     <dl>
                         <dt>Note On · Note Off</dt><dd>The message that starts a note and the one that ends it. Three bytes each: a status byte (which message, which channel) and two data bytes (the note number, the velocity).</dd>
-                        <dt>Velocity</dt><dd>How hard the key was struck, 1 to 127. A drum sampler and a synth read it as level, and often as brightness too (velocity-sensitive filtering). Why it varies: expression, accents, ghost hits, a human feel (2024).</dd>
-                        <dt>Status byte · data byte</dt><dd>A byte is 8 bits, but its first bit is the flag: 1 for a status byte, 0 for data. That leaves 7 bits for the value, 2<sup>7</sup> = 128 values, 0 to 127. The 2021 and 2026 question.</dd>
+                        <dt>Velocity</dt><dd>How hard the key was struck, 1 to 127. A drum sampler and a synth read it as level, and often as brightness too (velocity-sensitive filtering). Why it varies: expression, accents, ghost hits, a human feel.</dd>
+                        <dt>Status byte · data byte</dt><dd>A byte is 8 bits, but its first bit is the flag: 1 for a status byte, 0 for data. That leaves 7 bits for the value, 2<sup>7</sup> = 128 values, 0 to 127. A past question asks exactly this.</dd>
                         <dt>Pitch bend</dt><dd>A message with two data bytes, the LSB and the MSB, 7 bits each: 14 bits, 16,384 values. Shown as −8192 to 8191 by a DAW that counts from the centre, or 0 to 16383 by one that counts from the bottom; the centre is 0 or 8192. The range is set on the synth in semitones, so the same data can be a tone or an octave.</dd>
-                        <dt>Controller (CC)</dt><dd>A numbered message for anything else: modulation is CC1, the sustain pedal CC64, volume CC7, pan CC10. The 2019 scheme&apos;s list of other messages: modulation, damper, pitch bend, tempo, time signature, key, text, track name, instrument name, end position.</dd>
+                        <dt>Controller (CC)</dt><dd>A numbered message for anything else: modulation is CC1, the sustain pedal CC64, volume CC7, pan CC10. Other messages a file can carry: modulation, damper, pitch bend, tempo, time signature, key, text, track name, instrument name, end position.</dd>
                         <dt>Quantise</dt><dd>Moving notes onto a grid. The value is the grid (1/8, 1/16, 1/12 for triplets, 1/32); the strength is how far they move. The most appropriate value for a part is its smallest note value; anything coarser changes the rhythm.</dd>
                         <dt>Bar · beat · division · tick</dt><dd>A position in a DAW. 960 ticks to a quarter note on this bench, a division a sixteenth, so 4 2 1 161 is bar 4, beat 2, the first sixteenth, 161 ticks in.</dd>
                         <dt>Drum map</dt><dd>Which note plays which sound. On a General MIDI kit the kick is C1 (36), the snare D1 (38), the closed hat F#1 (42). A file whose notes were &quot;assigned to the incorrect sounds&quot; is fixed on the kit, not on the roll.</dd>
@@ -742,9 +746,9 @@ export default function PianoRoll({ back }) {
                     <dl>
                         <dt>Why a bend needs two bytes</dt><dd>Seven bits give 128 steps, which is coarse for a pitch that sweeps. Two data bytes give 16,384 steps across the range, and the ear hears the sweep as continuous.</dd>
                         <dt>Running status</dt><dd>On a real cable the status byte can be sent once and the data bytes follow for every note on that channel until the status changes; the DAW shows every message whole.</dd>
-                        <dt>Quantise against warp</dt><dd>Quantise moves MIDI notes; warping moves audio. The 2020 paper asks both in one question: fix the MIDI drums with a value, fix the audio drums with an edit.</dd>
+                        <dt>Quantise against warp</dt><dd>Quantise moves MIDI notes; warping moves audio. A past question asks for both at once: fix the MIDI drums with a value, fix the audio drums with an edit.</dd>
                     </dl>
-                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the 9MT0/04 question papers and mark schemes, 2019 to 2026.</p>
+                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the practical paper&apos;s past tasks.</p>
                 </>
             ),
         },
@@ -754,18 +758,17 @@ export default function PianoRoll({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Press Play and the drum file plays on an acoustic kit, accents on the beat and ghost notes between. Press <b>Wrong sounds</b> and the same notes come out of the wrong drums: the rhythm is right, the kit is not. Every preset is one of the papers&apos; opening questions on the same four bars, and the moves the reports mark down are the ones the bench lets you make: quantise the roll to 1/16, leave the bend range at 2.</p>
-                    <h3>What the schemes say</h3>
-                    <p>2019, the drum map: &quot;1 mark for each correctly assigned drum sound that plays the correct rhythm, in sync throughout. To award both the crash and the ride, they must be distinct and the crash more crash-like than the ride. Max 4 if the drum kit is not acoustic.&quot;</p>
-                    <p>2022, the quantise value: &quot;A 1/64. B, C, D are incorrect because the smallest note value is 1/64 in the hi-hats.&quot; 2023: &quot;C 1/16. A, B, D are incorrect because the smallest note value is 1/16.&quot;</p>
-                    <p>2022, the bend: &quot;3 MIDI pitch bend matches; 2 changes vox pitch with a wide pitch range; 1 changes vox pitch in some small way, i.e. 2 semitones; 0 no MIDI pitch bend.&quot; 2023: &quot;Pitch bend range is 12 semitones (1).&quot;</p>
-                    <p>2026, why 127: &quot;Byte is 8 bits but first bit is used / always 0 (1); (to indicate) data byte (1); velocity is 7 bits (1); 2<sup>7</sup> (1); 128 different values (including 0) (1).&quot; 2023, the bend&apos;s range: &quot;Two (data) bytes (instead of one) (1); 14 bits (1).&quot;</p>
-                    <p>2025, quantise as feel: unquantised, groove, swing, percent, humanise against hard quantise; &quot;loose / live / human / realistic feel&quot; against &quot;mechanical / tight(er) / in time&quot;.</p>
-                    <p className={styles.source}>Source: Edexcel 9MT0/04 and 9MT0/41 mark schemes, 2019 Q2(a)-(c), 2021 Q2(a)-(c), 2022 Q1(b)-(c) and Q4, 2023 Q1(a) and Q2(b)-(d), 2024 Q1(a)-(c), 2025 Q2(a)-(b) and Q3(d), 2026 Q2(b)-(c).</p>
+                    <p>Press Play and the drum file plays on an acoustic kit, accents on the beat and ghost notes between.{mapHeld ? '' : <> Press <b>Wrong sounds</b> and the same notes come out of the wrong drums: the rhythm is right, the kit is not.</>} Every preset is one of the practical paper&apos;s opening tasks on the same four bars, and the moves that lose marks are the ones the bench lets you make: quantise the roll to 1/16, leave the bend range at 2.</p>
+                    <h3>What earns the marks</h3>
+                    {mapHeld ? null : <p>The drum map: one mark for each drum sound on the right notes, playing the right rhythm, in sync throughout. The crash and the ride must be distinct, the crash more crash-like than the ride. A kit that is not acoustic caps the marks.</p>}
+                    <p>The quantise value: the smallest note value in the part. When the hi-hats run in 1/64, the answer is 1/64; when the smallest value is 1/16, it is 1/16.</p>
+                    <p>The bend: 3 marks when the pitch bend matches; 2 when it changes the pitch with a wide range; 1 when it changes the pitch a little, 2 semitones; 0 with no pitch bend. A range of 12 semitones plays the octave.</p>
+                    <p>Why 127: a byte is 8 bits but the first bit is always 0, to mark a data byte; velocity has 7 bits; 2<sup>7</sup>; 128 different values, 0 included. The bend&apos;s range: two data bytes instead of one; 14 bits.</p>
+                    <p>Quantise as feel: unquantised, groove, swing, percent or humanise, with a loose, live, human or realistic feel, against hard quantise, with a mechanical, tight or in-time feel.</p>
                     <h3>Do these now</h3>
                     <ul>
                         <li>Press <b>Velocity table</b>, switch to A-level, and read the two gold numbers in the lane. Write the binary yourself before you read it.</li>
-                        <li>Press <b>Wrong sounds</b> and fix the kit with the Sound chips only. Then say why moving the notes would have lost the marks.</li>
+                        {mapHeld ? null : <li>Press <b>Wrong sounds</b> and fix the kit with the Sound chips only. Then say why moving the notes would have lost the marks.</li>}
                         <li>Press <b>Hi-hat roll</b>, set Quantise to 1/16 at 100, and listen to bars 2 and 4. Say the quantise value the paper wants and why.</li>
                         <li>Press <b>Played</b>, turn Strength from 0 to 100 and back to 50. Give one feel word for each of the three.</li>
                         <li>Press <b>Bend range</b>, hold the example, then set 12. Say what changed in the data (nothing) and in the sound.</li>
@@ -773,12 +776,12 @@ export default function PianoRoll({ back }) {
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="Note velocity uses 7 bits to store a range of values from 0–127. Explain why note velocities cannot exceed 127 in the MIDI protocol. (2 marks, 2021)"
+                        prompt="Note velocity uses 7 bits to store a range of values from 0–127. Explain why note velocities cannot exceed 127 in the MIDI protocol. (2 marks)"
                         answer="A byte is 8 bits, but the first bit of every MIDI byte is a flag: 1 for a status byte, 0 for a data byte. A velocity is a data byte, so 7 bits are left for the value, and 7 bits give 2 to the power 7 = 128 values, 0 to 127."
                     />
                     <ExamCallout
-                        prompt="MIDI controllers usually have a range of 0–127. Pitch bend values have a range between −8192 and 8191. State how pitch bend's greater range of values is achieved within the MIDI specification. (1 mark, 2023)"
-                        answer="Two data bytes instead of one: 7 bits each, 14 bits together, 16,384 values. The scheme accepts 'two (data) bytes' or '14 bits', and rejects '8 bits'."
+                        prompt="MIDI controllers usually have a range of 0–127. Pitch bend values have a range between −8192 and 8191. State how pitch bend's greater range of values is achieved within the MIDI specification. (1 mark)"
+                        answer="Two data bytes instead of one: 7 bits each, 14 bits together, 16,384 values. 'Two (data) bytes' or '14 bits' earns the mark; '8 bits' does not."
                     />
                 </>
             ),
@@ -887,7 +890,7 @@ export default function PianoRoll({ back }) {
                     </div>
                 </div>
                 <div className={styles.meaning}>{state.grid === 'off' ? 'notes where they were played' : `${GRIDS[state.grid].short}, moved ${state.strength}% of the way`}</div>
-                <Why>The grid and how hard the notes are pulled to it. The paper&apos;s value is the smallest note value in the part; 1/12 is the triplet grid. Strength under 100 is percentage quantise, which the 2025 scheme names as a feel. Notes that move draw a dashed ghost where they were.</Why>
+                <Why>The grid and how hard the notes are pulled to it. The paper&apos;s value is the smallest note value in the part; 1/12 is the triplet grid. Strength under 100 is percentage quantise, which counts as a feel. Notes that move draw a dashed ghost where they were.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secNote}`} data-teach={teach || undefined}>

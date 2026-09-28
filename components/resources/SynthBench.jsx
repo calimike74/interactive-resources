@@ -8,6 +8,7 @@ import { useBenchAudio, glide } from '@/components/bench/useBenchAudio';
 import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
 import { DEPTH_LINES, DEPTH_TEACH, judge, open as openMachine, hearingLine, nextMove, sectionOfLast, noteLine } from '@/lib/bench/synth-depth';
+import { isTextHeld } from '@/lib/bench/held-papers';
 import {
     BPM, OCTAVE_IDS, DETUNE_MIN, DETUNE_MAX, OSC2_IDS, OSC2, FILTER_IDS, FILTERS, CUTOFF_MIN, CUTOFF_MAX, RES_MIN, RES_MAX, ENV_AMT_MIN, ENV_AMT_MAX,
     ATTACK_MIN, ATTACK_MAX, DECAY_MIN, DECAY_MAX, SUSTAIN_MIN, SUSTAIN_MAX, RELEASE_MIN, RELEASE_MAX,
@@ -906,24 +907,24 @@ export default function SynthBench({ back }) {
             render: () => (
                 <>
                     <h2>Synthesis, in the spec&apos;s words</h2>
-                    <p>The spec asks how synthesis is used to create sounds: selecting and mixing sine, triangle, pulse, square and saw waveforms; low-pass and high-pass filters with a cutoff and a resonance; envelopes with an attack, decay, sustain and release; a low frequency oscillator; envelopes and LFOs mapped to the filter cutoff and the pitch; oscillator octave and tuning; monophonic and polyphonic; portamento. This bench is that list as the paper&apos;s own panel: the 1982 monophonic synthesiser of the 2024 Q6 figure, cut into LFO, VCO, source mixer, VCF, VCA and ENV, the sections the report says many candidates &quot;did not identify&quot;.</p>
+                    <p>The spec asks how synthesis is used to create sounds: selecting and mixing sine, triangle, pulse, square and saw waveforms; low-pass and high-pass filters with a cutoff and a resonance; envelopes with an attack, decay, sustain and release; a low frequency oscillator; envelopes and LFOs mapped to the filter cutoff and the pitch; oscillator octave and tuning; monophonic and polyphonic; portamento. This bench is that list as a panel like the ones the papers draw: a 1982-style monophonic synthesiser, cut into LFO, VCO, source mixer, VCF, VCA and ENV. Name each section for what it is, not only by its label.</p>
                     <h3>Terms</h3>
                     <dl>
                         <dt>VCO</dt><dd>The voltage-controlled oscillator, the sound source: a repeating wave at a chosen pitch. This panel&apos;s VCO gives a pulse and a second wave (saw, triangle or sine) at once, mixed below. A second VCO a few cents from the first beats against it, which is detune.</dd>
                         <dt>Source mixer</dt><dd>What goes into the filter, each at its own level: the pulse, the second wave (its slider&apos;s name is the switch: Saw, Tri, Sine), a square sub-oscillator an octave or two down, and white noise. The spec&apos;s &quot;selecting and mixing&quot; is this row of sliders.</dd>
                         <dt>Waveform</dt><dd>Saw: every harmonic at 1/n, the brightest, the usual start for subtractive synthesis. Square: odd harmonics at 1/n, hollow. Pulse: a square whose high and low halves are unequal; as the width narrows the even harmonics come in and it thins. Triangle: odd harmonics falling fast at 1/n², soft. Sine: the fundamental alone, nothing for a filter to remove. Noise: every frequency at once, no harmonics and no pitch. The Oscilloscope bench (2.5) draws the four plain shapes against time.</dd>
-                        <dt>Pulse width and PWM</dt><dd>Width is how much of each cycle the pulse is high: 50 % is a square. Pulse-width modulation is the LFO moving that width, so the harmonics shift and the sound moves, like a chorus without one. The 2019 report: &quot;many candidates thought that this was a square wave and did not appreciate that the pulse width was being modulated by the LFO&quot;.</dd>
-                        <dt>Range</dt><dd>The VCO&apos;s octave, in organ feet: 8&apos; the part&apos;s own, 16&apos; an octave down, 4&apos; an octave up. The papers mark the octave of the example, and the 2023 AS report&apos;s common fault was an octave too high.</dd>
+                        <dt>Pulse width and PWM</dt><dd>Width is how much of each cycle the pulse is high: 50 % is a square. Pulse-width modulation is the LFO moving that width, so the harmonics shift and the sound moves, like a chorus without one. A pulse under PWM is easy to mistake for a plain square wave: watch the width move.</dd>
+                        <dt>Range</dt><dd>The VCO&apos;s octave, in organ feet: 8&apos; the part&apos;s own, 16&apos; an octave down, 4&apos; an octave up. Matching the example&apos;s octave is a mark of its own, so check it by ear.</dd>
                         <dt>Filter</dt><dd>Removes harmonics. Low-pass keeps what is below the cutoff (darker); high-pass keeps what is above (thinner); band-pass keeps a band (nasal). Subtractive synthesis is the filter doing the subtracting.</dd>
                         <dt>Cutoff</dt><dd>Where the filter takes hold: the frequency already 3 dB down. Sweeping it is the classic synthesiser movement. A 2-pole filter falls 12 dB an octave beyond it; this bench&apos;s filter is 2-pole.</dd>
                         <dt>Resonance</dt><dd>A peak at the cutoff. Low: a gentle emphasis. High: a ringing, whistling quality; at the top, the filter sings a note of its own.</dd>
                         <dt>Envelope (ADSR)</dt><dd>Attack: the time to rise to peak. Decay: the time to fall to the sustain. Sustain: the level held while the key is down, a level not a time. Release: the time to fall to silence after the key lifts. Routed to the amplifier it shapes the note; routed to the cutoff it opens and closes the brightness on every note.</dd>
-                        <dt>VCA: Env or Gate</dt><dd>The voltage-controlled amplifier. On Env the envelope sets its gain. On Gate the key does: full while it is down, off when it lifts, the envelope disabled. Not a noise gate; the 2019 report found candidates confusing the two.</dd>
+                        <dt>VCA: Env or Gate</dt><dd>The voltage-controlled amplifier. On Env the envelope sets its gain. On Gate the key does: full while it is down, off when it lifts, the envelope disabled. Not a noise gate, which cuts out background noise.</dd>
                         <dt>LFO</dt><dd>A low frequency oscillator: a wave below the range of hearing, used to move something. On the pitch it makes vibrato; on the level, tremolo; on the cutoff, a wobble or a sweep. Rate is its speed, depth how far it moves the target. It is a control signal, never heard as a note.</dd>
                         <dt>Mono · poly · portamento</dt><dd>Monophonic plays one note at a time, the usual for bass and lead; polyphonic plays chords, which pads and keyboard parts need. Portamento, or glide, slides the pitch from one note to the next.</dd>
                         <dt>Coarse and fine tuning</dt><dd>Fine tuning is cents, the detune between a pair. Coarse tuning is semitones: Osc 2 set to Fifth sits seven semitones above Osc 1, and Sub an octave below. Octave is the range the papers mark.</dd>
                         <dt>Arpeggiator</dt><dd>Steps through a held chord&apos;s notes in turn instead of sounding them together. The Arp chip in the More row does it to the pad and the keyboard part, in sixteenths, lowest note first.</dd>
-                        <dt>Pitch bend range</dt><dd>How far the bend wheel moves the pitch at full travel, in semitones: 7 in the 2020 fills, 12 in 2023, 4 in 2023 Q3(b). This bench has no wheel; the Piano Roll bench (1.5) has it, and its bass is this patch.</dd>
+                        <dt>Pitch bend range</dt><dd>How far the bend wheel moves the pitch at full travel, in semitones: past tasks have used 4, 7 and 12. This bench has no wheel; the Piano Roll bench (1.5) has it, and its bass is this patch.</dd>
                     </dl>
                     <h3>In your DAW</h3>
                     <table>
@@ -942,11 +943,11 @@ export default function SynthBench({ back }) {
                     <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
                     <dl>
                         <dt>Why a control signal</dt><dd>Inside an analogue synthesiser an audio signal and a control voltage are the same kind of thing: a voltage. What makes one a sound and the other a modulation is only where it is plugged in. The LFO&apos;s output goes to a parameter, not to the speakers.</dd>
-                        <dt>Envelope to pitch</dt><dd>The spec also maps an envelope to the pitch: a sweep that starts high and falls on every note, the 2025 Q6 tom. This bench routes its envelope to the amplifier and the cutoff only; the LFO reaches the pitch. A pitch envelope is the one routing here that is written, not played.</dd>
+                        <dt>Envelope to pitch</dt><dd>The spec also maps an envelope to the pitch: a sweep that starts high and falls on every note, the classic synth tom. This bench routes its envelope to the amplifier and the cutoff only; the LFO reaches the pitch. A pitch envelope is the one routing here that is written, not played.</dd>
                         <dt>Why the filter is a biquad</dt><dd>The curve on the stage is computed from the same equations the browser&apos;s filter node runs, so what is drawn is what is heard. Resonance is written to the node in decibels for a low-pass and high-pass, and as Q for a band-pass, which is how Web Audio takes it.</dd>
                         <dt>Two saws make a pulse</dt><dd>A saw minus a copy of itself delayed by part of a cycle is a pulse of that width, and moving the delay moves the width. That is how this bench makes its pulse and its PWM, from two band-limited saws, so the bars on the stage are the harmonics it plays. It is also why two saws detuned a whisker apart move like a chorus: their sum is a pulse whose width sweeps by itself.</dd>
                     </dl>
-                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters, the vault&apos;s oscillator, filter and envelope notes, and the 9MT0/04 and 9MT0/41 question papers and mark schemes, 2019 to 2025.</p>
+                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters, the vault&apos;s oscillator, filter and envelope notes, and the past papers and mark schemes.</p>
                 </>
             ),
         },
@@ -956,34 +957,33 @@ export default function SynthBench({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Press Play and the 2023 bass runs on two detuned squares through a low-pass. Pull <b>Detune</b> to zero and the two waves collapse into one; push it past 30 and detune becomes out of tune. Drag the gold dot left and the harmonics disappear from the top down. Set <b>PW by</b> to LFO and watch the WAVE screen breathe: that is pulse-width modulation, and the 2019 report says most candidates called it a square wave. Press <b>hold: raw</b> and you hear what the filter and the envelope were taking away. Then switch to A-level and read the sections: that is the Q6 answer, in the order the 2024 report asks for it.</p>
-                    <h3>What the schemes and reports say</h3>
-                    <p>2023 AS, the bass: &quot;Square wave (1); Detune added, suitable amount (1); Correct filter setting (1); Correct octave (both oscillators) (1)&quot;. The report&apos;s common issues: no detune, and the wrong octave, one octave too high.</p>
-                    <p>2024 AS, the keyboard: &quot;Two sawtooth oscillators&quot;; &quot;Both in same octave and transposed to correct octave (1)&quot;; &quot;Slight detune applied (1)&quot;; &quot;LPF matches example / equal or duller (1)&quot;.</p>
-                    <p>2025, the lead: &quot;Monophonic without note overlaps (1)&quot;; &quot;Subtle portamento (1)&quot;; &quot;A=soft, D=max, S=max, R=short&quot;; &quot;Muted sound from low cut off frequency ... resonance isn&apos;t a feature&quot;; &quot;LFO giving subtle Fc wobble&quot;.</p>
-                    <p>2023 and 2020, the fills: &quot;A=0, D=max, S=max, R=enough release so that the drop in octave is heard&quot;; and the 2020 report: &quot;Only the best candidates noticed that the release was very short, many leaving an audible tail presumably from a preset&quot;.</p>
-                    <p>2024 Q6, the synth bass on a 1982 monophonic synthesiser: &quot;Candidates who divided up their writing into subheadings, one for each synthesiser section, provided the most concise and structured writing yielding highest marks&quot;; &quot;Many candidates did not identify what LFO/VCO/VCA/VCF represented and simply used the label from the synth&quot;; &quot;The most common AO4 marks were for describing the fast attack and release&quot;; &quot;Very commonly, candidates mistakenly thought that the LFO was something audible rather than a control signal&quot;; &quot;It was very rare to see candidates that fully understood that the LFO was controlling the pulse width modulation of a pulse wave&quot;; &quot;Candidates were often successful in discussing the sub-oscillator&quot;; &quot;many learners misidentified it as a boost/cut rather than an LPF and would discuss what resonance was but didn&apos;t discuss its impact on the sound&quot;.</p>
-                    <p>2019 Q6, the synth pad on a 1982 polyphonic synthesiser: &quot;only the top performing candidates noticed that the envelope parameters were routed to the filter cutoff and not the amplitude&quot;; candidates confused &quot;the VCA gate (disabling the envelope) with a noise gate designed to cut out background noise&quot;; &quot;a surprising number of candidates ... thought that the LFO was for audible bass, rather than a control signal&quot;; &quot;many candidates thought that this was a square wave and did not appreciate that the pulse width was being modulated by the LFO&quot;.</p>
-                    <p className={styles.source}>Source: Edexcel 9MT0/04 and 9MT0/41 mark schemes and Principal Examiner reports, 2019 Q6, 2020 Q2(b), 2022 AS Q2, 2023 Q2(d), 2023 AS Q3(a), 2024 Q6, 2024 AS Q2(c), 2025 Q3(a). The Q6 AO3 and AO4 grids are not in the vault; the sections here are judged from the reports&apos; own words.</p>
+                    <p>Press <b>Past task: bass</b> and Play: the bass runs on two detuned squares through a low-pass. Pull <b>Detune</b> to zero and the two waves collapse into one; push it past 30 and detune becomes out of tune. Drag the gold dot left and the harmonics disappear from the top down. Set <b>PW by</b> to LFO and watch the WAVE screen breathe: that is pulse-width modulation, and it is easy to mistake for a plain square wave. Press <b>hold: raw</b> and you hear what the filter and the envelope were taking away. Then switch to A-level and read the sections: that is the evaluate answer, section by section in signal order.</p>
+                    <h3>What the marks are for</h3>
+                    <p>A past task, the bass: &quot;Square wave (1); Detune added, suitable amount (1); Correct filter setting (1); Correct octave (both oscillators) (1)&quot;. Check the detune and the octave by ear: they are two of the four marks.</p>
+                    <p>A past task, the keyboard: &quot;Two sawtooth oscillators&quot;; &quot;Both in same octave and transposed to correct octave (1)&quot;; &quot;Slight detune applied (1)&quot;; &quot;LPF matches example / equal or duller (1)&quot;.</p>
+                    <p>A past task, the lead: &quot;Monophonic without note overlaps (1)&quot;; &quot;Subtle portamento (1)&quot;; &quot;A=soft, D=max, S=max, R=short&quot;; &quot;Muted sound from low cut off frequency ... resonance isn&apos;t a feature&quot;; &quot;LFO giving subtle Fc wobble&quot;.</p>
+                    <p>Past tasks, the fills: &quot;A=0, D=max, S=max, R=enough release so that the drop in octave is heard&quot;. Listen for the release: it is very short, and a long tail left from a preset no longer matches.</p>
+                    <p>The 20-mark evaluate question, a synth bass on a 1982 monophonic synthesiser: write under a heading for each synth section. Say what LFO, VCO, VCA and VCF stand for, not only the labels. A fast attack and release is the first thing to say about a bass. The LFO is a control signal, not something you hear; when it moves the pulse width, say so. The sub-oscillator adds weight beneath. Name the filter as a low-pass, not a boost or a cut, and say what the resonance does to the sound, not only what it is.</p>
+                    <p className={styles.source}>The sections here are judged from what past mark schemes ask for.</p>
                     <h3>Do these now</h3>
                     <ul>
-                        <li>Press <b>2023 paper</b>, then push Range to 4&apos;. Say why the scheme&apos;s fourth mark has gone before the line tells you.</li>
-                        <li>On the same patch set <b>PW by</b> to LFO and watch the WAVE screen. Say what a candidate who called this &quot;a square wave&quot; in 2019 was not seeing.</li>
+                        <li>Press <b>Past task: bass</b>, then push Range to 4&apos;. Say why the scheme&apos;s fourth mark has gone before the line tells you.</li>
+                        <li>On the same patch set <b>PW by</b> to LFO and watch the WAVE screen. Say why calling this &quot;a square wave&quot; misses what is happening.</li>
                         <li>Press <b>Judge: a bass</b>, switch to A-level, and touch each box in signal order. Write one sentence per box: the setting, then its impact, then whether that suits a bass.</li>
-                        <li>Press <b>2025 paper</b>, switch to Extension, and count the LFO&apos;s cycles in one note. Then say what you would hear if the LFO were &quot;audible&quot;, and why you do not.</li>
+                        <li>Press <b>Past task: lead</b>, switch to Extension, and count the LFO&apos;s cycles in one note. Then say what you would hear if the LFO were &quot;audible&quot;, and why you do not.</li>
                         <li>Press <b>Fills</b>, turn Release to 10 ms, and listen for the tail that is now missing. Then turn it to 2 s and hear the fills pile up.</li>
-                        <li>Press <b>Judge: a pad</b> and fix it: the VCA to Env, Poly in the More row, then Attack past 500 ms, then Release past 1 s. Watch the section verdicts change one at a time, and say which of the 2019 report&apos;s two gates the VCA&apos;s is.</li>
-                        <li>Push Env in the VCF to 60 % on the bass and say which report credited noticing that routing.</li>
+                        {isTextHeld('synth', 'judgePad') ? null : <li>Press <b>Judge: a pad</b> and fix it: the VCA to Env, Poly in the More row, then Attack past 500 ms, then Release past 1 s. Watch the section verdicts change one at a time, and say why the VCA&apos;s gate is not a noise gate.</li>}
+                        <li>Push Env in the VCF to 60 % on the bass and say what that routing does to each note.</li>
                         <li>Take Pulse and Saw to zero and push Noise up: the HARMONICS screen now shows the filter&apos;s own shape. Say why, and why noise alone cannot play the part.</li>
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="Figure 1 shows a monophonic synthesiser from 1982. Evaluate the suitability of the settings to produce a synth bass. (20 marks, 2024)"
+                        prompt="Figure 1 shows a monophonic synthesiser from 1982. Evaluate the suitability of the settings to produce a synth bass. (20 marks)"
                         answer="Take it section by section under subheadings. VCO: name the wave, its pulse width and the range, say what harmonics that gives the filter, and whether the pitch sits where a bass sits. SOURCE MIXER: the sub-oscillator is a square an octave down, weight beneath the bass. VCF: name it as a low-pass (not a boost or cut), give the cutoff's effect on the harmonics and say what the resonance does to the sound. VCA: Env or Gate, and what each does to the note. ENV: fast attack and release suit a bass; say what a slow attack would do to the line. LFO: it is a control signal at a low rate, moving something; say what it moves (here the pulse width) and whether that suits a bass. Every point is AO3 for the name and the setting, AO4 for the impact and the judgement."
                     />
                     <ExamCallout
-                        prompt="Create a synth bass sound that is similar to the example. Use two square wave oscillators. Ensure the detuning matches, the filter setting matches, and the octave matches. (4 marks, 2023 AS)"
-                        answer="Two squares, a few cents apart (not zero, not tens of cents), a low-pass with its cutoff in the middle of the harmonics, and both oscillators in the example's octave. The report's lost marks were no detune and an octave too high."
+                        prompt="Create a synth bass sound that is similar to the example. Use two square wave oscillators. Ensure the detuning matches, the filter setting matches, and the octave matches. (4 marks)"
+                        answer="Two squares, a few cents apart (not zero, not tens of cents), a low-pass with its cutoff in the middle of the harmonics, and both oscillators in the example's octave. Check the detune and the octave by ear: they are two of the four marks."
                     />
                 </>
             ),
@@ -1104,7 +1104,7 @@ export default function SynthBench({ back }) {
                     </div>
                 </div>
                 <div className={styles.meaning}>{lfoMeaning}</div>
-                <Why>A low frequency oscillator is a wave too slow to hear, pointed at a parameter: the pitch for vibrato, the level for tremolo, the cutoff for a wobble. Rate is its speed, depth how far it moves the target; the wave is its shape. It also moves the pulse width when the VCO says PW by LFO. The 2024 report: candidates &quot;mistakenly thought that the LFO was something audible rather than a control signal&quot;.</Why>
+                <Why>A low frequency oscillator is a wave too slow to hear, pointed at a parameter: the pitch for vibrato, the level for tremolo, the cutoff for a wobble. Rate is its speed, depth how far it moves the target; the wave is its shape. It also moves the pulse width when the VCO says PW by LFO. It is a control signal, never heard as a sound of its own.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secSynth} ${styles.secVco}`} data-teach={teach || undefined}>
@@ -1125,7 +1125,7 @@ export default function SynthBench({ back }) {
                     </div>
                 </div>
                 <div className={styles.meaning}>{octaveSaid(state.octave)}{pwmOn(state) ? ' · PWM' : state.pulse > 0 && state.width < 45 ? ' · a narrow pulse' : ''}</div>
-                <Why>One oscillator, the paper&apos;s VCO. Range is its octave in organ feet, 8&apos; the part&apos;s own, the setting the papers mark (the 2023 report: one octave too high). Detune spreads a second VCO a few cents from this one; past 30 it is out of tune. Width narrows the pulse from a square, and PW by LFO lets the LFO move it: the pulse-width modulation the 2019 and 2024 reports say very few candidates recognised.</Why>
+                <Why>One oscillator, the paper&apos;s VCO. Range is its octave in organ feet, 8&apos; the part&apos;s own, a setting the marks check. Detune spreads a second VCO a few cents from this one; past 30 it is out of tune. Width narrows the pulse from a square, and PW by LFO lets the LFO move it: pulse-width modulation, easy to mistake for a plain square.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secSynth} ${styles.secMixer}`} data-teach={teach || undefined}>
@@ -1138,7 +1138,7 @@ export default function SynthBench({ back }) {
                     ))}
                 </div>
                 <div className={styles.meaning}>{rd.sources} → the filter</div>
-                <Why>What goes into the filter, mixed rather than chosen: the VCO&apos;s pulse and its second wave, a square sub-oscillator an octave or two down (the More row sets which), and white noise. The second wave&apos;s name is a switch: press it for Saw, Tri or Sine, the spec&apos;s &quot;selecting and mixing sine, triangle, pulse, square and saw&quot;. A saw has every harmonic, a square the odd ones, a narrow pulse the even ones too, a triangle faint odd ones, a sine one alone; noise is every frequency and no pitch. The 2024 report: &quot;Candidates were often successful in discussing the sub-oscillator&quot;.</Why>
+                <Why>What goes into the filter, mixed rather than chosen: the VCO&apos;s pulse and its second wave, a square sub-oscillator an octave or two down (the More row sets which), and white noise. The second wave&apos;s name is a switch: press it for Saw, Tri or Sine, the spec&apos;s &quot;selecting and mixing sine, triangle, pulse, square and saw&quot;. A saw has every harmonic, a square the odd ones, a narrow pulse the even ones too, a triangle faint odd ones, a sine one alone; noise is every frequency and no pitch. The sub adds weight beneath the part.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secSynth} ${styles.secVcf}`} data-teach={teach || undefined}>
@@ -1156,7 +1156,7 @@ export default function SynthBench({ back }) {
                     </Slide>
                 </div>
                 <div className={styles.meaning}>{rd.brightness}{state.envAmt > 0 ? ` · env lifts ${envOctaves(state).toFixed(1)} oct` : ''}</div>
-                <Why>Low-pass keeps what is below the cutoff, so lower is darker; high-pass keeps what is above; band-pass keeps a band. Resonance is a peak at the cutoff. Env routes the envelope to the cutoff, so each note opens bright and closes: the routing the 2019 report says only the top candidates noticed.</Why>
+                <Why>Low-pass keeps what is below the cutoff, so lower is darker; high-pass keeps what is above; band-pass keeps a band. Resonance is a peak at the cutoff. Env routes the envelope to the cutoff, so each note opens bright and closes: listen for the brightness moving, not only the level.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secSynth} ${styles.secVca}`} data-teach={teach || undefined}>
@@ -1165,7 +1165,7 @@ export default function SynthBench({ back }) {
                     <Chips label="VCA" options={vcaOptions} value={state.vca} onChange={edit(setVca, 'vca')} />
                 </div>
                 <div className={styles.meaning}>{state.vca === 'gate' ? 'obeys the key' : 'obeys the env'}</div>
-                <Why>The amplifier. On Env it obeys the envelope, so the note has its shape. On Gate it obeys the key alone: full while the key is down, nothing after, the envelope disabled. The 2019 report found candidates confusing &quot;the VCA gate (disabling the envelope) with a noise gate designed to cut out background noise&quot;.</Why>
+                <Why>The amplifier. On Env it obeys the envelope, so the note has its shape. On Gate it obeys the key alone: full while the key is down, nothing after, the envelope disabled. It is not a noise gate, which cuts out background noise.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secSynth} ${styles.secEnv}`} data-teach={teach || undefined}>
@@ -1185,7 +1185,7 @@ export default function SynthBench({ back }) {
                     </Slide>
                 </div>
                 <div className={styles.meaning}>{state.vca === 'gate' ? (state.envAmt > 0 ? 'on the cutoff only' : 'reaches nothing: VCA on Gate') : `on the amplifier${state.envAmt > 0 ? ' and the cutoff' : ''}`}</div>
-                <Why>Attack, decay and release are times; sustain is a level. A bass wants a fast attack and a short release, a pad a slow attack and a long release; the 2024 report&apos;s most common AO4 mark was the fast attack and release. The 2020 report: only the best candidates noticed the release was very short.</Why>
+                <Why>Attack, decay and release are times; sustain is a level. A bass wants a fast attack and a short release, a pad a slow attack and a long release. A fast attack and release is the first thing to say about a bass envelope, and a very short release is still worth listening for.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined} data-synth="true">

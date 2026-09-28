@@ -7,6 +7,7 @@ import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth, D
 import { useBenchAudio, glide } from '@/components/bench/useBenchAudio';
 import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
+import { isTextHeld } from '@/lib/bench/held-papers';
 import { FILES, PATTERNS, SOURCE_IDS, scheduleBar } from '@/lib/bench/sources';
 import { DEPTH_LINES, DEPTH_TEACH, judge, open as openMachine, hearingLine, nextMove } from '@/lib/bench/comp-depth';
 import {
@@ -684,7 +685,7 @@ export default function DynamicsBench({ back }) {
                         <dt>Limiter</dt><dd>A compressor whose ratio is infinity: nothing passes the threshold. Used to stop peaks, not to shape a part.</dd>
                         <dt>Gate</dt><dd>Shuts the signal off below the threshold: noise between notes, spill, the tail of a sound. Its range (or floor) is how far down it shuts; real gates add a hold time.</dd>
                         <dt>Expander</dt><dd>The gate&apos;s gentle cousin: below the threshold it turns the signal further down by a ratio, rather than off.</dd>
-                        <dt>Side-chain</dt><dd>Feeding the processor a different signal to listen to from the one it acts on: a gate on a synth keyed from the kick, a compressor on a bass ducking to the kick. Not on this bench; on the practical paper most years.</dd>
+                        <dt>Side-chain</dt><dd>Feeding the processor a different signal to listen to from the one it acts on: a gate on a synth keyed from the kick, a compressor on a bass ducking to the kick. Not on this bench; it often comes up in the practical tasks.</dd>
                     </dl>
                     <h3>In your DAW</h3>
                     <table>
@@ -716,36 +717,37 @@ export default function DynamicsBench({ back }) {
                 <>
                     <h2>What to listen for</h2>
                     <p>The stage shows the loop before and after the processor, and the coral band is what is being taken off. Hold the dry button and the filled shape becomes the ghost line; let go and watch what the threshold catches. Once you can hear a hit being held rather than &quot;quieter&quot;, you are describing dynamics the way the paper marks it.</p>
-                    <h3>What cost candidates marks</h3>
-                    <p>2023, a vocal chain: &quot;Most candidates were able to see that the very high ratio would result in a heavily compressed vocal. The function of the make-up gain was often confused and misunderstood.&quot; And: &quot;Some of the better students missed out on their full complement of AO3 points by not providing a definition of a parameter which they clearly knew (threshold, ratio, attack, release etc).&quot;</p>
-                    <p>2022, drawing the compressor&apos;s curve: &quot;Nearly all candidates managed to score 2 though for the axes. A few got the full 7 marks... In order of the most common first, marks were given for the flatter line, hard knee, 1:1 threshold mark, 10:1 slope, and then the gain make-up.&quot;</p>
-                    <p>2023 AS, labelling which of 1:1 and ∞:1 is limiting: &quot;Very few could do this.&quot;</p>
-                    <p>2019, a gate on a bass: &quot;Most candidates understood the concept of a noise gate, but also many confused the process with limiting, compressing or filtering... &apos;Below the threshold the frequencies are cut&apos; therefore no credit could be given.&quot; And on the practical: &quot;Very few students scored full marks... because they didn&apos;t set the threshold carefully to remove the noise but leave the bass intact.&quot;</p>
-                    <p>2025, compressing a vocal, the two-mark fault in the mark scheme: &quot;Attack too long causing excessive transients.&quot;</p>
-                    <p className={styles.source}>Source: Edexcel Principal Examiner Feedback and mark schemes, 9MT0/04, Summer 2019 (Q1), 2022 (Q4), 2023 (Q6), 2023 AS (Q4), 2025 (Q5).</p>
-                    <p>Those are the moves on this bench: define every parameter before you judge it; press <b>2022 paper</b> and read the seven marks off the drawing; press <b>Limiter</b> and name the flat line; press <b>Gate the hats</b> and find the threshold that keeps the kit; slow the attack on the vocal and hear the transients get through.</p>
+                    <h3>Where marks are lost</h3>
+                    <p>A heavily compressed vocal is easy to spot from a very high ratio. Make-up gain is the part people confuse: it lifts the output after the compression, it does not compress. Define every parameter you name (threshold, ratio, attack, release): a setting you clearly know still earns nothing until you say what it does.</p>
+                    <p>Drawing a compressor&apos;s curve: the axes are the easy marks. Then come the flatter line, the hard knee, the 1:1 line up to the threshold, the slope of the ratio, and last the make-up lift, the mark people most often miss.</p>
+                    <p>Labelling which of 1:1 and ∞:1 is limiting: the flat one. It is a short answer that few get right.</p>
+                    <p>A noise gate is not limiting, compressing or filtering. &quot;Below the threshold the frequencies are cut&quot; earns nothing: a gate cuts level, not frequencies. On a practical gate, set the threshold carefully so the noise goes and the part stays whole.</p>
+                    <p>Compressing a vocal: an attack that is too long lets the transients through too loud. That is a fault that costs marks.</p>
+                    <p>Those are the moves on this bench: define every parameter before you judge it; press <b>Past task: curve</b> and read the seven marks off the drawing; press <b>Limiter</b> and name the flat line; press <b>Gate the hats</b> and find the threshold that keeps the kit; slow the attack on the vocal and hear the transients get through.</p>
                     <h3>Do these now</h3>
                     <ul>
-                        <li>Press <b>2023 paper</b>, switch the bench to A-level, and judge the ratio and the make-up from what you hear before you read the examiner above. Then fix it: bring the ratio to 4:1, match the level, and say what came back.</li>
-                        <li>Press <b>2022 paper</b> and draw the transfer curve on paper from the stage: dB on both axes, 1:1 up to −30, a flatter line above it, a hard corner, the whole thing lifted by the make-up. Seven marks.</li>
-                        <li>Press <b>Limiter</b>, then switch the processor back to Compressor at 20:1 and say what changed on the drawing. Then say which line the 2023 AS paper called limiting.</li>
-                        <li>Press <b>Gate the hats</b>, then drag the threshold above the snare and below the hats. Say what the 2019 report would have said about each.</li>
-                        <li>Choose the vocal at <b>Vocal level</b>, turn the attack up to 60 ms and hold dry against it: hear the front of each word get through. That is the 2025 mark scheme&apos;s two-mark fault.</li>
+                        <li>Press <b>Past task: vocal</b>, switch the bench to A-level, and judge the ratio and the make-up from what you hear before you read the notes above. Then fix it: bring the ratio to 4:1, match the level, and say what came back.</li>
+                        <li>Press <b>Past task: curve</b> and draw the transfer curve on paper from the stage: dB on both axes, 1:1 up to −30, a flatter line above it, a hard corner, the whole thing lifted by the make-up. Seven marks.</li>
+                        <li>Press <b>Limiter</b>, then switch the processor back to Compressor at 20:1 and say what changed on the drawing. Then say which line is limiting.</li>
+                        <li>Press <b>Gate the hats</b>, then drag the threshold above the snare and below the hats. Say what goes wrong in each case.</li>
+                        <li>Choose the vocal at <b>Vocal level</b>, turn the attack up to 60 ms and hold dry against it: hear the front of each word get through. That is the attack-too-long fault.</li>
                         <li>Press <b>Drum punch</b>, then turn the attack down to 1 ms. Say what happened to the kick, and why a drum compressor is set slower than a vocal one.</li>
-                        <li>Press <b>Sustain</b> and hold dry against it. Say which processor the 2022 paper was asking about, and why most candidates said reverb.</li>
+                        <li>Press <b>Sustain</b> and hold dry against it. Say which processor gives a piano more sustain here, and why reverb is the wrong answer.</li>
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="A compressor reduces dynamic range. Give a reason why the recording engineer compressed the rap vocal, and state a disadvantage of doing so. (2 marks, 2022)"
-                        answer="Reasons the scheme credited: control the peaks, keep the volume consistent, increase the average level, help the vocal sit in the mix. Disadvantages: increased noise, louder breaths, more reverb, increased sibilance. 'Dynamics' alone was not credited because dynamic range was given in the question."
+                        prompt="A past task: A compressor reduces dynamic range. Give a reason why the recording engineer compressed the rap vocal, and state a disadvantage of doing so. (2 marks)"
+                        answer="Reasons that earn the mark: control the peaks, keep the volume consistent, increase the average level, help the vocal sit in the mix. Disadvantages: increased noise, louder breaths, more reverb, increased sibilance. 'Dynamics' alone earns nothing, because dynamic range was given in the question."
                     />
+                    {!isTextHeld('comp', 'gateThresholdPrompt') && (
+                        <ExamCallout
+                            prompt="A past task: On a noise gate, describe how the threshold control affects the signal. (2 marks)"
+                            answer="Sound below the threshold is removed or reduced; the higher the threshold, the more is cut. 'The threshold is the point at which the gate is activated' scores nothing, because it says neither below nor what a gate does."
+                        />
+                    )}
                     <ExamCallout
-                        prompt="On a noise gate, describe how the threshold control affects the signal. (2 marks, 2019)"
-                        answer="Sound below the threshold is removed or reduced; the higher the threshold, the more is cut. The report: 'the threshold is the point at which the gate is activated' scored nothing, because it says neither below nor what a gate does."
-                    />
-                    <ExamCallout
-                        prompt="Draw and label lines on the graph showing compression ratios of 1:1 and ∞:1 using the threshold shown, and label which is limiting. (3 marks, 2023 AS)"
-                        answer="1:1 is the diagonal, output equal to input. ∞:1 follows the diagonal up to the threshold and then runs almost horizontally: the output stays at the threshold however loud the input. The horizontal one is limiting. The report: very few could label it."
+                        prompt="A past task: Draw and label lines on the graph showing compression ratios of 1:1 and ∞:1 using the threshold shown, and label which is limiting. (3 marks)"
+                        answer="1:1 is the diagonal, output equal to input. ∞:1 follows the diagonal up to the threshold and then runs almost horizontally: the output stays at the threshold however loud the input. The horizontal one is limiting."
                     />
                 </>
             ),
@@ -764,12 +766,12 @@ export default function DynamicsBench({ back }) {
                     <a className={styles.conn} href={topicHref('synthesis')}>
                         <i>1.3 Synthesis</i>
                         <b>Two attacks</b>
-                        <span>A synth&apos;s envelope attack is how fast the sound starts; a compressor&apos;s attack is how fast the gain comes down. The 2025 report found candidates mixing them up.</span>
+                        <span>A synth&apos;s envelope attack is how fast the sound starts; a compressor&apos;s attack is how fast the gain comes down. The two are easy to mix up.</span>
                     </a>
                     <a className={styles.conn} href={topicHref('balance-blend')}>
                         <i>1.13 Balance and blend</i>
                         <b>Sitting in the mix</b>
-                        <span>The paper&apos;s reasons for compressing a vocal end with &quot;help it sit in the mix&quot;: dynamics are a balance decision as much as a level one.</span>
+                        <span>The reasons for compressing a vocal end with &quot;help it sit in the mix&quot;: dynamics are a balance decision as much as a level one.</span>
                     </a>
                     <a className={styles.conn} href={topicHref('reverb')}>
                         <i>1.12 Reverb</i>

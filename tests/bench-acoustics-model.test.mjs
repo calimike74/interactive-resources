@@ -296,7 +296,7 @@ test('a control room aims for 0.2 to 0.4 s: short is the target, and only next t
 });
 
 
-test('the judge faults only what a scheme or a report faults, and quotes it with its year', () => {
+test('the judge faults only what a scheme or a report faults, and keeps its evidence (never rendered) with its year', () => {
     const st = (over) => ({ ...DEFAULT_STATE, ...over });
     // the trap: soundproofing is the one thing that is always wrong here
     assert.equal(judgeSection(st({ proof: true }), 'walls').grade, 'poor');

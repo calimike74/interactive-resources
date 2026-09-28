@@ -735,15 +735,15 @@ export default function EditBench({ back }) {
                         <dt>Region</dt><dd>A piece of a recording placed on the timeline (a clip in Live). Editing moves its edges; the audio file underneath is untouched.</dd>
                         <dt>Edit point</dt><dd>Where a region ends or begins: the cut. The 40 milliseconds either side of it are where an edit is clean or not.</dd>
                         <dt>Zero crossing</dt><dd>A sample where the waveform passes through the centre line. A cut placed there has nothing to jump from or to.</dd>
-                        <dt>Discontinuity</dt><dd>The waveform jumping from one value to an unrelated one at the join. Heard as a click or pop. The mark scheme&apos;s own word.</dd>
-                        <dt>Click, not clipping</dt><dd>A click is a join fault and has nothing to do with level; clipping is a level fault, the peaks flattened. The 2019 scheme refuses &quot;clipping&quot; as the answer.</dd>
+                        <dt>Discontinuity</dt><dd>The waveform jumping from one value to an unrelated one at the join. Heard as a click or pop. The word that earns the mark.</dd>
+                        <dt>Click, not clipping</dt><dd>A click is a join fault and has nothing to do with level; clipping is a level fault, the peaks flattened. &quot;Clipping&quot; is the wrong answer for a click.</dd>
                         <dt>Fade in, fade out</dt><dd>A gain ramp from or to silence at a region&apos;s edge. Either one creates the zero point a hard cut lacks.</dd>
                         <dt>Crossfade</dt><dd>A fade out and a fade in at the same time, across an overlap between two regions, so the level through the join holds.</dd>
                         <dt>Linear</dt><dd>The gain changes by the same amount every millisecond. Straight in amplitude, curved in dB, and 3 dB down in the middle of a crossfade of two unrelated sounds.</dd>
                         <dt>Equal power</dt><dd>The two gains follow a sine and a cosine, so their powers always add to one: the level holds through the crossfade.</dd>
                         <dt>S-curve</dt><dd>Slow at both ends, quick in the middle: the fade-out shape that follows how a decay is heard.</dd>
                         <dt>Truncation</dt><dd>Cutting a sound off before it has finished: a reverb tail, a cymbal, a held chord. The waveform looks finished long before the sound is.</dd>
-                        <dt>Non-destructive</dt><dd>Edits that change what plays without rewriting the file. A destructive edit rewrites it, and every other region using that file changes too (the 2024 report&apos;s bars 12 and 52).</dd>
+                        <dt>Non-destructive</dt><dd>Edits that change what plays without rewriting the file. A destructive edit rewrites it, and every other region using that file changes too.</dd>
                     </dl>
                     <h3>In your DAW</h3>
                     <table>
@@ -763,7 +763,7 @@ export default function EditBench({ back }) {
                         <dt>How short is short</dt><dd>At 44.1 kHz a 10 ms fade is 441 samples. Under about 5 ms a fade starts to be heard as a click of its own on low notes, because a cycle at 100 Hz is 10 ms long.</dd>
                         <dt>Where a tail ends</dt><dd>The waveform display is linear, so it hides the last 40 dB of a decay the ear still follows. A cymbal that looks finished at half a second is still sounding at one and a half.</dd>
                     </dl>
-                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapter, Clean edit points, and the 1.6 mark schemes.</p>
+                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapter, Clean edit points, and what the 1.6 practical tasks ask for.</p>
                 </>
             ),
         },
@@ -773,31 +773,30 @@ export default function EditBench({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>The stage is the join, zoomed until the cycles show. Press Play and the loop runs through the cut about once a second; the pop you hear on every pass is the coral bar at the line. Hold dry and you hear the take as it was, including what the cut removed. Once you can hear a click come and go as you drag the cut a few milliseconds, you are hearing what the practical mark schemes mark.</p>
-                    <h3>What cost candidates marks</h3>
-                    <p>2024, copying eight-bar phrases into place: &quot;Most candidates were able to copy the correct sections of audio to the right places, but they usually failed to create smooth edit points, therefore resulting in unprofessional clicks and crossfades to the finished audio, yielding 2 marks, the most common score.&quot; And among the most common errors: &quot;not fading/removing the glitch at the end.&quot;</p>
-                    <p>2018, a tight vocal edit: &quot;Students clearly found this challenging, few getting a good edit... Students need to expand the screen and use short fades to get a clean and complete edit.&quot;</p>
-                    <p>2019, the explain question, three marks for the mechanism: &quot;Removes the clicks (not &apos;clipping&apos;). Due to discontinuity/not zero point in audio signal at start or end of segment/clip/region. Fade/crossfade creates a zero point at start/end. Crossfade on overlapping join can be used to smooth two regions with sustaining sounds (e.g. cymbal crash or strummed guitar).&quot;</p>
-                    <p>2022, a click from a synth&apos;s release: &quot;Release too short / 0ms; cuts waveform mid-cycle / cuts waveform when it&apos;s not at 0 displacement / credit a diagram showing waveform cut mid-cycle.&quot; The report: most scored one mark; &quot;fewer candidates were able to further comment on what is then happening from a waveform perspective.&quot;</p>
-                    <p className={styles.source}>Source: Edexcel 9MT0 mark schemes and Principal Examiner reports, 2018 AS Q3(a), 2019 AS Q3(c), 2022 A Q2(b), 2024 A Q2(e).</p>
-                    <p>Those are the moves on this bench: press <b>The click</b> and say what the coral bar is in the 2019 scheme&apos;s word; press <b>Zero crossing</b> and say what changed on the drawing; press <b>Repair fade</b> and say why 10 ms is enough; press <b>The tail</b>, hold dry, and say what the waveform hid.</p>
+                    <p>The stage is the join, zoomed until the cycles show. Press Play and the loop runs through the cut about once a second; the pop you hear on every pass is the coral bar at the line. Hold dry and you hear the take as it was, including what the cut removed. Once you can hear a click come and go as you drag the cut a few milliseconds, you are hearing what a practical task marks.</p>
+                    <h3>Where marks are lost</h3>
+                    <p>Copying phrases into place: getting the right sections to the right places is the easy part. The marks go on smooth edit points. Without them the finished audio has unprofessional clicks, and a four-mark task drops to 2. A glitch left at the very end of the file costs a mark too: fade it or remove it.</p>
+                    <p>A tight vocal edit is hard to get clean. Zoom in on the screen and use short fades to get a clean and complete edit.</p>
+                    <p>Explaining why fades and crossfades matter, three marks for the mechanism: they remove clicks (not &apos;clipping&apos;). A click is caused by a discontinuity, a point that is not zero in the audio signal at the start or end of a segment, clip or region. A fade or crossfade creates a zero point at the start or end. A crossfade on an overlapping join can smooth two regions with sustaining sounds, such as a cymbal crash or a strummed guitar.</p>
+                    <p>A click from a synth&apos;s release: the release is too short, 0 ms, so it cuts the waveform mid-cycle, when it is not at 0 displacement. A diagram of the waveform cut mid-cycle earns the mark. The first mark is easy; the second needs you to say what is happening to the waveform.</p>
+                    <p>Those are the moves on this bench: press <b>The click</b> and name the coral bar in one word; press <b>Zero crossing</b> and say what changed on the drawing; press <b>Repair fade</b> and say why 10 ms is enough; press <b>The tail</b>, hold dry, and say what the waveform hid.</p>
                     <h3>Do these now</h3>
                     <ul>
-                        <li>Press <b>The click</b>, switch the bench to A-level, and write the 2019 answer from the stage before you read it above: the fault, its cause, what a fade does. Then snap the cut and check your second sentence against the drawing.</li>
-                        <li>Press <b>2022 paper</b> and draw what the stage shows on paper: a waveform cut when it is not at zero displacement. That drawing is the second mark.</li>
-                        <li>With <b>Repair fade</b> on, drag Length up to 300 ms with Linear chosen and listen to the middle of the crossfade. Switch to Equal power. Say which one the 2019 scheme means by &quot;smooth&quot;.</li>
-                        <li>Press <b>The tail</b>, hold dry, and count how long the cymbal really rings. Then turn Length up until the fade reaches the silence, and say why the 2024 report named the glitch at the end.</li>
-                        <li>Press <b>2024 paper</b>: a 15 ms equal-power crossfade at a zero crossing. Say what two of the four marks cost the candidates who left it out.</li>
+                        <li>Press <b>The click</b>, switch the bench to A-level, and write the three-mark answer from the stage before you read it above: the fault, its cause, what a fade does. Then snap the cut and check your second sentence against the drawing.</li>
+                        <li>Press <b>Past task: a click</b> and draw what the stage shows on paper: a waveform cut when it is not at zero displacement. That drawing is the second mark.</li>
+                        <li>With <b>Repair fade</b> on, drag Length up to 300 ms with Linear chosen and listen to the middle of the crossfade. Switch to Equal power. Say which one sounds smooth, and why.</li>
+                        <li>Press <b>The tail</b>, hold dry, and count how long the cymbal really rings. Then turn Length up until the fade reaches the silence, and say why a glitch at the end costs a mark.</li>
+                        <li>Press <b>Past task: crossfades</b>: a 15 ms equal-power crossfade at a zero crossing. Say what two of the four marks cost when it is left out.</li>
                         <li>Turn Snap off, drag the cut one millisecond at a time, and watch the jump change size with the cycle. Say why a zero crossing is never far away on a sung note.</li>
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="Explain why it is important to use fades or crossfades when joining two sections of truncated audio. (3 marks, 2019)"
+                        prompt="A past task: Explain why it is important to use fades or crossfades when joining two sections of truncated audio. (3 marks)"
                         answer="Removes the clicks (not clipping), which are caused by a discontinuity, a non-zero point in the signal at the start or end of the region; a fade or crossfade creates a zero point there; and a crossfade on an overlapping join smooths two regions of sustaining sound, such as a cymbal crash or a strummed guitar."
                     />
                     <ExamCallout
-                        prompt="Explain why the envelope settings cause a click in bar 25. (2 marks, 2022)"
-                        answer="The release is too short (0 ms), so the envelope cuts the waveform mid-cycle, when it is not at zero displacement. The scheme credits a diagram of the waveform cut mid-cycle: the stage on The click, drawn."
+                        prompt="A past task: Explain why the envelope settings cause a click in bar 25. (2 marks)"
+                        answer="The release is too short (0 ms), so the envelope cuts the waveform mid-cycle, when it is not at zero displacement. A diagram of the waveform cut mid-cycle also earns the mark: the stage on The click, drawn."
                     />
                 </>
             ),
@@ -811,7 +810,7 @@ export default function EditBench({ back }) {
                     <a className={styles.conn} href={topicHref('synthesis')}>
                         <i>1.3 Synthesis</i>
                         <b>A release of 0 ms is a hard cut</b>
-                        <span>The 2022 paper&apos;s click came from an envelope, not an edit: a release too short cuts the waveform mid-cycle, the same discontinuity by another route.</span>
+                        <span>A click can come from an envelope, not an edit: a release too short cuts the waveform mid-cycle, the same discontinuity by another route.</span>
                     </a>
                     <a className={styles.conn} href={topicHref('sampling')}>
                         <i>1.4 Sampling</i>
@@ -826,7 +825,7 @@ export default function EditBench({ back }) {
                     <a className={styles.conn} href={topicHref('mastering')}>
                         <i>1.14 Mastering</i>
                         <b>The end of the file</b>
-                        <span>The last edit in any bounce is the one candidates forget: the 2024 report&apos;s glitch at the end, and the 2025 scheme&apos;s final fade that must be smooth.</span>
+                        <span>The last edit in any bounce is the easy one to forget: a glitch left at the end, or a final fade that is not smooth.</span>
                     </a>
                 </>
             ),

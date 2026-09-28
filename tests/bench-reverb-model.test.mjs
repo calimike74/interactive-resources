@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
     TYPE_IDS, TYPES, impulse, impulseEnergy, envelopeDbAt, earlyTaps, impulseLength, GATE_HOLD, GATE_CLOSE, TYPE_GAIN,
-    PRESETS, presetsFor, applyPreset, DEFAULT_STATE, judgeAll, judgeSection, verdict, readings, REPORTS, SECTION_IDS,
+    PRESETS, ALL_PRESETS, presetsFor, applyPreset, DEFAULT_STATE, judgeAll, judgeSection, verdict, readings, REPORTS, SECTION_IDS,
     setTime, setWet, setStereo, setRouting, setType, setPredelay, setDry, wetPan, dryPan, dampedTime, boxGrade, schemePoints,
 } from '../lib/bench/reverb-model.js';
 
@@ -73,11 +73,15 @@ test('Core presets are the six types, each suiting its part in every section; th
         const all = judgeAll(applyPreset(DEFAULT_STATE, p.id));
         for (const id of SECTION_IDS) assert.equal(all[id].grade, 'good', `${p.name} ${id}: ${all[id].why}`);
     }
-    assert.deepEqual(presetsFor('alevel').map((p) => p.name), ['2019 AS paper', '2019 paper', '2020 paper', '2019 dials', 'Judge: swamped', 'Judge: an insert', 'Judge: mono']);
+    assert.deepEqual(presetsFor('alevel').map((p) => p.name), ['Past task: vocal', 'Past task: gate', 'Judge: swamped', 'Judge: an insert', 'Judge: mono']);
+    // the 2019 A-level tasks are held (lib/bench/held-papers.js) but kept in the raw list
+    assert.deepEqual(ALL_PRESETS.filter((p) => p.level !== 'core').map((p) => p.name), ['Past task: vocal', 'Past task: blend', 'Past task: gate', 'Past task: dials', 'Judge: swamped', 'Judge: an insert', 'Judge: mono']);
+    assert.equal(applyPreset(DEFAULT_STATE, 'a2019'), DEFAULT_STATE);
+    assert.equal(applyPreset(DEFAULT_STATE, 'dials2019'), DEFAULT_STATE);
     assert.deepEqual(presetsFor('extension'), presetsFor('alevel'));
     assert.equal(DEFAULT_STATE.presetId, 'hall');
     assert.equal(DEFAULT_STATE.time, 2.6);
-    for (const p of PRESETS) noDash(p.blurb);
+    for (const p of ALL_PRESETS) noDash(p.blurb);
     for (const r of Object.values(REPORTS)) noDash(r);
 });
 
@@ -88,7 +92,7 @@ test('each paper task lands as directed, and each scheme point breaks the way th
     assert.equal(verdict(setWet(as, 60)).missed[0].id, 'level');
     assert.equal(verdict(setRouting(as, 'insert')).missed[0].id, 'send');
     assert.equal(verdict(setStereo(as, 'mono')).missed[0].id, 'stereo');
-    const a = applyPreset(DEFAULT_STATE, 'a2019');
+    const a = applyPreset(DEFAULT_STATE, 'a2019', ALL_PRESETS);
     assert.equal(verdict(a).ok, true);
     assert.equal(verdict(setTime(a, 2)).missed[0].id, 'time');
     assert.equal(verdict(setWet(a, 10)).missed[0].id, 'blend');
@@ -96,7 +100,7 @@ test('each paper task lands as directed, and each scheme point breaks the way th
     assert.equal(verdict(g).ok, true);
     assert.equal(verdict(setType(g, 'room')).missed[0].id, 'gate');
     assert.equal(verdict(setTime(g, 2)).missed[0].id, 'time');
-    const d = applyPreset(DEFAULT_STATE, 'dials2019');
+    const d = applyPreset(DEFAULT_STATE, 'dials2019', ALL_PRESETS);
     assert.equal(verdict(d).ok, true);
     assert.equal(verdict(setPredelay(d, 100)).missed[0].id, 'predelay');
     assert.equal(verdict(setTime(d, 2)).missed[0].id, 'time');
@@ -161,7 +165,7 @@ test('a box of the path is faulted only for what it holds, and a met scheme poin
     const said = schemePoints(as).map((p) => p.said).join('; ');
     assert.match(said, /a 2 s reverb; 25 % wet, clearly audible; on a send, so nothing else is affected; in stereo/);
     assert.ok(!/mono|insert/.test(said));
-    const d = schemePoints(applyPreset(DEFAULT_STATE, 'dials2019')).map((p) => p.said).join('; ');
+    const d = schemePoints(applyPreset(DEFAULT_STATE, 'dials2019', ALL_PRESETS)).map((p) => p.said).join('; ');
     assert.equal(d, 'Hall; 300 ms, inside 200 to 400 ms; 3.2 s, inside 2.5 to 4 s');
     assert.equal(readings(applyPreset(DEFAULT_STATE, 'reverse')).firstTapMs, 15);
 });

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-    DEFAULT_STATE, PRESETS, PARTS, WAVES, BPM, SOURCE_GAIN,
+    DEFAULT_STATE, PRESETS, ALL_PRESETS, PARTS, WAVES, BPM, SOURCE_GAIN,
     harmonicAmp, pulseCoef, midiHz, noteName, fmtHz, fmtMs, posToLog, logToPos,
     resDb, resQ, nodeQ, filterDb, filterMag, filterCoefficients, adsrAt, lfoValue, lfoSwing,
     applyPreset, setPulse, setSaw, setSub, setNoise, setWidth, setPwm, setSubOct, setVca, setOctave, setDetune, setOsc2, setFilter, setCutoff, setRes, setAttack, setRelease, setLfoTarget, setLfoDepth, setVoices, setPart, dragDot, rawOf,
@@ -224,7 +224,7 @@ test('the judge: a pad patch on the bass fails on its envelope; a bass patch on 
     assert.equal(jb.filter.grade, 'good');
     assert.equal(pwmOn(b), true);
     assert.ok(verdict(b).key.startsWith('poor-env'));
-    const p = applyPreset(DEFAULT_STATE, 'judgePad');
+    const p = applyPreset(DEFAULT_STATE, 'judgePad', ALL_PRESETS);
     assert.equal(p.vca, 'gate');
     const jp = judgeAll(p);
     assert.equal(jp.env.grade, 'poor');
@@ -266,7 +266,7 @@ test('the judge knows the Q6 misconceptions: an LFO is a control signal, a high-
     assert.equal(judgeSection(pw, 'osc').grade, 'good');
     assert.match(judgeSection(pw, 'osc').why, /width moving/);
     assert.equal(judgeSection(pw, 'lfo').grade, 'good');
-    assert.match(judgeSection(pw, 'lfo').why, /very rare/);
+    assert.match(judgeSection(pw, 'lfo').why, /pulse-width modulation, the LFO as a control signal/);
     // a sub under the bass is the 2024 report's easy credit
     assert.match(judgeSection(setSub(s, 60), 'osc').why, /sub/);
 });
@@ -387,7 +387,7 @@ test('coarse tuning: Osc 2 at a fifth sits seven semitones up, draws its own lin
 });
 
 test('the arpeggiator steps a chord up in sixteenths over its own length and leaves single notes alone', () => {
-    const pad = { ...applyPreset(DEFAULT_STATE, 'judgePad'), arp: 'up' };
+    const pad = { ...applyPreset(DEFAULT_STATE, 'judgePad', ALL_PRESETS), arp: 'up' };
     const bar = PARTS.pad.notes.filter((e) => e.s < 16);
     const out = arpeggiate(bar, pad);
     assert.equal(out.length, 16);
@@ -450,9 +450,12 @@ test('the wave slider has a shape, saw, tri or sine, in the words the schemes us
     assert.equal(SHAPES.tri.node, 'triangle');
 });
 
-test('Core presets are the four sounds, each suiting its part in every section; the papers and the Judge patches are the A-level and Extension presets', () => {
+test('Core presets are the four sounds, each suiting its part in every section; the past tasks and the Judge patches are the A-level and Extension presets, the held pad left out', () => {
     assert.deepEqual(presetsFor('core').map((p) => p.id), ['bass', 'pad', 'stab', 'lead']);
-    assert.deepEqual(presetsFor('alevel').map((p) => p.id), ['as2023', 'as2024', 'a2025', 'fills2023', 'judgeBass', 'judgePad']);
+    assert.deepEqual(presetsFor('alevel').map((p) => p.id), ['as2023', 'as2024', 'a2025', 'fills2023', 'judgeBass']);
+    assert.deepEqual(presetsFor('alevel').map((p) => p.name), ['Past task: bass', 'Past task: keys', 'Past task: lead', 'Fills', 'Judge: a bass']);
+    assert.ok(ALL_PRESETS.some((p) => p.id === 'judgePad'), 'the held pad is kept in the raw list');
+    assert.equal(applyPreset(DEFAULT_STATE, 'judgePad').presetId, DEFAULT_STATE.presetId, 'a held preset does not load');
     assert.deepEqual(presetsFor('extension'), presetsFor('alevel'));
     assert.equal(DEFAULT_STATE.presetId, 'bass');
     assert.equal(DEFAULT_STATE.task, null);

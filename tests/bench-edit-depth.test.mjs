@@ -58,7 +58,7 @@ test('the verdict on the cut turns on the jump, and on the tail for a trim', () 
 test('the verdict on length walks repair, short, transition, too long', () => {
     const say = (length) => { const s = at({ length, shape: 'power' }); return judge({ state: s.state, last: 'length', stats: s.stats })[1].text; };
     assert.match(say(0), /hard cut|click|clean/i);
-    assert.match(say(10), /repair|2018/);
+    assert.match(say(10), /repair/);
     assert.match(say(60), /repair|smear/);
     assert.match(say(200), /transition|sustaining/);
     assert.match(say(450), /musical|too long/);
@@ -73,13 +73,13 @@ test('the verdict on shape knows the linear dip and the equal-power hold', () =>
     assert.match(judge({ state: none.state, last: 'shape', stats: none.stats })[1].text, /nothing/);
 });
 
-test('the paper presets judge the paper', () => {
+test('the past-task presets judge the past tasks', () => {
     const s22 = applyPreset(DEFAULT_STATE, 'p2022');
     const j22 = judge({ state: s22, last: 'preset', stats: editStats(s22, SR, ch) });
     assert.match(j22[1].text, /0 displacement|mid-cycle/);
     const s24 = applyPreset(DEFAULT_STATE, 'p2024');
     const j24 = judge({ state: s24, last: 'preset', stats: editStats(s24, SR, ch) });
-    assert.match(j24[1].text, /most common score/);
+    assert.match(j24[1].text, /2 marks of 4/);
 });
 
 test('Extension is its own sentence with no AO tags and opens the machine', () => {

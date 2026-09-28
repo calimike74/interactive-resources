@@ -17,11 +17,11 @@ test('every preset judges in two segments, AO3 then AO4, short enough for the ba
     }
 });
 
-test('the feel task reads the swing the way the 2025 scheme does, on both sides', () => {
+test('the feel task reads the swing the way the scheme does, on both sides, with no paper cited', () => {
     const straight = applyPreset(DEFAULT_STATE, 'straight');
     const s0 = judge({ state: straight, last: 'preset' });
     assert.match(s0[0].text, /^Straight: sixteenth hats hard quantised/);
-    assert.match(s0[1].text, /\(2025\)/);
+    assert.doesNotMatch(s0[1].text, /\b20\d\d\b|report|candidates/);
     assert.match(s0[1].text, /mechanical/);
     const swung = judge({ state: applyPreset(DEFAULT_STATE, 'swing'), last: 'preset' });
     assert.match(swung[0].text, /^Swing quantise at 45%/);
@@ -31,11 +31,12 @@ test('the feel task reads the swing the way the 2025 scheme does, on both sides'
     assert.match(gentle[0].text, /^Gently swung/);
 });
 
-test('the filter task says where the cutoff sits and quotes the 2024 report', () => {
+test('the filter task says where the cutoff sits and asks for the impact, with no paper cited', () => {
     const sweep = applyPreset(DEFAULT_STATE, 'sweep');
     const sw = judge({ state: sweep, last: 'preset' });
     assert.match(sw[0].text, /^Filter sweep: the cutoff climbs from 260 Hz to 6 kHz/);
-    assert.match(sw[1].text, /\(2024\)/);
+    assert.match(sw[1].text, /not a boost or a cut/);
+    assert.doesNotMatch(sw[1].text, /\b20\d\d\b|report|learners/);
     const closed = judge({ state: setCutoff(sweep, 300), last: 'cutoff' });
     assert.match(closed[0].text, /^Low-pass filter: Cutoff at 300 Hz/);
     assert.match(closed[0].text, /below the bass line/);

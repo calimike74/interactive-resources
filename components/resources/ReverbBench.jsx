@@ -8,6 +8,7 @@ import { useBenchAudio, glide, envelopeOf } from '@/components/bench/useBenchAud
 import styles from '@/components/bench/bench.module.css';
 import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
 import { DEPTH_LINES, DEPTH_TEACH, hearingLine, judge, open as openMachine, nextMove, sectionOfLast } from '@/lib/bench/reverb-depth';
+import { isTextHeld } from '@/lib/bench/held-papers';
 import {
     TYPES, TYPE_IDS, SOURCES, SOURCE_IDS,
     TIME_MIN, TIME_MAX, PREDELAY_MIN, PREDELAY_MAX, WET_MIN, WET_MAX, DRY_MIN, DRY_MAX,
@@ -921,7 +922,7 @@ export default function ReverbBench({ back }) {
             render: () => (
                 <>
                     <h2>Reverb, in the spec&apos;s words</h2>
-                    <p>The specification lists six types and one number: &quot;Reverb: Room; hall; plate; spring; gated; reversed. Reverb time.&quot; Under acoustics it adds &quot;Describing a reverb tail; pre-delay time; reverb time (RT60)&quot;, and under core parameters &quot;Wet/dry and bypass settings&quot;. Those are the dials on this bench, in the order the 2019 paper drew them. The rest of the machine is this bench&apos;s own: the gate&apos;s 120 ms hold, the spring&apos;s pulse every 55 ms, the reflections&apos; times and the 2 kHz split are numbers chosen to be heard, not figures a scheme gives.</p>
+                    <p>The specification lists six types and one number: &quot;Reverb: Room; hall; plate; spring; gated; reversed. Reverb time.&quot; Under acoustics it adds &quot;Describing a reverb tail; pre-delay time; reverb time (RT60)&quot;, and under core parameters &quot;Wet/dry and bypass settings&quot;. Those are the dials on this bench. The rest of the machine is this bench&apos;s own: the gate&apos;s 120 ms hold, the spring&apos;s pulse every 55 ms, the reflections&apos; times and the 2 kHz split are numbers chosen to be heard, not exam figures.</p>
                     <h3>Terms</h3>
                     <dl>
                         <dt>Reverb time (RT60)</dt><dd>How long the tail takes to fall by 60 decibels. On the stage it is the point where the tail crosses the named floor line, and it is the handle you drag.</dd>
@@ -961,33 +962,33 @@ export default function ReverbBench({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Reverb marks are lost in four places, and every one of them is a control on this bench: how much, how long, where it is routed, and whether it is in stereo. Read the reports below, then set the fault yourself and listen to it.</p>
+                    <p>Reverb marks are lost in four places, and every one of them is a control on this bench: how much, how long, where it is routed, and whether it is in stereo. Read each fault below, then set it yourself and listen to it.</p>
                     <h3>How much</h3>
-                    <p>On the 2018 AS task the Principal Examiner wrote: &quot;A good proportion of students managed to choose a suitable reverb length. The amount was the common problem, vocals being too wet or even completely swamped. Short reverbs occurred but only occasionally. No reverb at all was rare.&quot;</p>
-                    <p className={styles.source}>Source: Edexcel Principal Examiner Feedback, 9MT0/41, Summer 2018, Question 5(c).</p>
+                    <p>Watch the amount as closely as the length. A vocal too wet, or swamped by its own reverb, is the usual fault. A short reverb now and then is fine.</p>
                     <h3>Where it is routed</h3>
-                    <p>On the 2023 AS task: &quot;Few got the third mark for maintaining the reverb in stereo on panned vocal, some because of unsuccessful vocal pan, but most because they used reverb on a channel insert so it panned with vocals. It&apos;s surprising that after many years of highlighting this as bad practice it still happens.&quot; And on the 2019 A gating task: &quot;Sometimes the reverb was gated as well as the vocal, proving that the candidate hadn&apos;t used an aux for the reverb in 5(a), or had the inserts in the wrong order.&quot;</p>
-                    <p className={styles.source}>Sources: Edexcel Principal Examiner Feedback, 9MT0/41 Summer 2023 Q5(d); 9MT0/04 Summer 2019 Q5(d).</p>
+                    <p>The stereo mark is lost when the reverb sits on a channel insert: it pans with the vocal instead of staying spread. Put it on a send and the return stays in stereo wherever the vocal is panned.</p>
+                    {isTextHeld('reverb', 'gatedVocalAux') ? null : <p>The same routing shows up when a gate is on the vocal. If the reverb is on an insert, the gate cuts the reverb as well as the voice. On a send, the reverb carries on.</p>}
                     <h3>Which parameter changed</h3>
-                    <p>On the 2023 A automation task: &quot;Most either applied a static reverb or simply automated the wet/dry balance. But those with more advanced analytical skills noticed that it was the reverb time that was increasing rather than the wet amount.&quot; On the 2023 listening paper: &quot;Many recognised the dry signal disappeared, leaving only the wet; a significant number incorrectly stated the wet signal had got louder or the reverb was longer.&quot;</p>
-                    <p className={styles.source}>Sources: Edexcel Principal Examiner Feedback, 9MT0/04 Summer 2023 Q5(f); 9MT0/03 Summer 2023 Q2(a)(i).</p>
+                    <p>When a reverb changes over time, ask which dial moved. Often it is the reverb time growing, not the wet level. When the dry signal disappears, only the wet is left: the wet has not got louder and the reverb is not longer.</p>
                     <h3>Do these now</h3>
                     <ul>
                         <li>Press <b>Judge: swamped</b>, switch to A-level and touch the Wet dial. Read the verdict before you fix it, then fix it.</li>
                         <li>Press <b>Judge: an insert</b> and hold the dry button while it plays. Then open More, switch Routing to Send, and say what moved.</li>
-                        <li>Set the vocal, take Dry to zero and leave Wet alone. That is the 2023 change on Funkytown: many heard the dry go, and a significant number said the wet had got louder.</li>
+                        <li>Set the vocal, take Dry to zero and leave Wet alone. Say what changed: the dry has gone, and the wet is no louder than it was.</li>
                         <li>On <b>Gated</b>, drag Reverb time from 4 s down to 1 s. The answer thins but never shortens. Say why, in one sentence, using the word gate.</li>
-                        <li>Set <b>2019 dials</b>, then drag Pre-delay to zero and back. That dial is the only pre-delay number any scheme has ever put a range on.</li>
+                        {PRESETS.some((p) => p.id === 'dials2019') ? <li>Set <b>Past task: dials</b>, then drag Pre-delay to zero and back. Listen to the space close on the voice and open again.</li> : null}
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
                         prompt="A vocal reverb is clearly audible but the voice still sounds close and clear. Which two settings are doing that?"
-                        answer="A wet level inside about 10 to 30 per cent, and a pre-delay long enough to hear as a gap. The 2024 scheme credits a medium or long pre-delay and a medium to high wet send in the same answer."
+                        answer="A wet level inside about 10 to 30 per cent, and a pre-delay long enough to hear as a gap. A medium or long pre-delay and a medium to high wet send earn credit together."
                     />
-                    <ExamCallout
-                        prompt="A candidate gates a vocal and its reverb disappears with it. What does that prove about their routing?"
-                        answer="The reverb was an insert on the vocal channel, not a send to an aux, so the gate took both. The 2019 examiner report treats this as proof no aux was used."
-                    />
+                    {isTextHeld('reverb', 'gatedVocalAux') ? null : (
+                        <ExamCallout
+                            prompt="A student gates a vocal and its reverb disappears with it. What does that tell you about their routing?"
+                            answer="The reverb was an insert on the vocal channel, not a send to an aux, so the gate took both. On a send, the reverb would carry on."
+                        />
+                    )}
                 </>
             ),
         },
@@ -1078,7 +1079,7 @@ export default function ReverbBench({ back }) {
                         </button>
                     ))}
                 </div>
-                <Why>Each is a phrase and then silence, so the tail is heard on its own. The vocal is the paper&apos;s subject in ten of the twelve practical tasks; the guitar is the spring&apos;s; the snare is the plate&apos;s and the gate&apos;s.</Why>
+                <Why>Each is a phrase and then silence, so the tail is heard on its own. The vocal is the part most reverb tasks are set on; the guitar is the spring&apos;s; the snare is the plate&apos;s and the gate&apos;s.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secRvType}`} data-teach={teach || undefined}>
@@ -1110,7 +1111,7 @@ export default function ReverbBench({ back }) {
                     />
                     <span className={styles.value} data-predelay={Math.round(state.predelay)}>{Math.round(state.predelay)}<small>ms</small></span>
                 </div>
-                <Why>The gap before the answer. The 2019 scheme accepts &quot;any value between 200ms-400ms&quot; for a hall on a lead vocal: long enough to hear the word clear before the space replies.</Why>
+                <Why>The gap before the answer. Make it long enough and the word is heard clear before the space replies.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secRvDial}`} data-teach={teach || undefined}>
@@ -1131,7 +1132,7 @@ export default function ReverbBench({ back }) {
                     />
                     <span className={styles.value} data-rt60={String(sig3(state.time))}>{fmtSec(sig3(state.time))}</span>
                 </div>
-                <Why>RT60: how long the tail takes to fall by 60 decibels. The 2024 scheme credits a vocal reverb of 1.5 to 4 seconds, and the other schemes&apos; bands sit inside it. On the stage this is the tail&apos;s end, and you can drag it.</Why>
+                <Why>RT60: how long the tail takes to fall by 60 decibels. A vocal reverb of 1.5 to 4 seconds is the usual band. On the stage this is the tail&apos;s end, and you can drag it.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secRvDial}`} data-teach={teach || undefined}>
@@ -1151,7 +1152,7 @@ export default function ReverbBench({ back }) {
                     />
                     <span className={styles.value} data-wet={Math.round(state.wet)}>{Math.round(state.wet)}<small>%</small></span>
                 </div>
-                <Why>How much of the answer reaches the mix. The 2021 scheme accepts &quot;any value between 10-30&quot; on a verse vocal; the 2018 report calls too much of it &quot;the common problem&quot;.</Why>
+                <Why>How much of the answer reaches the mix. On a verse vocal, 10 to 30 per cent is a safe range. Too much is the usual fault.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secHear}`} data-reverb="true" data-teach={teach || undefined}>
@@ -1280,7 +1281,7 @@ export default function ReverbBench({ back }) {
                     ) : (
                         <>
                             <i>{hover.label}{hover.section ? ` · ${SECTIONS[hover.section].name}` : ''}</i>
-                            <p>{hover.section ? grades[hover.section].why : 'The part the source comes from, before anything is done to it.'}{hover.section && grades[hover.section].cite ? ` ${grades[hover.section].cite}` : ''}</p>
+                            <p>{hover.section ? grades[hover.section].why : 'The part the source comes from, before anything is done to it.'}</p>
                         </>
                     )}
                 </div>

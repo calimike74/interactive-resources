@@ -43,15 +43,15 @@ test('Core names what is heard at each station and says what to try, with no ari
     }
 });
 
-test('A-level judges a paper\'s task in the scheme\'s line with its year, and a control the way Q6 does', () => {
+test('A-level judges a past task in the scheme\'s line, with no citation, and a control the way Q6 does', () => {
     const c = judge({ state: applyPreset(DEFAULT_STATE, 'comb2021'), last: 'preset' });
     assert.equal(c.length, 2);
     assert.equal(c[0].ao, 3);
     assert.equal(c[1].ao, 4);
-    assert.match(c[0].text, /^2021 paper, as set:/);
+    assert.match(c[0].text, /^Past task: two mics, as set:/);
     assert.match(c[0].text, /167 Hz/);
     assert.match(c[1].text, /^As directed: "The side mic is closer to the snare/);
-    assert.match(c[1].text, /2021 A Q6/);
+    assert.doesNotMatch(c[1].text, /2021|A Q6/);
     // the number follows the question: a treatment question wants the RT60
     const r = judge({ state: applyPreset(DEFAULT_STATE, 'room2024'), last: 'preset' });
     assert.match(r[0].text, /reverberation time the room is set to: 1\.1 s/);
@@ -93,10 +93,11 @@ test('every A-level pair carries both tags, quotes a year, and fits the bar', ()
             segs.forEach((s) => noDash(s.text));
         }
     }
-    // a paper's line always names its own year
+    // a past task's line never names the paper it came from (28 Sep 2026)
     for (const id of ['hearing2022', 'masking2020', 'comb2021', 'room2024']) {
         const segs = judge({ state: applyPreset(DEFAULT_STATE, id), last: 'preset' });
-        assert.match(segs[1].text, new RegExp(TASKS[id].cite.replace(/[()]/g, '\\$&')), `${id} does not cite itself`);
+        for (const sg of segs) assert.doesNotMatch(sg.text, /\b(19|20)\d\d\b|\bQ\d|examiner|report/i, `${id} cites a paper: ${sg.text}`);
+        assert.ok(TASKS[id].cite, `${id} keeps its cite for the held switch`);
     }
 });
 

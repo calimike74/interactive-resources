@@ -58,8 +58,8 @@ const LOOP_BPM = 240 / SONG.loopSec; // one scheduler bar is the whole loop
 const FADER_SCALE = [12, 0, -10, -20, -40, -60];
 const ORIENTS = {
     core: 'Each block is a part: taller is louder for the ear, shifted sideways by its pan, raised by its send. Drag one up for its fader, sideways for its pan.',
-    alevel: "The plan above; below it, every part's live spectrum on one axis. Where two curves ride together, the shaded region is the paper's masking.",
-    extension: 'Below the plan, the ladder: each file as it was, the examiner\'s trim, your fader, and what you hear, weighted for the ear. Mono is in the More row.',
+    alevel: "The plan above; below it, every part's live spectrum on one axis. Where two curves ride together, the shaded region is masking.",
+    extension: 'Below the plan, the ladder: each file as it was, the trim it was given, your fader, and what you hear, weighted for the ear. Mono is in the More row.',
 };
 const MONO_OPTIONS = [{ id: 'stereo', label: 'Stereo' }, { id: 'mono', label: 'Mono' }];
 const dbToGain = (db) => (db <= FLOOR ? 0 : 10 ** (db / 20));
@@ -648,7 +648,7 @@ export default function BalanceDesk({ back }) {
                     <dl>
                         <dt>Balance</dt><dd>The relative level of the parts. The exam&apos;s three practical marks: &quot;Balanced and blended across all parts of the mix. Vocals sit on top of mix.&quot;</dd>
                         <dt>Blend</dt><dd>Parts sitting together as one sound rather than as five recordings. Level, pan, frequency and depth all do it.</dd>
-                        <dt>Hierarchy</dt><dd>Foreground to background: the lead first, the drums driving under it, the bass present, the pads and backing parts behind. The 2023 report: after the vocals the drums &quot;should be the most important musical element&quot;.</dd>
+                        <dt>Hierarchy</dt><dd>Foreground to background: the lead first, the drums driving under it, the bass present, the pads and backing parts behind. After the vocals the drums should be the most important musical element.</dd>
                         <dt>Masking</dt><dd>One part hiding another because they share a frequency region at a similar level. The shaded region on the A-level stage.</dd>
                         <dt>Making space</dt><dd>Resolving masking without turning everything up: a cut on one part where the other lives, a pan, a part set back.</dd>
                         <dt>Pan</dt><dd>Where a part sits left to right. Lead, bass and kick in the centre; the parts that fight for a region apart.</dd>
@@ -656,7 +656,7 @@ export default function BalanceDesk({ back }) {
                         <dt>Send</dt><dd>A copy of a part after its fader into a shared effect. Post-fade on this desk, so the reverb follows the fader.</dd>
                         <dt>Mono-compatible</dt><dd>A mix that still works when left and right are summed: the space a pan bought is spent, and what returns is the masking.</dd>
                         <dt>Stems</dt><dd>The separate parts of a song as audio files. The exam&apos;s are &quot;deliberately mastered at wildly varying volumes&quot;.</dd>
-                        <dt>Reference</dt><dd>The mix the examiner marks against; the scheme names its file, &quot;MS q5.wav&quot;. On this desk, hold to hear it.</dd>
+                        <dt>Reference</dt><dd>The mix the marking compares yours against. On this desk, hold to hear it.</dd>
                     </dl>
                     <h3>In your DAW</h3>
                     <table>
@@ -677,7 +677,7 @@ export default function BalanceDesk({ back }) {
                         <dt>The pan law</dt><dd>A pan is two gains that follow an equal-power curve, so a part holds its level for the ear as it moves across.</dd>
                         <dt>Why panning apart works</dt><dd>The ear separates two sounds in the same region when they come from different places. Nothing gets quieter; the fight stops.</dd>
                     </dl>
-                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapter and the 1.13 mark schemes, 2017 to 2025.</p>
+                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapter and what the 1.13 practical tasks ask for.</p>
                 </>
             ),
         },
@@ -687,30 +687,29 @@ export default function BalanceDesk({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Press Play and you hear the five files as the examiner sent them, every fader at unity. Nothing on the desk tells you the bass was mastered loud and the vocal left quiet; only listening does. Hold the reference and hear where the parts belong; let go and hear how far yours are from it. When you can hear a part that is &quot;a touch over&quot; before the stage names it, you are doing what the three practical marks are for.</p>
-                    <h3>What cost candidates marks</h3>
-                    <p>Every A-level report since 2019 opens Q5 the same way: &quot;The stems are deliberately mastered at wildly varying volumes to ensure that the candidate needed to listen (rather than look at fader positions) to earn credit.&quot;</p>
-                    <p>2018: &quot;Mix level of drums was the most common problem, being too quiet. Vocal or keyboard often dominant.&quot; 2020: &quot;Many candidates had a tendency to leave the drums too quiet as in the original audio files.&quot; 2023: &quot;The majority of 2 mark mixes were because the chorus synth was too loud, or the drums too quiet. Candidates failed to recognise the importance of the drums in music of this nature, which after the vocals should be the most important musical element.&quot;</p>
-                    <p>2019: &quot;Many candidates had a tendency to leave the bass and backing vocals too loud as on the original CD.&quot; 2022: &quot;Most candidates had a tendency to leave the bass too quiet.&quot; 2024: &quot;most gaining 2 marks due to one part being under or over balanced, most commonly the rhythm guitar was too loud&quot;.</p>
-                    <p>2025, the scheme names the trap: the bass supplied at &minus;2 dB peak, &quot;mastered loud as possible&quot;; the acoustic guitar at &minus;6; the vocals quiet at &minus;9. Three marks for &quot;Balanced and blended across all parts of the mix. Vocals sit on top of mix&quot;; two for &quot;Most tracks are balanced with some masking. A few misjudgements, e.g. synth over vocals at start of chorus&quot;; one for &quot;Balanced so that one track is barely audible or is too dominant&quot;; none if not all tracks are present.</p>
-                    <p className={styles.source}>Source: Edexcel 9MT0 mark schemes and Principal Examiner reports, 2018 AS Q5(e), 2019 A Q5(f), 2020 A Q5(f), 2022 A Q5(f), 2023 A Q5(g), 2024 A Q5(g), 2025 A Q5(e).</p>
+                    <p>Press Play and you hear the five files as the exam supplies them, every fader at unity. Nothing on the desk tells you the bass was mastered loud and the vocal left quiet; only listening does. Hold the reference and hear where the parts belong; let go and hear how far yours are from it. When you can hear a part that is &quot;a touch over&quot; before the stage names it, you are doing what the three practical marks are for.</p>
+                    <h3>Where marks are lost</h3>
+                    <p>The stems are deliberately mastered at wildly varying volumes, so you have to listen, not look at fader positions, to earn credit.</p>
+                    <p>Drums left too quiet, as they came, is the most common fault. A vocal or a keyboard left dominant comes next. A chorus synth left too loud is a common reason a mix only earns two marks. In music like this the drums, after the vocals, should be the most important musical element.</p>
+                    <p>Parts that arrive loud should not stay loud: bass and backing vocals left too loud, as they came, cost marks. So does the other way round, a bass left too quiet. Most two-mark mixes have one part under or over balanced, such as a rhythm guitar left too loud.</p>
+                    <p>The marking: three marks for &quot;Balanced and blended across all parts of the mix. Vocals sit on top of mix&quot;; two for &quot;Most tracks are balanced with some masking. A few misjudgements, e.g. synth over vocals at start of chorus&quot;; one for &quot;Balanced so that one track is barely audible or is too dominant&quot;; none if not all tracks are present. A bass mastered as loud as possible and a quiet vocal is a trap the files can set.</p>
                     <p>Those are the moves on this bench: press <b>As supplied</b> and say which part is on top and which is missing; press <b>Drums too quiet</b> and say what the mix has lost; press <b>As on the CD</b> and hold the reference; press <b>Synth over the vocal</b>, switch to A-level, and read the shaded region.</p>
                     <h3>Do these now</h3>
                     <ul>
                         <li>Press <b>As supplied</b>, play, and balance the five parts by ear before you hold the reference. Then hold it. Say which part you were furthest out on, and whether the fader position would have told you.</li>
-                        <li>Press <b>Drums too quiet</b> and write the 2023 sentence in your own words: why the drums, after the vocal, matter most in music like this.</li>
-                        <li>Press <b>Synth over the vocal</b>, switch to A-level, and name the region the two share from the stage. Then fix it three ways: the synth&apos;s fader, its pan, its send. Say which one the scheme would call &quot;making space&quot;.</li>
+                        <li>Press <b>Drums too quiet</b> and say in your own words why the drums, after the vocal, matter most in music like this.</li>
+                        <li>Press <b>Synth over the vocal</b>, switch to A-level, and name the region the two share from the stage. Then fix it three ways: the synth&apos;s fader, its pan, its send. Say which one counts as &quot;making space&quot;.</li>
                         <li>Press <b>The reference</b>, open More, and fold the mix to Mono. Then pan the backing vocals and the synth apart, and fold again. Say what mono-compatible means from what you heard.</li>
                         <li>Press <b>Vocal buried</b> and say why one part barely audible costs two of the three marks whatever the rest of the mix does.</li>
                         <li>Switch to Extension and read the ladder for the bass. Say what the fader at unity was actually doing when the file arrived.</li>
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="Balance the levels of the mix. (3 marks, 2025)"
+                        prompt="A past task: Balance the levels of the mix. (3 marks)"
                         answer="Three: balanced and blended across all parts, vocals on top, the synth blended as on the reference. Two: most tracks balanced with some masking, a few misjudgements such as the synth over the vocals at the start of the chorus. One: one track barely audible or too dominant, or not all of a track present, or erratic level changes. None: no mix, or not all tracks present."
                     />
                     <ExamCallout
-                        prompt="What does the examiner listen for in a balanced mix? (AS scheme, 2024)"
+                        prompt="What makes a balanced mix? Name five things."
                         answer="&quot;Balanced mix: vocals lead; all parts clear; bass present; minimal masking; stable levels.&quot; Five things, each one a fader, a pan or an EQ decision you can point to."
                     />
                 </>
@@ -735,7 +734,7 @@ export default function BalanceDesk({ back }) {
                     <a className={styles.conn} href={topicHref('reverb')}>
                         <i>1.12 Reverb</i>
                         <b>Depth is a send</b>
-                        <span>The send on every strip feeds one room. More send is further away, not quieter: the fourth of the paper&apos;s tools after level, pan and frequency.</span>
+                        <span>The send on every strip feeds one room. More send is further away, not quieter: the fourth of the mixer&apos;s tools after level, pan and frequency.</span>
                     </a>
                     <a className={styles.conn} href={topicHref('automation')}>
                         <i>1.8 Automation</i>
@@ -783,11 +782,11 @@ export default function BalanceDesk({ back }) {
 
     // ---- console ----
     const stripWhy = {
-        vocal: 'The lead. The scheme\'s first line on every paper since 2017 is that the vocals sit on top; the 2023 report called it a noticeable improvement when candidates stopped burying them. Centre, and dry enough to stay at the front.',
-        drums: 'The drive. Too quiet is the most repeated deduction in nine years of reports; the 2020 scheme wants them equal to the vocal or louder. They share every band with everything, which is why they never count as masking here.',
-        bass: 'The foundation. Supplied loud in 2019 and 2025, left too quiet in 2022: the bass is the part candidates misjudge both ways. Centre, for a mono-compatible low end.',
-        bvox: 'The support. Left loud "as on the original CD" in 2019, and living in the same region as the lead: the first candidate for a pan apart or a send back.',
-        synth: 'The pad. The 2023 chorus synth and the 2025 "synth over vocals at start of chorus" are the same fault: a sustained part in the lead\'s region, left loud. Ease it, pan it, or set it back.',
+        vocal: 'The lead. The first line of the marking is always that the vocals sit on top, and a buried vocal costs the most. Centre, and dry enough to stay at the front.',
+        drums: 'The drive. Too quiet is the most common mix fault; the marking wants them equal to the vocal or louder. They share every band with everything, which is why they never count as masking here.',
+        bass: 'The foundation. Sometimes supplied loud, sometimes left too quiet: the bass is the part most often misjudged both ways. Centre, for a mono-compatible low end.',
+        bvox: 'The support. Often left loud as it came, and living in the same region as the lead: the first choice for a pan apart or a send back.',
+        synth: 'The pad. A synth over the vocals at the start of the chorus is a common fault: a sustained part in the lead\'s region, left loud. Ease it, pan it, or set it back.',
     };
     const pairText = fight ? `${STEMS[fight.a].short} · ${STEMS[fight.b].short}` : 'none';
     const lineWord = verdict.band === 3 ? 'balanced' : verdict.band === 2 ? 'misjudged' : verdict.band === 1 ? 'one part off' : 'a part missing';
@@ -875,12 +874,12 @@ export default function BalanceDesk({ back }) {
                     <div><b>{h.vocalOnTop ? 'yes' : 'no'}</b><span>vocal on top</span></div>
                     <div><b>{pairText}</b><span>{fight ? `share ${bandWords(fight.bands)}` : 'share a region'}</span></div>
                     {maths
-                        ? <div><b>{lineWord}</b><span>the scheme&apos;s line{ext ? <span className={styles.ext}>EXT</span> : null}</span></div>
+                        ? <div><b>{lineWord}</b><span>the mark line{ext ? <span className={styles.ext}>EXT</span> : null}</span></div>
                         : <div><b>{held ? 'reference' : 'yours'}</b><span>what is playing</span></div>}
                 </div>
                 {teach ? <div className={styles.meaning}>all from the files and the faders, weighted for the ear</div> : null}
                 <Legal />
-                <Why>Every word here comes from the song&apos;s measured levels and the five strips: which part is loudest for the ear, whether the vocal is on top the way the scheme means it, which two parts share a region beyond what the release shared, and which of the scheme&apos;s lines the balance sits on.</Why>
+                <Why>Every word here comes from the song&apos;s measured levels and the five strips: which part is loudest for the ear, whether the vocal is on top the way the marking means it, which two parts share a region beyond what the release shared, and which of the mark lines the balance sits on.</Why>
             </div>
         </>
     );
@@ -905,7 +904,7 @@ export default function BalanceDesk({ back }) {
         <>
             <canvas
                 ref={canvasRef}
-                aria-label={maths ? (ext ? 'The mix as a plan, and the ladder of what the examiner did to each file' : 'The mix as a plan, and the live spectrum of every part with the shared region marked') : 'The mix as a plan: pan across, level up, depth back'}
+                aria-label={maths ? (ext ? 'The mix as a plan, and the ladder of what was done to each file' : 'The mix as a plan, and the live spectrum of every part with the shared region marked') : 'The mix as a plan: pan across, level up, depth back'}
                 role="img"
                 onPointerDown={onStageDown}
                 onPointerMove={onStageMove}
@@ -942,7 +941,7 @@ export default function BalanceDesk({ back }) {
                         <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.2v9.6L11 6z" fill="currentColor" /></svg>
                         <span>
                             Play the bench
-                            <small>Five stems of one song, as the examiner sends them. Headphones help.</small>
+                            <small>Five stems of one song, as the exam supplies them. Headphones help.</small>
                         </span>
                     </button>
                 </div>

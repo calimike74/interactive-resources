@@ -29,7 +29,7 @@
 //  14. the three levels are three jobs: each announces itself when chosen;
 //      A-level's line judges a setting and tags AO3 / AO4; Extension's line
 //      is a different sentence with no tags; the bench's "judge it" preset
-//      lands its numbers (Delay: the 2023 paper sets 120 BPM; EQ: Too much
+//      lands its numbers (Delay: the past task sets 120 BPM; EQ: Too much
 //      sets +12 dB)
 //  15. (EQ bench) the dot on the stage is the dial: the canvas reports the
 //      chosen band's frequency and gain, they equal the console's, and
@@ -105,56 +105,58 @@ const STATUS_HUES = (rgb) => {
 const BENCHES = {
     'delay-effects': {
         shapes: true,
-        presets: { first: 'Rhythmic 1/8', second: 'Slapback', judge: '2023 paper' },
+        presets: { first: 'Rhythmic 1/8', second: 'Slapback', judge: 'Past task' },
         judgeLands: { selector: '[aria-label="Tempo"]', attr: 'aria-valuenow', value: '120', says: 'sets 120 BPM' },
     },
     'dynamics-bench': {
         threshold: true,
-        presets: { first: 'Vocal level', second: 'Limiter', judge: '2023 paper' },
+        presets: { first: 'Vocal level', second: 'Limiter', judge: 'Past task: vocal' },
         judgeLands: { selector: '[aria-label="Ratio"]', attr: 'aria-valuetext', value: '20:1', says: 'sets 20:1' },
         stages: { core: 'lane', alevel: 'graph', extension: 'machine' },
     },
     'edit-bench': {
         cut: true,
-        presets: { first: 'Repair fade', second: 'Linear, long', judge: '2022 paper' },
+        presets: { first: 'Repair fade', second: 'Linear, long', judge: 'Past task: a click' },
         judgeLands: { selector: '[aria-label="Cut"]', attr: 'aria-valuenow', value: '1000', says: 'sets the cut at 1.000 s' },
         stages: { core: 'join', alevel: 'drawing', extension: 'machine' },
     },
     'automation-lane': {
         lane: true,
         presets: { first: 'Sweep', second: 'Filter build', judge: 'Late step' },
-        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'placement', says: 'loads the 2020 fault: the step landed off the barline (data-verdict = placement)' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'placement', says: 'loads a common fault: the step landed off the barline (data-verdict = placement)' },
         stages: { core: 'lane', alevel: 'paper', extension: 'machine' },
     },
     'piano-roll': {
         roll: true,
-        presets: { first: 'Hi-hat roll', second: 'Bend range', judge: 'Wrong sounds' },
-        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'wrong-sounds', says: 'loads the 2019 file with its notes on the wrong sounds (data-verdict = wrong-sounds)' },
+        presets: { first: 'Hi-hat roll', second: 'Bend range', judge: 'Triplet trap' },
+        // 'Wrong sounds' is held (lib/bench/held-papers.js, 2019 A-level C4 Q2(c))
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'triplets', says: 'loads the bass with bar 2 in triplets (data-verdict = triplets)' },
         stages: { core: 'roll', alevel: 'list', extension: 'wire' },
     },
     oscilloscope: {
         bracket: true,
-        presets: { first: 'Read the period', second: 'Louder', judge: '294 Hz, an octave up' },
-        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-hz', value: '294', says: 'loads the 2019 sine at 294 Hz (data-hz = 294)' },
+        presets: { first: 'Read the period', second: 'Louder', judge: '200 Hz' },
+        // '294 Hz, an octave up' is held (lib/bench/held-papers.js, 2019 A-level C4 Q4(c)(ii))
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-hz', value: '200', says: 'loads a 200 Hz sine (data-hz = 200)' },
         stages: { core: 'scope', alevel: 'paper', extension: 'digital' },
     },
     'synth-bench': {
         cutoffDot: true,
-        presets: { first: '2023 paper', second: '2024 paper', judge: 'Judge: a bass' },
+        presets: { first: 'Past task: bass', second: 'Past task: keys', judge: 'Judge: a bass' },
         judgeLands: { selector: '[aria-label="Attack"]', attr: 'aria-valuetext', value: '600 ms', says: 'loads a pad envelope on the bass: a 600 ms attack (Attack = 600 ms)' },
         stages: { core: 'scope', alevel: 'sections', extension: 'machine' },
     },
     'acoustics-bench': {
         notch: true,
         captions: { stations: ['Loudness', 'Masking', 'The Room'], two: 'The Room' },
-        presets: { first: '2021 paper', second: '2024 AS paper', judge: 'Judge: soundproofing' },
-        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'soundproofing', says: 'loads the trap three reports name: bare walls with soundproofing asked for (data-verdict = soundproofing)' },
+        presets: { first: 'Past task: two mics', second: 'Past task: panels', judge: 'Judge: soundproofing' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-verdict', value: 'soundproofing', says: 'loads the soundproofing trap: bare walls with soundproofing asked for (data-verdict = soundproofing)' },
         stages: { core: 'ear', alevel: 'paper', extension: 'machine' },
     },
     'reverb-bench': {
         tailHandle: { preset: 'Hall' },
-        presets: { first: '2019 dials', second: '2020 paper', judge: 'Judge: swamped' },
-        judgeLands: { selector: '[aria-label="Wet"]', attr: 'aria-valuetext', value: '70 %', says: 'loads the 2018 report\'s fault, a hall at 70 % wet (Wet = 70 %)' },
+        presets: { first: 'Past task: vocal', second: 'Past task: gate', judge: 'Judge: swamped' },
+        judgeLands: { selector: '[aria-label="Wet"]', attr: 'aria-valuetext', value: '70 %', says: 'loads the classic fault, a hall at 70 % wet (Wet = 70 %)' },
         stages: { core: 'tail', alevel: 'path', extension: 'machine' },
     },
     'balance-desk': {
@@ -166,7 +168,7 @@ const BENCHES = {
     'sequence-bench': {
         seqGrid: true,
         presets: { first: 'Hats and swing', second: 'Filter sweep', judge: 'Judge: straight' },
-        judgeLands: { selector: '[aria-label="Swing"]', attr: 'aria-valuenow', value: '0', says: 'loads sixteenth hats hard quantised with Swing at 0, the 2025 comparison\'s tight side (Swing = 0)' },
+        judgeLands: { selector: '[aria-label="Swing"]', attr: 'aria-valuenow', value: '0', says: 'loads sixteenth hats hard quantised with Swing at 0, the tight side of the comparison (Swing = 0)' },
         stages: { core: 'steps', alevel: 'spectrum', extension: 'chain' },
     },
     'adc-explorer': {

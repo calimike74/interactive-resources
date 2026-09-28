@@ -18,14 +18,15 @@ test('A-level defines the threshold (AO3) and judges it on this part (AO4)', () 
     assert.match(segs[1].text, /words|vocal|singing/i);
 });
 
-test('the limiter is judged as the ratio at infinity, in the 2023 AS paper\'s terms', () => {
+test('the limiter is judged as the ratio at infinity, as the flat line', () => {
     const s = applyPreset(DEFAULT_STATE, 'limiter');
     const segs = judge({ state: s, last: 'ratio', part: 'the 808', stats: statsOf(s) });
     assert.match(segs[0].text, /∞:1/);
-    assert.match(segs[1].text, /2023 AS/);
+    assert.match(segs[1].text, /flat one is limiting/);
+    assert.doesNotMatch(segs[1].text, /\b20\d\d\b|paper|candidates/);
 });
 
-test('a gate is judged on its threshold against the kit, either side of the 2019 faults', () => {
+test('a gate is judged on its threshold against the kit, either side of the two faults', () => {
     let s = applyPreset(DEFAULT_STATE, 'gatehats');
     let segs = judge({ state: s, last: 'threshold', part: 'the drums', stats: statsOf(s) });
     assert.match(segs[1].text, /musically/);
@@ -33,10 +34,10 @@ test('a gate is judged on its threshold against the kit, either side of the 2019
     segs = judge({ state: s, last: 'threshold', part: 'the drums', stats: statsOf(s) });
     assert.match(segs[1].text, /too low/);
     segs = judge({ state: s, last: 'mode', part: 'the drums', stats: statsOf(s) });
-    assert.match(segs[1].text, /2019 report/);
+    assert.match(segs[1].text, /not limiting, compressing or filtering/);
 });
 
-test('a slow attack on a vocal is the 2025 mark scheme\'s fault', () => {
+test('a slow attack on a vocal lets the transients through', () => {
     let s = applyPreset(DEFAULT_STATE, 'vocal');
     s = setParam(s, { attack: 60 });
     const segs = judge({ state: s, last: 'attack', part: 'the vocal', stats: statsOf(s) });
@@ -44,7 +45,7 @@ test('a slow attack on a vocal is the 2025 mark scheme\'s fault', () => {
     assert.match(segs[1].text, /transients/);
 });
 
-test('the 2022 paper preset is judged from its mark scheme', () => {
+test('the curve past task is judged from its criteria', () => {
     const s = applyPreset(DEFAULT_STATE, 'paper2022');
     const segs = judge({ state: s, last: 'preset', part: 'the vocal', stats: statsOf(s) });
     assert.match(segs[0].text, /−30 dB, 10:1, hard knee/);

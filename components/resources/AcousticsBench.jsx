@@ -11,7 +11,7 @@ import { DEPTH_LINES, DEPTH_TEACH, hearingLine, judge, open as openMachine, next
 import {
     STATION_IDS, STATIONS, TONE_IDS, TONES, LEVEL_IDS, LEVELS, CONTOURS,
     TARGET_IDS, TARGETS, PLACE_IDS, PLACES, ABSORB_IDS, ABSORB, SOURCE_IDS, SOURCES,
-    BAND_IDS, BANDS, SECTIONS, TASKS,
+    BAND_IDS, BANDS, SECTIONS,
     DELAY_MIN, DELAY_MAX, REFLECT_MIN, REFLECT_MAX, RT60_MIN, RT60_MAX,
     ROOM_MIN, ROOM_MAX, MASKER_MIN, MASKER_MAX, TARGET_DBFS, TONE_DBFS,
     COLOUR_LIMIT_MS, HEARING_LOW, HEARING_HIGH, BPM, BEATS_PER_BAR, MODEL_RATE,
@@ -62,17 +62,17 @@ const TITLE = 'Acoustics bench';
 const ORIENTS = {
     loudness: {
         core: 'What a tone measures and how loud it seems are two different things. This is the difference.',
-        alevel: 'The two marks the papers give for the ear: the range it covers, and where it is sensitive.',
+        alevel: 'Two marks the exam gives for the ear: the range it covers, and where it is sensitive.',
         extension: 'Every tone leaves this bench at one level. The only thing here that is not flat is the ear.',
     },
     masking: {
         core: 'One sound raising the level another one needs. Nothing is taken away, the bar is raised.',
-        alevel: 'The 2020 question: noise buried under one kind of music and plainly audible under another.',
+        alevel: 'A past task: noise buried under one kind of music and plainly audible under another.',
         extension: 'The tone is never taken away. What moves is the level it has to beat before the ear finds it.',
     },
     room: {
         core: 'A room adds an early copy that colours the sound, then a tail that runs on after it.',
-        alevel: 'The 2024 question is worth sixteen marks, and half of it is the room the mic is standing in.',
+        alevel: 'A studio evaluation is worth sixteen marks, and half of it can be the room the mic is standing in.',
         extension: 'The room is an answer the bench writes, then stamps on every sample of the stem.',
     },
 };
@@ -569,35 +569,30 @@ export default function AcousticsBench({ back }) {
             label: 'Teacher',
             render: () => (
                 <>
-                    <h2>What the examiners keep writing</h2>
-                    <p>Acoustics is almost never asked by name. It is marked inside the Section B evaluation, where the question says &quot;including the studio environment&quot;, and the reports say the same thing about it three years running. Read them, then set the fault on the bench and listen to it.</p>
+                    <h2>What the answers keep getting wrong</h2>
+                    <p>Acoustics is almost never asked by name. It is marked inside the long evaluation question, where the task says &quot;including the studio environment&quot;. The same mistakes turn up year after year. Read them, then set the fault on the bench and listen to it.</p>
                     <h3>The word that loses the marks</h3>
-                    <p>2018: &quot;Few students seemed to have a real depth of knowledge about room acoustics and how they affect a recording. Many referred to the acoustic treatment as &apos;sound proofing&apos; which is a completely different thing.&quot;</p>
-                    <p>2022: &quot;Many responses used the word &apos;sound proofing&apos; which is not correct in the context of acoustic treatment. Sound proofing is a vague term at the best of times but refers to the reduction of transmission of sound through building structures. Studios do not necessarily need to be sound proofed, except the live room needs some isolation from the control room.&quot;</p>
-                    <p>2026: &quot;It is worthy of note that candidates continue to refer to &apos;soundproofing&apos; when answering questions about acoustics in music technology; this shows a misunderstanding about the purpose of the acoustic treatment visible in the studio. This cannot be seen in the picture, and thus cannot be credited.&quot;</p>
-                    <p className={styles.source}>Sources: Edexcel Principal Examiner Feedback, 8MT0/41 Summer 2018 Q6; 8MT0/41 Summer 2022 Q6; 9MT0/04 Summer 2026 Q6.</p>
+                    <p>Acoustic treatment is not soundproofing. Soundproofing is a vague term, but it means stopping sound passing through the building&apos;s structure. Studios do not always need it, except that the live room needs some isolation from the control room. Panels you can see in a photograph are treatment, not soundproofing, and an answer that calls them soundproofing earns nothing, because soundproofing cannot be seen in a picture.</p>
                     <h3>What a treated wall actually reaches</h3>
-                    <p>2018, on the tiles in the photograph: &quot;Tiles will reduce reflection of mid range and high frequencies. Tiles not thick so will not reduce low frequencies. The wall is not completely covered with tiles so the room is not completely dead.&quot; 2024 says it again: &quot;Only reduces mid and high frequency reflections. Too much acoustic treatment loses room character.&quot; And the other way round, 2022: &quot;a control room does not want to be completely acoustically dead as this is an uncomfortable environment for most people.&quot;</p>
-                    <p className={styles.source}>Sources: Edexcel mark schemes 8MT0/41 Summer 2018 Q6 and Summer 2024 Q6; Principal Examiner Feedback 8MT0/41 Summer 2022 Q6.</p>
+                    <p>Tiles or thin panels reduce the reflection of mid and high frequencies. They are not thick enough to reduce the low frequencies. A wall that is only partly covered leaves the room not completely dead. Too much treatment loses the room&apos;s character. And the other way round: a control room should not be completely dead, because that is an uncomfortable place for most people to work.</p>
                     <h3>Where comb filtering earns its mark</h3>
-                    <p>No paper in nine years asks for the term. It is credited as an explanation attached to something visible: 2021, on two mics on one kit, &quot;The side mic is closer to the snare than the overhead mic. Mics should be equidistant from the snare. Delay between two mics. Phase problems. Comb filtering&quot;, and on a mic near a wall, &quot;Destructive interference/comb filtering from reflections&quot;. 2024 marks the mechanism on its own: a wave added to its own inversion gives &quot;Silence / destructive interference / cancel out / cancellation&quot;.</p>
-                    <p className={styles.source}>Sources: Edexcel mark schemes 9MT0/04 Summer 2021 Q6 and 9MT0/41 Summer 2024 Q4(c) and (d).</p>
+                    <p>The term is not asked for on its own. It earns credit as an explanation attached to something you can see. Two mics on one kit: the side mic is closer to the snare than the overhead, so there is a delay between the two mics, phase problems and comb filtering; the mics should be equidistant from the snare. A mic near a wall: destructive interference and comb filtering from the reflections. The mechanism on its own: a wave added to its own inversion gives silence, destructive interference, cancellation.</p>
                     <h3>Do these now</h3>
                     <ul>
                         <li>Press <b>Judge: soundproofing</b> and hold the compare button while it plays. Nothing moves. Say in one sentence what soundproofing would have changed, and where.</li>
-                        <li>Press <b>2024 AS paper</b>, read the low and high numbers in the Hear panel, then press <b>Treated</b>. Name the thing that made the difference in the low end.</li>
-                        <li>Press <b>2021 paper</b> and drag Delay from 3 ms up past 25. Say where the colouration stops and a bounce starts, and why the ear changes its mind.</li>
+                        <li>Press <b>Past task: panels</b>, read the low and high numbers in the Hear panel, then press <b>Treated</b>. Name the thing that made the difference in the low end.</li>
+                        <li>Press <b>Past task: two mics</b> and drag Delay from 3 ms up past 25. Say where the colouration stops and a bounce starts, and why the ear changes its mind.</li>
                         <li>On <b>Masking</b>, put the masker Above the target and take its level to the top. Then move it Below at the same level. That difference is the upward spread of masking.</li>
                         <li>On <b>Loudness</b>, press Quiet and then Loud on the 100 Hz tone without touching anything else. The output has not moved; the drawing has.</li>
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="A photograph shows fabric panels on the walls of a live room. A candidate writes that the room has been soundproofed. Why does that score nothing?"
-                        answer="Soundproofing is the reduction of sound transmission through a structure. Panels on a wall are acoustic treatment: they absorb reflections inside the room to control reverberation and comb filtering. The 2026 report says this cannot be seen in the picture and cannot be credited."
+                        prompt="A photograph shows fabric panels on the walls of a live room. An answer says the room has been soundproofed. Why does that score nothing?"
+                        answer="Soundproofing is the reduction of sound transmission through a structure. Panels on a wall are acoustic treatment: they absorb reflections inside the room to control reverberation and comb filtering. Soundproofing cannot be seen in a picture, so it cannot be credited."
                     />
                     <ExamCallout
                         prompt="Two microphones are placed on one snare drum at different distances. What is the risk, and what are the two fixes?"
-                        answer="The two signals arrive at different times, so summing them cancels at a series of frequencies: comb filtering. The 2021 scheme credits moving the microphones so they are equidistant, and the polarity or phase button on the desk."
+                        answer="The two signals arrive at different times, so summing them cancels at a series of frequencies: comb filtering. The two fixes: move the microphones so they are equidistant, or use the polarity or phase button on the desk."
                     />
                 </>
             ),
@@ -621,7 +616,7 @@ export default function AcousticsBench({ back }) {
                     <a className={styles.conn} href={topicHref('microphones')}>
                         <i>1.2 Microphones</i>
                         <b>Two mics on one source</b>
-                        <span>Where the comb on this bench comes from in a real session, and the two things a scheme credits for fixing it.</span>
+                        <span>Where the comb on this bench comes from in a real session, and the two fixes that earn the marks.</span>
                     </a>
                     <a className={styles.conn} href={topicHref('monitor-speakers')}>
                         <i>2.2 Monitor Speakers</i>
@@ -707,7 +702,7 @@ export default function AcousticsBench({ back }) {
                         </div>
                         <Chips label="Tone" options={TONE_IDS.map((id) => ({ id, label: TONES[id].label, title: `${TONES[id].said}: ${TONES[id].part}` }))} value={state.tone} onChange={edit(setTone, 'tone')} />
                         <div className={styles.meaning}>every tone at {fmtDb(TONE_DBFS)}</div>
-                        <Why>Four tones at one level. 1 kHz is the reference the phon is defined against; 3 kHz is where the ear canal resonates; 100 Hz and 10 kHz are the two ends the paper asks about.</Why>
+                        <Why>Four tones at one level. 1 kHz is the reference the phon is defined against; 3 kHz is where the ear canal resonates; 100 Hz and 10 kHz sit towards the two ends of the hearing range.</Why>
                     </div>
                     <div className={`${styles.sec} ${styles.secAcListen}`} data-teach={teach || undefined}>
                         <div className={styles.secHead}><span className={styles.eyebrow}>Listening</span></div>
@@ -888,7 +883,7 @@ export default function AcousticsBench({ back }) {
             </div>
             <div className={styles.moreItem}>
                 <span className={styles.eyebrow}>Task</span>
-                <span className={styles.value}>{state.task ? TASKS[state.task].cite : 'none set'}</span>
+                <span className={styles.value}>{state.task ? 'a past task' : 'none set'}</span>
             </div>
         </>
     ) : null;
@@ -952,7 +947,7 @@ export default function AcousticsBench({ back }) {
                     ) : (
                         <>
                             <i>{hover.label}{hover.section ? ` · ${SECTIONS[hover.section].name}` : ''}</i>
-                            <p>{hover.section && grades[hover.section] ? grades[hover.section].why : 'What the sound starts as, before the room gets to it.'}{hover.section && grades[hover.section]?.cite ? ` ${grades[hover.section].cite}` : ''}</p>
+                            <p>{hover.section && grades[hover.section] ? grades[hover.section].why : 'What the sound starts as, before the room gets to it.'}</p>
                         </>
                     )}
                 </div>

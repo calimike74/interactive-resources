@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEFAULT_STATE, applyPreset, setAttack, setLfoDepth, setLfoTarget, setFilter, setOctave, setVoices, setVca, setPwm, setWidth, setSub, setSaw, setOsc2, setShape, setPulse } from '../lib/bench/synth-model.js';
+import { DEFAULT_STATE, ALL_PRESETS, applyPreset, setAttack, setLfoDepth, setLfoTarget, setFilter, setOctave, setVoices, setVca, setPwm, setWidth, setSub, setSaw, setOsc2, setShape, setPulse } from '../lib/bench/synth-model.js';
 import { DEPTH_LINES, DEPTH_TEACH, hearingLine, oscSaid, nextMove, judge, open, sectionOfLast, homeNote } from '../lib/bench/synth-depth.js';
 
 const noDash = (s) => assert.ok(!/—/.test(s) && !/\butilise/i.test(s), `house copy law broken: ${s}`);
@@ -38,22 +38,23 @@ test('Core names what is heard, in the mixer\'s words, and says what to try', ()
     assert.match(hearingLine(withLfo), /vibrato at 5\.0 Hz/);
 });
 
-test('A-level judges a paper\'s task in the scheme\'s line with its year, AO3 then AO4, and says what is missing', () => {
+test('A-level judges a past task in the scheme\'s own points, with no paper cited, AO3 then AO4, and says what is missing', () => {
     const s = applyPreset(DEFAULT_STATE, 'as2023');
     const segs = judge({ state: s, last: 'preset' });
     assert.equal(segs.length, 2);
     assert.equal(segs[0].ao, 3);
     assert.equal(segs[1].ao, 4);
     assert.match(segs[1].text, /^As directed: "Square wave \(1\)/);
-    assert.match(segs[1].text, /2023 AS Q3\(a\)/);
+    assert.doesNotMatch(segs[1].text, /\b20\d\d\b|Q\d|report|candidates/);
     const up = setOctave(s, 1);
     const notYet = judge({ state: up, last: 'octave' });
     assert.match(notYet[1].text, /^Not yet: an octave too high/);
-    assert.match(notYet[1].text, /one octave too high/);
+    assert.match(notYet[1].text, /the example's octave/);
+    assert.doesNotMatch(notYet[1].text, /\b20\d\d\b|Q\d|report|candidates/);
     segs.concat(notYet).forEach((sg) => noDash(sg.text));
 });
 
-test('A-level judges a section for the job the way Q6 does, and offers the better setting', () => {
+test('A-level judges a section for the job the way the evaluate question does, and offers the better setting', () => {
     const b = applyPreset(DEFAULT_STATE, 'judgeBass');
     const env = judge({ state: b, last: 'attack' });
     assert.match(env[0].text, /^ENV, the envelope: attack 600 ms/);
@@ -63,32 +64,32 @@ test('A-level judges a section for the job the way Q6 does, and offers the bette
     const summary = judge({ state: b, last: 'preset' });
     assert.match(summary[0].text, /^A synth bass, judged by section/);
     assert.match(summary[1].text, /Envelope first/);
-    assert.match(summary[1].text, /The 2024 report, on the bass question, credited answers written section by section, under subheadings; the 2019 pad question/);
+    assert.match(summary[1].text, /Write it section by section, under a heading for each/);
     const osc = judge({ state: b, last: 'width' });
     assert.match(osc[0].text, /^VCO, the oscillator and mixer: a saw wave and a pulse wave, its width moved by the LFO, doubled 14 cents apart/);
-    assert.match(osc[1].text, /very rare to see candidates that fully understood/);
+    assert.match(osc[1].text, /pulse-width modulation, not a plain square wave/);
     const hp = judge({ state: setFilter(b, 'hpf'), last: 'filter' });
     assert.match(hp[1].text, /removes the bass/);
     assert.match(hp[1].text, /Choose LPF/);
-    const p = applyPreset(DEFAULT_STATE, 'judgePad');
+    const p = applyPreset(DEFAULT_STATE, 'judgePad', ALL_PRESETS);
     const voices = judge({ state: p, last: 'vca' });
     assert.match(voices[0].text, /^VCA, the amplifier and voices: the VCA on Gate/);
     assert.match(voices[1].text, /complete chords/);
     assert.match(voices[1].text, /Set the VCA to Env, and press Poly/);
-    assert.match(voices[1].text, /noise gate designed to cut out background noise/);
+    assert.match(voices[1].text, /not a noise gate that cuts out background noise/);
     const fixed = judge({ state: setVca(setVoices(p, 'poly'), 'env'), last: 'voices' });
     assert.match(fixed[1].text, /^Suits a synth pad/);
     [env, summary, osc, hp, voices, fixed].flat().forEach((sg) => noDash(sg.text));
 });
 
-test('the LFO is judged as a control signal, with the 2024 report as evidence; PWM counts as the LFO at work', () => {
+test('the LFO is judged as a control signal; PWM counts as the LFO at work', () => {
     const s = setLfoDepth(setLfoTarget({ ...applyPreset(DEFAULT_STATE, 'as2023'), task: null, presetId: null }, 'pitch'), 20);
     const segs = judge({ state: s, last: 'lfoDepth' });
     assert.match(segs[0].text, /^LFO, the LFO: a triangle wave at 5\.0 Hz on the pitch/);
     assert.match(segs[1].text, /vibrato/);
-    assert.match(segs[1].text, /something audible rather than a control signal/);
+    assert.match(segs[1].text, /control signal, too slow to hear/);
     const pw = judge({ state: setPwm(setWidth({ ...applyPreset(DEFAULT_STATE, 'as2023'), task: null, presetId: null, lfoDepth: 0 }, 20), 'lfo'), last: 'lfoRate' });
-    assert.match(pw[1].text, /did not appreciate that the pulse width was being modulated by the LFO/);
+    assert.match(pw[1].text, /the LFO is moving the pulse width/i);
 });
 
 test('Extension opens the machine in its own sentence, with no AO tags, keyed to the section touched', () => {
@@ -100,10 +101,10 @@ test('Extension opens the machine in its own sentence, with no AO tags, keyed to
     assert.ok(!/AO[34]/.test(all));
     const lfo = open({ state: s, last: 'lfoRate' });
     assert.match(lfo, /^The LFO is a triangle wave at 4\.0 Hz/);
-    const filt = open({ state: setAttack(applyPreset(DEFAULT_STATE, 'judgePad'), 2), last: 'cutoff' });
+    const filt = open({ state: setAttack(applyPreset(DEFAULT_STATE, 'judgePad', ALL_PRESETS), 2), last: 'cutoff' });
     assert.match(filt, /lifts the cutoff 1\.6 octaves/);
-    assert.match(filt, /2019 report/);
-    const gated = open({ state: applyPreset(DEFAULT_STATE, 'judgePad'), last: 'preset' });
+    assert.match(filt, /routed to the cutoff as well as the amplifier/);
+    const gated = open({ state: applyPreset(DEFAULT_STATE, 'judgePad', ALL_PRESETS), last: 'preset' });
     assert.match(gated, /the amplifier ignores it and follows the key alone/);
     const pw = open({ state: applyPreset(DEFAULT_STATE, 'judgeBass'), last: 'lfoRate' });
     assert.match(pw, /moves the pulse width between 25 % and 75 %/);

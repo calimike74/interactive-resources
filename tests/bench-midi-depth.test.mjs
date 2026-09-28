@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { DEFAULT_STATE, PRESETS, GM_MAP, DRUM_NOTES, applyPreset, assign, setGrid, setStrength, setRange, setPart, setLane, select, removeNote, addNote, referenceOf } from '../lib/bench/midi-model.js';
+import { DEFAULT_STATE, PRESETS, ALL_PRESETS, GM_MAP, DRUM_NOTES, applyPreset, assign, setGrid, setStrength, setRange, setPart, setLane, select, removeNote, addNote, referenceOf } from '../lib/bench/midi-model.js';
 import { DEPTH_LINES, DEPTH_TEACH, hearingLine, nextMove, judge, open } from '../lib/bench/midi-depth.js';
 
 const noDash = (s) => assert.ok(!/—/.test(s) && !/\butilise/i.test(s), `house style: ${s.slice(0, 60)}`);
 
 test('every preset judges in two segments, AO3 then AO4, short enough for the bar', () => {
-    for (const p of PRESETS) {
-        const st = applyPreset(DEFAULT_STATE, p.id);
+    for (const p of ALL_PRESETS) {
+        const st = applyPreset(DEFAULT_STATE, p.id, ALL_PRESETS);
         const segs = judge({ state: st, last: 'preset' });
         assert.equal(segs.length, 2, p.id);
         assert.deepEqual(segs.map((s) => s.ao), [3, 4]);
@@ -17,10 +17,11 @@ test('every preset judges in two segments, AO3 then AO4, short enough for the ba
     }
 });
 
-test('the faulty presets say so and quote a year; fixed, they say as directed', () => {
-    const wrong = applyPreset(DEFAULT_STATE, 'wrong');
+test('the faulty presets say so and cite no paper; fixed, they say as directed', () => {
+    const wrong = applyPreset(DEFAULT_STATE, 'wrong', ALL_PRESETS);
     assert.match(judge({ state: wrong, last: 'preset' })[1].text, /^Not yet/);
-    assert.match(judge({ state: wrong, last: 'preset' })[1].text, /\(2019\)/);
+    assert.doesNotMatch(judge({ state: wrong, last: 'preset' })[1].text, /\b(19|20)\d\d\b/);
+    for (const p of ALL_PRESETS) for (const seg of judge({ state: applyPreset(DEFAULT_STATE, p.id, ALL_PRESETS), last: 'preset' })) assert.doesNotMatch(seg.text, /\b(19|20)\d\d\b|examiner|candidates|Q\d+\(/i, p.id);
     let fixed = wrong;
     for (const note of DRUM_NOTES) fixed = assign(fixed, note, GM_MAP[note]);
     assert.match(judge({ state: fixed, last: 'sound' })[1].text, /^As directed/);
@@ -54,10 +55,10 @@ test('the Core line names the part, the kit and the feel, and the next move is a
     const line = hearingLine(DEFAULT_STATE);
     assert.match(line, /^You are hearing the drum file on an acoustic kit/);
     assert.match(line, /loudest hit is \d+/);
-    assert.match(hearingLine(applyPreset(DEFAULT_STATE, 'wrong')), /on the wrong sound/);
+    assert.match(hearingLine(applyPreset(DEFAULT_STATE, 'wrong', ALL_PRESETS)), /on the wrong sound/);
     assert.match(hearingLine(applyPreset(DEFAULT_STATE, 'bend')), /falls a tone/);
     assert.match(hearingLine(applyPreset(DEFAULT_STATE, 'triplets')), /eighth-note triplets/);
-    for (const p of PRESETS) { const m = nextMove(applyPreset(DEFAULT_STATE, p.id)); assert.ok(m.length > 20, p.id); noDash(m); }
+    for (const p of ALL_PRESETS) { const m = nextMove(applyPreset(DEFAULT_STATE, p.id, ALL_PRESETS)); assert.ok(m.length > 20, p.id); noDash(m); }
     noDash(hearingLine(DEFAULT_STATE));
     let empty = DEFAULT_STATE;
     for (const n of DEFAULT_STATE.notes.drums) empty = removeNote(empty, n.id);

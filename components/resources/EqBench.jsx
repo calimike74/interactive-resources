@@ -547,16 +547,15 @@ export default function EqBench({ back }) {
                 <>
                     <h2>What to listen for</h2>
                     <p>The stage shows the EQ&apos;s curve over the sound as it is now. Hold the dry button and the green shape shows you the sound without the curve; let go and watch what the curve takes away or adds. Once you can hear a cut as a cut and not as &quot;quieter&quot;, you are describing EQ the way the paper marks it.</p>
-                    <h3>What cost candidates marks</h3>
-                    <p>2020, a guitar chain with EQ: &quot;There was much incorrect terminology with the parametric EQs. Many candidates incorrectly referred to these as a notch filter or BPF.&quot;</p>
-                    <p>2023, a vocal chain: &quot;many candidates realised that boosting the mid and high frequencies would add brightness and clarity thus allowing the vocals to come forward in the mix... Very few candidates discussed the problems that boosting the low frequencies would have on plosives and proximity effect. Very few candidates realised that all of the frequencies were boosted and that this could cause an issue with the overall volume of the track, possibly causing distortion.&quot;</p>
-                    <p>2024, drawing a 48 dB/octave high-pass: &quot;Most candidates were able to draw the slope of a high pass filter, and most correctly drew a steep filter curve. Those who scored 2 generally put the filter cut-off too low or too high. There were responses where the slope was too shallow.&quot;</p>
-                    <p className={styles.source}>Source: Edexcel Principal Examiner Feedback, 9MT0/04, Summer 2020 (Q6), 2023 (Q6) and 2024 (Q3).</p>
-                    <p>Those are three of the moves on this bench: name a bell as a bell, not a notch; press <b>2023 paper</b> and hear what boosting everything does to a vocal and to the level; press <b>2024 paper</b> and read a 48 dB/oct high-pass off the stage before you draw one.</p>
+                    <h3>Where EQ answers lose marks</h3>
+                    <p>A guitar chain with parametric EQs: a parametric bell is not a notch filter and not a band-pass filter. Use the right name.</p>
+                    <p>A vocal chain with every band boosted: boosting the mids and highs adds brightness and clarity, so the vocal comes forward in the mix. Boosting the lows makes plosives and the proximity effect worse. And when every frequency is boosted, the whole track gets louder, which can cause distortion.</p>
+                    <p>Drawing a 48 dB/octave high-pass: the curve must be steep. Marks go when the cutoff is too low or too high, or the slope is too shallow.</p>
+                    <p>Those are three of the moves on this bench: name a bell as a bell, not a notch; press <b>Past task: vocal</b> and hear what boosting everything does to a vocal and to the level; press <b>Past task: bass</b> and read a 48 dB/oct high-pass off the stage before you draw one.</p>
                     <h3>Do these now</h3>
                     <ul>
-                        <li>Press <b>2023 paper</b>, switch the bench to A-level, and judge all three boosts from what you hear before you read the examiner&apos;s findings above. Then fix it: take the low shelf out and match the level.</li>
-                        <li>Press <b>2024 paper</b> and draw the curve on paper from the stage: it starts on the axis between 200 Hz and 1 kHz, steeper than 45 degrees, reaching −20 dB, nothing else boosted or cut. That drawing was 3 marks.</li>
+                        <li>Press <b>Past task: vocal</b>, switch the bench to A-level, and judge all three boosts from what you hear before you read the notes above. Then fix it: take the low shelf out and match the level.</li>
+                        <li>Press <b>Past task: bass</b> and draw the curve on paper from the stage: it starts on the axis between 200 Hz and 1 kHz, steeper than 45 degrees, reaching −20 dB, nothing else boosted or cut. That drawing was 3 marks.</li>
                         <li>Press <b>Too much</b>, still at A-level, and judge the band from what you hear before you read the line. Then fix it, and say what you changed and why.</li>
                         <li>Choose the 808, press In on the HPF, and drag its dot up until the kick loses its weight. Note the frequency. Then do the same on the vocal and note where the voice thins.</li>
                         <li>On the vocal, set the Mid band to +8 dB, Q 8, and sweep the frequency slowly across the mids. The place it honks is the place a cut goes. Turn the gain to −4 and leave it there.</li>
@@ -570,8 +569,8 @@ export default function EqBench({ back }) {
                         answer="A high-pass filter with the cutoff around 80 to 100 Hz (12 dB/oct) removes the rumble below the voice; a parametric cut of about 3 to 4 dB at 300 Hz, Q around 1.5, takes the boom out without thinning the voice."
                     />
                     <ExamCallout
-                        prompt="A high-pass filter on a bass part is described as 48 dB per octave. Explain what that means. (2 marks, 2024)"
-                        answer="It is the slope, or steepness, of the filter: for every octave below the cutoff the output falls by another 48 dB, which makes it a very steep filter. The report: many linked it to slope, but there were many confused descriptions that scored no marks."
+                        prompt="A high-pass filter on a bass part is described as 48 dB per octave. Explain what that means. (2 marks)"
+                        answer="It is the slope, or steepness, of the filter: for every octave below the cutoff the output falls by another 48 dB, which makes it a very steep filter. Say slope or steepness: a confused description scores nothing."
                     />
                     <ExamCallout
                         prompt="What can a parametric EQ do that a graphic EQ cannot?"

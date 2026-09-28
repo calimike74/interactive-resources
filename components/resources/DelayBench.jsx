@@ -777,13 +777,12 @@ export default function DelayBench({ back }) {
                 <>
                     <h2>What to listen for</h2>
                     <p>The stage is showing you the feedback loop itself. Each repeat is the one before it, scaled by the Feedback amount and pushed along by the Delay time. Once you can see that, you will stop describing feedback as &quot;volume&quot; or &quot;distortion&quot;, which is where marks go.</p>
-                    <h3>What cost candidates marks in 2023</h3>
-                    <p>On the 2023 paper&apos;s Q6 (a vocal chain with compression, EQ and a delay), the Principal Examiner wrote: &quot;most candidates were able to identify that the high feedback was inappropriate and would cause too many repeats, but some candidates thought that the feedback setting was related to distortion or heavy metal in general. Very few candidates were able to work out that the delay time was tempo synced at a quaver. Some candidates incorrectly argued that the offset in delay times was a mistake and that changing the times to be identical would improve the stereo image.&quot;</p>
-                    <p className={styles.source}>Source: Edexcel Principal Examiner Feedback, 9MT0/04, Summer 2023, Question 6.</p>
+                    <h3>Three ways a delay answer loses marks</h3>
+                    <p>A past task showed a vocal chain with compression, EQ and a delay. High feedback on it was wrong because it causes too many repeats; feedback is not distortion, and it has nothing to do with heavy metal. The delay time was tempo synced at a quaver, which is easy to miss unless you work it out from the tempo. And the two sides had slightly different delay times on purpose: making them identical would not improve the stereo image.</p>
                     <p>Those three mistakes are your three moves on this bench: raise Feedback and count the repeats; switch Sync to 1/8 and watch them land on the beat; set Ping-pong and hear why two different-sided delay times are the point, not a mistake.</p>
                     <h3>Do these now</h3>
                     <ul>
-                        <li>Press <b>2023 paper</b>, switch the bench to A-level, and judge all six settings from what you hear before you read the examiner&apos;s three complaints above. Then fix it.</li>
+                        <li>Press <b>Past task</b>, switch the bench to A-level, and judge all six settings from what you hear before you read the three mistakes above. Then fix it.</li>
                         <li>Hold the dry button while it plays, let go, and say out loud what came back.</li>
                         <li>Set Time by ear until the repeats sit on the beat at 110 BPM, then switch Sync on and compare your number with the bench&apos;s.</li>
                         <li>Push Feedback to 100% and decide when you would turn it down. Then ask what the limiter is doing for you.</li>

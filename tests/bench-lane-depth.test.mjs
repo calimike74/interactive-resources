@@ -14,11 +14,14 @@ test('every preset judges in two segments, AO3 then AO4, short enough for the ba
     }
 });
 
-test('the fault presets say "Not as directed" and quote the year', () => {
+test('the fault presets say "Not as directed" and cite no paper', () => {
     for (const id of ['late', 'backwards', 'slow', 'short']) {
         const segs = judge({ state: applyPreset(DEFAULT_STATE, id), last: 'preset' });
         assert.match(segs[1].text, /^Not as directed/);
-        assert.match(segs[1].text, /\(20\d\d\)/);
+    }
+    for (const p of PRESETS) {
+        for (const seg of judge({ state: applyPreset(DEFAULT_STATE, p.id), last: 'preset' })) assert.doesNotMatch(seg.text, /\b(19|20)\d\d\b|examiner|candidates|Q\d+\(/i, p.id);
+        assert.doesNotMatch(`${p.name} ${p.blurb}`, /\b(19|20)\d\d\b|examiner|candidates|report/i, p.id);
     }
 });
 

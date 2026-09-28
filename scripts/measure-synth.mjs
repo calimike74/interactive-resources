@@ -120,41 +120,41 @@ async function keyLevel(sec = 1.6) {
 }
 
 if (want('level')) {
-  for (const p of ['2023 paper', '2024 paper', '2025 paper', 'Fills', 'Judge: a bass', 'Judge: a pad']) {
+  for (const p of ['Past task: bass', 'Past task: keys', 'Past task: lead', 'Fills', 'Judge: a bass']) {
     await preset(p).click(); await playIfStopped();
     const r = await rms();
     line(`LEVEL ${p}`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`);
   }
-  await preset('2023 paper').click(); await stopIfPlaying();
+  await preset('Past task: bass').click(); await stopIfPlaying();
   for (const w of ['Pulse', 'Saw', 'Sub', 'Noise']) { await solo(w); const r = await keyLevel(); line(`LEVEL C2 held, ${w.toLowerCase()} alone (paired), LPF 700 Hz`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
   await dial('Cutoff', 'End');
   for (const w of ['Pulse', 'Saw', 'Sub', 'Noise']) { await solo(w); const r = await keyLevel(); line(`LEVEL C2 held, ${w.toLowerCase()} alone (paired), filter open`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
   await solo('Pulse'); await dial('Pulse width', 'Home'); { const r = await keyLevel(); line('LEVEL C2 held, pulse at 5 % width, filter open', `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
   // the wave slider's other shapes, each alone with the filter open, against the saw
   for (const sh of ['tri', 'sine', 'saw']) { await setShape(sh); await solo(await waveLabel()); const r = await keyLevel(); line(`LEVEL C2 held, ${sh} alone (paired), filter open`, `mean ${dB(r.mean)} dB  max ${dB(r.max)}`); }
-  await preset('2023 paper').click();
+  await preset('Past task: bass').click();
 }
 if (want('pitch')) {
-  await preset('2023 paper').click(); await stopIfPlaying();
+  await preset('Past task: bass').click(); await stopIfPlaying();
   const c2 = await keyPitch();
   await dial('Range', 'End');
   const c3 = await keyPitch();
   await dial('Range', 'Home');
   const c1 = await keyPitch();
-  await preset('2023 paper').click();
+  await preset('Past task: bass').click();
   line("PITCH the C key on the bass: 8' · 4' · 16'", `${c2.toFixed(1)} · ${c3.toFixed(1)} · ${c1.toFixed(1)} Hz (65.4 · 130.8 · 32.7)`);
   await solo('Sub'); const sub1 = await keyPitch();
   if (await page.locator('[data-more]').count()) await page.locator('[data-more]').click();
   await chip('Sub octave', '2 oct').click(); const sub2 = await keyPitch(); await chip('Sub octave', '1 oct').click();
   line('PITCH the sub alone at 1 oct · 2 oct', `${sub1.toFixed(1)} · ${sub2.toFixed(1)} Hz (32.7 · 16.4)`);
-  await preset('2023 paper').click();
+  await preset('Past task: bass').click();
   await chip('Part', 'Lead').click();
   const c4 = await keyPitch();
   line('PITCH the C key on the lead (C4)', `${c4.toFixed(1)} Hz (261.6)`);
   await chip('Part', 'Bass').click();
 }
 if (want('detune')) {
-  await preset('2023 paper').click(); await stopIfPlaying();
+  await preset('Past task: bass').click(); await stopIfPlaying();
   // a pair 12 ct apart beats at f × (2^(12/1200) − 1): at C2 65.4 Hz that is 0.45 Hz; at 50 ct 1.9 Hz
   for (const [key, ct] of [['Home', 0], ['End', 50]]) {
     await dial('Detune', key);
@@ -173,7 +173,7 @@ if (want('detune')) {
   await dial('Detune', 'Home'); for (let i = 0; i < 12; i += 1) await page.keyboard.press('ArrowUp');
 }
 if (want('filter')) {
-  await preset('2023 paper').click(); await playIfStopped();
+  await preset('Past task: bass').click(); await playIfStopped();
   const centroid = async () => {
     await page.evaluate(() => { window.__keep = true; window.__frames = []; });
     await page.waitForTimeout(1500);
@@ -195,7 +195,7 @@ if (want('filter')) {
   for (let i = 0; i < 20; i += 1) await page.keyboard.press('ArrowUp');
   const mid = await centroid();
   line('FILTER spectral centroid: cutoff 16 kHz · 40 Hz · mid', `${open.toFixed(0)} · ${shut.toFixed(0)} · ${mid.toFixed(0)} Hz`);
-  await preset('2023 paper').click();
+  await preset('Past task: bass').click();
   await chip('Filter type', 'HPF').click(); const hp = await centroid(); await chip('Filter type', 'LPF').click();
   line('FILTER centroid LPF 700 Hz vs HPF 700 Hz', `${(await centroid()).toFixed(0)} vs ${hp.toFixed(0)} Hz`);
 }
@@ -221,13 +221,13 @@ if (want('envelope')) {
   let tr = await trace(1.2, 1.2);
   line('ENVELOPE A 600 D 400 S 80 R 900: level at 50 · 150 · 300 · 600 · 1000 ms', `${tr.at(0.05)} · ${tr.at(0.15)} · ${tr.at(0.3)} · ${tr.at(0.6)} · ${tr.at(1.0)} dB`);
   line('  after key-up at +100 · +400 · +800 · +1100 ms', `${tr.at(0.1, tr.tUp)} · ${tr.at(0.4, tr.tUp)} · ${tr.at(0.8, tr.tUp)} · ${tr.at(1.1, tr.tUp)} dB`);
-  await preset('2023 paper').click(); await stopIfPlaying();
+  await preset('Past task: bass').click(); await stopIfPlaying();
   tr = await trace(0.8, 0.5);
   line('ENVELOPE A 5 D 250 S 50 R 90: level at 20 · 50 · 150 · 300 · 600 ms', `${tr.at(0.02)} · ${tr.at(0.05)} · ${tr.at(0.15)} · ${tr.at(0.3)} · ${tr.at(0.6)} dB`);
   line('  after key-up at +30 · +100 · +200 ms', `${tr.at(0.03, tr.tUp)} · ${tr.at(0.1, tr.tUp)} · ${tr.at(0.2, tr.tUp)} dB`);
 }
 if (want('lfo')) {
-  await preset('2023 paper').click(); await playIfStopped();
+  await preset('Past task: bass').click(); await playIfStopped();
   await chip('LFO target', 'Amp').click();
   await dial('Depth', 'End');
   await dial('Rate', 'Home'); for (let i = 0; i < 139; i += 1) await page.keyboard.press('ArrowUp'); // 69.5 positions: 0.1 Hz × 200^0.695 ≈ 4 Hz
@@ -240,7 +240,9 @@ if (want('lfo')) {
   line(`LFO tremolo at ${rateText} on the pad: swells in 3 s`, `${peaks} (${(parseFloat(rateText) * 3).toFixed(0)} expected), level ${dB(r.min)} to ${dB(r.max)} dB`);
   await dial('Depth', 'Home'); await chip('Part', 'Bass').click();
 }
-if (want('mono')) {
+// 'Judge: a pad' is held (lib/bench/held-papers.js, 2019 A-level C4 Q6);
+// this measure runs again when the hold is lifted.
+if (want('mono') && await preset('Judge: a pad').count()) {
   await preset('Judge: a pad').click(); await playIfStopped(); await page.waitForTimeout(400);
   const mono = await rms(2.2, 0.8);
   if (await page.locator('[data-more]').count()) await page.locator('[data-more]').click();
@@ -270,7 +272,7 @@ if (want('release')) {
 if (want('pwm')) {
   // a pulse's level follows its width (RMS of a ±1 pulse of duty w is 2·sqrt(w(1−w))): with PW by LFO the
   // width sweeps 5 to 95 % and the level swings about 7 dB, twice per LFO cycle; by hand it holds still
-  await preset('2023 paper').click(); await stopIfPlaying();
+  await preset('Past task: bass').click(); await stopIfPlaying();
   await dial('Cutoff', 'End'); await dial('Pulse width', 'Home');
   if (await page.locator('[data-more]').count()) await page.locator('[data-more]').click();
   await chip('Osc 2', 'Off').click();
@@ -294,7 +296,7 @@ if (want('pwm')) {
   for (let i = 1; i < moving.length; i += 1) if (moving[i - 1] < mid && moving[i] >= mid) ups += 1;
   line(`PWM width 5 % by hand: level swing (100 ms bins)`, `${dB(Math.min(...still))} to ${dB(Math.max(...still))} dB`);
   line(`PWM width 5 to 95 % by the LFO at ${rateText}: level swing`, `${dB(lo)} to ${dB(hi)} dB, ${ups} swells in 3 s (${(parseFloat(rateText) * 6).toFixed(0)} expected)`);
-  await chip('PW by', 'man').click(); await preset('2023 paper').click();
+  await chip('PW by', 'man').click(); await preset('Past task: bass').click();
 }
 if (want('gate')) {
   // the VCA on Gate: full within 10 ms of key-down whatever the attack, silent within 30 ms of key-up whatever the release

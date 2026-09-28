@@ -9,7 +9,7 @@ test('each level announces its own job in its own words', () => {
     assert.match(DEPTH_LINES.core, /names the tail/);
     assert.match(DEPTH_LINES.alevel, /judges every setting/);
     assert.match(DEPTH_LINES.extension, /opens the machine/);
-    assert.match(DEPTH_TEACH.extension, /confused gating with compression/);
+    assert.match(DEPTH_TEACH.extension, /Gating is not compression/);
     for (const l of Object.values(DEPTH_LINES)) noDash(l);
     for (const l of Object.values(DEPTH_TEACH)) noDash(l);
 });
@@ -31,16 +31,16 @@ test('Core names what is heard in the spec\'s words and says what to try', () =>
     [line, hearingLine(applyPreset(DEFAULT_STATE, 'gated')), nextMove(DEFAULT_STATE)].forEach(noDash);
 });
 
-test('A-level judges a task in the scheme\'s line with its year, and a section the way Q6 does', () => {
+test('A-level judges a task against its marks with no citation, and a section the way Q6 does', () => {
     const as = applyPreset(DEFAULT_STATE, 'as2019');
     const segs = judge({ state: as, last: 'preset' });
     assert.equal(segs.length, 2);
     assert.equal(segs[0].ao, 3);
     assert.equal(segs[1].ao, 4);
-    assert.match(segs[1].text, /^As directed: "2 second reverb used on entire vocal \(1\)/);
-    assert.match(segs[1].text, /2019 AS Q5\(a\)/);
+    assert.match(segs[1].text, /^As directed: a 2 second reverb on the whole vocal \(1\)/);
+    assert.doesNotMatch(segs[1].text, /2019|Q5|AS/);
     const mono = judge({ state: setStereo(as, 'mono'), last: 'stereo' });
-    assert.match(mono[1].text, /^Not yet: in mono, where the scheme wants the reverb in stereo/);
+    assert.match(mono[1].text, /^Not yet: in mono, where the task wants the reverb in stereo/);
     const ins = applyPreset(DEFAULT_STATE, 'judgeInsert');
     const sum = judge({ state: ins, last: 'preset' });
     assert.match(sum[0].text, /^A lead vocal, judged part by part/);
@@ -49,7 +49,7 @@ test('A-level judges a task in the scheme\'s line with its year, and a section t
     const sec = judge({ state: ins, last: 'pan' });
     assert.match(sec[0].text, /^ROUTING: a channel insert, stereo, pan 100 left/);
     assert.match(sec[1].text, /^Does not suit a lead vocal: on an insert with the part panned left/);
-    assert.match(sec[1].text, /2023 AS report/);
+    assert.doesNotMatch(sec[1].text, /report|scheme|\b20\d\d\b/);
     const wet = judge({ state: applyPreset(DEFAULT_STATE, 'judgeWet'), last: 'wet' });
     assert.match(wet[1].text, /swamps the part/);
     assert.match(wet[1].text, /Bring Wet under 40/);
@@ -70,7 +70,7 @@ test('Extension opens the machine: the answer, the convolution, the type\'s mech
     assert.ok(!/AO[34]/.test(all));
     assert.match(open({ state: DEFAULT_STATE, last: 'time' }), /falling 60 dB in/);
     assert.match(open({ state: DEFAULT_STATE, last: 'predelay' }), /holds each copy back 40 ms/);
-    assert.match(open({ state: setDry(DEFAULT_STATE, 0), last: 'dry' }), /Funkytown/);
+    assert.match(open({ state: setDry(DEFAULT_STATE, 0), last: 'dry' }), /only the copies are left/);
     assert.match(open({ state: applyPreset(DEFAULT_STATE, 'gated'), last: 'preset' }), /^A room's answer with a gate across it/);
     assert.match(open({ state: DEFAULT_STATE, last: 'damping' }), /Damping splits the answer at 2 kHz/);
     for (const last of ['preset', 'time', 'predelay', 'dry', 'damping', 'routing']) {

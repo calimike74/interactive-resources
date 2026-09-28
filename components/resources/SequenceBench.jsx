@@ -646,7 +646,7 @@ export default function SequenceBench({ back }) {
                     <dl>
                         <dt>Step sequencer</dt><dd>A grid of steps, here sixteen to a bar: a sixteenth each at the tempo. A lit step sends its note when the clock reaches it. Non-real-time input: the note is placed, not played.</dd>
                         <dt>Real-time input</dt><dd>Playing the part on a keyboard while the sequencer runs. Record on this bench writes each key to the nearest step as it is played: quantised on entry.</dd>
-                        <dt>Swing</dt><dd>Every second sixteenth held back by a fraction of a step. At 120 bpm a sixteenth is 125 ms, so 60 % swing on this bench is 37.5 ms late. The 2025 scheme lists swing quantise with the loose, live answers.</dd>
+                        <dt>Swing</dt><dd>Every second sixteenth held back by a fraction of a step. At 120 bpm a sixteenth is 125 ms, so 60 % swing on this bench is 37.5 ms late. A mark scheme lists swing quantise with the loose, live answers.</dd>
                         <dt>Hard quantise</dt><dd>Every note exactly on its step: the mechanical, tight side of the same comparison. A step sequencer is hard quantised by nature; swing is what loosens it.</dd>
                         <dt>Low-pass filter · cutoff · resonance</dt><dd>The filter passes what sits below the cutoff and cuts what sits above; resonance lifts a peak at the corner. The gold curve on the A-level screen is the filter&apos;s own response.</dd>
                         <dt>Envelope · decay</dt><dd>The amplifier opens on each note and closes over the decay time. Short is a pluck; long is a pad.</dd>
@@ -670,7 +670,7 @@ export default function SequenceBench({ back }) {
                         <dt>Why a sequencer books ahead</dt><dd>A clock in software cannot fire a note at the exact instant; it looks a little ahead and books each step at its true time, so the timing is the audio clock&apos;s, not the screen&apos;s. This bench books 120 ms ahead.</dd>
                         <dt>One filter per note</dt><dd>Every note has its own filter, all set from one cutoff and one resonance, so a chord&apos;s three notes do not share one cut. That is how a polyphonic synth does it.</dd>
                     </dl>
-                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the 9MT0 papers and reports, 2019 to 2026, as read for the Piano Roll and the Synth bench.</p>
+                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the past papers, as read for the Piano Roll and the Synth bench.</p>
                 </>
             ),
         },
@@ -681,11 +681,11 @@ export default function SequenceBench({ back }) {
                 <>
                     <h2>What to listen for</h2>
                     <p>Press Play and the bass and two chords run under a four-to-the-floor kick. Press <b>Hats and swing</b> and every second hat lands late: that is the whole of swing, heard before it is named. Press <b>Filter sweep</b> and the harmonics arrive low first over four bars, which is what a low-pass cutoff does when it moves. Press <b>Played in</b>, arm Record and play a key while it runs: the note lands on a step, and the bench says how it got there.</p>
-                    <h3>What the schemes and reports say</h3>
-                    <p>2025, the feel: &quot;Unquantised / gently quantised / groove quantise / swing quantise / percent quantise / humanise: loose / live / human / realistic feel&quot; against &quot;hard quantised / 1/16 / 1/8: mechanical / tight(er) / in time&quot;. One mark for the type, one for the feel word.</p>
-                    <p>2024, the filter: &quot;many learners misidentified it as a boost/cut rather than an LPF and would discuss what resonance was but didn&apos;t discuss its impact on the sound&quot;. The A-level screen puts the impact in front of them: what the blue spectrum lost against the grey.</p>
-                    <p>2019, the envelope: &quot;only the top performing candidates noticed that the envelope parameters were routed to the filter cutoff and not the amplitude&quot;. On this bench the envelope is on the amplifier and the cutoff is a dial, so the two can be told apart before the Synth bench routes one to the other.</p>
-                    <p className={styles.source}>Source: Edexcel 9MT0/04 mark scheme 2025 Q2; examiner reports 2019 and 2024, as quoted on the Piano Roll and the Synth bench. The spec&apos;s wording of 1.5 as summarised on the topic page.</p>
+                    <h3>What the marks are for</h3>
+                    <p>The feel: &quot;Unquantised / gently quantised / groove quantise / swing quantise / percent quantise / humanise: loose / live / human / realistic feel&quot; against &quot;hard quantised / 1/16 / 1/8: mechanical / tight(er) / in time&quot;. One mark for the type, one for the feel word.</p>
+                    <p>The filter: a low-pass is not a boost or a cut, and saying what resonance is earns less than saying what it does to the sound. The A-level screen puts the impact in front of them: what the blue spectrum lost against the grey.</p>
+                    <p>The envelope: an envelope can be routed to the filter cutoff as well as to the amplitude, and a good answer says which one it is on. On this bench the envelope is on the amplifier and the cutoff is a dial, so the two can be told apart before the Synth bench routes one to the other.</p>
+                    <p className={styles.source}>The spec&apos;s wording of 1.5 as summarised on the topic page.</p>
                     <h3>Do these now</h3>
                     <ul>
                         <li>Press <b>Judge: straight</b>, switch to A-level, and read the line. Raise Swing to 40 and read it again: name the two feel words and the two types.</li>
@@ -696,12 +696,12 @@ export default function SequenceBench({ back }) {
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="The 2025 scheme compares two kinds of quantise by the feel they give. Name a type from each side, and the feel word the scheme pairs with it."
+                        prompt="A past task compares two kinds of quantise by the feel they give. Name a type from each side, and the feel word that goes with it. (2 marks)"
                         answer="Loose side: unquantised, gently quantised, groove, swing, percent or humanise, with loose, live, human or realistic. Tight side: hard quantised to 1/16 or 1/8, with mechanical, tight or in time."
                     />
                     <ExamCallout
-                        prompt="A student says a low-pass filter is 'a boost or cut'. What did the 2024 report say was missing, and what would a full answer add?"
-                        answer="The report says learners misidentified the LPF as a boost or cut and described resonance without its impact. A full answer names the filter as a low-pass, says the harmonics above the cutoff are removed so the sound is duller or rounder, and says resonance lifts a peak at the cutoff that rings or whistles as it moves."
+                        prompt="A student says a low-pass filter is 'a boost or cut'. What is wrong with that, and what would a full answer add?"
+                        answer="A low-pass is not a boost or a cut, and describing resonance without its impact misses the mark. A full answer names the filter as a low-pass, says the harmonics above the cutoff are removed so the sound is duller or rounder, and says resonance lifts a peak at the cutoff that rings or whistles as it moves."
                     />
                 </>
             ),
@@ -868,7 +868,7 @@ export default function SequenceBench({ back }) {
                     <div><b>{rd.counts.all} lit</b><span>of {STEPS * LANE_IDS.length} steps</span></div>
                     <div><b>{rd.counts.bass} · {rd.counts.chord}</b><span>bass notes · chords</span></div>
                     <div><b>{Math.round(rd.stepMs)} ms</b><span>a sixteenth at {state.tempo}</span></div>
-                    <div><b>{verdictWord}</b><span>{task ? `${task.label} (${task.years})` : 'press a preset to set one'}{depth === 'extension' ? <span className={styles.ext}>EXT</span> : null}</span></div>
+                    <div><b>{verdictWord}</b><span>{task ? task.label : 'press a preset to set one'}{depth === 'extension' ? <span className={styles.ext}>EXT</span> : null}</span></div>
                 </div>
                 {teach ? <div className={styles.meaning}>all from the grid, the clock and the filter</div> : null}
                 <Legal />

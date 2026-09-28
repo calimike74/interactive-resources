@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-    DEFAULT_STATE, PRESETS, TASKS, SOURCES, DIVS, TIME_BASES, BPM,
+    DEFAULT_STATE, PRESETS, ALL_PRESETS, TASKS, SOURCES, DIVS, TIME_BASES, BPM,
     frequency, sourceHz, periodMs, periodS, fmtHz, fmtMs, fmtS, noteOf, noteWord, dbToGain, levelWord, cyclesShown,
     lfoHz, fileMb, bytesPerSecond, fmtMb,
     applyPreset, setSource, setOctave, setTimeBase, setLevel, setLfo, setChannels, setRate, setDepth, stretchTo,
@@ -25,7 +25,7 @@ test('the ladder: a period in ms, in s, and back to Hz, as the 2025 and 2026 pap
 });
 
 test('the octave doubles the frequency and halves the period (2019: 294 to 588)', () => {
-    const s = applyPreset(DEFAULT_STATE, 'octave');
+    const s = applyPreset(DEFAULT_STATE, 'octave', ALL_PRESETS);
     near(frequency(s), 294);
     const up = setOctave(s, 'up');
     near(frequency(up), 588);
@@ -35,7 +35,7 @@ test('the octave doubles the frequency and halves the period (2019: 294 to 588)'
 
 test('a real note plays at the file\'s own pitch; a waveform can be set to the paper\'s number', () => {
     assert.equal(sourceHz(DEFAULT_STATE), SOURCES.sine.hz);
-    const sq = applyPreset(DEFAULT_STATE, 'lower');
+    const sq = applyPreset(DEFAULT_STATE, 'lower', ALL_PRESETS);
     assert.equal(sq.source, 'square');
     near(frequency(sq), 1000);
     near(periodMs(frequency(sq)), 1);
@@ -80,16 +80,16 @@ test('the file: 10 MB mono 44.1 kHz 16-bit; stereo 20 MB; stereo 88.2 kHz 24-bit
 test('the screen shows the span the time base gives, and the presets keep the period readable', () => {
     assert.equal(TIME_BASES[1].span, DIVS);
     for (const id of ['note', 'period', 'octave', 'lower', 'kick', 'louder']) {
-        const s = applyPreset(DEFAULT_STATE, id);
+        const s = applyPreset(DEFAULT_STATE, id, ALL_PRESETS);
         const c = cyclesShown(s);
         assert.ok(c >= 1 && c <= 12, `${id}: ${c.toFixed(1)} cycles on screen`);
     }
-    near(cyclesShown(applyPreset(DEFAULT_STATE, 'period')), 2.5);
-    near(cyclesShown(applyPreset(DEFAULT_STATE, 'kick')), 1);
+    near(cyclesShown(applyPreset(DEFAULT_STATE, 'period', ALL_PRESETS)), 2.5);
+    near(cyclesShown(applyPreset(DEFAULT_STATE, 'kick', ALL_PRESETS)), 1);
 });
 
 test('dragging the bracket stretches the period within an octave either way, and a chip resets it', () => {
-    const s = applyPreset(DEFAULT_STATE, 'period');
+    const s = applyPreset(DEFAULT_STATE, 'period', ALL_PRESETS);
     const wide = stretchTo(s, 2);
     near(frequency(wide), 250);
     near(frequency(stretchTo(s, 4)), 250, 1e-6);
@@ -98,29 +98,37 @@ test('dragging the bracket stretches the period within an octave either way, and
     assert.equal(setOctave(wide, 'up').stretch, 1);
 });
 
+test('the octave task is held: out of the pupil lists, still in the raw data', () => {
+    assert.ok(!PRESETS.some((p) => p.id === 'octave'));
+    assert.ok(!('octave' in TASKS));
+    assert.ok(ALL_PRESETS.some((p) => p.id === 'octave'));
+    assert.equal(applyPreset(DEFAULT_STATE, 'octave'), DEFAULT_STATE, 'the default list cannot load it');
+    for (const p of ALL_PRESETS) assert.doesNotMatch(`${p.name} ${p.blurb}`, /\b(19|20)\d\d\b|examiner|candidates|Q\d+\(/i, p.id);
+});
+
 test('each preset lands on its task and its verdict', () => {
     const want = { note: 'readable', period: 'readable', octave: 'not-yet', lower: 'wrong-shape', kick: 'readable', louder: 'not-yet', lfo: 'lfo-crotchet', file: 'base' };
-    for (const p of PRESETS) {
-        const st = applyPreset(DEFAULT_STATE, p.id);
+    for (const p of ALL_PRESETS) {
+        const st = applyPreset(DEFAULT_STATE, p.id, ALL_PRESETS);
         assert.equal(st.task, p.task, p.id);
         assert.equal(verdict(st).key, want[p.id], p.id);
     }
 });
 
 test('the papers\' answers are reached by the controls', () => {
-    assert.equal(verdict(setOctave(applyPreset(DEFAULT_STATE, 'octave'), 'up')).key, 'directed');
-    assert.equal(verdict(setOctave(applyPreset(DEFAULT_STATE, 'octave'), 'down')).key, 'wrong-way');
-    const lower = applyPreset(DEFAULT_STATE, 'lower');
+    assert.equal(verdict(setOctave(applyPreset(DEFAULT_STATE, 'octave', ALL_PRESETS), 'up')).key, 'directed');
+    assert.equal(verdict(setOctave(applyPreset(DEFAULT_STATE, 'octave', ALL_PRESETS), 'down')).key, 'wrong-way');
+    const lower = applyPreset(DEFAULT_STATE, 'lower', ALL_PRESETS);
     assert.equal(verdict(setSource(lower, 'saw')).key, 'wrong-octave');
     assert.equal(verdict(setOctave(setSource(lower, 'saw'), 'down')).key, 'directed');
-    const louder = applyPreset(DEFAULT_STATE, 'louder');
+    const louder = applyPreset(DEFAULT_STATE, 'louder', ALL_PRESETS);
     assert.equal(verdict(setLevel(louder, 6)).key, 'directed');
     assert.equal(verdict(setLevel(louder, 12)).key, 'too-loud');
     assert.equal(verdict(setOctave(setLevel(louder, 6), 'up')).key, 'period-moved');
-    const lfo = applyPreset(DEFAULT_STATE, 'lfo');
+    const lfo = applyPreset(DEFAULT_STATE, 'lfo', ALL_PRESETS);
     assert.equal(verdict(setLfo(lfo, 'quaver')).key, 'directed');
     assert.equal(verdict(setLfo(lfo, 'off')).key, 'no-lfo');
-    const file = applyPreset(DEFAULT_STATE, 'file');
+    const file = applyPreset(DEFAULT_STATE, 'file', ALL_PRESETS);
     assert.equal(verdict(setChannels(file, 2)).key, 'stereo');
     const full = setDepth(setRate(setChannels(file, 2), 88.2), 24);
     assert.equal(verdict(full).key, 'directed');
@@ -128,7 +136,7 @@ test('the papers\' answers are reached by the controls', () => {
 });
 
 test('readings gather what the console shows', () => {
-    const r = readings(applyPreset(DEFAULT_STATE, 'period'));
+    const r = readings(applyPreset(DEFAULT_STATE, 'period', ALL_PRESETS));
     near(r.hz, 500); near(r.ms, 2); near(r.s, 0.002);
     assert.equal(r.kind, 'osc');
     assert.equal(r.lfoHz, 0);

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-    DEFAULT_STATE, PRESETS, TASKS, GM_MAP, DRUM_NOTES, BEATS, BEND_MIN, BEND_CENTRE,
+    DEFAULT_STATE, PRESETS, TASKS, ALL_PRESETS, ALL_TASKS, GM_MAP, DRUM_NOTES, BEATS, BEND_MIN, BEND_CENTRE,
     positionOf, fmtPos, noteName, toBinary, noteOnBytes, noteOffBytes, bendBytes, bendFromBytes, bendUnsigned, bits8,
     placedTime, placed, smallestValue, tripletBars, stacked, displaced, looseness, feelWord,
     mapFaults, assign, bendAt, bendSemitones, bendExtent, intervalWord,
@@ -94,8 +94,20 @@ test('the played take is loose, and quantise tightens it in words', () => {
     assert.equal(feelWord(DEFAULT_STATE).key, 'hard');
 });
 
+test('the wrong-sounds task is held: out of the pupil lists, still in the raw data', () => {
+    assert.ok(!PRESETS.some((p) => p.id === 'wrong'));
+    assert.ok(!('map' in TASKS));
+    assert.ok(ALL_PRESETS.some((p) => p.id === 'wrong') && 'map' in ALL_TASKS);
+    assert.equal(applyPreset(DEFAULT_STATE, 'wrong'), DEFAULT_STATE, 'the default list cannot load it');
+    assert.equal(DEFAULT_STATE.presetId, 'velocity');
+});
+
+test('no preset name or blurb cites a paper year', () => {
+    for (const p of ALL_PRESETS) assert.doesNotMatch(`${p.name} ${p.blurb}`, /\b(19|20)\d\d\b|examiner|candidates|Q\d+\(/i, p.id);
+});
+
 test('the wrong-sounds preset scrambles every lane and assign fixes one at a time', () => {
-    const wrong = applyPreset(DEFAULT_STATE, 'wrong');
+    const wrong = applyPreset(DEFAULT_STATE, 'wrong', ALL_PRESETS);
     assert.equal(mapFaults(wrong).length, DRUM_NOTES.length - 1, 'one lane happens to be right');
     assert.equal(verdict(wrong).key, 'wrong-sounds');
     let s = wrong;
@@ -123,7 +135,7 @@ test('the bend lane falls to full downward and back; the range decides the inter
     assert.equal(referenceOf(bend).bendRange, 12);
 });
 
-test('the list editor carries the other messages the 2019 scheme names', () => {
+test('the list editor carries the other messages a file can hold', () => {
     const names = otherMessages(DEFAULT_STATE);
     for (const n of ['Tempo', 'Time signature', 'Key', 'Track name', 'Instrument name', 'End of track']) assert.ok(names.includes(n), n);
     assert.ok(!names.includes('Pitch bend'), 'the drums carry no bend');
@@ -147,10 +159,10 @@ test('the velocity table for bar 2 has an accent and a ghost note, and every val
 
 test('each preset lands on its task and its verdict', () => {
     const want = { velocity: 'table', wrong: 'wrong-sounds', roll: 'directed', played: 'loose', triplets: 'triplets', bend: 'range-2', draw: 'empty' };
-    for (const p of PRESETS) {
-        const st = applyPreset(DEFAULT_STATE, p.id);
+    for (const p of ALL_PRESETS) {
+        const st = applyPreset(DEFAULT_STATE, p.id, ALL_PRESETS);
         assert.equal(st.task, p.task, p.id);
-        assert.equal(st.part, TASKS[p.task].part, p.id);
+        assert.equal(st.part, ALL_TASKS[p.task].part, p.id);
         assert.equal(verdict(st).key, want[p.id], p.id);
         assert.ok(st.selected != null, `${p.id} selects a note`);
     }
@@ -205,7 +217,7 @@ test('readings gather what the console shows', () => {
     assert.equal(r.bend.lo, BEND_MIN);
     assert.equal(r.faults.length, 0);
     assert.ok(r.sel);
-    const w = readings(applyPreset(DEFAULT_STATE, 'wrong'));
+    const w = readings(applyPreset(DEFAULT_STATE, 'wrong', ALL_PRESETS));
     assert.ok(w.faults.length > 0);
     assert.equal(w.smallest, '16');
 });

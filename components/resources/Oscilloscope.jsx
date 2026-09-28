@@ -14,6 +14,10 @@ import {
     applyPreset, setSource, setOctave, setTimeBase, setLevel, setLfo, setChannels, setRate, setDepth, setVolume, stretchTo,
     frequency, sourceHz, periodMs, fmtHz, fmtMs, fmtS, fmtMb, dbToGain, lfoHz, fileMb, bytesPerSecond, readings, verdict,
 } from '@/lib/bench/scope-model';
+import { isTextHeld } from '@/lib/bench/held-papers';
+
+// The octave task belongs to a held paper: its reading stays out until it is released.
+const octaveHeld = isTextHeld('scope', 'octave');
 
 // The Oscilloscope (2.5), eighth bench to the Bench Standard. One sound
 // against time in milliseconds, five divisions across, as the written
@@ -433,7 +437,7 @@ export default function Oscilloscope({ back }) {
                     g2.fillStyle = vdd.ok ? col.goldBright : col.coral; g2.font = monoSmall; g2.textAlign = 'right';
                     g2.fillText(vdd.ok ? 'as directed' : 'not yet', P.x1 - 8, P.top + 13);
                 }
-                if (s.task) {
+                if (s.task && TASKS[s.task]) {
                     const stem = TASKS[s.task].stem;
                     g2.fillStyle = col.inkFaint; g2.font = monoSmall; g2.textAlign = 'left';
                     const words = stem.split(' ');
@@ -457,14 +461,14 @@ export default function Oscilloscope({ back }) {
                 const mb = fileMb(s);
                 g2.fillStyle = col.ink; g2.font = mono;
                 g2.fillText(`${s.channels} ${s.channels === 1 ? 'channel' : 'channels'} × ${(s.rate * 1000).toLocaleString('en-GB')} samples/s × ${s.depth} bits = ${(bps * 8).toLocaleString('en-GB')} bits/s = ${Math.round(bps / 1000).toLocaleString('en-GB')} kB/s`, F.x0 + 76, F.top + 31);
-                // the 2024 file as a bar against its 10 MB base
+                // the past task's file as a bar against its 10 MB base
                 const barX = F.x0 + 76; const barW = Math.min(F.x1 - barX - 260, 520); const barY = F.top + 41; const bh = 9;
                 const frac = Math.min(1, mb / 60);
                 g2.fillStyle = col.purple; g2.globalAlpha = 0.25; g2.fillRect(barX, barY, barW, bh); g2.globalAlpha = 1;
                 g2.fillRect(barX, barY, barW * frac, bh);
                 g2.strokeStyle = col.inkFaint; g2.beginPath(); g2.moveTo(barX + barW * (10 / 60) + 0.5, barY - 2); g2.lineTo(barX + barW * (10 / 60) + 0.5, barY + bh + 2); g2.stroke();
                 g2.fillStyle = col.ink; g2.textAlign = 'left';
-                g2.fillText(`the 2024 file: ${fmtMb(mb)}  (10 MB mono at 44.1 kHz and 16 bit)`, barX + barW + 12, barY + 9);
+                g2.fillText(`the file: ${fmtMb(mb)}  (10 MB mono at 44.1 kHz and 16 bit)`, barX + barW + 12, barY + 9);
             }
 
             // ---- the setting line, for the depth ----
@@ -578,13 +582,13 @@ export default function Oscilloscope({ back }) {
                     <h3>Terms</h3>
                     <dl>
                         <dt>Period</dt><dd>The time one cycle takes, in milliseconds on the paper and in seconds for the working. The bracket on the screen is one period.</dd>
-                        <dt>Frequency</dt><dd>Cycles a second, in hertz. f = 1 ÷ T, with T in seconds: a 2 ms period is 0.002 s, so 500 Hz. The slip the reports name is leaving T in milliseconds.</dd>
-                        <dt>Octave</dt><dd>A doubling of frequency, so a halving of period. 294 Hz up an octave is 588 Hz; a 1 ms square wave down an octave has a 2 ms period. Down the octave the wave stretches to twice its length on the screen.</dd>
+                        <dt>Frequency</dt><dd>Cycles a second, in hertz. f = 1 ÷ T, with T in seconds: a 2 ms period is 0.002 s, so 500 Hz. The usual slip is leaving T in milliseconds.</dd>
+                        <dt>Octave</dt><dd>A doubling of frequency, so a halving of period. 220 Hz up an octave is 440 Hz; a 1 ms square wave down an octave has a 2 ms period. Down the octave the wave stretches to twice its length on the screen.</dd>
                         <dt>Amplitude</dt><dd>The height of the wave, how loud. Louder changes the height and nothing else; the period stays. +6 dB is twice the amplitude, −6 dB half.</dd>
                         <dt>Waveform</dt><dd>The shape of one cycle. Sine: one smooth curve. Square: flat tops, vertical edges. Saw: a ramp and a drop. Triangle: straight rises and falls. The paper asks you to identify one and draw another.</dd>
                         <dt>LFO rate</dt><dd>A low-frequency oscillator is a wave slow enough to count. At 120 bpm a crotchet is 0.5 s, so an LFO once a crotchet runs at 2 Hz and once a quaver at 4 Hz.</dd>
                         <dt>Sample rate · bit depth</dt><dd>How many samples a second a converter keeps, and how many bits each one is. They set a file&apos;s size: channels × rate × depth is the bits a second. Stereo doubles a file; 88.2 kHz doubles it again; 24 bit is one and a half times 16.</dd>
-                        <dt>Pitch from frequency</dt><dd>A4 is 440 Hz; every octave doubles. 500 Hz sits between B4 (494 Hz) and C5 (523 Hz); the scheme accepts &quot;between B and C&quot;.</dd>
+                        <dt>Pitch from frequency</dt><dd>A4 is 440 Hz; every octave doubles. 500 Hz sits between B4 (494 Hz) and C5 (523 Hz), and &quot;between B and C&quot; is a full answer.</dd>
                     </dl>
                     <h3>In your DAW</h3>
                     <table>
@@ -604,7 +608,7 @@ export default function Oscilloscope({ back }) {
                         <dt>Playback speed and pitch</dt><dd>The recordings go up an octave by playing at twice the speed, the tape way: the period halves because the samples go past twice as fast. A pitch shifter that keeps the length is a different machine (1.7).</dd>
                         <dt>Why dots</dt><dd>At Extension the trace is drawn as the samples a converter keeps. At 8 kHz there are eight a millisecond; at 44.1 kHz the dots run together, which is why the wave sounds continuous.</dd>
                     </dl>
-                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the 9MT0/04 question papers and mark schemes, 2019 to 2026.</p>
+                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the written paper&apos;s past tasks.</p>
                 </>
             ),
         },
@@ -615,30 +619,30 @@ export default function Oscilloscope({ back }) {
                 <>
                     <h2>What to listen for</h2>
                     <p>Press Play and a sine wave stands on the screen, one cycle bracketed. Switch the source along the row, Square, Saw, Triangle, and the shape changes while the bracket stays a length you can read; press <b>A real note</b> and a bowed cello stands there instead. Press <b>Octave up</b> and the bracket halves as the note jumps; drag the bracket wider and the note falls as the wave stretches. That one picture is most of the topic: pitch is the length of a cycle, and every question is a reading off it.</p>
-                    <h3>What the schemes say</h3>
-                    <p>2019, the octave: &quot;294 × 2 / 294 + 294 (1); 588 (Hz) (2). Award 2 for 588 with no working.&quot;</p>
-                    <p>2023, the drawing: &quot;Saw wave (1); period of 2 ms (1). Accept DC offset. Accept different amplitude.&quot; 2025: &quot;a louder square wave with period of 2 ms and no DC offset (1)&quot;; &quot;a square wave with same amplitude as figure 1 and period of 4 ms and no DC offset (1)&quot;.</p>
-                    <p>2025, the pitch: &quot;award 1 mark for the correct pitch derived from the frequency ... allow description of the pitch if the candidate identifies that it is between two notes (e.g. between B and C)&quot;.</p>
-                    <p>2026, the kick: &quot;1/200 (1); 0.005 / 5 × 10⁻³ (1). Award 2 marks for 0.005 with no working.&quot; Then &quot;5 (1)&quot; for the milliseconds.</p>
-                    <p>2024, the file: &quot;20 (1)&quot; then &quot;60 (1)&quot;; &quot;Ignore working out&quot;.</p>
-                    <p className={styles.source}>Source: Edexcel 9MT0/04 and 9MT0/41 mark schemes, 2019 Q4(c)(ii), 2023 Q2(e), 2024 Q3(b), 2025 Q3(c), 2026 Q1(d). The 2020 LFO stem (Q3(a)(iv)) gives the crotchet as 0.5 s and asks for the quaver&apos;s rate; its scheme is not in the vault.</p>
+                    <h3>What earns the marks</h3>
+                    {octaveHeld ? null : <p>The octave: 294 × 2, or 294 + 294, earns 1 mark; 588 Hz earns 2, with or without working.</p>}
+                    <p>The drawing an octave lower: a saw wave earns 1 mark, a period of 2 ms the other; a DC offset or a different amplitude is accepted. Drawn louder: a louder square wave with a period of 2 ms and no DC offset. An octave lower as a square: the same amplitude as the figure, a period of 4 ms, no DC offset.</p>
+                    <p>The pitch: one mark for the pitch the frequency gives, and a pitch between two notes (between B and C) is allowed.</p>
+                    <p>The kick: 1/200 earns 1 mark and 0.005 s the other; 0.005 alone earns both. Then 5 earns 1 for the milliseconds.</p>
+                    <p>The file: 20 earns 1 mark, then 60 the other; the working is ignored.</p>
+                    <p>The LFO task gives the crotchet as 0.5 s and asks for the quaver&apos;s rate.</p>
                     <h3>Do these now</h3>
                     <ul>
                         <li>Press <b>Read the period</b>, switch to A-level, and cover the ladder with your hand. Read the period off the grid, write it in seconds, then the frequency; uncover and check each rung.</li>
-                        <li>Press <b>294 Hz, an octave up</b>, then Octave up. Say what happened to the bracket before you say what happened to the number.</li>
-                        <li>Press <b>An octave lower</b> and make the trace the scheme draws: the source and the octave. Then say why the amplitude does not matter and a DC offset does.</li>
+                        {octaveHeld ? null : <li>Press <b>294 Hz, an octave up</b>, then Octave up. Say what happened to the bracket before you say what happened to the number.</li>}
+                        <li>Press <b>An octave lower</b> and make the trace that earns the marks: the source and the octave. Then say why the amplitude does not matter and a DC offset does.</li>
                         <li>Press <b>Louder</b>, turn Level to +6 dB, and say which of the two numbers on the screen changed.</li>
                         <li>Press <b>The LFO</b>, then Quaver in the More row, and count the swells across half a second.</li>
                         <li>Switch to Extension, press <b>The file</b>, and make it 60 MB with the three chips, reading the strip each time.</li>
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="Figure 1 shows a wave over 5 ms. State the period of the wave in ms. State the period in s. Calculate the frequency of the wave in Hz. (3 marks, 2025)"
+                        prompt="Figure 1 shows a wave over 5 ms. State the period of the wave in ms. State the period in s. Calculate the frequency of the wave in Hz. (3 marks)"
                         answer="Read one full cycle off the grid: 2 ms. In seconds, 0.002 s. Frequency is 1 ÷ T with T in seconds: 1 ÷ 0.002 = 500 Hz. Each rung is its own mark, and the ms-to-s rung is where the marks go missing."
                     />
                     <ExamCallout
-                        prompt="An audio file has a file size of 10 MB: .wav, mono, 44.1 kHz, 16 bit. Calculate the file size if it were converted to stereo, 88.2 kHz, 24 bit. (1 mark, 2024)"
-                        answer="Stereo doubles it (20 MB); 88.2 kHz doubles it again (40 MB); 24 bit is 1.5 times 16 bit (60 MB). The scheme wants the number and ignores the working: 60."
+                        prompt="An audio file has a file size of 10 MB: .wav, mono, 44.1 kHz, 16 bit. Calculate the file size if it were converted to stereo, 88.2 kHz, 24 bit. (1 mark)"
+                        answer="Stereo doubles it (20 MB); 88.2 kHz doubles it again (40 MB); 24 bit is 1.5 times 16 bit (60 MB). The mark is for the number, not the working: 60."
                     />
                 </>
             ),
@@ -756,7 +760,7 @@ export default function Oscilloscope({ back }) {
                     <Dial label="Level" value={state.level} min={LEVEL_MIN} max={LEVEL_MAX} step={0.5} unit="dB" pointer="var(--gold-bright)" pixels={160} onChange={chooseLevel} title="The height of the wave, in dB: +6 is twice, −6 is half" />
                     <span className={styles.readout}>{rd.levelWord}</span>
                 </div>
-                <Why>Louder is height. +6 dB doubles the amplitude and the trace; the period does not move. The 2025 paper asks for the same wave drawn louder, and marks the period as much as the height.</Why>
+                <Why>Louder is height. +6 dB doubles the amplitude and the trace; the period does not move. A past task asks for the same wave drawn louder, and marks the period as much as the height.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined} data-scope="true">
@@ -796,7 +800,7 @@ export default function Oscilloscope({ back }) {
                 <Chips label="Channels" options={chOptions} value={state.channels} onChange={(v2) => chooseFile('ch', v2)} />
                 <Chips label="Sample rate" options={rateOptions} value={state.rate} onChange={(v2) => chooseFile('rate', v2)} />
                 <Chips label="Bit depth" options={depthOptions} value={state.depth} onChange={(v2) => chooseFile('depth', v2)} />
-                <span className={styles.chipNote}>{fmtMb(rd.fileMb)} for the 2024 file · the size, not the sound</span>
+                <span className={styles.chipNote}>{fmtMb(rd.fileMb)} for the file · the size, not the sound</span>
             </div>
         </>
     ) : null;

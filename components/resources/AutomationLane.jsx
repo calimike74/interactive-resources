@@ -811,7 +811,7 @@ export default function AutomationLane({ back }) {
                         <dt>Why a step must land on the transient</dt><dd>The attack of a note is where the ear places it. A pan that arrives 70 ms late lets the attack play in the old position; the rest of the note moving is heard as a drift, not a placement.</dd>
                         <dt>Sends and depth</dt><dd>A send lane is not a level lane: more send is further back, not louder. A send that opens at a section boundary is heard as the room changing, which is what the listening paper asks you to name.</dd>
                     </dl>
-                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the 1.8 mark schemes and examiner reports, 2017 to 2023.</p>
+                    <p className={styles.source}>The reading behind this bench is the topic&apos;s own Learn chapters and the practical paper&apos;s past automation tasks.</p>
                 </>
             ),
         },
@@ -821,14 +821,13 @@ export default function AutomationLane({ back }) {
             render: () => (
                 <>
                     <h2>What to listen for</h2>
-                    <p>Press Play and the keys jump hard left for bar 2 and hard right for bar 3. Hold the lane off and the keys sit in the centre: that difference is the move. Every preset is a real practical re-scoped to these four bars, and the ones named for a fault are what the reports say candidates handed in. When you can hear the late step before the stage marks it, and say why the mark went, you are doing what the practical marks.</p>
-                    <h3>What cost candidates marks</h3>
-                    <p>2020, the pan: &quot;The majority of candidates were successful at panning the synth riff. Some weaker candidates were a little sloppy with the placement of automation so the transients were not hard panned properly.&quot;</p>
-                    <p>2020, the filter: &quot;The most common problem that candidates had was that the cut-off frequency either started too low, or was too slow to rise so the synth riff was not audible in bar 10.&quot;</p>
-                    <p>2022 AS, the ramp: &quot;Often done well, problems were uneven volume ramp and not reaching a suitable level by the end of the chord. Some students failed to get a suitable final level because the volume envelope of the patch had a fast decay.&quot;</p>
-                    <p>2023, the sweep: &quot;most candidates seem to be able to perform basic automation mix moves. There were a few who inverted the answer panning from right to left.&quot;</p>
-                    <p>2022, the part that was not there: candidates who omitted the scratch vocal from the mix &quot;scored 0 because there was no part to pan&quot;.</p>
-                    <p className={styles.source}>Source: Edexcel 9MT0 mark schemes and Principal Examiner reports, 2017 AS Q5(a), 2019 AS Q5(b), 2020 A Q5(a) and Q5(b), 2021 A Q5(a), 2022 AS Q2(c), 2022 A Q5(b), 2023 A Q5(b).</p>
+                    <p>Press Play and the keys jump hard left for bar 2 and hard right for bar 3. Hold the lane off and the keys sit in the centre: that difference is the move. Every preset is a real practical re-scoped to these four bars, and the ones named for a fault are common ways the move goes wrong. When you can hear the late step before the stage marks it, and say why the mark went, you are doing what the practical marks.</p>
+                    <h3>What loses marks</h3>
+                    <p>The pan: automation placed a little late, so the transients are not hard panned. Every jump belongs on its barline.</p>
+                    <p>The filter: a cut-off that starts too low, or rises too slowly, so the part is not heard where it should be.</p>
+                    <p>The ramp: an uneven volume ramp, or one that does not reach a suitable level by the end of the chord. A patch whose own volume envelope has a fast decay can fight the ramp and stop it reaching the level.</p>
+                    <p>The sweep: a perfect sweep run from right to left. The shape is right and the mark is gone.</p>
+                    <p>The part that is not there: leave the named part out of the mix and there is nothing to pan, so the task scores 0.</p>
                     <p>Those are the moves on this bench: press <b>Late step</b> and hear the first note of bar 2 play centred; press <b>Backwards</b> and say what is wrong before the stage does; press <b>Slow to rise</b> and hear the keys go missing; press <b>Falls short</b> and count the marks gone.</p>
                     <h3>Do these now</h3>
                     <ul>
@@ -841,12 +840,12 @@ export default function AutomationLane({ back }) {
                     </ul>
                     <h3>Exam practice</h3>
                     <ExamCallout
-                        prompt="Apply automated panning to the synth riff. Only bars 4–5 should be affected; all other bars should be panned to the centre. Bar 4 should be panned hard left. Bar 5 should be panned hard right. (3 marks, 2020)"
-                        answer="The scheme is four words, &quot;L – R as directed&quot;, so the marks are in the doing: a step lane on the riff's pan, centre until bar 4, hard left on the barline of bar 4, hard right on the barline of bar 5, centre again on bar 6. Grid on, the jumps on the transients. The report's deduction was placement: transients not hard panned because the step landed late."
+                        prompt="Apply automated panning to the synth riff. Only bars 4–5 should be affected; all other bars should be panned to the centre. Bar 4 should be panned hard left. Bar 5 should be panned hard right. (3 marks)"
+                        answer="The scheme is four words, &quot;L – R as directed&quot;, so the marks are in the doing: a step lane on the riff's pan, centre until bar 4, hard left on the barline of bar 4, hard right on the barline of bar 5, centre again on bar 6. Grid on, the jumps on the transients. Marks go on placement: the transients are not hard panned when the step lands late."
                     />
                     <ExamCallout
-                        prompt="Apply volume automation to the long chord that plays from the end of bar 24 to the end of bar 25. The chord should be quiet but still audible when it starts playing. It should gradually get louder through to the end of bar 25, finishing at the original level. There must be no other volume changes in the keyboard part. (3 marks, 2022 AS)"
-                        answer="One mark each: audible at the start; the rise smooth; the end at the original level with nothing else changed. A linear lane from about −17 dB at the chord's start to 0 dB at the end of bar 25, flat at 0 dB everywhere else. The report's faults: an uneven ramp, and not reaching the level, sometimes because the patch's own decay fought the ramp."
+                        prompt="Apply volume automation to the long chord that plays from the end of bar 24 to the end of bar 25. The chord should be quiet but still audible when it starts playing. It should gradually get louder through to the end of bar 25, finishing at the original level. There must be no other volume changes in the keyboard part. (3 marks)"
+                        answer="One mark each: audible at the start; the rise smooth; the end at the original level with nothing else changed. A linear lane from about −17 dB at the chord's start to 0 dB at the end of bar 25, flat at 0 dB everywhere else. The faults to avoid: an uneven ramp, and not reaching the level, sometimes because the patch's own decay fights the ramp."
                     />
                 </>
             ),
@@ -923,7 +922,7 @@ export default function AutomationLane({ back }) {
     const gridOptions = GRID_IDS.map((id) => ({ id, label: GRIDS[id].label, title: GRIDS[id].short }));
     const verdictWord = vd.key === 'free' ? 'no stem' : vd.ok ? 'as directed' : 'not yet';
     const nodeWord = { vol: 'the fader', pan: 'the pan pot', filter: 'the cut-off, inside the insert', send: 'the send, into the room' }[state.target];
-    const hearOptions = [{ id: 'mix', label: 'the mix', title: 'All four parts, as the examiner hears the move' }, { id: 'solo', label: 'solo', title: 'This part alone: the DAW\'s S button, for hearing exactly what the lane does to it' }];
+    const hearOptions = [{ id: 'mix', label: 'the mix', title: 'All four parts, as the marker hears the move' }, { id: 'solo', label: 'solo', title: 'This part alone: the DAW\'s S button, for hearing exactly what the lane does to it' }];
 
     const consoleSlot = (
         <>
@@ -945,7 +944,7 @@ export default function AutomationLane({ back }) {
                 <Chips label="Part" options={partOptions} value={state.part} onChange={choosePart} />
                 <Chips label="Hear" options={hearOptions} value={solo ? 'solo' : 'mix'} onChange={(id) => { setSolo(id === 'solo'); touch('solo'); }} />
                 <div className={styles.meaning}>{solo ? `${PARTS[state.part].short.toLowerCase()} alone` : task && task.part === state.part ? 'the part the stem names' : 'the lane moves with you'}</div>
-                <Why>The papers name one part: the keyboards in 2019, a synth riff in 2020, the bass in 2021, a riser in the drums in 2023, a vocal phrase in 2017. The lane belongs to whichever part is chosen here; the other three play as they are.</Why>
+                <Why>The papers name one part: the keyboards, a synth riff, the bass, a riser in the drums, a vocal phrase. The lane belongs to whichever part is chosen here; the other three play as they are.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secTarget}`} data-teach={teach || undefined}>
@@ -966,7 +965,7 @@ export default function AutomationLane({ back }) {
                 <div className={styles.secHead}><span className={styles.eyebrow}>Grid</span><span className={styles.value}>{GRIDS[state.grid].label}</span></div>
                 <Chips label="Grid" options={gridOptions} value={state.grid} onChange={chooseGrid} />
                 <div className={styles.meaning}>{GRIDS[state.grid].short}</div>
-                <Why>Grid-synchronised or free-form, the spec&apos;s two timings. On the bar or the beat a jump lands on the barline and the transient; free is where a hand-recorded pass puts its points, and where the 2020 report&apos;s sloppy placement came from.</Why>
+                <Why>Grid-synchronised or free-form, the spec&apos;s two timings. On the bar or the beat a jump lands on the barline and the transient; free is where a hand-recorded pass puts its points, and where late, sloppy placement comes from.</Why>
             </div>
 
             <div className={`${styles.sec} ${styles.secValue}`} data-teach={teach || undefined}>

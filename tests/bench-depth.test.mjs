@@ -21,7 +21,7 @@ test('the 2023 paper preset is the paper: a quaver at 120 BPM, feedback high, be
     assert.equal(paper.stereo, 'pingpong');
     assert.equal(paper.source, 'vocal');
     assert.ok(derive(paper).hz > 3000 && derive(paper).hz < 4000, 'high cut near 3.5 kHz');
-    assert.ok(PRESETS.some((p) => p.id === 'paper2023' && p.name === '2023 paper'));
+    assert.ok(PRESETS.some((p) => p.id === 'paper2023' && p.name === 'Past task'));
 });
 
 test('a delay time has a zone: fused, slapback, echo', () => {
@@ -52,7 +52,7 @@ test('A-level judges every control in the paper\'s order: name (AO3) then verdic
     }
 });
 
-test('A-level judges the 2023 paper the way the examiner did', () => {
+test('A-level judges the past task\'s delay the way the mark scheme does', () => {
     const fb = judge({ state: paper, last: 'feedback', part: 'the vocal' }).map((s) => s.text).join(' ');
     assert.match(fb, /longer than a bar/);
     assert.match(fb, /too high/);
