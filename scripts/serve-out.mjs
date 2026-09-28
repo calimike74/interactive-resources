@@ -57,7 +57,10 @@ if (!fs.existsSync(root)) {
 // is how the site itself serves it.
 function fileFor(urlPath) {
     const clean = path.normalize(decodeURIComponent(urlPath.split('?')[0]));
-    if (clean.includes('..')) return null;
+    // a `..` segment, not a `..` anywhere: Turbopack names a chunk
+    // `0zl8h0p0wr_4..js` now and then (28 Sep 2026), and the substring test
+    // 404'd it and left every bench on that build dead
+    if (clean.split(/[\\/]/).includes('..')) return null;
     for (const candidate of [
         path.join(root, clean),
         path.join(root, clean, 'index.html'),

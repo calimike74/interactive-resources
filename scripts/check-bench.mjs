@@ -60,6 +60,10 @@
 //      both; clicking the first dark Snare step lights it (data-lit counts
 //      up, data-pattern changes); and a key in the console plays the voice
 //      (pressing C2 makes the stage report note 48)
+//  31. (ADC Explorer) the bracket over one sample's time is the Sample rate
+//      dial: the canvas reports the rate (data-rate) and it equals the
+//      dial's; dragging the bracket's end to the right (a longer sample
+//      period) lowers the rate on both
 //  24. (every bench) the stage note holds still and reads whole: while the
 //      bench plays, at every level, the prose beside the setting keeps its
 //      left edge (a live readout sits in a reserved slot) and is not clipped
@@ -164,6 +168,12 @@ const BENCHES = {
         presets: { first: 'Hats and swing', second: 'Filter sweep', judge: 'Judge: straight' },
         judgeLands: { selector: '[aria-label="Swing"]', attr: 'aria-valuenow', value: '0', says: 'loads sixteenth hats hard quantised with Swing at 0, the 2025 comparison\'s tight side (Swing = 0)' },
         stages: { core: 'steps', alevel: 'spectrum', extension: 'chain' },
+    },
+    'adc-explorer': {
+        sampleBracket: true,
+        presets: { first: 'Aliasing', second: 'Four bits', judge: 'Judge: 15 kHz at 20k' },
+        judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-alias', value: '5', says: 'loads a 15 kHz tone at 20 kHz with no filter, which comes back at 5 kHz (data-alias = 5)' },
+        stages: { core: 'samples', alevel: 'nyquist', extension: 'chain' },
     },
     'eq-bench': {
         curve: true,
@@ -901,6 +911,34 @@ for (const url of urls) {
                 else if (!after.band.startsWith(`${fx.bells.band}:`)) fail(url, size, `the dials did not go to the newest bell (data-band="${after.band}")`);
                 else ok(`${fx.bells.chip} bells: ${before.dots} dots became ${after.dots}, dials on ${fx.bells.band}`);
             }
+        }
+
+        // 31. (ADC Explorer) the sample bracket on the stage is the Sample rate dial
+        if (fx.sampleBracket) {
+            const canvasSel = '[aria-label="Stage"] canvas';
+            const readR = () => page.evaluate((sel) => { const c = document.querySelector(sel); return { rate: c?.dataset.rate || '', handle: c?.dataset.handle || '' }; }, canvasSel);
+            const dialR = () => page.evaluate(() => (document.querySelector('[aria-label="Sample rate"]')?.getAttribute('aria-valuetext') || '').replace(/ kHz$/, ''));
+            await page.waitForTimeout(200);
+            const before = await readR();
+            const dial = await dialR();
+            if (!before.rate) fail(url, size, 'the stage does not report the sample rate (data-rate missing)');
+            else if (before.rate !== dial) fail(url, size, `the stage's rate (${before.rate}) is not the dial's (${dial})`);
+            else ok(`the stage reports the sample rate and it matches the dial (${before.rate} kHz)`);
+            const box = await page.locator(canvasSel).boundingBox();
+            const [hx, hy] = before.handle.split(':').map(Number);
+            if (box && before.handle) {
+                await page.mouse.move(box.x + hx, box.y + hy);
+                await page.mouse.down();
+                await page.mouse.move(box.x + hx + 15, box.y + hy, { steps: 6 });
+                await page.mouse.move(box.x + hx + 30, box.y + hy, { steps: 6 });
+                await page.mouse.up();
+                await page.waitForTimeout(200);
+                const after = await readR();
+                const dialAfter = await dialR();
+                if (!(Number(after.rate) < Number(before.rate))) fail(url, size, `dragging the bracket's end right did not lower the rate (${before.rate} -> ${after.rate})`);
+                else if (dialAfter !== after.rate) fail(url, size, `the dial did not follow the bracket (${dialAfter} vs ${after.rate})`);
+                else ok(`dragging the bracket moves the dial (${before.rate} kHz -> ${after.rate} kHz)`);
+            } else fail(url, size, 'the stage does not expose the sample bracket for the drag test');
         }
 
         // 24. the stage note holds still and reads whole (30 Aug 2026, Mike:

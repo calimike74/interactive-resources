@@ -1,672 +1,1116 @@
 'use client';
 
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { theme, typography, spacing, borderRadius, transitions } from '@/lib/theme';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import BenchFrame from '@/components/bench/BenchFrame';
+import { Dial, Chips, Why, MoreButton } from '@/components/bench/controls';
+import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth, DEPTHS } from '@/components/bench/BenchBits';
+import { useBenchAudio, glide } from '@/components/bench/useBenchAudio';
+import styles from '@/components/bench/bench.module.css';
+import { memberTopicHref, useStudioArrival } from '@/lib/studio-return';
+import { DEPTH_LINES, DEPTH_TEACH, judge, open as openMachine, hearingLine, nextMove } from '@/lib/bench/adc-depth';
+import {
+    RATES, BITS_MIN, BITS_MAX, TONES, TONE_AMP, TONE_ON_S, DIVS, SOURCE_IDS, SOURCES, FILE_WINDOW_MS, PRESETS, DEFAULT_STATE,
+    FILTER_QS, WORKLET_NAME, workletSource, makeConverter, converterDelay, hostStep, qToDb, filterCutoffHz, filterGain, filterRun,
+    picture, toneSignal, toneWindowMs, readings, binaryWord, rateIndex, rateFromPeriod, fmtKhz, fmtHzKhz, fmtLevels,
+    applyPreset, setSource, setRateIndex, setRate, setBits, setTone, setFilter, setDither, setVolume, nyquist, levels,
+} from '@/lib/bench/adc-model';
 
-// ============================================
-// ADC Explorer
-// A-Level Music Technology — Topic 2.4
-// Three tabs mapped to book extract sections
-// ============================================
+// The ADC Explorer (2.4), rebuilt 28 Sep 2026 to the Bench Standard from a
+// stacked reading page (two tabs, a slider, definition cards to copy). The
+// stage is the converter at work on one picture: time across, voltage up,
+// the sound going in, the samples taken at the sample rate and rounded to
+// the bit depth's levels, and the wave the DAC draws back. Three jobs
+// (lib/bench/adc-depth.js): Core shows that picture; A-level adds the
+// paper's two numbers beside it (half the rate kept, about 6 dB a bit) and
+// the rounding error beneath; Extension opens the converter into its parts
+// and prints every sample as the binary word it is stored as.
+//
+// The sound is the picture: the converter in lib/bench/adc-model.js runs in
+// an AudioWorklet (its source is that function's text), after eight biquads
+// that are the anti-alias filter, so what is heard at a setting is what the
+// stage draws at it. The recordings are real; the test tone is a computed
+// buffer, a probe for aliasing, never programme material.
 
-const t = theme.light;
-
-const TABS = [
-    { id: 'sampling', label: 'Sampling' },
-    { id: 'bitdepth', label: 'Bit Depth' },
-];
-
-// Tier colours matching the book extract difficulty levels
-const TIER = {
-    foundation: '#059669',
-    intermediate: '#d97706',
-    advanced: '#DC2626',
+const CODE = '2.4 Digital and Analogue';
+const TITLE = 'ADC Explorer';
+const FILES = Object.fromEntries(SOURCE_IDS.filter((id) => SOURCES[id].kind === 'file').map((id) => [id, SOURCES[id].file]));
+const ORIENTS = {
+    core: 'Time runs across, voltage up. Blue is the sound going in; each dot is one sample.',
+    alevel: 'Beside the samples, the paper\'s two numbers: the highest frequency kept, and the dynamic range.',
+    extension: 'Inside the converter: filter, sample and hold, quantiser, then every sample as a binary word.',
 };
+const TONE_GAIN = 0.3; // the probe sits under the recordings (measured with the trim, 28 Sep 2026)
+const TRIM_MIN_DB = -9;
+const TRIM_MAX_DB = 3;
+const IDLE_AT_S = 1.2; // where a recording's picture rests before Play
 
-// ─── Shared styles ──────────────────────────────────────────────
-const card = {
-    background: t.bg.elevated,
-    borderRadius: borderRadius.xl,
-    border: `1px solid ${t.border.subtle}`,
-    padding: spacing[6],
-};
+// ---- the graph ------------------------------------------------------------
+// input -> [anti-alias: eight biquads | straight through] -> the converter
+// (AudioWorklet) -> trim (the level match) -> wet -> master
+// input -> delay (the converter's own lag) -> dry -> master   (hold: analogue)
+function buildAdcGraph(ctx, input, master) {
+    const sr = ctx.sampleRate;
+    const lag = converterDelay(sr);
+    const aa = FILTER_QS.map((q) => { const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.Q.value = qToDb(q); return f; });
+    input.connect(aa[0]);
+    for (let i = 1; i < aa.length; i += 1) aa[i - 1].connect(aa[i]);
+    const aaOn = ctx.createGain();
+    const aaOff = ctx.createGain();
+    aaOff.gain.value = 0;
+    aa[aa.length - 1].connect(aaOn);
+    input.connect(aaOff);
+    const into = ctx.createGain();
+    aaOn.connect(into);
+    aaOff.connect(into);
+    const trim = ctx.createGain();
+    const wet = ctx.createGain();
+    trim.connect(wet);
+    wet.connect(master);
+    const delay = ctx.createDelay(1);
+    delay.delayTime.value = lag / sr;
+    const dry = ctx.createGain();
+    dry.gain.value = 0;
+    input.connect(delay);
+    delay.connect(dry);
+    dry.connect(master);
 
-const sectionLabel = {
-    fontSize: typography.size.xs,
-    fontWeight: typography.weight.semibold,
-    textTransform: 'uppercase',
-    letterSpacing: '0.1em',
-    display: 'block',
-    marginBottom: spacing[2],
-};
+    let node = null;
+    let pending = null;
+    const url = URL.createObjectURL(new Blob([workletSource()], { type: 'application/javascript' }));
+    const ready = ctx.audioWorklet.addModule(url).then(() => {
+        node = new AudioWorkletNode(ctx, WORKLET_NAME, { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1], channelCount: 1, channelCountMode: 'explicit', channelInterpretation: 'speakers' });
+        into.connect(node);
+        node.connect(trim);
+        node.port.postMessage({ delay: lag });
+        if (pending) node.port.postMessage(pending);
+    }).catch(() => {}).finally(() => URL.revokeObjectURL(url));
 
-const bodyText = {
-    fontSize: typography.size.sm,
-    color: t.text.secondary,
-    lineHeight: typography.lineHeight.relaxed,
-};
-
-const strongText = {
-    color: t.text.primary,
-    fontWeight: typography.weight.semibold,
-};
-
-// ─── Main component ─────────────────────────────────────────────
-export default function ADCExplorer() {
-    const [activeTab, setActiveTab] = useState('sampling');
-
-    function handleTabKeyDown(e) {
-        const ids = TABS.map(tab => tab.id);
-        const currentIdx = ids.indexOf(activeTab);
-        let nextIdx = currentIdx;
-        if (e.key === 'ArrowRight') {
-            nextIdx = (currentIdx + 1) % ids.length;
-        } else if (e.key === 'ArrowLeft') {
-            nextIdx = (currentIdx - 1 + ids.length) % ids.length;
-        } else if (e.key === 'Home') {
-            nextIdx = 0;
-        } else if (e.key === 'End') {
-            nextIdx = ids.length - 1;
-        } else {
-            return;
-        }
-        e.preventDefault();
-        setActiveTab(ids[nextIdx]);
-        // Move DOM focus to the newly selected tab
-        const tablist = e.currentTarget;
-        const tabs = tablist.querySelectorAll('[role="tab"]');
-        if (tabs[nextIdx]) tabs[nextIdx].focus();
+    function set(state) {
+        const fc = filterCutoffHz(state.rate, sr);
+        const t = ctx.currentTime;
+        for (const f of aa) { f.frequency.cancelScheduledValues(t); f.frequency.setTargetAtTime(fc, t, 0.01); }
+        glide(aaOn.gain, state.filter ? 1 : 0, ctx, 0.01);
+        glide(aaOff.gain, state.filter ? 0 : 1, ctx, 0.01);
+        const msg = { P: hostStep(sr, state.rate), bits: state.bits, dither: state.dither };
+        pending = msg;
+        if (node) node.port.postMessage(msg);
     }
-
-    return (
-        <div style={{
-            maxWidth: '64rem',
-            margin: '0 auto',
-            padding: spacing[6],
-            fontFamily: typography.fontFamily,
-        }}>
-            {/* Tab navigation */}
-            <div
-                role="tablist"
-                aria-label="ADC Explorer sections"
-                onKeyDown={handleTabKeyDown}
-                style={{
-                    display: 'flex',
-                    gap: spacing[1],
-                    marginBottom: spacing[6],
-                    background: t.bg.secondary,
-                    borderRadius: borderRadius.lg,
-                    padding: spacing[1],
-                }}>
-                {TABS.map(tab => (
-                    <button type="button"
-                        key={tab.id}
-                        role="tab"
-                        aria-selected={activeTab === tab.id}
-                        aria-controls={`tabpanel-${tab.id}`}
-                        id={`tab-${tab.id}`}
-                        tabIndex={activeTab === tab.id ? 0 : -1}
-                        onClick={() => setActiveTab(tab.id)}
-                        style={{
-                            flex: 1,
-                            padding: `${spacing[3]} ${spacing[4]}`,
-                            borderRadius: borderRadius.md,
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: typography.size.sm,
-                            fontWeight: typography.weight.semibold,
-                            fontFamily: typography.fontFamily,
-                            background: activeTab === tab.id ? t.bg.elevated : 'transparent',
-                            color: activeTab === tab.id ? t.accent.primary : t.text.tertiary,
-                            boxShadow: activeTab === tab.id ? t.shadow.sm : 'none',
-                            transition: `all ${transitions.fast} ${transitions.easing}`,
-                        }}
-                    >
-                        {tab.label}
-                    </button>
-                ))}
-            </div>
-
-            {/* Tab content */}
-            {activeTab === 'sampling' && (
-                <div role="tabpanel" id="tabpanel-sampling" aria-labelledby="tab-sampling">
-                    <SamplingTab />
-                </div>
-            )}
-            {activeTab === 'bitdepth' && (
-                <div role="tabpanel" id="tabpanel-bitdepth" aria-labelledby="tab-bitdepth">
-                    <BitDepthTab />
-                </div>
-            )}
-        </div>
-    );
+    function setTrim(gain) { glide(trim.gain, gain, ctx, 0.05); }
+    function hold(on) { glide(wet.gain, on ? 0 : 1, ctx, 0.01); glide(dry.gain, on ? 1 : 0, ctx, 0.01); }
+    function clear() { if (node) node.port.postMessage({ reset: true }); }
+    return { set, setTrim, hold, clear, ready, sampleRate: sr };
 }
 
-// ─── Tab 1: Sampling ────────────────────────────────────────────
-function SamplingTab() {
-    const [sampleRate, setSampleRate] = useState(20);
-    const frequency = 3;
-
-    const samplesPerCycle = (sampleRate / frequency).toFixed(1);
-
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[6] }}>
-            {/* Context */}
-            <div style={card}>
-                <span style={{ ...sectionLabel, color: TIER.foundation }}>
-                    What is Sampling?
-                </span>
-                <p style={bodyText}>
-                    When sound enters a microphone, it produces a <strong style={strongText}>continuously varying electrical signal</strong> (the
-                    blue wave below). To store this digitally, the ADC takes <strong style={strongText}>measurements at regular
-                    intervals</strong>: each measurement is called a <strong style={strongText}>sample</strong>.
-                    Use the slider to change how many samples are taken.
-                </p>
-            </div>
-
-            {/* Visualisation */}
-            <WaveformVisualiser
-                frequency={frequency}
-                sampleRate={sampleRate}
-                bitDepth={16}
-                showStaircase={false}
-                showQuantisationLines={false}
-            />
-
-            {/* Control */}
-            <Slider
-                label="Sample Rate"
-                value={sampleRate}
-                min={4}
-                max={80}
-                step={2}
-                setter={setSampleRate}
-                colour={TIER.foundation}
-                unit=" samples"
-            />
-
-            {/* Dynamic feedback */}
-            <div style={card}>
-                <span style={{ ...sectionLabel, color: TIER.foundation }}>
-                    What You're Seeing
-                </span>
-                <p style={bodyText}>
-                    The ADC is taking <strong style={strongText}>{sampleRate} samples</strong> across
-                    this wave, giving <strong style={strongText}>{samplesPerCycle} samples per cycle</strong>.
-                    {Number(samplesPerCycle) < 2
-                        ? ' Below the Nyquist minimum: aliasing occurs and the original signal cannot be recovered.'
-                        : Number(samplesPerCycle) < 4
-                            ? ' Borderline: some detail is lost between samples. The Nyquist theorem requires at least 2 samples per cycle.'
-                            : ' The wave shape is captured well. More samples means a more accurate digital copy of the original sound.'
-                    }
-                </p>
-                <div style={{
-                    marginTop: spacing[4],
-                    padding: spacing[3],
-                    background: t.bg.secondary,
-                    borderRadius: borderRadius.md,
-                    borderLeft: `3px solid ${TIER.foundation}`,
-                }}>
-                    <p style={{ ...bodyText, fontSize: typography.size.xs, fontStyle: 'italic' }}>
-                        In real audio: CD quality uses 44,100 samples per second. Professional recording uses 48,000 or 96,000.
-                        The slider above is simplified, but the principle is identical.
-                    </p>
-                </div>
-            </div>
-
-            {/* Key Definitions */}
-            <DefinitionsSection
-                title="Sampling: Key Definitions (Section 2.4)"
-                definitions={SAMPLING_DEFINITIONS}
-            />
-        </div>
-    );
+// A buffer's mono mix, cached on the buffer.
+function monoOf(buf) {
+    if (!buf) return null;
+    if (buf.__mono) return buf.__mono;
+    const a = buf.getChannelData(0);
+    let m = a;
+    if (buf.numberOfChannels > 1) {
+        const b = buf.getChannelData(1);
+        m = new Float32Array(a.length);
+        for (let i = 0; i < a.length; i += 1) m[i] = 0.5 * (a[i] + b[i]);
+    }
+    buf.__mono = m;
+    return m;
+}
+function interp(arr, x) {
+    const i = Math.floor(x);
+    if (i < 0) return arr[0] || 0;
+    if (i >= arr.length - 1) return arr[arr.length - 1] || 0;
+    const f = x - i;
+    return arr[i] + (arr[i + 1] - arr[i]) * f;
+}
+// The test tone as a buffer: a note of TONE_ON_S with 15 ms edges, at the
+// context's rate, TONE_AMP of full scale into the converter.
+function toneBuffer(ctx, fKhz) {
+    const sr = ctx.sampleRate;
+    const n = Math.round(sr * TONE_ON_S);
+    const buf = ctx.createBuffer(1, n, sr);
+    const d = buf.getChannelData(0);
+    const edge = Math.round(sr * 0.015);
+    for (let i = 0; i < n; i += 1) {
+        const e = i < edge ? Math.sin((Math.PI / 2) * (i / edge)) ** 2 : i > n - edge ? Math.sin((Math.PI / 2) * ((n - i) / edge)) ** 2 : 1;
+        d[i] = TONE_AMP * e * Math.sin((2 * Math.PI * fKhz * 1000 * i) / sr);
+    }
+    return buf;
+}
+// The converter's output level against its input's, for a stretch of the
+// source, so turning a dial changes the sound and not the loudness. The
+// same converter the worklet runs; a boost is capped, so a lost tone stays
+// lost.
+function levelMatch(state, getBuffer, hostRate) {
+    let x; let sr;
+    if (state.source === 'tone') {
+        sr = hostRate;
+        x = new Float32Array(Math.round(sr * 0.3));
+        for (let i = 0; i < x.length; i += 1) x[i] = TONE_AMP * Math.sin((2 * Math.PI * state.tone * 1000 * i) / sr);
+    } else {
+        const buf = getBuffer(state.source);
+        if (!buf) return 1;
+        sr = buf.sampleRate;
+        const m = monoOf(buf);
+        const from = Math.round(sr * 0.5);
+        x = m.subarray(from, Math.min(m.length, from + Math.round(sr * 1.6)));
+    }
+    const into = state.filter ? filterRun(x, filterCutoffHz(state.rate, sr), sr) : x;
+    const c = makeConverter();
+    c.set({ P: hostStep(sr, state.rate), bits: state.bits, dither: state.dither, delay: converterDelay(sr) });
+    const y = new Float32Array(into.length);
+    c.process(into, y);
+    const skip = Math.round(sr * 0.05);
+    let si = 0; let so = 0;
+    for (let i = skip; i < x.length; i += 1) { si += x[i] * x[i]; so += y[i] * y[i]; }
+    if (so <= 0) return 10 ** (TRIM_MAX_DB / 20);
+    const db = Math.max(TRIM_MIN_DB, Math.min(TRIM_MAX_DB, 10 * Math.log10(si / so)));
+    return 10 ** (db / 20);
 }
 
+// ---- the bench ------------------------------------------------------------
+export default function ADCExplorer({ back }) {
+    const [state, setState] = useState(DEFAULT_STATE);
+    const [further, setFurther] = useState(false);
+    const [mode, setMode] = useBenchMode();
+    const [depth, setDepth] = useBenchDepth();
+    const [last, setLast] = useState('preset');
+    const [announce, setAnnounce] = useState(null);
+    const [held, setHeld] = useState(false);
+    const stateRef = useRef(state);
+    const { studioOrigin } = useStudioArrival();
+    const teach = mode === 'teacher';
+    const rd = useMemo(() => readings(state), [state]);
+    const rdRef = useRef(rd);
 
+    // ---- audio ----
+    const graphRef = useRef(null);
+    const passRef = useRef(null);
+    const toneBufs = useRef({});
+    const onSchedule = useCallback(({ barStart, playBuffer, ctx }) => {
+        const s = stateRef.current;
+        const src = SOURCES[s.source];
+        let dur;
+        if (src.kind === 'tone') {
+            const key = `tone-${s.tone}`;
+            if (!toneBufs.current[key]) toneBufs.current[key] = toneBuffer(ctx, s.tone);
+            playBuffer(key, barStart, { buffer: toneBufs.current[key], gain: 1 });
+            dur = TONE_ON_S;
+        } else {
+            const node = playBuffer(s.source, barStart, { gain: 1 });
+            if (node) dur = node.buffer.duration;
+        }
+        passRef.current = { start: barStart, dur: dur || 0, source: s.source };
+    }, []);
+    const buildGraph = useCallback((ctx, input, master) => {
+        const g = buildAdcGraph(ctx, input, master);
+        graphRef.current = g;
+        return g;
+    }, []);
+    // One bar is one pass of the source, the phrase and its silence.
+    const bpm = 240 / SOURCES[state.source].pass;
+    const audio = useBenchAudio({ files: FILES, bpm, onSchedule, buildGraph });
+    const { ctxRef, nodesRef, began, playing, getBuffer, ready } = audio;
+    const playingRef = useRef(false);
+    // The draw loop and the handlers read the latest render through refs.
+    useEffect(() => { stateRef.current = state; rdRef.current = rd; playingRef.current = playing; });
 
-// ─── Tab 2: Bit Depth ───────────────────────────────────────────
-function BitDepthTab() {
-    const [bitDepth, setBitDepth] = useState(3);
-    const sampleRate = 30;
-    const frequency = 3;
+    // The converter follows the state; the trim follows it a beat later.
+    useEffect(() => { graphRef.current?.set(state); }, [state.rate, state.bits, state.filter, state.dither, began]); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        const g = graphRef.current;
+        if (!g) return undefined;
+        const id = window.setTimeout(() => {
+            const base = state.source === 'tone' ? TONE_GAIN : 1;
+            g.setTrim(base * levelMatch(stateRef.current, getBuffer, g.sampleRate));
+        }, 90);
+        return () => window.clearTimeout(id);
+    }, [state.source, state.tone, state.rate, state.bits, state.filter, state.dither, began, ready, getBuffer]);
+    useEffect(() => { graphRef.current?.hold(held); }, [held, began]);
+    useEffect(() => {
+        const ctx = ctxRef.current;
+        const nodes = nodesRef.current;
+        if (ctx && nodes) glide(nodes.level.gain, state.volume, ctx);
+    }, [state.volume, began, ctxRef, nodesRef]);
+    // A new source or a new tone starts a new pass straight away.
+    const { restart } = audio;
+    useEffect(() => { if (playingRef.current) restart(); }, [state.source, state.tone]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const levels = Math.pow(2, bitDepth);
-    const dynamicRange = bitDepth * 6;
-
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[6] }}>
-            {/* Context */}
-            <div style={card}>
-                <span style={{ ...sectionLabel, color: TIER.intermediate }}>
-                    What is Bit Depth?
-                </span>
-                <p style={bodyText}>
-                    Bit depth determines <strong style={strongText}>how many amplitude levels</strong> are
-                    available for each sample. More bits means more levels, which means
-                    a <strong style={strongText}>more accurate representation</strong> of the original sound
-                    and a <strong style={strongText}>wider dynamic range</strong>.
-                </p>
-            </div>
-
-            {/* Visualisation — with staircase and quantisation lines */}
-            <WaveformVisualiser
-                frequency={frequency}
-                sampleRate={sampleRate}
-                bitDepth={bitDepth}
-                showStaircase={true}
-                showQuantisationLines={true}
-            />
-
-            {/* Control */}
-            <Slider
-                label="Bit Depth"
-                value={bitDepth}
-                min={1}
-                max={8}
-                step={1}
-                setter={setBitDepth}
-                colour={TIER.intermediate}
-                unit="-bit"
-            />
-
-            {/* Dynamic feedback */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing[4] }}>
-                <div style={card}>
-                    <span style={{ ...sectionLabel, color: TIER.intermediate }}>
-                        Quantisation Levels
-                    </span>
-                    <p style={{
-                        fontSize: typography.size['2xl'],
-                        fontWeight: typography.weight.bold,
-                        color: t.text.primary,
-                    }}>
-                        {levels.toLocaleString()}
-                    </p>
-                    <p style={{ ...bodyText, marginTop: spacing[2] }}>
-                        2<sup>{bitDepth}</sup> = {levels} possible amplitude values.
-                        {bitDepth <= 3
-                            ? ' Very coarse: you can see the steps clearly. This would sound distorted.'
-                            : bitDepth <= 5
-                                ? ' The steps are getting finer. Sound quality improves noticeably.'
-                                : ' Fine enough for clean audio. CD uses 16-bit (65,536 levels).'
-                        }
-                    </p>
-                </div>
-                <div style={card}>
-                    <span style={{ ...sectionLabel, color: TIER.intermediate }}>
-                        Dynamic Range
-                    </span>
-                    <p style={{
-                        fontSize: typography.size['2xl'],
-                        fontWeight: typography.weight.bold,
-                        color: t.text.primary,
-                    }}>
-                        ~{dynamicRange} dB
-                    </p>
-                    <p style={{ ...bodyText, marginTop: spacing[2] }}>
-                        Bit depth &times; 6 = dynamic range in dB.
-                        {dynamicRange < 24
-                            ? ' Very limited: the difference between quiet and loud is tiny.'
-                            : dynamicRange < 48
-                                ? ' Moderate range. Quiet passages would still have audible noise.'
-                                : ' Good range. CD quality (96 dB) can capture whispers to loud drums.'
-                        }
-                    </p>
-                </div>
-            </div>
-
-            {/* Exam tip */}
-            <div style={{
-                ...card,
-                background: t.accent.infoLight,
-                borderLeft: `4px solid ${t.accent.info}`,
-            }}>
-                <span style={{ ...sectionLabel, color: t.accent.info }}>
-                    Exam Formula
-                </span>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: spacing[2],
-                    fontFamily: typography.fontFamilyMono,
-                    fontSize: typography.size.sm,
-                    color: t.text.primary,
-                    padding: `${spacing[3]} 0`,
-                }}>
-                    <p>Quantisation levels = 2<sup>n</sup> (where n = bit depth)</p>
-                    <p>Dynamic range &asymp; bit depth &times; 6 dB</p>
-                </div>
-                <p style={{ ...bodyText, fontSize: typography.size.xs }}>
-                    16-bit = 65,536 levels = ~96 dB. 24-bit = 16,777,216 levels = ~144 dB.
-                    You're expected to know the formula, not memorise the numbers.
-                </p>
-            </div>
-
-            {/* Key Definitions */}
-            <DefinitionsSection
-                title="Bit Depth & Dynamic Range: Key Definitions (Section 2.4)"
-                definitions={BITDEPTH_DEFINITIONS}
-            />
-        </div>
-    );
-}
-
-// ─── Key Definitions Data ────────────────────────────────────────
-const SAMPLING_DEFINITIONS = [
-    { label: 'Sampling', text: 'The process of measuring the amplitude of an analogue signal at regular intervals in time. Each measurement is called a sample.' },
-    { label: 'Sample Rate', text: 'The number of samples taken per second, measured in Hertz (Hz). CD quality = 44,100 Hz. Professional = 48,000 Hz or 96,000 Hz.' },
-    { label: 'Nyquist Theorem', text: 'The sample rate must be at least twice the highest frequency to be captured. Below this limit, aliasing occurs and the original signal cannot be recovered. This is why CD quality (44,100 Hz) can capture frequencies up to approximately 20,000 Hz: the limit of human hearing.' },
-    { label: 'ADC (Analogue-to-Digital Converter)', text: 'A device that converts a continuously varying analogue electrical signal into a stream of binary numerical data by sampling the signal at regular intervals.' },
-    { label: 'Analogue Signal', text: 'A continuously varying electrical signal whose voltage is proportional to the original sound wave. Produced by microphones.' },
-    { label: 'Digital Signal', text: 'A signal represented as a series of discrete binary numbers, each encoding the amplitude of the sound at a specific moment in time.' },
-];
-
-const BITDEPTH_DEFINITIONS = [
-    { label: 'Bit Depth', text: 'The number of bits used to represent each sample\'s amplitude. More bits = more amplitude levels = more accurate representation. CD = 16-bit, professional = 24-bit.' },
-    { label: 'Dynamic Range', text: 'The ratio between the loudest and quietest sounds that can be represented. Calculated as bit depth x 6 dB. 16-bit = ~96 dB, 24-bit = ~144 dB.' },
-    { label: 'DAC (Digital-to-Analogue Converter)', text: 'A device that converts binary numerical data back into a continuously varying analogue electrical signal for playback through speakers or headphones.' },
-];
-
-// ─── Shared: KeyConcept (click-to-copy) ─────────────────────────
-function KeyConcept({ children, label }) {
-    const [copied, setCopied] = useState(false);
-    const contentRef = useRef(null);
-
-    const handleCopy = useCallback(async () => {
-        const text = contentRef.current ? contentRef.current.innerText : '';
-        if (!text) return;
-        const formatted = label ? `${label}: ${text}` : text;
-        try { await navigator.clipboard.writeText(formatted); } catch {}
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
-    }, [label]);
-
-    return (
-        <div
-            onClick={handleCopy}
-            title="Click to copy this definition"
-            style={{
-                background: t.bg.elevated,
-                border: `1px solid ${t.border.subtle}`,
-                borderRadius: borderRadius.lg,
-                padding: `${spacing[4]} ${spacing[5]}`,
-                marginBottom: spacing[3],
-                cursor: 'pointer',
-                transition: `border-color ${transitions.fast} ${transitions.easing}`,
-            }}
-        >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: spacing[3] }}>
-                <div style={{ flex: 1 }}>
-                    {label && (
-                        <div style={{
-                            fontSize: typography.size.sm, color: t.text.primary,
-                            fontWeight: typography.weight.semibold, marginBottom: spacing[1],
-                        }}>
-                            {label}
-                        </div>
-                    )}
-                    <div ref={contentRef} style={{
-                        color: t.text.secondary, fontSize: typography.size.sm,
-                        lineHeight: typography.lineHeight.relaxed,
-                    }}>
-                        {children}
-                    </div>
-                </div>
-                <span style={{
-                    flexShrink: 0,
-                    background: copied ? '#059669' : t.bg.secondary,
-                    color: copied ? '#FFFFFF' : t.text.tertiary,
-                    fontSize: typography.size.xs,
-                    fontWeight: typography.weight.medium,
-                    padding: `${spacing[1]} ${spacing[3]}`,
-                    borderRadius: borderRadius.full,
-                    border: `1px solid ${copied ? '#059669' : t.border.subtle}`,
-                    transition: `all ${transitions.fast} ${transitions.easing}`,
-                    whiteSpace: 'nowrap',
-                }}>
-                    {copied ? 'Copied!' : 'Copy'}
-                </span>
-            </div>
-        </div>
-    );
-}
-
-function CopyAllNotes({ notes, title }) {
-    const [copied, setCopied] = useState(false);
-
-    const handleCopy = useCallback(async () => {
-        const text = (title ? `${title}\n${'─'.repeat(title.length)}\n\n` : '')
-            + notes.map(n => `${n.label}: ${n.text}`).join('\n\n');
-        try { await navigator.clipboard.writeText(text); } catch {}
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    }, [notes, title]);
-
-    return (
-        <button type="button"
-            onClick={handleCopy}
-            style={{
-                display: 'flex', alignItems: 'center', gap: spacing[2],
-                width: '100%',
-                background: copied ? '#059669' : t.text.primary,
-                border: 'none',
-                borderRadius: borderRadius.lg,
-                padding: `${spacing[3]} ${spacing[5]}`,
-                cursor: 'pointer',
-                fontFamily: typography.fontFamily,
-                fontSize: typography.size.sm,
-                fontWeight: typography.weight.semibold,
-                color: '#FFFFFF',
-                marginTop: spacing[4],
-                transition: `all ${transitions.fast} ${transitions.easing}`,
-                justifyContent: 'center',
-            }}
-        >
-            {copied ? '\u2713 Copied to clipboard!' : '\uD83D\uDCCB Copy all definitions to notes'}
-        </button>
-    );
-}
-
-// ─── Shared: Definitions section ────────────────────────────────
-function DefinitionsSection({ title, definitions }) {
-    return (
-        <div>
-            <h3 style={{
-                fontFamily: 'var(--font-fraunces), Georgia, serif',
-                fontSize: typography.size.xl,
-                fontWeight: typography.weight.semibold,
-                color: t.text.primary,
-                marginBottom: spacing[5],
-            }}>
-                Key Definitions
-            </h3>
-            {definitions.map(def => (
-                <KeyConcept key={def.label} label={def.label}>
-                    {def.text}
-                </KeyConcept>
-            ))}
-            <CopyAllNotes title={title} notes={definitions} />
-        </div>
-    );
-}
-
-// ─── Shared: Waveform Visualiser ────────────────────────────────
-function WaveformVisualiser({ frequency, sampleRate, bitDepth, showStaircase, showQuantisationLines }) {
-    const containerRef = useRef(null);
-    const [svgWidth, setSvgWidth] = useState(700);
-    const svgHeight = 260;
+    const touch = (what) => { setLast(what); setAnnounce(null); };
+    const chooseDepth = (id) => { setDepth(id); setAnnounce(id); };
+    const chooseSource = (id) => { setState((s) => setSource(s, id)); touch('source'); };
+    const chooseRate = (i) => { setState((s) => setRateIndex(s, i)); touch('rate'); };
+    const chooseBits = (b) => { setState((s) => setBits(s, b)); touch('bits'); };
+    const chooseTone = (t) => { setState((s) => setTone(s, t)); touch('tone'); };
+    const chooseFilter = (on) => { setState((s) => setFilter(s, on === 'on')); touch('filter'); };
+    const chooseDither = (on) => { setState((s) => setDither(s, on === 'on')); touch('dither'); };
+    const choosePreset = (id) => { setState((s) => applyPreset(s, id)); touch('preset'); };
+    const { start, stop } = audio;
+    const togglePlay = useCallback(() => (playingRef.current ? stop() : start()), [start, stop]);
 
     useEffect(() => {
-        const measure = () => {
-            if (containerRef.current) {
-                setSvgWidth(Math.max(400, containerRef.current.clientWidth - 48));
-            }
+        function onKey(e) {
+            if (e.key !== ' ' || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+            const el = e.target;
+            const tag = el?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el?.isContentEditable) return;
+            if (el?.closest?.('[data-hold]')) return;
+            if (document.getElementById('bench-drawer')?.dataset.open === 'true') return;
+            if (el !== document.body && !el?.closest?.('[data-bench-frame]')) return;
+            e.preventDefault();
+            togglePlay();
+        }
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [togglePlay]);
+
+    // ---- stage ----
+    const canvasRef = useRef(null);
+    const depthRef = useRef(depth);
+    const heldRef = useRef(false);
+    useEffect(() => { depthRef.current = depth; heldRef.current = held; });
+    const geomRef = useRef(null);
+    const dragRef = useRef(null);
+    const readRef = useRef(null);
+    const lastPicRef = useRef(null);
+    const zoomRef = useRef(1);
+    const stageOf = (d) => (d === 'core' ? 'samples' : d === 'alevel' ? 'nyquist' : 'chain');
+
+    useEffect(() => {
+        const first = canvasRef.current;
+        if (!first) return undefined;
+        let raf = 0;
+        const css = getComputedStyle(first.parentElement);
+        const v = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
+        const col = {
+            blue: v('--gen-2', '#7fb0c4'),
+            coral: v('--gen-6', '#d08a80'),
+            pink: v('--gen-4', '#d08fa8'),
+            gold: v('--gold-bright', '#f0d48a'),
+            lilac: v('--gen-3', '#a395c9'),
+            white: '#ffffff',
+            ink: 'rgba(255, 255, 255, 0.86)',
+            inkSoft: 'rgba(255, 255, 255, 0.62)',
+            inkFaint: 'rgba(255, 255, 255, 0.4)',
+            grid: 'rgba(255, 255, 255, 0.07)',
+            gridDiv: 'rgba(255, 255, 255, 0.16)',
+            gridMid: 'rgba(255, 255, 255, 0.3)',
+            line: 'rgba(255, 255, 255, 0.22)',
+            level: 'rgba(163, 149, 201, 0.34)',
+            screen: 'rgba(0, 0, 0, 0.18)',
+            box: 'rgba(255, 255, 255, 0.04)',
         };
-        measure();
-        window.addEventListener('resize', measure);
-        return () => window.removeEventListener('resize', measure);
-    }, []);
+        const monoFace = v('--mono', 'monospace');
+        const mono = `11.5px ${monoFace}`;
+        const monoSmall = `10.5px ${monoFace}`;
+        const monoBig = `13px ${monoFace}`;
+        const monoHuge = `15px ${monoFace}`;
 
-    const midY = svgHeight / 2;
-    const amplitude = (svgHeight / 2) - 24;
-
-    const { analogPath, staircasePath, samplePoints, qLines } = useMemo(() => {
-        const w = svgWidth;
-        let aPath = `M 0 ${midY}`;
-        let sPath = '';
-        let pts = [];
-        let lines = [];
-
-        const levels = Math.pow(2, bitDepth);
-        const stepY = (amplitude * 2) / (levels - 1 || 1);
-        const minY = midY - amplitude;
-
-        if (showQuantisationLines) {
-            for (let i = 0; i < levels; i++) {
-                lines.push(minY + i * stepY);
+        // The signal the stage draws: the tone from the model, or the
+        // recording's own samples at the playhead, filtered as the nodes
+        // filter them and triggered on a rising zero so it stands still.
+        function signalNow(s, sr) {
+            if (s.source === 'tone') {
+                const t = toneSignal(s.tone, s.rate, s.filter, sr);
+                return { ...t, windowMs: toneWindowMs(s.tone), live: true };
             }
+            const buf = getBuffer(s.source);
+            if (!buf) return null;
+            const m = monoOf(buf);
+            const bsr = buf.sampleRate;
+            const ctx = ctxRef.current;
+            const pass = passRef.current;
+            let pos = IDLE_AT_S;
+            let live = false;
+            if (playingRef.current && ctx && pass && pass.source === s.source) {
+                const p = ctx.currentTime - pass.start;
+                if (p >= 0 && p < pass.dur - 0.05) { pos = p; live = true; } else if (lastPicRef.current && lastPicRef.current.source === s.source) return lastPicRef.current.sig;
+            }
+            const W = FILE_WINDOW_MS;
+            const i0 = Math.max(0, Math.round((pos - 0.04) * bsr));
+            const i1 = Math.min(m.length, Math.round((pos + W / 1000 + 0.03) * bsr));
+            const raw = m.subarray(i0, i1);
+            const filt = s.filter ? filterRun(raw, filterCutoffHz(s.rate, sr), bsr) : raw;
+            let j = Math.round((pos) * bsr) - i0;
+            const lim = Math.min(filt.length - Math.round((W / 1000 + 0.012) * bsr), j + Math.round(0.012 * bsr));
+            for (let k = j + 1; k < lim; k += 1) if (filt[k - 1] < 0 && filt[k] >= 0) { j = k; break; }
+            const per = bsr / 1000;
+            const sig = {
+                signal: (t) => interp(filt, j + t * per),
+                raw: (t) => interp(raw, j + t * per),
+                windowMs: W,
+                live,
+            };
+            lastPicRef.current = { source: s.source, sig };
+            return sig;
         }
 
-        // Analogue path
-        for (let x = 0; x <= w; x++) {
-            const phase = (x / w) * frequency * Math.PI * 2;
-            const y = midY - Math.sin(phase) * amplitude;
-            aPath += ` L ${x} ${y}`;
-        }
-
-        // Sample points and staircase
-        const stepX = w / sampleRate;
-        for (let x = 0; x <= w; x += stepX) {
-            const phase = (x / w) * frequency * Math.PI * 2;
-            const rawY = midY - Math.sin(phase) * amplitude;
-
-            let quantY = rawY;
-            if (showStaircase && bitDepth <= 8) {
-                const idx = Math.round((rawY - minY) / stepY);
-                quantY = minY + idx * stepY;
+        // ---- the time plot: shared by all three levels ----
+        function drawPlot(g2, P, s, pic, opts) {
+            const { x0, x1, top, bottom } = P;
+            const W = x1 - x0;
+            const H = bottom - top;
+            const mid = (top + bottom) / 2;
+            const half = H / 2 - 4;
+            const xOf = (t) => x0 + (t / pic.windowMs) * W;
+            const zm = pic.zoom || 1;
+            const yOf = (val) => mid - Math.max(-1.08, Math.min(1.08, val * zm)) * half;
+            // the screen: five divisions across, the full scale up
+            g2.fillStyle = col.screen; g2.fillRect(x0, top, W, H);
+            for (let i = 0; i <= DIVS; i += 1) {
+                const x = Math.round(x0 + (i / DIVS) * W) + 0.5;
+                g2.strokeStyle = col.gridDiv; g2.lineWidth = 1;
+                g2.beginPath(); g2.moveTo(x, top); g2.lineTo(x, bottom); g2.stroke();
             }
-
-            pts.push({ x, y: showStaircase ? quantY : rawY });
-
-            if (showStaircase) {
-                if (x === 0) {
-                    sPath = `M ${x} ${quantY}`;
-                } else {
-                    const prev = pts[pts.length - 2];
-                    sPath += ` L ${x} ${prev.y} L ${x} ${quantY}`;
+            // the levels: every code the bit depth allows, drawn when they are
+            // far enough apart to see
+            const step = 1 / 2 ** (s.bits - 1);
+            const gap = step * zm * half;
+            if (gap >= 3.2) {
+                g2.strokeStyle = col.level;
+                const n = 2 ** (s.bits - 1);
+                const reach = Math.ceil(1.08 / (step * zm));
+                for (let c = Math.max(-n, -reach); c <= Math.min(n - 1, reach); c += 1) {
+                    const y = Math.round(yOf(c * step)) + 0.5;
+                    g2.beginPath(); g2.moveTo(x0, y); g2.lineTo(x1, y); g2.stroke();
                 }
             }
+            g2.strokeStyle = col.gridMid;
+            g2.beginPath(); g2.moveTo(x0, Math.round(mid) + 0.5); g2.lineTo(x1, Math.round(mid) + 0.5); g2.stroke();
+            g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, top + 0.5, W - 1, H - 1);
+            // axes, named on the stage
+            g2.font = monoSmall; g2.fillStyle = col.inkFaint; g2.textAlign = 'center';
+            const divMs = pic.windowMs / DIVS;
+            if (!opts.compact) for (let i = 1; i <= DIVS; i += 1) g2.fillText(fmtMsShort(i * divMs), x0 + (i / DIVS) * W, bottom + 13);
+            else g2.fillText(`${fmtMsShort(pic.windowMs)} ms`, x1 - 14, bottom + 13);
+            g2.textAlign = 'left'; g2.fillStyle = col.inkSoft;
+            g2.fillText('Time (ms) →', x0 + 2, bottom + (opts.narrow ? 27 : 13));
+            g2.save(); g2.translate(x0 - 38, mid); g2.rotate(-Math.PI / 2); g2.textAlign = 'center'; g2.fillText('Voltage', 0, 0); g2.restore();
+            g2.textAlign = 'right'; g2.fillStyle = col.inkFaint;
+            g2.fillText('+', x0 - 6, mid - half + 4); g2.fillText('0', x0 - 6, mid + 4); g2.fillText('−', x0 - 6, mid + half + 4);
+            if (zm > 1) { g2.textAlign = 'left'; g2.fillStyle = col.inkSoft; g2.fillText(`zoomed ×${zm}: a quiet moment`, x0 + 6, bottom - 8); }
+            if (gap < 3.2 && !opts.compact) {
+                g2.textAlign = 'right'; g2.fillStyle = col.lilac;
+                g2.fillText(`${fmtLevels(s.bits)} levels: too fine to draw here`, x1 - 8, bottom - 8);
+            } else if (!opts.compact) {
+                g2.textAlign = 'right'; g2.fillStyle = col.lilac;
+                g2.fillText(`${levels(s.bits)} levels`, x1 - 8, bottom - 8);
+            }
+
+            g2.save();
+            g2.beginPath(); g2.rect(x0, top - 2, W, H + 4); g2.clip();
+            // the wave before the filter, where the filter changed it
+            if (pic.before && s.filter) {
+                let diff = 0;
+                for (let i = 0; i < pic.line.length; i += 4) diff = Math.max(diff, Math.abs(pic.line[i] - pic.before[i]));
+                if (diff > 0.03) {
+                    g2.strokeStyle = col.blue; g2.globalAlpha = 0.4; g2.setLineDash([4, 4]); g2.lineWidth = 1.2;
+                    g2.beginPath();
+                    pic.before.forEach((val, i) => { const x = x0 + (i / (pic.before.length - 1)) * W; if (i === 0) g2.moveTo(x, yOf(val)); else g2.lineTo(x, yOf(val)); });
+                    g2.stroke(); g2.setLineDash([]); g2.globalAlpha = 1;
+                    opts.legend.before = true;
+                }
+            }
+            // the analogue wave going in
+            g2.strokeStyle = col.blue; g2.lineWidth = 4; g2.lineJoin = 'round';
+            g2.beginPath();
+            pic.line.forEach((val, i) => { const x = x0 + (i / (pic.line.length - 1)) * W; if (i === 0) g2.moveTo(x, yOf(val)); else g2.lineTo(x, yOf(val)); });
+            g2.stroke();
+            // sample and hold: each stored level held until the next sample
+            const inside = pic.inside;
+            const T = 1 / s.rate;
+            const spacing = (T / pic.windowMs) * W;
+            if (opts.stair !== false) {
+                g2.strokeStyle = 'rgba(255, 255, 255, 0.34)'; g2.lineWidth = 1;
+                g2.beginPath();
+                inside.forEach((sm, i) => {
+                    const x = xOf(sm.t); const xe = xOf(sm.t + T); const y = yOf(sm.q);
+                    if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y);
+                    g2.lineTo(xe, y);
+                });
+                g2.stroke();
+            }
+            // the DAC's wave back, drawn over the blue: where it matches, the
+            // blue shows as its edges
+            g2.strokeStyle = col.gold; g2.lineWidth = 1.8;
+            g2.beginPath();
+            pic.back.forEach((val, i) => { const x = x0 + (i / (pic.back.length - 1)) * W; if (i === 0) g2.moveTo(x, yOf(val)); else g2.lineTo(x, yOf(val)); });
+            g2.stroke();
+            // the samples: the dot is the stored level; a tick joins it to the true voltage
+            const r = spacing > 16 ? 4.2 : spacing > 7 ? 3.2 : spacing > 3.5 ? 2.2 : 1.5;
+            inside.forEach((sm) => {
+                const x = xOf(sm.t); const yv = yOf(sm.v); const yq = yOf(sm.q);
+                if (Math.abs(yv - yq) > 1.5 && spacing > 3.5) {
+                    g2.strokeStyle = col.pink; g2.lineWidth = 1.5;
+                    g2.beginPath(); g2.moveTo(x, yv); g2.lineTo(x, yq); g2.stroke();
+                }
+                g2.fillStyle = col.white;
+                g2.beginPath(); g2.arc(x, yq, r, 0, Math.PI * 2); g2.fill();
+            });
+            if (opts.numbers) {
+                g2.font = monoSmall; g2.fillStyle = col.inkSoft; g2.textAlign = 'center';
+                inside.slice(0, opts.numbers).forEach((sm, i) => { const x = xOf(sm.t); const y = yOf(sm.q); g2.fillText(`${i + 1}`, x, y + (sm.q >= 0 ? -9 : 17)); });
+            }
+            g2.restore();
+
+            // the sample period, bracketed and draggable (Core and A-level)
+            let handle = null;
+            if (opts.bracket && inside.length >= 2) {
+                const bx0 = xOf(0); const bx1 = xOf(T); const by = top + 12;
+                g2.strokeStyle = col.gold; g2.lineWidth = 1.5;
+                g2.beginPath(); g2.moveTo(bx0, by - 5); g2.lineTo(bx0, by + 5); g2.moveTo(bx0, by); g2.lineTo(bx1, by); g2.moveTo(bx1, by - 5); g2.lineTo(bx1, by + 5); g2.stroke();
+                const hot = dragRef.current != null;
+                g2.beginPath(); g2.arc(bx1, by, hot ? 7 : 5.5, 0, Math.PI * 2); g2.fillStyle = col.gold; g2.fill(); g2.strokeStyle = '#17172b'; g2.lineWidth = 1.5; g2.stroke(); g2.lineWidth = 1;
+                g2.font = mono; g2.fillStyle = col.gold; g2.textAlign = 'left';
+                g2.fillText(`one sample: ${fmtMsShort(T)} ms`, bx1 + 10, by + 4);
+                handle = { x: bx1, y: by, x0: bx0 };
+            }
+            return { xOf, yOf, handle, half, mid };
         }
-        if (showStaircase && pts.length > 0) {
-            sPath += ` L ${w} ${pts[pts.length - 1].y}`;
+
+        // ---- A-level: the paper's two numbers, beside the plot ----
+        function drawNumbers(g2, R, s, rdd) {
+            const { x0, x1, top, bottom } = R;
+            const W = x1 - x0;
+            const hB = Math.max(72, Math.min(96, Math.round((bottom - top) * 0.4)));
+            // (1) the frequency line: 0 to the rate, half of it marked, the tone folding
+            const A = { top, bottom: bottom - hB - 8 };
+            g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, A.top + 0.5, W - 1, A.bottom - A.top - 1);
+            g2.font = monoSmall; g2.fillStyle = col.gold; g2.textAlign = 'left';
+            g2.fillText('HIGHEST FREQUENCY KEPT', x0 + 10, A.top + 16);
+            const maxK = Math.max(s.rate, rdd.isTone ? s.tone * 1.08 : 22, 4);
+            const lx0 = x0 + 18; const lx1 = x1 - 18;
+            const ly = Math.round(Math.max(A.top + 64, Math.min(A.bottom - 36, A.top + (A.bottom - A.top) * 0.66)));
+            const xk = (k) => lx0 + (k / maxK) * (lx1 - lx0);
+            const ny = nyquist(s.rate);
+            const band = Math.max(12, Math.min(26, ly - A.top - 44));
+            g2.fillStyle = 'rgba(127, 176, 196, 0.16)'; g2.fillRect(xk(0), ly - band, xk(ny) - xk(0), band);
+            if (!rdd.isTone && ny < 20) {
+                g2.fillStyle = 'rgba(208, 138, 128, 0.18)'; g2.fillRect(xk(ny), ly - band, xk(Math.min(20, maxK)) - xk(ny), band);
+                g2.fillStyle = col.coral; g2.textAlign = 'center'; g2.font = monoSmall;
+                g2.fillText('lost', (xk(ny) + xk(Math.min(20, maxK))) / 2, ly - band - 5);
+            }
+            g2.fillStyle = col.blue; g2.textAlign = 'center'; g2.font = monoSmall;
+            if (xk(ny) - xk(0) > 44) g2.fillText('kept', (xk(0) + xk(ny)) / 2, ly - band - 5);
+            g2.strokeStyle = col.inkSoft; g2.beginPath(); g2.moveTo(lx0, ly + 0.5); g2.lineTo(lx1, ly + 0.5); g2.stroke();
+            g2.strokeStyle = col.gold; g2.lineWidth = 2; g2.beginPath(); g2.moveTo(xk(ny), ly - band - 4); g2.lineTo(xk(ny), ly + 4); g2.stroke(); g2.lineWidth = 1;
+            // row one under the line: 0, half the rate, the rate
+            g2.font = monoSmall; g2.fillStyle = col.inkFaint;
+            g2.textAlign = 'left'; g2.fillText('0', lx0 - 3, ly + 14);
+            const halfTxt = `half: ${fmtKhz(ny)}`;
+            const hw = g2.measureText(halfTxt).width;
+            const hx = Math.max(lx0 + 12 + hw / 2, Math.min(lx1 - hw / 2 - 40, xk(ny)));
+            if (xk(s.rate) - (hx + hw / 2) > 36) { g2.textAlign = 'right'; g2.fillText(fmtKhz(s.rate), lx1 + 3, ly + 14); }
+            g2.fillStyle = col.gold; g2.textAlign = 'center'; g2.fillText(halfTxt, hx, ly + 14);
+            if (!rdd.isTone && maxK >= 20 && ny < 20) {
+                g2.strokeStyle = col.inkFaint; g2.setLineDash([2, 3]); g2.beginPath(); g2.moveTo(xk(20), ly - band); g2.lineTo(xk(20), ly + 4); g2.stroke(); g2.setLineDash([]);
+                g2.fillStyle = col.inkFaint; g2.textAlign = 'center'; g2.fillText('hearing: 20 kHz', xk(20) - 20, ly + 28);
+            }
+            if (rdd.isTone) {
+                const xf = xk(s.tone);
+                g2.fillStyle = col.blue; g2.beginPath(); g2.moveTo(xf, ly - 1); g2.lineTo(xf - 5, ly - 11); g2.lineTo(xf + 5, ly - 11); g2.fill();
+                g2.font = monoSmall; g2.textAlign = 'center';
+                const folds = rdd.above && rdd.alias != null && !(s.filter && rdd.through < 0.05);
+                const xa = folds ? xk(rdd.alias) : null;
+                const tx = folds && Math.abs(xa - xf) < 90 ? xf + (xf > xa ? 30 : -30) : xf;
+                g2.fillText(`tone ${fmtHzKhz(s.tone)}`, Math.max(lx0 + 30, Math.min(lx1 - 30, tx)), ly + 28);
+                if (folds) {
+                    g2.strokeStyle = col.coral; g2.lineWidth = 1.5;
+                    const apex = Math.max(A.top + 26, ly - band - 16);
+                    g2.beginPath(); g2.moveTo(xf, ly - 13); g2.quadraticCurveTo((xf + xa) / 2, 2 * apex - (ly - 13), xa, ly - 13); g2.stroke(); g2.lineWidth = 1;
+                    g2.fillStyle = col.coral; g2.beginPath(); g2.moveTo(xa, ly - 1); g2.lineTo(xa - 5, ly - 11); g2.lineTo(xa + 5, ly - 11); g2.fill();
+                    const ax = folds && Math.abs(xa - xf) < 90 ? xa + (xa > xf ? 30 : -30) : xa;
+                    g2.fillText(`back as ${fmtHzKhz(rdd.alias)}`, Math.max(lx0 + 44, Math.min(lx1 - 44, ax)), ly + 28);
+                } else if (s.filter && rdd.above) {
+                    g2.fillStyle = col.blue; g2.fillText('filtered out', Math.max(lx0 + 40, Math.min(lx1 - 40, xf)), ly - 16);
+                }
+            }
+            // (2) the levels and the range: n bits, 2^n levels, about 6 dB a bit
+            const B = { top: bottom - hB, bottom };
+            g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, B.top + 0.5, W - 1, B.bottom - B.top - 1);
+            g2.font = monoSmall; g2.fillStyle = col.gold; g2.textAlign = 'left';
+            g2.fillText('DYNAMIC RANGE', x0 + 10, B.top + 16);
+            g2.font = monoBig; g2.fillStyle = col.ink;
+            g2.fillText(`2${sup(s.bits)} = ${fmtLevels(s.bits)} levels`, x0 + 10, B.top + 36);
+            const bx0 = x0 + 12; const bx1 = x1 - 14; const byy = B.bottom - 20;
+            const xd = (db) => bx0 + (db / 144) * (bx1 - bx0);
+            g2.fillStyle = 'rgba(163, 149, 201, 0.22)'; g2.fillRect(bx0, byy - 9, bx1 - bx0, 9);
+            g2.fillStyle = col.lilac; g2.fillRect(bx0, byy - 9, xd(rdd.dynamicRange) - bx0, 9);
+            g2.font = monoSmall; g2.textAlign = 'center';
+            for (const [db, name] of [[48, '8 bit'], [96, '16'], [144, '24']]) {
+                g2.strokeStyle = col.inkFaint; g2.beginPath(); g2.moveTo(xd(db) + 0.5, byy - 12); g2.lineTo(xd(db) + 0.5, byy + 2); g2.stroke();
+                g2.fillStyle = col.inkFaint; g2.fillText(name, Math.min(bx1 - 10, xd(db)), byy + 13);
+            }
+            g2.textAlign = 'right'; g2.fillStyle = col.lilac; g2.font = monoBig;
+            g2.fillText(`${s.bits} × 6 ≈ ${rdd.dynamicRange} dB`, x1 - 10, B.top + 16);
         }
 
-        return { analogPath: aPath, staircasePath: sPath, samplePoints: pts, qLines: lines };
-    }, [frequency, sampleRate, bitDepth, svgWidth, showStaircase, showQuantisationLines, midY, amplitude]);
+        // ---- A-level: the rounding error, beneath the plot ----
+        function drawError(g2, E, s, pic, plot) {
+            const { x0, x1, top, bottom } = E;
+            const mid = (top + bottom) / 2;
+            const halfH = (bottom - top) / 2 - 4;
+            const halfStep = 0.5 / 2 ** (s.bits - 1);
+            g2.fillStyle = col.screen; g2.fillRect(x0, top, x1 - x0, bottom - top);
+            g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, top + 0.5, x1 - x0 - 1, bottom - top - 1);
+            g2.strokeStyle = col.pink; g2.globalAlpha = 0.5; g2.setLineDash([3, 3]);
+            for (const y of [mid - halfH * 0.8, mid + halfH * 0.8]) { g2.beginPath(); g2.moveTo(x0, Math.round(y) + 0.5); g2.lineTo(x1, Math.round(y) + 0.5); g2.stroke(); }
+            g2.setLineDash([]); g2.globalAlpha = 1;
+            g2.strokeStyle = col.gridMid; g2.beginPath(); g2.moveTo(x0, Math.round(mid) + 0.5); g2.lineTo(x1, Math.round(mid) + 0.5); g2.stroke();
+            const spacing = ((1 / s.rate) / pic.windowMs) * (x1 - x0);
+            g2.fillStyle = col.pink;
+            pic.inside.forEach((sm) => {
+                const e = (sm.v - sm.q) / halfStep; // -1..1
+                const x = plot.xOf(sm.t);
+                const h = e * halfH * 0.8;
+                const bw = Math.max(1.5, Math.min(6, spacing * 0.5));
+                g2.fillRect(x - bw / 2, Math.min(mid, mid - h), bw, Math.max(1, Math.abs(h)));
+            });
+            g2.font = monoSmall; g2.textAlign = 'right'; g2.fillStyle = col.pink;
+            g2.fillText('ROUNDING ERROR: never more than half a step', x1, top - 5);
+        }
 
-    return (
-        <div ref={containerRef} style={{
-            ...card,
-            padding: spacing[4],
-            background: '#0F172A',
-        }}>
-            <svg
-                width={svgWidth}
-                height={svgHeight}
-                viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-                style={{ display: 'block', width: '100%', height: 'auto' }}
-                role="img"
-                aria-label={showStaircase ? `Quantisation staircase at ${bitDepth}-bit depth` : `Waveform sampled at ${sampleRate} samples per second`}
-            >
-                {/* Quantisation level lines */}
-                {qLines.map((y, i) => (
-                    <line key={i} x1="0" y1={y} x2={svgWidth} y2={y}
-                        stroke="rgba(148, 163, 184, 0.15)" strokeWidth="1" />
+        // ---- Extension: the converter opened, and the words it stores ----
+        function drawChain(g2, R, s, pic, rdd, sr) {
+            const { x0, x1, top, bottom } = R;
+            const names = ['ANTI-ALIAS FILTER', 'SAMPLE AND HOLD', 'QUANTISER', 'BINARY WORDS', 'DAC'];
+            const gapX = 26;
+            const bw = (x1 - x0 - gapX * 4) / 5;
+            const boxes = names.map((nm, i) => ({ nm, x0: x0 + i * (bw + gapX), x1: x0 + i * (bw + gapX) + bw, top, bottom }));
+            boxes.forEach((b, i) => {
+                g2.fillStyle = col.box; g2.fillRect(b.x0, b.top, bw, b.bottom - b.top);
+                g2.strokeStyle = i === 0 && !s.filter ? col.coral : col.line; g2.setLineDash(i === 0 && !s.filter ? [4, 3] : []);
+                g2.strokeRect(b.x0 + 0.5, b.top + 0.5, bw - 1, b.bottom - b.top - 1); g2.setLineDash([]);
+                g2.font = monoSmall; g2.fillStyle = col.gold; g2.textAlign = 'left';
+                g2.fillText(b.nm, b.x0 + 8, b.top + 15);
+                if (i < 4) {
+                    const ax = b.x1 + 4; const ay = (b.top + b.bottom) / 2;
+                    g2.strokeStyle = col.inkSoft; g2.lineWidth = 1.5;
+                    g2.beginPath(); g2.moveTo(ax, ay); g2.lineTo(ax + gapX - 8, ay); g2.stroke();
+                    g2.beginPath(); g2.moveTo(ax + gapX - 8, ay); g2.lineTo(ax + gapX - 14, ay - 4); g2.moveTo(ax + gapX - 8, ay); g2.lineTo(ax + gapX - 14, ay + 4); g2.stroke(); g2.lineWidth = 1;
+                }
+            });
+            const inner = (b) => ({ x0: b.x0 + 8, x1: b.x1 - 8, top: b.top + 24, bottom: b.bottom - 20 });
+            // 1: the filter's curve over 0 .. the rate, the tone as a line
+            {
+                const I = inner(boxes[0]);
+                const maxK = Math.max(s.rate, rdd.isTone ? s.tone * 1.1 : 0, 4);
+                const xk = (k) => I.x0 + (k / maxK) * (I.x1 - I.x0);
+                const yg = (gv) => I.bottom - gv * (I.bottom - I.top);
+                g2.strokeStyle = col.gridDiv; g2.beginPath(); g2.moveTo(I.x0, I.bottom + 0.5); g2.lineTo(I.x1, I.bottom + 0.5); g2.stroke();
+                const ny = nyquist(s.rate);
+                g2.strokeStyle = col.gold; g2.setLineDash([2, 3]); g2.beginPath(); g2.moveTo(xk(ny), I.top); g2.lineTo(xk(ny), I.bottom); g2.stroke(); g2.setLineDash([]);
+                g2.strokeStyle = s.filter ? col.ink : col.coral; g2.lineWidth = 1.8; g2.beginPath();
+                for (let i = 0; i <= 60; i += 1) { const k = (i / 60) * maxK; const gv = s.filter ? filterGain(k, s.rate, sr) : 1; if (i === 0) g2.moveTo(xk(k), yg(gv)); else g2.lineTo(xk(k), yg(gv)); }
+                g2.stroke(); g2.lineWidth = 1;
+                if (rdd.isTone) { g2.strokeStyle = col.blue; g2.lineWidth = 2; g2.beginPath(); g2.moveTo(xk(s.tone), I.bottom); g2.lineTo(xk(s.tone), yg(s.filter ? filterGain(s.tone, s.rate, sr) : 1)); g2.stroke(); g2.lineWidth = 1; }
+                g2.font = monoSmall; g2.fillStyle = s.filter ? col.inkFaint : col.coral; g2.textAlign = 'left';
+                g2.fillText(s.filter ? `cuts at ${fmtHzKhz(filterCutoffHz(s.rate, sr) / 1000)}` : 'off: all passes', I.x0, boxes[0].bottom - 6);
+            }
+            // 2-5: the first samples of the window, held, rounded, written, drawn back
+            const n = Math.min(pic.inside.length, 10);
+            const first = pic.inside.slice(0, n);
+            const span = first.length > 1 ? first[first.length - 1].t + 1 / s.rate : 1 / s.rate;
+            const mini = (b, fn) => {
+                const I = inner(b);
+                const xt = (t) => I.x0 + (t / span) * (I.x1 - I.x0);
+                const mid = (I.top + I.bottom) / 2; const hh = (I.bottom - I.top) / 2;
+                const yv = (val) => mid - Math.max(-1.1, Math.min(1.1, val * (pic.zoom || 1))) * hh;
+                g2.strokeStyle = col.gridDiv; g2.beginPath(); g2.moveTo(I.x0, Math.round(mid) + 0.5); g2.lineTo(I.x1, Math.round(mid) + 0.5); g2.stroke();
+                g2.save(); g2.beginPath(); g2.rect(I.x0 - 4, I.top - 4, I.x1 - I.x0 + 8, I.bottom - I.top + 8); g2.clip();
+                fn(I, xt, yv);
+                g2.restore();
+            };
+            mini(boxes[1], (I, xt, yv) => {
+                g2.strokeStyle = col.blue; g2.globalAlpha = 0.5; g2.lineWidth = 1; g2.beginPath();
+                const pts = 80;
+                for (let i = 0; i <= pts; i += 1) { const t = (i / pts) * span; const idx = Math.min(pic.line.length - 1, Math.round((t / pic.windowMs) * (pic.line.length - 1))); if (i === 0) g2.moveTo(xt(t), yv(pic.line[idx])); else g2.lineTo(xt(t), yv(pic.line[idx])); }
+                g2.stroke(); g2.globalAlpha = 1;
+                g2.strokeStyle = col.white; g2.lineWidth = 1.5; g2.beginPath();
+                first.forEach((sm, i) => { const x = xt(sm.t); const y = yv(sm.v); if (i === 0) g2.moveTo(x, y); else g2.lineTo(x, y); g2.lineTo(xt(sm.t + 1 / s.rate), y); });
+                g2.stroke(); g2.lineWidth = 1;
+            });
+            mini(boxes[2], (I, xt, yv) => {
+                const step = 1 / 2 ** (s.bits - 1);
+                if (step * ((I.bottom - I.top) / 2) >= 3) {
+                    g2.strokeStyle = col.level; const nn = 2 ** (s.bits - 1);
+                    for (let c = -nn; c < nn; c += 1) { const y = Math.round(yv(c * step)) + 0.5; g2.beginPath(); g2.moveTo(I.x0, y); g2.lineTo(I.x1, y); g2.stroke(); }
+                }
+                g2.fillStyle = col.white;
+                first.forEach((sm) => { g2.beginPath(); g2.arc(xt(sm.t), yv(sm.q), 2.6, 0, Math.PI * 2); g2.fill(); });
+            });
+            {
+                const b = boxes[3]; const I = inner(b);
+                g2.font = monoSmall; g2.fillStyle = col.ink; g2.textAlign = 'left';
+                const rows = Math.max(1, Math.floor((I.bottom - I.top + 10) / 14));
+                first.slice(0, rows).forEach((sm, i) => {
+                    let w = binaryWord(sm.code, s.bits);
+                    while (g2.measureText(w).width > I.x1 - I.x0 && w.length > 4) w = `…${w.slice(-(w.length - 2))}`;
+                    g2.fillText(w, I.x0, I.top + 8 + i * 14);
+                });
+            }
+            mini(boxes[4], (I, xt, yv) => {
+                g2.strokeStyle = col.gold; g2.lineWidth = 1.8; g2.beginPath();
+                const pts = 80;
+                for (let i = 0; i <= pts; i += 1) { const t = (i / pts) * span; const idx = Math.min(pic.back.length - 1, Math.round((t / pic.windowMs) * (pic.back.length - 1))); if (i === 0) g2.moveTo(xt(t), yv(pic.back[idx])); else g2.lineTo(xt(t), yv(pic.back[idx])); }
+                g2.stroke(); g2.lineWidth = 1;
+                g2.fillStyle = col.white;
+                first.forEach((sm) => { g2.beginPath(); g2.arc(xt(sm.t), yv(sm.q), 2, 0, Math.PI * 2); g2.fill(); });
+            });
+            g2.font = monoSmall; g2.fillStyle = col.inkFaint; g2.textAlign = 'left';
+            g2.fillText(`${fmtKhz(s.rate)}: a sample every ${fmtMsShort(1 / s.rate)} ms`, boxes[1].x0 + 8, boxes[1].bottom - 6);
+            g2.fillText(`${fmtLevels(s.bits)} levels`, boxes[2].x0 + 8, boxes[2].bottom - 6);
+            g2.fillText(`${s.bits} bits a word`, boxes[3].x0 + 8, boxes[3].bottom - 6);
+            g2.fillText('back to a voltage', boxes[4].x0 + 8, boxes[4].bottom - 6);
+        }
+        function drawWords(g2, R, s, pic) {
+            const { x0, x1, top, bottom } = R;
+            g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, top + 0.5, x1 - x0 - 1, bottom - top - 1);
+            const cols = { n: x0 + 12, v: x0 + 38, c: x0 + 112, w: x0 + 184 };
+            g2.font = monoSmall; g2.textAlign = 'left';
+            g2.fillStyle = col.inkFaint;
+            g2.fillText('#', cols.n, top + 17); g2.fillText('voltage', cols.v, top + 17); g2.fillText('code', cols.c, top + 17);
+            g2.fillStyle = col.gold; g2.fillText(`STORED AS ${s.bits} BITS`, cols.w, top + 17);
+            const rowH = 17;
+            const rows = Math.max(1, Math.min(8, Math.floor((bottom - top - 44) / rowH)));
+            g2.font = mono;
+            pic.inside.slice(0, rows).forEach((sm, i) => {
+                const y = top + 38 + i * rowH;
+                g2.fillStyle = col.inkSoft; g2.fillText(`${i + 1}`, cols.n, y);
+                const vt = Math.abs(sm.v) < 0.0005 ? ' 0.000' : `${sm.v > 0 ? '+' : '−'}${Math.abs(sm.v).toFixed(3)}`;
+                g2.fillStyle = col.blue; g2.fillText(vt, cols.v, y);
+                g2.fillStyle = col.ink; g2.fillText(`${sm.code}`, cols.c, y);
+                let wd = binaryWord(sm.code, s.bits);
+                const room = x1 - 10 - cols.w;
+                while (g2.measureText(wd).width > room && wd.length > 4) wd = `…${wd.slice(2)}`;
+                g2.fillStyle = col.coral; g2.fillText(wd.charAt(0), cols.w, y);
+                g2.fillStyle = col.gold; g2.fillText(wd.slice(1), cols.w + g2.measureText(wd.charAt(0)).width, y);
+            });
+            g2.font = monoSmall; g2.fillStyle = col.coral; g2.textAlign = 'right';
+            g2.fillText('first digit: the sign', x1 - 10, bottom - 8);
+        }
+
+        function draw() {
+            const canvas = canvasRef.current;
+            if (!canvas) { raf = requestAnimationFrame(draw); return; }
+            const g2 = canvas.getContext('2d');
+            const s = stateRef.current;
+            const d = depthRef.current;
+            const rdd = rdRef.current;
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.clientWidth;
+            const hgt = canvas.clientHeight;
+            if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(hgt * dpr)) {
+                canvas.width = Math.round(w * dpr);
+                canvas.height = Math.round(hgt * dpr);
+            }
+            g2.setTransform(dpr, 0, 0, dpr, 0, 0);
+            g2.clearRect(0, 0, w, hgt);
+            const sr = graphRef.current?.sampleRate || 48000;
+            const sig = signalNow(s, sr);
+            const legend = {};
+            let handle = null;
+            let plot = null;
+            const narrow = w < 700;
+            if (sig) {
+                const pic = picture({ signal: sig.signal, raw: sig.raw, windowMs: sig.windowMs, rateKhz: s.rate, bits: s.bits, points: Math.max(240, Math.min(900, Math.round(w))) });
+                // A recording is zoomed to what is there, in powers of two and
+                // named on the axis (the Edit bench's rule: a DAW zooms both
+                // ways); the levels zoom with it, so a quiet moment shows how
+                // few of them it uses.
+                if (s.source === 'tone') zoomRef.current = 1;
+                else {
+                    let peak = 0;
+                    for (const v2 of pic.line) peak = Math.max(peak, Math.abs(v2));
+                    let z = zoomRef.current || 1;
+                    if (peak * z > 1.02 || peak * z < 0.3) z = Math.max(1, Math.min(64, 2 ** Math.floor(Math.log2(0.95 / Math.max(peak, 1e-4)))));
+                    zoomRef.current = z;
+                }
+                pic.zoom = zoomRef.current;
+                const top = narrow ? 118 : 66;
+                if (d === 'core' || narrow) {
+                    const P = { x0: 56, x1: w - 22, top, bottom: hgt - (narrow ? 78 : 30) };
+                    plot = drawPlot(g2, P, s, pic, { legend, bracket: true, narrow });
+                    handle = plot.handle;
+                } else if (d === 'alevel') {
+                    const pw = Math.round(Math.max(250, Math.min(360, w * 0.3)));
+                    const avail = hgt - top - 30;
+                    const errH = Math.round(Math.max(46, Math.min(90, avail * 0.24)));
+                    const P = { x0: 56, x1: w - 22 - pw - 20, top, bottom: hgt - 14 - errH - 34 };
+                    plot = drawPlot(g2, P, s, pic, { legend, bracket: true });
+                    handle = plot.handle;
+                    drawError(g2, { x0: P.x0, x1: P.x1, top: P.bottom + 34, bottom: hgt - 14 }, s, pic, plot);
+                    drawNumbers(g2, { x0: w - 22 - pw, x1: w - 22, top, bottom: hgt - 14 }, s, rdd);
+                } else {
+                    const chainH = Math.round(Math.max(96, Math.min(180, (hgt - top - 30) * 0.4)));
+                    drawChain(g2, { x0: 22, x1: w - 22, top, bottom: top + chainH }, s, pic, rdd, sr);
+                    const lowTop = top + chainH + 22;
+                    const px1 = Math.round(56 + (w - 78) * 0.5);
+                    // the first eight samples, close up: the rows of the table
+                    const zoom = picture({ signal: sig.signal, raw: sig.raw, windowMs: 7.5 / s.rate, rateKhz: s.rate, bits: s.bits, points: 360 });
+                    zoom.zoom = pic.zoom;
+                    plot = drawPlot(g2, { x0: 56, x1: px1, top: lowTop, bottom: hgt - 30 }, s, zoom, { legend, numbers: 8, compact: true });
+                    drawWords(g2, { x0: px1 + 22, x1: w - 22, top: lowTop - 8, bottom: hgt - 10 }, s, zoom);
+                }
+                // what happened, said on the stage where the eye is (Core and A-level)
+                if (plot && d !== 'extension') {
+                    let msg = null; let c = col.coral;
+                    if (rdd.key === 'alias' && rdd.isTone) msg = `comes back as ${fmtHzKhz(rdd.alias)}: aliasing`;
+                    else if (rdd.key === 'alias') msg = 'filter off: highs fold down as false tones';
+                    else if (rdd.key === 'edge') { msg = 'two a cycle: every sample on the centre line'; c = col.gold; }
+                    else if (rdd.key === 'filtered') { msg = 'the filter removed it before sampling'; c = col.blue; }
+                    else if (rdd.key === 'swallowed') { msg = `${s.bits} bit: most of it rounds to silence`; c = col.pink; }
+                    else if (rdd.key === 'grit') { msg = 'few levels: you hear the rounding as grit'; c = col.pink; }
+                    else if (rdd.key === 'hiss') { msg = 'fewer levels: a hiss under the quiet parts'; c = col.pink; }
+                    else if (rdd.key === 'dull') { msg = `nothing above ${fmtKhz(rdd.nyquist)}: the top end has gone`; c = col.blue; }
+                    if (msg) {
+                        g2.font = monoBig; g2.textAlign = 'right';
+                        const x1 = d === 'core' || narrow ? w - 30 : w - 22 - Math.round(Math.max(250, Math.min(360, w * 0.3))) - 28;
+                        const y = top + (narrow ? 34 : 16);
+                        const mw = g2.measureText(msg).width;
+                        g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(x1 - mw - 6, y - 13, mw + 12, 19);
+                        g2.fillStyle = c; g2.fillText(msg, x1, y);
+                    }
+                }
+                canvas.dataset.spc = rdd.isTone ? rdd.spc.toFixed(1) : '';
+                canvas.dataset.samples = String(pic.inside.length);
+            }
+            if (heldRef.current) {
+                g2.font = monoBig; g2.fillStyle = col.blue; g2.textAlign = 'left';
+                g2.fillText('holding: you hear the analogue sound, before the converter', 56, hgt - 12 > 0 ? 58 : 58);
+            }
+
+            if (readRef.current) {
+                const txt = rdd.isTone ? `\u00a0· ${rdd.spc < 10 ? rdd.spc.toFixed(1) : Math.round(rdd.spc)} a cycle` : `\u00a0· up to ${fmtKhz(rdd.nyquist)}`;
+                if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
+            }
+            geomRef.current = { handle, plot };
+            const handleTag = handle ? `${Math.round(handle.x)}:${Math.round(handle.y)}` : '';
+            if (canvas.dataset.handle !== handleTag) canvas.dataset.handle = handleTag;
+            const rateTag = String(s.rate);
+            if (canvas.dataset.rate !== rateTag) canvas.dataset.rate = rateTag;
+            if (canvas.dataset.bits !== String(s.bits)) canvas.dataset.bits = String(s.bits);
+            const aliasTag = rdd.alias != null ? String(rdd.alias) : '';
+            if (canvas.dataset.alias !== aliasTag) canvas.dataset.alias = aliasTag;
+            if (canvas.dataset.key !== rdd.key) canvas.dataset.key = rdd.key;
+            const stageTag = narrow ? 'samples' : stageOf(d);
+            if (canvas.dataset.stage !== stageTag) canvas.dataset.stage = stageTag;
+            raf = requestAnimationFrame(draw);
+        }
+        raf = requestAnimationFrame(draw);
+        return () => cancelAnimationFrame(raf);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // The sample-period bracket's end is dragged: the rate follows the
+    // length, to the nearest step on the dial.
+    const nearHandle = (px, py) => {
+        const h = geomRef.current?.handle;
+        return Boolean(h && Math.hypot(h.x - px, h.y - py) <= 12);
+    };
+    const onStageDown = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const px = e.clientX - rect.left; const py = e.clientY - rect.top;
+        if (!nearHandle(px, py)) return;
+        e.preventDefault();
+        e.currentTarget.setPointerCapture(e.pointerId);
+        const h = geomRef.current.handle;
+        const plot = geomRef.current.plot;
+        dragRef.current = { x0: h.x0, perPx: (h.x - h.x0) > 0 ? (1 / stateRef.current.rate) / (h.x - h.x0) : 0, plot };
+        touch('rate');
+    };
+    const onStageMove = (e) => {
+        const dr = dragRef.current;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const px = e.clientX - rect.left; const py = e.clientY - rect.top;
+        e.currentTarget.style.cursor = dr || nearHandle(px, py) ? 'ew-resize' : '';
+        if (!dr || !dr.perPx) return;
+        const ms = Math.max(1 / RATES[RATES.length - 1], (px - dr.x0) * dr.perPx);
+        const next = rateFromPeriod(ms);
+        setState((s) => setRate(s, next));
+    };
+    const onStageUp = (e) => {
+        if (!dragRef.current) return;
+        dragRef.current = null;
+        try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* gone */ }
+    };
+
+    // ---- drawer content ----
+    const drawerTabs = useMemo(() => {
+        const topicHref = (slug) => memberTopicHref(null, slug, studioOrigin);
+        return [
+        {
+            id: 'reference',
+            label: 'Reference',
+            render: () => (
+                <>
+                    <h2>Digital and analogue, in the spec&apos;s words</h2>
+                    <p>A microphone gives a voltage that varies continuously. An ADC turns it into numbers by measuring it at regular intervals and rounding each measurement to a fixed set of levels; a DAC turns the numbers back into a voltage for the speakers. The stage is that round trip, drawn and heard.</p>
+                    <h3>Terms</h3>
+                    <dl>
+                        <dt>Analogue</dt><dd>A signal that varies continuously, its voltage following the sound wave. The blue line.</dd>
+                        <dt>Digital</dt><dd>The same sound as a list of numbers, one for each moment it was measured. The dots, and the words in Extension.</dd>
+                        <dt>ADC · DAC</dt><dd>The analogue-to-digital converter on the way in (mic to DAW); the digital-to-analogue converter on the way out (DAW to monitors). The gold line is the DAC&apos;s.</dd>
+                        <dt>Sampling · sample rate</dt><dd>Measuring the voltage at regular intervals; the rate is how many measurements a second, in kHz. CD is 44.1 kHz; video and most studios 48 kHz; high-resolution recording 96 kHz.</dd>
+                        <dt>Nyquist</dt><dd>The sample rate must be more than twice the highest frequency you want to keep. Half the sample rate is the highest frequency kept: 22.05 kHz for CD, just above the 20 kHz top of hearing.</dd>
+                        <dt>Aliasing</dt><dd>A frequency above half the sample rate, sampled anyway, comes back as a false lower one: 3 kHz sampled at 4 kHz returns as 1 kHz. An anti-alias filter before the converter removes those frequencies first.</dd>
+                        <dt>Bit depth</dt><dd>How many bits each sample is stored with. n bits give 2^n levels: 16 bit is 65,536, 24 bit is 16,777,216.</dd>
+                        <dt>Quantisation</dt><dd>Rounding each sample to the nearest level. The difference, never more than half a step, is quantisation error; heard as noise or distortion when there are few levels.</dd>
+                        <dt>Dynamic range</dt><dd>From the loudest level a format can hold down to its noise floor: about 6 dB for every bit. 16 bit is about 96 dB, 24 bit about 144 dB.</dd>
+                    </dl>
+                    <h3>In your DAW</h3>
+                    <table>
+                        <thead><tr><th>On this bench</th><th>Ableton Live</th><th>Logic Pro</th></tr></thead>
+                        <tbody>
+                            <tr><td>Sample rate</td><td>Settings, Audio: In/Out Sample Rate</td><td>Project Settings, Audio: Sample Rate</td></tr>
+                            <tr><td>Bit depth (recording)</td><td>Settings, Record: Bit Depth</td><td>Settings, Audio, General: 24-bit recording</td></tr>
+                            <tr><td>Bit depth (export)</td><td>Export Audio: Bit Depth, with Dither Options</td><td>Bounce: Resolution, with Dithering</td></tr>
+                            <tr><td>Lowering both, as an effect</td><td>Redux (Downsample, Bit Depth)</td><td>Bitcrusher (Resolution, Downsampling)</td></tr>
+                        </tbody>
+                    </table>
+                    <p className={styles.source}>As the settings appear in Live 12 and Logic Pro 11. Check against your own version if they move.</p>
+                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <dl>
+                        <dt>Sample and hold</dt><dd>The converter freezes the voltage for the moment it takes to measure it, which is why a sampled wave is drawn as steps before the DAC smooths it.</dd>
+                        <dt>Two&apos;s complement</dt><dd>How a signed sample is written in binary. The first bit is the sign: 0 above the centre line, 1 below.</dd>
+                        <dt>Dither</dt><dd>A very quiet noise added before rounding. The error stops following the music and becomes a steady hiss, which the ear forgives more easily than grit.</dd>
+                        <dt>The DAC&apos;s filter</dt><dd>The gold line is not joined dots: the DAC&apos;s reconstruction filter draws the one smooth wave, below half the rate, that passes through every sample.</dd>
+                    </dl>
+                </>
+            ),
+        },
+        {
+            id: 'teacher',
+            label: 'Teacher',
+            render: () => (
+                <>
+                    <h2>What to listen for</h2>
+                    <p>Press Play and a 3 kHz tone sounds while the stage draws it: the blue wave going in, a white dot for each sample, the gold wave the DAC gives back on top of the blue. Turn Sample rate down and the dots spread; at 6 kHz there are exactly two a cycle and they all sit on the centre line; below it the gold wave comes apart from the blue, and you hear a lower, false tone. Turn Bit depth down and the levels appear as lines; each dot snaps to one, and the tone gains a gritty edge.</p>
+                    <h3>Do these now</h3>
+                    <ul>
+                        <li>Press <b>Two per cycle</b>. Say why every dot is on the centre line, and what the rule &quot;more than twice&quot; means.</li>
+                        <li>Press <b>Aliasing</b>, then turn Sample rate slowly up to 8 kHz. Say what the false tone does as the rate rises.</li>
+                        <li>Press <b>CD quality</b>, then take Sample rate down to 8 kHz. Name what is lost, and why the answer is not &quot;it gets quieter&quot;.</li>
+                        <li>Press <b>Four bits</b> and hold the button in the play column. Say where in the phrase the crunch is worst, and why.</li>
+                        <li>Press <b>Bit crusher</b> and describe the sound in the exam&apos;s words: name what the sample rate did and what the bit depth did.</li>
+                        <li>Switch to A-level and read the two numbers for the setting; switch to Extension and count the digits in a word.</li>
+                    </ul>
+                    <h3>Exam practice</h3>
+                    <ExamCallout
+                        prompt="A recording is made at 48 kHz and 16 bit. State the highest frequency it can capture, and its approximate dynamic range. (2 marks)"
+                        answer="Half the sample rate: 24 kHz. About 6 dB a bit: 16 × 6 = 96 dB. The first comes from the rate, the second from the bit depth; mixing them up is the common slip."
+                    />
+                    <ExamCallout
+                        prompt="Explain what happens to a 15 kHz sound recorded at a sample rate of 20 kHz with no filter before the converter. (2 marks)"
+                        answer="Half of 20 kHz is 10 kHz, so 15 kHz is above the highest frequency the rate can keep. It aliases: it comes back as a false 5 kHz tone (20 − 15). An anti-alias filter, or a rate over 30 kHz, prevents it."
+                    />
+                </>
+            ),
+        },
+        {
+            id: 'connections',
+            label: 'Connections',
+            render: () => (
+                <>
+                    <h2>Where this leads</h2>
+                    <a className={styles.conn} href={topicHref('sampling')}>
+                        <i>1.4 Sampling</i>
+                        <b>Rate and depth, in a sampler</b>
+                        <span>The same two numbers set what a sampler keeps; lowering them on purpose is the lo-fi sound.</span>
+                    </a>
+                    <a className={styles.conn} href={topicHref('numeracy')}>
+                        <i>2.5 Numeracy</i>
+                        <b>The file</b>
+                        <span>Rate times depth times channels is the bits a second, and so the file&apos;s size. The Oscilloscope works it out.</span>
+                    </a>
+                    <a className={styles.conn} href={topicHref('levels')}>
+                        <i>2.6 Levels</i>
+                        <b>The noise floor</b>
+                        <span>Dynamic range is headroom plus the distance to the noise floor, which the bit depth sets.</span>
+                    </a>
+                </>
+            ),
+        },
+    ];
+    }, [studioOrigin]);
+
+    // ---- the bench's one line to the student ----
+    let say;
+    if (announce) {
+        say = <><b>{DEPTHS.find((d) => d.id === announce)?.label}:</b> {DEPTH_LINES[announce]}</>;
+    } else if (depth === 'alevel') {
+        const segs = judge({ state, last });
+        const colon = segs[0].text.indexOf(':');
+        const lead = colon > 0 && colon < 48 ? segs[0].text.slice(0, colon + 1) : null;
+        say = (
+            <>
+                {segs.map((sg, i) => (
+                    <span key={i}>
+                        {i === 0 && lead ? <b>{lead}</b> : null}
+                        {i === 0 && lead ? sg.text.slice(colon + 1) : sg.text}
+                        <i className={styles.ao} data-ao={sg.ao}>AO{sg.ao}</i>{' '}
+                    </span>
                 ))}
+                {teach ? DEPTH_TEACH.alevel : null}
+            </>
+        );
+    } else if (depth === 'extension') {
+        say = <>{openMachine({ state, last })}{teach ? <> {DEPTH_TEACH.extension}</> : null}</>;
+    } else {
+        const next = nextMove(state);
+        say = teach
+            ? <>{hearingLine(state)} <b>Try:</b> {next}.</>
+            : <><b>Try:</b> {next.charAt(0).toUpperCase() + next.slice(1)}.</>;
+    }
 
-                {/* Centre line */}
-                <line x1="0" y1={midY} x2={svgWidth} y2={midY}
-                    stroke="rgba(148, 163, 184, 0.3)" strokeWidth="1" />
+    // ---- console ----
+    const sourceOptions = SOURCE_IDS.map((id) => ({ id, label: SOURCES[id].label, title: id === 'tone' ? 'A test tone: a probe for aliasing' : `A real recording: ${SOURCES[id].said}` }));
+    const toneOptions = TONES.map((t) => ({ id: t, label: fmtHzKhz(t), title: `The test tone at ${fmtHzKhz(t)}` }));
+    const onOff = [{ id: 'on', label: 'On' }, { id: 'off', label: 'Off' }];
+    const hearWord = {
+        clean: 'clean', dull: 'dull', hiss: 'hiss', grit: 'grit', swallowed: 'mostly silence',
+        alias: rd.isTone ? `${fmtHzKhz(rd.alias)}, false` : 'metallic',
+        filtered: 'nothing', edge: 'nothing',
+    }[rd.key];
+    const aLevel = depth !== 'core';
 
-                {/* Analogue wave */}
-                <path d={analogPath} fill="none" stroke="#60A5FA" strokeWidth="2" opacity="0.5" />
-
-                {/* Staircase */}
-                {showStaircase && staircasePath && (
-                    <path d={staircasePath} fill="none" stroke="#34D399" strokeWidth="2" />
-                )}
-
-                {/* Sample points */}
-                {samplePoints.map((pt, i) => (
-                    <circle key={i} cx={pt.x} cy={pt.y} r="4" fill="#FB923C" />
-                ))}
-
-                {/* Labels */}
-                <text x="8" y="16" fill="rgba(148,163,184,0.6)" fontSize="10"
-                    fontFamily={typography.fontFamily}>Amplitude +</text>
-                <text x="8" y={svgHeight - 8} fill="rgba(148,163,184,0.6)" fontSize="10"
-                    fontFamily={typography.fontFamily}>Amplitude -</text>
-                <text x={svgWidth - 50} y={midY - 8} fill="rgba(148,163,184,0.6)" fontSize="10"
-                    fontFamily={typography.fontFamily}>Time &rarr;</text>
-            </svg>
-
-            {/* Legend */}
-            <div style={{
-                display: 'flex',
-                gap: spacing[6],
-                marginTop: spacing[3],
-                justifyContent: 'center',
-            }}>
-                <LegendItem colour="#60A5FA" label="Analogue signal (continuous)" />
-                <LegendItem colour="#FB923C" label="Sample points (discrete)" />
-                {showStaircase && <LegendItem colour="#34D399" label="Quantised output (staircase)" />}
-            </div>
-        </div>
-    );
-}
-
-function LegendItem({ colour, label }) {
-    return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
-            <div style={{
-                width: '12px', height: '12px', borderRadius: borderRadius.full,
-                background: colour,
-            }} />
-            <span style={{ fontSize: typography.size.xs, color: 'rgba(148,163,184,0.8)' }}>
-                {label}
-            </span>
-        </div>
-    );
-}
-
-// ─── Shared: Slider control ─────────────────────────────────────
-function Slider({ label, value, min, max, step, setter, colour, unit }) {
-    return (
-        <div style={card}>
-            <label style={{
-                ...sectionLabel,
-                color: colour,
-                marginBottom: spacing[3],
-            }}>
-                {label}: {value}{unit}
-            </label>
-            <input aria-label={label}
-                type="range"
-                min={min} max={max} step={step}
-                value={value}
-                aria-valuemin={min} aria-valuemax={max} aria-valuenow={value}
-                onChange={e => setter(Number(e.target.value))}
-                style={{ width: '100%', accentColor: colour }}
+    const consoleSlot = (
+        <>
+            <PlayColumn
+                playing={playing}
+                onTogglePlay={togglePlay}
+                onHoldDry={setHeld}
+                level={state.volume}
+                onLevel={(v2) => setState((s) => setVolume(s, v2))}
+                teach={teach}
+                holdLabel="hold: analogue"
+                holdTitle="Hold to hear the sound before the converter"
+                holdWhy="plays the sound as it went in, before sampling and rounding, while you hold it"
+                playWhy="plays the source through the converter, a phrase at a time"
             />
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginTop: spacing[1],
-            }}>
-                <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>{min}{unit}</span>
-                <span style={{ fontSize: typography.size.xs, color: t.text.tertiary }}>{max}{unit}</span>
+
+            <div className={`${styles.sec} ${styles.secSrc}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>Source</span><span className={styles.value}>{SOURCES[state.source].label}</span></div>
+                <Chips label="Source" options={sourceOptions} value={state.source} onChange={chooseSource} />
+                <div className={styles.meaning}>{state.source === 'tone' ? `a ${fmtHzKhz(state.tone)} test tone, a probe` : 'a real recording'}</div>
+                <Why>The tone is a probe: one frequency, so you can count samples a cycle and see a false tone appear. The recordings show what a setting does to music. The More row sets the tone&apos;s pitch.</Why>
             </div>
-        </div>
+
+            <div className={`${styles.sec} ${styles.secAdc}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>Sample rate</span><span className={styles.value}>{String(state.rate)}<small>kHz</small></span></div>
+                <div className={styles.adcKnob}>
+                    <Dial label="Sample rate" value={rateIndex(state.rate)} min={0} max={RATES.length - 1} step={1} format={(i) => fmtKhz(RATES[i])} pointer="var(--gold-bright)" pixels={220} onChange={chooseRate} title="Samples a second, in kHz: drag up for more" />
+                    <span className={styles.adcRead}>{rd.isTone ? <><b>{rd.spc < 10 ? rd.spc.toFixed(1) : Math.round(rd.spc)}</b> samples per cycle</> : <><b>{fmtKhz(rd.nyquist)}</b> highest kept</>}</span>
+                </div>
+                <div className={styles.meaning}>{aLevel ? `half the rate: ${fmtKhz(rd.nyquist)}` : 'more dots, finer detail in time'}</div>
+                <Why>How many times a second the converter measures the voltage. Half this number is the highest frequency it can keep; the bracket on the stage is one sample&apos;s time, and dragging its end sets the rate.</Why>
+            </div>
+
+            <div className={`${styles.sec} ${styles.secAdc}`} data-teach={teach || undefined}>
+                <div className={styles.secHead}><span className={styles.eyebrow}>Bit depth</span><span className={styles.value}>{state.bits}<small>bit</small></span></div>
+                <div className={styles.adcKnob}>
+                    <Dial label="Bit depth" value={state.bits} min={BITS_MIN} max={BITS_MAX} step={1} format={(b) => `${b} bit`} pointer="var(--gen-3)" pixels={200} onChange={chooseBits} title="Bits for each sample: drag up for more levels" />
+                    <span className={styles.adcRead}><b>{fmtLevels(state.bits)}</b> levels</span>
+                </div>
+                <div className={styles.meaning}>{aLevel ? `about ${rd.dynamicRange} dB of range` : 'more levels, finer detail in voltage'}</div>
+                <Why>How many bits each sample is stored with. n bits give 2^n levels, and each dot is rounded to the nearest; each bit adds about 6 dB of dynamic range.</Why>
+            </div>
+
+            <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined} data-scope="true">
+                <div className={styles.secHead}><span className={styles.eyebrow}>What you should hear</span></div>
+                <div className={styles.stats} aria-live="polite">
+                    <div><b>{hearWord}</b><span>what comes back</span></div>
+                    <div><b>{fmtKhz(rd.nyquist)}</b><span>highest frequency kept</span></div>
+                    <div><b>{fmtLevels(state.bits)}</b><span>levels</span></div>
+                    <div><b>≈ {rd.dynamicRange} dB</b><span>dynamic range</span></div>
+                </div>
+                <Legal />
+                <Why>Every number here comes from the two dials: half the sample rate is the highest frequency kept; 2 to the power of the bit depth is the levels; about 6 dB a bit is the dynamic range.</Why>
+            </div>
+        </>
     );
+
+    const bar = (
+        <>
+            <Presets presets={PRESETS} presetId={state.presetId} onPreset={choosePreset} wrap />
+            <div className={styles.say} data-mode={mode} data-depth={depth}>{say}</div>
+            <MoreButton open={further} onOpen={() => setFurther(true)} />
+        </>
+    );
+
+    const more = further ? (
+        <>
+            <div className={styles.moreItem}>
+                <span className={styles.eyebrow}>Tone</span>
+                <Chips label="Tone" options={toneOptions} value={state.tone} onChange={chooseTone} />
+            </div>
+            <div className={styles.moreItem}>
+                <span className={styles.eyebrow}>Anti-alias filter</span>
+                <Chips label="Anti-alias filter" options={onOff} value={state.filter ? 'on' : 'off'} onChange={chooseFilter} />
+            </div>
+            <div className={styles.moreItem}>
+                <span className={styles.eyebrow}>Dither</span>
+                <Chips label="Dither" options={onOff} value={state.dither ? 'on' : 'off'} onChange={chooseDither} />
+                <span className={styles.chipNote}>{state.dither ? 'a quiet hiss, on purpose' : 'off'}</span>
+            </div>
+        </>
+    ) : null;
+
+    const stage = (
+        <>
+            <canvas
+                ref={canvasRef}
+                aria-label={depth === 'core' ? 'The converter: the wave in, the samples, the levels and the wave the DAC gives back' : depth === 'alevel' ? 'The samples, the rounding error, and the highest frequency kept and the dynamic range' : 'Inside the converter, and every sample as a binary word'}
+                role="img"
+                onPointerDown={onStageDown}
+                onPointerMove={onStageMove}
+                onPointerUp={onStageUp}
+                onPointerCancel={onStageUp}
+            />
+            <div className={styles.stageNote}>
+                <b>{fmtKhz(state.rate)} · {state.bits} bit<span ref={readRef} style={{ '--read': '16ch' }} /></b>
+                <span>{ORIENTS[depth] || ORIENTS.core}</span>
+            </div>
+            <div className={`${styles.stageLegend} ${styles.legendTop} ${styles.adcLegend}`} aria-hidden="true">
+                <span><i style={{ background: 'var(--gen-2)' }} />analogue in</span>
+                <span><i style={{ background: '#fff', borderRadius: 5 }} />sample</span>
+                <span><i style={{ background: 'var(--gen-3)', height: 2 }} />levels</span>
+                <span><i style={{ background: 'var(--gold-bright)' }} />DAC out</span>
+            </div>
+            {!began ? (
+                <div className={styles.begin}>
+                    <button type="button" className={styles.beginBtn} onClick={() => audio.start()}>
+                        <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.2v9.6L11 6z" fill="currentColor" /></svg>
+                        <span>
+                            Play the bench
+                            <small>A sound through a converter, drawn as it is sampled. Headphones help.</small>
+                        </span>
+                    </button>
+                </div>
+            ) : null}
+        </>
+    );
+
+    return (
+        <BenchFrame
+            code={CODE}
+            title={TITLE}
+            orientation={ORIENTS[depth] || ORIENTS.core}
+            back={back}
+            mode={mode}
+            onMode={setMode}
+            depth={depth}
+            onDepth={chooseDepth}
+            stage={stage}
+            bar={bar}
+            more={more}
+            console={consoleSlot}
+            drawerTabs={drawerTabs}
+        />
+    );
+}
+
+const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+function sup(n) { return String(n).split('').map((c) => SUP[Number(c)]).join(''); }
+function fmtMsShort(ms) {
+    if (ms >= 1) return ms.toFixed(ms >= 10 ? 1 : 2).replace(/\.?0+$/, '');
+    return ms.toFixed(3).replace(/0+$/, '').replace(/\.$/, '');
 }

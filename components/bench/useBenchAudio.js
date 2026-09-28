@@ -125,7 +125,13 @@ export function useBenchAudio({ files, bpm, beatsPerBar = 4, onSchedule, buildGr
         if (duration != null) src.start(when, offset, duration); else if (offset) src.start(when, offset); else src.start(when);
         const live = { src, g };
         liveRef.current.add(live);
-        src.onended = () => liveRef.current.delete(live);
+        // Take the pair apart when it ends, so a bench that plays for an
+        // hour holds no more connections than one that played for a
+        // minute (scripts/measure-leak.mjs; ADC Explorer, 28 Sep 2026).
+        src.onended = () => {
+            liveRef.current.delete(live);
+            try { src.disconnect(); g.disconnect(); } catch { /* already apart */ }
+        };
         eventsRef.current.push({ name, time: when, duration: duration ?? buf.duration - offset, level: gain });
         // keep the last 12 seconds only
         const cutoff = ctx.currentTime - 12;
