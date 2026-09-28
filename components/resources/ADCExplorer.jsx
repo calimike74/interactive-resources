@@ -42,7 +42,7 @@ const ORIENTS = {
 const TONE_GAIN = 0.3; // the probe sits under the recordings (measured with the trim, 28 Sep 2026)
 const TRIM_MIN_DB = -9;
 const TRIM_MAX_DB = 3;
-const IDLE_AT_S = 1.2; // where a recording's picture rests before Play
+const GOOD_PEAK = 0.45; // a window worth drawing reaches this share of the file's peak
 
 // ---- the graph ------------------------------------------------------------
 // input -> [anti-alias: eight biquads | straight through] -> the converter
@@ -114,6 +114,32 @@ function monoOf(buf) {
     }
     buf.__mono = m;
     return m;
+}
+// The loudest 5 ms of a recording (by RMS), cached on the buffer: where
+// the picture rests before Play, and what it holds while the playhead is
+// somewhere too quiet to show the levels (28 Sep 2026: a 4-bit vocal caught
+// in near-silence drew a flat line and an empty error lane).
+function loudestOf(buf) {
+    if (buf.__loud) return buf.__loud;
+    const m = monoOf(buf);
+    const sr = buf.sampleRate;
+    const n = Math.round(sr * FILE_WINDOW_MS / 1000);
+    const hop = Math.round(n / 2);
+    let best = 0; let at = 0; let peak = 0;
+    for (let i = 0; i < m.length; i += 1) { const a = Math.abs(m[i]); if (a > peak) peak = a; }
+    for (let i = Math.round(sr * 0.05); i + n < m.length - Math.round(sr * 0.05); i += hop) {
+        let e = 0;
+        for (let j = i; j < i + n; j += 1) e += m[j] * m[j];
+        if (e > best) { best = e; at = i; }
+    }
+    buf.__loud = { at: at / sr, peak };
+    return buf.__loud;
+}
+function windowPeak(m, sr, pos) {
+    const i0 = Math.max(0, Math.round(pos * sr)); const i1 = Math.min(m.length, i0 + Math.round(sr * FILE_WINDOW_MS / 1000));
+    let pk = 0;
+    for (let i = i0; i < i1; i += 1) { const a = Math.abs(m[i]); if (a > pk) pk = a; }
+    return pk;
 }
 function interp(arr, x) {
     const i = Math.floor(x);
@@ -319,11 +345,16 @@ export default function ADCExplorer({ back }) {
             const bsr = buf.sampleRate;
             const ctx = ctxRef.current;
             const pass = passRef.current;
-            let pos = IDLE_AT_S;
+            // Follow the playhead only through moments loud enough to fill the
+            // grid; otherwise hold the last one that did, or the loudest.
+            const loud = loudestOf(buf);
+            let pos = loud.at;
             let live = false;
+            const held = lastPicRef.current && lastPicRef.current.source === s.source ? lastPicRef.current : null;
             if (playingRef.current && ctx && pass && pass.source === s.source) {
                 const p = ctx.currentTime - pass.start;
-                if (p >= 0 && p < pass.dur - 0.05) { pos = p; live = true; } else if (lastPicRef.current && lastPicRef.current.source === s.source) return lastPicRef.current.sig;
+                if (p >= 0 && p < pass.dur - 0.05 && windowPeak(m, bsr, p) >= GOOD_PEAK * loud.peak) { pos = p; live = true; }
+                else if (held && held.filter === s.filter && held.rate === s.rate) return held.sig;
             }
             const W = FILE_WINDOW_MS;
             const i0 = Math.max(0, Math.round((pos - 0.04) * bsr));
@@ -340,7 +371,7 @@ export default function ADCExplorer({ back }) {
                 windowMs: W,
                 live,
             };
-            lastPicRef.current = { source: s.source, sig };
+            lastPicRef.current = { source: s.source, sig, filter: s.filter, rate: s.rate };
             return sig;
         }
 
@@ -387,7 +418,7 @@ export default function ADCExplorer({ back }) {
             g2.save(); g2.translate(x0 - 38, mid); g2.rotate(-Math.PI / 2); g2.textAlign = 'center'; g2.fillText('Voltage', 0, 0); g2.restore();
             g2.textAlign = 'right'; g2.fillStyle = col.inkFaint;
             g2.fillText('+', x0 - 6, mid - half + 4); g2.fillText('0', x0 - 6, mid + 4); g2.fillText('−', x0 - 6, mid + half + 4);
-            if (zm > 1) { g2.textAlign = 'left'; g2.fillStyle = col.inkSoft; g2.fillText(`zoomed ×${zm}: a quiet moment`, x0 + 6, bottom - 8); }
+            if (zm > 1) { g2.textAlign = 'left'; g2.fillStyle = col.inkSoft; g2.fillText(`zoomed ×${zm} to fit`, x0 + 6, bottom - 8); }
             if (opts.axes) {
                 // Sample rate lives on the time axis, bit depth on the voltage
                 // axis: each axis in its dial's colour, with its dial's number,
