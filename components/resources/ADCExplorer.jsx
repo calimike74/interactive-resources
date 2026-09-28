@@ -388,7 +388,31 @@ export default function ADCExplorer({ back }) {
             g2.textAlign = 'right'; g2.fillStyle = col.inkFaint;
             g2.fillText('+', x0 - 6, mid - half + 4); g2.fillText('0', x0 - 6, mid + 4); g2.fillText('−', x0 - 6, mid + half + 4);
             if (zm > 1) { g2.textAlign = 'left'; g2.fillStyle = col.inkSoft; g2.fillText(`zoomed ×${zm}: a quiet moment`, x0 + 6, bottom - 8); }
-            if (gap < 3.2 && !opts.compact) {
+            if (opts.axes) {
+                // Sample rate lives on the time axis, bit depth on the voltage
+                // axis: each axis in its dial's colour, with its dial's number,
+                // because the two are the pair candidates swap.
+                g2.lineWidth = 2;
+                g2.strokeStyle = col.gold; g2.beginPath(); g2.moveTo(x0, bottom + 0.5); g2.lineTo(x1, bottom + 0.5); g2.stroke();
+                g2.strokeStyle = col.lilac; g2.beginPath(); g2.moveTo(x0 - 0.5, top); g2.lineTo(x0 - 0.5, bottom); g2.stroke();
+                g2.lineWidth = 1;
+                const tag = `bit depth ${s.bits} ↕ 2${sup(s.bits)} = ${fmtLevels(s.bits)} levels${gap < 3.2 ? ', too fine to draw' : ''}`;
+                g2.font = mono; g2.textAlign = 'right';
+                const tw = g2.measureText(tag).width;
+                g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(x1 - tw - 14, bottom - 22, tw + 12, 18);
+                g2.fillStyle = col.lilac; g2.fillText(tag, x1 - 8, bottom - 9);
+                // one step, bracketed up the right-hand edge, where it can be seen
+                if (gap >= 6) {
+                    const sx = x1 - 10; const y0 = yOf(0); const y1 = yOf(step);
+                    g2.strokeStyle = col.lilac; g2.lineWidth = 1.5;
+                    g2.beginPath(); g2.moveTo(sx - 4, y0); g2.lineTo(sx + 4, y0); g2.moveTo(sx, y0); g2.lineTo(sx, y1); g2.moveTo(sx - 4, y1); g2.lineTo(sx + 4, y1); g2.stroke(); g2.lineWidth = 1;
+                    g2.font = monoSmall; g2.textAlign = 'right';
+                    const lw = g2.measureText('one step').width; const ly2 = (y0 + y1) / 2;
+                    g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(sx - lw - 11, ly2 - 8, lw + 6, 15);
+                    g2.fillStyle = col.lilac; g2.fillText('one step', sx - 8, ly2 + 4);
+                }
+                g2.font = monoSmall;
+            } else if (gap < 3.2 && !opts.compact) {
                 g2.textAlign = 'right'; g2.fillStyle = col.lilac;
                 g2.fillText(`${fmtLevels(s.bits)} levels: too fine to draw here`, x1 - 8, bottom - 8);
             } else if (!opts.compact) {
@@ -461,7 +485,12 @@ export default function ADCExplorer({ back }) {
                 const hot = dragRef.current != null;
                 g2.beginPath(); g2.arc(bx1, by, hot ? 7 : 5.5, 0, Math.PI * 2); g2.fillStyle = col.gold; g2.fill(); g2.strokeStyle = '#17172b'; g2.lineWidth = 1.5; g2.stroke(); g2.lineWidth = 1;
                 g2.font = mono; g2.fillStyle = col.gold; g2.textAlign = 'left';
-                g2.fillText(`one sample: ${fmtMsShort(T)} ms`, bx1 + 10, by + 4);
+                const btxt = opts.axes
+                    ? `sample rate ${fmtKhz(s.rate)} ↔ a sample every ${fmtMsShort(T)} ms`
+                    : `one sample: ${fmtMsShort(T)} ms`;
+                const bw = g2.measureText(btxt).width;
+                if (opts.axes) { g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(bx1 + 6, by - 9, bw + 8, 18); g2.fillStyle = col.gold; }
+                g2.fillText(btxt, bx1 + 10, by + 4);
                 handle = { x: bx1, y: by, x0: bx0 };
             }
             return { xOf, yOf, handle, half, mid };
@@ -476,7 +505,7 @@ export default function ADCExplorer({ back }) {
             const A = { top, bottom: bottom - hB - 8 };
             g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, A.top + 0.5, W - 1, A.bottom - A.top - 1);
             g2.font = monoSmall; g2.fillStyle = col.gold; g2.textAlign = 'left';
-            g2.fillText('HIGHEST FREQUENCY KEPT', x0 + 10, A.top + 16);
+            g2.fillText('SAMPLE RATE → HIGHEST FREQUENCY KEPT', x0 + 10, A.top + 16);
             const maxK = Math.max(s.rate, rdd.isTone ? s.tone * 1.08 : 22, 4);
             const lx0 = x0 + 18; const lx1 = x1 - 18;
             const ly = Math.round(Math.max(A.top + 64, Math.min(A.bottom - 36, A.top + (A.bottom - A.top) * 0.66)));
@@ -527,8 +556,8 @@ export default function ADCExplorer({ back }) {
             // (2) the levels and the range: n bits, 2^n levels, about 6 dB a bit
             const B = { top: bottom - hB, bottom };
             g2.strokeStyle = col.line; g2.strokeRect(x0 + 0.5, B.top + 0.5, W - 1, B.bottom - B.top - 1);
-            g2.font = monoSmall; g2.fillStyle = col.gold; g2.textAlign = 'left';
-            g2.fillText('DYNAMIC RANGE', x0 + 10, B.top + 16);
+            g2.font = monoSmall; g2.fillStyle = col.lilac; g2.textAlign = 'left';
+            g2.fillText('BIT DEPTH → DYNAMIC RANGE', x0 + 10, B.top + 16);
             g2.font = monoBig; g2.fillStyle = col.ink;
             g2.fillText(`2${sup(s.bits)} = ${fmtLevels(s.bits)} levels`, x0 + 10, B.top + 36);
             const bx0 = x0 + 12; const bx1 = x1 - 14; const byy = B.bottom - 20;
@@ -736,7 +765,7 @@ export default function ADCExplorer({ back }) {
                     const avail = hgt - top - 30;
                     const errH = Math.round(Math.max(46, Math.min(90, avail * 0.24)));
                     const P = { x0: 56, x1: w - 22 - pw - 20, top, bottom: hgt - 14 - errH - 34 };
-                    plot = drawPlot(g2, P, s, pic, { legend, bracket: true });
+                    plot = drawPlot(g2, P, s, pic, { legend, bracket: true, axes: true });
                     handle = plot.handle;
                     drawError(g2, { x0: P.x0, x1: P.x1, top: P.bottom + 34, bottom: hgt - 14 }, s, pic, plot);
                     drawNumbers(g2, { x0: w - 22 - pw, x1: w - 22, top, bottom: hgt - 14 }, s, rdd);
@@ -765,7 +794,7 @@ export default function ADCExplorer({ back }) {
                     if (msg) {
                         g2.font = monoBig; g2.textAlign = 'right';
                         const x1 = d === 'core' || narrow ? w - 30 : w - 22 - Math.round(Math.max(250, Math.min(360, w * 0.3))) - 28;
-                        const y = top + (narrow ? 34 : 16);
+                        const y = top + (narrow || d === 'alevel' ? 36 : 16);
                         const mw = g2.measureText(msg).width;
                         g2.fillStyle = 'rgba(23, 23, 43, 0.82)'; g2.fillRect(x1 - mw - 6, y - 13, mw + 12, 19);
                         g2.fillStyle = c; g2.fillText(msg, x1, y);
@@ -854,6 +883,7 @@ export default function ADCExplorer({ back }) {
                         <dt>Aliasing</dt><dd>A frequency above half the sample rate, sampled anyway, comes back as a false lower one: 3 kHz sampled at 4 kHz returns as 1 kHz. An anti-alias filter before the converter removes those frequencies first.</dd>
                         <dt>Bit depth</dt><dd>How many bits each sample is stored with. n bits give 2^n levels: 16 bit is 65,536, 24 bit is 16,777,216.</dd>
                         <dt>Quantisation</dt><dd>Rounding each sample to the nearest level. The difference, never more than half a step, is quantisation error; heard as noise or distortion when there are few levels.</dd>
+                        <dt>File size · bit rate</dt><dd>Channels × sample rate × bit depth is the bits a second, so the file&apos;s size. Bit rate (kbps) is how much data a second a lossy file like an mp3 keeps; it is not bit depth.</dd>
                         <dt>Dynamic range</dt><dd>From the loudest level a format can hold down to its noise floor: about 6 dB for every bit. 16 bit is about 96 dB, 24 bit about 144 dB.</dd>
                     </dl>
                     <h3>In your DAW</h3>
@@ -888,9 +918,9 @@ export default function ADCExplorer({ back }) {
                     <ul>
                         <li>Press <b>Two per cycle</b>. Say why every dot is on the centre line, and what the rule &quot;more than twice&quot; means.</li>
                         <li>Press <b>Aliasing</b>, then turn Sample rate slowly up to 8 kHz. Say what the false tone does as the rate rises.</li>
-                        <li>Press <b>CD quality</b>, then take Sample rate down to 8 kHz. Name what is lost, and why the answer is not &quot;it gets quieter&quot;.</li>
-                        <li>Press <b>Four bits</b> and hold the button in the play column. Say where in the phrase the crunch is worst, and why.</li>
-                        <li>Press <b>Bit crusher</b> and describe the sound in the exam&apos;s words: name what the sample rate did and what the bit depth did.</li>
+                        <li>Press <b>CD</b>, then take Sample rate down to 8 kHz. Name what is lost, and why the answer is not &quot;it gets quieter&quot;.</li>
+                        <li>Press <b>4-bit file</b> and hold the button in the play column. Say where in the phrase the crunch is worst, and why.</li>
+                        <li>Press <b>Akai S900, 7.5k</b>, then <b>Akai S900, 40k</b>. Say what changed and which dial did it; then say what the 12 bits still cost against CD.</li>
                         <li>Switch to A-level and read the two numbers for the setting; switch to Extension and count the digits in a word.</li>
                     </ul>
                     <h3>Exam practice</h3>

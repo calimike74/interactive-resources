@@ -51,9 +51,10 @@ test('the judge says the exam\'s lines: half the rate, the alias, 2^n levels and
     assert.match(cd[1].text, /CD quality, 44\.1 kHz and 16 bit/);
     const dull = judge({ state: setRate(applyPreset(DEFAULT_STATE, 'cd'), 8), last: 'rate' });
     assert.match(dull[1].text, /reduces the high-frequency content/);
-    const crush = judge({ state: applyPreset(DEFAULT_STATE, 'crusher'), last: 'preset' });
-    assert.match(crush[1].text, /aliasing/);
-    assert.match(crush[1].text, /quantisation noise/);
+    const s900 = judge({ state: applyPreset(DEFAULT_STATE, 's900low'), last: 'preset' });
+    assert.match(s900[0].text, /3\.75 kHz, is the highest frequency kept; 2¹² is 4,096 levels/);
+    assert.match(s900[1].text, /poorer high-frequency reproduction/);
+    assert.match(s900[1].text, /signal-to-noise ratio/);
     const deep = judge({ state: setBits(DEFAULT_STATE, 24), last: 'bits' });
     assert.match(deep[0].text, /16,777,216 levels, about 144 dB/);
 });

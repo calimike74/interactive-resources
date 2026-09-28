@@ -143,7 +143,9 @@ test('readings name what happens', () => {
     assert.equal(readings(applyPreset(DEFAULT_STATE, 'grit')).key, 'grit');
     assert.equal(readings(setRate(setBits(applyPreset(DEFAULT_STATE, 'cd'), 8), 8)).key, 'hiss');
     assert.equal(readings(setRate(applyPreset(DEFAULT_STATE, 'cd'), 8)).key, 'dull');
-    assert.equal(readings(applyPreset(DEFAULT_STATE, 'crusher')).key, 'grit');
+    assert.equal(readings(applyPreset(DEFAULT_STATE, 's900low')).key, 'dull');
+    assert.equal(readings(applyPreset(DEFAULT_STATE, 's900high')).key, 'clean');
+    assert.ok(RATES.includes(7.5) && RATES.includes(40));
     assert.equal(readings({ ...applyPreset(DEFAULT_STATE, 'alias'), filter: true }).key, 'filtered');
     assert.equal(readings(applyPreset(DEFAULT_STATE, 'judge')).alias, 5);
     assert.equal(readings(applyPreset(DEFAULT_STATE, 'cd')).key, 'clean');

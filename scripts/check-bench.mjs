@@ -171,7 +171,7 @@ const BENCHES = {
     },
     'adc-explorer': {
         sampleBracket: true,
-        presets: { first: 'Aliasing', second: 'Four bits', judge: 'Judge: 15 kHz at 20k' },
+        presets: { first: 'Aliasing', second: '4-bit file', judge: 'Judge: 15 kHz at 20k' },
         judgeLands: { selector: '[aria-label="Stage"] canvas', attr: 'data-alias', value: '5', says: 'loads a 15 kHz tone at 20 kHz with no filter, which comes back at 5 kHz (data-alias = 5)' },
         stages: { core: 'samples', alevel: 'nyquist', extension: 'chain' },
     },
