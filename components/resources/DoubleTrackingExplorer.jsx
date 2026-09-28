@@ -75,7 +75,7 @@ const QUIZ_QUESTIONS = {
                 'Record the vocal twice, keeping both takes for natural timing variation',
             ],
             correct: 1,
-            explanation: 'The first answer is the zero-marks response flagged in examiner reports (2022-2024). Simply copying creates no variation.'
+            explanation: 'The first answer scores zero. Simply copying creates no variation.'
         },
         {
             type: 'multiple_choice',
@@ -310,7 +310,7 @@ const MistakeSection = ({ onComplete }) => {
                     <AlertTriangle size={28} strokeWidth={1.75} color="#ef4444" aria-hidden="true" />
                     <div>
                         <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#ef4444', margin: '0 0 0.5rem 0' }}>
-                            EXAMINER WARNING (2022-2024)
+                            THE COMMON ERROR
                         </h3>
                         <blockquote style={{
                             margin: '0 0 1rem 0',
@@ -324,7 +324,7 @@ const MistakeSection = ({ onComplete }) => {
                             "Merely copying vocal to another track just adds level - doesn't sound like separate vocal."
                         </blockquote>
                         <p style={{ margin: '0', color: '#c9cdd4', fontSize: '0.9rem', lineHeight: '1.6' }}>
-                            This error has appeared in examiner reports for <strong style={{ color: '#f8f9fa' }}>three consecutive years</strong>.
+                            This is the error that <strong style={{ color: '#f8f9fa' }}>costs the most marks</strong> on double tracking.
                         </p>
                     </div>
                 </div>
@@ -479,8 +479,8 @@ const MistakeSection = ({ onComplete }) => {
                 • Every sample is IDENTICAL<br/>
                 • Identical waveforms = constructive interference<br/>
                 • Result: +3 to +6dB louder, but sounds like ONE voice<br/><br/>
-                <strong>EXAMINER QUOTE (2022-2024):</strong><br/>
-                "Merely copying vocal to another track just adds level - doesn't sound like separate vocal."
+                <strong>REMEMBER:</strong><br/>
+                Copying the vocal to another track only adds level. It does not sound like a separate vocal.
             </CopyableNote>
 
             <CopyableNote title="What Makes Double Tracking Work" color="#22c55e" variant="key">

@@ -342,7 +342,7 @@ export default function WaveformDrawingAssessment() {
                 </div>
 
                 <p className="text-xs text-ink/50 text-center mt-4">
-                    Drawn from 2019, 2023, 2024 and 2025 exam papers
+                    Drawn from past exam question types
                 </p>
             </div>
         </div>

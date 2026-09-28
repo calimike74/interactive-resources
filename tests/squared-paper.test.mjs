@@ -182,7 +182,7 @@ test('every octave question asks for one octave, and never for two', () => {
         assert.equal(q.timeBase, 1);
         assert.deepEqual(q.marks.map((m) => m.id), ['shape', 'period']);
         assert.equal(q.accept, 'Accept DC offset. Accept different amplitude.');
-        assert.match(q.report, /an octave lower was double the period/);
+        assert.match(q.report, /octave lower is double the period/i);
     }
 });
 
@@ -214,7 +214,8 @@ test('every question prints a stem, a source and its marks, in the house style',
         if (q.accept) noDash(q.accept);
         if (q.report) {
             noDash(q.report);
-            assert.match(q.report, /\(examiner's report\)$/, `${q.id}: the examiner line is not signed`);
+            // Mike, 28 Sep 2026: no paper or examiner-report attribution reaches pupils.
+            assert.doesNotMatch(q.report, /examiner|report|candidates|\b(19|20)\d\d\b/i, `${q.id}: the common-error line cites its source`);
         }
         for (const m of q.marks) {
             noDash(m.words);

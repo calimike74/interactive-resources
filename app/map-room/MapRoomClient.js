@@ -470,7 +470,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                         ))}
                     </div>
                     <div className="mt-2 border-t pt-2 text-[10.5px]" style={{ borderColor: ROOM.line, color: '#6B6F5C' }}>
-                        Drawn from the Principal Examiner&rsquo;s reports, 2019–2023.
+                        The traps that cost marks most often.
                     </div>
                 </div>
             )}

@@ -425,17 +425,17 @@ export default function MIDIPitchBendController() {
               />
             </Callout>
 
-            <Callout type="tip" title="2024 Q1(b)">
-              2024's Q1(b) asked exactly this, across three one-mark parts: how many bytes MIDI uses for
-              pitch bend, the value at the centre position, and how 16383 is transmitted as LSB/MSB. All
+            <Callout type="tip" title="Three quick marks">
+              A past question asked exactly this, across three one-mark parts: how many bytes MIDI uses for
+              pitch bend, the value at the centre position, and how 16383 is sent as LSB and MSB. All
               three are questions about representation, not musicality: get the numbers automatic and
-              they're free marks.
+              they are free marks.
             </Callout>
 
             <Callout type="tip" title="The signed-range version" defaultOpen={false}>
-              Some mark schemes describe this same 14-bit space as running from −8192 to +8191 rather
-              than 0 to 16,383 (2023 Q2(b)). It's the identical 16,384 values: just counted outward from
-              centre instead of up from zero. Recognise both framings.
+              The same 14-bit space is sometimes written as running from −8192 to +8191 rather
+              than 0 to 16,383. It is the same 16,384 values, counted outward from the
+              centre instead of up from zero. Recognise both.
             </Callout>
           </div>
         </section>
@@ -597,14 +597,13 @@ export default function MIDIPitchBendController() {
 
             <Callout type="tip" title="7-bit velocity">
               Note velocity uses the same logic in miniature: 7 bits, 2⁷ = 128 values, 0–127, which is
-              why a fact like "127 is the loudest a note can be struck" (2021 Q2(b), 2 marks) always
+              why a fact like "127 is the loudest a note can be struck" always
               traces back to the bit count, not a musical decision.
             </Callout>
 
             <Callout type="tip" title="Naming the messages" defaultOpen={false}>
-              2019's Q2(b) asked for three MIDI messages other than Note On/Off, worth 3 marks.
-              Everything on this page qualifies: Pitch Bend and any of the five Control Change types
-              above.
+              MIDI carries more than Note On and Note Off. Everything on this page is a MIDI message
+              in its own right: Pitch Bend and any of the five Control Change types above.
             </Callout>
           </div>
         </section>
