@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
     drawSet, normaliseCode, randomCode, mulberry32, hashCode, markRound, leanOf, leanSentences,
-    soundState, ROUND_TYPES, ROUND_TIMES, ROUND_WETS, ROUNDS_PER_SET, PREDELAY_BY_TYPE,
+    soundState, ROUND_TYPES, ROUND_TIMES, TIMES_BY_TYPE, ROUND_WETS, ROUNDS_PER_SET, PREDELAY_BY_TYPE,
     TIME_LADDER, WET_LADDER, DRY_RUNG, RULE_OF_THUMB, EMPTY_ANSWER,
 } from '../lib/bench/reverb-by-ear.js';
 
@@ -28,7 +28,7 @@ test('every round is drawn from the stated lists, and a set holds every type', (
         assert.equal(set.length, ROUNDS_PER_SET);
         for (const r of set) {
             assert.ok(ROUND_TYPES.includes(r.type));
-            assert.ok(ROUND_TIMES.includes(r.time));
+            assert.ok(TIMES_BY_TYPE[r.type].includes(r.time), `${r.type} at ${r.time} s`);
             assert.ok(ROUND_WETS.includes(r.wet));
             assert.equal(r.predelay, PREDELAY_BY_TYPE[r.type]);
         }
