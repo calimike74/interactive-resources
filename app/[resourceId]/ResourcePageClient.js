@@ -22,6 +22,7 @@ import RevealExplorer from '@/components/resources/RevealExplorer';
 import EQAssessmentPrototype from '@/components/resources/EQAssessmentPrototype';
 import EssayScaffold from '@/components/resources/EssayScaffold';
 import ReverbBench from '@/components/resources/ReverbBench';
+import ReverbByEar from '@/components/resources/ReverbByEar';
 // The Synth bench is the one resource that builds oscillators. A static
 // import puts createOscillator in the chunk every resource page loads, and
 // check-bench law 9 then fails every bench that does not declare synthesis
@@ -94,6 +95,7 @@ const resourceComponents = {
     'EssayScaffold': EssayScaffold,
     'SynthBench': SynthBench,
     'ReverbBench': ReverbBench,
+    'ReverbByEar': ReverbByEar,
     'StereoRecordingEssay': StereoRecordingEssay,
     'CompressorExplorer': CompressorExplorer,
     'CompressorCurvePractice': CompressorCurvePractice,

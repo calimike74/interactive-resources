@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import BenchFrame from '@/components/bench/BenchFrame';
 import { Dial, Chips, Why, MoreButton } from '@/components/bench/controls';
 import { PlayColumn, Presets, Legal, ExamCallout, useBenchMode, useBenchDepth, DEPTHS } from '@/components/bench/BenchBits';
@@ -53,7 +54,7 @@ const ORIENTS = {
 // Set from scripts/measure-reverb.mjs, 2 Sep 2026: the three sources through
 // the same hall within about 3 dB on their peaks (the phrases carry silence,
 // so their means sit lower than the snare's).
-const SOURCE_TRIM = { vocal: 1, guitar: 1.28, snare: 0.66 };
+export const SOURCE_TRIM = { vocal: 1, guitar: 1.28, snare: 0.66 };
 
 const PRE_MAX_SEC = 0.6;
 const XFADE = 0.06;
@@ -64,8 +65,10 @@ const XFADE = 0.06;
 // Two convolvers alternate: a change of type, time, damping or stereo builds
 // the new answer into the idle one and crossfades 60 ms, so nothing clicks
 // and the old tail is allowed to finish. The ceiling compressor is the
-// shared kit's limiter, between master and the destination.
-function buildReverbGraph(ctx, input, master) {
+// shared kit's limiter, between master and the destination. Exported so
+// Reverb by ear (components/resources/ReverbByEar.jsx) plays its blind rounds
+// through this same graph rather than a second engine.
+export function buildReverbGraph(ctx, input, master) {
     const dry = ctx.createGain();
     const dryPanner = ctx.createStereoPanner();
     input.connect(dry);
@@ -1013,6 +1016,11 @@ export default function ReverbBench({ back }) {
                         <b>Send against insert</b>
                         <span>The routing that loses the most reverb marks is a signal-flow question. The topic covers aux sends, returns and insert order.</span>
                     </a>
+                    <Link className={styles.conn} href="/reverb-by-ear">
+                        <i>1.12 Reverb</i>
+                        <b>Reverb by ear</b>
+                        <span>Five blind rounds on this vocal. Name the type, the reverb time and the wet level, then see which way you lean.</span>
+                    </Link>
                     <a className={styles.conn} href={`${topicHref('reverb')}#explore`}>
                         <i>1.12 Reverb</i>
                         <b>Inside the Room</b>
