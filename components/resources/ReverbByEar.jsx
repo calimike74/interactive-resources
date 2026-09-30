@@ -14,7 +14,7 @@ import {
 } from '@/lib/bench/reverb-model';
 import {
     drawSet, normaliseCode, randomCode, soundState, markRound, leanOf, leanSentences,
-    TIME_LADDER, WET_LADDER, DRY_RUNG, ROUND_TYPES, ROUNDS_PER_SET, TYPE_LABEL, EMPTY_ANSWER,
+    TYPE_LADDER, TIME_LADDER, WET_LADDER, DRY_RUNG, ROUND_TYPES, ROUNDS_PER_SET, TYPE_LABEL, EMPTY_ANSWER,
     ANSWER_TIME, ANSWER_WET, TIME_TOL, WET_TOL, RULE_OF_THUMB,
 } from '@/lib/bench/reverb-by-ear';
 
@@ -189,14 +189,22 @@ export default function ReverbByEar({ back }) {
                 </div>
 
                 <p className={styles.lede}>
-                    A past question: a pop vocal, with its reverb set out in a table: Type, Reverb time (s), Wet level %. Tune your ear on the two ladders first. Then do five blind rounds, and I will show you which way you lean.
+                    A past question: a pop vocal, with its reverb set out in a table: Type, Reverb time (s), Wet level %. Tune your ear on the ladders first. Then do five blind rounds, and I will show you which way you lean.
                 </p>
 
                 <div className={styles.grid}>
                     {/* ---- 1. the ladders ---- */}
                     <section className={styles.card} aria-labelledby="ladders-h">
                         <h2 id="ladders-h" className={styles.h2}><span className={styles.num}>1</span>Tune your ear</h2>
-                        <p className={styles.note}>The same vocal every time. Listen for how long the tail hangs after each phrase, then for how loud it sits behind the voice.</p>
+                        <p className={styles.note}>The same vocal every time. Listen for the size of the space, then for how long the tail hangs after each phrase, then for how loud it sits behind the voice.</p>
+                        <Ladder
+                            label="Reverb type"
+                            sub="each at its usual length, 20% wet"
+                            rungs={TYPE_LADDER}
+                            text={(r) => `${TYPE_LABEL[r.type]}, ${secs(r.time)}`}
+                            nowId={playing ? nowId : null}
+                            onPress={toggleRung}
+                        />
                         <Ladder
                             label="Reverb time"
                             sub="hall, 20% wet"

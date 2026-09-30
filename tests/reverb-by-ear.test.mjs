@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
     drawSet, normaliseCode, randomCode, mulberry32, hashCode, markRound, leanOf, leanSentences,
     soundState, ROUND_TYPES, ROUND_TIMES, TIMES_BY_TYPE, ROUND_WETS, ROUNDS_PER_SET, PREDELAY_BY_TYPE,
-    TIME_LADDER, WET_LADDER, DRY_RUNG, RULE_OF_THUMB, EMPTY_ANSWER,
+    TYPE_LADDER, TIME_LADDER, WET_LADDER, DRY_RUNG, RULE_OF_THUMB, EMPTY_ANSWER,
 } from '../lib/bench/reverb-by-ear.js';
 
 const noDash = (s) => assert.ok(!/[—–]/.test(s) && !/\butilise/i.test(s), `house copy law broken: ${s}`);
@@ -148,6 +148,8 @@ test('the ladders are the ones asked for, and a round plays the vocal on a stere
     assert.deepEqual(TIME_LADDER.map((r) => [r.type, r.time, r.wet]), [['hall', 1, 20], ['hall', 2, 20], ['hall', 3, 20]]);
     assert.deepEqual(WET_LADDER.map((r) => [r.type, r.time, r.wet]), [['hall', 2, 10], ['hall', 2, 30], ['hall', 2, 60]]);
     assert.equal(DRY_RUNG.wet, 0);
+    assert.deepEqual(TYPE_LADDER.map((r) => r.type), ROUND_TYPES, 'every type a round can be is on the type ladder');
+    for (const r of TYPE_LADDER) assert.ok(TIMES_BY_TYPE[r.type].includes(r.time), `${r.type} rung at a time a round of that type can have`);
     const s = soundState({ type: 'plate', time: 2.5, wet: 20 });
     assert.equal(s.source, 'vocal');
     assert.equal(s.routing, 'send');
