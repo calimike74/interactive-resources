@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readPassParam, verifyMemberPass } from '../lib/memberPass.js';
+import { readPassParam, verifyMemberPass, mintMemberPass } from '../lib/memberPass.js';
 
 test('readPassParam extracts ?pass= from a URL', () => {
     assert.equal(
@@ -119,6 +119,54 @@ test('verifyMemberPass resolves false, never throws, on an unparseable JSON body
         }),
         async () => {
             assert.equal(await verifyMemberPass('token'), false);
+        },
+    );
+});
+
+// 8 Oct 2026 (Mike: "no student should need a code"): a page opened from a
+// OneNote link carries no ?pass=, so the gate asks the member site itself,
+// sending this browser's own cookies. The school pass cookie lives on
+// member., so that is the host asked (not grades.).
+test('mintMemberPass asks the member site with the browser cookies and returns the pass', async () => {
+    let capturedUrl;
+    let capturedOptions;
+    await withFetch(
+        async (url, options) => {
+            capturedUrl = url;
+            capturedOptions = options;
+            return { ok: true, json: async () => ({ pass: 'fresh.pass' }) };
+        },
+        async () => {
+            assert.equal(await mintMemberPass(), 'fresh.pass');
+        },
+    );
+    assert.equal(capturedUrl, 'https://member.musictechstudio.co.uk/api/member/resources-pass');
+    assert.equal(capturedOptions.method, 'POST');
+    assert.equal(capturedOptions.credentials, 'include');
+});
+
+test('mintMemberPass resolves null when the member site says no (not a pupil or member)', async () => {
+    await withFetch(
+        async () => ({ ok: false, status: 401, json: async () => ({ error: 'Unauthorized' }) }),
+        async () => {
+            assert.equal(await mintMemberPass(), null);
+        },
+    );
+});
+
+test('mintMemberPass resolves null, never throws, on a network error or an odd reply', async () => {
+    await withFetch(
+        async () => {
+            throw new Error('offline');
+        },
+        async () => {
+            assert.equal(await mintMemberPass(), null);
+        },
+    );
+    await withFetch(
+        async () => ({ ok: true, json: async () => ({ pass: '' }) }),
+        async () => {
+            assert.equal(await mintMemberPass(), null);
         },
     );
 });

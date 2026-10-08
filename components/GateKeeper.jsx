@@ -13,7 +13,7 @@ import {
     GATE_STORAGE_KEY,
     GATE_COOKIE_MAX_AGE_SECONDS,
 } from '@/lib/gate';
-import { readPassParam, stripPassParam, verifyMemberPass } from '@/lib/memberPass';
+import { readPassParam, stripPassParam, verifyMemberPass, mintMemberPass } from '@/lib/memberPass';
 
 /**
  * Wraps a single resource's interactive region, or a Learn lesson's body.
@@ -77,7 +77,23 @@ export default function GateKeeper({ resourceId, title, children, free }) {
                 stored = null;
             }
             const valid = await isTokenValid(stored, subtle);
-            if (!cancelled) setStatus(valid ? 'open' : 'locked');
+            if (valid) {
+                if (!cancelled) setStatus('open');
+                return;
+            }
+
+            // No pass and no stored unlock (a OneNote link, a new computer):
+            // ask the member site with this browser's own cookies before the
+            // panel. A pupil whose own link set the school pass gets in with
+            // no code (Mike, 8 Oct 2026: "no student should need a code").
+            const minted = await mintMemberPass();
+            if (minted) {
+                const token = await deriveToken(subtle);
+                persistUnlock(token);
+                if (!cancelled) setStatus('open');
+                return;
+            }
+            if (!cancelled) setStatus('locked');
         })();
         return () => { cancelled = true; };
     }, [status, resourceId, exempt]);
@@ -218,6 +234,17 @@ function PasscodePanel({ title, onUnlocked }) {
                             Sign in via your studio
                         </a>
                         .
+                    </p>
+                    <p
+                        style={{
+                            marginTop: spacing[3],
+                            fontSize: typography.size.sm,
+                            color: t.text.tertiary,
+                            lineHeight: typography.lineHeight.relaxed,
+                        }}
+                    >
+                        A pupil with your own student link? Open it once on this computer, then
+                        come back to this page: it opens by itself.
                     </p>
                 </div>
 
