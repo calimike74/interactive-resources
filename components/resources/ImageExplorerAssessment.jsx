@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { theme, typography, spacing, borderRadius } from '@/lib/theme';
+import { LIVE_SCREENSHOT_CREDIT, isLiveScreenshot } from '@/lib/ableton';
 
 const t = theme.light;
 
@@ -476,6 +477,12 @@ export default function ImageExplorerAssessment({ imageSrc, imageAlt, hotspots, 
                     })}
                 </div>
             </div>
+
+            {isLiveScreenshot(imageSrc) && (
+                <p style={{ margin: `${spacing[2]} 0 0`, fontSize: 11, lineHeight: 1.5, color: t.text.tertiary }}>
+                    {LIVE_SCREENSHOT_CREDIT}
+                </p>
+            )}
 
             {/* Drag items bank */}
             <div style={{

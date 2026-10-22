@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { theme } from '@/lib/theme';
 import { openCookiePreferences } from '@/lib/consent';
 import { getResource, resourceExists } from '@/lib/resources';
+import { TRADEMARK_LINE } from '@/lib/ableton';
 
 // A bench page (resource kind 'bench', BENCH-STANDARD §3 law 1) is one
 // viewport with nothing below it; it carries these two links in its own
@@ -46,6 +47,7 @@ export default function SiteFooter() {
             >
                 Cookie preferences
             </button>
+            <p style={{ margin: '10px auto 0', maxWidth: 640, fontSize: 11, lineHeight: 1.5 }}>{TRADEMARK_LINE}</p>
         </footer>
     );
 }

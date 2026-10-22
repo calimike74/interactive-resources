@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { theme, typography, spacing, borderRadius, glass } from '@/lib/theme';
+import { LIVE_SCREENSHOT_CREDIT, isLiveScreenshot } from '@/lib/ableton';
 
 const t = theme.light;
 
@@ -566,6 +567,12 @@ export default function ImageExplorer({ imageSrc, imageAlt, hotspots, title, ins
                     );
                 })()}
             </div>
+
+            {isLiveScreenshot(imageSrc) && (
+                <p style={{ margin: `${spacing[2]} 0 0`, fontSize: 11, lineHeight: 1.5, color: t.text.tertiary }}>
+                    {LIVE_SCREENSHOT_CREDIT}
+                </p>
+            )}
 
             {/* Detail panel — full description + guided questions for selected control */}
             {selectedId && connectedIds.has(selectedId) && (() => {
