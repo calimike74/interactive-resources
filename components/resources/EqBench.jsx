@@ -742,7 +742,7 @@ export default function EqBench({ back }) {
                 <div className={styles.meaning} data-ext={maths && hasSlope(bandId) ? 'true' : undefined}>
                     {maths && hasSlope(bandId) && slope
                         ? `${fmtDb(slope.atCutoffDb)} at the cutoff, ${fmtDb(slope.octaveDb)} an octave ${bandId === 'hpf' ? 'below' : 'above'}`
-                        : hasSlope(bandId) ? 'where the roll-off starts' : `the ${hasQ(bandId) ? 'centre' : 'corner'} of the band`}
+                        : hasSlope(bandId) ? 'where the curve is 3 dB down' : `the ${hasQ(bandId) ? 'centre' : 'corner'} of the band`}
                 </div>
                 <Why>{hasSlope(bandId)
                     ? 'The cutoff is the frequency where the filter is already 3 dB down; the slope is how fast it falls beyond that, in dB for every octave. Drag the dial, or drag the band’s dot on the stage.'
