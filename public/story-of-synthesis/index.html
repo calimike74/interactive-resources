@@ -79,9 +79,15 @@
     h1 { font-size: 34px; }
   }
   @media (prefers-reduced-motion: reduce) { .download, .chip { transition: none; } }
+  .mts-home { background: #F8F2E8; border-bottom: 1px solid #D4C9B4; font-family: "Geist", -apple-system, sans-serif; }
+  .mts-home div { max-width: 980px; margin: 0 auto; padding: 0 16px; height: 36px; display: flex; align-items: center; }
+  .mts-home a { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; font-size: 13px; font-weight: 500; line-height: 1.4; color: #6B6F5C; text-decoration: none; transition: color 150ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .mts-home a:hover { color: #3A4A35; text-decoration: underline; text-underline-offset: 3px; }
+  .mts-home a:focus-visible { outline: 2px solid #3A4A35; outline-offset: 2px; border-radius: 4px; color: #3A4A35; }
 </style>
 </head>
 <body>
+<nav class="mts-home" aria-label="Music Tech Studio"><div><a href="https://musictechstudio.co.uk"><span aria-hidden="true">&larr;</span> Music Tech Studio</a></div></nav>
 <main>
   <p class="eyebrow">Free download &middot; Component 4</p>
   <h1>The Story of Synthesis</h1>

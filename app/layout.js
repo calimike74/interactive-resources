@@ -6,6 +6,7 @@ import { PHProvider } from "./posthog-provider";
 import CookieBanner from "@/components/CookieBanner";
 import SiteFooter from "@/components/SiteFooter";
 import ReturnRail from "@/components/ReturnRail";
+import StudioHomeBar from "@/components/StudioHomeBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -81,6 +82,7 @@ export default function RootLayout({ children }) {
       >
         <PHProvider>
           <ContextMenuProvider>
+            <StudioHomeBar />
             {children}
             <SiteFooter />
           </ContextMenuProvider>

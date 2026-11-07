@@ -364,7 +364,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                         className="pointer-events-auto inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.14em] opacity-75 transition-opacity duration-150 hover:opacity-100"
                         style={{ color: ROOM.ink, textDecoration: 'none' }}
                     >
-                        ← musictechstudio.co.uk
+                        ← Music Tech Studio
                     </a>
                     <h1 style={{ fontFamily: 'var(--font-fraunces), Georgia, serif', color: ROOM.ink }}
                         className="mt-1.5 text-[28px] font-semibold leading-tight">
