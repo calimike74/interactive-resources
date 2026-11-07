@@ -24,6 +24,16 @@ import { DepthToggle, ModeToggle } from './BenchBits';
 // Laws it enforces by construction (BENCH-STANDARD §3): one viewport, no
 // hero, nothing hidden behind a tab, the member room's tokens.
 
+// The topic code in the head opens that topic's free chapters (Gemini review, 7 Nov:
+// "1.9 Dynamics" was plain text, so a student could not get from the bench to the reading).
+const MEMBER_TOPICS = 'https://member.musictechstudio.co.uk/member/topics/';
+const CODE_TOPIC = {
+    '1.3 Synthesis': 'synthesis', '1.5 Sequencing': 'sequencing', '1.6 Editing': 'audio-editing',
+    '1.8 Automation': 'automation', '1.9 Dynamics': 'dynamic-processing', '1.11 EQ': 'eq-filters',
+    '1.12 Delay': 'delay', '1.12 Reverb': 'reverb', '1.13 Balance': 'balance-blend',
+    '2.1 Acoustics': 'acoustics', '2.4 Digital and Analogue': 'digital-analogue', '2.5 Numeracy': 'numeracy',
+};
+
 export default function BenchFrame({
     code,
     title,
@@ -49,10 +59,12 @@ export default function BenchFrame({
             <div className={styles.frame}>
                 <header className={styles.head}>
                     {back ? <a className={styles.back} href={back.href}>{back.label}</a> : null}
-                    <span className={styles.code}>{code}</span>
+                    {CODE_TOPIC[code]
+                        ? <a className={styles.code} href={MEMBER_TOPICS + CODE_TOPIC[code]} title="Read this topic's chapters">{code}</a>
+                        : <span className={styles.code}>{code}</span>}
                     <span className={styles.title}>{title}</span>
                     <div className={styles.headRight}>
-                        {mode === 'teacher' ? <span className={styles.hint}>hover anything for the why</span> : null}
+                        {mode === 'teacher' ? <span className={styles.hint}><span className={styles.hintMouse}>hover</span><span className={styles.hintTouch}>tap</span> anything for the why</span> : null}
                         <DepthToggle depth={depth} onChange={onDepth} />
                         <ModeToggle mode={mode} onChange={onMode} />
                     </div>

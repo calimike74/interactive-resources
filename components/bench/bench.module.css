@@ -120,6 +120,14 @@
     line-height: 1;
 }
 .headRight { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+a.code { text-decoration: none; }
+a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+/* the hint says tap on a touch screen, hover with a mouse */
+.hintTouch { display: none; }
+@media (hover: none) and (pointer: coarse) {
+    .hintMouse { display: none; }
+    .hintTouch { display: inline; }
+}
 .hint {
     font-family: var(--mono);
     font-size: 11.5px;
