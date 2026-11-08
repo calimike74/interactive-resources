@@ -29,8 +29,10 @@
 .display { font-family: var(--font-bebas), "Bebas Neue", sans-serif; font-weight: 400; letter-spacing: .04em; line-height: .98 }
 
 /* head: the title left, what this is and the key right (as /topics) */
-.hero { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px 72px; align-items: end; padding: 56px 0 72px }
+.hero { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px 72px; align-items: start; padding: 56px 0 72px }
 .title { font-size: clamp(3rem, 6.2vw, 5.6rem); margin: 0; text-wrap: balance }
+/* the title's cap tops sit level with the first line of the lede beside it (Mike, 8 Nov) */
+@media (min-width: 1001px) { .title { margin-top: 4px } }
 .lede { color: var(--ink-70); font-size: 19px; line-height: 1.55; max-width: 34em; margin: 0 0 20px }
 .key { list-style: none; margin: 0 0 24px; padding: 20px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px }
 .key li { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: baseline; font-size: 15px; color: var(--ink-70) }

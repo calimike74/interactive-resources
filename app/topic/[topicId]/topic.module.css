@@ -4,7 +4,7 @@
 .back { display: inline-flex; align-items: center; min-height: 44px; margin-top: 16px; font-size: 15px; color: rgba(45, 45, 45, .72); text-decoration: none }
 .back:hover { color: #2D2D2D; text-decoration: underline }
 
-.hero { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: end; padding: 24px 0 56px; border-bottom: 1px solid rgba(45, 45, 45, .1) }
+.hero { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: start; padding: 24px 0 56px; border-bottom: 1px solid rgba(45, 45, 45, .1) }
 .pic { width: 200px; height: 200px; max-width: 100%; border-radius: 12px; background: #EEF1F6; object-fit: cover; display: block }
 .heroText { min-width: 0 }
 .eyebrow { margin: 0 0 8px; font-family: var(--font-jbmono), ui-monospace, monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #005356 }
