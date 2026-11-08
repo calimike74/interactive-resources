@@ -106,11 +106,14 @@ export default function ExploreHome() {
                     if (!list.length) return null;
                     return (
                         <section key={area.num} className={s.area} aria-labelledby={`area-${area.num}`}>
-                            <div className={s.areaHead}>
-                                <span className={`${s.display} ${s.areaNum}`} aria-hidden="true">{area.num}</span>
-                                <h2 id={`area-${area.num}`} className={`${s.display} ${s.areaName}`}>{area.name}</h2>
-                                <span className={s.areaCount}>{list.length} {list.length === 1 ? 'topic' : 'topics'}</span>
-                            </div>
+                            {/* header.bar + .inner: the ball (public/ball.js) moves this clear of itself while it sticks */}
+                            <header className={`${s.areaHead} bar`}>
+                                <div className={`${s.areaInner} inner`}>
+                                    <span className={`${s.display} ${s.areaNum}`} aria-hidden="true">{area.num}</span>
+                                    <h2 id={`area-${area.num}`} className={`${s.display} ${s.areaName}`}>{area.name}</h2>
+                                    <span className={s.areaCount}>{list.length} {list.length === 1 ? 'topic' : 'topics'}</span>
+                                </div>
+                            </header>
                             <ol className={s.topics}>
                                 {list.map((t) => <Topic key={t.id} topic={t} />)}
                             </ol>

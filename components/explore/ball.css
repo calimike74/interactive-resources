@@ -1,0 +1,59 @@
+/* Copied from the front door (_sandbox/mts-fresh-start/ball.css), 8 Nov 2026. Keep the two the same; the block at the end fits it to this site. */
+  /* The ball (Mike, 22 Oct, from detail.design, the other way round). The name in the top bar
+     never leaves: the words stay where they are while the bar scrolls away, a paper backing
+     comes up behind them, and a little further down they fold into a paper ball. Hover, tap
+     or Tab opens the menu. Paper, not ink, so it belongs to the page (Mike: "blending in"). */
+  @property --p { syntax: '<number>'; inherits: true; initial-value: 0 }
+  /* the fold takes .75s on an ease-out-cubic, slow enough to see it move (Mike, 22 Oct) */
+  :root { --ball-t: .75s; --ball-ease: cubic-bezier(.33, 1, .68, 1) }
+  .mts-ball { --p: 0; position: fixed; z-index: 30; top: max(16px, env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px));
+              pointer-events: none; transition: --p .22s var(--ease, cubic-bezier(.22, 1, .36, 1)) }
+  .mts-ball.is-rest { pointer-events: auto }
+  /* while the ball holds the name, the bar's own link stays in place for clicks and Tab, unseen */
+  .nav .brand.mts-ball-held { color: transparent }
+
+  .mts-ball-btn { position: relative; display: block; width: var(--pill-w, 44px); height: 44px; padding: 0; border: 0; border-radius: 22px; background: none; color: var(--ink); cursor: pointer;
+                  transition: width var(--ball-t) var(--ball-ease) }
+  .mts-ball.is-ball:not(.is-open) .mts-ball-btn { width: 44px }
+  .mts-ball-btn::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--paper); opacity: var(--p);
+                          box-shadow: 0 0 0 1px rgba(45, 45, 45, .12), 0 8px 22px -10px rgba(45, 45, 45, .3) }
+  .mts-ball-btn .clip { position: absolute; inset: 0; border-radius: inherit; overflow: hidden }
+  .mts-ball:not(.is-rest) .mts-ball-btn .clip { overflow: visible }
+  .mts-ball-btn .word { position: absolute; left: 16px; white-space: nowrap;
+                        transform: translate(calc((1 - var(--p)) * var(--dx, 0px)), calc((1 - var(--p)) * var(--dy, 0px)));
+                        transition: opacity .45s .15s var(--ball-ease) }
+  .mts-ball.is-ball:not(.is-open) .mts-ball-btn .word { opacity: 0; transition: opacity .35s ease-out }
+  .mts-ball-btn .mark { position: absolute; left: 11px; top: 11px; width: 22px; height: 22px; opacity: 0; transform: scale(.6);
+                        transition: opacity .25s ease-out, transform .45s var(--ball-ease) }
+  .mts-ball.is-ball:not(.is-open) .mts-ball-btn .mark { opacity: 1; transform: none;
+                        transition: opacity .45s .3s ease-out, transform .7s .2s var(--ball-ease) }
+  .mts-ball .mts-ball-btn:focus-visible { outline: 2px solid var(--explore-ink, #2E6BBF); outline-offset: 3px; border-radius: 22px }
+
+  .mts-ball-menu { position: absolute; top: 52px; left: 0; min-width: 232px; padding: 8px; border-radius: 16px; background: var(--paper); color: var(--ink);
+                   box-shadow: 0 0 0 1px rgba(45, 45, 45, .12), 0 22px 44px -20px rgba(45, 45, 45, .32); display: grid; gap: 2px;
+                   opacity: 0; transform: translateY(-6px) scale(.98); transform-origin: 22px 0; visibility: hidden;
+                   transition: opacity .18s var(--ease, ease-out), transform .3s var(--ease, ease-out), visibility 0s .3s }
+  .mts-ball.is-open .mts-ball-menu { opacity: 1; transform: none; visibility: visible; transition: opacity .18s var(--ease, ease-out), transform .3s var(--ease, ease-out) }
+  .mts-ball-menu a { display: block; padding: 10px 12px; border-radius: 10px; font: 400 15px/1.3 "Public Sans", system-ui, sans-serif; color: var(--ink-70, rgba(45, 45, 45, .72)); text-decoration: none }
+  .mts-ball-menu a:hover, .mts-ball-menu a:focus-visible { color: var(--ink); background: rgba(45, 45, 45, .05); outline: none }
+  .mts-ball-menu a:focus-visible { box-shadow: inset 0 0 0 2px var(--explore-ink, #2E6BBF) }
+  .mts-ball-menu a[aria-current] { color: var(--ink); font-weight: 600 }
+  .mts-ball-menu hr { border: 0; border-top: 1px solid rgba(45, 45, 45, .1); margin: 6px 4px }
+  /* Start here keeps the top bar's dark button, the one dark thing in the menu */
+  .mts-ball-menu a.go { margin-top: 4px; background: var(--ink); color: var(--paper); font-weight: 500; text-align: center }
+  .mts-ball-menu a.go:focus-visible { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--explore-ink, #2E6BBF) }
+
+  /* A bar that sticks to the top of the page moves its title clear of the ball: below
+     1384px wide its column starts left of where the ball ends. */
+  header.ways-bar .inner, header.bar .inner, header.parts-bar .inner { transition: padding-left var(--ball-t) var(--ball-ease) }
+  @media (max-width: 1383px) { .ball-room .inner { padding-left: 44px } }
+  @media (max-width: 520px) { .ball-room .inner { padding-left: 52px } }
+  /* opening a page part-way down: everything starts where it should be, without moving */
+  .mts-ball-still .mts-ball, .mts-ball-still .mts-ball *, .mts-ball-still header .inner { transition: none !important }
+  @media (prefers-reduced-motion: reduce) {
+    .mts-ball, .mts-ball *, header.ways-bar .inner, header.bar .inner, header.parts-bar .inner { transition: none !important }
+  }
+
+/* this site: the ball sits outside .page, so it carries the tokens; fonts are next/font variables */
+.mts-ball { --paper: #FFFBF5; --ink: #2D2D2D; --ink-70: rgba(45, 45, 45, .72); --explore-ink: #005356 }
+.mts-ball-menu a { font-family: var(--font-public), system-ui, sans-serif }
