@@ -13,9 +13,9 @@
 .read { margin: 0; font-size: 15px; color: rgba(45, 45, 45, .72) }
 .read a { color: #2D2D2D; text-decoration: underline }
 
-.body { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 32px 72px; padding-top: 48px }
+.body { --head: clamp(1.9rem, 3.4vw, 2.6rem); display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 32px 72px; padding-top: 48px }
 .main { min-width: 0 }
-.head { font-size: clamp(1.9rem, 3.4vw, 2.6rem); margin: 0 0 16px }
+.head { font-size: var(--head); margin: 0 0 16px }
 .headGap { margin-top: 56px }
 
 .tools { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(45, 45, 45, .1) }
@@ -26,7 +26,7 @@
 .tool:hover .toolName { text-decoration: underline }
 .toolDesc { font-size: 15px; line-height: 1.5; color: rgba(45, 45, 45, .72); max-width: 62ch }
 .time { font-size: 13px; color: rgba(45, 45, 45, .68); font-variant-numeric: tabular-nums }
-.none { margin: 0; font-size: 17px; color: rgba(45, 45, 45, .72); max-width: 56ch }
+.none { margin: 0; padding-top: 16px; border-top: 1px solid rgba(45, 45, 45, .1); font-size: 17px; color: rgba(45, 45, 45, .72); max-width: 56ch }
 .none a { color: #2D2D2D }
 
 .progress { display: flex; flex-wrap: wrap; gap: 8px 32px; margin: 0 0 16px; padding: 12px 16px; background: #D9F1F2; border-radius: 10px }
@@ -35,8 +35,9 @@
 .progress dd { margin: 0; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums }
 
 .side { min-width: 0 }
-.sideHead { margin: 6px 0 12px; font-family: var(--font-jbmono), ui-monospace, monospace; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(45, 45, 45, .68); padding-bottom: 12px; border-bottom: 1px solid rgba(45, 45, 45, .1) }
-.spec { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: 15px; line-height: 1.5 }
+/* same height as .head, so the rule under each heading sits on one line */
+.sideHead { box-sizing: content-box; height: calc(var(--head) * .98); display: flex; align-items: flex-end; margin: 0 0 16px; font-family: var(--font-jbmono), ui-monospace, monospace; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(45, 45, 45, .68) }
+.spec { list-style: none; margin: 0; padding: 16px 0 0; border-top: 1px solid rgba(45, 45, 45, .1); display: grid; gap: 12px; font-size: 15px; line-height: 1.5 }
 .spec li { padding-left: 16px; position: relative }
 .spec li::before { content: ""; position: absolute; left: 0; top: .65em; width: 6px; height: 6px; border-radius: 50%; background: #3B8F93 }
 
