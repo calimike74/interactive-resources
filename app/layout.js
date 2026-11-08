@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { Instrument_Serif, Fraunces, Manrope, JetBrains_Mono } from "next/font/google";
+import { Instrument_Serif, Fraunces, Manrope, JetBrains_Mono, Bebas_Neue, Public_Sans } from "next/font/google";
 import "./globals.css";
 import { ContextMenuProvider } from "@/components/ContextMenu";
 import { PHProvider } from "./posthog-provider";
@@ -44,18 +44,33 @@ const jetBrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+// The Music Tech Studio design system's two faces (8 Nov 2026): Bebas Neue for display,
+// Public Sans for text. The older faces stay loaded for pages not yet moved over.
+const bebas = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
+const publicSans = Public_Sans({
+  variable: "--font-public",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata = {
   metadataBase: new URL('https://resources.musictechstudio.co.uk'),
   title: {
     default: 'Interactive Resources | A-Level Music Technology',
-    template: '%s | Interactive Resources',
+    template: '%s | Music Tech Studio',
   },
   description: "Interactive learning tools for Pearson Edexcel A-Level Music Technology. Practice EQ, synthesis, dynamics, and more.",
   openGraph: {
     title: 'Interactive Resources | A-Level Music Technology',
     description: 'Interactive learning tools for Pearson Edexcel A-Level Music Technology. Practice EQ, synthesis, dynamics, and more.',
     url: 'https://resources.musictechstudio.co.uk',
-    siteName: 'Interactive Resources | A-Level Music Technology',
+    siteName: 'Music Tech Studio',
     locale: 'en_GB',
     type: 'website',
   },
@@ -78,7 +93,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${fraunces.variable} ${manrope.variable} ${jetBrainsMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${fraunces.variable} ${manrope.variable} ${jetBrainsMono.variable} ${bebas.variable} ${publicSans.variable} antialiased`}
       >
         <PHProvider>
           <ContextMenuProvider>

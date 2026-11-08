@@ -1,0 +1,98 @@
+/* The Explore home (8 Nov 2026), in the Music Tech Studio design system:
+   paper ground, Bebas Neue display, Public Sans text, JetBrains Mono labels,
+   Explore teal for wayfinding only. Same 1240px grid as the front door's /topics. */
+
+.page {
+    --paper: #FFFBF5;
+    --ink: #2D2D2D;
+    --ink-70: rgba(45, 45, 45, .72);
+    --ink-55: rgba(45, 45, 45, .68);
+    --line: rgba(45, 45, 45, .1);
+    --ground: #EEF1F6;
+    --explore: #3B8F93;
+    --explore-tint: #D9F1F2;
+    --explore-ink: #005356;
+    --pen: #2F5BB7;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 17px/1.6 var(--font-public), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+.page a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px }
+.page a:focus-visible { outline: 2px solid var(--pen); outline-offset: 3px; border-radius: 3px }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 104px max(16px, env(safe-area-inset-left, 0px)) }
+@media (min-width: 700px) { .wrap { padding-left: 28px; padding-right: 28px } }
+
+.display { font-family: var(--font-bebas), "Bebas Neue", sans-serif; font-weight: 400; letter-spacing: .04em; line-height: .98 }
+
+/* head: the title left, what this is and the key right (as /topics) */
+.hero { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px 72px; align-items: end; padding: 56px 0 72px }
+.title { font-size: clamp(3rem, 6.2vw, 5.6rem); margin: 0; text-wrap: balance }
+.lede { color: var(--ink-70); font-size: 19px; line-height: 1.55; max-width: 34em; margin: 0 0 20px }
+.key { list-style: none; margin: 0 0 24px; padding: 20px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px }
+.key li { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: baseline; font-size: 15px; color: var(--ink-70) }
+.key b { font-weight: 600; color: var(--ink) }
+
+/* the kind of each tool: a small mono label, never a colour on its own */
+.kind { font-family: var(--font-jbmono), ui-monospace, monospace; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-55); white-space: nowrap }
+.kindBench { justify-self: start; color: var(--explore-ink); background: var(--explore-tint); padding: 2px 8px; border-radius: 999px }
+
+/* an area: big numeral, display name, count on the right, hairline under */
+.area { margin-top: 32px }
+.areaHead { display: flex; align-items: baseline; gap: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 32px }
+.areaNum { font-size: clamp(3rem, 6vw, 4.6rem) }
+.areaName { font-size: clamp(1.9rem, 3.4vw, 2.8rem); margin: 0; flex: 1 }
+.areaCount { font-size: 15px; color: var(--ink-55); white-space: nowrap }
+
+/* topics: a drawing and a list of what is on it, two to a row on a laptop */
+.topics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 56px }
+.topic { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 24px; align-items: start }
+.pic { display: block; width: 132px; aspect-ratio: 1; border-radius: 10px; background: var(--ground); overflow: hidden }
+.pic img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s var(--ease) }
+.pic:hover img { transform: scale(1.04) }
+.topicHead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 4px }
+.topicName { font-size: 21px; font-weight: 600; line-height: 1.3; margin: 0 }
+.topicName a { text-decoration: none }
+.topicName a:hover { text-decoration: underline }
+.spec { font-size: 15px; color: var(--ink-55); font-variant-numeric: tabular-nums }
+.read { font-size: 14px; color: var(--ink-70); margin: 0 0 10px }
+.read a { color: var(--ink) }
+.tools { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line) }
+.tools li { border-bottom: 1px solid var(--line) }
+.tools a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 8px 2px; text-decoration: none; font-size: 16px; line-height: 1.35 }
+.tools a:hover .toolName { text-decoration: underline }
+.toolName { min-width: 0 }
+
+/* what has no bench yet: one quiet line, still linked */
+.coming { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 16px 56px }
+.comingHead { font-size: 1.9rem; margin: 0 }
+.comingText { margin: 0 0 12px; color: var(--ink-70); font-size: 16px; max-width: 60ch }
+.comingList { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 16px }
+.comingList a { display: inline-flex; min-height: 44px; align-items: center; gap: 8px }
+
+/* also here: the Map Room, the shelf, the books */
+.also { margin-top: 72px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 56px }
+.alsoHead { font-size: 1.9rem; margin: 0 0 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line) }
+.alsoList { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px }
+.alsoList a { font-weight: 600; text-decoration: none; font-size: 17px }
+.alsoList a:hover { text-decoration: underline }
+.alsoList p { margin: 2px 0 0; color: var(--ink-70); font-size: 15px; line-height: 1.5; max-width: 52ch }
+.members { margin-left: 10px; font-size: 13px; font-weight: 500; color: var(--ink-70); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; white-space: nowrap; vertical-align: 2px }
+
+@media (max-width: 1000px) {
+    .hero { grid-template-columns: 1fr; padding: 32px 0 48px }
+    .topics { grid-template-columns: 1fr; gap: 40px }
+    .coming, .also { grid-template-columns: 1fr }
+}
+@media (max-width: 560px) {
+    .topic { grid-template-columns: 84px minmax(0, 1fr); gap: 16px }
+    .pic { width: 84px }
+    .key li { grid-template-columns: 6.5em 1fr }
+    .lede { font-size: 17px }
+    .areaHead { gap: 12px; margin-bottom: 24px }
+    .areaCount { display: none }
+}
+@media (prefers-reduced-motion: reduce) { .pic img { transition: none } .pic:hover img { transform: none } }
