@@ -6,6 +6,7 @@
 
 import { getAllTopicDefs } from '@/lib/topics';
 import { getResource } from '@/lib/resources';
+import { chapterUrl, kindOf } from '@/lib/chapters';
 import CommandPalette from '@/components/CommandPalette';
 import s from './explore-home.module.css';
 
@@ -14,29 +15,6 @@ export const metadata = {
     description: 'Benches for every topic of the Edexcel A level in Music Technology: machines drawn on screen that you play, with the real devices in Live and quick quizzes beside them.',
     alternates: { canonical: '/' },
 };
-
-const MEMBER_TOPICS = 'https://member.musictechstudio.co.uk/member/topics/';
-
-// resources topic id -> member chapter slug (as the front door's /topics links them)
-const CHAPTER = {
-    'software-hardware': 'software-hardware', microphones: 'microphones', synthesis: 'synthesis',
-    sampling: 'sampling', midi: 'sequencing', 'audio-editing': 'audio-editing',
-    'pitch-rhythm-correction': 'pitch-correction', automation: 'automation', dynamics: 'dynamic-processing',
-    stereo: 'stereo', eq: 'eq-filters', delay: 'delay', distortion: 'distortion', modulation: 'modulation',
-    reverb: 'reverb', 'balance-and-blend': 'balance-blend', mastering: 'mastering', acoustics: 'acoustics',
-    'monitor-speakers': 'monitor-speakers', 'leads-and-signals': 'signals', 'digital-analogue': 'digital-analogue',
-    numeracy: 'numeracy', levels: 'levels',
-};
-
-// What kind of thing a tool is, in words. Benches first, quizzes last.
-const KINDS = {
-    bench: { label: 'Bench', order: 0 },
-    sandbox: { label: 'Explorer', order: 1 },
-    interface: { label: 'In Live', order: 2 },
-    practice: { label: 'Practice', order: 3 },
-    retrieval: { label: 'Quiz', order: 4 },
-};
-const kindOf = (r) => KINDS[r.kind] || KINDS.sandbox;
 
 const AREAS = [
     { num: '1', name: 'Making and shaping sound', test: (t) => t.specRef.startsWith('1.') && t.id !== 'general' },
@@ -65,7 +43,7 @@ function toolsFor(topic) {
 
 function Topic({ topic }) {
     const tools = toolsFor(topic);
-    const chapter = CHAPTER[topic.id];
+    const chapter = chapterUrl(topic.id);
     return (
         <li className={s.topic}>
             <a className={s.pic} href={`/topic/${topic.id}`} tabIndex={-1} aria-hidden="true">
@@ -77,7 +55,7 @@ function Topic({ topic }) {
                     <span className={s.spec}>{topic.specRef}</span>
                 </div>
                 {chapter ? (
-                    <p className={s.read}><a href={MEMBER_TOPICS + chapter}>Read the chapters</a> first, free.</p>
+                    <p className={s.read}><a href={chapter}>Read the chapters</a> first, free.</p>
                 ) : null}
                 <ul className={s.tools}>
                     {tools.map((r) => {
@@ -148,7 +126,7 @@ export default function ExploreHome() {
                             <ul className={s.comingList}>
                                 {without.map((t) => (
                                     <li key={t.id}>
-                                        <a href={CHAPTER[t.id] ? MEMBER_TOPICS + CHAPTER[t.id] : `/topic/${t.id}`}>
+                                        <a href={chapterUrl(t.id) || `/topic/${t.id}`}>
                                             {t.name} <span className={s.spec}>{t.specRef}</span>
                                         </a>
                                     </li>
