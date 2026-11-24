@@ -1,5 +1,6 @@
 'use client';
 import Script from 'next/script';
+import { useLayoutEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import './explore/ball.css';
 
@@ -15,6 +16,13 @@ import './explore/ball.css';
 // own way home in the header, the Map Room has its own link in its fixed stage, and the
 // static books in public/ carry their own bar in their own HTML.
 const HOME = 'https://musictechstudio.co.uk';
+const MEMBER = 'https://member.musictechstudio.co.uk';
+
+// Signed in (Mike, 24 Nov 2026: the Explore bar said Sign in when the rest of the site did not). The member
+// site sets mts_signed_in=1 on .musictechstudio.co.uk while a session lasts; the front door's bar then reads
+// "Member area" and drops Start here (build-site.py MARKER_JS). Same here. Read in a layout effect, so the
+// swap lands before paint and before ball.js (afterInteractive) copies the bar into the ball's menu.
+const signedIn = () => typeof document !== 'undefined' && /(^|;\s*)mts_signed_in=1(;|$)/.test(document.cookie);
 
 function isHubPage(pathname) {
     const p = (pathname || '/').replace(/\.html$/, '').replace(/\/$/, '') || '/';
@@ -23,6 +31,8 @@ function isHubPage(pathname) {
 
 export default function StudioHomeBar() {
     const pathname = usePathname();
+    const [member, setMember] = useState(false);
+    useLayoutEffect(() => { setMember(signedIn()); }, []);
     if (!isHubPage(pathname)) return null;
 
     return (
@@ -34,8 +44,14 @@ export default function StudioHomeBar() {
             <a className="l on" href="/" aria-current="page">Explore</a>
             <a className="l" href={HOME + '/figures'}>Figures</a>
             <a className="l" href={HOME + '/for-teachers'}>For teachers</a>
-            <a className="in" href="https://member.musictechstudio.co.uk/">Sign in</a>
-            <a className="go" href={HOME + '/#ways'}>Start here</a>
+            {member ? (
+                <a className="in" href={MEMBER + '/member'}>Member area</a>
+            ) : (
+                <>
+                    <a className="in" href={MEMBER + '/'}>Sign in</a>
+                    <a className="go" href={HOME + '/#ways'}>Start here</a>
+                </>
+            )}
             <style>{`
                 .mts-bar { display: flex; align-items: center; gap: 28px; background: #FFFBF5; color: #2D2D2D;
                     padding: 16px max(28px, env(safe-area-inset-right, 0px)) 16px max(28px, env(safe-area-inset-left, 0px));
