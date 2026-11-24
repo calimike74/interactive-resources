@@ -29,11 +29,17 @@
 .display { font-family: var(--font-bebas), "Bebas Neue", sans-serif; font-weight: 400; letter-spacing: .04em; line-height: .98 }
 
 /* head: the title left, what this is and the key right (as /topics) */
-.hero { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px 72px; align-items: start; padding: 56px 0 72px }
-.title { font-size: clamp(3rem, 6.2vw, 5.6rem); margin: 0; text-wrap: balance }
+.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px 56px; align-items: center; padding: 56px 0 72px }
+.title { font-size: clamp(2.6rem, 4.3vw, 4.2rem); margin: 0; white-space: nowrap }
 /* the title's cap tops sit level with the first line of the lede beside it (Mike, 8 Nov) */
 @media (min-width: 1001px) { .title { margin-top: 4px } }
-.lede { color: var(--ink-70); font-size: 19px; line-height: 1.55; max-width: 34em; margin: 0 0 20px }
+.lede { color: var(--ink-70); font-size: 16px; line-height: 1.6; max-width: 34em; margin: 28px 0 20px }
+/* the bench picture: framed like the Figures and Lessons heroes, the whole thing a link */
+.shot { display: block; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -18px rgba(0,0,0,.25); text-decoration: none; color: inherit }
+.shot img { display: block; width: 100%; height: auto; transition: transform .4s ease }
+.shot:hover img { transform: scale(1.015) }
+.shotCap { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); font-family: var(--font-jbmono), ui-monospace, monospace; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-55) }
+.shotGo { color: var(--explore-ink) }
 .key { list-style: none; margin: 0 0 24px; padding: 20px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px }
 .key li { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: baseline; font-size: 15px; color: var(--ink-70) }
 .key b { font-weight: 600; color: var(--ink) }
@@ -90,6 +96,7 @@
 
 @media (max-width: 1000px) {
     .hero { grid-template-columns: 1fr; padding: 32px 0 48px }
+    .title { white-space: normal }
     .topics { grid-template-columns: 1fr; gap: 40px }
     .coming, .also { grid-template-columns: 1fr }
 }
@@ -97,8 +104,8 @@
     .topic { grid-template-columns: 84px minmax(0, 1fr); gap: 16px }
     .pic { width: 84px }
     .key li { grid-template-columns: 6.5em 1fr }
-    .lede { font-size: 17px }
+    .lede { font-size: 16px }
     .areaHead { gap: 12px; margin-bottom: 24px }
     .areaCount { display: none }
 }
-@media (prefers-reduced-motion: reduce) { .pic img { transition: none } .pic:hover img { transform: none } }
+@media (prefers-reduced-motion: reduce) { .pic img, .shot img { transition: none } .pic:hover img, .shot:hover img { transform: none } }

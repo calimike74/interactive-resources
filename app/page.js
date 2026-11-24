@@ -85,8 +85,8 @@ export default function ExploreHome() {
         <div className={s.page}>
             <main className={s.wrap}>
                 <header className={s.hero}>
-                    <h1 className={`${s.display} ${s.title}`}>Turn a control.<br />Hear it change.</h1>
                     <div>
+                        <h1 className={`${s.display} ${s.title}`}>Turn a control.<br />Hear it change.</h1>
                         <p className={s.lede}>
                             {toolCount} benches on {withTools.length} topics of the Edexcel A level. A bench is the machine
                             drawn the way the paper draws it, and you play it: every control makes a sound, and the drawing
@@ -94,6 +94,12 @@ export default function ExploreHome() {
                         </p>
                         <CommandPalette />
                     </div>
+                    {/* one real bench on the right, as Figures and Lessons show their real thing (Mike, 24 Nov 2026) */}
+                    <a className={s.shot} href="/dynamics-bench">
+                        <img src="/explore-hero-dynamics.webp" width="1600" height="828"
+                            alt="The Dynamics bench: a compressor's transfer curve beside two bars of drums, with the threshold, ratio, attack and release knobs below" />
+                        <span className={s.shotCap}><span>Dynamics bench · 1.9</span><span className={s.shotGo}>Play it →</span></span>
+                    </a>
                 </header>
 
                 {AREAS.map((area) => {
