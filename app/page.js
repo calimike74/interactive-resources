@@ -6,13 +6,13 @@
 
 import { getAllTopicDefs } from '@/lib/topics';
 import { getResource } from '@/lib/resources';
-import { chapterUrl, kindOf } from '@/lib/chapters';
+import { chapterUrl, kindOf, isHandsOn } from '@/lib/chapters';
 import CommandPalette from '@/components/CommandPalette';
 import s from './explore-home.module.css';
 
 export const metadata = {
     title: { absolute: 'Explore: benches you play | Music Tech Studio' },
-    description: 'Benches for every topic of the Edexcel A level in Music Technology: machines drawn on screen that you play, with the real devices in Live and quick quizzes beside them.',
+    description: 'Benches for the Edexcel A level in Music Technology: machines drawn on screen that you play, every control making a sound.',
     alternates: { canonical: '/' },
 };
 
@@ -37,7 +37,7 @@ const BOOKS = [
 function toolsFor(topic) {
     return topic.resourceIds
         .map((id) => getResource(id))
-        .filter((r) => r && !r.hidden)
+        .filter((r) => r && !r.hidden && isHandsOn(r))
         .sort((a, b) => kindOf(a).order - kindOf(b).order);
 }
 
@@ -88,15 +88,10 @@ export default function ExploreHome() {
                     <h1 className={`${s.display} ${s.title}`}>Turn a control.<br />Hear it change.</h1>
                     <div>
                         <p className={s.lede}>
-                            {toolCount} tools on {withTools.length} topics of the Edexcel A level. A bench is the machine
-                            drawn on screen, and you play it: every control makes a sound, and the drawing moves with it.
+                            {toolCount} benches on {withTools.length} topics of the Edexcel A level. A bench is the machine
+                            drawn the way the paper draws it, and you play it: every control makes a sound, and the drawing
+                            moves with it.
                         </p>
-                        <ul className={s.key}>
-                            <li><span className={`${s.kind} ${s.kindBench}`}>Bench</span><span><b>A machine to play</b>, drawn the way the paper draws it</span></li>
-                            <li><span className={s.kind}>Explorer</span><span><b>One idea</b> to try out</span></li>
-                            <li><span className={s.kind}>In Live</span><span><b>The real device</b> in Ableton Live, control by control</span></li>
-                            <li><span className={s.kind}>Quiz</span><span><b>Check yourself</b> in a few minutes</span></li>
-                        </ul>
                         <CommandPalette />
                     </div>
                 </header>

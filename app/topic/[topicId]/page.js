@@ -6,7 +6,7 @@ import { getAllTopicIds, getTopic } from '@/lib/topics';
 import { getResource, resourceExists } from '@/lib/resources';
 import { hasLearnContent } from '@/lib/learn/topics';
 import { hasReviseContent } from '@/lib/questions';
-import { chapterUrl, kindOf } from '@/lib/chapters';
+import { chapterUrl, kindOf, isHandsOn } from '@/lib/chapters';
 import QuizProgress from '@/components/explore/QuizProgress';
 import h from '../../explore-home.module.css';
 import s from './topic.module.css';
@@ -19,7 +19,7 @@ function toolsFor(topic) {
     return topic.resourceIds
         .filter(id => resourceExists(id))
         .map(id => getResource(id))
-        .filter(r => r && !r.hidden)
+        .filter(r => r && !r.hidden && isHandsOn(r))
         .sort((a, b) => kindOf(a).order - kindOf(b).order);
 }
 

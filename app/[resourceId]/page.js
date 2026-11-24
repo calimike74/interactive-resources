@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { getResource, resourceExists, getAllResources } from '@/lib/resources';
 import { ResourceJsonLd } from '@/components/ResourceJsonLd';
 import ResourcePageClient from './ResourcePageClient';
@@ -40,6 +41,8 @@ export async function generateMetadata({ params }) {
 export default async function ResourcePage({ params }) {
     const { resourceId } = await params;
     const resource = resourceExists(resourceId) ? getResource(resourceId) : null;
+    // a hidden resource is off the site, not just off the lists (24 Nov 2026)
+    if (resource?.hidden) notFound();
 
     return (
         <>

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAllTopicDefs, getTopicForResource, withComponentPrefix } from '@/lib/topics';
 import { getAllResources } from '@/lib/resources';
+import { isHandsOn } from '@/lib/chapters';
 import { theme, typography, borderRadius, spacing, transitions, glass, editorial as ED } from '@/lib/theme';
 
 const t = theme.light;
@@ -31,7 +32,7 @@ export default function CommandPalette() {
     // Build searchable items once
     const items = useMemo(() => {
         const topics = getAllTopicDefs();
-        const resources = getAllResources();
+        const resources = getAllResources().filter(isHandsOn); // benches only, as Explore (24 Nov 2026)
         const result = [];
 
         for (const resource of resources) {
