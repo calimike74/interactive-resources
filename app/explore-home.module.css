@@ -38,15 +38,13 @@
 .shot { display: block; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -18px rgba(0,0,0,.25); text-decoration: none; color: inherit }
 .shot img { display: block; width: 100%; height: auto; transition: transform .4s ease }
 .shot:hover img { transform: scale(1.015) }
-.shotCap { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); font-family: var(--font-jbmono), ui-monospace, monospace; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-55) }
+.shotCap { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-55) }
 .shotGo { color: var(--explore-ink) }
 .key { list-style: none; margin: 0 0 24px; padding: 20px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px }
 .key li { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: baseline; font-size: 15px; color: var(--ink-70) }
 .key b { font-weight: 600; color: var(--ink) }
 
 /* the kind of each tool: a small mono label, never a colour on its own */
-.kind { font-family: var(--font-jbmono), ui-monospace, monospace; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-55); white-space: nowrap }
-.kindBench { justify-self: start; color: var(--explore-ink); background: var(--explore-tint); padding: 2px 8px; border-radius: 999px }
 
 /* an area: big numeral, display name, count on the right, hairline under */
 .area { margin-top: 32px }
@@ -92,7 +90,7 @@
 .alsoList a { font-weight: 600; text-decoration: none; font-size: 17px }
 .alsoList a:hover { text-decoration: underline }
 .alsoList p { margin: 2px 0 0; color: var(--ink-70); font-size: 15px; line-height: 1.5; max-width: 52ch }
-.members { margin-left: 10px; font-size: 13px; font-weight: 500; color: var(--ink-70); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; white-space: nowrap; vertical-align: 2px }
+.members { margin-left: 10px; font-size: 13px; font-weight: 500; color: var(--ink-70); white-space: nowrap; vertical-align: 2px }
 
 @media (max-width: 1000px) {
     .hero { grid-template-columns: 1fr; padding: 32px 0 48px }

@@ -59,12 +59,10 @@ function Topic({ topic }) {
                 ) : null}
                 <ul className={s.tools}>
                     {tools.map((r) => {
-                        const k = kindOf(r);
                         return (
                             <li key={r.id}>
                                 <a href={`/${r.id}`}>
                                     <span className={s.toolName}>{r.title}</span>
-                                    <span className={`${s.kind} ${k.label === 'Bench' ? s.kindBench : ''}`}>{k.label}</span>
                                 </a>
                             </li>
                         );
@@ -98,7 +96,7 @@ export default function ExploreHome() {
                     <a className={s.shot} href="/dynamics-bench">
                         <img src="/explore-hero-dynamics.webp" width="1600" height="828"
                             alt="The Dynamics bench: a compressor's transfer curve beside two bars of drums, with the threshold, ratio, attack and release knobs below" />
-                        <span className={s.shotCap}><span>Dynamics bench · 1.9</span><span className={s.shotGo}>Play it →</span></span>
+                        <span className={s.shotCap}><span>Dynamics bench, 1.9</span><span className={s.shotGo}>Play it</span></span>
                     </a>
                 </header>
 

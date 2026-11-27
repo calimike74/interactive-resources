@@ -53,12 +53,12 @@ export default async function TopicPage({ params }) {
     return (
         <div className={h.page}>
             <main className={h.wrap}>
-                <a className={s.back} href="/">← All of Explore</a>
+                <a className={s.back} href="/">All of Explore</a>
 
                 <header className={s.hero}>
                     <img className={s.pic} src={`/explore/${topic.id}.webp`} alt="" width="200" height="200" />
                     <div className={s.heroText}>
-                        <p className={s.eyebrow}>Explore · Topic {topic.specRef}</p>
+                        <p className={s.eyebrow}>Explore, topic {topic.specRef}</p>
                         <h1 className={`${h.display} ${s.title}`}>{topic.name}</h1>
                         <p className={s.lede}>{topic.description}</p>
                         {chapter ? (
@@ -75,13 +75,11 @@ export default async function TopicPage({ params }) {
                         {tools.length ? (
                             <ul className={s.tools}>
                                 {tools.map(r => {
-                                    const k = kindOf(r);
                                     return (
                                         <li key={r.id}>
                                             <a href={`/${r.id}`} className={s.tool}>
                                                 <span className={s.toolTop}>
                                                     <span className={s.toolName}>{r.title}</span>
-                                                    <span className={`${h.kind} ${k.label === 'Bench' ? h.kindBench : ''}`}>{k.label}</span>
                                                 </span>
                                                 {r.description ? <span className={s.toolDesc}>{r.description}</span> : null}
                                                 {r.estimatedTime ? <span className={s.time}>{r.estimatedTime}</span> : null}

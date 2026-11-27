@@ -98,16 +98,14 @@
     white-space: nowrap;
     padding: 5px 14px;
     border: 1px solid var(--line-2);
-    border-radius: 999px;
+    border-radius: 6px;
     background: var(--plate);
 }
 .back:hover { color: var(--ink); border-color: var(--ink-3); }
 .code {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--gold);
     white-space: nowrap;
 }
@@ -134,7 +132,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     color: var(--gold-ink);
     border: 1px solid rgba(197, 168, 85, 0.45);
     background: var(--gold-soft);
-    border-radius: 999px;
+    border-radius: 6px;
     padding: 4px 12px;
     white-space: nowrap;
 }
@@ -247,12 +245,10 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     color: var(--ink);
 }
 .tip i {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-style: normal;
     font-size: 11px;
-    letter-spacing: 0.08em;
     font-weight: 600;
-    text-transform: uppercase;
     color: var(--teal);
 }
 .tip p { margin: 0; font-size: 13.5px; line-height: 1.5; }
@@ -278,11 +274,9 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .presets { display: flex; align-items: center; gap: 6px; flex: none; }
 .presets[data-wrap='true'] { flex-wrap: wrap; max-width: 470px; row-gap: 6px; }
 .presetLabel {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--ink-3);
     margin-right: 4px;
 }
@@ -291,7 +285,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     font-size: 13px;
     font-weight: 500;
     border: 1px solid var(--line-2);
-    border-radius: 999px;
+    border-radius: 6px;
     background: var(--plate);
     color: var(--ink-2);
     cursor: pointer;
@@ -335,18 +329,16 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .more {
     flex: none;
     cursor: pointer;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     color: var(--ink-2);
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 5px 12px;
     border: 1px solid var(--line-2);
-    border-radius: 999px;
+    border-radius: 6px;
     background: var(--plate);
     white-space: nowrap;
 }
@@ -392,11 +384,9 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .secHear { flex: 1 1 auto; border-right: 0; gap: 10px; }
 .secHead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .eyebrow {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--ink-3);
     white-space: nowrap;
 }
@@ -768,7 +758,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     font-size: 11px;
     letter-spacing: 0.04em;
     border: 1px solid var(--line-2);
-    border-radius: 999px;
+    border-radius: 6px;
     background-color: var(--plate);
     background-image: linear-gradient(180deg, #ffffff 0%, #f4f3f0 100%);
     box-shadow: 0 1px 0 rgba(26, 26, 46, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -839,11 +829,9 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     border: 1px solid var(--line);
     background: var(--plate);
     border-radius: 8px;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 10.5px;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--ink-3);
     cursor: pointer;
     padding: 12px 0;
@@ -904,13 +892,11 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .tab {
     padding: 7px 12px;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     border: 1px solid transparent;
-    border-radius: 999px;
+    border-radius: 6px;
     background: transparent;
     color: var(--ink-3);
     cursor: pointer;
@@ -949,11 +935,9 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     letter-spacing: -0.01em;
 }
 .drawerBody h3 {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--gold-ink);
     margin: 22px 0 8px;
 }
@@ -963,7 +947,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .drawerBody dd { margin: 0; }
 .drawerBody table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .drawerBody th, .drawerBody td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
-.drawerBody th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.drawerBody th { font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-weight: 600; }
 .drawerBody td:first-child { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
 .drawerBody ul { margin: 0 0 10px; padding-left: 18px; list-style: disc; }
 .drawerBody li { margin: 0 0 6px; }
@@ -981,7 +965,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .conn:hover { border-color: var(--purple); }
 .conn b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
 .conn span { font-size: 13.5px; }
-.conn i { font-family: var(--mono); font-style: normal; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--purple); display: block; margin-bottom: 4px; }
+.conn i { font-family: var(--sans); font-style: normal; font-size: 11px; font-weight: 600; color: var(--purple); display: block; margin-bottom: 4px; }
 .source { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
 
 /* ---- think-then-reveal ---- */
@@ -1000,7 +984,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     font-size: 14px;
 }
 .callout summary::-webkit-details-marker { display: none; }
-.callout summary::before { content: 'Exam · think first'; display: block; font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink); margin-bottom: 4px; }
+.callout summary::before { content: 'Exam: think first'; display: block; font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--gold-ink); margin-bottom: 4px; }
 .callout[open] summary::before { content: 'Exam · the answer'; }
 .callout p { margin: 8px 0 0; font-size: 14px; }
 
@@ -1008,7 +992,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .mode, .depth {
     display: inline-flex;
     border: 1px solid var(--line-2);
-    border-radius: 999px;
+    border-radius: 6px;
     overflow: hidden;
     background: var(--plate);
 }
@@ -1047,7 +1031,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     align-items: center;
     gap: 12px;
     padding: 14px 22px 14px 16px;
-    border-radius: 999px;
+    border-radius: 6px;
     border: 1px solid var(--plate);
     background: var(--plate);
     color: var(--ink);
@@ -1122,7 +1106,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
    the block on the stage is the same number. */
 .secStrip { width: 150px; padding: 12px 12px 10px; gap: 6px; }
 .secStrip .secHead { align-items: center; }
-.stripName { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+.stripName { display: flex; align-items: center; gap: 6px; font-family: var(--sans); font-size: 11px; color: var(--ink-2); white-space: nowrap; }
 .stripName i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--stem); flex: none; }
 .stripBody { display: flex; gap: 8px; align-items: stretch; height: 118px; }
 .fader { position: relative; width: 52px; height: 100%; cursor: ns-resize; touch-action: none; outline: none; user-select: none; flex: none; }
@@ -1137,7 +1121,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .meter i { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--fill, 0) * 100%); background: var(--stem); transition: height 60ms linear; }
 .stripDials { display: flex; flex-direction: column; justify-content: space-between; align-items: center; gap: 2px; flex: 1 1 auto; }
 .stripDial { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-.stripDial small { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.stripDial small { font-family: var(--mono); font-size: 9px; color: var(--ink-3); }
 .stripDial .readout { font-family: var(--mono); font-size: 10px; color: var(--ink-2); }
 .secHear[data-desk='true'] .stats { max-width: none; }
 
@@ -1197,9 +1181,9 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .slide[data-wide='true'] .fader { width: 26px; }
 .slideVal { font-family: var(--mono); font-size: 9.5px; line-height: 1.15; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .slide[data-off='true'] .slideVal { color: var(--ink-3); }
-.slideName { font-family: var(--mono); font-size: 8.5px; line-height: 1.15; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+.slideName { font-family: var(--mono); font-size: 8.5px; line-height: 1.15; color: var(--ink-3); white-space: nowrap; }
 /* the wave slider's name is its shape switch: press for the next shape */
-.slideShape { appearance: none; border: 0; border-bottom: 1px dotted var(--ink-3); border-radius: 0; background: none; padding: 0 0 1px; margin: 0; cursor: pointer; color: var(--ink-2); font: inherit; font-family: var(--mono); font-size: 8.5px; line-height: 1.15; letter-spacing: 0.02em; text-transform: uppercase; }
+.slideShape { appearance: none; border: 0; border-bottom: 1px dotted var(--ink-3); border-radius: 0; background: none; padding: 0 0 1px; margin: 0; cursor: pointer; color: var(--ink-2); font: inherit; font-family: var(--mono); font-size: 8.5px; line-height: 1.15; }
 .slideShape::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 4px solid currentColor; margin-left: 3px; vertical-align: 1px; }
 .slideShape:hover { color: var(--ink); border-bottom-color: var(--ink); }
 .slideShape:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -1332,8 +1316,6 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     font-family: var(--mono);
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--gold-bright);
     white-space: nowrap;
 }
@@ -1362,7 +1344,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     font-size: 11.5px;
     line-height: 1;
     padding: 6px 11px;
-    border-radius: 999px;
+    border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.24);
     background: rgba(255, 255, 255, 0.06);
     color: rgba(255, 255, 255, 0.82);
@@ -1432,7 +1414,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .seqBlack[data-lit='chord'] { background: linear-gradient(180deg, #7c6a9e 0%, #5d4d7e 100%); }
 .seqWhite:focus-visible, .seqBlack:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .seqOct { position: absolute; left: 3px; top: 3px; font-family: var(--mono); font-size: 8.5px; color: var(--ink-3); }
-.seqLtr { font-family: var(--mono); font-size: 9px; font-weight: 500; text-transform: uppercase; color: var(--ink-3); }
+.seqLtr { font-family: var(--mono); font-size: 9px; font-weight: 500; color: var(--ink-3); }
 .seqBlack .seqLtr { position: absolute; left: 0; right: 0; bottom: 2px; text-align: center; color: rgba(255, 255, 255, 0.55); }
 .seqKeysFoot { display: flex; align-items: center; gap: 10px; }
 .seqKeysFoot .meaning { margin-top: 0; }
