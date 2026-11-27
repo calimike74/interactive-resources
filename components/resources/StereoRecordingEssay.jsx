@@ -421,7 +421,7 @@ export default function StereoRecordingEssay() {
                         <span style={{
                             fontSize: typography.size.sm,
                             color: wordCount > 0 ? t.text.secondary : t.text.tertiary,
-                            fontFamily: typography.fontFamilyMono,
+                            fontFamily: typography.fontFamily,
                         }}>
                             {wordCount} words
                         </span>
@@ -496,7 +496,7 @@ export default function StereoRecordingEssay() {
                             <span style={{
                                 fontSize: typography.size.xs,
                                 color: checkedCount === SELF_ASSESSMENT.length ? t.accent.success : t.text.tertiary,
-                                fontFamily: typography.fontFamilyMono,
+                                fontFamily: typography.fontFamily,
                             }}>
                                 {checkedCount}/{SELF_ASSESSMENT.length}
                             </span>

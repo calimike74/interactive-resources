@@ -278,7 +278,7 @@ function PasscodePanel({ title, onUnlocked }) {
                                 borderRadius: borderRadius.lg,
                                 background: t.bg.primary,
                                 color: t.text.primary,
-                                fontFamily: typography.fontFamilyMono,
+                                fontFamily: typography.fontFamily,
                                 outline: 'none',
                                 boxSizing: 'border-box',
                                 transition: `border-color ${transitions.fast}`,

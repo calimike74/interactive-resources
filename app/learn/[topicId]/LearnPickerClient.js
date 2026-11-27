@@ -79,7 +79,7 @@ export default function LearnPickerClient({ topic, lessons, resources = [], rati
                         marginTop: '1.25rem',
                     }}>
                         <span style={{
-                            fontFamily: ED.mono,
+                            fontFamily: ED.sans,
                             fontSize: '11px',
                             fontWeight: 500,
                             letterSpacing: '0.18em',
@@ -265,7 +265,7 @@ function LessonCard({ lesson, topicId, t, isCourse = false, index = 0, completed
     return (
         <CardShell href={`/learn/${topicId}/${lesson.id}`}>
             <div style={{
-                fontFamily: ED.mono,
+                fontFamily: ED.sans,
                 fontSize: '11px',
                 fontWeight: 500,
                 letterSpacing: '0.18em',
@@ -317,7 +317,7 @@ function ResourceCard({ resource, t }) {
     return (
         <CardShell href={resource.href}>
             <div style={{
-                fontFamily: ED.mono,
+                fontFamily: ED.sans,
                 fontSize: '11px',
                 fontWeight: 500,
                 letterSpacing: '0.18em',

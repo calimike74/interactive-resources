@@ -31,7 +31,6 @@ const AO_STYLES = {
     },
 };
 
-const mono = 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace';
 
 // Fallback level descriptors if not provided in data
 const DEFAULT_LEVELS_20 = [
@@ -97,7 +96,7 @@ function ScoreBadge({ label, awarded, total, colour }) {
             <span style={{
                 fontWeight: 700,
                 color: colour || '#fff',
-                fontFamily: mono,
+                fontFamily: 'inherit',
                 fontVariantNumeric: 'tabular-nums',
                 letterSpacing: '0.02em',
             }}>
@@ -270,7 +269,7 @@ function AnnotationPanel({ segment, isOpen, onToggle }) {
                     border: `1px solid ${aoStyle.border}`,
                     fontSize: '0.6em',
                     fontWeight: 700,
-                    fontFamily: mono,
+                    fontFamily: 'inherit',
                     lineHeight: 1.4,
                     verticalAlign: 'middle',
                     cursor: 'pointer',
@@ -325,7 +324,7 @@ function ExpandedPanel({ annotation }) {
                     border: `1px solid ${AO_STYLES[annotation.type].border}`,
                     fontSize: '0.8em',
                     fontWeight: 700,
-                    fontFamily: mono,
+                    fontFamily: 'inherit',
                     fontVariantNumeric: 'tabular-nums',
                     letterSpacing: '0.03em',
                 }}>

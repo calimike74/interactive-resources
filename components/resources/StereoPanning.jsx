@@ -327,7 +327,7 @@ const StereoPanning = () => {
 
     // Pan scale
     ctx.fillStyle = 'rgba(232, 228, 223, 0.3)';
-    ctx.font = "9px 'Geist Mono', monospace";
+    ctx.font = `9px ${getComputedStyle(document.body).fontFamily}`;
     for (let p = -100; p <= 100; p += 25) {
       ctx.fillText(p === 0 ? 'C' : `${p}`, stageXForPan(p), h - 8);
     }
@@ -370,7 +370,7 @@ const StereoPanning = () => {
       ctx.fillText(inst.label, x, y + 32);
 
       // Pan value
-      ctx.font = "8px 'Geist Mono', monospace";
+      ctx.font = `8px ${getComputedStyle(document.body).fontFamily}`;
       ctx.fillStyle = 'rgba(201, 184, 122, 0.6)';
       const panLabel = inst.pan === 0 ? 'C' : (inst.pan < 0 ? `L${Math.abs(inst.pan)}` : `R${inst.pan}`);
       ctx.fillText(panLabel, x, y - 22);
@@ -784,7 +784,7 @@ const StereoPanning = () => {
                   <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_BODY }}>Currently dragging</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
-                  <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(201, 184, 122, 0.9)', fontFamily: "'Geist Mono', monospace", fontWeight: 600 }}>R35</span>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(201, 184, 122, 0.9)', fontFamily: 'inherit', fontWeight: 600 }}>R35</span>
                   <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_BODY }}>Pan position value</span>
                 </div>
               </div>
@@ -815,7 +815,7 @@ const StereoPanning = () => {
                   <div style={{ marginTop: 'var(--space-3)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)' }}>Angle</span>
-                      <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{micAngle}&deg;</span>
+                      <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: 'inherit' }}>{micAngle}&deg;</span>
                     </div>
                     <input aria-label={`X-Y microphone angle, ${micAngle} degrees`} type="range" min={60} max={180} value={micAngle} onChange={e => setMicAngle(parseInt(e.target.value))}
                       style={{ width: '100%', accentColor: '#FF6B35' }} />
@@ -824,7 +824,7 @@ const StereoPanning = () => {
                   <div style={{ marginTop: 'var(--space-3)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)' }}>Spacing</span>
-                      <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{micSpacing} cm</span>
+                      <span style={{ fontSize: 'var(--text-sm)', color: 'var(--accent)', fontFamily: 'inherit' }}>{micSpacing} cm</span>
                     </div>
                     <input aria-label={`A-B microphone spacing, ${micSpacing} centimetres`} type="range" min={30} max={300} step={5} value={micSpacing} onChange={e => setMicSpacing(parseInt(e.target.value))}
                       style={{ width: '100%', accentColor: '#FF6B35' }} />
@@ -844,7 +844,7 @@ const StereoPanning = () => {
                   {(challengeActive ? challengeInstruments : instruments).map((inst, i) => (
                     <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--space-1) 0', borderBottom: '1px solid rgba(74, 127, 212, 0.06)' }}>
                       <span style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-secondary)' }}>{inst.emoji} {inst.label}</span>
-                      <span style={{ fontSize: 'var(--text-xs)', fontFamily: "'Geist Mono', monospace", color: inst.pan === 0 ? '#10B981' : 'var(--canvas-highlight)' }}>
+                      <span style={{ fontSize: 'var(--text-xs)', fontFamily: 'inherit', color: inst.pan === 0 ? '#10B981' : 'var(--canvas-highlight)' }}>
                         {inst.pan === 0 ? 'C' : (inst.pan < 0 ? `L${Math.abs(inst.pan)}` : `R${inst.pan}`)}
                       </span>
                     </div>

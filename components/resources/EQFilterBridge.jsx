@@ -128,7 +128,7 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
                         color: color,
                         textTransform: 'uppercase',
                         letterSpacing: '0.1em',
-                        fontFamily: 'monospace'
+                        fontFamily: 'inherit'
                     }}>
                         {title || 'Copy to Notes'}
                     </span>
@@ -146,7 +146,7 @@ const CopyableNote = ({ title, children, color = '#74b9ff', variant = 'definitio
                         gap: '0.35rem',
                         color: copied ? '#050507' : '#8b909a',
                         fontSize: '0.7rem',
-                        fontFamily: 'monospace'
+                        fontFamily: 'inherit'
                     }}
                 >
                     {copied ? '✓ Copied!' : 'Copy'}
@@ -264,7 +264,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                     <div style={{ fontSize: '0.9rem', fontWeight: '600', color: isHovered ? concept.color : '#f8f9fa', textAlign: 'center' }}>
                         {concept.term}
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: '#767b88', marginTop: '0.75rem', fontFamily: 'monospace', padding: '0.4rem 0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '6px' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#767b88', marginTop: '0.75rem', fontFamily: 'inherit', padding: '0.4rem 0.8rem', background: 'rgba(255,255,255,0.03)', borderRadius: '6px' }}>
                         Click to reveal →
                     </div>
                 </div>
@@ -296,7 +296,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                             color: '#050507', 
                             textTransform: 'uppercase', 
                             letterSpacing: '0.1em', 
-                            fontFamily: 'monospace'
+                            fontFamily: 'inherit'
                         }}>
                             {concept.term}
                         </div>
@@ -310,7 +310,7 @@ const Flashcard = ({ concept, isFlipped, onFlip }) => {
                                 cursor: 'pointer',
                                 color: copied ? concept.color : '#050507',
                                 fontSize: '0.65rem',
-                                fontFamily: 'monospace',
+                                fontFamily: 'inherit',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.25rem',
@@ -467,11 +467,11 @@ const FrequencyResponseGraph = ({ filterType, frequency, gain, q }) => {
                 {/* Labels */}
                 {freqLabels.map(({ freq, label }) => {
                     const x = padding.left + ((Math.log10(freq) - Math.log10(20)) / (Math.log10(20000) - Math.log10(20))) * innerWidth;
-                    return <text key={`fl-${freq}`} x={x} y={height - 15} fill="#8b909a" fontSize="11" textAnchor="middle" fontFamily="monospace">{label}</text>;
+                    return <text key={`fl-${freq}`} x={x} y={height - 15} fill="#8b909a" fontSize="11" textAnchor="middle" fontFamily="inherit">{label}</text>;
                 })}
                 {dbLabels.map((db) => {
                     const y = padding.top + innerHeight / 2 - (db / 24) * (innerHeight / 2);
-                    return <text key={`dl-${db}`} x={padding.left - 10} y={y + 4} fill="#8b909a" fontSize="11" textAnchor="end" fontFamily="monospace">{db > 0 ? '+' : ''}{db}</text>;
+                    return <text key={`dl-${db}`} x={padding.left - 10} y={y + 4} fill="#8b909a" fontSize="11" textAnchor="end" fontFamily="inherit">{db > 0 ? '+' : ''}{db}</text>;
                 })}
                 <text x={width / 2} y={height - 2} fill="#c9cdd4" fontSize="12" textAnchor="middle">Frequency (Hz)</text>
                 <text x={15} y={height / 2} fill="#c9cdd4" fontSize="12" textAnchor="middle" transform={`rotate(-90, 15, ${height/2})`}>Gain (dB)</text>
@@ -504,8 +504,8 @@ const Part1Review = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
-                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>From 1.3 Synthesis</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #74b9ff 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'inherit', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 1</div>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'inherit', letterSpacing: '0.15em', textTransform: 'uppercase' }}>From 1.3 Synthesis</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>What You Already Know</h2>
                 <p style={{ color: '#8b909a', maxWidth: '600px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -522,7 +522,7 @@ const Part1Review = ({ onComplete }) => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', background: '#101218', borderRadius: '16px', border: '1px solid #ffffff10' }}>
                 <div>
-                    <div style={{ fontSize: '0.7rem', color: '#767b88', marginBottom: '0.25rem', fontFamily: 'monospace', textTransform: 'uppercase' }}>Cards Revealed</div>
+                    <div style={{ fontSize: '0.7rem', color: '#767b88', marginBottom: '0.25rem', fontFamily: 'inherit', textTransform: 'uppercase' }}>Cards Revealed</div>
                     <div style={{ fontSize: '2rem', fontWeight: '700', color: '#DCC892' }}>{flippedCards.size} / {SYNTHESIS_CONCEPTS.length}</div>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
@@ -571,8 +571,8 @@ const Part2Bridge = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #34d399 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 2</div>
-                    <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>The Connection</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #34d399 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'inherit', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 2</div>
+                    <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'inherit', letterSpacing: '0.15em', textTransform: 'uppercase' }}>The Connection</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Same Tools, Different Job</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -583,7 +583,7 @@ const Part2Bridge = ({ onComplete }) => {
 
             <div style={{ background: '#101218', borderRadius: '16px', padding: '2rem', marginBottom: '2rem', textAlign: 'center', border: '1px solid rgba(255,200,100,0.15)' }}>
                 <div style={{ position: 'relative', height: '4px', background: 'linear-gradient(90deg, #DCC892, #34d399)', borderRadius: '2px', marginBottom: '1.5rem' }} />
-                <div style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '1rem', fontFamily: 'monospace', background: 'linear-gradient(90deg, #DCC892, #ff9f43, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <div style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '1rem', fontFamily: 'inherit', background: 'linear-gradient(90deg, #DCC892, #ff9f43, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                     LPF = LPF = LPF
                 </div>
                 <p style={{ color: '#8b909a', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
@@ -595,7 +595,7 @@ const Part2Bridge = ({ onComplete }) => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
                 <div style={{ background: 'linear-gradient(180deg, rgba(167,139,250,0.1) 0%, #101218 100%)', borderRadius: '16px', padding: '1.5rem', border: '1px solid rgba(167,139,250,0.3)' }}>
-                    <div style={{ fontSize: '0.7rem', fontFamily: 'monospace', color: '#DCC892', marginBottom: '0.5rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>1.3 Synthesis Context</div>
+                    <div style={{ fontSize: '0.7rem', fontFamily: 'inherit', color: '#DCC892', marginBottom: '0.5rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>1.3 Synthesis Context</div>
                     <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#f8f9fa' }}>Creative Filtering</h3>
                     {comparisons.map((item, idx) => (
                         <div key={idx} style={{ padding: '0.75rem', background: '#16181f', borderRadius: '10px', marginBottom: idx < comparisons.length - 1 ? '0.5rem' : 0 }}>
@@ -613,7 +613,7 @@ const Part2Bridge = ({ onComplete }) => {
                 </div>
 
                 <div style={{ background: 'linear-gradient(180deg, rgba(52,211,153,0.1) 0%, #101218 100%)', borderRadius: '16px', padding: '1.5rem', border: '1px solid rgba(52,211,153,0.3)' }}>
-                    <div style={{ fontSize: '0.7rem', fontFamily: 'monospace', color: '#34d399', marginBottom: '0.5rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>1.11 EQ Context</div>
+                    <div style={{ fontSize: '0.7rem', fontFamily: 'inherit', color: '#34d399', marginBottom: '0.5rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>1.11 EQ Context</div>
                     <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#f8f9fa' }}>Corrective Mixing</h3>
                     {comparisons.map((item, idx) => (
                         <div key={idx} style={{ padding: '0.75rem', background: '#16181f', borderRadius: '10px', marginBottom: idx < comparisons.length - 1 ? '0.5rem' : 0 }}>
@@ -909,8 +909,8 @@ const Part3NewConcepts = ({ onComplete }) => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #34d399 0%, #0ea5e9 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 3</div>
-                    <div style={{ fontSize: '0.7rem', color: '#34d399', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>New in EQ</div>
+                    <div style={{ background: 'linear-gradient(135deg, #34d399 0%, #0ea5e9 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'inherit', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 3</div>
+                    <div style={{ fontSize: '0.7rem', color: '#34d399', fontFamily: 'inherit', letterSpacing: '0.15em', textTransform: 'uppercase' }}>New in EQ</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>New EQ Filter Types</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -953,7 +953,7 @@ const Part3NewConcepts = ({ onComplete }) => {
                         <p style={{ color: '#8b909a', fontSize: '0.9rem' }}>{filterCategories[activeCategory].description}</p>
                     </div>
                     {!filterCategories[activeCategory].isNew && (
-                        <div style={{ background: 'rgba(167,139,250,0.15)', color: '#DCC892', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '600', fontFamily: 'monospace' }}>From 1.3</div>
+                        <div style={{ background: 'rgba(167,139,250,0.15)', color: '#DCC892', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '600', fontFamily: 'inherit' }}>From 1.3</div>
                     )}
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -995,21 +995,21 @@ const Part3NewConcepts = ({ onComplete }) => {
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.25rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Frequency</span>
-                        <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{formatFreq(frequency)} Hz</span>
+                        <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'inherit', fontWeight: '600' }}>{formatFreq(frequency)} Hz</span>
                     </div>
                     <input aria-label="Cutoff frequency" type="range" min={0} max={1000} value={Math.round(((Math.log10(frequency) - Math.log10(20)) / (Math.log10(20000) - Math.log10(20))) * 1000)} onChange={(e) => { const minLog = Math.log10(20); const maxLog = Math.log10(20000); setFrequency(Math.round(Math.pow(10, minLog + (Number(e.target.value) / 1000) * (maxLog - minLog)))); }} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                 </div>
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.25rem', opacity: filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch' ? 0.4 : 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Gain</span>
-                        <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{gain > 0 ? '+' : ''}{gain} dB</span>
+                        <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'inherit', fontWeight: '600' }}>{gain > 0 ? '+' : ''}{gain} dB</span>
                     </div>
                     <input aria-label={`Gain, ${gain} dB`} type="range" min={-18} max={18} value={gain} onChange={(e) => setGain(Number(e.target.value))} disabled={filterType === 'highpass' || filterType === 'lowpass' || filterType === 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                 </div>
                 <div style={{ background: '#101218', borderRadius: '14px', padding: '1.25rem', opacity: filterType === 'bell' || filterType === 'notch' ? 1 : 0.4 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                         <span style={{ color: '#8b909a', fontSize: '0.85rem' }}>Q / Bandwidth (higher Q = narrower)</span>
-                        <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'monospace', fontWeight: '600' }}>{q.toFixed(1)}</span>
+                        <span style={{ color: filterCategories[activeCategory].color, fontFamily: 'inherit', fontWeight: '600' }}>{q.toFixed(1)}</span>
                     </div>
                     <input aria-label="Q bandwidth" type="range" min={0.3} max={18} step={0.1} value={q} onChange={(e) => setQ(Number(e.target.value))} disabled={filterType !== 'bell' && filterType !== 'notch'} style={{ width: '100%', accentColor: filterCategories[activeCategory].color }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.65rem', color: '#767b88' }}>
@@ -1289,7 +1289,7 @@ const Part4Practice = () => {
 
         // Labels
         ctx.fillStyle = '#8b909a';
-        ctx.font = '11px monospace';
+        ctx.font = `11px ${getComputedStyle(document.body).fontFamily}`;
         ctx.textAlign = 'center';
 
         // X-axis labels
@@ -1356,7 +1356,7 @@ const Part4Practice = () => {
 
         // Frequency label
         ctx.fillStyle = '#ffd700';
-        ctx.font = 'bold 11px monospace';
+        ctx.font = `bold 11px ${getComputedStyle(document.body).fontFamily}`;
         ctx.textAlign = 'center';
         const freqLabel = challenge.frequency >= 1000 ? `${challenge.frequency / 1000}kHz` : `${challenge.frequency}Hz`;
         ctx.fillText(freqLabel, markerX, padding.top - 10);
@@ -1436,7 +1436,7 @@ const Part4Practice = () => {
 
         // Label
         ctx.fillStyle = '#ffd700';
-        ctx.font = '10px monospace';
+        ctx.font = `10px ${getComputedStyle(document.body).fontFamily}`;
         ctx.textAlign = 'center';
         const freqLabel = challenge.frequency >= 1000 ? `${challenge.frequency / 1000}kHz` : `${challenge.frequency}Hz`;
         ctx.fillText(freqLabel, markerX, padding.top - 8);
@@ -1515,8 +1515,8 @@ const Part4Practice = () => {
         <div style={{ padding: '1.5rem' }}>
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 4</div>
-                    <div style={{ fontSize: '0.7rem', color: '#74b9ff', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Draw & Practice</div>
+                    <div style={{ background: 'linear-gradient(135deg, #74b9ff 0%, #0ea5e9 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'inherit', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Part 4</div>
+                    <div style={{ fontSize: '0.7rem', color: '#74b9ff', fontFamily: 'inherit', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Draw & Practice</div>
                 </div>
                 <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Practice Drawing EQ Curves</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -1567,7 +1567,7 @@ const Part4Practice = () => {
                 <div style={{ background: '#101218', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem', border: `1px solid ${challenge.color}50` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'monospace', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Current Challenge</div>
+                            <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'inherit', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Current Challenge</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: '700', color: challenge.color }}>{challenge.name}</div>
                             {drawingMode === 'guided' && (
                                 <div style={{ fontSize: '0.85rem', color: '#8b909a', marginTop: '0.5rem', fontStyle: 'italic' }}>
@@ -1578,18 +1578,18 @@ const Part4Practice = () => {
                         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
                             <div style={{ textAlign: 'center' }}>
                                 <div style={{ fontSize: '0.65rem', color: '#767b88', textTransform: 'uppercase' }}>Frequency</div>
-                                <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#ffd700', fontFamily: 'monospace' }}>{formatFreq(challenge.frequency)} Hz</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#ffd700', fontFamily: 'inherit' }}>{formatFreq(challenge.frequency)} Hz</div>
                             </div>
                             {(challenge.type === 'lowshelf' || challenge.type === 'highshelf' || challenge.type === 'bell') && (
                                 <div style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '0.65rem', color: '#767b88', textTransform: 'uppercase' }}>Gain</div>
-                                    <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#C99F44', fontFamily: 'monospace' }}>{challenge.gain > 0 ? '+' : ''}{challenge.gain} dB</div>
+                                    <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#C99F44', fontFamily: 'inherit' }}>{challenge.gain > 0 ? '+' : ''}{challenge.gain} dB</div>
                                 </div>
                             )}
                             {(challenge.type === 'bell' || challenge.type === 'notch') && (
                                 <div style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '0.65rem', color: '#767b88', textTransform: 'uppercase' }}>Q</div>
-                                    <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#14b8a6', fontFamily: 'monospace' }}>{challenge.q}</div>
+                                    <div style={{ fontSize: '1.1rem', fontWeight: '600', color: '#14b8a6', fontFamily: 'inherit' }}>{challenge.q}</div>
                                 </div>
                             )}
                         </div>
@@ -1698,7 +1698,7 @@ const Part4Practice = () => {
                                 fontSize: '2rem', 
                                 fontWeight: '700', 
                                 color: score >= 70 ? '#34d399' : score >= 50 ? '#fbbf24' : '#ef4444',
-                                fontFamily: 'monospace'
+                                fontFamily: 'inherit'
                             }}>
                                 {score !== null ? `${score}%` : '–'}
                             </div>
@@ -1843,7 +1843,7 @@ export default function EQFilterBridge() {
                         <h1 style={{ fontSize: '0.9rem', fontWeight: '400', letterSpacing: '0.15em', color: '#8b909a', textTransform: 'uppercase', margin: 0 }}>
                             From <span style={{ color: '#DCC892', fontWeight: '600' }}>Synthesis</span> to <span style={{ color: '#34d399', fontWeight: '600' }}>EQ</span>
                         </h1>
-                        <div style={{ fontSize: '0.65rem', color: '#767b88', fontFamily: 'monospace', marginTop: '0.25rem' }}>
+                        <div style={{ fontSize: '0.65rem', color: '#767b88', fontFamily: 'inherit', marginTop: '0.25rem' }}>
                             A-Level Music Technology | 1.3 → 1.11 Bridge
                         </div>
                     </div>
@@ -1860,7 +1860,7 @@ export default function EQFilterBridge() {
                                     borderRadius: '8px',
                                     color: currentPart === part ? '#050507' : visitedParts.has(part) ? '#c9cdd4' : '#767b88',
                                     cursor: 'pointer',
-                                    fontFamily: 'monospace',
+                                    fontFamily: 'inherit',
                                     textAlign: 'center',
                                     lineHeight: 1.3,
                                 }}
@@ -1883,7 +1883,7 @@ export default function EQFilterBridge() {
 
             {/* Footer */}
             <footer style={{ background: '#101218', borderTop: '1px solid #ffffff10', padding: '2rem', marginTop: '3rem', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'monospace', letterSpacing: '0.1em' }}>
+                <div style={{ fontSize: '0.7rem', color: '#767b88', fontFamily: 'inherit', letterSpacing: '0.1em' }}>
                     A-Level Music Technology | Component 4: Producing and Analysing
                 </div>
                 <div style={{ fontSize: '0.65rem', color: '#767b88', marginTop: '0.5rem' }}>

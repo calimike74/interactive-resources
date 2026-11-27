@@ -23,7 +23,7 @@ function OutroCard({ href, eyebrow, title }) {
             >
                 <div style={{ textAlign: 'left' }}>
                     <div style={{
-                        fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
+                        fontFamily: ED.sans, fontSize: '10px', fontWeight: 500,
                         letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                         marginBottom: '0.35rem',
                     }}>

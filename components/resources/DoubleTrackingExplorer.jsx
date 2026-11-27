@@ -161,7 +161,7 @@ const CopyableNote = ({ title, children, color = '#DCC892', variant = 'definitio
                         color: color,
                         textTransform: 'uppercase',
                         letterSpacing: '0.1em',
-                        fontFamily: 'monospace'
+                        fontFamily: 'inherit'
                     }}>
                         {title || 'Copy to Notes'}
                     </span>
@@ -179,7 +179,7 @@ const CopyableNote = ({ title, children, color = '#DCC892', variant = 'definitio
                         gap: '0.35rem',
                         color: copied ? '#050507' : '#8b909a',
                         fontSize: '0.7rem',
-                        fontFamily: 'monospace'
+                        fontFamily: 'inherit'
                     }}
                 >
                     {copied ? '✓ Copied!' : 'Copy'}
@@ -255,7 +255,7 @@ const WaveformDisplay = ({ cycles, color, label, width = 300, height = 100, show
                     fontSize: '0.75rem',
                     fontWeight: '600',
                     color: color,
-                    fontFamily: 'monospace'
+                    fontFamily: 'inherit'
                 }}>
                     {label}
                 </div>
@@ -280,7 +280,7 @@ const WaveformDisplay = ({ cycles, color, label, width = 300, height = 100, show
                     padding: '0.25rem 0.5rem',
                     borderRadius: '4px',
                     fontSize: '0.7rem',
-                    fontFamily: 'monospace',
+                    fontFamily: 'inherit',
                     color: color
                 }}>
                     {cycles} cycle{cycles !== 1 ? 's' : ''}
@@ -575,7 +575,7 @@ const ExploreSection = () => {
         ctx.shadowBlur = 0;
 
         // Legend
-        ctx.font = '11px monospace';
+        ctx.font = `11px ${getComputedStyle(document.body).fontFamily}`;
         ctx.fillStyle = '#DCC892';
         ctx.textAlign = 'left';
         ctx.fillText('Original', padding, 25);
@@ -614,8 +614,8 @@ const ExploreSection = () => {
             {/* ADT Intro */}
             <div style={{ background: 'linear-gradient(135deg, #101218 0%, #16181f 100%)', borderRadius: '20px', padding: '2rem', marginBottom: '2rem', border: '1px solid #ffffff10' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}>ADT</div>
-                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Automatic Double Tracking</div>
+                    <div style={{ background: 'linear-gradient(135deg, #DCC892 0%, #DCC892 100%)', color: '#050507', padding: '0.5rem 1.25rem', borderRadius: '24px', fontSize: '0.75rem', fontWeight: '700', fontFamily: 'inherit', letterSpacing: '0.1em', textTransform: 'uppercase' }}>ADT</div>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'inherit', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Automatic Double Tracking</div>
                 </div>
                 <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.75rem', color: '#f8f9fa' }}>Explore the Parameters</h2>
                 <p style={{ color: '#8b909a', maxWidth: '700px', fontSize: '1rem', lineHeight: '1.7' }}>
@@ -647,7 +647,7 @@ const ExploreSection = () => {
                     <div style={{ background: '#16181f', borderRadius: '12px', padding: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                             <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Delay Time</span>
-                            <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>{delayMs}ms</span>
+                            <span style={{ color: '#DCC892', fontFamily: 'inherit', fontWeight: '700', fontSize: '1.1rem' }}>{delayMs}ms</span>
                         </div>
                         <input aria-label="Delay Time in milliseconds"
                             type="range"
@@ -669,7 +669,7 @@ const ExploreSection = () => {
                     <div style={{ background: '#16181f', borderRadius: '12px', padding: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                             <span style={{ color: '#DCC892', fontSize: '0.8rem', fontWeight: '600' }}>Pitch Modulation</span>
-                            <span style={{ color: '#DCC892', fontFamily: 'monospace', fontWeight: '700', fontSize: '1.1rem' }}>+/-{pitchCents}c</span>
+                            <span style={{ color: '#DCC892', fontFamily: 'inherit', fontWeight: '700', fontSize: '1.1rem' }}>+/-{pitchCents}c</span>
                         </div>
                         <input aria-label="Pitch Modulation in cents"
                             type="range"
@@ -724,7 +724,7 @@ const ExploreSection = () => {
                             cursor: 'pointer',
                             fontSize: '0.8rem',
                             fontWeight: '600',
-                            fontFamily: 'monospace'
+                            fontFamily: 'inherit'
                         }}
                     >
                         {isAnimating ? 'Pause' : 'Play'}
@@ -746,13 +746,13 @@ const ExploreSection = () => {
                         </thead>
                         <tbody>
                             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <td style={{ padding: '0.75rem', color: '#DCC892', fontFamily: 'monospace' }}>Delay</td>
-                                <td style={{ padding: '0.75rem', textAlign: 'center', color: '#f8f9fa', fontFamily: 'monospace' }}>10-40ms</td>
+                                <td style={{ padding: '0.75rem', color: '#DCC892', fontFamily: 'inherit' }}>Delay</td>
+                                <td style={{ padding: '0.75rem', textAlign: 'center', color: '#f8f9fa', fontFamily: 'inherit' }}>10-40ms</td>
                                 <td style={{ padding: '0.75rem', color: '#8b909a' }}>Timing variation (below Haas threshold)</td>
                             </tr>
                             <tr>
-                                <td style={{ padding: '0.75rem', color: '#DCC892', fontFamily: 'monospace' }}>Pitch Mod</td>
-                                <td style={{ padding: '0.75rem', textAlign: 'center', color: '#f8f9fa', fontFamily: 'monospace' }}>+/-5-20c</td>
+                                <td style={{ padding: '0.75rem', color: '#DCC892', fontFamily: 'inherit' }}>Pitch Mod</td>
+                                <td style={{ padding: '0.75rem', textAlign: 'center', color: '#f8f9fa', fontFamily: 'inherit' }}>+/-5-20c</td>
                                 <td style={{ padding: '0.75rem', color: '#8b909a' }}>Pitch variation via LFO modulation</td>
                             </tr>
                         </tbody>
@@ -973,7 +973,7 @@ const Quiz = () => {
                             borderRadius: '10px',
                             color: '#f8f9fa',
                             fontSize: '1.1rem',
-                            fontFamily: 'monospace',
+                            fontFamily: 'inherit',
                             outline: 'none'
                         }}
                     />
@@ -1028,7 +1028,7 @@ const Quiz = () => {
                         padding: '0.5rem 1.5rem',
                         background: '#16181f',
                         borderRadius: '8px',
-                        fontFamily: 'monospace'
+                        fontFamily: 'inherit'
                     }}>
                         <span style={{ color: '#22c55e', fontWeight: '700', fontSize: '1.25rem' }}>{score.correct}</span>
                         <span style={{ color: '#4a4f5a' }}> / </span>
@@ -1043,7 +1043,7 @@ const Quiz = () => {
                     borderRadius: '12px',
                     marginBottom: '1rem'
                 }}>
-                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'monospace', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#DCC892', fontFamily: 'inherit', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                         {currentQuestion?.type === 'identify_answer' ? 'Which answer scores marks?' : 'Question'}
                     </div>
                     <div style={{ fontSize: '1.1rem', color: '#f8f9fa', lineHeight: '1.5', marginBottom: '1.25rem' }}>
@@ -1162,7 +1162,7 @@ export default function DoubleTrackingExplorer() {
                             <h1 style={{ fontSize: '1rem', fontWeight: '600', letterSpacing: '0.1em', color: '#f8f9fa', margin: 0 }}>
                                 <span style={{ color: '#DCC892' }}>Double Tracking</span> <span style={{ color: '#ef4444' }}>vs Copying</span>
                             </h1>
-                            <div style={{ fontSize: '0.65rem', color: '#4a4f5a', fontFamily: 'monospace', marginTop: '0.25rem' }}>
+                            <div style={{ fontSize: '0.65rem', color: '#4a4f5a', fontFamily: 'inherit', marginTop: '0.25rem' }}>
                                 A-Level Music Technology | 1.4 Sampling | A* Extension
                             </div>
                         </div>
@@ -1186,7 +1186,7 @@ export default function DoubleTrackingExplorer() {
                                         gap: '0.5rem'
                                     }}
                                 >
-                                    <span style={{ fontFamily: 'monospace' }}>{tab.icon}</span>
+                                    <span style={{ fontFamily: 'inherit' }}>{tab.icon}</span>
                                     {tab.label}
                                 </button>
                             ))}

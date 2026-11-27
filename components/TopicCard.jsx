@@ -24,7 +24,6 @@ const ED = {
     chase: '#a8541a',
     serif: 'var(--font-fraunces), Georgia, serif',
     sans: 'var(--font-manrope), -apple-system, sans-serif',
-    mono: 'var(--font-jbmono), ui-monospace, monospace',
 };
 
 // Spell-inspired: badge pops in with a small spring overshoot
@@ -125,7 +124,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
             >
                 <span
                     style={{
-                        fontFamily: ED.mono,
+                        fontFamily: ED.sans,
                         fontSize: '10px',
                         fontWeight: 500,
                         letterSpacing: '0.18em',
@@ -188,7 +187,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                                     display: 'inline-flex',
                                     alignItems: 'baseline',
                                     gap: '5px',
-                                    fontFamily: ED.mono,
+                                    fontFamily: ED.sans,
                                     fontSize: '9.5px',
                                     fontWeight: 500,
                                     letterSpacing: '0.12em',
@@ -214,7 +213,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                         <AnimatedBadge delay={animationDelay + 420}>
                             <span
                                 style={{
-                                    fontFamily: ED.mono,
+                                    fontFamily: ED.sans,
                                     fontSize: '9.5px',
                                     fontWeight: 500,
                                     letterSpacing: '0.14em',
@@ -289,7 +288,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                     `}</style>
                     <p
                         style={{
-                            fontFamily: ED.mono,
+                            fontFamily: ED.sans,
                             fontSize: '9.5px',
                             fontWeight: 500,
                             letterSpacing: '0.16em',
@@ -316,7 +315,7 @@ export default function TopicCard({ topic, animationDelay = 0, comingSoon = fals
                             >
                                 <span
                                     style={{
-                                        fontFamily: ED.mono,
+                                        fontFamily: ED.sans,
                                         fontSize: '8.5px',
                                         color: ED.inkFade,
                                         fontVariantNumeric: 'tabular-nums',

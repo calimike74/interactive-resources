@@ -36,7 +36,6 @@ const C = {
 };
 
 const font = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
-const mono = 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace';
 
 const TABS = [
     { key: 'understand', label: 'Understand', icon: '' },
@@ -216,7 +215,7 @@ function BrowserCard({ children, title = '' }) {
                         <div style={{
                             background: C.surface, borderRadius: 8,
                             padding: '5px 20px', fontSize: 12,
-                            fontFamily: mono, color: C.textMuted,
+                            fontFamily: 'inherit', color: C.textMuted,
                             border: `1px solid ${C.borderSubtle}`,
                         }}>{title}</div>
                     </div>
@@ -240,7 +239,7 @@ function AOBadge({ ao }) {
             fontSize: 10, fontWeight: 700,
             padding: '2px 8px', borderRadius: 6,
             border: `1px solid ${isAO3 ? C.ao3Border : C.ao4Border}`,
-            fontFamily: mono, letterSpacing: '0.05em',
+            fontFamily: 'inherit', letterSpacing: '0.05em',
         }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: isAO3 ? C.ao3 : C.ao4 }} />
             AO{ao}
@@ -359,7 +358,7 @@ function UnderstandTab({ topic }) {
                 <div style={{
                     background: C.bgInner, border: `1px solid ${C.border}`,
                     borderRadius: 10, padding: 16,
-                    fontFamily: mono, fontSize: 12.5,
+                    fontFamily: 'inherit', fontSize: 12.5,
                     lineHeight: 1.7, color: C.textSecondary,
                     minHeight: 320,
                 }}>
@@ -503,7 +502,7 @@ function PracticeTab({ topic }) {
                 <div style={{
                     background: C.bgInner, border: `1px solid ${C.border}`,
                     borderRadius: 10, padding: 16,
-                    fontFamily: mono, fontSize: 12.5,
+                    fontFamily: 'inherit', fontSize: 12.5,
                     lineHeight: 1.7, color: C.textSecondary,
                     minHeight: 320,
                 }}>
@@ -653,7 +652,7 @@ function TestTab({ topic }) {
                 <div style={{
                     background: C.bgInner, border: `1px solid ${C.border}`,
                     borderRadius: 10, padding: 16,
-                    fontFamily: mono, fontSize: 12.5,
+                    fontFamily: 'inherit', fontSize: 12.5,
                     lineHeight: 1.7, color: C.textSecondary,
                     minHeight: 320, position: 'relative', overflow: 'hidden',
                 }}>

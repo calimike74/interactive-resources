@@ -244,7 +244,7 @@ export default function WaveformDrawingAssessment() {
             <div className="max-w-2xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
-                    <p className="text-xs font-[family-name:var(--font-jbmono)] uppercase tracking-widest text-sienna-600 mb-1">
+                    <p className="text-xs tabular-nums uppercase tracking-widest text-sienna-600 mb-1">
                         Topic 2.5 Numeracy · Revision Drill
                     </p>
                     <h1 className="font-[family-name:var(--font-fraunces)] text-2xl font-medium text-ink">
@@ -544,7 +544,7 @@ function NumericInput({ unit, showFeedback, onSubmit }) {
                 onChange={e => setValue(e.target.value)}
                 disabled={showFeedback}
                 placeholder="Your answer"
-                className="flex-1 px-4 py-3 text-lg font-[family-name:var(--font-jbmono)] border-2 border-line rounded-lg bg-paper text-ink focus:border-sienna-500 focus:outline-none disabled:bg-cream"
+                className="flex-1 px-4 py-3 text-lg tabular-nums border-2 border-line rounded-lg bg-paper text-ink focus:border-sienna-500 focus:outline-none disabled:bg-cream"
             />
             {unit && (
                 <span className="text-sm font-medium text-ink/60 whitespace-nowrap">{unit}</span>
@@ -684,7 +684,7 @@ function ResultsScreen({ responses, questions, onRestart }) {
                                         </p>
                                         {r && (
                                             <p className="text-xs text-ink/50 mt-1">
-                                                Your answer: <span className="font-[family-name:var(--font-jbmono)]">{r.answerDisplay || String(r.answer)}</span>
+                                                Your answer: <span className="tabular-nums">{r.answerDisplay || String(r.answer)}</span>
                                             </p>
                                         )}
                                     </div>

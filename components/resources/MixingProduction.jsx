@@ -49,7 +49,6 @@ const DESIGN_TOKENS_CSS = `
 
 const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
-const FONT_MONO = "'Geist Mono', ui-monospace, monospace";
 
 // ============================================
 // PRIMITIVES
@@ -374,7 +373,7 @@ const MixingProduction = () => {
         </div>
         {/* Pan */}
         <div>
-          <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: FONT_MONO, marginBottom: 2 }}>
+          <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: 'inherit', marginBottom: 2 }}>
             PAN {t.pan === 0 ? 'C' : (t.pan < 0 ? `L${Math.abs(t.pan)}` : `R${t.pan}`)}
           </div>
           <input aria-label={`${t.label} pan, ${t.pan === 0 ? 'centre' : (t.pan < 0 ? `L${Math.abs(t.pan)}` : `R${t.pan}`)}`} type="range" min={-100} max={100} value={t.pan}
@@ -383,7 +382,7 @@ const MixingProduction = () => {
         </div>
         {/* Send */}
         <div>
-          <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: FONT_MONO, marginBottom: 2 }}>
+          <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', textAlign: 'center', fontFamily: 'inherit', marginBottom: 2 }}>
             SEND {Math.round(t.send * 100)}
           </div>
           <input aria-label={`${t.label} reverb send, ${Math.round(t.send * 100)}`} type="range" min={0} max={100} value={Math.round(t.send * 100)}
@@ -401,7 +400,7 @@ const MixingProduction = () => {
               cursor: 'pointer',
             }} />
         </div>
-        <div style={{ fontSize: 10, color: 'var(--canvas-foreground)', textAlign: 'center', fontFamily: FONT_MONO }}>
+        <div style={{ fontSize: 10, color: 'var(--canvas-foreground)', textAlign: 'center', fontFamily: 'inherit' }}>
           {Math.round(t.gain * 100)}
         </div>
         {/* M/S buttons */}
@@ -571,7 +570,7 @@ const MixingProduction = () => {
                 <input aria-label={`Reverb return level, ${Math.round(reverbReturn * 100)}`} type="range" min={0} max={100} value={Math.round(reverbReturn * 100)}
                   onChange={e => setReverbReturn(Number(e.target.value) / 100)}
                   style={{ width: '100%', accentColor: 'var(--moss)' }} />
-                <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_MONO, textAlign: 'center', marginTop: 4 }}>
+                <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: 'inherit', textAlign: 'center', marginTop: 4 }}>
                   Return level {Math.round(reverbReturn * 100)}
                 </div>
               </div>
@@ -590,7 +589,7 @@ const MixingProduction = () => {
                   onChange={e => setDrumBusComp(Number(e.target.value) / 100)}
                   disabled={!drumBusEnabled}
                   style={{ width: '100%', accentColor: 'var(--sienna)', opacity: drumBusEnabled ? 1 : 0.4 }} />
-                <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_MONO, textAlign: 'center', marginTop: 4 }}>
+                <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: 'inherit', textAlign: 'center', marginTop: 4 }}>
                   Glue compression {drumBusEnabled ? Math.round(drumBusComp * 100) : 'off'}
                 </div>
               </div>
@@ -607,7 +606,7 @@ const MixingProduction = () => {
                 <input aria-label={`Master fader, ${Math.round(masterFader * 100)}`} type="range" min={0} max={100} value={Math.round(masterFader * 100)}
                   onChange={e => setMasterFader(Number(e.target.value) / 100)}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
-                <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: FONT_MONO, textAlign: 'center', marginTop: 4 }}>
+                <div style={{ fontSize: 10, color: 'var(--canvas-foreground-tertiary)', fontFamily: 'inherit', textAlign: 'center', marginTop: 4 }}>
                   {Math.round(masterFader * 100)}
                 </div>
               </div>
@@ -627,7 +626,7 @@ const MixingProduction = () => {
                 </div>
                 <div style={{
                   display: 'flex', justifyContent: 'space-between', marginTop: 4,
-                  fontFamily: FONT_MONO, fontSize: 10, color: 'var(--canvas-foreground-tertiary)'
+                  fontFamily: 'inherit', fontSize: 10, color: 'var(--canvas-foreground-tertiary)'
                 }}>
                   <span>{masterPeakDb.toFixed(1)} dBFS</span>
                   <span style={{ color: masterPeakColor, fontWeight: 700 }}>{masterPeakLabel}</span>
@@ -650,7 +649,7 @@ const MixingProduction = () => {
                 </div>
                 {showSignalFlow && (
                   <pre style={{
-                    fontFamily: FONT_MONO, fontSize: 11, color: 'var(--canvas-foreground-secondary)',
+                    fontFamily: 'inherit', fontSize: 11, color: 'var(--canvas-foreground-secondary)',
                     lineHeight: 1.6, whiteSpace: 'pre-wrap', margin: 0
                   }}>{`Track → Pan → Fader → Master
    ↘ Send ${reverbPreFader ? '(pre)' : '(post)'} → Reverb Bus → Return → Master

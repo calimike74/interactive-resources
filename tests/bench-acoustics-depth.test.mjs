@@ -65,7 +65,7 @@ test('A-level judges a past task in the scheme\'s line, with no citation, and a 
     assert.match(p[1].text, /nothing here has changed/);
     // one control, judged on its own
     const one = judge({ state: applyPreset(DEFAULT_STATE, 'judgeProof'), last: 'rt60' });
-    assert.match(one[0].text, /^TAIL:/);
+    assert.match(one[0].text, /^Tail:/);
     // the other way the answer goes wrong
     const d = judge({ state: applyPreset(DEFAULT_STATE, 'judgeDead'), last: 'rt60' });
     assert.match(d[1].text, /not the goal/);

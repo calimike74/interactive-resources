@@ -70,7 +70,7 @@ export default function ExaminerHintBadge({ topicCode, position = 'top' }) {
                     style={{
                         fontSize: typography.size.xs,
                         color: t.text.tertiary,
-                        fontFamily: typography.fontFamilyMono,
+                        fontFamily: typography.fontFamily,
                     }}
                 >
                     {withComponentPrefix(topicCode)}

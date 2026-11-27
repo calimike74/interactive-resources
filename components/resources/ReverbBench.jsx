@@ -354,7 +354,7 @@ export default function ReverbBench({ back }) {
             gridStrong: 'rgba(255, 255, 255, 0.2)',
             white: '#ffffff',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
 
@@ -705,10 +705,10 @@ export default function ReverbBench({ back }) {
                 g.fillStyle = col.tail;
                 g.font = monoSmall;
                 g.textAlign = 'center';
-                g.fillText(s.stereo === 'stereo' ? 'STEREO RETURN' : 'MONO RETURN', retBox.x + retBox.w / 2, retBox.y + retBox.h + 16);
+                g.fillText(s.stereo === 'stereo' ? 'Stereo return' : 'Mono return', retBox.x + retBox.w / 2, retBox.y + retBox.h + 16);
                 g.fillStyle = col.faint;
                 g.textAlign = 'left';
-                g.fillText(s.routing === 'send' ? 'SEND AND RETURN' : 'CHANNEL INSERT', sendBox.x, sendBox.y - 10);
+                g.fillText(s.routing === 'send' ? 'Send and return' : 'Channel insert', sendBox.x, sendBox.y - 10);
                 if (vddRef.current.ok != null) {
                     g.fillStyle = vddRef.current.ok ? col.tail : col.gold;
                     g.font = mono;
@@ -733,7 +733,7 @@ export default function ReverbBench({ back }) {
                     g.fillStyle = col.ink;
                     g.font = monoSmall;
                     g.textAlign = 'left';
-                    g.fillText(lane.id === 'answer' && s.predelay > 0 ? `${lane.label} · gap ${fmtMs(s.predelay)}` : lane.label, m.x0, lane.top - 4);
+                    g.fillText(lane.id === 'answer' && s.predelay > 0 ? `${lane.label}, gap ${fmtMs(s.predelay)}` : lane.label, m.x0, lane.top - 4);
                     g.fillStyle = col.faint;
                     g.textAlign = 'right';
                     g.fillText(lane.title, m.x1, lane.top - 4);
@@ -825,7 +825,7 @@ export default function ReverbBench({ back }) {
             if (readRef.current) {
                 const graph = nodesRef.current?.graph;
                 const lvl = graph && playingRef.current ? graph.wetLevel() : null;
-                const txt = lvl == null ? '\u00a0· stopped' : `\u00a0· out ${Math.max(-99, Math.round(dbOfAmp(lvl)))} dB`;
+                const txt = lvl == null ? ', stopped' : `, out ${Math.max(-99, Math.round(dbOfAmp(lvl)))} dB`;
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
 
@@ -949,7 +949,7 @@ export default function ReverbBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>Control names as they appear in Live 12 and Logic Pro 11 device panels. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>The answer is synthesised</dt><dd>This bench builds its impulse response rather than playing a recorded one: shaped noise under an exponential decay, with the early reflections written in by hand. A convolution reverb does the same arithmetic with an answer recorded in a real space, which is why swapping one for the other is a change of file, not a change of method.</dd>
                         <dt>Convolution</dt><dd>Every sample of the dry sound stamps a scaled copy of the answer, and the wet signal is all those copies added together. That is what the Extension stage draws, and it is why a longer answer costs more processing rather than sounding different in kind.</dd>
@@ -1174,8 +1174,8 @@ export default function ReverbBench({ back }) {
                     <div><b>{tapSpread}</b><span>first reflections</span></div>
                     {ext ? (
                         <>
-                            <div><b>{fmtSec(rd.hiTime)}</b><span>above 2 kHz<span className={styles.ext}>EXT</span></span></div>
-                            <div><b>{rd.lengthText}</b><span>answer length<span className={styles.ext}>EXT</span></span></div>
+                            <div><b>{fmtSec(rd.hiTime)}</b><span>above 2 kHz<span className={styles.ext}>extension</span></span></div>
+                            <div><b>{rd.lengthText}</b><span>answer length<span className={styles.ext}>extension</span></span></div>
                         </>
                     ) : (
                         <>
@@ -1250,7 +1250,7 @@ export default function ReverbBench({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{TYPES[state.type].label} · {fmtSec(sig3(state.time))} · {fmtMs(state.predelay)}<span ref={readRef} style={{ '--read': '14ch' }} /></b>
+                <b>{TYPES[state.type].label}, {fmtSec(sig3(state.time))}, {fmtMs(state.predelay)}<span ref={readRef} style={{ '--read': '14ch' }} /></b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
@@ -1288,7 +1288,7 @@ export default function ReverbBench({ back }) {
                         </>
                     ) : (
                         <>
-                            <i>{hover.label}{hover.section ? ` · ${SECTIONS[hover.section].name}` : ''}</i>
+                            <i>{hover.label}{hover.section ? `, ${SECTIONS[hover.section].name}` : ''}</i>
                             <p>{hover.section ? grades[hover.section].why : 'The part the source comes from, before anything is done to it.'}</p>
                         </>
                     )}

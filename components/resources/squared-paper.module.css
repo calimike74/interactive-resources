@@ -22,7 +22,6 @@
     --pen-soft: rgba(192, 57, 43, 0.1);
     --strip-h: 50px;
     --sans: var(--bench-sans), 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --mono: var(--font-jbmono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
     min-height: 100dvh;
     background:
@@ -63,7 +62,7 @@
 .back:hover { color: #fff; border-color: rgba(255, 255, 255, 0.45); }
 .back:focus-visible { outline: 2px solid #f0d48a; outline-offset: 2px; }
 .code {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -89,7 +88,7 @@
     padding-bottom: 10px;
     margin-bottom: 22px;
     border-bottom: 1px solid var(--rule);
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     color: var(--ink-3);
 }
@@ -135,7 +134,7 @@
     color: var(--ink-3);
     padding-top: 20px;
 }
-.score { font-family: var(--mono); font-size: 16px; color: var(--pen); }
+.score { font-family: var(--sans); font-size: 16px; color: var(--pen); }
 
 /* ---- the grid the student draws on ---- */
 .grid { display: flex; justify-content: center; margin: 0 0 8px; }
@@ -189,7 +188,7 @@
     margin-bottom: 12px;
 }
 .tick {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 17px;
     line-height: 1.2;
     color: var(--pen);
@@ -198,7 +197,7 @@
 .words { font-size: 14.5px; line-height: 1.45; color: var(--pen); }
 .measured { grid-column: 2; font-size: 13px; line-height: 1.4; color: var(--ink-3); }
 .ladder {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 13px;
     color: var(--pen);
     margin: 14px 0 0;
@@ -260,7 +259,7 @@
 }
 .check:hover:not(:disabled) { background: #fff; border-color: #fff; color: #16161d; }
 .where {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 12.5px;
     color: rgba(255, 255, 255, 0.72);
     padding: 0 10px;

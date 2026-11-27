@@ -422,7 +422,7 @@ export default function AutomationLane({ back }) {
             gridBar: 'rgba(255, 255, 255, 0.2)',
             line: 'rgba(255, 255, 255, 0.22)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
 

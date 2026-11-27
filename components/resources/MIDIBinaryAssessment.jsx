@@ -307,7 +307,7 @@ export default function MIDIBinaryAssessment() {
             <div className="mx-auto max-w-3xl text-ink">
                 <header className="mb-6">
                     <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-medium text-ink">MIDI, Binary & Numeracy: Results</h1>
-                    <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">1.5 Sequencing + 2.5 Numeracy</p>
+                    <p className="mt-2 text-xs sm:text-sm tabular-nums uppercase tracking-wide text-sienna-600">1.5 Sequencing + 2.5 Numeracy</p>
                 </header>
 
                 <div className={`mb-6 rounded-2xl border-2 p-6 ${bandColour}`}>
@@ -379,7 +379,7 @@ export default function MIDIBinaryAssessment() {
                 <h1 className="font-[family-name:var(--font-fraunces)] text-2xl font-medium text-ink sm:text-3xl">
                     MIDI, Binary & Numeracy Assessment
                 </h1>
-                <p className="mt-2 text-xs sm:text-sm font-[family-name:var(--font-jbmono)] uppercase tracking-wide text-sienna-600">
+                <p className="mt-2 text-xs sm:text-sm tabular-nums uppercase tracking-wide text-sienna-600">
                     1.5 Sequencing + 2.5 Numeracy: exam-style practice questions
                 </p>
             </header>
@@ -522,7 +522,7 @@ export default function MIDIBinaryAssessment() {
                                     ? 'Type 7 binary digits, e.g. 1100100'
                                     : 'Type your answer…'
                             }
-                            className="w-full rounded-xl border border-line bg-paper px-4 py-3 font-[family-name:var(--font-jbmono)] text-base text-ink shadow-sm focus:border-sienna-500 focus:outline-none focus:ring-2 focus:ring-sienna-200 disabled:bg-cream"
+                            className="w-full rounded-xl border border-line bg-paper px-4 py-3 tabular-nums text-base text-ink shadow-sm focus:border-sienna-500 focus:outline-none focus:ring-2 focus:ring-sienna-200 disabled:bg-cream"
                         />
                         {current.type === 'trainer' && (
                             <p className="mt-2 text-xs text-ink/50">
@@ -547,7 +547,7 @@ export default function MIDIBinaryAssessment() {
                         {!isCorrect && current.type === 'trainer' && (
                             <p className="mt-1 text-sm">
                                 The answer is{' '}
-                                <span className="font-mono font-semibold">
+                                <span className="tabular-nums font-semibold">
                                     {decimalToBinary7Bit(current.decimal)}
                                 </span>
                                 . Worked example: start from 64 and subtract each place value that
@@ -557,7 +557,7 @@ export default function MIDIBinaryAssessment() {
                         {!isCorrect && current.type !== 'trainer' && current.canonicalAnswer && (
                             <p className="mt-1 text-sm">
                                 Expected:{' '}
-                                <span className="font-mono font-semibold">
+                                <span className="tabular-nums font-semibold">
                                     {current.canonicalAnswer}
                                 </span>
                                 .

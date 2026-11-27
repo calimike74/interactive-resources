@@ -324,7 +324,7 @@ export default function DynamicsBench({ back }) {
             ghost: 'rgba(255, 255, 255, 0.34)',
             zero: 'rgba(255, 255, 255, 0.26)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
 
         function draw() {
@@ -462,7 +462,7 @@ export default function DynamicsBench({ back }) {
 
             // the chosen setting, for the depth (read from the state, not the render closure)
             // (it stops short of the legend: the last parts go first, and they are on the drawing and the dials anyway)
-            const segs = [`${sDef.label} · ${fmtDb(s.threshold)}`];
+            const segs = [`${sDef.label}, ${fmtDb(s.threshold)}`];
             if (hasRatio(s.mode) || s.mode === 'limiter') segs.push(ratioLabel(s));
             segs.push(`${fmtMs(s.attack)} in, ${fmtMs(s.release)} out`);
             if (r && !sDown) segs.push(`up to ${fmtDb(-r.stats.maxGr).replace('−', '')} off`);
@@ -472,8 +472,8 @@ export default function DynamicsBench({ back }) {
             if (frameRef.current % 20 === 0 && legendRef.current) legendWRef.current = legendRef.current.getBoundingClientRect().width;
             frameRef.current += 1;
             const room = w - 18 - legendWRef.current - 16 - (g.laneX0 + 6);
-            let label = segs.join(' · ');
-            while (segs.length > 3 && g2.measureText(label).width > room) { segs.pop(); label = segs.join(' · '); }
+            let label = segs.join(', ');
+            while (segs.length > 3 && g2.measureText(label).width > room) { segs.pop(); label = segs.join(', '); }
             g2.fillText(label, g.laneX0 + 6, g.top - 10);
 
             // the paper's drawing: input across, output up, on the lane's own dB scale
@@ -491,7 +491,7 @@ export default function DynamicsBench({ back }) {
                 g2.translate(gp.x0 + gp.w * 0.74, g.bottom - g.plotH * 0.74);
                 g2.rotate(-Math.atan2(g.plotH, gp.w));
                 g2.fillStyle = col.inkFaint; g2.font = `10px ${monoFace}`; g2.textAlign = 'center';
-                g2.fillText('unity · out = in', 0, -7);
+                g2.fillText('unity, out = in', 0, -7);
                 g2.restore();
                 // the axes, named and ticked
                 g2.fillStyle = col.inkFaint; g2.font = mono; g2.textAlign = 'center';
@@ -517,7 +517,7 @@ export default function DynamicsBench({ back }) {
                 }
                 // the processor, the way the paper names it
                 g2.fillStyle = '#ffffff'; g2.font = `600 10.5px ${monoFace}`; g2.textAlign = 'right';
-                g2.fillText(sDef.label.toUpperCase(), gp.x1 - 7, g.bottom - 7);
+                g2.fillText(sDef.label, gp.x1 - 7, g.bottom - 7);
                 // the curve: the paper's own drawing, so it is the brightest
                 // object on the graph. Craft pass 29 Aug 2026: a wash under
                 // the trace to give the plot a floor, then the trace itself
@@ -583,7 +583,7 @@ export default function DynamicsBench({ back }) {
                     const off = -staticGainDb(probe, s);
                     mark(probe, outAt, col.gold, 0.85, true);
                     g2.fillStyle = col.gold;
-                    g2.fillText(`in ${num(probe)} → out ${num(outAt)}${off > 0.05 ? ` · ${num(off)} dB off` : ''}`, gp.x0, g.top - 10);
+                    g2.fillText(`in ${num(probe)}, out ${num(outAt)}${off > 0.05 ? `, ${num(off)} dB off` : ''}`, gp.x0, g.top - 10);
                 } else {
                     g2.fillStyle = col.inkSoft;
                     g2.fillText('drag inside to read a level off', gp.x0, g.top - 10);
@@ -699,7 +699,7 @@ export default function DynamicsBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>Control names as they appear in Live 12 and Logic Pro 11 device panels. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>Look-ahead</dt><dd>A limiter with no look-ahead lets the first fraction of a millisecond of every peak through. A mastering limiter delays the signal by a few milliseconds so the gain is already down when the peak arrives.</dd>
                         <dt>Peak against RMS</dt><dd>This bench reads the level as a peak every half millisecond. An RMS detector averages over tens of milliseconds and follows loudness instead of transients, which is why two compressors set the same can sound different.</dd>
@@ -1007,7 +1007,7 @@ export default function DynamicsBench({ back }) {
                     <div><b>{stats ? fmtDb(stats.peakOut) : '…'}</b><span>loudest moment after</span></div>
                     <div><b>{stats ? `${over}%` : '…'}</b><span>of the loop {down ? 'under' : 'over'} the threshold</span></div>
                     {ext
-                        ? <div><b>{stats ? fmtDb(-stats.meanGr).replace('−', '') : '…'}</b><span>average reduction<span className={styles.ext}>EXT</span></span></div>
+                        ? <div><b>{stats ? fmtDb(-stats.meanGr).replace('−', '') : '…'}</b><span>average reduction<span className={styles.ext}>extension</span></span></div>
                         : <div><b>{stats ? fmtDb(stats.peakOut - stats.peakIn) : '…'}</b><span>loudest moment, before to after</span></div>}
                 </div>
                 {teach ? <div className={styles.meaning}>all from the dials and the loop</div> : null}
@@ -1052,7 +1052,7 @@ export default function DynamicsBench({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{pattern.bars} bars · 0 to −48 dB · {pattern.label}</b>
+                <b>{pattern.bars} bars, 0 to −48 dB, {pattern.label}</b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
@@ -1072,7 +1072,7 @@ export default function DynamicsBench({ back }) {
                         top: Math.max(44, Math.min(hover.stageH - 120, hover.y - 30)),
                     }}
                 >
-                    <i>threshold · {fmtDb(state.threshold)}</i>
+                    <i>threshold, {fmtDb(state.threshold)}</i>
                     <p>
                         {over}% of the loop is {down ? 'under' : 'over'} it{stats && !down ? `, and up to ${fmtDb(-stats.maxGr).replace('−', '')} is taken off there` : ''}. Drag the line up or down; the {def.name} works {down ? 'below' : 'above'} it.
                     </p>

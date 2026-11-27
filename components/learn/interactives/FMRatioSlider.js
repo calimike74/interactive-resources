@@ -33,12 +33,12 @@ export default function FMRatioSlider() {
         }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.5rem' }}>
                 <span style={{
-                    fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
+                    fontFamily: ED.sans, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
                     Try it: FM ratio
                 </span>
-                <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
+                <span style={{ fontFamily: ED.sans, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
                     ratio {ratio.toFixed(2)}: {isHarmonic ? 'harmonic' : 'inharmonic/bell-like'}
                 </span>
             </div>

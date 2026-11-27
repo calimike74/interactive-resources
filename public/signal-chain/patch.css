@@ -81,7 +81,7 @@ header.masthead::after {
 }
 .eyebrow {
   display: flex; align-items: center; gap: 12px;
-  font-family: 'JetBrains Mono'; font-size: 10.5px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10.5px; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -102,7 +102,7 @@ h1.title em { font-style: italic; font-weight: 400; color: var(--brass); }
 }
 .lede em { font-style: italic; color: var(--paper); }
 .masthead-meta {
-  text-align: right; font-family: 'JetBrains Mono'; font-size: 10.5px;
+  text-align: right; font-family: 'Inter', system-ui, sans-serif; font-size: 10.5px;
   color: var(--ink-soft); line-height: 1.85;
   border-left: 1px solid rgba(255,255,255,0.10); padding-left: 22px;
   white-space: nowrap;
@@ -143,12 +143,12 @@ h1.title em { font-style: italic; font-weight: 400; color: var(--brass); }
 .mode-btn:not(.active):hover { color: var(--paper); }
 
 .toolbar-meta {
-  font-family: 'JetBrains Mono'; font-size: 10.5px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10.5px;
   color: var(--ink-soft); margin-left: auto;
   display: flex; gap: 12px; align-items: center;
 }
 .kbd {
-  font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; font-weight: 500;
   background: #131316; border: 1px solid rgba(255,255,255,0.16);
   border-bottom-width: 2px;
   padding: 2px 7px; border-radius: 4px; color: var(--paper);
@@ -163,7 +163,7 @@ h1.title em { font-style: italic; font-weight: 400; color: var(--brass); }
   display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start;
 }
 .caveat-tag {
-  font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase;
   background: var(--brass); color: #1a1410;
   padding: 5px 9px; border-radius: 3px; line-height: 1;
@@ -180,7 +180,7 @@ h1.title em { font-style: italic; font-weight: 400; color: var(--brass); }
   border-radius: 8px;
 }
 .pill-row-label {
-  font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase;
   color: rgba(236,229,212,0.5); margin-right: 6px;
   display: inline-flex; align-items: center; gap: 8px;
@@ -278,7 +278,7 @@ h1.title em { font-style: italic; font-weight: 400; color: var(--brass); }
   background:
     linear-gradient(180deg, #1a1a1d 0%, #0e0e10 100%);
   border-bottom: 1px solid #000;
-  font-family: 'JetBrains Mono'; font-size: 10px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px;
   letter-spacing: 0.16em; text-transform: uppercase;
   color: rgba(212,166,87,0.55);
   position: relative; z-index: 2;
@@ -395,7 +395,7 @@ body.diagnose-active .rack-header .h-meta .dot { background: var(--dyn); box-sha
   position: fixed;
   z-index: 9999;
   transform: translate(-50%, -100%);
-  font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; font-weight: 500;
   letter-spacing: 0.18em; color: var(--brass);
   background: rgba(14,14,16,0.96); border: 1px dashed var(--brass);
   padding: 5px 10px; border-radius: 3px;
@@ -506,7 +506,7 @@ body.diagnose-active .rack-header .h-meta .dot { background: var(--dyn); box-sha
 
 .rack-ep .ep-engraving {
   position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
-  font-family: 'JetBrains Mono'; font-size: 7px; font-weight: 600;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 7px; font-weight: 600;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: rgba(212,166,87,0.45);
 }
@@ -554,7 +554,7 @@ body.diagnose-active .rack-header .h-meta .dot { background: var(--dyn); box-sha
   border: 1px solid var(--brass);
   box-shadow: 0 4px 14px -4px rgba(0,0,0,0.8), 0 0 14px -6px var(--brass);
   padding: 8px 12px; border-radius: 4px;
-  font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 500;
   letter-spacing: 0.16em; text-transform: uppercase;
   transform: translate(-50%, -150%);
   opacity: 0; transition: opacity 0.12s ease;
@@ -609,7 +609,7 @@ body.diagnose-active .rack-header .h-meta .dot { background: var(--dyn); box-sha
 }
 .rack-bus-line {
   display: flex; gap: 14px; align-items: center;
-  font-family: 'JetBrains Mono'; font-size: 9px; letter-spacing: 0.14em;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9px; letter-spacing: 0.14em;
   color: rgba(212,166,87,0.45);
 }
 .rack-bus-line .bus-label { color: var(--brass); font-weight: 500; }
@@ -663,7 +663,7 @@ body.diagnose-active .rack-header .h-meta .dot { background: var(--dyn); box-sha
 .rack-foot .fault { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; margin-top: 14px; }
 .rack-foot .fault:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
 .rack-foot .fault h4 {
-  font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 500;
   letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin: 0 0 6px;
 }
 .rack-foot .fault .examiner {
@@ -688,7 +688,7 @@ body.diagnose-active .rack-header .h-meta .dot { background: var(--dyn); box-sha
   content: 'CAUTION · DIAGNOSE MODE · CAUTION ·';
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 600;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 600;
   letter-spacing: 0.16em;
   color: #1a1410;
   background: rgba(255,184,77,0.0);
@@ -717,12 +717,12 @@ body.diagnose-active .caution-tape { display: block; }
   margin: 0; color: var(--brass); letter-spacing: -0.01em;
 }
 .palette-sub {
-  font-family: 'JetBrains Mono'; font-size: 9.5px; letter-spacing: 0.14em;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; letter-spacing: 0.14em;
   text-transform: uppercase; color: rgba(212,166,87,0.55);
 }
 .cat-group { margin-bottom: 14px; }
 .cat-title {
-  font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase; margin: 0 0 8px;
   display: flex; align-items: center; gap: 8px;
 }
@@ -742,7 +742,7 @@ body.diagnose-active .caution-tape { display: block; }
 }
 .effect-chip:active { cursor: grabbing; }
 .effect-chip.dragging { opacity: 0.45; transform: scale(0.96); border-style: dashed; }
-.effect-chip::before { content: '⋮⋮'; font-family: 'JetBrains Mono'; font-size: 11px; color: rgba(212,166,87,0.6); letter-spacing: -2px; }
+.effect-chip::before { content: '⋮⋮'; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: rgba(212,166,87,0.6); letter-spacing: -2px; }
 .cat-eq         .effect-chip:hover { border-color: var(--eq-glow);     color: var(--eq-glow); }
 .cat-dynamics   .effect-chip:hover { border-color: var(--dyn-glow);    color: var(--dyn-glow); }
 .cat-time       .effect-chip:hover { border-color: var(--time-glow);   color: var(--time-glow); }
@@ -769,15 +769,15 @@ body.diagnose-active .caution-tape { display: block; }
 .detail.colour     { --c: var(--colour); --c-glow: var(--colour-glow); }
 .detail.modulation { --c: var(--mod);    --c-glow: var(--mod-glow); }
 .detail-head-led { width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 6px var(--c-glow); }
-.detail-head-cat { font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c); }
-.detail-head-spec { font-family: 'JetBrains Mono'; font-size: 9.5px; color: rgba(212,166,87,0.55); letter-spacing: 0.1em; }
-.detail-head-pos { margin-left: auto; font-family: 'JetBrains Mono'; font-size: 10px; color: rgba(236,229,212,0.6);
+.detail-head-cat { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c); }
+.detail-head-spec { font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; color: rgba(212,166,87,0.55); letter-spacing: 0.1em; }
+.detail-head-pos { margin-left: auto; font-family: 'Inter', system-ui, sans-serif; font-size: 10px; color: rgba(236,229,212,0.6);
   background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.10); padding: 3px 9px; border-radius: 4px; }
 .detail-head-pos strong { color: var(--paper); font-weight: 500; }
 .detail-body { padding: 22px 26px; }
 .detail-name { font-family: 'Fraunces', serif; font-weight: 300; font-style: italic; font-size: 32px;
   margin: 0 0 16px; line-height: 1; color: var(--paper); letter-spacing: -0.01em; }
-.detail-mfr { font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.16em;
+.detail-mfr { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; letter-spacing: 0.16em;
   text-transform: uppercase; color: rgba(212,166,87,0.65); margin-bottom: 4px;
 }
 .detail-mfr .model { color: var(--paper); }
@@ -793,7 +793,7 @@ body.diagnose-active .caution-tape { display: block; }
 }
 .d-section { margin-bottom: 16px; }
 .d-section h3 {
-  font-family: 'JetBrains Mono'; font-size: 9.5px; font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 9.5px; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase; color: rgba(212,166,87,0.7); margin: 0 0 6px;
   display: flex; align-items: center; gap: 8px;
 }
@@ -822,8 +822,8 @@ body.diagnose-active .caution-tape { display: block; }
 .display .meter-cell { fill: var(--c); fill-opacity: 0.18; }
 .display .meter-cell.lit { fill-opacity: 0.9; filter: drop-shadow(0 0 2px var(--c-glow)); }
 .display .bar { fill: var(--c); fill-opacity: 0.85; filter: drop-shadow(0 0 2px var(--c-glow)); }
-.display .label { font-family: 'JetBrains Mono'; font-size: 7px; fill: var(--c); fill-opacity: 0.75; letter-spacing: 0.04em; }
-.display .label-dim { font-family: 'JetBrains Mono'; font-size: 6.5px; fill: rgba(255,255,255,0.30); letter-spacing: 0.04em; }
+.display .label { font-family: 'Inter', system-ui, sans-serif; font-size: 7px; fill: var(--c); fill-opacity: 0.75; letter-spacing: 0.04em; }
+.display .label-dim { font-family: 'Inter', system-ui, sans-serif; font-size: 6.5px; fill: rgba(255,255,255,0.30); letter-spacing: 0.04em; }
 .display .signal { fill: none; stroke: rgba(255,255,255,0.30); stroke-width: 0.8; }
 .display .signal-hot { fill: none; stroke: var(--c); stroke-width: 1.1; opacity: 0.85; filter: drop-shadow(0 0 2px var(--c-glow)); }
 .display .tap { stroke: var(--c); stroke-width: 1.3; stroke-linecap: round; filter: drop-shadow(0 0 3px var(--c-glow)); }
@@ -832,7 +832,7 @@ body.diagnose-active .caution-tape { display: block; }
 /* Footer */
 footer {
   margin-top: 56px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.10);
-  font-family: 'JetBrains Mono'; font-size: 10.5px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10.5px;
   color: rgba(236,229,212,0.55); line-height: 1.7;
   display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
 }

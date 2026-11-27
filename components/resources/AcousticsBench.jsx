@@ -364,7 +364,7 @@ export default function AcousticsBench({ back }) {
             gridStrong: 'rgba(255, 255, 255, 0.2)',
             white: '#ffffff',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
         const bandCol = { low: col.gold, mid: col.one, high: col.two };
@@ -553,7 +553,7 @@ export default function AcousticsBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>Control names as they appear in Live 12 and Logic Pro 11 device panels. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>Where the contours come from</dt><dd>ISO 226:2003 tabulates three values at each of 29 frequencies and gives one formula that turns them into a contour. This bench carries the table and runs the formula, which is why the curve at 1 kHz returns its own level exactly.</dd>
                         <dt>The Bark scale</dt><dd>Masking spread is not measured in hertz but in critical bands. Zwicker and Terhardt&apos;s 1980 formula turns a frequency into a band number, and the spread is a straight line in those units: 27 dB per band downward, and upward a slope that flattens as the masker gets louder.</dd>
@@ -889,10 +889,10 @@ export default function AcousticsBench({ back }) {
     ) : null;
 
     const settingLine = station === 'loudness'
-        ? `${TONES[state.tone].label} · ${LEVELS[state.listen].label.toLowerCase()}`
+        ? `${TONES[state.tone].label}, ${LEVELS[state.listen].label.toLowerCase()}`
         : station === 'masking'
-            ? `${TARGETS[state.target].label} · noise ${fmtHz(rd.maskerHz)} · ${fmtDb(state.masker)}`
-            : `${fmtMs(state.delay)} · ${rd.notchText} · ${fmtSec(state.rt60)}`;
+            ? `${TARGETS[state.target].label}, noise ${fmtHz(rd.maskerHz)}, ${fmtDb(state.masker)}`
+            : `${fmtMs(state.delay)}, ${rd.notchText}, ${fmtSec(state.rt60)}`;
 
     const stage = (
         <>
@@ -946,7 +946,7 @@ export default function AcousticsBench({ back }) {
                         </>
                     ) : (
                         <>
-                            <i>{hover.label}{hover.section ? ` · ${SECTIONS[hover.section].name}` : ''}</i>
+                            <i>{hover.label}{hover.section ? `, ${SECTIONS[hover.section].name}` : ''}</i>
                             <p>{hover.section && grades[hover.section] ? grades[hover.section].why : 'What the sound starts as, before the room gets to it.'}</p>
                         </>
                     )}

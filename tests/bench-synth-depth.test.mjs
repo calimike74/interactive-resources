@@ -113,7 +113,7 @@ test('Extension opens the machine in its own sentence, with no AO tags, keyed to
     assert.equal(sectionOfLast('width'), 'osc');
     assert.equal(sectionOfLast('vca'), 'voices');
     assert.equal(sectionOfLast('part'), null);
-    assert.equal(homeNote(s), 'A4 · 440 Hz');
+    assert.equal(homeNote(s), 'A4, 440 Hz');
 });
 
 test('the shape switch reads in every line: two triangle waves, a sine sent back to Saw, the sounds\' own next moves', () => {

@@ -420,7 +420,7 @@ export default function PitchSynthMonitorsAssessment() {
                                     <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                         Working
                                     </p>
-                                    <ol className="space-y-1 text-sm font-mono text-slate-700">
+                                    <ol className="space-y-1 text-sm tabular-nums text-slate-700">
                                         {current.workedExample().map((line, i) => (
                                             <li key={i}>{line}</li>
                                         ))}
@@ -499,7 +499,7 @@ function NumericForm({ value, onChange, disabled, unit, onSubmit }) {
                 onChange={e => onChange(e.target.value)}
                 disabled={disabled}
                 placeholder="Frequency"
-                className="flex-1 rounded-lg border border-slate-300 px-4 py-3 font-mono text-base text-slate-900 outline-none focus:border-slate-900 disabled:bg-slate-100"
+                className="flex-1 rounded-lg border border-slate-300 px-4 py-3 tabular-nums text-base text-slate-900 outline-none focus:border-slate-900 disabled:bg-slate-100"
             />
             {unit && <span className="text-sm font-medium text-slate-500">{unit}</span>}
             {!disabled && (
@@ -583,7 +583,7 @@ function ResultsScreen({ responses, questions, onRestart, hasToken }) {
                                     <div key={s.key} className="rounded-lg bg-slate-50 p-3 ring-1 ring-slate-200">
                                         <div className="mb-1 flex items-center justify-between text-sm">
                                             <span className="font-medium text-slate-800">{s.label}</span>
-                                            <span className="font-mono text-slate-600">{s.correct}/{s.total} · {s.pct}%</span>
+                                            <span className="tabular-nums text-slate-600">{s.correct}/{s.total} · {s.pct}%</span>
                                         </div>
                                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
                                             <div

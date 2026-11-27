@@ -750,16 +750,16 @@
         ${screw(w - 7, h - TOP_Y, id)}
       </svg>
       <style>
-        .lbl-brand   { font-family: 'JetBrains Mono'; font-size: 8px; font-weight: 600; letter-spacing: 0.22em; fill: var(--ink); }
+        .lbl-brand   { font-family: 'Inter', system-ui, sans-serif; font-size: 8px; font-weight: 600; letter-spacing: 0.22em; fill: var(--ink); }
         .lbl-model   { font-family: 'Fraunces', serif; font-size: 7.5px; font-style: italic; font-weight: 500; fill: var(--ink-soft); letter-spacing: 0.04em; }
-        .lbl-tag     { font-family: 'JetBrains Mono'; font-size: 6px; font-weight: 500; letter-spacing: 0.2em; fill: var(--ink-soft); }
-        .lbl-knob    { font-family: 'JetBrains Mono'; font-size: 5.5px; font-weight: 500; letter-spacing: 0.14em; fill: var(--ink); }
-        .lbl-meter   { font-family: 'JetBrains Mono'; font-size: 5.5px; font-weight: 500; letter-spacing: 0.14em; fill: var(--ink); }
-        .lbl-jack    { font-family: 'JetBrains Mono'; font-size: 5px; font-weight: 500; letter-spacing: 0.18em; fill: var(--ink); }
-        .lbl-vu      { font-family: 'JetBrains Mono'; font-size: 5px; font-weight: 600; letter-spacing: 0.2em; fill: #1a0f08; }
-        .lbl-toggle  { font-family: 'JetBrains Mono'; font-size: 5px; font-weight: 500; letter-spacing: 0.16em; fill: var(--ink); }
-        .lbl-serial  { font-family: 'JetBrains Mono'; font-size: 5px; font-weight: 500; letter-spacing: 0.20em; fill: var(--ink-soft); }
-        .lbl-engrave { font-family: 'JetBrains Mono'; font-weight: 500; letter-spacing: 0.18em; fill: var(--ink); }
+        .lbl-tag     { font-family: 'Inter', system-ui, sans-serif; font-size: 6px; font-weight: 500; letter-spacing: 0.2em; fill: var(--ink-soft); }
+        .lbl-knob    { font-family: 'Inter', system-ui, sans-serif; font-size: 5.5px; font-weight: 500; letter-spacing: 0.14em; fill: var(--ink); }
+        .lbl-meter   { font-family: 'Inter', system-ui, sans-serif; font-size: 5.5px; font-weight: 500; letter-spacing: 0.14em; fill: var(--ink); }
+        .lbl-jack    { font-family: 'Inter', system-ui, sans-serif; font-size: 5px; font-weight: 500; letter-spacing: 0.18em; fill: var(--ink); }
+        .lbl-vu      { font-family: 'Inter', system-ui, sans-serif; font-size: 5px; font-weight: 600; letter-spacing: 0.2em; fill: #1a0f08; }
+        .lbl-toggle  { font-family: 'Inter', system-ui, sans-serif; font-size: 5px; font-weight: 500; letter-spacing: 0.16em; fill: var(--ink); }
+        .lbl-serial  { font-family: 'Inter', system-ui, sans-serif; font-size: 5px; font-weight: 500; letter-spacing: 0.20em; fill: var(--ink-soft); }
+        .lbl-engrave { font-family: 'Inter', system-ui, sans-serif; font-weight: 500; letter-spacing: 0.18em; fill: var(--ink); }
       </style>
     `;
   }

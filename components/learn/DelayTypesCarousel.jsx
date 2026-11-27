@@ -21,7 +21,6 @@ const C = {
 
 const sans  = 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 const serif = 'var(--font-fraunces), Georgia, serif';
-const mono  = 'var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace';
 
 // Edexcel 1.12 Delay — six delay forms with detail content
 const DELAY_TYPES = [
@@ -223,7 +222,7 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
         <button type="button" onClick={prev} style={btn(false)} aria-label="Previous delay type">← Previous</button>
 
         <div style={{
-          fontFamily: mono, fontSize: 12, color: C.inkSoft,
+          fontFamily: 'inherit', fontSize: 12, color: C.inkSoft,
           minWidth: 200, textAlign: 'center', letterSpacing: '0.08em',
           textTransform: 'uppercase',
         }}>
@@ -239,7 +238,7 @@ export default function DelayTypesCarousel({ types = DELAY_TYPES, initialIndex =
 
       <p style={{
         marginTop: 16, textAlign: 'center',
-        fontFamily: mono, fontSize: 11, letterSpacing: '0.1em',
+        fontFamily: 'inherit', fontSize: 11, letterSpacing: '0.1em',
         color: C.inkSoft, opacity: 0.7,
       }}>
         Click a card for details · ←/→ to browse · ESC to close
@@ -296,7 +295,7 @@ function CardFace({ t, style, onClick, isFront }) {
         }}
       >
         <p style={{
-          fontFamily: mono, fontSize: 10.5, letterSpacing: '0.16em',
+          fontFamily: 'inherit', fontSize: 10.5, letterSpacing: '0.16em',
           textTransform: 'uppercase', opacity: 0.72, margin: 0,
         }}>
           Type {t.n} <span style={{ opacity: 0.55 }}>·</span> 06 <span style={{ opacity: 0.55 }}>·</span> {t.name}
@@ -370,7 +369,7 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
           }}
         >
           <p style={{
-            fontFamily: mono, fontSize: 11, letterSpacing: '0.16em',
+            fontFamily: 'inherit', fontSize: 11, letterSpacing: '0.16em',
             textTransform: 'uppercase', opacity: 0.72, margin: 0,
           }}>
             Type {t.n} <span style={{ opacity: 0.55 }}>·</span> 06 <span style={{ opacity: 0.55 }}>·</span> {t.name}
@@ -414,7 +413,7 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
             marginBottom: 18,
           }}>
             <span style={{
-              fontFamily: mono, fontSize: 11, letterSpacing: '0.14em',
+              fontFamily: 'inherit', fontSize: 11, letterSpacing: '0.14em',
               textTransform: 'uppercase', color: C.inkSoft,
             }}>
               Position {position}
@@ -438,7 +437,7 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
                   borderTop: i === 0 ? 'none' : `1px solid ${C.line}`,
                 }}>
                   <span style={{
-                    fontFamily: mono, fontSize: 10, color: C.inkSoft,
+                    fontFamily: 'inherit', fontSize: 10, color: C.inkSoft,
                     marginRight: 10, letterSpacing: '0.08em',
                   }}>{String(i + 1).padStart(2, '0')}</span>
                   {ex}
@@ -448,7 +447,7 @@ function DetailOverlay({ t, onClose, onPrev, onNext, position }) {
           </Section>
 
           <Section label="Settings to try">
-            <p style={{ ...pBody, fontFamily: mono, fontSize: 13 }}>{t.details.settings}</p>
+            <p style={{ ...pBody, fontFamily: 'inherit', fontSize: 13 }}>{t.details.settings}</p>
           </Section>
 
           <Section label="Exam pointer" last>
@@ -472,7 +471,7 @@ function Section({ label, last, children }) {
   return (
     <div style={{ marginBottom: last ? 0 : 20 }}>
       <p style={{
-        fontFamily: mono, fontSize: 10.5, letterSpacing: '0.16em',
+        fontFamily: 'inherit', fontSize: 10.5, letterSpacing: '0.16em',
         textTransform: 'uppercase', color: C.field500, margin: '0 0 8px',
       }}>{label}</p>
       {children}
@@ -521,22 +520,22 @@ function DiagramSlapback({ fg }) {
 
       <line x1={dryX} y1={axisY} x2={dryX} y2={28} stroke={fg} strokeWidth="1.25" />
       <circle cx={dryX} cy={28} r="5" fill={fg} />
-      <text x={dryX} y={20} fontSize="9" fontFamily={mono} fill={fg} textAnchor="middle" letterSpacing="0.14em">DRY</text>
+      <text x={dryX} y={20} fontSize="9" fontFamily={sans} fill={fg} textAnchor="middle" letterSpacing="0.14em">DRY</text>
 
       <line x1={wetX} y1={axisY} x2={wetX} y2={36} stroke={fg} strokeWidth="1.25" strokeDasharray="1,3" />
       <circle cx={wetX} cy={36} r="5" fill={fg} fillOpacity="0.92" />
-      <text x={wetX} y={28} fontSize="9" fontFamily={mono} fill={fg} textAnchor="middle" letterSpacing="0.14em">WET</text>
+      <text x={wetX} y={28} fontSize="9" fontFamily={sans} fill={fg} textAnchor="middle" letterSpacing="0.14em">WET</text>
 
       <line x1={dryX} y1={62} x2={wetX} y2={62} stroke={fg} strokeOpacity="0.7" />
-      <text x={(dryX + wetX) / 2} y={56} fontSize="9" fontFamily={mono} fill={fg} textAnchor="middle" letterSpacing="0.14em">80 MS</text>
+      <text x={(dryX + wetX) / 2} y={56} fontSize="9" fontFamily={sans} fill={fg} textAnchor="middle" letterSpacing="0.14em">80 MS</text>
 
       {[0, 40, 80, 120, 160, 200].map(t => (
         <g key={t}>
           <line x1={x(t)} y1={axisY} x2={x(t)} y2={axisY + 3} stroke={fg} strokeOpacity="0.5" />
-          <text x={x(t)} y={axisY + 14} fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.7" textAnchor="middle">{t}</text>
+          <text x={x(t)} y={axisY + 14} fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.7" textAnchor="middle">{t}</text>
         </g>
       ))}
-      <text x={xMax} y={axisY + 28} fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.7" textAnchor="end" letterSpacing="0.16em">TIME →</text>
+      <text x={xMax} y={axisY + 28} fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.7" textAnchor="end" letterSpacing="0.16em">TIME →</text>
     </svg>
   );
 }
@@ -558,7 +557,7 @@ function DiagramTape({ fg, accent }) {
     <svg viewBox="0 0 252 160" width="100%" style={{ display: 'block' }}>
       <line x1="10" y1={axisY} x2="245" y2={axisY} stroke={fg} strokeOpacity="0.35" />
 
-      <text x="220" y="24" fontSize="10" fontFamily={mono} fill={fg} fillOpacity="0.75" textAnchor="middle" letterSpacing="0.04em" fontStyle="italic">darker →</text>
+      <text x="220" y="24" fontSize="10" fontFamily={sans} fill={fg} fillOpacity="0.75" textAnchor="middle" letterSpacing="0.04em" fontStyle="italic">darker →</text>
 
       <path
         d={bars.map((b, i) => {
@@ -574,16 +573,16 @@ function DiagramTape({ fg, accent }) {
         return (
           <g key={b.label}>
             <rect x={x} y={axisY - b.h} width={barW} height={b.h} fill={b.color} opacity={b.dry ? 1 : 0.95} />
-            <text x={x + barW / 2} y={axisY + 14} fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.8" textAnchor="middle" letterSpacing="0.06em">{b.label}</text>
+            <text x={x + barW / 2} y={axisY + 14} fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.8" textAnchor="middle" letterSpacing="0.06em">{b.label}</text>
           </g>
         );
       })}
 
       {/* Legend */}
       <rect x="10" y="132" width="8" height="8" fill={fg} />
-      <text x="22" y="140" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dry signal</text>
+      <text x="22" y="140" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Dry signal</text>
       <rect x="90" y="132" width="8" height="8" fill={accent} />
-      <text x="102" y="140" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Delayed repeats (each pass loses high frequencies)</text>
+      <text x="102" y="140" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Delayed repeats (each pass loses high frequencies)</text>
     </svg>
   );
 }
@@ -600,8 +599,8 @@ function DiagramPingPong({ fg, accent }) {
         <Dial key={d.label} cx={d.cx} cy={42} r={24} frac={d.frac} value={d.value} label={d.label} fg={fg} accent={accent} />
       ))}
 
-      <text x="12" y="158" fontSize="10" fontFamily={mono} fill={fg} fillOpacity="0.75">L</text>
-      <text x="12" y="186" fontSize="10" fontFamily={mono} fill={fg} fillOpacity="0.75">R</text>
+      <text x="12" y="158" fontSize="10" fontFamily={sans} fill={fg} fillOpacity="0.75">L</text>
+      <text x="12" y="186" fontSize="10" fontFamily={sans} fill={fg} fillOpacity="0.75">R</text>
       <line x1="26" y1="154" x2="244" y2="154" stroke={fg} strokeOpacity="0.35" />
       <line x1="26" y1="182" x2="244" y2="182" stroke={fg} strokeOpacity="0.35" />
 
@@ -619,8 +618,8 @@ function DiagramPingPong({ fg, accent }) {
       ))}
 
       {/* Legend */}
-      <text x="10" y="212" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Zigzag = repeats alternating L/R channel</text>
-      <text x="10" y="228" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dot size = amplitude decay</text>
+      <text x="10" y="212" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Zigzag = repeats alternating L/R channel</text>
+      <text x="10" y="228" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Dot size = amplitude decay</text>
     </svg>
   );
 }
@@ -636,7 +635,7 @@ function Dial({ cx, cy, r, frac, value, label, fg, accent }) {
               strokeLinecap="round"
               transform={`rotate(-90 ${cx} ${cy})`} />
       <text x={cx} y={cy + 6} fontFamily={serif} fontSize="18" fontWeight="500" fill={fg} textAnchor="middle">{value}</text>
-      <text x={cx} y={cy + r + 18} fontFamily={mono} fontSize="9" fill={fg} fillOpacity="0.75" textAnchor="middle" letterSpacing="0.12em">{label}</text>
+      <text x={cx} y={cy + r + 18} fontFamily={sans} fontSize="9" fill={fg} fillOpacity="0.75" textAnchor="middle" letterSpacing="0.12em">{label}</text>
     </g>
   );
 }
@@ -655,7 +654,7 @@ function DiagramClean({ fg, accent }) {
       {/* Y-axis label */}
       <text
         x="8" y="70"
-        fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.65"
+        fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.65"
         textAnchor="middle" letterSpacing="0.08em"
         transform="rotate(-90, 8, 70)"
       >AMPLITUDE</text>
@@ -674,17 +673,17 @@ function DiagramClean({ fg, accent }) {
       {impulses.map((b, i) => (
         <g key={i}>
           <rect x={b.x} y={axisY - b.h} width="6" height={b.h} fill={b.dry ? fg : accent} />
-          <text x={b.x + 3} y={axisY + 14} fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.8" textAnchor="middle" letterSpacing="0.06em">{b.label}</text>
+          <text x={b.x + 3} y={axisY + 14} fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.8" textAnchor="middle" letterSpacing="0.06em">{b.label}</text>
         </g>
       ))}
 
-      <text x="245" y={axisY + 25} fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.7" textAnchor="end" letterSpacing="0.16em">BEATS AFTER DRY →</text>
+      <text x="245" y={axisY + 25} fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.7" textAnchor="end" letterSpacing="0.16em">BEATS AFTER DRY →</text>
 
       {/* Legend */}
       <rect x="10" y="134" width="8" height="8" fill={fg} />
-      <text x="22" y="142" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dry signal</text>
+      <text x="22" y="142" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Dry signal</text>
       <rect x="86" y="134" width="8" height="8" fill={accent} />
-      <text x="98" y="142" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Delayed repeats (equal amplitude each beat)</text>
+      <text x="98" y="142" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Delayed repeats (equal amplitude each beat)</text>
     </svg>
   );
 }
@@ -707,10 +706,10 @@ function DiagramMultiTap({ fg, accent }) {
                 stroke={t.dry ? fg : accent}
                 strokeOpacity={t.dry ? 0.9 : 0.75} strokeWidth="1.25" />
           <circle cx={t.x} cy={axisY - t.h} r={t.dry ? 5 : 4.5} fill={t.dry ? fg : accent} />
-          <text x={t.x} y={axisY + 14} fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.8" textAnchor="middle" letterSpacing="0.08em">{t.label}</text>
+          <text x={t.x} y={axisY + 14} fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.8" textAnchor="middle" letterSpacing="0.08em">{t.label}</text>
         </g>
       ))}
-      <text x="245" y="135" fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.6" textAnchor="end" letterSpacing="0.16em">TIME →</text>
+      <text x="245" y="135" fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.6" textAnchor="end" letterSpacing="0.16em">TIME →</text>
     </svg>
   );
 }
@@ -735,14 +734,14 @@ function DiagramModulated({ fg, accent }) {
         return <circle key={i} cx={x} cy={y} r="4.2" fill={accent} opacity={1 - i * 0.13} />;
       })}
 
-      <text x="14"  y="24"  fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.75" letterSpacing="0.14em">LFO RATE</text>
-      <text x="244" y="108" fontSize="9" fontFamily={mono} fill={fg} fillOpacity="0.65" textAnchor="end" letterSpacing="0.16em">TIME →</text>
+      <text x="14"  y="24"  fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.75" letterSpacing="0.14em">LFO RATE</text>
+      <text x="244" y="108" fontSize="9" fontFamily={sans} fill={fg} fillOpacity="0.65" textAnchor="end" letterSpacing="0.16em">TIME →</text>
 
       {/* Legend */}
       <line x1="10" y1="124" x2="20" y2="124" stroke={accent} strokeWidth="1.5" />
-      <text x="24" y="128" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Sine curve = LFO modulation of delay time</text>
+      <text x="24" y="128" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Sine curve = LFO modulation of delay time</text>
       <circle cx="14" cy="141" r="4" fill={accent} opacity="0.8" />
-      <text x="24" y="145" fontSize="8" fontFamily={mono} fill={fg} fillOpacity="0.75">Dots = successive delayed repeats (opacity = amplitude decay)</text>
+      <text x="24" y="145" fontSize="8" fontFamily={sans} fill={fg} fillOpacity="0.75">Dots = successive delayed repeats (opacity = amplitude decay)</text>
     </svg>
   );
 }

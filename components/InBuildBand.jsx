@@ -37,7 +37,7 @@ export default function InBuildBand({ topic }) {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
-                    fontFamily: ED.mono,
+                    fontFamily: ED.sans,
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.14em',

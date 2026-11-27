@@ -1,5 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { Instrument_Serif, Fraunces, Manrope, JetBrains_Mono, Bebas_Neue, Public_Sans } from "next/font/google";
+import { Geist } from "next/font/google";
+import { Instrument_Serif, Fraunces, Manrope, Bebas_Neue, Public_Sans } from "next/font/google";
 import "./globals.css";
 import { ContextMenuProvider } from "@/components/ContextMenu";
 import { PHProvider } from "./posthog-provider";
@@ -10,11 +10,6 @@ import StudioHomeBar from "@/components/StudioHomeBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -34,12 +29,6 @@ const fraunces = Fraunces({
 
 const manrope = Manrope({
   variable: "--font-manrope",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jbmono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -93,7 +82,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${fraunces.variable} ${manrope.variable} ${jetBrainsMono.variable} ${bebas.variable} ${publicSans.variable} antialiased`}
+        className={`${geistSans.variable} ${instrumentSerif.variable} ${fraunces.variable} ${manrope.variable} ${bebas.variable} ${publicSans.variable} antialiased`}
       >
         <PHProvider>
           <ContextMenuProvider>

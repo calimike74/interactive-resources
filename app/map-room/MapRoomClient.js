@@ -463,7 +463,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                                     {r.stem}
                                 </div>
                                 <div className="mt-0.5 text-[10.5px]"
-                                    style={{ color: '#9B7530', fontFamily: 'var(--font-geist-mono), monospace' }}>
+                                    style={{ color: '#9B7530', fontFamily: 'inherit' }}>
                                     {r.marks} marks · {r.steps.length} steps
                                 </div>
                             </button>
@@ -545,7 +545,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                     {cardNode.kind === 'topic' && topicChildren && (
                         <div className="mt-3 border-t pt-2 text-[11px] leading-snug"
                             style={{ borderColor: ROOM.line, color: '#6B6F5C' }}>
-                            <span style={{ fontFamily: 'var(--font-geist-mono), monospace' }}>
+                            <span style={{ fontFamily: 'inherit' }}>
                                 {topicChildren.count} ideas in the map
                             </span>
                             {topicChildren.shared.length > 0 && (
@@ -595,7 +595,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                                 Walking the spec · {walkTopic.parent} {walkTopic.label}
                             </div>
                             <div className="mt-0.5 text-[10.5px] tracking-wide"
-                                style={{ color: '#6B6F5C', fontFamily: 'var(--font-geist-mono), monospace' }}>
+                                style={{ color: '#6B6F5C', fontFamily: 'inherit' }}>
                                 {walkIdx + 1} of {specTopics.length} · ← → to move · Esc to stop
                             </div>
                         </div>
@@ -624,7 +624,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                                 {beat.caption}
                             </p>
                             <div className="mt-1 text-[10.5px] tracking-wide"
-                                style={{ color: '#6B6F5C', fontFamily: 'var(--font-geist-mono), monospace' }}>
+                                style={{ color: '#6B6F5C', fontFamily: 'inherit' }}>
                                 {tourState.beat + 1} / {tour.beats.length} · {tour.title}
                             </div>
                         </div>
@@ -668,7 +668,7 @@ export default function MapRoomClient({ graph, tour, examRoutes, lightlyExamined
                                 {routeStep.note}
                             </p>
                             <div className="mt-1 text-[10.5px] tracking-wide"
-                                style={{ color: '#6B6F5C', fontFamily: 'var(--font-geist-mono), monospace' }}>
+                                style={{ color: '#6B6F5C', fontFamily: 'inherit' }}>
                                 Step {routeState.step + 1} of {route.steps.length} · {route.year}: {route.title} · {route.marks} marks
                             </div>
                         </div>

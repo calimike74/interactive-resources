@@ -447,7 +447,7 @@ function BitDepthExplorer() {
             background: T.surfaceHover, border: `1px solid rgba(74, 127, 212, 0.08)`, borderRadius: '12px', padding: '14px 16px',
           }}>
             <div style={{ fontSize: '11px', color: T.textTertiary, marginBottom: '4px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{label}</div>
-            <div style={{ fontSize: '13px', color: 'rgba(232,228,223,0.6)', marginBottom: '4px', fontFamily: 'monospace' }}>{formula}</div>
+            <div style={{ fontSize: '13px', color: 'rgba(232,228,223,0.6)', marginBottom: '4px', fontFamily: 'inherit' }}>{formula}</div>
             <div style={{ fontSize: '22px', fontWeight: 700, color: colour, fontFamily: FONT_HEADING }}>{value}</div>
           </div>
         ))}
@@ -572,7 +572,7 @@ function FileSizeChallenge() {
       <div style={{
         background: 'rgba(74, 127, 212, 0.06)', border: '1px solid rgba(74, 127, 212, 0.15)',
         borderRadius: '10px', padding: '10px 14px', marginBottom: '20px',
-        fontSize: '12px', color: 'rgba(232,228,223,0.7)', fontFamily: 'monospace', letterSpacing: '0.03em',
+        fontSize: '12px', color: 'rgba(232,228,223,0.7)', fontFamily: 'inherit', letterSpacing: '0.03em',
       }}>
         Formula: Sample Rate × (Bit Depth ÷ 8) × Channels × Duration ÷ 1,048,576 (= 1,024²: bytes → KB → MB)
       </div>
@@ -878,7 +878,7 @@ function InfoCallout({ children }) {
 }
 
 function Num({ children }) {
-  return <strong style={{ color: T.accent, fontFamily: 'monospace', fontSize: '14px' }}>{children}</strong>;
+  return <strong style={{ color: T.accent, fontFamily: 'inherit', fontSize: '14px' }}>{children}</strong>;
 }
 
 function Step({ n, children }) {

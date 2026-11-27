@@ -8,7 +8,7 @@ export default function ExamAnchor({ anchor }) {
         <div style={{ maxWidth: '760px', margin: '0 auto 4rem', padding: '0 1.5rem', position: 'relative', zIndex: 3 }}>
             <div style={{ background: 'white', border: `1px solid ${ED.accentFaint}`, borderRadius: '0.75rem', padding: '1.75rem 2rem' }}>
                 <div style={{
-                    fontFamily: ED.mono, fontSize: '11px', fontWeight: 500,
+                    fontFamily: ED.sans, fontSize: '11px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.accent, marginBottom: '0.75rem',
                 }}>
                     In the exam
@@ -17,7 +17,7 @@ export default function ExamAnchor({ anchor }) {
                     {anchor.question}
                 </p>
                 <div style={{
-                    fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
+                    fontFamily: ED.sans, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade, marginBottom: '0.5rem',
                 }}>
                     A strong answer includes

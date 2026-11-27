@@ -604,7 +604,7 @@ function ExamHeader({ topic, t, studentName, onSignOut, timerDisplay, timerColor
                         <span
                             aria-label={timerLabel}
                             style={{
-                                fontFamily: typography.fontFamilyMono,
+                                fontFamily: typography.fontFamily,
                                 fontSize: typography.size.lg,
                                 fontWeight: typography.weight.bold,
                                 color: timerColor,
@@ -815,7 +815,7 @@ function NumericInput({ unit, showFeedback, onSubmit, t }) {
                     borderRadius: borderRadius.lg,
                     background: showFeedback ? t.bg.tertiary : t.bg.primary,
                     color: t.text.primary,
-                    fontFamily: typography.fontFamilyMono,
+                    fontFamily: typography.fontFamily,
                     backdropFilter: 'blur(8px)',
                     outline: 'none',
                 }}
@@ -999,7 +999,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                         fontSize: typography.size.lg,
                         fontWeight: typography.weight.bold,
                         color: t.text.primary,
-                        fontFamily: typography.fontFamilyMono,
+                        fontFamily: typography.fontFamily,
                     }}>
                         {timeUsedMin}:{String(timeUsedSec).padStart(2, '0')}
                     </p>
@@ -1010,7 +1010,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                         fontSize: typography.size.lg,
                         fontWeight: typography.weight.bold,
                         color: t.text.primary,
-                        fontFamily: typography.fontFamilyMono,
+                        fontFamily: typography.fontFamily,
                     }}>
                         {totalMin}:00
                     </p>
@@ -1079,7 +1079,7 @@ function ExamResultsSummary({ responses, questions, topic, questionTimes, totalT
                                 </span>
                                 <span style={{
                                     fontSize: typography.size.xs,
-                                    fontFamily: typography.fontFamilyMono,
+                                    fontFamily: typography.fontFamily,
                                     color: isSlow ? t.accent.warning : t.text.tertiary,
                                     fontWeight: isSlow ? typography.weight.semibold : typography.weight.normal,
                                     whiteSpace: 'nowrap',

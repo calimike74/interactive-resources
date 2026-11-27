@@ -471,7 +471,7 @@ function TailPicture({ truth, answer }) {
             grid: 'rgba(255, 255, 255, 0.08)',
             gridStrong: 'rgba(255, 255, 255, 0.2)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
 
         function draw() {
             const g = canvas.getContext('2d');

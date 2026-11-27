@@ -336,7 +336,7 @@ export default function DelayBench({ back }) {
             downbeat: 'rgba(255, 255, 255, 0.22)',
             ghost: 'rgba(255, 255, 255, 0.3)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
 
         function draw() {
@@ -659,7 +659,7 @@ export default function DelayBench({ back }) {
                     if (depthRef.current === 'core') label = `${ms} later, the first repeat`;
                     else if (s.sync) label = `${perBeat} ms per beat × ${fractionOf(s.noteId)} = ${ms}`;
                     else label = `${ms} = ${(d / (60 / bpmNow)).toFixed(2)} beats at ${bpmNow} BPM`;
-                    if (depthRef.current === 'extension') label += ` · ${d < 0.03 ? 'fused' : d < 0.12 ? 'slapback' : 'echo'}`;
+                    if (depthRef.current === 'extension') label += `, ${d < 0.03 ? 'fused' : d < 0.12 ? 'slapback' : 'echo'}`;
                     ctx2d.fillText(label, xa, y - 8);
                 }
             }
@@ -677,8 +677,8 @@ export default function DelayBench({ back }) {
                 ctx2d.fillText(`tail ≈ ${s.feedback >= 100 ? 'no decay' : `${n} × ${fmtMs(d)} = ${tail}`}`, w - padR - 30, top - 10);
                 ctx2d.fillStyle = col.purple;
                 ctx2d.font = `600 9.5px ${monoFace}`;
-                ctx2d.fillText('EXT', w - padR, top - 26);
-                ctx2d.fillText('EXT', w - padR, top - 10);
+                ctx2d.fillText('extension', w - padR, top - 26);
+                ctx2d.fillText('extension', w - padR, top - 10);
             }
 
             // playhead
@@ -760,7 +760,7 @@ export default function DelayBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>Control names as they appear in Live 12 and Logic Pro 11 device panels. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>Precedence (Haas) window</dt><dd>Under about 30 ms a repeat fuses with the original: the ear hears one sound, placed where the first arrival came from. Doubling and ADT live here; slapback starts above it.</dd>
                         <dt>Multitap</dt><dd>Several delays in parallel from one input, each with its own time and level. Feed them from one line and the taps share its feedback; give each its own line and each can feed back on its own.</dd>
@@ -974,7 +974,7 @@ export default function DelayBench({ back }) {
                     </div>
                 </div>
                 <div className={styles.meaning} data-ext={ext ? 'true' : undefined}>
-                    {ext ? <>≈ {dbPass} dB per pass · tail ≈ {tailS}{state.feedback < 100 ? ' s' : ''}<span className={styles.ext}>EXT</span></> : 'how much of each repeat is fed back in'}
+                    {ext ? <>≈ {dbPass} dB per pass, tail ≈ {tailS}{state.feedback < 100 ? ' s' : ''}<span className={styles.ext}>extension</span></> : 'how much of each repeat is fed back in'}
                 </div>
                 <Why>How much of each repeat goes back round the loop. At 100% the repeats never die away. Where does it stop being an echo and start being a drone?</Why>
             </div>
@@ -995,7 +995,7 @@ export default function DelayBench({ back }) {
                     </div>
                 </div>
                 <div className={styles.meaning} data-ext={ext ? 'true' : undefined}>
-                    {ext ? <>equal power at 50 %<span className={styles.ext}>EXT</span></> : 'balance of original against repeats'}
+                    {ext ? <>equal power at 50 %<span className={styles.ext}>extension</span></> : 'balance of original against repeats'}
                 </div>
                 <Why>The balance of the repeats against the original. Past 50% the echo is louder than the part it came from. That is a decision, not a mistake, if you can say why.</Why>
             </div>
@@ -1007,8 +1007,8 @@ export default function DelayBench({ back }) {
                     <div><b>{audibleLabel}</b><span>repeats you can hear</span></div>
                     {ext ? (
                         <>
-                            <div><b>{dbPass} dB</b><span>per pass<span className={styles.ext}>EXT</span></span></div>
-                            <div><b>{tailS}{state.feedback < 100 ? ' s' : ''}</b><span>tail length<span className={styles.ext}>EXT</span></span></div>
+                            <div><b>{dbPass} dB</b><span>per pass<span className={styles.ext}>extension</span></span></div>
+                            <div><b>{tailS}{state.feedback < 100 ? ' s' : ''}</b><span>tail length<span className={styles.ext}>extension</span></span></div>
                         </>
                     ) : (
                         <>
@@ -1073,7 +1073,7 @@ export default function DelayBench({ back }) {
                 onPointerLeave={() => setHover(null)}
             />
             <div className={styles.stageNote}>
-                <b>{bars} bars · {playing ? bpmRef.current : state.bpm} BPM{state.stereo === 'pingpong' ? ' · L and R' : ''}</b>
+                <b>{bars} bars, {playing ? bpmRef.current : state.bpm} BPM{state.stereo === 'pingpong' ? ', L and R' : ''}</b>
                 <span>{ORIENT}</span>
             </div>
             <div className={styles.stageLegend} aria-hidden="true">
@@ -1091,7 +1091,7 @@ export default function DelayBench({ back }) {
                         top: Math.max(44, Math.min(hover.stageH - 120, hover.y - 30)),
                     }}
                 >
-                    <i>Repeat {hover.n} · of the hit on {hover.where}</i>
+                    <i>Repeat {hover.n}, of the hit on {hover.where}</i>
                     <p>
                         Arrived <b>{fmtMs(delaySec * hover.n)}</b> after its hit. {hover.n === 1 ? 'One trip' : `${hover.n} trips`} round the loop, so it is <b>{Math.round(Math.pow(fb, hover.n) * 100)}%</b> as loud as the original{hover.lane === 'L' || hover.lane === 'R' ? `, on the ${hover.lane === 'L' ? 'left' : 'right'}` : ''}.
                     </p>

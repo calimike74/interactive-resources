@@ -24,7 +24,6 @@ const TAPE_LAB_CSS = `
   --phosphor:#7FBF3F;
   --f-display:'Fraunces','Times New Roman',serif;
   --f-body:'IBM Plex Sans',system-ui,sans-serif;
-  --f-mono:'JetBrains Mono',ui-monospace,monospace;
   font-family: var(--f-body); color: var(--ink); background: var(--paper);
   background-image:
     repeating-linear-gradient(0deg, transparent 0, transparent 23px, rgba(122,31,43,0.025) 23px, rgba(122,31,43,0.025) 24px),
@@ -51,7 +50,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-mixer-row + .tl-mixer-row { margin-top: -10px; }
 .tape-lab .tl-mixer-label {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faded);
   min-width: 96px;
 }
@@ -69,13 +68,13 @@ const TAPE_LAB_CSS = `
   border: 2px solid var(--ink); cursor: ew-resize;
 }
 .tape-lab .tl-mixer-value {
-  font-family: var(--f-mono); font-weight: 700; font-size: 11px;
+  font-family: var(--f-body); font-weight: 700; font-size: 11px;
   letter-spacing: 0.08em; color: var(--ink); min-width: 38px; text-align: right;
 }
 
 .tape-lab header.tl-header { border-bottom: 2px solid var(--ink); padding-bottom: 20px; margin-bottom: 28px; }
 .tape-lab .tl-eyebrow {
-  font-family: var(--f-mono); font-size: 11px; font-weight: 600;
+  font-family: var(--f-body); font-size: 11px; font-weight: 600;
   letter-spacing: 0.25em; text-transform: uppercase; color: var(--oxblood);
   margin-bottom: 6px;
 }
@@ -106,7 +105,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-video-stencil {
   position: absolute; top: 12px; left: 14px;
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase;
   padding: 4px 8px; background: rgba(26,22,18,0.7);
   color: var(--amber); border: 1px solid var(--amber-glow);
@@ -129,7 +128,7 @@ const TAPE_LAB_CSS = `
   pointer-events: none; z-index: 1;
 }
 .tape-lab .tl-video-caption {
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.22em;
+  font-family: var(--f-body); font-size: 10px; letter-spacing: 0.22em;
   text-transform: uppercase; color: var(--ink-faded);
   padding: 10px 0 0;
   display: flex; justify-content: space-between; align-items: baseline;
@@ -152,7 +151,7 @@ const TAPE_LAB_CSS = `
   border: 1px solid rgba(26,22,18,0.18); pointer-events: none;
 }
 .tape-lab .tl-gap-meter-stencil {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-faded);
   display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 22px;
 }
@@ -202,7 +201,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-head-label {
   position: absolute; bottom: -38px; left: 50%;
   transform: translateX(-50%);
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--ink); white-space: nowrap;
   transition: left 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -245,7 +244,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-bracket-label {
   position: absolute; top: 80px;
-  font-family: var(--f-mono); font-weight: 700; font-size: 14px;
+  font-family: var(--f-body); font-weight: 700; font-size: 14px;
   letter-spacing: 0.12em; color: var(--oxblood);
   background: var(--paper); padding: 0 10px;
   transform: translateX(-50%);
@@ -263,7 +262,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-tick.major { height: 10px; background: var(--ink); }
 .tape-lab .tl-tick-num {
   position: absolute; top: 12px; transform: translateX(-50%);
-  font-family: var(--f-mono); font-size: 9px; font-weight: 600;
+  font-family: var(--f-body); font-size: 9px; font-weight: 600;
   color: var(--ink-faded); letter-spacing: 0.08em;
 }
 .tape-lab .tl-pulse {
@@ -287,7 +286,7 @@ const TAPE_LAB_CSS = `
   pointer-events: none;
 }
 .tape-lab .tl-formula-eq {
-  font-family: var(--f-mono); font-size: 14px;
+  font-family: var(--f-body); font-size: 14px;
   color: rgba(255,179,71,0.6); letter-spacing: 0.05em; margin-bottom: 6px;
 }
 .tape-lab .tl-formula-eq em {
@@ -295,14 +294,14 @@ const TAPE_LAB_CSS = `
   text-shadow: 0 0 10px var(--amber-glow);
 }
 .tape-lab .tl-formula-result {
-  font-family: var(--f-mono); font-weight: 800;
+  font-family: var(--f-body); font-weight: 800;
   font-size: clamp(56px, 9vw, 96px); line-height: 0.85;
   letter-spacing: -0.05em; color: var(--amber);
   text-shadow: 0 0 18px var(--amber-glow);
   font-feature-settings: 'tnum';
 }
 .tape-lab .tl-formula-unit {
-  font-family: var(--f-mono); font-size: 18px; font-weight: 600;
+  font-family: var(--f-body); font-size: 18px; font-weight: 600;
   color: rgba(255,179,71,0.65); letter-spacing: 0.18em;
   margin-left: 6px; vertical-align: 0.55em;
 }
@@ -314,7 +313,7 @@ const TAPE_LAB_CSS = `
   padding: 14px 18px; margin: 0 0 18px;
 }
 .tape-lab .tl-loop-btn {
-  font-family: var(--f-mono); font-weight: 700; font-size: 11px;
+  font-family: var(--f-body); font-weight: 700; font-size: 11px;
   letter-spacing: 0.2em; text-transform: uppercase;
   padding: 12px 22px; cursor: pointer; user-select: none;
   border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
@@ -323,7 +322,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-loop-btn:hover { background: var(--paper-edge); }
 .tape-lab .tl-loop-btn.on { background: var(--oxblood); color: var(--paper); border-color: var(--oxblood); }
 .tape-lab .tl-loop-label {
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.22em;
+  font-family: var(--f-body); font-size: 10px; letter-spacing: 0.22em;
   text-transform: uppercase; color: var(--ink-faded);
 }
 .tape-lab .tl-beat-leds { display: flex; gap: 9px; align-items: center; margin-left: auto; }
@@ -345,7 +344,7 @@ const TAPE_LAB_CSS = `
   border: 1.5px solid var(--ink);
   background: linear-gradient(155deg, var(--paper) 0%, var(--paper-deep) 100%);
   padding: 16px 14px; cursor: pointer; user-select: none;
-  font-family: var(--f-mono); font-weight: 700; font-size: 11px;
+  font-family: var(--f-body); font-weight: 700; font-size: 11px;
   letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink);
   position: relative; overflow: hidden;
   transition: transform 80ms ease-out, background 100ms;
@@ -353,7 +352,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-pad:hover { background: linear-gradient(155deg, var(--paper-deep), var(--paper-edge)); }
 .tape-lab .tl-pad:active { transform: translateY(1px); }
 .tape-lab .tl-pad-key {
-  font-family: var(--f-mono); font-weight: 800; font-size: 16px;
+  font-family: var(--f-body); font-weight: 800; font-size: 16px;
   display: block; margin-bottom: 4px; opacity: 0.6;
 }
 
@@ -365,7 +364,7 @@ const TAPE_LAB_CSS = `
 }
 @media (min-width: 700px) { .tape-lab .tl-controls { grid-template-columns: 1fr 1fr; } }
 .tape-lab .tl-ctrl-label {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-faded);
   margin-bottom: 12px;
 }
@@ -376,7 +375,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-bpm-display .small {
   font-size: 12px; color: var(--ink-faded); margin-left: 6px; vertical-align: 1.5em;
-  letter-spacing: 0.2em; font-family: var(--f-mono); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.2em; font-family: var(--f-body); font-weight: 600; text-transform: uppercase;
 }
 .tape-lab .tl-bpm-slider {
   flex: 1; min-width: 160px; appearance: none;
@@ -393,7 +392,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-bpm-presets { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
 .tape-lab .tl-bpm-preset {
-  font-family: var(--f-mono); font-size: 11px; font-weight: 600;
+  font-family: var(--f-body); font-size: 11px; font-weight: 600;
   padding: 6px 11px; border: 1.5px solid var(--ink); background: var(--paper);
   cursor: pointer; color: var(--ink); letter-spacing: 0.05em;
   transition: all 100ms ease-out;
@@ -411,20 +410,20 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-note-btn:hover { background: var(--paper-edge); }
 .tape-lab .tl-note-btn.active { background: var(--ink); color: var(--paper); }
 .tape-lab .tl-note-symbol { font-family: var(--f-display); font-size: 22px; line-height: 1; }
-.tape-lab .tl-note-label  { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; }
-.tape-lab .tl-note-ms     { font-family: var(--f-mono); font-size: 11px; font-weight: 700; }
+.tape-lab .tl-note-label  { font-family: var(--f-body); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; }
+.tape-lab .tl-note-ms     { font-family: var(--f-body); font-size: 11px; font-weight: 700; }
 
 .tape-lab .tl-aside {
   font-family: var(--f-body); font-size: 14px; color: var(--ink-soft);
   line-height: 1.6; max-width: 640px; margin: 0 auto;
 }
 .tape-lab .tl-aside .tl-tag {
-  font-family: var(--f-mono); font-size: 10px; color: var(--oxblood);
+  font-family: var(--f-body); font-size: 10px; color: var(--oxblood);
   display: inline-block; padding: 3px 8px; border: 1px solid var(--oxblood);
   margin-right: 8px; letter-spacing: 0.2em; text-transform: uppercase;
   vertical-align: 2px;
 }
-.tape-lab .tl-aside em { font-family: var(--f-mono); font-style: normal; color: var(--ink); font-weight: 600; }
+.tape-lab .tl-aside em { font-family: var(--f-body); font-style: normal; color: var(--ink); font-weight: 600; }
 
 /* drawer */
 .tape-lab .tl-drawer-handle {
@@ -434,7 +433,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-drawer-handle button {
   writing-mode: vertical-rl; transform: rotate(180deg);
   padding: 14px 8px; cursor: pointer;
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase;
   background: var(--ink); color: var(--paper); border: none;
   border-left: 2px solid var(--oxblood);
@@ -462,14 +461,14 @@ const TAPE_LAB_CSS = `
   position: absolute; top: 16px; right: 16px;
   width: 32px; height: 32px; border: 1.5px solid var(--ink);
   background: var(--paper); cursor: pointer;
-  font-family: var(--f-mono); font-size: 16px; line-height: 1;
+  font-family: var(--f-body); font-size: 16px; line-height: 1;
 }
 .tape-lab .tl-drawer h2 {
   font-family: var(--f-display); font-weight: 800;
   font-size: 36px; letter-spacing: -0.025em; margin: 0 0 8px;
 }
 .tape-lab .tl-drawer .tl-drawer-eyebrow {
-  font-family: var(--f-mono); font-size: 11px; font-weight: 600;
+  font-family: var(--f-body); font-size: 11px; font-weight: 600;
   letter-spacing: 0.25em; text-transform: uppercase; color: var(--oxblood);
   margin-bottom: 20px;
 }
@@ -481,13 +480,13 @@ const TAPE_LAB_CSS = `
   font-family: var(--f-body); font-size: 15px; line-height: 1.65; color: var(--ink-soft);
 }
 .tape-lab .tl-drawer .tl-formula-block {
-  font-family: var(--f-mono); font-weight: 600; font-size: 18px;
+  font-family: var(--f-body); font-weight: 600; font-size: 18px;
   background: var(--ink); color: var(--amber);
   padding: 16px 20px; margin: 16px 0;
   text-align: center; letter-spacing: 0.04em;
   text-shadow: 0 0 8px var(--amber-glow);
 }
-.tape-lab .tl-ref-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-family: var(--f-mono); font-size: 12px; }
+.tape-lab .tl-ref-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-family: var(--f-body); font-size: 12px; }
 .tape-lab .tl-ref-table th, .tape-lab .tl-ref-table td { padding: 8px 5px; text-align: right; border-bottom: 1px solid var(--paper-edge); }
 .tape-lab .tl-ref-table th { font-size: 10px; letter-spacing: 0.15em; color: var(--ink-faded); text-transform: uppercase; font-weight: 700; }
 .tape-lab .tl-ref-table td:first-child, .tape-lab .tl-ref-table th:first-child { text-align: left; font-weight: 600; color: var(--ink); }
@@ -498,7 +497,7 @@ const TAPE_LAB_CSS = `
 /* copy buttons */
 .tape-lab .tl-copy-row { display: flex; gap: 8px; margin: 8px 0 24px; flex-wrap: wrap; align-items: center; }
 .tape-lab .tl-copy-btn {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.2em; text-transform: uppercase;
   padding: 9px 14px; cursor: pointer;
   background: var(--paper); color: var(--ink);
@@ -521,7 +520,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-tab-btn {
   flex: 1; padding: 14px 10px;
-  font-family: var(--f-mono); font-weight: 700; font-size: 11px;
+  font-family: var(--f-body); font-weight: 700; font-size: 11px;
   letter-spacing: 0.22em; text-transform: uppercase;
   background: transparent; border: none;
   border-right: 1px solid var(--paper-edge);
@@ -551,7 +550,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-margin-term {
   display: block;
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--oxblood); margin-bottom: 4px;
 }
@@ -560,7 +559,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-spec-footer {
   display: flex; justify-content: space-between; align-items: center;
   border-top: 2px solid var(--ink); padding-top: 14px; margin-top: 28px;
-  font-family: var(--f-mono); font-size: 10.5px;
+  font-family: var(--f-body); font-size: 10.5px;
   letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faded);
   flex-wrap: wrap; gap: 8px;
 }
@@ -581,7 +580,7 @@ const TAPE_LAB_CSS = `
   gap: 16px; flex-wrap: wrap; margin-bottom: 18px;
 }
 .tape-lab .tl-bx-eyebrow {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--amber); text-shadow: 0 0 6px var(--amber-glow);
   margin-bottom: 8px;
@@ -598,7 +597,7 @@ const TAPE_LAB_CSS = `
   display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
 }
 .tape-lab .tl-bx-btn {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.2em; text-transform: uppercase;
   padding: 10px 14px; cursor: pointer;
   background: var(--amber); color: #1a0f06;
@@ -614,7 +613,7 @@ const TAPE_LAB_CSS = `
   display: inline-flex; align-items: center; gap: 8px;
   padding: 8px 12px; background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
-  font-family: var(--f-mono); font-size: 11px; color: var(--paper);
+  font-family: var(--f-body); font-size: 11px; color: var(--paper);
 }
 .tape-lab .tl-bx-chip-k { color: #c8b89a; letter-spacing: 0.14em; font-size: 10px; text-transform: uppercase; }
 .tape-lab .tl-bx-chip-v { color: var(--amber-glow); font-weight: 700; }
@@ -649,7 +648,7 @@ const TAPE_LAB_CSS = `
   background: linear-gradient(180deg, #1a110a 0%, #0e0805 100%);
   color: var(--amber); border: 1px solid #2c1d12;
   padding: 12px 18px;
-  font-family: var(--f-mono); font-size: 12px;
+  font-family: var(--f-body); font-size: 12px;
   letter-spacing: 0.16em; text-transform: uppercase;
   text-shadow: 0 0 8px var(--amber-glow);
 }
@@ -703,13 +702,13 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-bx-big-head.erase .tl-bx-bh-gap { background: #6a584a; }
 .tape-lab .tl-bx-big-head .tl-bx-bh-label {
   position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
-  color: #e9d8b3; font-family: var(--f-mono); font-size: 9px;
+  color: #e9d8b3; font-family: var(--f-body); font-size: 9px;
   letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap;
 }
 .tape-lab .tl-bx-big-head.draggable { cursor: ew-resize; }
 .tape-lab .tl-bx-big-head .tl-bx-bh-arrow {
   position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
-  color: var(--amber); font-size: 14px; font-family: var(--f-mono);
+  color: var(--amber); font-size: 14px; font-family: var(--f-body);
 }
 
 .tape-lab .tl-bx-bracket {
@@ -725,7 +724,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-bx-bracket-label {
   position: absolute; left: 50%; top: -7px; transform: translateX(-50%);
   background: #1d140d; padding: 0 8px;
-  color: var(--amber-glow); font-family: var(--f-mono); font-size: 12px; font-weight: 700;
+  color: var(--amber-glow); font-family: var(--f-body); font-size: 12px; font-weight: 700;
   text-shadow: 0 0 8px rgba(247,192,105,0.6);
 }
 .tape-lab .tl-bx-hit {
@@ -743,7 +742,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-bx-ruler {
   position: absolute; left: 0; right: 0; bottom: 4px;
   display: flex; justify-content: space-between;
-  color: #c8b89a; font-family: var(--f-mono); font-size: 10px;
+  color: #c8b89a; font-family: var(--f-body); font-size: 10px;
   letter-spacing: 0.1em;
   padding: 0 200px;
 }
@@ -764,11 +763,11 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-bx-snap.active {
   background: var(--amber); color: #1a0f06; border-color: var(--amber);
 }
-.tape-lab .tl-bx-snap-ms { font-family: var(--f-mono); font-weight: 700; }
+.tape-lab .tl-bx-snap-ms { font-family: var(--f-body); font-weight: 700; }
 .tape-lab .tl-bx-foot {
   display: flex; justify-content: space-between; align-items: center;
   margin-top: 14px; flex-wrap: wrap; gap: 8px;
-  font-family: var(--f-mono); font-size: 10px;
+  font-family: var(--f-body); font-size: 10px;
   color: #c8b89a; letter-spacing: 0.16em; text-transform: uppercase;
 }
 
@@ -786,7 +785,7 @@ const TAPE_LAB_CSS = `
   gap: 16px; flex-wrap: wrap;
 }
 .tape-lab .tl-bc-eyebrow {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--oxblood);
   margin-bottom: 6px;
 }
@@ -806,11 +805,11 @@ const TAPE_LAB_CSS = `
   text-shadow: 0 0 8px var(--amber-glow);
 }
 .tape-lab .tl-bc-readout-eyebrow {
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  font-family: var(--f-body); font-size: 10px; letter-spacing: 0.18em;
   text-transform: uppercase; opacity: 0.7;
 }
 .tape-lab .tl-bc-readout-big {
-  font-family: var(--f-mono); font-size: 32px; font-weight: 800;
+  font-family: var(--f-body); font-size: 32px; font-weight: 800;
   color: var(--amber-glow); line-height: 1; margin-top: 4px;
   font-feature-settings: 'tnum';
 }
@@ -831,11 +830,11 @@ const TAPE_LAB_CSS = `
   transition: all 120ms;
 }
 .tape-lab .tl-bc-pick-label {
-  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.14em;
+  font-family: var(--f-body); font-size: 9.5px; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--ink-faded);
 }
 .tape-lab .tl-bc-pick-ms {
-  font-family: var(--f-mono); font-size: 13px; font-weight: 700;
+  font-family: var(--f-body); font-size: 13px; font-weight: 700;
   margin-top: 2px; color: var(--ink);
 }
 .tape-lab .tl-bc-pick.active .tl-bc-pick-label { color: rgba(255,255,255,0.75); }
@@ -850,11 +849,11 @@ const TAPE_LAB_CSS = `
   display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;
 }
 .tape-lab .tl-bc-grid-cap {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.18em; text-transform: uppercase; color: var(--oxblood);
 }
 .tape-lab .tl-bc-grid-cap-r {
-  font-family: var(--f-mono); font-weight: 500; font-size: 10px;
+  font-family: var(--f-body); font-weight: 500; font-size: 10px;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded);
 }
 .tape-lab .tl-bc-row {
@@ -866,7 +865,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-bc-row.active { background: rgba(122,31,43,0.05); }
 .tape-lab .tl-bc-row-label {
   position: absolute; left: 0; top: 6px; width: 80px;
-  font-family: var(--f-mono); font-weight: 500; font-size: 10px;
+  font-family: var(--f-body); font-weight: 500; font-size: 10px;
   letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded);
 }
 .tape-lab .tl-bc-row.active .tl-bc-row-label {
@@ -891,7 +890,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-bc-beat {
   position: absolute; top: 4px;
-  font-family: var(--f-mono); font-size: 11px; color: var(--ink-faded);
+  font-family: var(--f-body); font-size: 11px; color: var(--ink-faded);
   transform: translateX(-50%);
 }
 
@@ -903,7 +902,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-bc-osc-head {
   display: flex; justify-content: space-between; align-items: center;
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em;
+  font-family: var(--f-body); font-size: 10px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--amber); opacity: 0.85;
   text-shadow: 0 0 6px var(--amber-glow); margin-bottom: 10px;
 }
@@ -920,7 +919,7 @@ const TAPE_LAB_CSS = `
   padding: 3px; border: 1px solid var(--paper-edge);
 }
 .tape-lab .tl-bd-mode-btn {
-  font-family: var(--f-mono); font-size: 10px; font-weight: 700;
+  font-family: var(--f-body); font-size: 10px; font-weight: 700;
   letter-spacing: 0.18em; text-transform: uppercase;
   padding: 8px 14px; cursor: pointer; border: none;
   background: transparent; color: var(--ink-soft);
@@ -939,7 +938,7 @@ const TAPE_LAB_CSS = `
   box-shadow: 0 4px 0 var(--ink), 6px 8px 0 rgba(26,22,18,0.08);
 }
 .tape-lab .tl-bd-cap {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--oxblood);
   margin-bottom: 10px;
 }
@@ -955,12 +954,12 @@ const TAPE_LAB_CSS = `
   border: 1px solid var(--paper-edge);
 }
 .tape-lab .tl-bd-working-cap {
-  font-family: var(--f-mono); font-weight: 700; font-size: 9.5px;
+  font-family: var(--f-body); font-weight: 700; font-size: 9.5px;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--ink-faded); margin-bottom: 8px;
 }
 .tape-lab .tl-bd-working-line {
-  font-family: var(--f-mono); font-size: 13px; line-height: 1.9;
+  font-family: var(--f-body); font-size: 13px; line-height: 1.9;
   color: var(--ink-soft);
 }
 .tape-lab .tl-bd-working-result {
@@ -980,17 +979,17 @@ const TAPE_LAB_CSS = `
   margin-top: 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
 }
 .tape-lab .tl-bd-solve-label {
-  font-family: var(--f-mono); font-size: 10px; font-weight: 700;
+  font-family: var(--f-body); font-size: 10px; font-weight: 700;
   letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faded);
 }
 .tape-lab .tl-bd-solve-input {
   width: 110px; padding: 10px 12px;
   background: var(--paper-edge); border: 1.5px solid var(--ink);
-  font-family: var(--f-mono); font-size: 22px; font-weight: 700;
+  font-family: var(--f-body); font-size: 22px; font-weight: 700;
   color: var(--ink); outline: none; text-align: center;
 }
 .tape-lab .tl-bd-solve-btn {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.2em; text-transform: uppercase;
   padding: 11px 16px; cursor: pointer;
   background: var(--ink); color: var(--paper);
@@ -1012,7 +1011,7 @@ const TAPE_LAB_CSS = `
 }
 .tape-lab .tl-bd-feedback strong { color: var(--oxblood); font-style: normal; font-weight: 700; }
 .tape-lab .tl-bd-feedback .hint {
-  font-family: var(--f-mono); font-style: normal; font-size: 12px;
+  font-family: var(--f-body); font-style: normal; font-size: 12px;
   color: var(--ink-faded); display: block; margin-top: 4px;
 }
 
@@ -1022,7 +1021,7 @@ const TAPE_LAB_CSS = `
   border-left: 3px solid var(--oxblood);
 }
 .tape-lab .tl-bd-try-tag {
-  font-family: var(--f-mono); font-weight: 700; font-size: 9.5px;
+  font-family: var(--f-body); font-weight: 700; font-size: 9.5px;
   letter-spacing: 0.2em; text-transform: uppercase; color: var(--oxblood);
   margin-bottom: 4px;
 }
@@ -1056,10 +1055,10 @@ const TAPE_LAB_CSS = `
   font-family: var(--f-display); font-size: 18px; font-weight: 600;
 }
 .tape-lab .tl-bd-preset-ms {
-  font-family: var(--f-mono); font-size: 12px; color: var(--oxblood); font-weight: 700;
+  font-family: var(--f-body); font-size: 12px; color: var(--oxblood); font-weight: 700;
 }
 .tape-lab .tl-bd-preset-meta {
-  font-family: var(--f-mono); font-size: 10px; color: var(--ink-faded);
+  font-family: var(--f-body); font-size: 10px; color: var(--ink-faded);
   letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px;
 }
 .tape-lab .tl-bd-preset-blurb {
@@ -1074,7 +1073,7 @@ const TAPE_LAB_CSS = `
   display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
 }
 .tape-lab .tl-bd-walk-cap {
-  font-family: var(--f-mono); font-weight: 700; font-size: 10px;
+  font-family: var(--f-body); font-weight: 700; font-size: 10px;
   letter-spacing: 0.2em; text-transform: uppercase; color: var(--oxblood);
 }
 .tape-lab .tl-bd-walk-steps {
@@ -1083,7 +1082,7 @@ const TAPE_LAB_CSS = `
 .tape-lab .tl-bd-walk-step {
   background: var(--paper-edge);
   padding: 6px 10px;
-  font-family: var(--f-mono); font-size: 10.5px;
+  font-family: var(--f-body); font-size: 10.5px;
   color: var(--ink-soft); display: flex; gap: 6px; align-items: center;
 }
 .tape-lab .tl-bd-walk-step .k {
@@ -1460,7 +1459,7 @@ function NoteIcon({ id, size = 22 }) {
       return (
         <svg viewBox="0 0 28 32" width={w * 1.15} height={h} aria-hidden="true">
           <Stem /><HeadFilled /><Flag1 />
-          <text x="22" y="6" fontSize="8" fontFamily="JetBrains Mono, monospace" fontWeight="800" fill="currentColor">3</text>
+          <text x="22" y="6" fontSize="8" fontFamily="inherit" fontWeight="800" fill="currentColor">3</text>
         </svg>
       );
     case 'sixteenth':
@@ -2014,9 +2013,9 @@ function TheoryPanel({ onCopy }) {
       <h3>Worked example</h3>
       <p>120 BPM, dotted eighth.</p>
       <ol>
-        <li><strong>Quarter:</strong> 60,000 ÷ 120 = <span style={{ fontFamily: 'var(--f-mono)' }}>500 ms</span></li>
-        <li><strong>Eighth:</strong> 500 ÷ 2 = <span style={{ fontFamily: 'var(--f-mono)' }}>250 ms</span></li>
-        <li><strong>Dotted eighth:</strong> 250 × 1.5 = <span style={{ fontFamily: 'var(--f-mono)' }}>375 ms</span></li>
+        <li><strong>Quarter:</strong> 60,000 ÷ 120 = <span style={{ fontFamily: 'var(--f-body)' }}>500 ms</span></li>
+        <li><strong>Eighth:</strong> 500 ÷ 2 = <span style={{ fontFamily: 'var(--f-body)' }}>250 ms</span></li>
+        <li><strong>Dotted eighth:</strong> 250 × 1.5 = <span style={{ fontFamily: 'var(--f-body)' }}>375 ms</span></li>
       </ol>
       <p style={{ fontStyle: 'italic', color: 'var(--ink-faded)' }}>375 ms is the iconic U2/The Edge guitar delay. Each echo lands a sixteenth before the next eighth, weaving across the beat.</p>
 
@@ -2093,7 +2092,7 @@ function ReferencePanel({ onCopy, onPickBpm }) {
         </tbody>
       </table>
       <h3>Keyboard</h3>
-      <ul style={{ fontFamily: 'var(--f-mono)', fontSize: 12, lineHeight: 1.9 }}>
+      <ul style={{ fontFamily: 'var(--f-body)', fontSize: 12, lineHeight: 1.9 }}>
         <li><strong>1–6</strong> · trigger source pad</li>
         <li><strong>P</strong> · play / stop drum loop</li>
         <li><strong>Esc</strong> · close drawer</li>
@@ -2623,7 +2622,7 @@ function PracticeTab() {
       <div className="tl-bd-presets-head">
         <div className="tl-bd-cap" style={{ marginBottom: 0 }}>Where the numbers come from: genre presets</div>
         <span style={{
-          fontFamily: 'var(--f-mono)', fontSize: 10, color: 'var(--ink-faded)',
+          fontFamily: 'var(--f-body)', fontSize: 10, color: 'var(--ink-faded)',
           letterSpacing: '0.14em', textTransform: 'uppercase',
         }}>Click a card to highlight</span>
       </div>

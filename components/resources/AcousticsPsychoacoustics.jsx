@@ -49,7 +49,6 @@ const DESIGN_TOKENS_CSS = `
 
 const FONT_HEADING = "var(--font-fraunces), Georgia, serif";
 const FONT_BODY = "'Inter', system-ui, sans-serif";
-const FONT_MONO = "'Geist Mono', ui-monospace, monospace";
 
 const CopyableNote = ({ title, children, color = 'var(--annotation-info)', variant = 'definition' }) => {
   const [copied, setCopied] = useState(false);
@@ -372,7 +371,7 @@ const AcousticsPsychoacoustics = () => {
           <div style={{ background: 'var(--canvas-background)', borderRadius: 'var(--radius-xl)', padding: 'var(--space-5)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--space-4)' }}>
               <h3 style={{ fontFamily: FONT_HEADING, color: 'var(--canvas-foreground)', fontSize: 'var(--text-xl)' }}>Equal-loudness contour</h3>
-              <span style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_MONO }}>
+              <span style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: 'inherit' }}>
                 {phon} phon · perceived loudness
               </span>
             </div>
@@ -383,7 +382,7 @@ const AcousticsPsychoacoustics = () => {
                 return (
                   <g key={f}>
                     <line x1={x} y1={20} x2={x} y2={250} stroke="rgba(255,255,255,0.06)" />
-                    <text x={x} y={266} fontSize="9" fill="rgba(255,255,255,0.4)" fontFamily="monospace" textAnchor="middle">
+                    <text x={x} y={266} fontSize="9" fill="rgba(255,255,255,0.4)" fontFamily="inherit" textAnchor="middle">
                       {f >= 1000 ? `${f / 1000}k` : f}
                     </text>
                   </g>
@@ -394,7 +393,7 @@ const AcousticsPsychoacoustics = () => {
                 return (
                   <g key={spl}>
                     <line x1={20} y1={y} x2={580} y2={y} stroke="rgba(255,255,255,0.04)" />
-                    <text x={4} y={y + 3} fontSize="9" fill="rgba(255,255,255,0.4)" fontFamily="monospace">{spl}</text>
+                    <text x={4} y={y + 3} fontSize="9" fill="rgba(255,255,255,0.4)" fontFamily="inherit">{spl}</text>
                   </g>
                 );
               })}
@@ -403,15 +402,15 @@ const AcousticsPsychoacoustics = () => {
               {/* Reference at 1 kHz */}
               <circle cx={(Math.log10(1000 / 20) / Math.log10(20000 / 20)) * 560 + 20}
                 cy={280 - 30 - ((phon + 10) / 130) * 230} r={5} fill="var(--sienna)" />
-              <text x="568" y="14" fontSize="10" fill="rgba(255,255,255,0.5)" fontFamily="monospace" textAnchor="end">SPL (dB)</text>
-              <text x="300" y="278" fontSize="10" fill="rgba(255,255,255,0.5)" fontFamily="monospace" textAnchor="middle">Frequency (Hz, log)</text>
+              <text x="568" y="14" fontSize="10" fill="rgba(255,255,255,0.5)" fontFamily="inherit" textAnchor="end">SPL (dB)</text>
+              <text x="300" y="278" fontSize="10" fill="rgba(255,255,255,0.5)" fontFamily="inherit" textAnchor="middle">Frequency (Hz, log)</text>
             </svg>
 
             <div style={{ marginTop: 'var(--space-4)', display: 'flex', gap: 'var(--space-3)', alignItems: 'center' }}>
               <span style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)' }}>Listening level</span>
               <input aria-label="Listening level (phon)" type="range" min={10} max={100} step={10} value={phon} onChange={e => setPhon(Number(e.target.value))}
                 style={{ flex: 1, accentColor: 'var(--mustard)' }} />
-              <span style={{ color: 'var(--canvas-foreground)', fontFamily: FONT_MONO, fontSize: 12, minWidth: 60, textAlign: 'right' }}>{phon} phon</span>
+              <span style={{ color: 'var(--canvas-foreground)', fontFamily: 'inherit', fontSize: 12, minWidth: 60, textAlign: 'right' }}>{phon} phon</span>
             </div>
 
             <CopyableNote title="Watch the contour flatten" variant="key" color="var(--canvas-highlight)">
@@ -445,7 +444,7 @@ const AcousticsPsychoacoustics = () => {
               {/* Grid */}
               {[20, 100, 1000, 10000, 20000].map(f => {
                 const x = (Math.log10(f / 20) / Math.log10(20000 / 20)) * 560 + 20;
-                return <text key={f} x={x} y={216} fontSize="9" fill="rgba(255,255,255,0.4)" fontFamily="monospace" textAnchor="middle">{f >= 1000 ? `${f / 1000}k` : f}</text>;
+                return <text key={f} x={x} y={216} fontSize="9" fill="rgba(255,255,255,0.4)" fontFamily="inherit" textAnchor="middle">{f >= 1000 ? `${f / 1000}k` : f}</text>;
               })}
               {/* Masker bar */}
               {(() => {
@@ -455,7 +454,7 @@ const AcousticsPsychoacoustics = () => {
                   <g>
                     <line x1={x} y1={y} x2={x} y2={200} stroke="var(--sienna)" strokeWidth="3" />
                     <circle cx={x} cy={y} r={5} fill="var(--sienna)" />
-                    <text x={x + 8} y={y - 4} fontSize="10" fill="var(--sienna)" fontFamily="monospace">M {maskerLevel} dB</text>
+                    <text x={x + 8} y={y - 4} fontSize="10" fill="var(--sienna)" fontFamily="inherit">M {maskerLevel} dB</text>
                   </g>
                 );
               })()}
@@ -468,7 +467,7 @@ const AcousticsPsychoacoustics = () => {
                   <g>
                     <line x1={x} y1={y} x2={x} y2={200} stroke={color} strokeWidth="3" strokeDasharray={targetMasked ? '4 3' : ''} />
                     <circle cx={x} cy={y} r={5} fill={color} />
-                    <text x={x + 8} y={y - 4} fontSize="10" fill={color} fontFamily="monospace">T {targetLevel} dB</text>
+                    <text x={x + 8} y={y - 4} fontSize="10" fill={color} fontFamily="inherit">T {targetLevel} dB</text>
                   </g>
                 );
               })()}
@@ -477,19 +476,19 @@ const AcousticsPsychoacoustics = () => {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
               <div>
                 <div style={{ color: 'var(--sienna)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Masker (the loud sound)</div>
-                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Frequency {maskerFreq} Hz</label>
+                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: 'inherit' }}>Frequency {maskerFreq} Hz</label>
                 <input aria-label="Masker frequency (Hz)" type="range" min={50} max={10000} value={maskerFreq} onChange={e => setMaskerFreq(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sienna)' }} />
-                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Level {maskerLevel} dB</label>
+                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: 'inherit' }}>Level {maskerLevel} dB</label>
                 <input aria-label="Masker level (dB)" type="range" min={20} max={95} value={maskerLevel} onChange={e => setMaskerLevel(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sienna)' }} />
               </div>
               <div>
                 <div style={{ color: 'var(--mustard)', fontSize: 'var(--text-xs)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-2)' }}>Target (the quieter sound)</div>
-                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Frequency {targetFreq} Hz</label>
+                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: 'inherit' }}>Frequency {targetFreq} Hz</label>
                 <input aria-label="Target frequency (Hz)" type="range" min={50} max={10000} value={targetFreq} onChange={e => setTargetFreq(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
-                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: FONT_MONO }}>Level {targetLevel} dB</label>
+                <label style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 11, fontFamily: 'inherit' }}>Level {targetLevel} dB</label>
                 <input aria-label="Target level (dB)" type="range" min={0} max={95} value={targetLevel} onChange={e => setTargetLevel(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--mustard)' }} />
               </div>
@@ -516,13 +515,13 @@ const AcousticsPsychoacoustics = () => {
               {/* Floor lines (perspective) */}
               <svg viewBox="0 0 400 260" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
                 <polygon points="40,40 360,40 360,220 40,220" fill="rgba(201,184,122,0.04)" stroke="rgba(201,184,122,0.2)" strokeWidth="1" />
-                <text x="200" y="32" fill="rgba(232,228,223,0.4)" fontSize="11" textAnchor="middle" fontFamily="monospace">FRONT WALL</text>
-                <text x="200" y="232" fill="rgba(232,228,223,0.4)" fontSize="11" textAnchor="middle" fontFamily="monospace">BACK WALL</text>
-                <text x="32" y="130" fill="rgba(232,228,223,0.4)" fontSize="11" textAnchor="end" fontFamily="monospace">L</text>
-                <text x="368" y="130" fill="rgba(232,228,223,0.4)" fontSize="11" fontFamily="monospace">R</text>
+                <text x="200" y="32" fill="rgba(232,228,223,0.4)" fontSize="11" textAnchor="middle" fontFamily="inherit">FRONT WALL</text>
+                <text x="200" y="232" fill="rgba(232,228,223,0.4)" fontSize="11" textAnchor="middle" fontFamily="inherit">BACK WALL</text>
+                <text x="32" y="130" fill="rgba(232,228,223,0.4)" fontSize="11" textAnchor="end" fontFamily="inherit">L</text>
+                <text x="368" y="130" fill="rgba(232,228,223,0.4)" fontSize="11" fontFamily="inherit">R</text>
                 {/* Listening position */}
                 <circle cx="200" cy="170" r="10" fill="var(--accent)" />
-                <text x="200" y="190" fill="var(--canvas-foreground)" fontSize="10" textAnchor="middle" fontFamily="monospace">listener</text>
+                <text x="200" y="190" fill="var(--canvas-foreground)" fontSize="10" textAnchor="middle" fontFamily="inherit">listener</text>
                 {/* Bass traps in corners */}
                 {[
                   [44, 44], [356, 44], [44, 216], [356, 216]
@@ -572,7 +571,7 @@ const AcousticsPsychoacoustics = () => {
                   <div style={{ display: 'flex', gap: 4 }}>
                     <button type="button" data-press onClick={() => item.set(Math.max(0, item.value - 1))}
                       style={{ flex: 1, padding: 6, background: 'var(--canvas-surface-2)', color: 'var(--canvas-foreground)', border: 'none', borderRadius: 4, cursor: 'pointer', fontFamily: FONT_BODY }}>−</button>
-                    <div style={{ flex: 2, textAlign: 'center', color: 'var(--canvas-foreground)', fontFamily: FONT_MONO, padding: 6 }}>{item.value} / {item.max}</div>
+                    <div style={{ flex: 2, textAlign: 'center', color: 'var(--canvas-foreground)', fontFamily: 'inherit', padding: 6 }}>{item.value} / {item.max}</div>
                     <button type="button" data-press onClick={() => item.set(Math.min(item.max, item.value + 1))}
                       style={{ flex: 1, padding: 6, background: 'var(--canvas-surface-2)', color: 'var(--canvas-foreground)', border: 'none', borderRadius: 4, cursor: 'pointer', fontFamily: FONT_BODY }}>+</button>
                   </div>
@@ -588,11 +587,11 @@ const AcousticsPsychoacoustics = () => {
             }}>
               <div>
                 <div style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY }}>RT60</div>
-                <div style={{ color: 'var(--canvas-foreground)', fontFamily: FONT_MONO, fontSize: 'var(--text-xl)' }}>{roomScore.rt60.toFixed(2)} s</div>
+                <div style={{ color: 'var(--canvas-foreground)', fontFamily: 'inherit', fontSize: 'var(--text-xl)' }}>{roomScore.rt60.toFixed(2)} s</div>
               </div>
               <div>
                 <div style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY }}>Low-freq evenness</div>
-                <div style={{ color: 'var(--canvas-foreground)', fontFamily: FONT_MONO, fontSize: 'var(--text-xl)' }}>{Math.round(roomScore.lowEvenness)}%</div>
+                <div style={{ color: 'var(--canvas-foreground)', fontFamily: 'inherit', fontSize: 'var(--text-xl)' }}>{Math.round(roomScore.lowEvenness)}%</div>
               </div>
               <div>
                 <div style={{ color: 'var(--canvas-foreground-tertiary)', fontSize: 'var(--text-xs)', fontFamily: FONT_BODY }}>Verdict</div>

@@ -732,7 +732,7 @@ const DigitalAnalogue = () => {
                 <div style={{ flex: '1 1 250px', background: 'var(--canvas-surface)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-3) var(--space-4)', border: '1px solid var(--canvas-border)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sample Rate</span>
-                    <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{(sampleRate / 1000).toFixed(1)} kHz</span>
+                    <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: 'inherit' }}>{(sampleRate / 1000).toFixed(1)} kHz</span>
                   </div>
                   <input aria-label="Sample Rate" type="range" min={8000} max={96000} step={1000} value={sampleRate}
                     onChange={e => setSampleRate(parseInt(e.target.value))}
@@ -747,7 +747,7 @@ const DigitalAnalogue = () => {
                 <div style={{ flex: '1 1 250px', background: 'var(--canvas-surface)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-3) var(--space-4)', border: '1px solid var(--canvas-border)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
                     <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bit Depth</span>
-                    <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--canvas-highlight)', fontFamily: "'Geist Mono', monospace" }}>{bitDepth}-bit ({Math.pow(2, bitDepth).toLocaleString()} levels)</span>
+                    <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--canvas-highlight)', fontFamily: 'inherit' }}>{bitDepth}-bit ({Math.pow(2, bitDepth).toLocaleString()} levels)</span>
                   </div>
                   <input aria-label="Bit Depth" type="range" min={4} max={24} step={1} value={bitDepth}
                     onChange={e => setBitDepth(parseInt(e.target.value))}
@@ -768,7 +768,7 @@ const DigitalAnalogue = () => {
                 ].map((info, i) => (
                   <div key={i} style={{ flex: '1 1 140px', background: 'var(--canvas-surface)', borderRadius: 'var(--radius-md)', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--canvas-border)', textAlign: 'center' }}>
                     <div style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{info.label}</div>
-                    <div style={{ fontSize: 'var(--text-sm)', fontWeight: '600', color: 'var(--canvas-foreground)', fontFamily: "'Geist Mono', monospace", marginTop: '2px' }}>{info.value}</div>
+                    <div style={{ fontSize: 'var(--text-sm)', fontWeight: '600', color: 'var(--canvas-foreground)', fontFamily: 'inherit', marginTop: '2px' }}>{info.value}</div>
                   </div>
                 ))}
               </div>
@@ -818,7 +818,7 @@ const DigitalAnalogue = () => {
                   <div key={ctrl.label} style={{ flex: '1 1 160px', background: 'var(--canvas-surface)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-3) var(--space-4)', border: '1px solid var(--canvas-border)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-1)' }}>
                       <span style={{ fontSize: 'var(--text-xs)', fontWeight: '600', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{ctrl.label}</span>
-                      <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>{ctrl.display}</span>
+                      <span style={{ fontSize: 'var(--text-sm)', fontWeight: '500', color: 'var(--accent)', fontFamily: 'inherit' }}>{ctrl.display}</span>
                     </div>
                     <input aria-label={ctrl.label} type="range" min={ctrl.min} max={ctrl.max} step={ctrl.step} value={ctrl.value}
                       onChange={e => ctrl.set(parseFloat(e.target.value))}
@@ -846,7 +846,7 @@ const DigitalAnalogue = () => {
               {/* Result */}
               <div style={{ background: 'var(--canvas-surface)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)', textAlign: 'center', border: '1px solid var(--canvas-border-hover)' }}>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 'var(--space-1)' }}>Uncompressed File Size</div>
-                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: '700', color: 'var(--accent)', fontFamily: "'Geist Mono', monospace" }}>
+                <div style={{ fontSize: 'var(--text-3xl)', fontWeight: '700', color: 'var(--accent)', fontFamily: 'inherit' }}>
                   {calculateFileSize(calcSampleRate, calcBitDepth, calcChannels, calcDuration).toFixed(2)} MB
                 </div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--canvas-foreground-tertiary)', marginTop: 'var(--space-1)' }}>
@@ -898,7 +898,7 @@ const DigitalAnalogue = () => {
                       style={{
                         padding: 'var(--space-2) var(--space-3)', background: 'var(--canvas-surface)',
                         border: '1px solid var(--canvas-border-hover)', borderRadius: 'var(--radius-md)',
-                        color: 'var(--canvas-foreground)', fontFamily: "'Geist Mono', monospace",
+                        color: 'var(--canvas-foreground)', fontFamily: 'inherit',
                         fontSize: 'var(--text-sm)', width: '200px'
                       }} />
                     {!challengeSubmitted ? (
@@ -1104,7 +1104,7 @@ const DigitalAnalogue = () => {
             <StudioCard style={{ marginBottom: 'var(--space-6)' }}>
               <h3 style={{ fontFamily: FONT_HEADING, fontWeight: 700, fontSize: 'var(--text-xl)', margin: '0 0 var(--space-4)', color: 'var(--foreground)' }}>File Size Formula</h3>
               <CopyableNote title="File Size Calculation" color="var(--accent)" variant="key">
-                <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 'var(--text-base)', lineHeight: '2' }}>
+                <div style={{ fontFamily: 'inherit', fontSize: 'var(--text-base)', lineHeight: '2' }}>
                   (Sample Rate &times; Bit Depth &times; Channels &times; Duration) &divide; 8 &divide; 1,048,576 = <strong>Size in MB</strong>
                 </div>
                 <div style={{ marginTop: 'var(--space-2)', fontSize: 'var(--text-sm)' }}>

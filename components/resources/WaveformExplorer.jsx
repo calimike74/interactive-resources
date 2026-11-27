@@ -21,7 +21,6 @@ const HOUSE = {
     accentSoft: '#FBF1EB',
     field: '#3A4A35',         // moss — secondary/confirm action
     fieldHover: '#2D3A2A',
-    mono: 'var(--font-jbmono), ui-monospace, SFMono-Regular, Menlo, monospace',
     serif: 'var(--font-fraunces), Georgia, serif',
     sans: 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
 };
@@ -345,7 +344,7 @@ const WaveformExplorer = () => {
 
             // Original waveform label
             ctx.fillStyle = canvasTheme.textSecondary;
-            ctx.font = '11px ui-monospace, monospace';
+            ctx.font = `11px ${getComputedStyle(document.body).fontFamily}`;
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
             ctx.fillText(
@@ -368,7 +367,7 @@ const WaveformExplorer = () => {
             // Target shape badge
             const targetShapeName = waveformShapes[currentChallengeData.targetShape]?.name || '';
             const badgeText = `Draw: ${targetShapeName}`;
-            ctx.font = 'bold 11px ui-monospace, monospace';
+            ctx.font = `bold 11px ${getComputedStyle(document.body).fontFamily}`;
             const badgeWidth = ctx.measureText(badgeText).width + 16;
             const badgeX = padding.left + innerWidth - badgeWidth - 8;
 
@@ -442,7 +441,7 @@ const WaveformExplorer = () => {
         // Answer label
         const targetName = waveformShapes[currentChallengeData.targetShape]?.name || '';
         ctx.fillStyle = canvasTheme.answerLine;
-        ctx.font = '11px ui-monospace, monospace';
+        ctx.font = `11px ${getComputedStyle(document.body).fontFamily}`;
         ctx.textAlign = 'right';
         ctx.textBaseline = 'top';
         ctx.fillText(
@@ -588,7 +587,7 @@ const WaveformExplorer = () => {
             boxShadow: '0 1px 0 rgba(43,36,24,0.04), 0 18px 40px -24px rgba(43,36,24,0.22)',
         },
         eyebrow: {
-            fontFamily: HOUSE.mono,
+            fontFamily: HOUSE.sans,
             fontSize: 11,
             fontWeight: 600,
             letterSpacing: '0.08em',

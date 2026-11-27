@@ -488,7 +488,7 @@ export default function SynthBench({ back }) {
             keyWhite: 'rgba(255, 255, 255, 0.88)',
             keyBlack: '#22223a',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
         const monoBold = `600 10.5px ${monoFace}`;
@@ -526,7 +526,7 @@ export default function SynthBench({ back }) {
             if (d === 'core') {
                 // ---- the tiles: where you are in the chain ----
                 const sec = sectionOfLast(lastRef.current);
-                const tiles = [['OSCILLATORS', 'osc'], ['FILTER', 'filter'], ['AMPLIFIER', 'env']];
+                const tiles = [['Oscillators', 'osc'], ['Filter', 'filter'], ['Amplifier', 'env']];
                 let tx = padL; const ty = top; const th = 18;
                 g2.font = monoSmall;
                 for (const [name, id] of tiles) {
@@ -538,7 +538,7 @@ export default function SynthBench({ back }) {
                     g2.fillStyle = lit ? col.goldBright : col.inkSoft; g2.textAlign = 'left';
                     g2.fillText(name, tx + 8, ty + 12.5);
                     tx += tw;
-                    if (name !== 'AMPLIFIER') { g2.strokeStyle = col.line; g2.beginPath(); g2.moveTo(tx, ty + th / 2); g2.lineTo(tx + 12, ty + th / 2); g2.moveTo(tx + 9, ty + th / 2 - 3); g2.lineTo(tx + 12, ty + th / 2); g2.lineTo(tx + 9, ty + th / 2 + 3); g2.stroke(); tx += 12; }
+                    if (name !== 'Amplifier') { g2.strokeStyle = col.line; g2.beginPath(); g2.moveTo(tx, ty + th / 2); g2.lineTo(tx + 12, ty + th / 2); g2.moveTo(tx + 9, ty + th / 2 - 3); g2.lineTo(tx + 12, ty + th / 2); g2.lineTo(tx + 9, ty + th / 2 + 3); g2.stroke(); tx += 12; }
                 }
                 g2.fillStyle = col.inkFaint; g2.fillText('the LFO and the envelope steer them; nothing else reaches the speakers', tx + 12, ty + 12.5);
 
@@ -590,9 +590,9 @@ export default function SynthBench({ back }) {
                 trace(shape.out); g2.shadowColor = wc; g2.shadowBlur = 9; g2.strokeStyle = wc; g2.lineWidth = 2; g2.stroke(); g2.shadowBlur = 0;
                 g2.lineWidth = 1; g2.lineCap = 'butt';
                 g2.fillStyle = col.inkSoft; g2.font = monoBold; g2.textAlign = 'left';
-                g2.fillText('WAVE', L.x0 + 8, L.top + 14);
+                g2.fillText('Wave', L.x0 + 8, L.top + 14);
                 g2.fillStyle = col.inkFaint; g2.font = monoSmall;
-                g2.fillText(`two cycles at ${fmtHz(shape.f0)}${s.pulse > 0 && (pwmOn(s) || s.width < 50) ? ` · width ${Math.round(wNow * 100)} %` : ''} · dotted: before the filter`, L.x0 + 8, L.bottom - 7);
+                g2.fillText(`two cycles at ${fmtHz(shape.f0)}${s.pulse > 0 && (pwmOn(s) || s.width < 50) ? `, width ${Math.round(wNow * 100)} %` : ''}, dotted: before the filter`, L.x0 + 8, L.bottom - 7);
 
                 // the harmonics, with the filter over them
                 const RW = R.x1 - R.x0; const RH = R.bottom - R.top;
@@ -639,20 +639,20 @@ export default function SynthBench({ back }) {
                     g2.setLineDash([2, 3]); g2.strokeStyle = col.gold; g2.globalAlpha = 0.6; g2.beginPath(); g2.moveTo(dx, dy); g2.lineTo(dx, R.bottom); g2.stroke(); g2.setLineDash([]); g2.globalAlpha = 1;
                     g2.beginPath(); g2.arc(dx, dy, hot ? 7.5 : 5.5, 0, Math.PI * 2); g2.fillStyle = col.goldBright; g2.fill(); g2.strokeStyle = '#17172b'; g2.lineWidth = 1.5; g2.stroke(); g2.lineWidth = 1;
                     g2.fillStyle = col.goldBright; g2.font = monoBig; g2.textAlign = dx > R.x0 + RW * 0.6 ? 'right' : 'left';
-                    g2.fillText(`cutoff ${fmtHz(s.cutoff)} · drag`, dx + (dx > R.x0 + RW * 0.6 ? -12 : 12), dy - 10);
+                    g2.fillText(`cutoff ${fmtHz(s.cutoff)}, drag`, dx + (dx > R.x0 + RW * 0.6 ? -12 : 12), dy - 10);
                     handle = { x: dx, y: dy };
                 } else {
                     g2.fillStyle = col.goldBright; g2.font = monoBig; g2.textAlign = 'left';
                     g2.fillText('filter open: the oscillators alone', R.x0 + 8, R.top + 30);
                 }
                 g2.fillStyle = col.inkSoft; g2.font = monoBold; g2.textAlign = 'left';
-                g2.fillText('HARMONICS', R.x0 + 8, R.top + 14);
+                g2.fillText('Harmonics', R.x0 + 8, R.top + 14);
                 g2.fillStyle = col.inkFaint; g2.font = monoSmall;
                 {
-                    const bits = harmonicsSaid(s).split(' · ');
+                    const bits = harmonicsSaid(s).split(', ');
                     if (s.osc2 === 'pair') bits.push(`doubled ${s.detune} ct apart`); else if (s.osc2 === 'fifth') bits.push('a second a fifth up');
-                    let head = bits.join(' · ');
-                    while (bits.length > 1 && g2.measureText(head).width > RW - 84) { bits.pop(); head = bits.join(' · '); }
+                    let head = bits.join(', ');
+                    while (bits.length > 1 && g2.measureText(head).width > RW - 84) { bits.pop(); head = bits.join(', '); }
                     g2.fillText(head, R.x0 + 74, R.top + 14);
                 }
                 geomRef.current = { d, L, R, keys, xHz, yDb, hzOfX: (x) => hzOfPos((x - R.x0) / RW), dbOfY: (y) => DB_TOP - ((y - R.top) / RH) * (DB_TOP - DB_BOT) };
@@ -662,7 +662,7 @@ export default function SynthBench({ back }) {
                 const sec = sectionOfLast(lastRef.current);
                 const job = PARTS[s0.part].job;
                 g2.fillStyle = col.inkFaint; g2.font = monoSmall; g2.textAlign = 'left';
-                g2.fillText(`THE PAPER'S DRAWING · a synthesiser as sections, in signal order · judged for ${job}`, padL, top + 6);
+                g2.fillText(`The paper's drawing: a synthesiser as sections, in signal order, judged for ${job}`, padL, top + 6);
                 const areaTop = top + 18; const areaBot = bottom - 4;
                 const H = areaBot - areaTop;
                 const gapX = 46; const gapY = short ? 14 : 20;
@@ -679,11 +679,11 @@ export default function SynthBench({ back }) {
                     env: { x: bx(1), y: row2, w: bw, h: bh },
                 };
                 const lineOf = {
-                    osc: [`${sourcesShort(s0)}${s0.osc2 === 'pair' ? ' × 2' : s0.osc2 === 'fifth' ? ' + a fifth' : ''}`, `range ${RANGE_WORD[s0.octave]}${s0.osc2 === 'pair' ? ` · detune ${s0.detune} ct` : ''}${s0.pulse > 0 ? ` · PW ${pwmOn(s0) ? 'by LFO' : `${s0.width} %`}` : ''}`, harmonicsSaid(s0)],
-                    filter: [`${FILTERS[s0.filter].label} · cutoff ${fmtHz(s0.cutoff)}`, `resonance ${s0.res} % (${resDb(s0.res) > 0 ? '+' : ''}${resDb(s0.res).toFixed(0)} dB peak)`, s0.envAmt > 0 ? `env → cutoff ${envOctaves(s0).toFixed(1)} oct` : 'no envelope on the cutoff'],
-                    voices: [`VCA ${s0.vca} · ${VOICES[s0.voices].label.toLowerCase()}${GLIDES[s0.glide].label.toLowerCase() === 'off' ? '' : ` · glide ${GLIDES[s0.glide].ms} ms`}`, `level ${Math.round(s0.volume * 100)} %`, s0.vca === 'gate' ? 'the key sets its gain: on, then off' : 'the envelope sets its gain'],
-                    lfo: lfoOn(s0) ? [`${LFO_SHAPES[s0.lfoShape].label.toLowerCase()} · ${fmtRate(s0.lfoRate)}`, `→ ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()} · depth ${s0.lfoDepth} %`, 'a control signal, never heard'] : ['depth 0 %', 'nothing modulated', 'a control signal, never heard'],
-                    env: [`A ${fmtMs(s0.attack)} · D ${fmtMs(s0.decay)}`, `S ${s0.sustain} % · R ${fmtMs(s0.release)}`, 'times, times, a level, a time'],
+                    osc: [`${sourcesShort(s0)}${s0.osc2 === 'pair' ? ' × 2' : s0.osc2 === 'fifth' ? ' + a fifth' : ''}`, `range ${RANGE_WORD[s0.octave]}${s0.osc2 === 'pair' ? `, detune ${s0.detune} ct` : ''}${s0.pulse > 0 ? `, PW ${pwmOn(s0) ? 'by LFO' : `${s0.width} %`}` : ''}`, harmonicsSaid(s0)],
+                    filter: [`${FILTERS[s0.filter].label}, cutoff ${fmtHz(s0.cutoff)}`, `resonance ${s0.res} % (${resDb(s0.res) > 0 ? '+' : ''}${resDb(s0.res).toFixed(0)} dB peak)`, s0.envAmt > 0 ? `env → cutoff ${envOctaves(s0).toFixed(1)} oct` : 'no envelope on the cutoff'],
+                    voices: [`VCA ${s0.vca}, ${VOICES[s0.voices].label.toLowerCase()}${GLIDES[s0.glide].label.toLowerCase() === 'off' ? '' : `, glide ${GLIDES[s0.glide].ms} ms`}`, `level ${Math.round(s0.volume * 100)} %`, s0.vca === 'gate' ? 'the key sets its gain: on, then off' : 'the envelope sets its gain'],
+                    lfo: lfoOn(s0) ? [`${LFO_SHAPES[s0.lfoShape].label.toLowerCase()}, ${fmtRate(s0.lfoRate)}`, `to ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()}, depth ${s0.lfoDepth} %`, 'a control signal, never heard'] : ['depth 0 %', 'nothing modulated', 'a control signal, never heard'],
+                    env: [`A ${fmtMs(s0.attack)}, D ${fmtMs(s0.decay)}`, `S ${s0.sustain} %, R ${fmtMs(s0.release)}`, 'times, times, a level, a time'],
                 };
                 const arrow = (x0, y0, x1, y1, colour, dashed) => {
                     g2.strokeStyle = colour; g2.setLineDash(dashed ? [4, 4] : []); g2.beginPath(); g2.moveTo(x0, y0); g2.lineTo(x1, y1); g2.stroke(); g2.setLineDash([]);
@@ -695,7 +695,7 @@ export default function SynthBench({ back }) {
                 arrow(boxes.osc.x + bw, my, boxes.filter.x, my, col.ink, false);
                 arrow(boxes.filter.x + bw, my, boxes.voices.x, my, col.ink, false);
                 arrow(boxes.voices.x + bw, my, boxes.voices.x + bw + outW - 6, my, col.ink, false);
-                g2.fillStyle = col.inkSoft; g2.font = monoSmall; g2.textAlign = 'left'; g2.fillText('OUT', boxes.voices.x + bw + outW - 4, my - 6);
+                g2.fillStyle = col.inkSoft; g2.font = monoSmall; g2.textAlign = 'left'; g2.fillText('Out', boxes.voices.x + bw + outW - 4, my - 6);
                 // the control routes
                 const envTop = boxes.env.y;
                 arrow(boxes.env.x + bw * 0.62, envTop, boxes.voices.x + bw * 0.3, row1 + bh, s0.vca === 'gate' ? col.inkFaint : col.purple, s0.vca === 'gate');
@@ -738,11 +738,11 @@ export default function SynthBench({ back }) {
                 const LH = Math.floor((bottom - axisH - areaTop - gateH - gapY * 4) / 4);
                 const xOf = (ms) => X0 + (ms / tl.spanMs) * TW;
                 const lanesDef = [
-                    { id: 'gate', name: 'GATE', h: gateH, note: 'the key: down, then up' },
-                    { id: 'env', name: 'ENVELOPE', h: LH, note: 'asks: A, D, S, R', colour: col.purple },
-                    { id: 'amp', name: 'AMPLIFIER', h: LH, note: s0.vca === 'gate' ? 'obeys the gate: on, then off' : s0.lfoTarget === 'amp' && lfoOn(s0) ? 'obeys; the LFO is tremolo' : 'obeys: the note\'s shape', colour: col.green },
-                    { id: 'cutoff', name: 'CUTOFF', h: LH, note: s0.envAmt > 0 ? (s0.lfoTarget === 'cutoff' && lfoOn(s0) ? 'obeys env; wobble = LFO' : 'obeys the envelope') : (s0.lfoTarget === 'cutoff' && lfoOn(s0) ? 'the wobble is the LFO' : 'not routed: stays put'), colour: col.goldBright },
-                    { id: 'lfo', name: 'LFO', h: LH, note: lfoOn(s0) ? `→ ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()} ${Math.round(lfoSwing(s0) * (s0.lfoTarget === 'amp' ? 100 : 1))}${s0.lfoTarget === 'amp' ? ' %' : ' ct'}${pwmOn(s0) ? ' + PW' : ''}; never heard` : pwmOn(s0) ? `→ pulse width ${s0.width} to ${100 - s0.width} %; never heard` : 'depth 0: nothing moves', colour: col.purple },
+                    { id: 'gate', name: 'Gate', h: gateH, note: 'the key: down, then up' },
+                    { id: 'env', name: 'Envelope', h: LH, note: 'asks: A, D, S, R', colour: col.purple },
+                    { id: 'amp', name: 'Amplifier', h: LH, note: s0.vca === 'gate' ? 'obeys the gate: on, then off' : s0.lfoTarget === 'amp' && lfoOn(s0) ? 'obeys; the LFO is tremolo' : 'obeys: the note\'s shape', colour: col.green },
+                    { id: 'cutoff', name: 'Cutoff', h: LH, note: s0.envAmt > 0 ? (s0.lfoTarget === 'cutoff' && lfoOn(s0) ? 'obeys env; wobble = LFO' : 'obeys the envelope') : (s0.lfoTarget === 'cutoff' && lfoOn(s0) ? 'the wobble is the LFO' : 'not routed: stays put'), colour: col.goldBright },
+                    { id: 'lfo', name: 'LFO', h: LH, note: lfoOn(s0) ? `to ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()} ${Math.round(lfoSwing(s0) * (s0.lfoTarget === 'amp' ? 100 : 1))}${s0.lfoTarget === 'amp' ? ' %' : ' ct'}${pwmOn(s0) ? ' + PW' : ''}; never heard` : pwmOn(s0) ? `→ pulse width ${s0.width} to ${100 - s0.width} %; never heard` : 'depth 0: nothing moves', colour: col.purple },
                 ];
                 lanes = [];
                 let y = areaTop;
@@ -810,20 +810,20 @@ export default function SynthBench({ back }) {
             // ---- the setting line, for the depth ----
             const segs = [PARTS[s0.part].label.toLowerCase(), `${sourcesShort(s0)}${s0.osc2 === 'pair' ? ' × 2' : s0.osc2 === 'fifth' ? ' + 5th' : ''}`, `${FILTERS[s0.filter].label} ${fmtHz(s0.cutoff)}`];
             if (s0.vca === 'gate') segs.push('VCA gate');
-            if (lfoOn(s0)) segs.push(`LFO → ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()}${pwmOn(s0) ? ' + PW' : ''}`); else if (pwmOn(s0)) segs.push('LFO → PW');
+            if (lfoOn(s0)) segs.push(`LFO to ${LFO_TARGETS[s0.lfoTarget].label.toLowerCase()}${pwmOn(s0) ? ' + PW' : ''}`); else if (pwmOn(s0)) segs.push('LFO → PW');
             segs.push(heldRef.current ? 'raw' : s0.presetId ? PRESETS.find((p) => p.id === s0.presetId)?.name.toLowerCase() : 'your patch');
             if (d !== 'core' && vdd.ok != null) segs.push(vdd.ok ? 'as directed' : 'not as directed');
             g2.fillStyle = col.goldBright; g2.font = mono; g2.textAlign = 'left';
             if (frameRef.current % 20 === 0 && legendRef.current) legendWRef.current = legendRef.current.getBoundingClientRect().width;
             frameRef.current += 1;
             const roomW = w - 18 - legendWRef.current - 16 - (padL + 6);
-            let label = segs.join(' · ');
-            while (segs.length > 2 && g2.measureText(label).width > roomW) { segs.pop(); label = segs.join(' · '); }
+            let label = segs.join(', ');
+            while (segs.length > 2 && g2.measureText(label).width > roomW) { segs.pop(); label = segs.join(', '); }
             g2.fillText(label, padL, settingY);
 
             if (readRef.current) {
                 const nowMidi = sounding.length ? Math.min(...sounding) : null;
-                const txt = nowMidi != null ? ` · ${noteLine(nowMidi)}` : ` · ${noteLine(rdRef.current.midi)}`;
+                const txt = nowMidi != null ? `, ${noteLine(nowMidi)}` : `, ${noteLine(rdRef.current.midi)}`;
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
 
@@ -921,7 +921,7 @@ export default function SynthBench({ back }) {
                         <dt>Envelope (ADSR)</dt><dd>Attack: the time to rise to peak. Decay: the time to fall to the sustain. Sustain: the level held while the key is down, a level not a time. Release: the time to fall to silence after the key lifts. Routed to the amplifier it shapes the note; routed to the cutoff it opens and closes the brightness on every note.</dd>
                         <dt>VCA: Env or Gate</dt><dd>The voltage-controlled amplifier. On Env the envelope sets its gain. On Gate the key does: full while it is down, off when it lifts, the envelope disabled. Not a noise gate, which cuts out background noise.</dd>
                         <dt>LFO</dt><dd>A low frequency oscillator: a wave below the range of hearing, used to move something. On the pitch it makes vibrato; on the level, tremolo; on the cutoff, a wobble or a sweep. Rate is its speed, depth how far it moves the target. It is a control signal, never heard as a note.</dd>
-                        <dt>Mono · poly · portamento</dt><dd>Monophonic plays one note at a time, the usual for bass and lead; polyphonic plays chords, which pads and keyboard parts need. Portamento, or glide, slides the pitch from one note to the next.</dd>
+                        <dt>Mono, poly, portamento</dt><dd>Monophonic plays one note at a time, the usual for bass and lead; polyphonic plays chords, which pads and keyboard parts need. Portamento, or glide, slides the pitch from one note to the next.</dd>
                         <dt>Coarse and fine tuning</dt><dd>Fine tuning is cents, the detune between a pair. Coarse tuning is semitones: Osc 2 set to Fifth sits seven semitones above Osc 1, and Sub an octave below. Octave is the range the papers mark.</dd>
                         <dt>Arpeggiator</dt><dd>Steps through a held chord&apos;s notes in turn instead of sounding them together. The Arp chip in the More row does it to the pad and the keyboard part, in sixteenths, lowest note first.</dd>
                         <dt>Pitch bend range</dt><dd>How far the bend wheel moves the pitch at full travel, in semitones: past tasks have used 4, 7 and 12. This bench has no wheel; the Piano Roll bench (1.5) has it, and its bass is this patch.</dd>
@@ -936,11 +936,11 @@ export default function SynthBench({ back }) {
                             <tr><td>Filter</td><td>Analog: Filter 1, with type, Freq and Res; the Env amount beside it</td><td>Retro Synth: Filter with type, Cutoff and Resonance; the Env Depth beside it</td></tr>
                             <tr><td>Envelope</td><td>Analog: Amp Env and Filter Env, each A D S R</td><td>Retro Synth: Amp Env and Filter Env, each A D S R</td></tr>
                             <tr><td>LFO</td><td>Analog: LFO 1 with shape, Rate and a destination amount on the pitch, the filter or the amp</td><td>Retro Synth: LFO with shape, Rate and a target</td></tr>
-                            <tr><td>Mono · Glide</td><td>Analog: Voices set to 1; Glide time</td><td>Retro Synth: Voices set to Mono; Glide</td></tr>
+                            <tr><td>Mono, Glide</td><td>Analog: Voices set to 1; Glide time</td><td>Retro Synth: Voices set to Mono; Glide</td></tr>
                         </tbody>
                     </table>
                     <p className={styles.source}>As the controls appear in Live 12 and Logic Pro 11. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>Why a control signal</dt><dd>Inside an analogue synthesiser an audio signal and a control voltage are the same kind of thing: a voltage. What makes one a sound and the other a modulation is only where it is plugged in. The LFO&apos;s output goes to a parameter, not to the speakers.</dd>
                         <dt>Envelope to pitch</dt><dd>The spec also maps an envelope to the pitch: a sweep that starts high and falls on every note, the classic synth tom. This bench routes its envelope to the amplifier and the cutoff only; the LFO reaches the pitch. A pitch envelope is the one routing here that is written, not played.</dd>
@@ -1071,7 +1071,7 @@ export default function SynthBench({ back }) {
     const arpOptions = ARP_IDS.map((id) => ({ id, label: ARPS[id].label, title: ARPS[id].said }));
     const verdictWord = vd.key === 'free' ? 'no stem' : vd.ok == null ? (vd.poor?.length ? 'a fault' : vd.partly?.length ? 'partly' : 'suits') : vd.ok ? 'as directed' : 'not yet';
     const lfoValue2 = lfoOn(state) || pwmOn(state) ? fmtRate(state.lfoRate) : 'off';
-    const lfoMeaning = `${pwmOn(state) ? (rd.lfoShort === 'off' ? 'PW' : `${rd.lfoShort} + PW`) : rd.lfoShort} · a control signal`;
+    const lfoMeaning = `${pwmOn(state) ? (rd.lfoShort === 'off' ? 'PW' : `${rd.lfoShort} + PW`) : rd.lfoShort}, a control signal`;
 
     const consoleSlot = (
         <>
@@ -1108,7 +1108,7 @@ export default function SynthBench({ back }) {
             </div>
 
             <div className={`${styles.sec} ${styles.secSynth} ${styles.secVco}`} data-teach={teach || undefined}>
-                <div className={styles.secHead}><span className={styles.eyebrow}>VCO</span><span className={styles.value}>{rd.note} · {fmtHz(rd.hz)}</span></div>
+                <div className={styles.secHead}><span className={styles.eyebrow}>VCO</span><span className={styles.value}>{rd.note}, {fmtHz(rd.hz)}</span></div>
                 <div className={styles.slideRow}>
                     <Slide name="Range" shown={RANGE_WORD[state.octave]}>
                         <Fader slim label="Range" value={state.octave} min={-1} max={1} step={1} format={(o) => `${RANGE_WORD[o]}, ${octaveSaid(o)}`} colour="var(--gen-3)" pixels={60} onChange={edit(setOctave, 'octave')} title="The octave, in the paper's feet: 8' is the part's own octave, 16' an octave down, 4' up" />
@@ -1124,7 +1124,7 @@ export default function SynthBench({ back }) {
                         <Chips label="PW by" options={pwmOptions} value={state.pwm} onChange={edit(setPwm, 'pwm')} />
                     </div>
                 </div>
-                <div className={styles.meaning}>{octaveSaid(state.octave)}{pwmOn(state) ? ' · PWM' : state.pulse > 0 && state.width < 45 ? ' · a narrow pulse' : ''}</div>
+                <div className={styles.meaning}>{octaveSaid(state.octave)}{pwmOn(state) ? ', PWM' : state.pulse > 0 && state.width < 45 ? ', a narrow pulse' : ''}</div>
                 <Why>One oscillator, the paper&apos;s VCO. Range is its octave in organ feet, 8&apos; the part&apos;s own, a setting the marks check. Detune spreads a second VCO a few cents from this one; past 30 it is out of tune. Width narrows the pulse from a square, and PW by LFO lets the LFO move it: pulse-width modulation, easy to mistake for a plain square.</Why>
             </div>
 
@@ -1137,7 +1137,7 @@ export default function SynthBench({ back }) {
                         </Slide>
                     ))}
                 </div>
-                <div className={styles.meaning}>{rd.sources} → the filter</div>
+                <div className={styles.meaning}>{rd.sources} into the filter</div>
                 <Why>What goes into the filter, mixed rather than chosen: the VCO&apos;s pulse and its second wave, a square sub-oscillator an octave or two down (the More row sets which), and white noise. The second wave&apos;s name is a switch: press it for Saw, Tri or Sine, the spec&apos;s &quot;selecting and mixing sine, triangle, pulse, square and saw&quot;. A saw has every harmonic, a square the odd ones, a narrow pulse the even ones too, a triangle faint odd ones, a sine one alone; noise is every frequency and no pitch. The sub adds weight beneath the part.</Why>
             </div>
 
@@ -1155,7 +1155,7 @@ export default function SynthBench({ back }) {
                         <Fader slim label="Env" value={state.envAmt} min={ENV_AMT_MIN} max={ENV_AMT_MAX} step={1} format={(a) => `${a} %`} colour="var(--purple)" pixels={92} onChange={edit(setEnvAmt, 'envAmt')} title="How far the envelope lifts the cutoff on every note: 100 % is four octaves" />
                     </Slide>
                 </div>
-                <div className={styles.meaning}>{rd.brightness}{state.envAmt > 0 ? ` · env lifts ${envOctaves(state).toFixed(1)} oct` : ''}</div>
+                <div className={styles.meaning}>{rd.brightness}{state.envAmt > 0 ? `, env lifts ${envOctaves(state).toFixed(1)} oct` : ''}</div>
                 <Why>Low-pass keeps what is below the cutoff, so lower is darker; high-pass keeps what is above; band-pass keeps a band. Resonance is a peak at the cutoff. Env routes the envelope to the cutoff, so each note opens bright and closes: listen for the brightness moving, not only the level.</Why>
             </div>
 
@@ -1191,12 +1191,12 @@ export default function SynthBench({ back }) {
             <div className={`${styles.sec} ${styles.secHear}`} data-teach={teach || undefined} data-synth="true">
                 <div className={styles.secHead}><span className={styles.eyebrow}>Hear</span></div>
                 <div className={styles.stats} aria-live="polite">
-                    <div><b data-note-number={rd.midi}>{rd.note} · {fmtHz(rd.hz)}</b><span>home note</span></div>
+                    <div><b data-note-number={rd.midi}>{rd.note}, {fmtHz(rd.hz)}</b><span>home note</span></div>
                     <div><b data-wrap="true">{rd.sources}</b><span>into the filter</span></div>
                     <div><b>{rd.brightness}</b><span>the filter</span></div>
                     <div><b>{rd.envelope}</b><span>the envelope</span></div>
                     {maths
-                        ? <div><b>{verdictWord}</b><span>the paper&apos;s check{ext ? <span className={styles.ext}>EXT</span> : null}</span></div>
+                        ? <div><b>{verdictWord}</b><span>the paper&apos;s check{ext ? <span className={styles.ext}>extension</span> : null}</span></div>
                         : <div><b>{held ? 'raw' : rd.lfoShort}</b><span>{held ? 'what is playing' : 'the LFO'}</span></div>}
                 </div>
                 <Legal />
@@ -1247,17 +1247,17 @@ export default function SynthBench({ back }) {
             <div className={styles.moreItem}>
                 <span className={styles.eyebrow}>Arp</span>
                 <Chips label="Arp" options={arpOptions} value={state.arp} onChange={edit(setArp, 'arp')} />
-                <span className={styles.chipNote}>{state.arp === 'up' ? (state.part === 'pad' || state.part === 'keys' ? 'each chord stepped up in sixteenths' : 'no chords in this part to step through') : `${VOICES[state.voices].label.toLowerCase()}${state.glide !== 'off' ? ` · glide ${GLIDES[state.glide].ms} ms` : ''} · ${OSC2[state.osc2].label.toLowerCase() === 'off' ? 'one VCO' : `osc 2: ${OSC2[state.osc2].label.toLowerCase()}`}`}</span>
+                <span className={styles.chipNote}>{state.arp === 'up' ? (state.part === 'pad' || state.part === 'keys' ? 'each chord stepped up in sixteenths' : 'no chords in this part to step through') : `${VOICES[state.voices].label.toLowerCase()}${state.glide !== 'off' ? `, glide ${GLIDES[state.glide].ms} ms` : ''}, ${OSC2[state.osc2].label.toLowerCase() === 'off' ? 'one VCO' : `osc 2: ${OSC2[state.osc2].label.toLowerCase()}`}`}</span>
             </div>
         </>
     ) : null;
 
     const hoverTip = () => {
         if (!hover) return null;
-        if (hover.kind === 'dot') return <><i>cutoff · {fmtHz(state.cutoff)}</i><p>Drag across to move the cutoff, up for more resonance. The Cutoff slider follows.</p></>;
-        if (hover.kind === 'key') return <><i>{noteName(hover.midi)} · {fmtHz(midiHz(hover.midi) * 2 ** state.octave)}</i><p>Press to play the voice at this note; {KEYBOARD_KEYS.charAt(hover.midi - PARTS[state.part].keyC).toUpperCase()} on your keyboard does the same.</p></>;
-        if (hover.kind === 'box') { const gd = judgeAll(state)[hover.id]; return <><i>{SECTIONS[hover.id].label} · {GRADE_WORD[gd.grade]} {PARTS[state.part].job}</i><p>{gd.why.charAt(0).toUpperCase() + gd.why.slice(1)}.</p></>; }
-        if (hover.kind === 'time') { const g = readings(state).gateMs; const e = adsrAt(state, hover.ms, g); return <><i>{fmtMs(hover.ms)} · envelope {Math.round(e * 100)} %</i><p>{hover.ms <= g ? `The key is down: ${hover.ms < state.attack ? 'the attack is rising' : hover.ms < state.attack + state.decay ? 'the decay is falling to the sustain' : 'holding at the sustain'}.` : `The key is up: the release is ${Math.round((1 - Math.min(1, (hover.ms - g) / state.release)) * 100)} % of the way to silence.`}</p></>; }
+        if (hover.kind === 'dot') return <><i>cutoff, {fmtHz(state.cutoff)}</i><p>Drag across to move the cutoff, up for more resonance. The Cutoff slider follows.</p></>;
+        if (hover.kind === 'key') return <><i>{noteName(hover.midi)}, {fmtHz(midiHz(hover.midi) * 2 ** state.octave)}</i><p>Press to play the voice at this note; {KEYBOARD_KEYS.charAt(hover.midi - PARTS[state.part].keyC).toUpperCase()} on your keyboard does the same.</p></>;
+        if (hover.kind === 'box') { const gd = judgeAll(state)[hover.id]; return <><i>{SECTIONS[hover.id].label}, {GRADE_WORD[gd.grade]} {PARTS[state.part].job}</i><p>{gd.why.charAt(0).toUpperCase() + gd.why.slice(1)}.</p></>; }
+        if (hover.kind === 'time') { const g = readings(state).gateMs; const e = adsrAt(state, hover.ms, g); return <><i>{fmtMs(hover.ms)}, envelope {Math.round(e * 100)} %</i><p>{hover.ms <= g ? `The key is down: ${hover.ms < state.attack ? 'the attack is rising' : hover.ms < state.attack + state.decay ? 'the decay is falling to the sustain' : 'holding at the sustain'}.` : `The key is up: the release is ${Math.round((1 - Math.min(1, (hover.ms - g) / state.release)) * 100)} % of the way to silence.`}</p></>; }
         return null;
     };
 
@@ -1274,7 +1274,7 @@ export default function SynthBench({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{PARTS[state.part].label} · {BPM} bpm<span ref={readRef} style={{ '--read': '17ch' }} /></b>
+                <b>{PARTS[state.part].label}, {BPM} bpm<span ref={readRef} style={{ '--read': '17ch' }} /></b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
@@ -1282,7 +1282,7 @@ export default function SynthBench({ back }) {
                     <>
                         {state.pulse > 0 ? <span><i style={{ background: 'var(--gen-3)' }} />{isSquare(state) ? 'square' : 'pulse'}</span> : null}
                         {state.saw > 0 ? <span><i style={{ background: 'var(--gen-4)' }} />{state.shape}</span> : null}
-                        {state.sub > 0 || state.noise > 0 ? <span><i style={{ background: 'var(--gen-7)' }} />{[state.sub > 0 ? 'sub' : null, state.noise > 0 ? 'noise' : null].filter(Boolean).join(' · ')}</span> : null}
+                        {state.sub > 0 || state.noise > 0 ? <span><i style={{ background: 'var(--gen-7)' }} />{[state.sub > 0 ? 'sub' : null, state.noise > 0 ? 'noise' : null].filter(Boolean).join(', ')}</span> : null}
                         {state.osc2 !== 'off' ? <span><i style={{ background: 'var(--gen-1)' }} />{state.osc2 === 'fifth' ? 'a fifth up' : 'osc 2'}</span> : null}
                         <span><i style={{ background: 'var(--gold-bright)' }} />filter</span>
                     </>

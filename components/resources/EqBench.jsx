@@ -245,7 +245,7 @@ export default function EqBench({ back }) {
         };
         const bandCol = {};
         for (const id of BAND_IDS) bandCol[id] = v(BANDS[id].colour.replace(/^var\((.*)\)$/, '$1'), '#7fb0c4');
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const specPre = new Uint8Array(1024);
         const specPost = new Uint8Array(1024);
@@ -367,7 +367,7 @@ export default function EqBench({ back }) {
                 g.textAlign = 'left';
                 g.fillText('dotted: phase, ±360° top to bottom', padL, top - 10);
                 g.font = `600 9.5px ${monoFace}`;
-                g.fillText('EXT', padL + g.measureText('dotted: phase, ±360° top to bottom').width * 1.22 + 8, top - 10);
+                g.fillText('extension', padL + g.measureText('dotted: phase, ±360° top to bottom').width * 1.22 + 8, top - 10);
                 g.font = mono;
             }
 
@@ -405,17 +405,17 @@ export default function EqBench({ back }) {
             if (chosen) {
                 const b = s[s.band];
                 const d = BANDS[s.band];
-                let label = `${bandLabel(s, s.band)} · ${fmtHz(chosen.hz)}`;
-                if (hasGain(s.band)) label += ` · ${fmtDb(b.gain)}`;
-                if (hasSlope(s.band)) label += ` · ${b.slope} dB/oct`;
-                if (depthRef.current === 'core') label += ` · ${regionOf(chosen.hz).name}`;
-                else if (hasQ(s.band)) label += ` · Q ${(s.graphic ? 1.41 : b.q).toFixed(1)} = ${bandwidthOctaves(s.graphic ? 1.41 : b.q).toFixed(1)} oct wide`;
-                else if (hasSlope(s.band)) label += ` · ${fmtDb(chosen.db)} at the cutoff`;
+                let label = `${bandLabel(s, s.band)}, ${fmtHz(chosen.hz)}`;
+                if (hasGain(s.band)) label += `, ${fmtDb(b.gain)}`;
+                if (hasSlope(s.band)) label += `, ${b.slope} dB/oct`;
+                if (depthRef.current === 'core') label += `, ${regionOf(chosen.hz).name}`;
+                else if (hasQ(s.band)) label += `, Q ${(s.graphic ? 1.41 : b.q).toFixed(1)} = ${bandwidthOctaves(s.graphic ? 1.41 : b.q).toFixed(1)} oct wide`;
+                else if (hasSlope(s.band)) label += `, ${fmtDb(chosen.db)} at the cutoff`;
                 if (depthRef.current === 'extension' && hasQ(s.band)) {
                     const half = Math.pow(2, bandwidthOctaves(s.graphic ? 1.41 : b.q) / 2);
-                    label += ` · half power at ${fmtHz(chosen.hz / half)} and ${fmtHz(chosen.hz * half)}`;
+                    label += `, half power at ${fmtHz(chosen.hz / half)} and ${fmtHz(chosen.hz * half)}`;
                 }
-                if (depthRef.current === 'extension' && hasSlope(s.band)) label += ` · order ${Math.round(b.slope / 6)}`;
+                if (depthRef.current === 'extension' && hasSlope(s.band)) label += `, order ${Math.round(b.slope / 6)}`;
                 g.font = mono;
                 g.fillStyle = col.gold;
                 const above = chosen.y > top + 40;
@@ -530,7 +530,7 @@ export default function EqBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>Control names as they appear in Live 12 and Logic Pro 11 device panels. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>Minimum phase</dt><dd>Every one of these filters delays the frequencies around its corner a little, and the steeper the filter the more it delays. The dotted line at Extension is that phase. A linear-phase EQ removes it, at the cost of delay and pre-ringing.</dd>
                         <dt>Order</dt><dd>A 12 dB/oct filter is second order (one biquad); 24 dB/oct is fourth order (two). Two identical Butterworth sections put the cutoff 6 dB down rather than 3, which is how a Linkwitz-Riley crossover is made.</dd>
@@ -809,8 +809,8 @@ export default function EqBench({ back }) {
                     <div><b>{hasQ(bandId) && bw != null ? `${bw.toFixed(1)} oct` : hasSlope(bandId) && slope ? fmtDb(slope.atCutoffDb) : region.name}</b><span>{hasQ(bandId) ? 'wide, between half-power points' : hasSlope(bandId) ? 'at the cutoff' : 'the region for the ear'}</span></div>
                     {ext ? (
                         <>
-                            <div><b>{fmtDb(peak.maxDb)}</b><span>curve peak at {fmtHz(peak.maxHz)}<span className={styles.ext}>EXT</span></span></div>
-                            <div><b>{trimDb ? fmtDb(trimDb) : 'off'}</b><span>level match trim<span className={styles.ext}>EXT</span></span></div>
+                            <div><b>{fmtDb(peak.maxDb)}</b><span>curve peak at {fmtHz(peak.maxHz)}<span className={styles.ext}>extension</span></span></div>
+                            <div><b>{trimDb ? fmtDb(trimDb) : 'off'}</b><span>level match trim<span className={styles.ext}>extension</span></span></div>
                         </>
                     ) : (
                         <>
@@ -871,7 +871,7 @@ export default function EqBench({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>20 Hz to 20 kHz · ±{DB_SPAN} dB · {PATTERNS[state.source].label}</b>
+                <b>20 Hz to 20 kHz, ±{DB_SPAN} dB, {PATTERNS[state.source].label}</b>
                 <span>{ORIENT}</span>
             </div>
             <div className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
@@ -890,7 +890,7 @@ export default function EqBench({ back }) {
                         top: Math.max(44, Math.min(hover.stageH - 120, hover.y - 30)),
                     }}
                 >
-                    <i>{hoverDef.name} · {fmtHz(hover.hz)}</i>
+                    <i>{hoverDef.name}, {fmtHz(hover.hz)}</i>
                     <p>
                         {hasGain(hover.id) ? <>{fmtDb(state[hover.id].gain)} {hasQ(hover.id) ? 'at the centre' : 'past the corner'}.</> : <>{state[hover.id].slope} dB/oct, {fmtDb(hover.db)} here at the cutoff.</>}
                         {' '}{regionOf(hover.hz).name}: {regionOf(hover.hz).line}. Drag the dot to move it.

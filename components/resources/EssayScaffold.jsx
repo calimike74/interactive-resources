@@ -301,7 +301,7 @@ export default function EssayScaffold() {
                     <span style={{
                         fontSize: typography.size.sm,
                         color: t.text.tertiary,
-                        fontFamily: typography.fontFamilyMono,
+                        fontFamily: typography.fontFamily,
                     }}>
                         {wordCount} words
                     </span>

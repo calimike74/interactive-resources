@@ -94,7 +94,7 @@ const DESIGN_TOKENS_CSS = `
     border: 1px solid var(--border);
     border-radius: 3px;
     padding: 0 0.35rem;
-    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-family: inherit;
     font-size: 0.7rem;
     color: var(--fg);
   }

@@ -6,7 +6,7 @@ import Callout from '@/components/Callout';
 // ─── Shared style fragments (Botanical Press, matching MIDIBinaryAssessment.jsx) ─
 
 const FRAUNCES = 'font-[family-name:var(--font-fraunces)]';
-const MONO = 'font-[family-name:var(--font-jbmono)]';
+const MONO = 'tabular-nums';
 const CARD_SHADOW = 'shadow-[0_1px_0_rgba(43,36,24,0.04),0_18px_40px_-24px_rgba(43,36,24,0.22)]';
 
 const ACCENTS = {
@@ -270,10 +270,10 @@ export default function MIDIPitchBendController() {
             <line x1="43" y1="124" x2="43" y2="140" stroke="#B85A3F" strokeWidth="1.5" opacity="0.6" />
             <circle cx="43" cy="75" r="15" fill="#B85A3F" />
             <circle cx="43" cy="75" r="15" fill="none" stroke="#F2EBE0" strokeWidth="1.5" opacity="0.5" />
-            <text x="10" y="24" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">+1</text>
-            <text x="10" y="130" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="var(--font-jbmono), ui-monospace, monospace" textAnchor="middle">−1</text>
+            <text x="10" y="24" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="inherit" textAnchor="middle">+1</text>
+            <text x="10" y="130" fill="rgba(242,235,224,0.55)" fontSize="11" fontFamily="inherit" textAnchor="middle">−1</text>
 
-            <g fontFamily="var(--font-jbmono), ui-monospace, monospace">
+            <g fontFamily="inherit">
               <text x="90" y="46" fill="#F2EBE0" fontSize="12" opacity="0.6">14-BIT VALUE · CENTRE</text>
               <text x="90" y="80" fill="#ffffff" fontSize="30" fontWeight="700">8192</text>
               <text x="90" y="106" fill="#DCC892" fontSize="15" letterSpacing="1">10000000000000</text>

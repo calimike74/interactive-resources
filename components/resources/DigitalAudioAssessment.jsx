@@ -467,7 +467,7 @@ function FileSizeCalculator({ onClose }) {
             </div>
 
             {/* Step-through */}
-            <div className="bg-white rounded-lg p-4 border border-amber-200 font-mono text-xs sm:text-sm space-y-2">
+            <div className="bg-white rounded-lg p-4 border border-amber-200 tabular-nums text-xs sm:text-sm space-y-2">
                 <p className="text-stone-500">bytes = (sample rate × bit depth × channels × duration) ÷ 8</p>
                 <p className="text-stone-800">
                     bytes = ({sampleRate.toLocaleString()} × {bitDepth} × {channels} × {duration}) ÷ 8
@@ -504,7 +504,7 @@ function NumberField({ label, value, onChange, options }) {
             <select
                 value={value}
                 onChange={e => onChange(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-stone-300 rounded-md bg-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full px-3 py-2 border border-stone-300 rounded-md bg-white text-sm tabular-nums focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
                 {options.map(opt => (
                     <option key={opt} value={opt}>{opt.toLocaleString()}</option>
@@ -569,7 +569,7 @@ function NumericInput({ unit, showFeedback, onSubmit }) {
                 onChange={e => setValue(e.target.value)}
                 disabled={showFeedback}
                 placeholder="Your answer"
-                className="flex-1 px-4 py-3 text-lg border-2 border-stone-300 rounded-lg font-mono disabled:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="flex-1 px-4 py-3 text-lg border-2 border-stone-300 rounded-lg tabular-nums disabled:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
             {unit && (
                 <span className="text-sm font-medium text-stone-500 whitespace-nowrap text-center sm:text-left">
@@ -791,7 +791,7 @@ function ResultsScreen({ responses, questions, onRestart }) {
                             return (
                                 <div key={section} className="flex items-center justify-between bg-stone-50 rounded-md px-3 py-2 text-sm">
                                     <span className="text-stone-700">{section}</span>
-                                    <span className="font-mono text-stone-900 font-semibold">
+                                    <span className="tabular-nums text-stone-900 font-semibold">
                                         {pct !== null ? `${stats.correct}/${scoreable}` : `${stats.total} reviewed`}
                                     </span>
                                 </div>

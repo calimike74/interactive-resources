@@ -39,7 +39,7 @@ function filterTypesSVG(w, h) {
         { label: 'Notch', x: w*0.85, color: '#DCC892', path: `M${w*0.75},${mid-20} Q${w*0.80},${mid-20} ${w*0.85},${mid+20} Q${w*0.90},${mid-20} ${w*0.95},${mid-20}` },
     ].map(f => `
         <path d="${f.path}" fill="none" stroke="${f.color}" stroke-width="2.5" opacity="0.85"/>
-        <text x="${f.x}" y="${h-12}" text-anchor="middle" font-size="10" fill="${f.color}" font-family="monospace" font-weight="600">${f.label}</text>
+        <text x="${f.x}" y="${h-12}" text-anchor="middle" font-size="10" fill="${f.color}" font-family="inherit" font-weight="600">${f.label}</text>
     `).join('')}
     </svg>`;
 }
@@ -61,8 +61,8 @@ function qFactorSVG(w, h) {
     <line x1="10" y1="${mid}" x2="${w-10}" y2="${mid}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
     <polyline points="${wide.join(' ')}" fill="none" stroke="#22c55e" stroke-width="2" opacity="0.6"/>
     <polyline points="${narrow.join(' ')}" fill="none" stroke="#ef4444" stroke-width="2.5" opacity="0.85"/>
-    <text x="${cx - 30}" y="${mid - h*0.3}" text-anchor="middle" font-size="10" fill="#ef4444" font-family="monospace">High Q</text>
-    <text x="${cx + 40}" y="${mid - h*0.12}" text-anchor="end" font-size="10" fill="#22c55e" font-family="monospace">Low Q</text>
+    <text x="${cx - 30}" y="${mid - h*0.3}" text-anchor="middle" font-size="10" fill="#ef4444" font-family="inherit">High Q</text>
+    <text x="${cx + 40}" y="${mid - h*0.12}" text-anchor="end" font-size="10" fill="#22c55e" font-family="inherit">Low Q</text>
     </svg>`;
 }
 
@@ -82,7 +82,7 @@ function graphicEqSVG(w, h) {
         const barY = g > 0 ? mid - barH : mid;
         return `<rect x="${x-8}" y="${barY}" width="16" height="${barH}" rx="3" fill="${colors[i]}44" stroke="${colors[i]}88" stroke-width="1"/>
         <circle cx="${x}" cy="${g > 0 ? mid - barH : mid + barH}" r="3.5" fill="${colors[i]}"/>
-        <text x="${x}" y="${h-8}" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">${labels[i]}</text>`;
+        <text x="${x}" y="${h-8}" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="inherit">${labels[i]}</text>`;
     }).join('')}
     </svg>`;
 }
@@ -109,10 +109,10 @@ function parametricEqSVG(w, h) {
     <circle cx="${w*0.35}" cy="${mid+35}" r="5" fill="#f97316" opacity="0.9"/>
     <circle cx="${w*0.65}" cy="${mid-20}" r="5" fill="#22c55e" opacity="0.9"/>
     <circle cx="${w*0.88}" cy="${mid-15}" r="5" fill="#5F7058" opacity="0.9"/>
-    <text x="${w*0.15}" y="${mid-35}" text-anchor="middle" font-size="9" fill="#ef4444" font-family="monospace">+3dB</text>
-    <text x="${w*0.35}" y="${mid+50}" text-anchor="middle" font-size="9" fill="#f97316" font-family="monospace">-4dB</text>
-    <text x="${w*0.65}" y="${mid-30}" text-anchor="middle" font-size="9" fill="#22c55e" font-family="monospace">+2dB</text>
-    <text x="${w*0.88}" y="${mid-25}" text-anchor="middle" font-size="9" fill="#5F7058" font-family="monospace">+1.5dB</text>
+    <text x="${w*0.15}" y="${mid-35}" text-anchor="middle" font-size="9" fill="#ef4444" font-family="inherit">+3dB</text>
+    <text x="${w*0.35}" y="${mid+50}" text-anchor="middle" font-size="9" fill="#f97316" font-family="inherit">-4dB</text>
+    <text x="${w*0.65}" y="${mid-30}" text-anchor="middle" font-size="9" fill="#22c55e" font-family="inherit">+2dB</text>
+    <text x="${w*0.88}" y="${mid-25}" text-anchor="middle" font-size="9" fill="#5F7058" font-family="inherit">+1.5dB</text>
     </svg>`;
 }
 
@@ -134,8 +134,8 @@ function shelvingSVG(w, h) {
     <line x1="10" y1="${mid}" x2="${w-10}" y2="${mid}" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
     <polyline points="${hiShelf.join(' ')}" fill="none" stroke="#3b82f6" stroke-width="2.5" opacity="0.8"/>
     <polyline points="${loShelf.join(' ')}" fill="none" stroke="#D4724F" stroke-width="2.5" opacity="0.8"/>
-    <text x="${w*0.85}" y="${mid-28}" font-size="10" fill="#3b82f6" font-family="monospace" text-anchor="middle">High shelf +</text>
-    <text x="${w*0.15}" y="${mid+32}" font-size="10" fill="#D4724F" font-family="monospace" text-anchor="middle">Low shelf +</text>
+    <text x="${w*0.85}" y="${mid-28}" font-size="10" fill="#3b82f6" font-family="inherit" text-anchor="middle">High shelf +</text>
+    <text x="${w*0.15}" y="${mid+32}" font-size="10" fill="#D4724F" font-family="inherit" text-anchor="middle">Low shelf +</text>
     </svg>`;
 }
 

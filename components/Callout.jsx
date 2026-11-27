@@ -109,7 +109,7 @@ export default function Callout({
                         justifyContent: 'center',
                         fontSize: '0.7rem',
                         fontWeight: typography.weight.bold,
-                        fontFamily: typography.fontFamilyMono,
+                        fontFamily: typography.fontFamily,
                         flexShrink: 0,
                     }}
                 >

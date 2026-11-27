@@ -47,7 +47,7 @@ test('A-level judges a task against its marks with no citation, and a section th
     assert.match(sum[1].text, /^Routing and stereo width first/);
     assert.match(sum[1].text, /Switch Routing to Send/);
     const sec = judge({ state: ins, last: 'pan' });
-    assert.match(sec[0].text, /^ROUTING: a channel insert, stereo, pan 100 left/);
+    assert.match(sec[0].text, /^Routing: a channel insert, stereo, pan 100 left/);
     assert.match(sec[1].text, /^Does not suit a lead vocal: on an insert with the part panned left/);
     assert.doesNotMatch(sec[1].text, /report|scheme|\b20\d\d\b/);
     const wet = judge({ state: applyPreset(DEFAULT_STATE, 'judgeWet'), last: 'wet' });

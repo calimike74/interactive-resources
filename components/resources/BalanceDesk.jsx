@@ -319,7 +319,7 @@ export default function BalanceDesk({ back }) {
             grid: 'rgba(255, 255, 255, 0.08)',
             line: 'rgba(255, 255, 255, 0.22)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
         let weights = null;

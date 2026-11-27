@@ -516,7 +516,7 @@ function QuizHeader({ topic, t, studentName, onSignOut }) {
                         </button>
                     )}
                     <span style={{
-                        fontFamily: ED.mono,
+                        fontFamily: ED.sans,
                         fontSize: '11px',
                         fontWeight: 500,
                         letterSpacing: '0.18em',
@@ -630,7 +630,7 @@ function NumericInput({ unit, showFeedback, onSubmit, t }) {
                     borderRadius: borderRadius.lg,
                     background: showFeedback ? t.bg.tertiary : t.bg.primary,
                     color: t.text.primary,
-                    fontFamily: typography.fontFamilyMono,
+                    fontFamily: typography.fontFamily,
                     backdropFilter: 'blur(8px)',
                     outline: 'none',
                 }}

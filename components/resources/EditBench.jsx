@@ -299,7 +299,7 @@ export default function EditBench({ back }) {
             grid: 'rgba(255, 255, 255, 0.08)',
             zero: 'rgba(255, 255, 255, 0.26)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
 
         // A run of samples across [x0, x1): a polyline when the zoom shows
@@ -483,10 +483,10 @@ export default function EditBench({ back }) {
                         g2.beginPath(); g2.moveTo(x, y0); g2.lineTo(x, y1); g2.stroke();
                         g2.lineWidth = 1;
                         g2.fillStyle = col.coral; g2.font = `600 11px ${monoFace}`; g2.textAlign = 'left';
-                        g2.fillText(`click · ${st.stepPct}% jump`, x + 9, Math.min(y0, y1) - 6 > wv.top + 8 ? Math.min(y0, y1) - 6 : Math.max(y0, y1) + 14);
+                        g2.fillText(`click, ${st.stepPct}% jump`, x + 9, Math.min(y0, y1) - 6 > wv.top + 8 ? Math.min(y0, y1) - 6 : Math.max(y0, y1) + 14);
                     } else {
                         g2.fillStyle = col.inkSoft; g2.font = `600 11px ${monoFace}`; g2.textAlign = 'left';
-                        g2.fillText('meets at zero · no click', x + 9, wv.top + 14);
+                        g2.fillText('meets at zero, no click', x + 9, wv.top + 14);
                     }
                     g2.font = mono;
                 } else if (d === 'core') {
@@ -495,7 +495,7 @@ export default function EditBench({ back }) {
                     g2.strokeStyle = col.inkSoft;
                     g2.beginPath(); g2.moveTo(x0, wv.top - 5); g2.lineTo(x0, wv.top - 1); g2.moveTo(x0, wv.top - 3); g2.lineTo(x1, wv.top - 3); g2.moveTo(x1, wv.top - 5); g2.lineTo(x1, wv.top - 1); g2.stroke();
                     g2.fillStyle = col.inkSoft; g2.textAlign = 'center';
-                    g2.fillText(`${sp ? 'crossfade' : 'fade out'} ${fmtMs(s.length)} · ${SHAPES[s.shape].name}`, (x0 + x1) / 2, wv.top - 8);
+                    g2.fillText(`${sp ? 'crossfade' : 'fade out'} ${fmtMs(s.length)}, ${SHAPES[s.shape].name}`, (x0 + x1) / 2, wv.top - 8);
                 }
                 // the join line and its handle
                 const jx = Math.round(xOfMs(0)) + 0.5;
@@ -544,9 +544,9 @@ export default function EditBench({ back }) {
                     g2.save(); g2.translate(14, (dr.top + dr.bottom) / 2); g2.rotate(-Math.PI / 2); g2.textAlign = 'center'; g2.fillStyle = col.inkFaint; g2.fillText('gain ↑', 0, 4); g2.restore();
                     // the region names
                     g2.font = `600 10.5px ${monoFace}`; g2.textAlign = 'left'; g2.fillStyle = col.gold;
-                    g2.fillText('REGION A', g.laneX0 + 6, dr.top + 13);
-                    if (sp) { g2.textAlign = 'right'; g2.fillStyle = col.blue; g2.fillText('REGION B', g.laneX1 - 6, dr.top + 13); }
-                    else { g2.textAlign = 'right'; g2.fillStyle = col.inkFaint; g2.fillText('SILENCE', g.laneX1 - 6, dr.top + 13); }
+                    g2.fillText('Region A', g.laneX0 + 6, dr.top + 13);
+                    if (sp) { g2.textAlign = 'right'; g2.fillStyle = col.blue; g2.fillText('Region B', g.laneX1 - 6, dr.top + 13); }
+                    else { g2.textAlign = 'right'; g2.fillStyle = col.inkFaint; g2.fillText('Silence', g.laneX1 - 6, dr.top + 13); }
                     g2.font = mono;
                     // the curves: out gain (A), in gain (B)
                     const pts = fadeCurve(s.shape, 65);
@@ -568,7 +568,7 @@ export default function EditBench({ back }) {
                     g2.strokeStyle = col.inkSoft;
                     g2.beginPath(); g2.moveTo(bx0, by - 4); g2.lineTo(bx0, by); g2.lineTo(bx1, by); g2.lineTo(bx1, by - 4); g2.stroke();
                     g2.fillStyle = col.inkSoft; g2.textAlign = 'center';
-                    const bracketLabel = s.length === 0 ? 'hard cut · no fade' : `${sp ? 'crossfade' : 'fade out'} ${fmtMs(s.length)} · ${SHAPES[s.shape].name}`;
+                    const bracketLabel = s.length === 0 ? 'hard cut, no fade' : `${sp ? 'crossfade' : 'fade out'} ${fmtMs(s.length)}, ${SHAPES[s.shape].name}`;
                     g2.fillText(bracketLabel, Math.max(g.laneX0 + 90, Math.min(g.laneX1 - 90, (bx0 + bx1) / 2)), by - 8);
                     // Extension: the level through the crossfade, the two powers added
                     if (d === 'extension' && sp) {
@@ -605,8 +605,8 @@ export default function EditBench({ back }) {
                         dot(yG(gOut), col.gold);
                         if (sp) dot(yG(gIn), col.blue);
                         g2.fillStyle = col.goldBright;
-                        const lvl = d === 'extension' && sp ? ` · level ${fmtDb(sumDb(s.shape, t))}` : '';
-                        g2.fillText(`at ${probe >= 0 ? '+' : '−'}${Math.abs(probe).toFixed(1)} ms · out ${gOut.toFixed(2)}${sp ? ` · in ${gIn.toFixed(2)}` : ''}${lvl}`, g.laneX0 + 80, dr.top + 13);
+                        const lvl = d === 'extension' && sp ? `, level ${fmtDb(sumDb(s.shape, t))}` : '';
+                        g2.fillText(`at ${probe >= 0 ? '+' : '−'}${Math.abs(probe).toFixed(1)} ms, out ${gOut.toFixed(2)}${sp ? `, in ${gIn.toFixed(2)}` : ''}${lvl}`, g.laneX0 + 80, dr.top + 13);
                     } else {
                         g2.fillStyle = col.inkSoft;
                         g2.fillText('drag inside to read the gains off', g.laneX0 + 80, dr.top + 13);
@@ -615,7 +615,7 @@ export default function EditBench({ back }) {
             }
 
             // the chosen edit, for the depth, stopping short of the legend
-            const segs = [`${TAKES[s.take].label} · cut ${fmtSec(s.cut / 1000)}`];
+            const segs = [`${TAKES[s.take].label}, cut ${fmtSec(s.cut / 1000)}`];
             if (sp) segs.push(`${(s.gap / 1000).toFixed(2)} s removed`);
             segs.push(s.length === 0 ? 'hard cut' : `${sp ? 'crossfade' : 'fade'} ${fmtMs(s.length)} ${SHAPES[s.shape].name}`);
             if (s.snap) segs.push('snapped to zero');
@@ -625,8 +625,8 @@ export default function EditBench({ back }) {
             if (frameRef.current % 20 === 0 && legendRef.current) legendWRef.current = legendRef.current.getBoundingClientRect().width;
             frameRef.current += 1;
             const room = w - 18 - legendWRef.current - 16 - (g.laneX0 + 6);
-            let label = segs.join(' · ');
-            while (segs.length > 2 && g2.measureText(label).width > room) { segs.pop(); label = segs.join(' · '); }
+            let label = segs.join(', ');
+            while (segs.length > 2 && g2.measureText(label).width > room) { segs.pop(); label = segs.join(', '); }
             g2.fillText(label, g.laneX0, g.settingY);
 
             geomRef.current = { g, hx, hy, winMs };
@@ -756,7 +756,7 @@ export default function EditBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>As the controls appear in Live 12 and Logic Pro 11. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>Why a click is every frequency</dt><dd>A step has no period, so it is not a pitch: it is energy at every frequency at once. That is why a click sounds the same on a bass note and a cymbal, and why no EQ removes it.</dd>
                         <dt>Equal power, equal gain</dt><dd>Two unrelated sounds add in power, so the crossfade wants equal power. Two copies of the same sound add in amplitude, and equal power then bumps 3 dB in the middle; DAWs offer equal gain for that case.</dd>
@@ -889,9 +889,9 @@ export default function EditBench({ back }) {
     const shapeOptions = SHAPE_IDS.map((id) => ({ id, label: SHAPES[id].label, title: SHAPES[id].does }));
     const cutMeaning = !stats ? 'where the region ends'
         : stats.faded ? `jump ${stats.stepPct}% under the fade` + (stats.atZero ? ', at zero anyway' : '')
-            : stats.atZero ? 'meets at zero · no click' : `jump ${stats.stepPct}% · a click`;
+            : stats.atZero ? 'meets at zero, no click' : `jump ${stats.stepPct}%, a click`;
     const fadeMeaning = state.length === 0 ? 'a hard cut: no fade'
-        : !splice ? `${lengthWord(state.length)} · ends at the cut`
+        : !splice ? `${lengthWord(state.length)}, ends at the cut`
             : stats && stats.dipDb < -0.5 ? `level dips ${fmtDb(stats.dipDb)} mid-fade` : 'level steady through the join';
 
     const consoleSlot = (
@@ -1007,7 +1007,7 @@ export default function EditBench({ back }) {
                         ? <div><b>{stats ? `${stats.removedSec.toFixed(2)} s` : '…'}</b><span>removed after the cut</span></div>
                         : <div><b>{stats ? `${stats.tailLostSec.toFixed(2)} s` : '…'}</b><span>of tail cut off</span></div>}
                     {ext
-                        ? <div><b>{stats ? stats.lengthSamples : '…'}</b><span>samples in the fade<span className={styles.ext}>EXT</span></span></div>
+                        ? <div><b>{stats ? stats.lengthSamples : '…'}</b><span>samples in the fade<span className={styles.ext}>extension</span></span></div>
                         : splice
                             ? <div><b>{stats && stats.inSec != null ? fmtSec(stats.inSec) : '…'}</b><span>region B starts</span></div>
                             : <div><b>{stats ? fmtSec(stats.tailEndSec) : '…'}</b><span>the cymbal really ends</span></div>}
@@ -1054,7 +1054,7 @@ export default function EditBench({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{take.label} · {fmtMs(winMsOf(state))} window</b>
+                <b>{take.label}, {fmtMs(winMsOf(state))} window</b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div ref={legendRef} className={`${styles.stageLegend} ${styles.legendTop}`} aria-hidden="true">
@@ -1073,7 +1073,7 @@ export default function EditBench({ back }) {
                         top: Math.max(44, Math.min(hover.stageH - 120, hover.y + 22)),
                     }}
                 >
-                    <i>cut · {fmtSec(state.cut / 1000)}</i>
+                    <i>cut, {fmtSec(state.cut / 1000)}</i>
                     <p>
                         {stats && stats.atZero ? 'Both sides meet at zero here, so there is nothing to jump. ' : stats ? `The two sides of the join sit ${stats.stepPct}% of full scale apart, and that jump is the click. ` : ''}
                         Drag to move the cut a few milliseconds at a time; the marker above moves it through the whole take.

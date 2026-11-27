@@ -307,7 +307,7 @@ function CompressorControl({ label, value, min, max, step, onChange, unit = '', 
                     {tierColor && <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: tierColor, flexShrink: 0 }} />}
                     {label}
                 </label>
-                <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamilyMono }}>{displayVal}{unit}</span>
+                <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamily }}>{displayVal}{unit}</span>
             </div>
             <input aria-label={label}
                 type="range"
@@ -341,7 +341,7 @@ function CompactParam({ label, value, min, max, step, onChange, unit = '' }) {
                 {label}
             </div>
             <div>
-                <span style={{ fontSize: '1rem', fontWeight: 700, fontFamily: typography.fontFamilyMono, color: '#1a1a2e' }}>
+                <span style={{ fontSize: '1rem', fontWeight: 700, fontFamily: typography.fontFamily, color: '#1a1a2e' }}>
                     {displayVal}
                 </span>
                 <span style={{ fontSize: '0.55rem', color: '#ccc', fontWeight: 500 }}>{unit}</span>
@@ -495,10 +495,10 @@ function TransferCurveSVG({ threshold, ratio, knee = 0, makeupGain = 0, width = 
                 <g key={db}>
                     <line x1={dbToX(db)} y1={pad.top} x2={dbToX(db)} y2={height - pad.bottom} stroke={db % 20 === 0 ? '#e2e0dc' : '#eeede9'} strokeWidth={db % 20 === 0 ? 0.6 : 0.3} />
                     <line x1={pad.left} y1={dbToY(db)} x2={width - pad.right} y2={dbToY(db)} stroke={db % 20 === 0 ? '#e2e0dc' : '#eeede9'} strokeWidth={db % 20 === 0 ? 0.6 : 0.3} />
-                    <text x={dbToX(db)} y={height - 8} fill="#888" fontSize={9} textAnchor="middle" fontFamily={typography.fontFamilyMono}>
+                    <text x={dbToX(db)} y={height - 8} fill="#888" fontSize={9} textAnchor="middle" fontFamily={typography.fontFamily}>
                         {db}
                     </text>
-                    <text x={pad.left - 6} y={dbToY(db) + 3} fill="#888" fontSize={9} textAnchor="end" fontFamily={typography.fontFamilyMono}>
+                    <text x={pad.left - 6} y={dbToY(db) + 3} fill="#888" fontSize={9} textAnchor="end" fontFamily={typography.fontFamily}>
                         {db}
                     </text>
                 </g>
@@ -548,11 +548,11 @@ function TransferCurveSVG({ threshold, ratio, knee = 0, makeupGain = 0, width = 
             )}
 
             {/* Threshold label */}
-            <text x={dbToX(threshold) + (isDraggable ? 16 : 4)} y={isDraggable ? thDotY - 10 : pad.top + 12} fill={accentColor} fontSize={9} fontFamily={typography.fontFamilyMono}>
+            <text x={dbToX(threshold) + (isDraggable ? 16 : 4)} y={isDraggable ? thDotY - 10 : pad.top + 12} fill={accentColor} fontSize={9} fontFamily={typography.fontFamily}>
                 T: {threshold} dB
             </text>
             {isDraggable && ratio > 1 && (
-                <text x={dbToX(Math.min(threshold + 15, -5)) + 10} y={dbToY(Math.min(compOut(Math.min(threshold + 15, -5)) + makeupGain, maxDb)) - 10} fill="#666" fontSize={11} fontWeight="bold" fontFamily={typography.fontFamilyMono}>
+                <text x={dbToX(Math.min(threshold + 15, -5)) + 10} y={dbToY(Math.min(compOut(Math.min(threshold + 15, -5)) + makeupGain, maxDb)) - 10} fill="#666" fontSize={11} fontWeight="bold" fontFamily={typography.fontFamily}>
                     {ratio}:1
                 </text>
             )}
@@ -605,13 +605,13 @@ function ThresholdDiagramSVG({ threshold, width = 500, height = 180, accentColor
             <path d={wavePath} fill="none" stroke="rgba(0,0,0,0.45)" strokeWidth={2} />
 
             {/* Labels */}
-            <text x={width - pad.right - 4} y={thresholdYTop - 4} fill={accentColor} fontSize={9} textAnchor="end" fontFamily={typography.fontFamilyMono}>
+            <text x={width - pad.right - 4} y={thresholdYTop - 4} fill={accentColor} fontSize={9} textAnchor="end" fontFamily={typography.fontFamily}>
                 Threshold
             </text>
-            <text x={pad.left + 4} y={mid - 4} fill="#bbb" fontSize={9} fontFamily={typography.fontFamilyMono}>
+            <text x={pad.left + 4} y={mid - 4} fill="#bbb" fontSize={9} fontFamily={typography.fontFamily}>
                 No compression
             </text>
-            <text x={pad.left + 4} y={thresholdYTop + 12} fill={`${accentColor}`} fontSize={9} fontFamily={typography.fontFamilyMono} fillOpacity={0.7}>
+            <text x={pad.left + 4} y={thresholdYTop + 12} fill={`${accentColor}`} fontSize={9} fontFamily={typography.fontFamily} fillOpacity={0.7}>
                 Compressed
             </text>
         </svg>
@@ -663,13 +663,13 @@ function TimingDiagramSVG({ attack, release, width = 500, height = 240, accentCo
 
             {/* Attack label */}
             <line x1={xStart} y1={yBot + 5} x2={xStart + attackFraction * innerW * 0.8} y2={yBot + 5} stroke={accentColor} strokeWidth={1.5} />
-            <text x={(xStart + xStart + attackFraction * innerW * 0.8) / 2} y={height - 5} fill={accentColor} fontSize={11} textAnchor="middle" fontFamily={typography.fontFamilyMono}>
+            <text x={(xStart + xStart + attackFraction * innerW * 0.8) / 2} y={height - 5} fill={accentColor} fontSize={11} textAnchor="middle" fontFamily={typography.fontFamily}>
                 Attack: {Math.round(attack)} ms
             </text>
 
             {/* Release label */}
             <line x1={xReleaseStart} y1={yBot + 5} x2={xReleaseEnd} y2={yBot + 5} stroke={accentColor} strokeWidth={1.5} strokeOpacity={0.7} />
-            <text x={(xReleaseStart + xReleaseEnd) / 2} y={height - 5} fill={accentColor} fontSize={11} textAnchor="middle" fontFamily={typography.fontFamilyMono} fillOpacity={0.7}>
+            <text x={(xReleaseStart + xReleaseEnd) / 2} y={height - 5} fill={accentColor} fontSize={11} textAnchor="middle" fontFamily={typography.fontFamily} fillOpacity={0.7}>
                 Release: {Math.round(release)} ms
             </text>
 
@@ -755,7 +755,7 @@ function WaveformSVG({ threshold, ratio, knee = 0, makeupGain = 0, attack = 10, 
             {/* Threshold dashed lines */}
             <line x1={pad} y1={thTop} x2={pad + gw} y2={thTop} stroke="rgba(255,107,53,0.22)" strokeWidth={1} strokeDasharray="3,3" />
             <line x1={pad} y1={thBot} x2={pad + gw} y2={thBot} stroke="rgba(255,107,53,0.22)" strokeWidth={1} strokeDasharray="3,3" />
-            <text x={pad + gw - 4} y={thTop - 4} fill="rgba(255,107,53,0.4)" fontSize={10} textAnchor="end" fontFamily={typography.fontFamilyMono} fontWeight={500}>
+            <text x={pad + gw - 4} y={thTop - 4} fill="rgba(255,107,53,0.4)" fontSize={10} textAnchor="end" fontFamily={typography.fontFamily} fontWeight={500}>
                 {threshold} dB
             </text>
 
@@ -776,7 +776,7 @@ function WaveformSVG({ threshold, ratio, knee = 0, makeupGain = 0, attack = 10, 
 
             {/* GR label */}
             {maxGR > 0.1 && (
-                <text x={pad + 6} y={pad + 16} fill="#22c55e" fontSize={11} fontFamily={typography.fontFamilyMono} fontWeight={600}>
+                <text x={pad + 6} y={pad + 16} fill="#22c55e" fontSize={11} fontFamily={typography.fontFamily} fontWeight={600}>
                     -{maxGR.toFixed(1)} dB GR
                 </text>
             )}
@@ -797,8 +797,8 @@ function GainReductionMeter({ reductionDb, width = 32, height = 200 }) {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: spacing[1] }}>
-            <div style={{ color: COLORS.textHint, fontSize: '9px', fontFamily: typography.fontFamilyMono, letterSpacing: '0.05em' }}>GR</div>
-            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamilyMono }}>0 dB</div>
+            <div style={{ color: COLORS.textHint, fontSize: '9px', fontFamily: typography.fontFamily, letterSpacing: '0.05em' }}>GR</div>
+            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamily }}>0 dB</div>
             <svg width={width} height={height} style={{ display: 'block' }}>
                 <rect width={width} height={height} fill="#fcfcfb" rx={4} stroke="#eae8e4" strokeWidth={1} />
                 {/* Fill from top */}
@@ -809,18 +809,18 @@ function GainReductionMeter({ reductionDb, width = 32, height = 200 }) {
                     return (
                         <g key={db}>
                             <line x1={0} y1={y} x2={4} y2={y} stroke="#ccc" strokeWidth={1} />
-                            <text x={width - 2} y={y + 3} fill="#aaa" fontSize={7} textAnchor="end" fontFamily={typography.fontFamilyMono}>
+                            <text x={width - 2} y={y + 3} fill="#aaa" fontSize={7} textAnchor="end" fontFamily={typography.fontFamily}>
                                 {db}
                             </text>
                         </g>
                     );
                 })}
             </svg>
-            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamilyMono }}>30 dB</div>
-            <div style={{ color: COLORS.text, fontSize: '10px', fontFamily: typography.fontFamilyMono, fontWeight: typography.weight.semibold }}>
+            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamily }}>30 dB</div>
+            <div style={{ color: COLORS.text, fontSize: '10px', fontFamily: typography.fontFamily, fontWeight: typography.weight.semibold }}>
                 {clampedGR > 0 ? `-${clampedGR.toFixed(1)}` : '0.0'}
             </div>
-            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamilyMono, textAlign: 'center', maxWidth: '60px' }}>Fill ↓ = more gain reduction</div>
+            <div style={{ color: COLORS.textHint, fontSize: '7px', fontFamily: typography.fontFamily, textAlign: 'center', maxWidth: '60px' }}>Fill ↓ = more gain reduction</div>
         </div>
     );
 }
@@ -831,7 +831,7 @@ function LevelMeter({ level, label, width = 24, height = 160, color = '#059669' 
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: spacing[1] }}>
-            <div style={{ color: COLORS.textHint, fontSize: '9px', fontFamily: typography.fontFamilyMono }}>{label}</div>
+            <div style={{ color: COLORS.textHint, fontSize: '9px', fontFamily: typography.fontFamily }}>{label}</div>
             <svg width={width} height={height} style={{ display: 'block' }}>
                 <rect width={width} height={height} fill="#fcfcfb" rx={3} stroke="#eae8e4" strokeWidth={1} />
                 <rect x={2} y={height - fillHeight} width={width - 4} height={fillHeight} fill={color} fillOpacity={0.7} rx={2} />

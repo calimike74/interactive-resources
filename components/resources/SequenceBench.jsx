@@ -333,7 +333,7 @@ export default function SequenceBench({ back }) {
             grid: 'rgba(255, 255, 255, 0.055)', gridStrong: 'rgba(255, 255, 255, 0.11)', pre: 'rgba(238, 241, 246, 0.34)',
             cellOff: 'rgba(255, 255, 255, 0.045)', cellEdge: 'rgba(0, 0, 0, 0.28)', navy: '#17172b',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `500 11px ${monoFace}`;
         const monoSmall = `500 10px ${monoFace}`;
         const timeBuf = new Float32Array(2048); const oscBuf = new Float32Array(2048); const ampBuf = new Float32Array(2048); const outBuf = new Float32Array(2048);
@@ -522,8 +522,8 @@ export default function SequenceBench({ back }) {
             } else {
                 const gapX = 26; const gapY = 10;
                 const pw = (PW - gapX) / 2; const ph = (PH - gapY) / 2;
-                const titles = ['1 · Oscillators', '2 · Filter', '3 · Amplifier', '4 · Output'];
-                const subs = ['2 × sawtooth, 9 cents apart', `cutoff ${fmtHz(fcLive)} · resonance ${s.res}%`, `envelope, decay ${s.decay} ms`, 'master, true scale'];
+                const titles = ['Oscillators', 'Filter', 'Amplifier', 'Output'];
+                const subs = ['2 × sawtooth, 9 cents apart', `cutoff ${fmtHz(fcLive)}, resonance ${s.res}%`, `envelope, decay ${s.decay} ms`, 'master, true scale'];
                 const at = [[P.x0, P.top], [P.x0 + pw + gapX, P.top], [P.x0, P.top + ph + gapY], [P.x0 + pw + gapX, P.top + ph + gapY]];
                 for (let i = 0; i < 4; i += 1) {
                     const [x, y] = at[i];
@@ -543,7 +543,7 @@ export default function SequenceBench({ back }) {
 
             // ---- the readouts, told to the DOM ----
             if (readRef.current) {
-                const txt = pos ? ` · bar ${pos.bar + 1} · step ${String(pos.step + 1).padStart(2, '0')}` : ' · bar 1 · step 01';
+                const txt = pos ? `, bar ${pos.bar + 1}, step ${pos.step + 1}` : ', bar 1, step 1';
                 if (readRef.current.textContent !== txt) readRef.current.textContent = txt;
             }
             if (nowRef.current) {
@@ -648,9 +648,9 @@ export default function SequenceBench({ back }) {
                         <dt>Real-time input</dt><dd>Playing the part on a keyboard while the sequencer runs. Record on this bench writes each key to the nearest step as it is played: quantised on entry.</dd>
                         <dt>Swing</dt><dd>Every second sixteenth held back by a fraction of a step. At 120 bpm a sixteenth is 125 ms, so 60 % swing on this bench is 37.5 ms late. A mark scheme lists swing quantise with the loose, live answers.</dd>
                         <dt>Hard quantise</dt><dd>Every note exactly on its step: the mechanical, tight side of the same comparison. A step sequencer is hard quantised by nature; swing is what loosens it.</dd>
-                        <dt>Low-pass filter · cutoff · resonance</dt><dd>The filter passes what sits below the cutoff and cuts what sits above; resonance lifts a peak at the corner. The gold curve on the A-level screen is the filter&apos;s own response.</dd>
-                        <dt>Envelope · decay</dt><dd>The amplifier opens on each note and closes over the decay time. Short is a pluck; long is a pad.</dd>
-                        <dt>Bar · step</dt><dd>The transport reads the bar it is on and the step within it. A pass is one bar; the Filter sweep preset takes four.</dd>
+                        <dt>Low-pass filter, cutoff, resonance</dt><dd>The filter passes what sits below the cutoff and cuts what sits above; resonance lifts a peak at the corner. The gold curve on the A-level screen is the filter&apos;s own response.</dd>
+                        <dt>Envelope, decay</dt><dd>The amplifier opens on each note and closes over the decay time. Short is a pluck; long is a pad.</dd>
+                        <dt>Bar, step</dt><dd>The transport reads the bar it is on and the step within it. A pass is one bar; the Filter sweep preset takes four.</dd>
                     </dl>
                     <h3>The material</h3>
                     <p>Everything is in {KEY_SIG}. The Bass row runs {bassRange()}; the chords are {chordTable().map((c) => `${c.name} (${c.notes})`).join(', ')}.</p>
@@ -665,7 +665,7 @@ export default function SequenceBench({ back }) {
                         </tbody>
                     </table>
                     <p className={styles.source}>As the controls appear in Live 12 and Logic Pro 11. Check against your own version if they move.</p>
-                    <h3>Beyond the paper<span className={styles.ext}>EXT</span></h3>
+                    <h3>Beyond the paper<span className={styles.ext}>extension</span></h3>
                     <dl>
                         <dt>Why a sequencer books ahead</dt><dd>A clock in software cannot fire a note at the exact instant; it looks a little ahead and books each step at its true time, so the timing is the audio clock&apos;s, not the screen&apos;s. This bench books 120 ms ahead.</dd>
                         <dt>One filter per note</dt><dd>Every note has its own filter, all set from one cutoff and one resonance, so a chord&apos;s three notes do not share one cut. That is how a polyphonic synth does it.</dd>
@@ -866,9 +866,9 @@ export default function SequenceBench({ back }) {
                 <div className={styles.secHead}><span className={styles.eyebrow}>What you should hear</span></div>
                 <div className={styles.stats} aria-live="polite">
                     <div><b>{rd.counts.all} lit</b><span>of {STEPS * LANE_IDS.length} steps</span></div>
-                    <div><b>{rd.counts.bass} · {rd.counts.chord}</b><span>bass notes · chords</span></div>
+                    <div><b>{rd.counts.bass}, {rd.counts.chord}</b><span>bass notes, chords</span></div>
                     <div><b>{Math.round(rd.stepMs)} ms</b><span>a sixteenth at {state.tempo}</span></div>
-                    <div><b>{verdictWord}</b><span>{task ? task.label : 'press a preset to set one'}{depth === 'extension' ? <span className={styles.ext}>EXT</span> : null}</span></div>
+                    <div><b>{verdictWord}</b><span>{task ? task.label : 'press a preset to set one'}{depth === 'extension' ? <span className={styles.ext}>extension</span> : null}</span></div>
                 </div>
                 {teach ? <div className={styles.meaning}>all from the grid, the clock and the filter</div> : null}
                 <Legal />
@@ -896,8 +896,8 @@ export default function SequenceBench({ back }) {
     const hoverText = hover ? (() => {
         const on = state.lanes[hover.lane][hover.step];
         const name = LANES[hover.lane].label;
-        if (isTunable(hover.lane)) return { i: `${name} · step ${String(hover.step + 1).padStart(2, '0')}${on ? ` · ${cellText(state, hover.lane, hover.step)}` : ''}`, p: on ? `${hover.lane === 'bass' && state.bassHow[hover.step] === 'played' ? 'Played in from the keys. ' : ''}Drag up or down to change the ${hover.lane === 'bass' ? 'note' : 'chord'}; click to clear it.` : 'Click to light it, or drag up or down to choose the note as you do.' };
-        return { i: `${name} · step ${String(hover.step + 1).padStart(2, '0')}`, p: on ? 'Click to clear it; drag along the row to clear several.' : 'Click to light it; drag along the row to paint several.' };
+        if (isTunable(hover.lane)) return { i: `${name}, step ${hover.step + 1}${on ? `, ${cellText(state, hover.lane, hover.step)}` : ''}`, p: on ? `${hover.lane === 'bass' && state.bassHow[hover.step] === 'played' ? 'Played in from the keys. ' : ''}Drag up or down to change the ${hover.lane === 'bass' ? 'note' : 'chord'}; click to clear it.` : 'Click to light it, or drag up or down to choose the note as you do.' };
+        return { i: `${name}, step ${hover.step + 1}`, p: on ? 'Click to clear it; drag along the row to clear several.' : 'Click to light it; drag along the row to paint several.' };
     })() : null;
 
     const stage = (
@@ -913,7 +913,7 @@ export default function SequenceBench({ back }) {
                 onPointerLeave={() => { if (!dragRef.current) setHover(null); }}
             />
             <div className={styles.stageNote}>
-                <b>{presetOf(state.presetId)?.name.toLowerCase() || 'your pattern'} · {state.tempo} bpm<span ref={readRef} style={{ '--read': '19ch' }} /></b>
+                <b>{presetOf(state.presetId)?.name.toLowerCase() || 'your pattern'}, {state.tempo} bpm<span ref={readRef} style={{ '--read': '19ch' }} /></b>
                 <span>{ORIENTS[depth] || ORIENTS.core}</span>
             </div>
             <div className={styles.stageLegend} aria-hidden="true">

@@ -130,7 +130,7 @@ export default function ADTVideoOverviewClient() {
                         flexWrap: 'wrap',
                     }}>
                         <span style={{
-                            fontFamily: ED.mono,
+                            fontFamily: ED.sans,
                             fontSize: '11px',
                             fontWeight: 500,
                             letterSpacing: '0.18em',

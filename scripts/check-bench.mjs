@@ -14,8 +14,8 @@
 //   1. no vertical or horizontal page scroll, console does not overflow
 //   2. no site header above the bench, no site footer below it
 //   3. the plate is white, the stage is the dark panel, no cream, no status reds/greens
-//   4. sentences resolve to Manrope, the title to Playfair Display, labels to JetBrains Mono
-//      (Mike's Fonts-Try note, 21 Aug 2026)
+//   4. sentences resolve to Manrope, the title to Playfair Display, labels to Manrope too
+//      (Mike's Fonts-Try note, 21 Aug 2026); no coding font anywhere (Mike, 27 Nov 2026)
 //   5. no em-dash in rendered text; no "utilise"
 //   6. the drawer opens from its handle, closes on Escape, returns focus
 //   7. More, once opened, does not close
@@ -283,7 +283,7 @@ for (const url of urls) {
         const fontNames = Object.keys(m.fonts).join(' | ');
         if (!/Manrope/i.test(fontNames)) fail(url, size, `sentence face is not Manrope (${fontNames.slice(0, 120)})`);
         if (!/Playfair/i.test(fontNames)) fail(url, size, `title face is not Playfair Display (${fontNames.slice(0, 120)})`);
-        if (!/JetBrains/i.test(fontNames)) fail(url, size, `label face is not JetBrains Mono (${fontNames.slice(0, 120)})`);
+        if (/JetBrains|Mono\b|monospace/i.test(fontNames)) fail(url, size, `a coding font is present (${fontNames.slice(0, 120)})`);
         if (/Hanken|Inter\b|Geist/i.test(fontNames)) fail(url, size, `a retired face is present (${fontNames.slice(0, 120)})`);
         if (/Space Mono/i.test(fontNames)) fail(url, size, 'Space Mono is present');
 

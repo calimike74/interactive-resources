@@ -41,7 +41,6 @@
     --accent-soft: var(--green-soft);
     --sans: var(--bench-sans), 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --serif: var(--bench-serif), 'Playfair Display', Georgia, serif;
-    --mono: var(--font-jbmono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     --radius: 10px;
     --head-h: 54px;
     --console-h: clamp(216px, 30vh, 250px);
@@ -50,6 +49,7 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--sans);
+    font-variant-numeric: tabular-nums;
     font-size: 14px;
     line-height: 1.45;
     -webkit-font-smoothing: antialiased;
@@ -127,7 +127,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     .hintTouch { display: inline; }
 }
 .hint {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     color: var(--gold-ink);
     border: 1px solid rgba(197, 168, 85, 0.45);
@@ -191,7 +191,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .stageNote b {
     flex: none;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-weight: 500;
     font-size: 11.5px;
     color: var(--stage-ink-2);
@@ -215,7 +215,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     display: flex;
     align-items: center;
     gap: 12px;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     color: var(--stage-ink);
     pointer-events: none;
@@ -252,7 +252,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     color: var(--teal);
 }
 .tip p { margin: 0; font-size: 13.5px; line-height: 1.5; }
-.tip p b { font-family: var(--mono); font-weight: 600; }
+.tip p b { font-family: var(--sans); font-weight: 600; }
 
 /* ---- the bar: presets, the bench's one line to the student, More ---- */
 .bar {
@@ -309,7 +309,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 /* A-level: which half of the mark a sentence belongs to (AO3 names, AO4 judges) */
 .ao {
     display: inline-block;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-style: normal;
     font-size: 9.5px;
     font-weight: 600;
@@ -392,7 +392,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .secHead .eyebrow[data-hot='true'] { color: var(--gold-ink); }
 .value {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 15px;
     font-weight: 600;
     color: var(--ink);
@@ -407,12 +407,11 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     color: var(--ink-3);
     margin-top: auto;
 }
-.meaning[data-ext='true'] { font-family: var(--mono); font-size: 11.5px; }
+.meaning[data-ext='true'] { font-family: var(--sans); font-size: 11.5px; }
 .ext {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    font-size: 11px;
+    font-weight: 500;
+    font-style: italic;
     color: var(--purple);
     margin-left: 4px;
     vertical-align: 1px;
@@ -444,7 +443,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     left: 0;
     right: 0;
     text-align: center;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 9.5px;
     letter-spacing: 0.04em;
     color: var(--ink-3);
@@ -476,7 +475,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .splitBar { height: 18px; border-radius: 6px; overflow: hidden; display: flex; border: 1px solid var(--line); }
 .splitBar i { display: block; height: 100%; }
-.splitLabels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+.splitLabels { display: flex; justify-content: space-between; font-family: var(--sans); font-size: 10.5px; color: var(--ink-3); }
 
 /* the source switch: 2 × 2 */
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -506,7 +505,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 /* chips: the note values, stereo */
 .chips { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; }
 .chip {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     padding: 4px 8px;
     border-radius: 6px;
@@ -531,7 +530,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .chip:disabled { opacity: 0.45; cursor: not-allowed; }
 .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .chipNote {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11px;
     color: var(--ink-3);
     margin-left: auto;
@@ -652,7 +651,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 
 /* a number you drag */
 .drag {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     font-weight: 600;
     color: var(--ink);
@@ -709,7 +708,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .stats b {
     display: block;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 20px;
     font-weight: 600;
     color: var(--ink);
@@ -754,7 +753,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .hold {
     padding: 4px 11px;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11px;
     letter-spacing: 0.04em;
     border: 1px solid var(--line-2);
@@ -806,7 +805,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
     top: 14px;
     display: flex;
     gap: 8px;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 10.5px;
     color: var(--ink-3);
     white-space: nowrap;
@@ -943,12 +942,12 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .drawerBody p { margin: 0 0 10px; }
 .drawerBody dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; }
-.drawerBody dt { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
+.drawerBody dt { font-family: var(--sans); font-size: 12.5px; color: var(--ink); }
 .drawerBody dd { margin: 0; }
 .drawerBody table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .drawerBody th, .drawerBody td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
-.drawerBody th { font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-weight: 600; }
-.drawerBody td:first-child { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
+.drawerBody th { font-family: var(--sans); font-size: 11px; color: var(--ink-3); font-weight: 600; }
+.drawerBody td:first-child { font-family: var(--sans); font-size: 12.5px; color: var(--ink); }
 .drawerBody ul { margin: 0 0 10px; padding-left: 18px; list-style: disc; }
 .drawerBody li { margin: 0 0 6px; }
 .drawerBody a { color: var(--green); text-decoration: none; border-bottom: 1px solid var(--green-soft); }
@@ -966,7 +965,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .conn b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
 .conn span { font-size: 13.5px; }
 .conn i { font-family: var(--sans); font-style: normal; font-size: 11px; font-weight: 600; color: var(--purple); display: block; margin-bottom: 4px; }
-.source { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+.source { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); }
 
 /* ---- think-then-reveal ---- */
 .callout {
@@ -1114,15 +1113,15 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .fader i { position: absolute; left: 2px; width: 28px; height: 14px; border-radius: 3px; background: linear-gradient(180deg, #34344c, var(--ink)); top: calc((1 - var(--pct)) * (100% - 14px)); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18); }
 .fader i::after { content: ''; position: absolute; left: 5px; right: 5px; top: 6px; height: 2px; background: var(--stem, #fff); border-radius: 1px; }
 .fader:focus-visible i { outline: 2px solid var(--accent); outline-offset: 1px; }
-.faderScale { position: absolute; left: 34px; top: 7px; bottom: 7px; width: 18px; font-family: var(--mono); font-size: 8.5px; line-height: 1; color: var(--ink-3); pointer-events: none; }
+.faderScale { position: absolute; left: 34px; top: 7px; bottom: 7px; width: 18px; font-family: var(--sans); font-size: 8.5px; line-height: 1; color: var(--ink-3); pointer-events: none; }
 .faderScale b { position: absolute; left: 0; transform: translateY(-50%); font-weight: 500; }
 .faderScale b[data-unity='true'] { color: var(--ink); font-weight: 700; }
 .meter { width: 6px; height: 100%; border-radius: 3px; background: var(--line); position: relative; overflow: hidden; flex: none; margin: 4px 0; height: calc(100% - 8px); }
 .meter i { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--fill, 0) * 100%); background: var(--stem); transition: height 60ms linear; }
 .stripDials { display: flex; flex-direction: column; justify-content: space-between; align-items: center; gap: 2px; flex: 1 1 auto; }
 .stripDial { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-.stripDial small { font-family: var(--mono); font-size: 9px; color: var(--ink-3); }
-.stripDial .readout { font-family: var(--mono); font-size: 10px; color: var(--ink-2); }
+.stripDial small { font-family: var(--sans); font-size: 9px; color: var(--ink-3); }
+.stripDial .readout { font-family: var(--sans); font-size: 10px; color: var(--ink-2); }
 .secHear[data-desk='true'] .stats { max-width: none; }
 
 .secPlay .hold { white-space: normal; line-height: 1.15; text-align: center; }
@@ -1179,11 +1178,11 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .slide { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 38px; flex: none; }
 .slide[data-wide='true'] { width: 40px; }
 .slide[data-wide='true'] .fader { width: 26px; }
-.slideVal { font-family: var(--mono); font-size: 9.5px; line-height: 1.15; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.slideVal { font-family: var(--sans); font-size: 9.5px; line-height: 1.15; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .slide[data-off='true'] .slideVal { color: var(--ink-3); }
-.slideName { font-family: var(--mono); font-size: 8.5px; line-height: 1.15; color: var(--ink-3); white-space: nowrap; }
+.slideName { font-family: var(--sans); font-size: 8.5px; line-height: 1.15; color: var(--ink-3); white-space: nowrap; }
 /* the wave slider's name is its shape switch: press for the next shape */
-.slideShape { appearance: none; border: 0; border-bottom: 1px dotted var(--ink-3); border-radius: 0; background: none; padding: 0 0 1px; margin: 0; cursor: pointer; color: var(--ink-2); font: inherit; font-family: var(--mono); font-size: 8.5px; line-height: 1.15; }
+.slideShape { appearance: none; border: 0; border-bottom: 1px dotted var(--ink-3); border-radius: 0; background: none; padding: 0 0 1px; margin: 0; cursor: pointer; color: var(--ink-2); font: inherit; font-family: var(--sans); font-size: 8.5px; line-height: 1.15; }
 .slideShape::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 4px solid currentColor; margin-left: 3px; vertical-align: 1px; }
 .slideShape:hover { color: var(--ink); border-bottom-color: var(--ink); }
 .slideShape:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -1313,7 +1312,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .stemNum {
     flex: none;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11px;
     font-weight: 600;
     color: var(--gold-bright);
@@ -1321,7 +1320,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .stemRef {
     flex: none;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-style: normal;
     font-size: 11px;
     color: var(--stage-ink-2);
@@ -1340,7 +1339,7 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 }
 .stemNav { flex: none; display: flex; align-items: center; gap: 6px; pointer-events: auto; }
 .stemBtn {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11.5px;
     line-height: 1;
     padding: 6px 11px;
@@ -1413,8 +1412,8 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .seqBlack[data-lit='bass'] { background: linear-gradient(180deg, #8a7835 0%, #6f6028 100%); }
 .seqBlack[data-lit='chord'] { background: linear-gradient(180deg, #7c6a9e 0%, #5d4d7e 100%); }
 .seqWhite:focus-visible, .seqBlack:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.seqOct { position: absolute; left: 3px; top: 3px; font-family: var(--mono); font-size: 8.5px; color: var(--ink-3); }
-.seqLtr { font-family: var(--mono); font-size: 9px; font-weight: 500; color: var(--ink-3); }
+.seqOct { position: absolute; left: 3px; top: 3px; font-family: var(--sans); font-size: 8.5px; color: var(--ink-3); }
+.seqLtr { font-family: var(--sans); font-size: 9px; font-weight: 500; color: var(--ink-3); }
 .seqBlack .seqLtr { position: absolute; left: 0; right: 0; bottom: 2px; text-align: center; color: rgba(255, 255, 255, 0.55); }
 .seqKeysFoot { display: flex; align-items: center; gap: 10px; }
 .seqKeysFoot .meaning { margin-top: 0; }
@@ -1433,4 +1432,4 @@ a.code:hover, a.code:focus-visible { text-decoration: underline; text-underline-
 .secAdc { width: 196px; }
 .adcKnob { display: flex; align-items: center; gap: 12px; }
 .adcRead { font-size: 12.5px; line-height: 1.3; color: var(--ink-3); }
-.adcRead b { display: block; font-family: var(--mono); font-size: 17px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.adcRead b { display: block; font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }

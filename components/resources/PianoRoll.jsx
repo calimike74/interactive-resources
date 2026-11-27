@@ -292,7 +292,7 @@ export default function PianoRoll({ back }) {
             black: 'rgba(0, 0, 0, 0.16)',
             rowHot: 'rgba(255, 255, 255, 0.05)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
         const monoTiny = `9px ${monoFace}`;

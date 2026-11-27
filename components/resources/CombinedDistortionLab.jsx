@@ -610,7 +610,7 @@ const DistortionLab = () => {
 
                         <div>
                           <p className="font-semibold text-gray-800">Ableton Live:</p>
-                          <p className="text-gray-600 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+                          <p className="text-gray-600 tabular-nums text-xs bg-gray-100 px-2 py-1 rounded">
                             {config.abletonDevice}
                           </p>
                         </div>
@@ -644,7 +644,7 @@ const DistortionLab = () => {
                   </div>
                   <div className="bg-white p-3 rounded border">
                     <h5 className="font-bold mb-2">THD Formula</h5>
-                    <p className="text-gray-600 font-mono text-xs">THD = √(H₂² + H₃² + ... + Hₙ²) / H₁</p>
+                    <p className="text-gray-600 tabular-nums text-xs">THD = √(H₂² + H₃² + ... + Hₙ²) / H₁</p>
                     <p className="text-xs text-gray-500 mt-1">Ratio of harmonics to fundamental</p>
                   </div>
                 </CardContent>
@@ -1042,7 +1042,7 @@ const DistortionLab = () => {
                         <span className="font-bold" style={{ color: algo.color }}>
                           {algo.name}
                         </span>
-                        <span className="text-sm font-mono text-slate-700 bg-slate-100 px-3 py-1 rounded border">
+                        <span className="text-sm tabular-nums text-slate-700 bg-slate-100 px-3 py-1 rounded border">
                           {algo.abletonDevice}
                         </span>
                       </div>
@@ -1175,14 +1175,14 @@ const DistortionLab = () => {
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   <div className="bg-white rounded-lg px-4 py-3 border-2 border-blue-400 shadow-sm">
                     <div className="text-xs text-gray-500 mb-1">INPUT</div>
-                    <div className="font-mono text-sm font-bold">Signal</div>
+                    <div className="tabular-nums text-sm font-bold">Signal</div>
                   </div>
 
                   <div className="text-2xl text-gray-400">→</div>
 
                   <div className="bg-white rounded-lg px-4 py-3 border-2 border-green-400 shadow-sm">
                     <div className="text-xs text-gray-500 mb-1">PRE-GAIN</div>
-                    <div className="font-mono text-sm font-bold">{chainGain.toFixed(2)}x</div>
+                    <div className="tabular-nums text-sm font-bold">{chainGain.toFixed(2)}x</div>
                   </div>
 
                   <div className="text-2xl text-gray-400">→</div>
@@ -1192,7 +1192,7 @@ const DistortionLab = () => {
                     style={{ borderColor: distortionTypes[chainDistortion].color }}
                   >
                     <div className="text-xs text-gray-500 mb-1">DISTORTION</div>
-                    <div className="font-mono text-sm font-bold" style={{ color: distortionTypes[chainDistortion].color }}>
+                    <div className="tabular-nums text-sm font-bold" style={{ color: distortionTypes[chainDistortion].color }}>
                       {distortionTypes[chainDistortion].shortName}
                     </div>
                   </div>
@@ -1203,7 +1203,7 @@ const DistortionLab = () => {
                     chainFilterEnabled ? 'border-mustard-400' : 'border-gray-300 opacity-50'
                   }`}>
                     <div className="text-xs text-gray-500 mb-1">LOW-PASS</div>
-                    <div className="font-mono text-sm font-bold">
+                    <div className="tabular-nums text-sm font-bold">
                       {chainFilterEnabled ? `${chainFilterFreq}Hz` : 'OFF'}
                     </div>
                   </div>

@@ -7,7 +7,7 @@
 <title>The Story of Synthesis: free book</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='2' width='10' height='12' rx='1' fill='none' stroke='%23B85A3F' stroke-width='2'/%3E%3Cline x1='6' y1='6' x2='10' y2='6' stroke='%23B85A3F' stroke-width='1.5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #F8F2E8; --paper-warm: #F4EDDF; --cream: #F2EBE0;
@@ -17,7 +17,6 @@
     --ease-house: cubic-bezier(0.22, 1, 0.36, 1);
     --serif: "Fraunces", Georgia, serif;
     --sans: "Geist", "Avenir Next", sans-serif;
-    --mono: "Geist Mono", "SF Mono", monospace;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -30,13 +29,13 @@
   }
   main { max-width: 980px; margin: 0 auto; padding: 56px 32px 48px; flex: 1; }
   .eyebrow {
-    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.15em;
+    font-family: var(--sans); font-size: 11.5px; letter-spacing: 0.15em;
     text-transform: uppercase; color: var(--sienna);
   }
   h1 { font-family: var(--serif); font-weight: 500; font-size: 46px; line-height: 1.04; margin-top: 8px; max-width: 20ch; }
   .standfirst { margin-top: 14px; max-width: 60ch; color: var(--ink-soft); font-size: 15.5px; }
   .meta-line {
-    margin-top: 18px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+    margin-top: 18px; font-family: var(--sans); font-size: 11.5px; letter-spacing: 0.06em;
     color: var(--ink-soft);
   }
 
@@ -45,7 +44,7 @@
     list-style: none; display: flex; gap: 16px; align-items: baseline;
     padding: 13px 4px; border-bottom: 1px solid var(--line);
   }
-  .eras .n { font-family: var(--mono); font-size: 12px; color: var(--sienna); min-width: 1.4em; }
+  .eras .n { font-family: var(--sans); font-size: 12px; color: var(--sienna); min-width: 1.4em; }
   .eras .name { font-family: var(--serif); font-size: 18px; }
 
   .back-matter { margin-top: 22px; max-width: 60ch; color: var(--ink-soft); font-size: 14px; }
@@ -59,14 +58,14 @@
   }
   .download:hover { background: #2F3D2B; border-color: #2F3D2B; }
   .download:focus-visible { outline: 2px solid var(--sienna); outline-offset: 2px; }
-  .download .size { font-family: var(--mono); font-size: 11.5px; opacity: 0.75; }
+  .download .size { font-family: var(--sans); font-size: 11.5px; opacity: 0.75; }
   .free-note { margin-top: 12px; font-size: 13px; color: var(--ink-soft); max-width: 52ch; }
 
-  footer { max-width: 980px; margin: 0 auto; padding: 0 32px 60px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); line-height: 1.7; width: 100%; }
+  footer { max-width: 980px; margin: 0 auto; padding: 0 32px 60px; font-family: var(--sans); font-size: 11.5px; color: var(--ink-soft); line-height: 1.7; width: 100%; }
   footer a { color: var(--sienna); }
   footer .home-link {
     display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
-    font-family: var(--mono); font-size: 11.5px; text-decoration: none;
+    font-family: var(--sans); font-size: 11.5px; text-decoration: none;
     color: var(--ink-soft); border: 1px solid var(--line); border-radius: 999px;
     padding: 6px 13px; background: rgba(255,255,255,0.5);
     transition: border-color 240ms var(--ease-house), color 240ms var(--ease-house);

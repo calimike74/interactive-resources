@@ -261,7 +261,7 @@ export default function Oscilloscope({ back }) {
             screen: 'rgba(0, 0, 0, 0.18)',
         };
         const srcCol = (id) => v(SOURCES[id].colour.replace(/^var\(|\)$/g, ''), '#7fb0c4');
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10px ${monoFace}`;
         const monoBig = `13px ${monoFace}`;

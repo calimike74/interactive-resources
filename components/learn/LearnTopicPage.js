@@ -55,7 +55,7 @@ export default function LearnTopicPage({ topic, parentTopicId, outro }) {
                         marginTop: '0.75rem',
                     }}>
                         <span style={{
-                            fontFamily: ED.mono,
+                            fontFamily: ED.sans,
                             fontSize: '11px',
                             fontWeight: 500,
                             letterSpacing: '0.18em',
@@ -159,7 +159,7 @@ function ExpandableHint({ color }) {
         <span style={{
             fontSize: '0.75rem',
             color: '#9CA3AF',
-            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
+            fontFamily: 'inherit',
             minHeight: '1.2em',
             display: 'inline-flex',
             alignItems: 'center',

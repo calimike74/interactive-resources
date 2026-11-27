@@ -290,7 +290,7 @@ export default function ADCExplorer({ back }) {
             screen: 'rgba(0, 0, 0, 0.18)',
             box: 'rgba(255, 255, 255, 0.04)',
         };
-        const monoFace = v('--mono', 'monospace');
+        const monoFace = v('--sans', 'sans-serif');
         const mono = `11.5px ${monoFace}`;
         const monoSmall = `10.5px ${monoFace}`;
         const monoBig = `13px ${monoFace}`;

@@ -1,5 +1,5 @@
 /* The Explore home (8 Nov 2026), in the Music Tech Studio design system:
-   paper ground, Bebas Neue display, Public Sans text, JetBrains Mono labels,
+   paper ground, Bebas Neue display, Public Sans text and labels,
    Explore teal for wayfinding only. Same 1240px grid as the front door's /topics. */
 
 .page {
@@ -44,7 +44,7 @@
 .key li { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: baseline; font-size: 15px; color: var(--ink-70) }
 .key b { font-weight: 600; color: var(--ink) }
 
-/* the kind of each tool: a small mono label, never a colour on its own */
+/* the kind of each tool: a small label, never a colour on its own */
 
 /* an area: big numeral, display name, count on the right, hairline under */
 .area { margin-top: 32px }

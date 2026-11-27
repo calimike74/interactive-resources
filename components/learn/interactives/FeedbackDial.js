@@ -31,12 +31,12 @@ export default function FeedbackDial() {
         }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.5rem' }}>
                 <span style={{
-                    fontFamily: ED.mono, fontSize: '10px', fontWeight: 500,
+                    fontFamily: ED.sans, fontSize: '10px', fontWeight: 500,
                     letterSpacing: '0.18em', textTransform: 'uppercase', color: ED.inkFade,
                 }}>
                     Try it: feedback
                 </span>
-                <span style={{ fontFamily: ED.mono, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
+                <span style={{ fontFamily: ED.sans, fontSize: '11px', color: ED.accent, fontVariantNumeric: 'tabular-nums' }}>
                     one repeat ⇄ long tail
                 </span>
             </div>

@@ -303,7 +303,7 @@ function SynthControl({ label, value, min, max, step, onChange, unit = '', color
         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1], flex: 1, minWidth: '120px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                 <label style={{ color: COLORS.textSecondary, fontSize: typography.size.xs, fontWeight: typography.weight.medium }}>{label}</label>
-                <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamilyMono }}>{displayVal}{unit}</span>
+                <span style={{ color: COLORS.text, fontSize: typography.size.xs, fontFamily: typography.fontFamily }}>{displayVal}{unit}</span>
             </div>
             <input aria-label={label}
                 type="range"
@@ -459,7 +459,7 @@ function FilterResponseSVG({ type, cutoff, resonance, width = 500, height = 160,
             {freqMarks.map(f => (
                 <g key={f}>
                     <line x1={freqToX(f)} y1={padding.top} x2={freqToX(f)} y2={height - padding.bottom} stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
-                    <text x={freqToX(f)} y={height - 5} fill="rgba(255,255,255,0.35)" fontSize={10} textAnchor="middle" fontFamily={typography.fontFamilyMono}>
+                    <text x={freqToX(f)} y={height - 5} fill="rgba(255,255,255,0.35)" fontSize={10} textAnchor="middle" fontFamily={typography.fontFamily}>
                         {f >= 1000 ? `${f / 1000}k` : f}
                     </text>
                 </g>
@@ -467,7 +467,7 @@ function FilterResponseSVG({ type, cutoff, resonance, width = 500, height = 160,
             {dbMarks.map(db => (
                 <g key={db}>
                     <line x1={padding.left} y1={dbToY(db)} x2={width - padding.right} y2={dbToY(db)} stroke={db === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)'} strokeWidth={1} />
-                    <text x={padding.left - 4} y={dbToY(db) + 3} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="end" fontFamily={typography.fontFamilyMono}>
+                    <text x={padding.left - 4} y={dbToY(db) + 3} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="end" fontFamily={typography.fontFamily}>
                         {db > 0 ? '+' : ''}{db}
                     </text>
                 </g>
@@ -484,7 +484,7 @@ function FilterResponseSVG({ type, cutoff, resonance, width = 500, height = 160,
                     fillOpacity={0.75}
                     fontSize={9}
                     textAnchor={type === 'highpass' ? 'end' : 'start'}
-                    fontFamily={typography.fontFamilyMono}
+                    fontFamily={typography.fontFamily}
                 >
                     −12 dB/oct
                 </text>
@@ -492,9 +492,9 @@ function FilterResponseSVG({ type, cutoff, resonance, width = 500, height = 160,
             {/* Legend */}
             <g transform={`translate(${padding.left + 4}, ${padding.top + innerH - 22})`}>
                 <line x1={0} y1={4} x2={14} y2={4} stroke="rgba(255,255,255,0.3)" strokeWidth={1} strokeDasharray="4,3" />
-                <text x={18} y={8} fill="rgba(255,255,255,0.5)" fontSize={9} fontFamily={typography.fontFamilyMono}>Cutoff</text>
+                <text x={18} y={8} fill="rgba(255,255,255,0.5)" fontSize={9} fontFamily={typography.fontFamily}>Cutoff</text>
                 <rect x={0} y={14} width={14} height={6} fill={accentColor} fillOpacity={0.4} />
-                <text x={18} y={21} fill="rgba(255,255,255,0.5)" fontSize={9} fontFamily={typography.fontFamilyMono}>Filter response</text>
+                <text x={18} y={21} fill="rgba(255,255,255,0.5)" fontSize={9} fontFamily={typography.fontFamily}>Filter response</text>
             </g>
         </svg>
     );
@@ -546,7 +546,7 @@ function EnvelopeShapeSVG({ attack, decay, sustain, release, width = 400, height
                 <circle key={i} cx={p.cx} cy={p.cy} r={3.5} fill={accentColor} />
             ))}
             {stages.map(s => (
-                <text key={s.label} x={s.x} y={height - 8} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle" fontWeight="bold" fontFamily={typography.fontFamilyMono}>
+                <text key={s.label} x={s.x} y={height - 8} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle" fontWeight="bold" fontFamily={typography.fontFamily}>
                     {s.label}
                 </text>
             ))}
@@ -618,7 +618,7 @@ function MiniKeyboard({ onNoteOn, onNoteOff, activeNote }) {
                         paddingBottom: spacing[1], transition: 'background 0.05s',
                     }}
                 >
-                    <span style={{ fontSize: '9px', color: COLORS.textHint, fontFamily: typography.fontFamilyMono }}>{k.note}</span>
+                    <span style={{ fontSize: '9px', color: COLORS.textHint, fontFamily: typography.fontFamily }}>{k.note}</span>
                 </div>
             ))}
             {blackKeys.map(k => (
@@ -1113,7 +1113,7 @@ export default function SubtractiveSynthExplorer() {
     const pillBtn = (active) => ({
         border: 'none',
         cursor: 'pointer',
-        fontFamily: typography.fontFamilyMono,
+        fontFamily: typography.fontFamily,
         fontWeight: typography.weight.medium,
         borderRadius: borderRadius.full,
         padding: `${spacing[1]} ${spacing[3]}`,

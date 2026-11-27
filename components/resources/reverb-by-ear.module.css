@@ -55,15 +55,15 @@
     border-radius: 999px;
 }
 .codeChip b {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 18px;
     font-weight: 600;
     letter-spacing: 0.12em;
     color: var(--ink);
 }
-.setNo { font-family: var(--mono); font-size: 12px; color: var(--gold-ink); }
+.setNo { font-family: var(--sans); font-size: 12px; color: var(--gold-ink); }
 .setHint { font-size: 13px; color: var(--ink-3); }
-.setHint code { font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.setHint code { font-family: var(--sans); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
 
 .lede {
     margin: 12px 20px 0;
@@ -111,7 +111,7 @@
     height: 24px;
     border-radius: 50%;
     border: 1px solid var(--line-2);
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 12px;
     font-weight: 600;
     color: var(--ink-2);
@@ -134,7 +134,7 @@
     background-color: var(--plate);
     background-image: linear-gradient(180deg, #ffffff 0%, #f4f3f0 100%);
     box-shadow: 0 1px 0 rgba(26, 26, 46, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 14px;
     font-weight: 600;
     color: var(--ink);
@@ -205,7 +205,7 @@
 .slider > span { width: 76px; text-align: right; font-size: 17px; }
 .slider > span[data-unset] { font-size: 13px; font-weight: 500; color: var(--ink-3); }
 .truth {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 16px;
     font-weight: 600;
     color: var(--green);
@@ -217,7 +217,7 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 13px;
     border: 1.5px solid var(--gold);
     color: var(--gold-ink);
@@ -240,12 +240,12 @@
 .primary:hover { background-image: none; }
 .primary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .roundScore { font-size: 14px; color: var(--ink-2); }
-.roundScore b { font-family: var(--mono); font-size: 18px; color: var(--ink); }
+.roundScore b { font-family: var(--sans); font-size: 18px; color: var(--ink); }
 .running { font-size: 13px; color: var(--ink-3); }
 
 /* ---- the lean ---- */
 .score { margin: 0; font-size: 15px; color: var(--ink-2); }
-.score b { font-family: var(--mono); font-size: 40px; font-weight: 600; color: var(--ink); margin-right: 6px; }
+.score b { font-family: var(--sans); font-size: 40px; font-weight: 600; color: var(--ink); margin-right: 6px; }
 .leanLines p { margin: 0 0 6px; font-size: 17px; line-height: 1.45; color: var(--ink); font-weight: 500; }
 .thumb {
     margin: 0;
@@ -260,9 +260,9 @@
     gap: 4px;
 }
 .recap { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-.recap th { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--line); }
+.recap th { text-align: left; font-family: var(--sans); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--line); }
 .recap td { padding: 7px 8px 7px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
-.recap td:first-child, .recap td:last-child { font-family: var(--mono); white-space: nowrap; }
+.recap td:first-child, .recap td:last-child { font-family: var(--sans); white-space: nowrap; }
 
 /* ---- the tail panel ---- */
 .stage {
@@ -298,7 +298,7 @@
     gap: 16px;
     flex-wrap: wrap;
     pointer-events: none;
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 11px;
     color: var(--stage-ink);
 }

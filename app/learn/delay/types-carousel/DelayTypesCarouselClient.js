@@ -15,7 +15,6 @@ const C = {
 
 const sans  = 'var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 const serif = 'var(--font-fraunces), Georgia, serif';
-const mono  = 'var(--font-jbmono), ui-monospace, "SF Mono", Menlo, monospace';
 
 const NEXT_STEPS = [
   {
@@ -51,7 +50,7 @@ export default function DelayTypesCarouselClient() {
 
         <header style={{ marginTop: 16, marginBottom: 32, maxWidth: 720 }}>
           <p style={{
-            fontFamily: mono, fontSize: 11, letterSpacing: '0.14em',
+            fontFamily: 'inherit', fontSize: 11, letterSpacing: '0.14em',
             textTransform: 'uppercase', color: C.field500, margin: '0 0 12px',
           }}>1.12 Delay · Orientation</p>
           <h1 style={{
@@ -76,7 +75,7 @@ export default function DelayTypesCarouselClient() {
           marginLeft: 'auto', marginRight: 'auto',
         }}>
           <p style={{
-            fontFamily: mono, fontSize: 11, letterSpacing: '0.14em',
+            fontFamily: 'inherit', fontSize: 11, letterSpacing: '0.14em',
             textTransform: 'uppercase', color: C.field500, margin: '0 0 16px',
           }}>What's next</p>
           <div style={{

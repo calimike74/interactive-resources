@@ -426,7 +426,7 @@ function MenuItem({ item, onClose, theme: t }) {
                 <span style={{
                     color: t.text.tertiary,
                     fontSize: typography.size.xs,
-                    fontFamily: typography.fontFamilyMono,
+                    fontFamily: typography.fontFamily,
                     flexShrink: 0,
                 }}>
                     {item.shortcut}
